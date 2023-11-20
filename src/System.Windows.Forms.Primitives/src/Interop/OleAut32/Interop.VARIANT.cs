@@ -15,15 +15,15 @@ internal unsafe partial struct VARIANT : IDisposable
 {
     public static VARIANT Empty { get; }
 
-    public static VARIANT True { get; } = InitBoolVariant(value: true);
+    public static VARIANT True { get; } = CreateBoolVariant(value: true);
 
-    public static VARIANT False { get; } = InitBoolVariant(value: false);
+    public static VARIANT False { get; } = CreateBoolVariant(value: false);
 
-    private static VARIANT InitBoolVariant(bool value)
+    private static VARIANT CreateBoolVariant(bool value)
     {
-        VARIANT temp = new() { vt = VT_BOOL };
-        temp.data.boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE;
-        return temp;
+        VARIANT variant = new() { vt = VT_BOOL };
+        variant.data.boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE;
+        return variant;
     }
 
     public bool IsEmpty => vt == VT_EMPTY && data.llVal == 0;

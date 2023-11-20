@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Runtime.Versioning;
@@ -19,6 +19,7 @@ internal
     {
         PlatformName = platformName;
     }
+
     public string PlatformName { get; }
 }
 
@@ -102,10 +103,12 @@ internal
     public UnsupportedOSPlatformAttribute(string platformName) : base(platformName)
     {
     }
+
     public UnsupportedOSPlatformAttribute(string platformName, string? message) : base(platformName)
     {
         Message = message;
     }
+
     public string? Message { get; }
 }
 
@@ -137,10 +140,12 @@ internal
     public ObsoletedOSPlatformAttribute(string platformName) : base(platformName)
     {
     }
+
     public ObsoletedOSPlatformAttribute(string platformName, string? message) : base(platformName)
     {
         Message = message;
     }
+
     public string? Message { get; }
     public string? Url { get; set; }
 }

@@ -53,10 +53,24 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
 
     public bool IsNull => _value == 0;
 
+    /// <summary>
+    ///  Tries querying the requested interface into a new <see cref="ComScope{T}"/>.
+    /// </summary>
+    /// <param name="hr">The result of the query.</param>
     public ComScope<TTo> TryQuery<TTo>(out HRESULT hr) where TTo : unmanaged, IComIID
     {
         ComScope<TTo> scope = new(null);
         hr = ((IUnknown*)Value)->QueryInterface(IID.Get<TTo>(), scope);
+        return scope;
+    }
+
+    /// <summary>
+    ///  Queries the requested interface into a new <see cref="ComScope{T}"/>.
+    /// </summary>
+    public ComScope<TTo> Query<TTo>() where TTo : unmanaged, IComIID
+    {
+        ComScope<TTo> scope = new(null);
+        ((IUnknown*)Value)->QueryInterface(IID.Get<TTo>(), scope).ThrowOnFailure();
         return scope;
     }
 

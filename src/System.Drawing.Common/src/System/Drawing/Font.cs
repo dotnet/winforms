@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
@@ -183,7 +182,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
 #endif
                 Gdip.GdipDeleteFont(new HandleRef(this, _nativeFont));
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
@@ -332,7 +331,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
     private void CreateNativeFont()
     {
         Debug.Assert(_nativeFont == IntPtr.Zero, "nativeFont already initialized, this will generate a handle leak.");
-        Debug.Assert(_fontFamily != null, "fontFamily not initialized.");
+        Debug.Assert(_fontFamily is not null, "fontFamily not initialized.");
 
         // Note: GDI+ creates singleton font family objects (from the corresponding font file) and reference count them so
         // if creating the font object from an external FontFamily, this object's FontFamily will share the same native object.
@@ -516,7 +515,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
         _gdiCharSet = gdiCharSet;
         _gdiVerticalFont = gdiVerticalFont;
 
-        if (_fontFamily == null)
+        if (_fontFamily is null)
         {
             // GDI+ FontFamily is a singleton object.
             SetFontFamily(new FontFamily(family.NativeFamily));

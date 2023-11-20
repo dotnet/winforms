@@ -76,6 +76,7 @@ public class SystemPensTests
         {
             AssertExtensions.Throws<ArgumentException>(null, () => pen.Transform = matrix);
         }
+
         AssertExtensions.Throws<ArgumentException>(null, () => pen.Width = 10);
     }
 

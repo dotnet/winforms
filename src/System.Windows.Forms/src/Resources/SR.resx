@@ -4341,9 +4341,6 @@ Stack trace where the illegal operation occurred was:
   <data name="NumericUpDownIncrementDescr" xml:space="preserve">
     <value>Indicates the amount to increment or decrement on each button click.</value>
   </data>
-  <data name="NumericUpDownLessThanZeroError" xml:space="preserve">
-    <value>Parameter value must be greater than or equal to 0.</value>
-  </data>
   <data name="NumericUpDownMaximumDescr" xml:space="preserve">
     <value>Indicates the maximum value for the numeric up-down control.</value>
   </data>
@@ -4811,9 +4808,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="PropertyCategoryText" xml:space="preserve">
     <value>Text</value>
-  </data>
-  <data name="PropertyGridBadTabIndex" xml:space="preserve">
-    <value>Tab index not valid.</value>
   </data>
   <data name="PropertyGridCanShowCommandsDesc" xml:space="preserve">
     <value>Sets whether the commands window will be displayed for components with commands.</value>
@@ -6954,9 +6948,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="AccessDenied" xml:space="preserve">
     <value>Access denied</value>
-  </data>
-  <data name="ArgumentOutOfRange_NeedNonNegNum" xml:space="preserve">
-    <value>Non-negative number required.</value>
   </data>
   <data name="Argument_IncompatibleArrayType" xml:space="preserve">
     <value>Target array type is not compatible with the type of items in the collection.</value>

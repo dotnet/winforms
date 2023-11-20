@@ -60,21 +60,18 @@ public partial class Control
         // If the control is used as an item of a ToolStrip via ToolStripControlHost,
         // its accessible object should provide info about the owning ToolStrip and items-siblings
         // to build a correct ToolStrip accessibility tree.
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out Control? owner) || owner.ToolStripControlHost is not ToolStripControlHost host)
             {
                 return base.FragmentNavigate(direction);
             }
 
-            if (direction == NavigateDirection.NavigateDirection_Parent
-                || direction == NavigateDirection.NavigateDirection_PreviousSibling
-                || direction == NavigateDirection.NavigateDirection_NextSibling)
-            {
-                return host.AccessibilityObject.FragmentNavigate(direction);
-            }
-
-            return base.FragmentNavigate(direction);
+            return direction is NavigateDirection.NavigateDirection_Parent
+                or NavigateDirection.NavigateDirection_PreviousSibling
+                or NavigateDirection.NavigateDirection_NextSibling
+                ? host.AccessibilityObject.FragmentNavigate(direction)
+                : base.FragmentNavigate(direction);
         }
 
         /// <summary>
@@ -486,18 +483,21 @@ public partial class Control
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId =>
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId
                     // "ControlType" value depends on owner's AccessibleRole value.
                     // See: docs/accessibility/accessible-role-controltype.md
-                    (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.Enabled ?? false),
+                    => (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId
+                    => Owner?.Enabled == true ? VARIANT.True : VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId when
                     Owner?.SupportsUiaProviders ?? false
                     => (VARIANT)Owner.CanSelect,
-                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
-                    ? (VARIANT)(int)owner.LiveSetting
-                    : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(Owner?.InternalHandle ?? HWND.Null),
+                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId
+                    => Owner is IAutomationLiveRegion owner
+                        ? (VARIANT)(int)owner.LiveSetting
+                        : base.GetPropertyValue(propertyID),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId
+                    => UIAHelper.WindowHandleToVariant(Owner?.InternalHandle ?? HWND.Null),
                 _ => base.GetPropertyValue(propertyID)
             };
 

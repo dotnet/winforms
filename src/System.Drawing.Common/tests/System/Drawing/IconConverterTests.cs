@@ -116,7 +116,6 @@ public class IconConverterTest
         Assert.Throws<NotSupportedException>(() => _icoConv.ConvertFrom(null, CultureInfo.InvariantCulture, new SizeF(10, 10)));
         Assert.Throws<NotSupportedException>(() => _icoConv.ConvertFrom(null, CultureInfo.InvariantCulture, new object()));
 
-
         newIcon = (Icon)_icoConvFrmTD.ConvertFrom(null, CultureInfo.InvariantCulture, _iconBytes);
 
         Assert.Equal(_icon.Height, newIcon.Height);
@@ -152,7 +151,6 @@ public class IconConverterTest
 
         Assert.Equal(_iconStr, (string)_icoConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _icon, typeof(string)));
         Assert.Equal(_iconStr, (string)_icoConvFrmTD.ConvertTo(_icon, typeof(string)));
-
 
         newIconBytes = (byte[])_icoConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _icon, _iconBytes.GetType());
         Assert.Equal(_iconBytes, newIconBytes);

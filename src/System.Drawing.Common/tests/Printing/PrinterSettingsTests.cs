@@ -566,7 +566,7 @@ public class PrinterSettingsTests
         Assert.Equal(printerSettings.Duplex, newPrinterSettings.Duplex);
     }
 
-    public static bool CanTestSetHdevmode_IntPtr_Success => GetNameOfTestPrinterSuitableForDevModeTesting() != null;
+    public static bool CanTestSetHdevmode_IntPtr_Success => GetNameOfTestPrinterSuitableForDevModeTesting() is not null;
 
     private static string GetNameOfTestPrinterSuitableForDevModeTesting()
     {
@@ -576,6 +576,7 @@ public class PrinterSettingsTests
             if (printerSettings.IsValid)
                 return candidate;
         }
+
         return null;
     }
 

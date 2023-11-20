@@ -92,6 +92,7 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
             {
                 Gdip.GdipDeleteMatrix(new HandleRef(this, NativeMatrix));
             }
+
             NativeMatrix = IntPtr.Zero;
         }
     }

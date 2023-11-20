@@ -28,7 +28,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.IAccessibleEx,
     ComIServiceProvider.Interface,
     IRawElementProviderSimple.Interface,
-    UiaCore.IRawElementProviderFragment,
+    IRawElementProviderFragment.Interface,
     UiaCore.IRawElementProviderFragmentRoot,
     UiaCore.IInvokeProvider,
     UiaCore.IValueProvider,
@@ -48,10 +48,14 @@ public unsafe partial class AccessibleObject :
     UiaCore.IScrollItemProvider,
     UiaCore.IMultipleViewProvider,
     ITextProvider.Interface,
-    ITextProvider2.Interface
+    ITextProvider2.Interface,
+    // This IAccessible needs moved first once IManagedWrapper is implemented so it gets chosen by built-in COM interop.
+    UIA.IAccessible.Interface,
+    IDispatch.Interface,
+    IDispatchEx.Interface
 {
     private static readonly string[] s_propertiesWithArguments =
-    {
+    [
         "accChild",
         "accName",
         "accValue",
@@ -61,7 +65,9 @@ public unsafe partial class AccessibleObject :
         "accHelp",
         "accKeyboardShortcut",
         "accDefaultAction"
-    };
+    ];
+
+    private readonly AccessibleDispatchAdapter _dispatchAdapter;
 
     /// <summary>
     ///  The <see cref="UIA.IAccessible"/> as passed in or generated from requesting the standard implementation
@@ -89,15 +95,14 @@ public unsafe partial class AccessibleObject :
 
     internal const int RuntimeIDFirstItem = 0x2a;
 
-    public AccessibleObject()
-    {
-    }
+    public AccessibleObject() => _dispatchAdapter = new(this);
 
     /// <devdoc>
     ///  This constructor is used ONLY for wrapping system IAccessible objects
     ///  that are returned by the IAccessible methods.
     /// </devdoc>
     private AccessibleObject(AgileComPointer<UIA.IAccessible> accessible)
+        : this()
     {
         SystemIAccessible = accessible;
         _isSystemWrapper = true;
@@ -535,7 +540,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="direction">Indicates the direction in which to navigate.</param>
     /// <returns>The element in the specified direction if it exists.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) => null;
+    internal virtual IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction) => null;
 
     internal virtual IRawElementProviderSimple.Interface[]? GetEmbeddedFragmentRoots() => null;
 
@@ -556,9 +561,9 @@ public unsafe partial class AccessibleObject :
     /// <param name="x">X coordinate.</param>
     /// <param name="y">Y coordinate.</param>
     /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y) => this;
+    internal virtual IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y) => this;
 
-    internal virtual UiaCore.IRawElementProviderFragment? GetFocus() => null;
+    internal virtual IRawElementProviderFragment.Interface? GetFocus() => null;
 
     internal virtual void Expand()
     {
@@ -822,23 +827,94 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    object? UiaCore.IRawElementProviderFragment.Navigate(NavigateDirection direction) => FragmentNavigate(direction);
+    HRESULT IRawElementProviderFragment.Interface.Navigate(NavigateDirection direction, IRawElementProviderFragment** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int[]? UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
+        IRawElementProviderFragment.Interface? fragment = FragmentNavigate(direction);
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderFragment>(fragment);
+        return HRESULT.S_OK;
+    }
 
-    object[]? UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots() => GetEmbeddedFragmentRoots();
+    HRESULT IRawElementProviderFragment.Interface.GetRuntimeId(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IRawElementProviderFragment.SetFocus() => SetFocus();
+        *pRetVal = new SafeArrayScope<int>(RuntimeId);
+        return HRESULT.S_OK;
+    }
 
-    UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle => new(BoundingRectangle);
+    HRESULT IRawElementProviderFragment.Interface.get_BoundingRectangle(UiaRect* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = new()
+        {
+            left = BoundingRectangle.Left,
+            top = BoundingRectangle.Top,
+            height = BoundingRectangle.Height,
+            width = BoundingRectangle.Width
+        };
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRawElementProviderFragment.Interface.GetEmbeddedFragmentRoots(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        IRawElementProviderSimple.Interface[]? fragmentRoots = GetEmbeddedFragmentRoots();
+        if (fragmentRoots is null)
+        {
+            *pRetVal = default;
+            return HRESULT.S_OK;
+        }
+
+        ComSafeArrayScope<IRawElementProviderSimple> scope = new((uint)fragmentRoots.Length);
+        for (int i = 0; i < fragmentRoots.Length; i++)
+        {
+            scope[i] = ComHelpers.GetComPointer<IRawElementProviderSimple>(fragmentRoots[i]);
+        }
+
+        *pRetVal = scope;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRawElementProviderFragment.Interface.SetFocus()
+    {
+        SetFocus();
+        return HRESULT.S_OK;
+    }
 
     // An accessible object should provide info about its correct root object,
     // even its owner is used like a ToolStrip item via ToolStripControlHost.
     // This change was made here to not to rework FragmentRoot implementations
     // for all accessible object. Moreover, this change will work for new accessible object
     // classes, where it is enough to implement FragmentRoot for a common case.
-    UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot
-        => ToolStripFragmentRoot ?? FragmentRoot;
+    HRESULT IRawElementProviderFragment.Interface.get_FragmentRoot(IRawElementProviderFragmentRoot** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ToolStripFragmentRoot is not null
+                ? ComHelpers.GetComPointer<IRawElementProviderFragmentRoot>(ToolStripFragmentRoot)
+                : ComHelpers.TryGetComPointer<IRawElementProviderFragmentRoot>(FragmentRoot);
+        return HRESULT.S_OK;
+    }
 
     object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 
@@ -2040,22 +2116,22 @@ public unsafe partial class AccessibleObject :
             return null;
         }
 
+        AgileComPointer<UIA.IAccessible> agileAccessible =
+#if DEBUG
+            // AccessibleObject is not disposable so we shouldn't be tracking it.
+            new(accessible, takeOwnership: true, trackDisposal: false);
+#else
+            new(accessible, takeOwnership: true);
+#endif
         // Check to see if this object already wraps the given pointer.
         if (SystemIAccessible is { } systemAccessible
-            && systemAccessible.IsSameNativeObject(accessible))
+            && systemAccessible.IsSameNativeObject(agileAccessible))
         {
-            accessible->Release();
+            agileAccessible.Dispose();
             return this;
         }
 
-        return new AccessibleObject(
-#if DEBUG
-            // AccessibleObject is not disposable so we shouldn't be tracking it.
-            new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true, trackDisposal: false)
-#else
-            new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true)
-#endif
-            );
+        return new AccessibleObject(agileAccessible);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
@@ -2297,4 +2373,77 @@ public unsafe partial class AccessibleObject :
         result = HRESULT.E_NOINTERFACE;
         return default;
     }
+
+    HRESULT UIA.IAccessible.Interface.get_accParent(IDispatch** ppdispParent) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accChildCount(int* pcountChildren) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accChild(VARIANT varChild, IDispatch** ppdispChild) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accName(VARIANT varChild, BSTR* pszName) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accValue(VARIANT varChild, BSTR* pszValue) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accDescription(VARIANT varChild, BSTR* pszDescription) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accRole(VARIANT varChild, VARIANT* pvarRole) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accState(VARIANT varChild, VARIANT* pvarState) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accHelp(VARIANT varChild, BSTR* pszHelp) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accHelpTopic(BSTR* pszHelpFile, VARIANT varChild, int* pidTopic) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accKeyboardShortcut(VARIANT varChild, BSTR* pszKeyboardShortcut) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accFocus(VARIANT* pvarChild) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accSelection(VARIANT* pvarChildren) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.get_accDefaultAction(VARIANT varChild, BSTR* pszDefaultAction) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.accSelect(int flagsSelect, VARIANT varChild) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.accLocation(int* pxLeft, int* pyTop, int* pcxWidth, int* pcyHeight, VARIANT varChild) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.accNavigate(int navDir, VARIANT varStart, VARIANT* pvarEndUpAt) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.accHitTest(int xLeft, int yTop, VARIANT* pvarChild) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.accDoDefaultAction(VARIANT varChild) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.put_accName(VARIANT varChild, BSTR szName) => HRESULT.E_NOTIMPL;
+    HRESULT UIA.IAccessible.Interface.put_accValue(VARIANT varChild, BSTR szValue) => HRESULT.E_NOTIMPL;
+
+    HRESULT IDispatch.Interface.GetTypeInfoCount(uint* pctinfo)
+        => ((IDispatch.Interface)_dispatchAdapter).GetTypeInfoCount(pctinfo);
+
+    HRESULT IDispatch.Interface.GetTypeInfo(uint iTInfo, uint lcid, ITypeInfo** ppTInfo)
+        => ((IDispatch.Interface)_dispatchAdapter).GetTypeInfo(iTInfo, lcid, ppTInfo);
+
+    HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
+        => ((IDispatch.Interface) _dispatchAdapter).GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
+
+    HRESULT IDispatch.Interface.Invoke(
+        int dispIdMember,
+        Guid* riid,
+        uint lcid,
+        DISPATCH_FLAGS dwFlags,
+        DISPPARAMS* pDispParams,
+        VARIANT* pVarResult,
+        EXCEPINFO* pExcepInfo,
+        uint* pArgErr)
+        => ((IDispatch.Interface)_dispatchAdapter).Invoke(dispIdMember, riid, lcid, dwFlags, pDispParams, pVarResult, pExcepInfo, pArgErr);
+
+    HRESULT IDispatchEx.Interface.GetDispID(BSTR bstrName, uint grfdex, int* pid)
+        => ((IDispatchEx.Interface)_dispatchAdapter).GetDispID(bstrName, grfdex, pid);
+
+    HRESULT IDispatchEx.Interface.InvokeEx(
+        int id,
+        uint lcid,
+        ushort wFlags,
+        DISPPARAMS* pdp,
+        VARIANT* pvarRes,
+        EXCEPINFO* pei,
+        ComIServiceProvider* pspCaller)
+        => ((IDispatchEx.Interface)_dispatchAdapter).InvokeEx(id, lcid, wFlags, pdp, pvarRes, pei, pspCaller);
+
+    HRESULT IDispatchEx.Interface.DeleteMemberByName(BSTR bstrName, uint grfdex)
+        => ((IDispatchEx.Interface)_dispatchAdapter).DeleteMemberByName(bstrName, grfdex);
+
+    HRESULT IDispatchEx.Interface.DeleteMemberByDispID(int id)
+        => ((IDispatchEx.Interface)_dispatchAdapter).DeleteMemberByDispID(id);
+
+    HRESULT IDispatchEx.Interface.GetMemberProperties(int id, uint grfdexFetch, FDEX_PROP_FLAGS* pgrfdex)
+        => ((IDispatchEx.Interface)_dispatchAdapter).GetMemberProperties(id, grfdexFetch, pgrfdex);
+
+    HRESULT IDispatchEx.Interface.GetMemberName(int id, BSTR* pbstrName)
+        => ((IDispatchEx.Interface)_dispatchAdapter).GetMemberName(id, pbstrName);
+
+    HRESULT IDispatchEx.Interface.GetNextDispID(uint grfdex, int id, int* pid)
+        => ((IDispatchEx.Interface)_dispatchAdapter).GetNextDispID(grfdex, id, pid);
+
+    HRESULT IDispatchEx.Interface.GetNameSpaceParent(IUnknown** ppunk)
+        => ((IDispatchEx.Interface)_dispatchAdapter).GetNameSpaceParent(ppunk);
 }

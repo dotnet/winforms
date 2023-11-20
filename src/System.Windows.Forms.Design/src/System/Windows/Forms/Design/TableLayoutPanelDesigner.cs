@@ -25,7 +25,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     private UndoEngine undoEngine;
 
     private Control localDragControl;//only valid if we're currently dragging a child control of the table
-    private ArrayList dragComps;          //the components we are dragging
+    private List<IComponent> _dragComponents;          //the components we are dragging
     private DesignerVerbCollection verbs;//add col/row and remove col/row tab verbs
     private DesignerTableLayoutControlCollection controls;
     private DesignerVerb removeRowVerb;
@@ -966,11 +966,10 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private Control ExtractControlFromDragEvent(DragEventArgs de)
     {
-        DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-        if (data is not null)
+        if (de.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            dragComps = new ArrayList(data.DragComponents);
-            return dragComps[0] as Control;
+            _dragComponents = new List<IComponent>(data.DragComponents);
+            return _dragComponents[0] as Control;
         }
 
         return null;
@@ -1307,7 +1306,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             //or if we are doing a multi-select local drag, then show the no-smoking cursor.
             //or if we are doig a local drag, and the cell is not empty, and we are doing a copy
             if ((existingControl is not null && localDragControl is null) ||
-                (localDragControl is not null && dragComps.Count > 1) ||
+                (localDragControl is not null && _dragComponents.Count > 1) ||
                 (localDragControl is not null && existingControl is not null && Control.ModifierKeys == Keys.Control))
             {
                 return false;
@@ -1349,7 +1348,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     protected override void OnDragLeave(EventArgs e)
     {
         localDragControl = null; //VSWhidbey #275678
-        dragComps = null;
+        _dragComponents = null;
         base.OnDragLeave(e);
     }
 
@@ -1383,9 +1382,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             // Unfortunally cancelling the transaction throws as well, so we need a way to undo the Add
             // or access internal properties of the control.
             // dragComps is null when dragging off the toolbox
-            if (dragComps is not null)
+            if (_dragComponents is not null)
             {
-                foreach (Control dragControl in dragComps)
+                foreach (Control dragControl in _dragComponents)
                 {
                     if (dragControl is not null)
                     {
@@ -1400,7 +1399,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
 
         droppedCellPosition = InvalidPoint;
-        dragComps = null;
+        _dragComponents = null;
     }
 
     protected override void OnDragOver(DragEventArgs de)
@@ -1809,7 +1808,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    internal void FixUpControlsOnDelete(bool isRow, int index, ArrayList deleteList)
+    internal void FixUpControlsOnDelete(bool isRow, int index, List<Control> deleteList)
     {
         PropertyDescriptor childProp = TypeDescriptor.GetProperties(Table)["Controls"];
         PropChanging(childProp);
@@ -1907,7 +1906,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 try
                 {
                     Table.SuspendLayout();
-                    ArrayList deleteList = new ArrayList();
+                    List<Control> deleteList = new();
 
                     //First fix up any controls in the row/col we are deleting
                     FixUpControlsOnDelete(isRow, index, deleteList);
@@ -1921,16 +1920,16 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     {
                         PropertyDescriptor childProp = TypeDescriptor.GetProperties(Table)["Controls"];
                         PropChanging(childProp);
-                        foreach (object o in deleteList)
+                        foreach (Control control in deleteList)
                         {
                             List<IComponent> al = new();
-                            DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
+                            DesignerUtils.GetAssociatedComponents(control, host, al);
                             foreach (IComponent comp in al)
                             {
                                 compSvc.OnComponentChanging(comp, null);
                             }
 
-                            host.DestroyComponent(o as Component);
+                            host.DestroyComponent(control);
                         }
 
                         PropChanged(childProp);
@@ -2257,15 +2256,13 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         protected override object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            ArrayList subset = new ArrayList();
+            List<IComponent> subset = new();
 
             if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
             {
                 foreach (object val in valuesToSerialize)
                 {
-                    IComponent comp = val as IComponent;
-
-                    if (comp is not null && comp.Site is not null && !(comp.Site is INestedSite))
+                    if (val is IComponent { Site: not null and not INestedSite } comp)
                     {
                         subset.Add(comp);
                     }

@@ -74,7 +74,6 @@ public partial class PrinterResolution
             return $"[PrinterResolution {Kind}]";
         }
 
-
         return FormattableString.Invariant($"[PrinterResolution X={X} Y={Y}]");
     }
 }

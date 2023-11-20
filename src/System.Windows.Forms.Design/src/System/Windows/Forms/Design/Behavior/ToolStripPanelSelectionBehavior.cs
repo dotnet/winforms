@@ -125,7 +125,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
         return false;
     }
 
-    private void ReParentControls(IList<IComponent> controls, bool copy)
+    private void ReParentControls(List<IComponent> controls, bool copy)
     {
         if (controls.Count <= 0)
         {
@@ -223,11 +223,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
 
         if (e.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            components = new List<IComponent>(data.DragComponents.Count);
-            foreach (var component in data.DragComponents)
-            {
-                components.Add((IComponent)component);
-            }
+            components = new List<IComponent>(data.DragComponents);
 
             foreach (IComponent dragComponent in components)
             {

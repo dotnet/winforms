@@ -4,7 +4,6 @@
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using UiaCore = Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -23,7 +22,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
         _textProvider = new(owningControl, labelEdit, this);
     }
 
-    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+    internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         => direction switch
         {
             NavigateDirection.NavigateDirection_Parent => Parent,
@@ -39,7 +38,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
             UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.True,
             UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
             UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
-            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_labelEdit.TryGetTarget(out var target) ? target.HWND : 0),
+            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_labelEdit.TryGetTarget(out var target) ? target.HWND : HWND.Null),
             _ => base.GetPropertyValue(propertyID),
         };
 

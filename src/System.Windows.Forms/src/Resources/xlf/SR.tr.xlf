@@ -262,11 +262,6 @@
         <target state="translated">Yalnızca tek boyutlu diziler, istenen eylem için destekleniyor.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Negatif olmayan sayı gerekiyor.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Hedef dizi türü, koleksiyondaki öğelerin türüyle uyumlu değil.</target>
@@ -7409,11 +7404,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Her düğme tıklamasında artacak veya azalacak miktarı gösterir.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">Parametre değerinin 0'dan büyük veya eşit olması gerekir.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Sayısal artırma-azaltma denetimi için en büyük değeri gösterir.</target>
@@ -8267,11 +8257,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Metin</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Sekme dizini geçerli değil.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">

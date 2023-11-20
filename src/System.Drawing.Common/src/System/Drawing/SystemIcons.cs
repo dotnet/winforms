@@ -41,10 +41,10 @@ public static class SystemIcons
     {
         get
         {
-            if (s_shield == null)
+            if (s_shield is null)
             {
                 s_shield = new Icon(typeof(SystemIcons), "ShieldIcon.ico");
-                Debug.Assert(s_shield != null, "ShieldIcon.ico must be present as an embedded resource in System.Drawing.Common.");
+                Debug.Assert(s_shield is not null, "ShieldIcon.ico must be present as an embedded resource in System.Drawing.Common.");
             }
 
             return s_shield;

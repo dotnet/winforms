@@ -93,10 +93,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsWmf()
     {
-        if ((wmf == null) && (emf == null))
+        if ((wmf is null) && (emf is null))
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        if ((wmf != null) &&
+        if ((wmf is not null) &&
             ((wmf.type == MetafileType.Wmf) ||
              (wmf.type == MetafileType.WmfPlaceable)))
             return true;
@@ -109,10 +109,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsWmfPlaceable()
     {
-        if (wmf == null && emf == null)
+        if (wmf is null && emf is null)
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        return ((wmf != null) && (wmf.type == MetafileType.WmfPlaceable));
+        return ((wmf is not null) && (wmf.type == MetafileType.WmfPlaceable));
     }
 
     /// <summary>
@@ -120,10 +120,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsEmf()
     {
-        if (wmf == null && emf == null)
+        if (wmf is null && emf is null)
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        return ((emf != null) && (emf.type == MetafileType.Emf));
+        return ((emf is not null) && (emf.type == MetafileType.Emf));
     }
 
     /// <summary>
@@ -132,10 +132,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsEmfOrEmfPlus()
     {
-        if (wmf == null && emf == null)
+        if (wmf is null && emf is null)
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        return ((emf != null) && (emf.type >= MetafileType.Emf));
+        return ((emf is not null) && (emf.type >= MetafileType.Emf));
     }
 
     /// <summary>
@@ -144,10 +144,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsEmfPlus()
     {
-        if (wmf == null && emf == null)
+        if (wmf is null && emf is null)
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        return ((emf != null) && (emf.type >= MetafileType.EmfPlusOnly));
+        return ((emf is not null) && (emf.type >= MetafileType.EmfPlusOnly));
     }
 
     /// <summary>
@@ -156,10 +156,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsEmfPlusDual()
     {
-        if (wmf == null && emf == null)
+        if (wmf is null && emf is null)
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        return ((emf != null) && (emf.type == MetafileType.EmfPlusDual));
+        return ((emf is not null) && (emf.type == MetafileType.EmfPlusDual));
     }
 
     /// <summary>
@@ -168,10 +168,10 @@ public sealed class MetafileHeader
     /// </summary>
     public bool IsEmfPlusOnly()
     {
-        if (wmf == null && emf == null)
+        if (wmf is null && emf is null)
             throw Gdip.StatusException(Gdip.InvalidParameter);
 
-        return ((emf != null) && (emf.type == MetafileType.EmfPlusOnly));
+        return ((emf is not null) && (emf.type == MetafileType.EmfPlusOnly));
     }
 
     /// <summary>
@@ -190,7 +190,7 @@ public sealed class MetafileHeader
     {
         get
         {
-            if (wmf == null)
+            if (wmf is null)
                 throw Gdip.StatusException(Gdip.InvalidParameter);
 
             return wmf.WmfHeader;
@@ -204,7 +204,7 @@ public sealed class MetafileHeader
     {
         get
         {
-            if (wmf == null && emf == null)
+            if (wmf is null && emf is null)
                 throw Gdip.StatusException(Gdip.InvalidParameter);
 
             return IsWmf() ? wmf!.EmfPlusHeaderSize : emf!.EmfPlusHeaderSize;
@@ -218,7 +218,7 @@ public sealed class MetafileHeader
     {
         get
         {
-            if (wmf == null && emf == null)
+            if (wmf is null && emf is null)
                 throw Gdip.StatusException(Gdip.InvalidParameter);
 
             return IsWmf() ? wmf!.LogicalDpiX : emf!.LogicalDpiX;
@@ -232,7 +232,7 @@ public sealed class MetafileHeader
     {
         get
         {
-            if (wmf == null && emf == null)
+            if (wmf is null && emf is null)
                 throw Gdip.StatusException(Gdip.InvalidParameter);
 
             return IsWmf() ? wmf!.LogicalDpiY : emf!.LogicalDpiX;
