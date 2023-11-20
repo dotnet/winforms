@@ -193,8 +193,9 @@ public class ControlBindingsCollection : BindingsCollection
         for (int i = 0; i < Count; i++)
         {
             Binding current = this[i];
-            if (binding != current && !string.IsNullOrEmpty(current.PropertyName) &&
-                string.Equals(binding.PropertyName, current.PropertyName, StringComparison.InvariantCulture))
+            if (binding != current
+                && !string.IsNullOrEmpty(current.PropertyName)
+                && string.Equals(binding.PropertyName, current.PropertyName, StringComparison.InvariantCulture))
             {
                 throw new ArgumentException(SR.BindingsCollectionDup, nameof(binding));
             }

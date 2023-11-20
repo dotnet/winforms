@@ -1214,8 +1214,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             Rectangle oldBounds = Bounds;
 
-            if (oldBounds.X == x && oldBounds.Y == y && oldBounds.Width == width &&
-                oldBounds.Height == height)
+            if (oldBounds.X == x && oldBounds.Y == y && oldBounds.Width == width && oldBounds.Height == height)
             {
                 return;
             }

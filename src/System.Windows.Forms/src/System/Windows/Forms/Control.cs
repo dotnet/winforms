@@ -3835,6 +3835,7 @@ public unsafe partial class Control :
 
         HANDLE threadHandle = ctx.Handle;
         bool processed = false;
+
         // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
         uint exitCode = 0;
         bool returnValue = false;
@@ -3846,11 +3847,11 @@ public unsafe partial class Control :
                 returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
             }
 
-            //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
-            //if we don't know, we shouldn't throw.
-            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE) ||
-                (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
-                AppDomain.CurrentDomain.IsFinalizingForUnload())
+            // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
+            // if we don't know, we shouldn't throw.
+            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE)
+                || (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE)
+                || AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
                 if (waitHandle.WaitOne(1, false))
                 {
@@ -6574,8 +6575,9 @@ public unsafe partial class Control :
                     // This code matches the behavior above.  Basically, if we're debugging, don't
                     // do this because the exception would have been handled above.  If we're
                     // not debugging, raise the exception here.
-                    if (!NativeWindow.WndProcShouldBeDebuggable &&
-                        current._exception is not null && !current._synchronous)
+                    if (!NativeWindow.WndProcShouldBeDebuggable
+                        && current._exception is not null
+                        && !current._synchronous)
                     {
                         Application.OnThreadException(current._exception);
                     }
@@ -8172,8 +8174,8 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnKeyUp(KeyEventArgs e)
     {
-        if (OsVersion.IsWindows11_OrGreater() &&
-            (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
+        if (OsVersion.IsWindows11_OrGreater()
+            && (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
         {
             KeyboardToolTipStateMachine.HidePersistentTooltip();
         }
@@ -8996,18 +8998,18 @@ public unsafe partial class Control :
         foreach (Control c in Controls)
         {
             // First, if the control is a container, recurse into its descendants.
-            if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren &&
-                c.ShouldPerformContainerValidation() &&
-                c.PerformContainerValidation(validationConstraints))
+            if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren
+                && c.ShouldPerformContainerValidation()
+                && c.PerformContainerValidation(validationConstraints))
             {
                 failed = true;
             }
 
             // Next, use input flags to decide whether to validate the control itself
-            if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable)) ||
-                ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled) ||
-                ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible) ||
-                ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
+            if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable))
+                || ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled)
+                || ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible)
+                || ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
             {
                 continue;
             }
@@ -10558,8 +10560,7 @@ public unsafe partial class Control :
 
     private Control? GetNextSelectableControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
     {
-        if (!Contains(ctl) ||
-            (!nested && ctl?._parent != this))
+        if (!Contains(ctl) || (!nested && ctl?._parent != this))
         {
             ctl = null;
         }
@@ -10645,8 +10646,7 @@ public unsafe partial class Control :
     /// </summary>
     public void SetBounds(int x, int y, int width, int height)
     {
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        if (_x != x || _y != y || _width != width || _height != height)
         {
             _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
             try
@@ -10694,8 +10694,7 @@ public unsafe partial class Control :
             height = _height;
         }
 
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        if (_x != x || _y != y || _width != width || _height != height)
         {
             _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
             try
@@ -11494,8 +11493,7 @@ public unsafe partial class Control :
 #endif // DEBUG
 
         bool newLocation = _x != x || _y != y;
-        bool newSize = Width != width || Height != height ||
-                       _clientWidth != clientWidth || _clientHeight != clientHeight;
+        bool newSize = Width != width || Height != height || _clientWidth != clientWidth || _clientHeight != clientHeight;
 
         _x = x;
         _y = y;

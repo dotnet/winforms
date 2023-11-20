@@ -98,9 +98,9 @@ internal class Program
         {
             loaded = true;
             var forms = application.OpenForms;
-            valid = forms.Count == 1 &&
-                forms[0] == mainForm &&
-                application.ApplicationContext.MainForm == mainForm;
+            valid = forms.Count == 1
+                && forms[0] == mainForm
+                && application.ApplicationContext.MainForm == mainForm;
             if (!valid)
             {
                 mainForm.Close();

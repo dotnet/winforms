@@ -84,10 +84,10 @@ public partial class Binding
             }
 
             // remove notification from the backEnd
-            if (_bindingManager is not null &&
-                FieldInfo is not null &&
-                _bindingManager.IsBinding &&
-                _bindingManager is not CurrencyManager)
+            if (_bindingManager is not null
+                && FieldInfo is not null
+                && _bindingManager.IsBinding
+                && _bindingManager is not CurrencyManager)
             {
                 FieldInfo.RemoveValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
                 FieldInfo = null;
@@ -202,18 +202,18 @@ public partial class Binding
             }
 
             // Remove propertyChangedNotification when this binding is deleted
-            if (_bindingManager is not null &&
-                FieldInfo is not null &&
-                _bindingManager.IsBinding &&
-                _bindingManager is not CurrencyManager)
+            if (_bindingManager is not null
+                && FieldInfo is not null
+                && _bindingManager.IsBinding
+                && _bindingManager is not CurrencyManager)
             {
                 FieldInfo.RemoveValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
             }
 
-            if (_bindingManager is not null &&
-                _owner.BindableComponent is not null &&
-                _owner.ComponentCreated &&
-                IsDataSourceInitialized)
+            if (_bindingManager is not null
+                && _owner.BindableComponent is not null
+                && _owner.ComponentCreated
+                && IsDataSourceInitialized)
             {
                 string dataField = _owner.BindingMemberInfo.BindingField;
 
@@ -229,9 +229,9 @@ public partial class Binding
                 // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
                 // then we want to get notification from Current.Property1.Property2 and not from DataSource
                 // when we get the backEnd notification we push the new value into the Control's property
-                if (FieldInfo is not null &&
-                    _bindingManager.IsBinding &&
-                    _bindingManager is not CurrencyManager)
+                if (FieldInfo is not null
+                    && _bindingManager.IsBinding
+                    && _bindingManager is not CurrencyManager)
                 {
                     FieldInfo.AddValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
                 }
