@@ -20,6 +20,7 @@ public sealed unsafe partial class HtmlWindow
 
     private readonly HtmlShimManager _shimManager;
     private readonly AgileComPointer<IHTMLWindow2> _htmlWindow2;
+    private readonly int _hashCode;
 
     internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2* window)
     {
@@ -29,6 +30,8 @@ public sealed unsafe partial class HtmlWindow
         _htmlWindow2 = new(window, takeOwnership: true);
 #endif
         Debug.Assert(NativeHtmlWindow is not null, "The window object should implement IHTMLWindow2");
+        using var scope = _htmlWindow2.GetInterface<IUnknown>();
+        _hashCode = HashCode.Combine((nint)scope.Value);
 
         _shimManager = shimManager;
     }
@@ -471,7 +474,7 @@ public sealed unsafe partial class HtmlWindow
 
     public static bool operator !=(HtmlWindow? left, HtmlWindow? right) => !(left == right);
 
-    public override int GetHashCode() => _htmlWindow2.GetHashCode();
+    public override int GetHashCode() => _hashCode;
 
     public override bool Equals(object? obj) => this == (HtmlWindow?)obj;
 }

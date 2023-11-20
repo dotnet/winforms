@@ -2116,22 +2116,22 @@ public unsafe partial class AccessibleObject :
             return null;
         }
 
+        AgileComPointer<UIA.IAccessible> agileAccessible =
+#if DEBUG
+            // AccessibleObject is not disposable so we shouldn't be tracking it.
+            new(accessible, takeOwnership: true, trackDisposal: false);
+#else
+            new(accessible, takeOwnership: true);
+#endif
         // Check to see if this object already wraps the given pointer.
         if (SystemIAccessible is { } systemAccessible
-            && systemAccessible.IsSameNativeObject(accessible))
+            && systemAccessible.IsSameNativeObject(agileAccessible))
         {
-            accessible->Release();
+            agileAccessible.Dispose();
             return this;
         }
 
-        return new AccessibleObject(
-#if DEBUG
-            // AccessibleObject is not disposable so we shouldn't be tracking it.
-            new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true, trackDisposal: false)
-#else
-            new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true)
-#endif
-            );
+        return new AccessibleObject(agileAccessible);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]

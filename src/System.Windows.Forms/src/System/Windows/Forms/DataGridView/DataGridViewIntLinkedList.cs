@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms;
@@ -12,8 +10,8 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class DataGridViewIntLinkedList : IEnumerable
 {
-    private DataGridViewIntLinkedListElement _lastAccessedElement;
-    private DataGridViewIntLinkedListElement _headElement;
+    private DataGridViewIntLinkedListElement? _lastAccessedElement;
+    private DataGridViewIntLinkedListElement? _headElement;
     private int _lastAccessedIndex;
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -40,31 +38,32 @@ internal class DataGridViewIntLinkedList : IEnumerable
     {
         get
         {
-            Debug.Assert(index >= 0);
-            Debug.Assert(index < Count);
+            ArgumentOutOfRangeException.ThrowIfLessThan(index, 0);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
             if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
             {
-                DataGridViewIntLinkedListElement tmp = _headElement;
+                // Since we have checked the index value, targetElement should not be null here.
+                DataGridViewIntLinkedListElement targetElement = _headElement!;
                 int tmpIndex = index;
                 while (tmpIndex > 0)
                 {
-                    tmp = tmp.Next;
+                    targetElement = targetElement.Next!;
                     tmpIndex--;
                 }
 
-                _lastAccessedElement = tmp;
+                _lastAccessedElement = targetElement;
                 _lastAccessedIndex = index;
-                return tmp.Int;
+                return targetElement.Int;
             }
             else
             {
                 while (_lastAccessedIndex < index)
                 {
-                    _lastAccessedElement = _lastAccessedElement.Next;
+                    _lastAccessedElement = _lastAccessedElement!.Next;
                     _lastAccessedIndex++;
                 }
 
-                return _lastAccessedElement.Int;
+                return _lastAccessedElement!.Int;
             }
         }
         set
@@ -76,7 +75,7 @@ internal class DataGridViewIntLinkedList : IEnumerable
                 Debug.Assert(index == _lastAccessedIndex);
             }
 
-            _lastAccessedElement.Int = value;
+            _lastAccessedElement!.Int = value;
         }
     }
 
@@ -116,7 +115,7 @@ internal class DataGridViewIntLinkedList : IEnumerable
     public bool Contains(int integer)
     {
         int index = 0;
-        DataGridViewIntLinkedListElement tmp = _headElement;
+        DataGridViewIntLinkedListElement? tmp = _headElement;
         while (tmp is not null)
         {
             if (tmp.Int == integer)
@@ -147,28 +146,29 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
     public bool Remove(int integer)
     {
-        DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
-        while (tmp2 is not null)
+        DataGridViewIntLinkedListElement? removeTargetPrevious = null;
+        DataGridViewIntLinkedListElement? removeTarget = _headElement;
+        while (removeTarget is not null)
         {
-            if (tmp2.Int == integer)
+            if (removeTarget.Int == integer)
             {
                 break;
             }
 
-            tmp1 = tmp2;
-            tmp2 = tmp2.Next;
+            removeTargetPrevious = removeTarget;
+            removeTarget = removeTarget.Next;
         }
 
-        if (tmp2.Int == integer)
+        if (removeTarget is not null && removeTarget.Int == integer)
         {
-            DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-            if (tmp1 is null)
+            DataGridViewIntLinkedListElement? removeTargetNext = removeTarget.Next;
+            if (removeTargetPrevious is null)
             {
-                _headElement = tmp3;
+                _headElement = removeTargetNext;
             }
             else
             {
-                tmp1.Next = tmp3;
+                removeTargetPrevious.Next = removeTargetNext;
             }
 
             Count--;
@@ -182,22 +182,28 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
     public void RemoveAt(int index)
     {
-        DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
+        ArgumentOutOfRangeException.ThrowIfLessThan(index, 0);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
+
+        DataGridViewIntLinkedListElement? removeTargetPrevious = null;
+
+        // Since we have checked the index value, removeTarget should not be null here.
+        DataGridViewIntLinkedListElement removeTarget = _headElement!;
         while (index > 0)
         {
-            tmp1 = tmp2;
-            tmp2 = tmp2.Next;
+            removeTargetPrevious = removeTarget;
+            removeTarget = removeTarget.Next!;
             index--;
         }
 
-        DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-        if (tmp1 is null)
+        DataGridViewIntLinkedListElement? removeTargetNext = removeTarget!.Next;
+        if (removeTargetPrevious is null)
         {
-            _headElement = tmp3;
+            _headElement = removeTargetNext;
         }
         else
         {
-            tmp1.Next = tmp3;
+            removeTargetPrevious.Next = removeTargetNext;
         }
 
         Count--;

@@ -33,6 +33,7 @@ public sealed unsafe partial class HtmlElement
 
     private readonly AgileComPointer<IHTMLElement> _htmlElement;
     private readonly HtmlShimManager _shimManager;
+    private readonly int _hashCode;
 
     internal HtmlElement(HtmlShimManager shimManager, IHTMLElement* element)
     {
@@ -42,6 +43,8 @@ public sealed unsafe partial class HtmlElement
         _htmlElement = new(element, takeOwnership: true);
 #endif
         Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
+        using var scope = _htmlElement.GetInterface<IUnknown>();
+        _hashCode = HashCode.Combine((nint)scope.Value);
 
         _shimManager = shimManager;
     }
@@ -806,7 +809,7 @@ public sealed unsafe partial class HtmlElement
 
     public static bool operator !=(HtmlElement? left, HtmlElement? right) => !(left == right);
 
-    public override int GetHashCode() => _htmlElement.GetHashCode();
+    public override int GetHashCode() => _hashCode;
 
     public override bool Equals(object? obj) => this == (obj as HtmlElement);
 }
