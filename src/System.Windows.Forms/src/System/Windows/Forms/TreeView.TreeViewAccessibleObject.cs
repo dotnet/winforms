@@ -68,8 +68,6 @@ public partial class TreeView
             return Bounds.Contains(x, y) ? this : null;
         }
 
-        internal override int[] RuntimeId => base.RuntimeId;
-
         public override AccessibleStates State
         {
             get
