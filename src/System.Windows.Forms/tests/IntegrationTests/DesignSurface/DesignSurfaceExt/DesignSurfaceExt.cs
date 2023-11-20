@@ -309,15 +309,11 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         //- We can leave the default services in their present state,
         //- or we can remove them and replace them with our own.
         //- Now add our own services using IServiceContainer
-        //-
-        //-
         //- Note
         //- before loading the root control in the design surface
         //- we must add an instance of naming service to the service container.
         //- otherwise the root component did not have a name and this caused
         //- troubles when we try to use the UndoEngine
-        //-
-        //-
         //- 1. NameCreationService
         _nameCreationService = new NameCreationServiceImp();
         if (_nameCreationService is not null)
@@ -326,8 +322,6 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
         }
 
-        //-
-        //-
         //- 2. CodeDomComponentSerializationService
         _codeDomComponentSerializationService = new CodeDomComponentSerializationService(ServiceContainer);
         if (_codeDomComponentSerializationService is not null)
@@ -337,8 +331,6 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             ServiceContainer.AddService(typeof(ComponentSerializationService), _codeDomComponentSerializationService);
         }
 
-        //-
-        //-
         //- 3. IDesignerSerializationService
         _designerSerializationService = new DesignerSerializationServiceImpl(ServiceContainer);
         if (_designerSerializationService is not null)
@@ -348,8 +340,6 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             ServiceContainer.AddService(typeof(IDesignerSerializationService), _designerSerializationService);
         }
 
-        //-
-        //-
         //- 4. UndoEngine
         _undoEngine = new UndoEngineExt(ServiceContainer);
         //- disable the UndoEngine
@@ -361,10 +351,11 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             ServiceContainer.AddService(typeof(UndoEngine), _undoEngine);
         }
 
-        //-
-        //-
         //- 5. IMenuCommandService
         ServiceContainer.AddService(typeof(IMenuCommandService), new MenuCommandService(this));
+
+        //- 6. ITypeDiscoveryService
+        ServiceContainer.AddService(typeof(ITypeDiscoveryService), new TypeDiscoveryService());
     }
 
     //- do some Edit menu command using the MenuCommandService
