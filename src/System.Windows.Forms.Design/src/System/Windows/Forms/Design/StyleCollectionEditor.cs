@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
         protected string? _helpTopic;
 
         /// <summary>
-        ///  This collection editor is used to add value to the TableLayoutPanel's
+        ///  This collection editor is used to add value to the <see cref="TableLayoutPanel" />'s
         ///  'Style' collections: RowStyle and ColumnStyle.
         /// </summary>
         /// <param name="type">A specified collection type.</param>
