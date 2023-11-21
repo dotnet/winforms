@@ -4,7 +4,6 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
-using static Interop;
 
 namespace System.Windows.Forms;
 
