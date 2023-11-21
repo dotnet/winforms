@@ -15304,7 +15304,9 @@ public partial class DataGridView
     {
         base.OnDoubleClick(e);
 
-        if (!_dataGridViewState2[State2_MessageFromEditingCtrls] && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
+        if (!_dataGridViewState2[State2_MessageFromEditingCtrls]
+            && !_dataGridViewOper[OperationInDispose]
+            && !IsDisposed)
         {
             if (e is MouseEventArgs me)
             {
@@ -15727,7 +15729,6 @@ public partial class DataGridView
         }
     }
 
-#nullable disable
     internal void OnInsertingColumn(int columnIndexInserted, DataGridViewColumn dataGridViewColumn, out Point newCurrentCell)
     {
         Debug.Assert(dataGridViewColumn is not null);
@@ -15794,7 +15795,7 @@ public partial class DataGridView
                 throw new InvalidOperationException(SR.DataGridView_CannotAddUntypedColumn);
             }
 
-            if (dataGridViewColumn.CellTemplate.DefaultNewRowValue is not null && NewRowIndex != -1)
+            if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
             {
                 // New row needs to be unshared before addition of new cell with a Value is not null
                 DataGridViewRow newRow = Rows[NewRowIndex];
@@ -15901,7 +15902,12 @@ public partial class DataGridView
                     // When force is true, the underlying data was already added, therefore we need to avoid accessing any back-end data
                     // since we might be off by 1 row.
                     _dataGridViewState1[State1_TemporarilyResetCurrentCell] = true;
-                    bool success = SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, false /*validateCurrentCell*/, false);
+                    bool success = SetCurrentCellAddressCore(
+                        columnIndex: -1,
+                        rowIndex: -1,
+                        setAnchorCellAddress: true,
+                        validateCurrentCell: false,
+                        throughMouseClick: false);
                     Debug.Assert(success);
                 }
                 else
@@ -15923,7 +15929,7 @@ public partial class DataGridView
         }
 
         // For now same checks as for OnAddingRow
-        OnAddingRow(dataGridViewRow, rowState, false /*checkFrozenState*/);
+        OnAddingRow(dataGridViewRow, rowState, checkFrozenState: false);
 
         // check for correctness of frozen state - throws exception if state is incorrect.
         CorrectRowFrozenState(dataGridViewRow, rowState, rowIndexInserted);
@@ -15983,7 +15989,7 @@ public partial class DataGridView
 
         // For now almost same checks as for OnAddingRows
         // OnAddingRows checks for Selected status of rows.
-        OnAddingRows(dataGridViewRows, false /*checkFrozenStates*/);
+        OnAddingRows(dataGridViewRows, checkFrozenStates: false);
 
         // Check for Frozen state correctness
         CorrectRowFrozenStates(dataGridViewRows, rowIndexInserted);
@@ -16151,7 +16157,11 @@ public partial class DataGridView
         }
 
         base.OnLayout(e);
-        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
+        PerformLayoutPrivate(
+            useRowShortcut: false,
+            computeVisibleRows: false,
+            invalidInAdjustFillingColumns: false,
+            repositionEditingControl: false);
         if (RightToLeftInternal)
         {
             Invalidate();
@@ -16167,7 +16177,7 @@ public partial class DataGridView
     {
         if (_ptCurrentCell.X > -1 && !_dataGridViewState1[State1_LeavingWithTabKey])
         {
-            DataGridViewCell dataGridViewCell = null;
+            DataGridViewCell? dataGridViewCell = null;
             OnCellLeave(ref dataGridViewCell, _ptCurrentCell.X, _ptCurrentCell.Y);
             if (_ptCurrentCell.X == -1)
             {
@@ -16184,7 +16194,7 @@ public partial class DataGridView
             // invalidate the current cell so the data grid view does not paint the focus rectangle any longer
             if (_ptCurrentCell.X > -1 && _ptCurrentCell.Y > -1)
             {
-                InvalidateCellPrivate(_ptCurrentCell.X /*columnIndex*/, _ptCurrentCell.Y /*rowIndex*/);
+                InvalidateCellPrivate(columnIndex: _ptCurrentCell.X, rowIndex: _ptCurrentCell.Y);
             }
         }
 
@@ -16230,7 +16240,7 @@ public partial class DataGridView
                     || _ptMouseDownCell.Y == -1
                     || (_ptMouseDownCell.X == _ptCurrentCell.X && _ptMouseDownCell.Y == _ptCurrentCell.Y)))
             {
-                DataGridViewCellMouseEventArgs dgvcme = null;
+                DataGridViewCellMouseEventArgs? dgvcme = null;
                 if (hti.Type is not DataGridViewHitTestType.None
                     and not DataGridViewHitTestType.HorizontalScrollBar
                     and not DataGridViewHitTestType.VerticalScrollBar)
@@ -16314,7 +16324,7 @@ public partial class DataGridView
 
             if (_ptMouseDownCell.X == hti._col && _ptMouseDownCell.Y == hti._row)
             {
-                DataGridViewCellMouseEventArgs dgvcme = null;
+                DataGridViewCellMouseEventArgs? dgvcme = null;
                 if (hti.Type is not DataGridViewHitTestType.None
                     and not DataGridViewHitTestType.HorizontalScrollBar
                     and not DataGridViewHitTestType.VerticalScrollBar)
@@ -16353,7 +16363,13 @@ public partial class DataGridView
                                 int columnIndex = (hti._typeInternal == DataGridViewHitTestTypeInternal.ColumnResizeRight) ? hti._col : hti._adjacentCol;
                                 if (columnIndex < Columns.Count)
                                 {
-                                    HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, false /*defaultHandledValue*/);
+                                    HandledMouseEventArgs hme = new(
+                                        e.Button,
+                                        e.Clicks,
+                                        e.X,
+                                        e.Y,
+                                        e.Delta,
+                                        defaultHandledValue: false);
                                     DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new DataGridViewColumnDividerDoubleClickEventArgs(columnIndex, hme);
                                     Debug.Assert(Columns[columnIndex].Resizable == DataGridViewTriState.True);
                                     OnColumnDividerDoubleClick(dgvcddce);
@@ -16367,7 +16383,13 @@ public partial class DataGridView
                         case DataGridViewHitTestTypeInternal.ColumnHeadersResizeTop:
                         case DataGridViewHitTestTypeInternal.ColumnHeadersResizeBottom:
                             {
-                                HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, false /*defaultHandledValue*/);
+                                HandledMouseEventArgs hme = new(
+                                    e.Button,
+                                    e.Clicks,
+                                    e.X,
+                                    e.Y,
+                                    e.Delta,
+                                    defaultHandledValue: false);
                                 DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new DataGridViewRowDividerDoubleClickEventArgs(-1, hme);
                                 Debug.Assert(_columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
                                 OnRowDividerDoubleClick(dgvrddce);
@@ -16391,7 +16413,13 @@ public partial class DataGridView
                                 int rowIndex = (hti._typeInternal == DataGridViewHitTestTypeInternal.RowResizeBottom) ? hti._row : hti._adjacentRow;
                                 if (rowIndex < Rows.Count)
                                 {
-                                    HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, false /*defaultHandledValue*/);
+                                    HandledMouseEventArgs hme = new(
+                                        e.Button,
+                                        e.Clicks,
+                                        e.X,
+                                        e.Y,
+                                        e.Delta,
+                                        defaultHandledValue: false);
                                     DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new DataGridViewRowDividerDoubleClickEventArgs(rowIndex, hme);
                                     Debug.Assert(Rows[rowIndex].Resizable == DataGridViewTriState.True);
                                     OnRowDividerDoubleClick(dgvrddce);
@@ -16405,7 +16433,13 @@ public partial class DataGridView
                         case DataGridViewHitTestTypeInternal.RowHeadersResizeLeft:
                         case DataGridViewHitTestTypeInternal.RowHeadersResizeRight:
                             {
-                                HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, false /*defaultHandledValue*/);
+                                HandledMouseEventArgs hme = new(
+                                    e.Button,
+                                    e.Clicks,
+                                    e.X,
+                                    e.Y,
+                                    e.Delta,
+                                    defaultHandledValue: false);
                                 DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new DataGridViewColumnDividerDoubleClickEventArgs(-1, hme);
                                 Debug.Assert(_rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing);
                                 OnColumnDividerDoubleClick(dgvcddce);
@@ -16504,7 +16538,7 @@ public partial class DataGridView
 
         if (!mouseOverEditingPanel && !mouseOverEditingControl && !mouseOverToolTipControl && !MouseOverScrollBar)
         {
-            _toolTipControl.Activate(false /*activate*/);
+            _toolTipControl.Activate(activate: false);
             base.OnMouseLeave(e);
             _dataGridViewState2[State2_MouseEnterExpected] = true;
         }
@@ -16709,7 +16743,7 @@ public partial class DataGridView
                         OnMouseClick(e);
                     }
 
-                    CorrectFocus(true /*onlyIfGridHasFocus*/);
+                    CorrectFocus(onlyIfGridHasFocus: true);
 
                     if (dgvcme.ColumnIndex < Columns.Count && dgvcme.RowIndex < Rows.Count)
                     {
@@ -16719,7 +16753,7 @@ public partial class DataGridView
                 else if (hti.Type == DataGridViewHitTestType.None)
                 {
                     // VS Whidbey
-                    CorrectFocus(true /*onlyIfGridHasFocus*/);
+                    CorrectFocus(onlyIfGridHasFocus: true);
                 }
             }
             else
@@ -16750,7 +16784,7 @@ public partial class DataGridView
                 }
 
                 // VS Whidbey
-                CorrectFocus(true /*onlyIfGridHasFocus*/);
+                CorrectFocus(onlyIfGridHasFocus: true);
 
                 // Updating the hit test info since the EndXXX operation above may have invalidated the previously
                 // determined hti.
@@ -16779,7 +16813,7 @@ public partial class DataGridView
     {
         base.OnMouseWheel(e);
 
-        HandledMouseEventArgs hme = e as HandledMouseEventArgs;
+        HandledMouseEventArgs? hme = e as HandledMouseEventArgs;
         if (hme is not null && hme.Handled)
         {
             // The application event handler handled the scrolling - don't do anything more.
@@ -17002,7 +17036,11 @@ public partial class DataGridView
 
             if (_layout._dirty)
             {
-                PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
+                PerformLayoutPrivate(
+                    useRowShortcut: false,
+                    computeVisibleRows: true,
+                    invalidInAdjustFillingColumns: false,
+                    repositionEditingControl: false);
             }
 
             Graphics g = e.GraphicsInternal;
@@ -17195,7 +17233,7 @@ public partial class DataGridView
             BeginEditInternal(selectAll: true);
         }
     }
-
+#nullable disable
     internal void OnRemovedColumn_PreNotification(DataGridViewColumn dataGridViewColumn)
     {
         Debug.Assert(dataGridViewColumn.Index >= 0);
@@ -29994,7 +30032,7 @@ public partial class DataGridView
 
         return false;
     }
-
+#nullable enable
     protected override void WndProc(ref Message m)
     {
         switch (m.MsgInternal)
@@ -30039,7 +30077,6 @@ public partial class DataGridView
         base.WndProc(ref m);
     }
 
-#nullable enable
     /// <summary>
     ///  Helper that  gets the specified event if the class is not disposing or disposed.
     /// </summary>
