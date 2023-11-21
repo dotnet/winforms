@@ -32,7 +32,8 @@ namespace WinformsControlsTest
             // Fill series data for chart3
             double[] yValues = { 32.4, 56.9, 89.7, 80.5, 59.3, 33.8, 78.8, 44.6, 76.4, 68.9 };
             chart3.Series["DataSeries"].Points.DataBindY(yValues);
-            chart3.Series["ErrorBar"]["ErrorBarSeries"] = "DataSeries"; // Link error bar series with data series
+            // Link error bar series with data series
+            chart3.Series["ErrorBar"]["ErrorBarSeries"] = "DataSeries";
 
             // Fill series data for chart4
             chart4.Series[0].Font = new Font("Trebuchet MS", 8, FontStyle.Bold);
