@@ -801,8 +801,8 @@ public unsafe class AccessibleObjectTests : InteropTestBase
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IRawElementProviderSimpleHostRawElementProvider(
-    [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-    BOOL expected);
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        BOOL expected);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IRawElementProviderSimpleProviderOptions(
