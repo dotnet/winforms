@@ -975,6 +975,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         }
         else if (ccea.Action == CollectionChangeAction.Remove)
         {
+            Debug.Assert(dataGridViewColumn is not null);
             DataGridView.OnRemovedColumn_PostNotification(dataGridViewColumn, newCurrentCell);
         }
 

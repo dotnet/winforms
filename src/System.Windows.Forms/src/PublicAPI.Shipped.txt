@@ -36,8 +36,8 @@ override System.Windows.Forms.DataGridView.OnMouseMove(System.Windows.Forms.Mous
 override System.Windows.Forms.DataGridView.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridView.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridView.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.DataGridView.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.DataGridView.OnRightToLeftChanged(System.EventArgs e) -> void
+override System.Windows.Forms.DataGridView.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridView.OnRightToLeftChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridView.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
 override System.Windows.Forms.DataGridView.Text.get -> string!
@@ -753,20 +753,20 @@ virtual System.Windows.Forms.DataGridView.OnGridColorChanged(System.EventArgs! e
 virtual System.Windows.Forms.DataGridView.OnMultiSelectChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnNewRowNeeded(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnReadOnlyChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowContextMenuStripChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowContextMenuStripNeeded(System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowDefaultCellStyleChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowDirtyStateNeeded(System.Windows.Forms.QuestionEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowDividerDoubleClick(System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowDividerHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowEnter(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowErrorTextChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowErrorTextNeeded(System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeaderCellChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeaderMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeaderMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeadersBorderStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeadersDefaultCellStyleChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowContextMenuStripChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowContextMenuStripNeeded(System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowDefaultCellStyleChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowDirtyStateNeeded(System.Windows.Forms.QuestionEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowDividerDoubleClick(System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowDividerHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowEnter(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowErrorTextChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowErrorTextNeeded(System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeaderCellChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeaderMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeaderMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeadersBorderStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeadersDefaultCellStyleChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnRowHeadersWidthChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnRowHeadersWidthSizeModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnRowHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
@@ -6130,7 +6130,7 @@ System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs.DataGridViewRowD
 System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewRowDividerDoubleClickEventHandler
 System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs
-System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.get -> string!
 System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.set -> void
 System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewRowErrorTextNeededEventHandler
