@@ -57,37 +57,31 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderSimple_GetHostRawElementProvider_ReturnsExpected()
     {
-        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
-        using ComScope<IRawElementProviderSimple> actual = new(null);
-        Assert.True(elementProvider.Value->get_HostRawElementProvider(actual).Succeeded);
-        Assert.True(actual.IsNull);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderSimpleHostRawElementProvider(o, false));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
     {
-        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
-        ProviderOptions actual = default;
-        Assert.True(elementProvider.Value->get_ProviderOptions(&actual).Succeeded);
-        Assert.Equal(ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading, actual);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading));
     }
 
-    public static TheoryData<int> GetPatternProvider_TestData() => new()
+    public static TheoryData<int, bool> GetPatternProvider_TestData() => new()
     {
-        { (int)UIA_PATTERN_ID.UIA_InvokePatternId },
-        { (int)UIA_PATTERN_ID.UIA_SelectionPatternId },
-        { (int)UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId },
-        { (int)UIA_PATTERN_ID.UIA_InvokePatternId - 1 }
+        { (int)UIA_PATTERN_ID.UIA_InvokePatternId, false },
+        { (int)UIA_PATTERN_ID.UIA_SelectionPatternId, false },
+        { (int)UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId, false },
+        { (int)UIA_PATTERN_ID.UIA_InvokePatternId - 1, false }
     };
 
     [WinFormsTheory]
     [MemberData(nameof(GetPatternProvider_TestData))]
-    public void AccessibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(int patternId)
+    public void AccessibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(int patternId, bool expected)
     {
-        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
-        using ComScope<IUnknown> actual = new(null);
-        Assert.True(elementProvider.Value->GetPatternProvider((UIA_PATTERN_ID)patternId, actual).Succeeded);
-        Assert.True(actual.IsNull);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderSimpleGetPatternProvider(o, (UIA_PATTERN_ID)patternId, (BOOL)expected));
     }
 
     public static IEnumerable<object[]> GetPropertyValue_TestData()
@@ -102,9 +96,9 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [MemberData(nameof(GetPropertyValue_TestData))]
     public void AccessibleObject_IRawElementProviderSimpleGetPropertyValue_Invoke_ReturnsExpected(object propertyId, object expected)
     {
-        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
-        VARIANT variant = default;
-        Assert.True(elementProvider.Value->GetPropertyValue((UIA_PROPERTY_ID)propertyId, &variant).Succeeded);
+        var o = new AccessibleObject();
+        using VARIANT variant = default;
+        AssertSuccess(Test_IRawElementProviderSimpleGetPropertyValue(o, (UIA_PROPERTY_ID)propertyId, &variant));
         if (expected is null)
         {
             Assert.Equal(VARIANT.Empty, variant);
@@ -173,32 +167,32 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
     {
-        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
-        Assert.True(fragment.Value->get_BoundingRectangle(out _).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentGetBoundingRectangle(o, new UiaRect()));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderFragmentFragmentRoot_Get_ReturnsExpected()
     {
-        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
-        using ComScope<IRawElementProviderFragmentRoot> result = new(null);
-        Assert.True(fragment.Value->get_FragmentRoot(result).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentGetFragmentRoot(o));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderFragmentGetEmbeddedFragmentRoots_Invoke_ReturnsExpected()
     {
-        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
-        using ComSafeArrayScope<IRawElementProviderFragment> result = new(null);
-        Assert.True(fragment.Value->GetEmbeddedFragmentRoots(result).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(o));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
     {
-        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
-        using SafeArrayScope<int> runtimeId = new((SAFEARRAY*)null);
-        Assert.True(fragment.Value->GetRuntimeId(runtimeId).Succeeded);
+        using (new NoAssertContext())
+        {
+            var o = new AccessibleObject();
+            AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o, null));
+        }
     }
 
     [WinFormsTheory]
@@ -211,16 +205,15 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [InlineData((int)NavigateDirection.NavigateDirection_LastChild + 1)]
     public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
     {
-        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
-        using ComScope<IRawElementProviderFragment> result = new(null);
-        Assert.True(fragment.Value->Navigate((NavigateDirection)direction, result).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentNavigate(o, (NavigateDirection)direction));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderFragmentSetFocus_Invoke_ReturnsExpected()
     {
-        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
-        Assert.True(fragment.Value->SetFocus().Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentSetFocus(o));
     }
 
     [WinFormsTheory]
@@ -230,17 +223,15 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [InlineData(double.NaN, double.NaN)]
     public void AccessibleObject_IRawElementProviderFragmentRootElementProviderFromPoint_Invoke_ReturnsExpected(double x, double y)
     {
-        using var fragmentRoot = ComHelpers.GetComScope<IRawElementProviderFragmentRoot>(new AccessibleObject());
-        using ComScope<IRawElementProviderFragment> result = new(null);
-        Assert.True(fragmentRoot.Value->ElementProviderFromPoint(x, y, result).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentRootElementProviderFromPoint(o, x, y));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderFragmentRootGetFocus_Invoke_ReturnsExpected()
     {
-        using var fragmentRoot = ComHelpers.GetComScope<IRawElementProviderFragmentRoot>(new AccessibleObject());
-        using ComScope<IRawElementProviderFragment> result = new(null);
-        Assert.True(fragmentRoot.Value->GetFocus(result).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderFragmentRootGetFocus(o));
     }
 
     [WinFormsFact]
@@ -706,9 +697,8 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd_Invoke_ReturnsExpected()
     {
-        using var overrideProvider = ComHelpers.GetComScope<IRawElementProviderHwndOverride>(new AccessibleObject());
-        using ComScope<IRawElementProviderSimple> result = new(null);
-        Assert.True(overrideProvider.Value->GetOverrideProviderForHwnd(HWND.Null, result).Succeeded);
+        var o = new AccessibleObject();
+        AssertSuccess(Test_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd(o));
     }
 
     [WinFormsFact]
@@ -810,6 +800,28 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern string Test_IRawElementProviderSimpleHostRawElementProvider(
+    [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+    BOOL expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern string Test_IRawElementProviderSimpleProviderOptions(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        ProviderOptions expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern string Test_IRawElementProviderSimpleGetPatternProvider(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        UIA_PATTERN_ID patternId,
+        BOOL expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern string Test_IRawElementProviderSimpleGetPropertyValue(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        UIA_PROPERTY_ID propertyId,
+        VARIANT* expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IRangeValueProviderGetIsReadOnly(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
         BOOL expected);
@@ -843,6 +855,43 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     private static extern string Test_IRangeValueProviderSetValue(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
         double value, double expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentGetBoundingRectangle(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        UiaRect expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentGetFragmentRoot(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentGetRuntimeId(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        int* expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern string Test_IRawElementProviderFragmentNavigate(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        NavigateDirection expected);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentSetFocus(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentRootElementProviderFromPoint(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
+        double x,
+        double y);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern unsafe string Test_IRawElementProviderFragmentRootGetFocus(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern unsafe string Test_IInvokeProviderInvoke(
@@ -1076,6 +1125,10 @@ public unsafe class AccessibleObjectTests : InteropTestBase
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_ISelectionItemProviderSelect(
+        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
+
+    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
+    private static extern string Test_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
