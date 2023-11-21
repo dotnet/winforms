@@ -16363,7 +16363,13 @@ public partial class DataGridView
                                 int columnIndex = (hti._typeInternal == DataGridViewHitTestTypeInternal.ColumnResizeRight) ? hti._col : hti._adjacentCol;
                                 if (columnIndex < Columns.Count)
                                 {
-                                    HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, defaultHandledValue: false);
+                                    HandledMouseEventArgs hme = new(
+                                        e.Button,
+                                        e.Clicks,
+                                        e.X,
+                                        e.Y,
+                                        e.Delta,
+                                        defaultHandledValue: false);
                                     DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new DataGridViewColumnDividerDoubleClickEventArgs(columnIndex, hme);
                                     Debug.Assert(Columns[columnIndex].Resizable == DataGridViewTriState.True);
                                     OnColumnDividerDoubleClick(dgvcddce);
@@ -16377,7 +16383,13 @@ public partial class DataGridView
                         case DataGridViewHitTestTypeInternal.ColumnHeadersResizeTop:
                         case DataGridViewHitTestTypeInternal.ColumnHeadersResizeBottom:
                             {
-                                HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, defaultHandledValue: false);
+                                HandledMouseEventArgs hme = new(
+                                    e.Button,
+                                    e.Clicks,
+                                    e.X,
+                                    e.Y,
+                                    e.Delta,
+                                    defaultHandledValue: false);
                                 DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new DataGridViewRowDividerDoubleClickEventArgs(-1, hme);
                                 Debug.Assert(_columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
                                 OnRowDividerDoubleClick(dgvrddce);
@@ -16401,7 +16413,13 @@ public partial class DataGridView
                                 int rowIndex = (hti._typeInternal == DataGridViewHitTestTypeInternal.RowResizeBottom) ? hti._row : hti._adjacentRow;
                                 if (rowIndex < Rows.Count)
                                 {
-                                    HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, defaultHandledValue: false);
+                                    HandledMouseEventArgs hme = new(
+                                        e.Button,
+                                        e.Clicks,
+                                        e.X,
+                                        e.Y,
+                                        e.Delta,
+                                        defaultHandledValue: false);
                                     DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new DataGridViewRowDividerDoubleClickEventArgs(rowIndex, hme);
                                     Debug.Assert(Rows[rowIndex].Resizable == DataGridViewTriState.True);
                                     OnRowDividerDoubleClick(dgvrddce);
@@ -16415,7 +16433,13 @@ public partial class DataGridView
                         case DataGridViewHitTestTypeInternal.RowHeadersResizeLeft:
                         case DataGridViewHitTestTypeInternal.RowHeadersResizeRight:
                             {
-                                HandledMouseEventArgs hme = new HandledMouseEventArgs(e.Button, e.Clicks, e.X, e.Y, e.Delta, defaultHandledValue: false);
+                                HandledMouseEventArgs hme = new(
+                                    e.Button,
+                                    e.Clicks,
+                                    e.X,
+                                    e.Y,
+                                    e.Delta,
+                                    defaultHandledValue: false);
                                 DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new DataGridViewColumnDividerDoubleClickEventArgs(-1, hme);
                                 Debug.Assert(_rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing);
                                 OnColumnDividerDoubleClick(dgvcddce);
