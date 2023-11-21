@@ -20,21 +20,21 @@ internal unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccessibleObj
 
     private protected override string? AutomationId =>
         _owningTreeView.TryGetTarget(out TreeView? target)
-        ? target._editNode?.AccessibilityObject.Name
-        : null;
+            ? target._editNode?.AccessibilityObject.Name
+            : null;
 
     internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
         _owningTreeView.TryGetTarget(out TreeView? target)
-        ? target.AccessibilityObject
-        : null;
+            ? target.AccessibilityObject
+            : null;
 
     public override AccessibleObject? Parent =>
         _owningTreeView.TryGetTarget(out TreeView? target)
-        ? target._editNode?.AccessibilityObject
-        : null;
+            ? target._editNode?.AccessibilityObject
+            : null;
 
-    internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
-        => propertyID switch
+    internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        propertyID switch
         {
             UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningTreeView.TryGetTarget(out TreeView? target) ? (VARIANT)target.Enabled : VARIANT.False,
             _ => base.GetPropertyValue(propertyID),

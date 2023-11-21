@@ -197,8 +197,8 @@ public partial class DataGridView
 
         internal override IRawElementProviderFragmentRoot.Interface FragmentRoot =>
             _ownerDataGridView is null
-            ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet)
-            : (IRawElementProviderFragmentRoot.Interface)_ownerDataGridView.AccessibilityObject;
+                ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet)
+                : (IRawElementProviderFragmentRoot.Interface)_ownerDataGridView.AccessibilityObject;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

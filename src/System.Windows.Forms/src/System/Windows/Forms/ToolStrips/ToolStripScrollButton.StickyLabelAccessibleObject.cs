@@ -44,8 +44,8 @@ internal partial class ToolStripScrollButton
 
         public override string? Name =>
             _owner.UpDirection
-            ? SR.ToolStripScrollButtonUpAccessibleName
-            : SR.ToolStripScrollButtonDownAccessibleName;
+                ? SR.ToolStripScrollButtonUpAccessibleName
+                : SR.ToolStripScrollButtonDownAccessibleName;
 
         public override string? DefaultAction => SR.AccessibleActionPress;
 

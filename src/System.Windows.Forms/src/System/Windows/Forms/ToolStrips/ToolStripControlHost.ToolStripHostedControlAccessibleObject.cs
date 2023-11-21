@@ -33,8 +33,8 @@ public partial class ToolStripControlHost
             _toolStripHostedControl is not null // Hosted control should not be null.
             && _toolStripControlHost is not null // ToolStripControlHost is a container for ToolStripControl.
             && _toolStripControlHost.Owner is not null
-            ? _toolStripControlHost.Owner.AccessibilityObject
-            : base.FragmentRoot;
+                ? _toolStripControlHost.Owner.AccessibilityObject
+                : base.FragmentRoot;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

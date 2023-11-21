@@ -27,13 +27,13 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
 
     private ListViewSubItemAccessibleObject? OwningSubItemAccessibleObject =>
         _owningListView.TryGetTarget(out ListView? target)
-        ? target._listViewSubItem?.AccessibilityObject as ListViewSubItemAccessibleObject
-        : null;
+            ? target._listViewSubItem?.AccessibilityObject as ListViewSubItemAccessibleObject
+            : null;
 
     private AccessibleObject? OwningListViewItemAccessibleObject =>
         _owningListView.TryGetTarget(out ListView? target)
-        ? target._selectedItem?.AccessibilityObject
-        : null;
+            ? target._selectedItem?.AccessibilityObject
+            : null;
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
 
@@ -63,6 +63,6 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
 
     internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
         _owningListView.TryGetTarget(out ListView? target)
-        ? target.AccessibilityObject
-        : null;
+            ? target.AccessibilityObject
+            : null;
 }

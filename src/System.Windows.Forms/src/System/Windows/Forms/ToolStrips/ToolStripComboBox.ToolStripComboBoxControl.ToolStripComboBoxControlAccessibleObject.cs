@@ -36,8 +36,8 @@ public partial class ToolStripComboBox
 
             internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
                 this.TryGetOwnerAs(out ToolStripComboBoxControl? owner)
-                ? owner.Owner?.Owner?.AccessibilityObject
-                : base.FragmentRoot;
+                    ? owner.Owner?.Owner?.AccessibilityObject
+                    : base.FragmentRoot;
 
             internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
             {
