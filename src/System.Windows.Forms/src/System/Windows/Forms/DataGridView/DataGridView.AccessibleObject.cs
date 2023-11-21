@@ -352,8 +352,7 @@ public partial class DataGridView
                 return null;
             }
 
-            if (row >= 0 && row < RowCount &&
-                column >= 0 && column < ColumnCount)
+            if (row >= 0 && row < RowCount && column >= 0 && column < ColumnCount)
             {
                 row = owner.Rows.DisplayIndexToRowIndex(row);
                 column = owner.Columns.ActualDisplayIndexToColumnIndex(column, DataGridViewElementStates.Visible);

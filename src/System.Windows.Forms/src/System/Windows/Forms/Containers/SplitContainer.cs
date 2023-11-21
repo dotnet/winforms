@@ -943,8 +943,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
             }
 
             //valid Keys that move the splitter...
-            if (_splitterFocused &&
-                (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
+            if (_splitterFocused
+                && (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
             {
                 if (_splitBegin)
                 {
@@ -1010,8 +1010,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         base.OnKeyUp(e);
         if (_splitBegin && IsSplitterMovable)
         {
-            if (_splitterFocused &&
-                (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
+            if (_splitterFocused
+                && (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
             {
                 DrawSplitBar(DrawEnd);
                 ApplySplitterDistance();

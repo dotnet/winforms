@@ -213,6 +213,11 @@ public partial class MainForm : Form
         {
             MainFormControlsTabOrder.ChartControlButton,
             new InitInfo("ChartControl", (obj, e) => new ChartControl().Show(this))
+        },
+        {
+            // Test GetPreferredSize output https://github.com/dotnet/winforms/issues/2576
+            MainFormControlsTabOrder.ToolStripSeparatorPreferredSize,
+            new InitInfo("ToolStripSeparatorPreferredSize", (obj, e) => new ToolStripSeparatorPreferredSize().Show(this))
         }
     };
 
