@@ -44,5 +44,6 @@ public enum MainFormControlsTabOrder
     FormOwnerTestButton,
     ListBoxTestButton,
     PasswordButton,
+    ChartControlButton,
     ToolStripSeparatorPreferredSize
 }

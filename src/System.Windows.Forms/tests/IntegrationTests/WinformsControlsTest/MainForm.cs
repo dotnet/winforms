@@ -211,7 +211,11 @@ public partial class MainForm : Form
             new InitInfo("Password", (obj, e) => new Password().Show(this))
         },
         {
-            // Helps test the output of GetPreferredSize output https://github.com/dotnet/winforms/issues/2576
+            MainFormControlsTabOrder.ChartControlButton,
+            new InitInfo("ChartControl", (obj, e) => new ChartControl().Show(this))
+        },
+        {
+            // Test GetPreferredSize output https://github.com/dotnet/winforms/issues/2576
             MainFormControlsTabOrder.ToolStripSeparatorPreferredSize,
             new InitInfo("ToolStripSeparatorPreferredSize", (obj, e) => new ToolStripSeparatorPreferredSize().Show(this))
         }
