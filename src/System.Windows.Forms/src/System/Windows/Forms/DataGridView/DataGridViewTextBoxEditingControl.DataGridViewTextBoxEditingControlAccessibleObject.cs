@@ -48,8 +48,8 @@ public partial class DataGridViewTextBoxEditingControl
             return base.FragmentNavigate(direction);
         }
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-            => this.TryGetOwnerAs(out IDataGridViewEditingControl? owner)
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            this.TryGetOwnerAs(out IDataGridViewEditingControl? owner)
                 ? owner.EditingControlDataGridView?.AccessibilityObject
                 : null;
 

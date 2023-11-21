@@ -50,8 +50,7 @@ internal partial class PropertyGridView
 
             public override string? Name => SR.PropertyGridViewDropDownControlHolderAccessibleName;
 
-            private bool ExistsInAccessibleTree
-                => _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;
+            private bool ExistsInAccessibleTree => _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;
         }
     }
 }

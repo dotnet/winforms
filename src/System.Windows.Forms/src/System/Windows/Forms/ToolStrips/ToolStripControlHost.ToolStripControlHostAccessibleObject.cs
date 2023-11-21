@@ -74,7 +74,7 @@ public partial class ToolStripControlHost
             return base.FragmentNavigate(direction);
         }
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-            => _ownerItem.RootToolStrip?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _ownerItem.RootToolStrip?.AccessibilityObject;
     }
 }
