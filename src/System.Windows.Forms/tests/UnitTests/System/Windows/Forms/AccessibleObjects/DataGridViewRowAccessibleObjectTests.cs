@@ -2384,8 +2384,6 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
     {
-        Assert.False(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero);
-
         LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(true); 
 
         using DataGridView dataGridView = new();

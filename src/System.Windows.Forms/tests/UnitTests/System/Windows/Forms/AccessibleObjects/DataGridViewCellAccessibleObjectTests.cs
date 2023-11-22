@@ -227,7 +227,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows.Add("3");
 
         AccessibleObject accessibleObject = dataGridView.Rows[2].Cells[0].AccessibilityObject;
-        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 2);
+        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 3);
 
         Assert.Equal(expected, accessibleObject.Name);
         Assert.False(dataGridView.IsHandleCreated);
@@ -245,7 +245,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows[0].Visible = false;
 
         AccessibleObject accessibleObject = dataGridView.Rows[2].Cells[0].AccessibilityObject;
-        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 1);
+        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 2);
 
         Assert.Equal(expected, accessibleObject.Name);
         Assert.False(dataGridView.IsHandleCreated);
@@ -264,7 +264,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows[1].Visible = false;
 
         AccessibleObject accessibleObject = dataGridView.Rows[2].Cells[0].AccessibilityObject;
-        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 0);
+        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 1);
 
         Assert.Equal(expected, accessibleObject.Name);
         Assert.False(dataGridView.IsHandleCreated);
@@ -1447,8 +1447,6 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices()
     {
-        Assert.False(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero);
-
         LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(true);
 
         using DataGridView dataGridView = new();
