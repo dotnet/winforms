@@ -85,9 +85,9 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject1.Name);
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject2.Name);
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 2), accessibleObject3.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject1.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 2), accessibleObject2.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 3), accessibleObject3.Name);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -125,9 +125,9 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject1.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject1.Name);
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibleObject2.Name);
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject3.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 2), accessibleObject3.Name);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -145,8 +145,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject1.Name);
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject2.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject1.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 2), accessibleObject2.Name);
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibleObject3.Name);
         Assert.False(dataGridView.IsHandleCreated);
     }
