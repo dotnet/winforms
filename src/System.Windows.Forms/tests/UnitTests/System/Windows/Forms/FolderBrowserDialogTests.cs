@@ -16,7 +16,9 @@ public class FolderBrowserDialogTests
         Assert.Equal(Environment.SpecialFolder.Desktop, dialog.RootFolder);
         Assert.Empty(dialog.InitialDirectory);
         Assert.False(dialog.OkRequiresInteraction);
+        Assert.False(dialog.Multiselect);
         Assert.Empty(dialog.SelectedPath);
+        Assert.Empty(dialog.SelectedPaths);
         Assert.False(dialog.ShowHiddenFiles);
         Assert.True(dialog.ShowPinnedPlaces);
         Assert.True(dialog.ShowNewFolderButton);
@@ -248,7 +250,9 @@ public class FolderBrowserDialogTests
         Assert.Equal(Environment.SpecialFolder.Desktop, dialog.RootFolder);
         Assert.Empty(dialog.InitialDirectory);
         Assert.False(dialog.OkRequiresInteraction);
+        Assert.False(dialog.Multiselect);
         Assert.Empty(dialog.SelectedPath);
+        Assert.Empty(dialog.SelectedPaths);
         Assert.False(dialog.ShowHiddenFiles);
         Assert.True(dialog.ShowPinnedPlaces);
         Assert.True(dialog.ShowNewFolderButton);
