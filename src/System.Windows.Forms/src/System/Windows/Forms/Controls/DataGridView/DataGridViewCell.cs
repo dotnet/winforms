@@ -2582,7 +2582,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             font,
             maxWidth,
             flags,
-            out bool widthTruncated);
+            out bool _);
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static int MeasureTextHeight(
