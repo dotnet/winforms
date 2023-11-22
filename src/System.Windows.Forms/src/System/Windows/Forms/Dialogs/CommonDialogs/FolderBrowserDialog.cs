@@ -74,8 +74,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
-    // Needs a localized description
-    //[SRDescription(nameof(SR.FolderBrowserDialogMultiSelectDescr))]
+    [SRDescription(nameof(SR.FolderBrowserDialogMultiSelectDescr))]
     public bool Multiselect
     {
         get => GetOption(FOS_ALLOWMULTISELECT);
@@ -171,10 +170,12 @@ public sealed class FolderBrowserDialog : CommonDialog
         set => _selectedPaths = value is not null ? new string[] { value } : Array.Empty<string>();
     }
 
+    /// <summary>
+    /// Retrieves the paths of all selected folders in the dialog box.
+    /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    // Needs a localized description
-    //[SRDescription(nameof(SR.FolderBrowserDialogSelectedPathsDescr))]
+    [SRDescription(nameof(SR.FolderBrowserDialogSelectedPathsDescr))]
     public string[] SelectedPaths
     {
         get => _selectedPaths.Length > 0 ? (string[])_selectedPaths.Clone() : Array.Empty<string>();
