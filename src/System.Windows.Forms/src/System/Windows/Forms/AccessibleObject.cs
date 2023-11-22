@@ -29,7 +29,7 @@ public unsafe partial class AccessibleObject :
     ComIServiceProvider.Interface,
     IRawElementProviderSimple.Interface,
     IRawElementProviderFragment.Interface,
-    UiaCore.IRawElementProviderFragmentRoot,
+    IRawElementProviderFragmentRoot.Interface,
     UiaCore.IInvokeProvider,
     UiaCore.IValueProvider,
     UiaCore.IRangeValueProvider,
@@ -44,7 +44,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.ILegacyIAccessibleProvider,
     UiaCore.ISelectionProvider,
     UiaCore.ISelectionItemProvider,
-    UiaCore.IRawElementProviderHwndOverride,
+    IRawElementProviderHwndOverride.Interface,
     UiaCore.IScrollItemProvider,
     UiaCore.IMultipleViewProvider,
     ITextProvider.Interface,
@@ -553,7 +553,7 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  Gets the top level element.
     /// </summary>
-    internal virtual UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => null;
+    internal virtual IRawElementProviderFragmentRoot.Interface? FragmentRoot => null;
 
     /// <summary>
     ///  Return the child object at the given screen coordinates.
@@ -581,7 +581,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual ToggleState ToggleState => ToggleState.ToggleState_Indeterminate;
 
-    private protected virtual UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot => null;
+    private protected virtual IRawElementProviderFragmentRoot.Interface? ToolStripFragmentRoot => null;
 
     internal virtual IRawElementProviderSimple.Interface[]? GetRowHeaders() => null;
 
@@ -647,8 +647,6 @@ public unsafe partial class AccessibleObject :
     {
         Value = newValue;
     }
-
-    internal virtual IRawElementProviderSimple.Interface? GetOverrideProviderForHwnd(IntPtr hwnd) => null;
 
     internal virtual int GetMultiViewProviderCurrentView() => 0;
 
@@ -916,9 +914,27 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
+    HRESULT IRawElementProviderFragmentRoot.Interface.ElementProviderFromPoint(double x, double y, IRawElementProviderFragment** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    object? UiaCore.IRawElementProviderFragmentRoot.GetFocus() => GetFocus();
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderFragment>(ElementProviderFromPoint(x, y));
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRawElementProviderFragmentRoot.Interface.GetFocus(IRawElementProviderFragment** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderFragment>(GetFocus());
+        return HRESULT.S_OK;
+    }
 
     string? UiaCore.ILegacyIAccessibleProvider.DefaultAction => DefaultAction;
 
@@ -2228,8 +2244,16 @@ public unsafe partial class AccessibleObject :
 
     Type IReflect.UnderlyingSystemType => typeof(IAccessible);
 
-    IRawElementProviderSimple.Interface? UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
-        => GetOverrideProviderForHwnd(hwnd);
+    HRESULT IRawElementProviderHwndOverride.Interface.GetOverrideProviderForHwnd(HWND hwnd, IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = default;
+        return HRESULT.S_OK;
+    }
 
     int UiaCore.IMultipleViewProvider.CurrentView => GetMultiViewProviderCurrentView();
 

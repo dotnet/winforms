@@ -1967,15 +1967,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             while (currentValidatingControl is not null && currentValidatingControl != ancestorControl)
             {
-                try
-                {
-                    cancel = currentValidatingControl.PerformControlValidation(false);
-                }
-                catch
-                {
-                    cancel = true;
-                    throw;
-                }
+                cancel = currentValidatingControl.PerformControlValidation(false);
 
                 if (cancel)
                 {

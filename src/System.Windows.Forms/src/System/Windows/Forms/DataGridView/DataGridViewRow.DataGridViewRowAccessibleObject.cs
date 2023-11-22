@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -465,13 +464,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-        {
-            get
-            {
-                return ParentPrivate;
-            }
-        }
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => ParentPrivate;
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId.Equals(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);

@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
-using IRawElementProviderFragmentRoot = Interop.UiaCore.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms;
 
@@ -18,7 +17,7 @@ public partial class TreeView
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
-        internal override IRawElementProviderFragmentRoot FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
