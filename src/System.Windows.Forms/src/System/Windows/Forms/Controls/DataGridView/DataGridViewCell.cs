@@ -2542,6 +2542,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
         if (AccessibleRestructuringNeeded)
         {
+            // We have already checked that EditingControl is not null.
             dgv.EditingControlAccessibleObject!.SetParent(AccessibilityObject);
             AccessibilityObject.SetDetachableChild(dgv.EditingControlAccessibleObject);
         }
