@@ -3471,7 +3471,7 @@ public partial class DataGridView
             return false;
         }
 
-        if (DataConnection.CurrencyManager!.Count <= _ptCurrentCell.Y)
+        if ((DataConnection.CurrencyManager?.Count ?? 0) <= _ptCurrentCell.Y)
         {
             // don't validate a row beyond the last row in the back end list
             return false;

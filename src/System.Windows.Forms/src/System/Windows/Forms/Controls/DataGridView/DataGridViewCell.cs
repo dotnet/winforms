@@ -2493,7 +2493,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             {
                 return null;
             }
-            else if (dataConnection.CurrencyManager!.Count <= rowIndex)
+            else if ((dataConnection.CurrencyManager?.Count ?? 0) <= rowIndex)
             {
                 return Properties.GetObject(s_propCellValue);
             }

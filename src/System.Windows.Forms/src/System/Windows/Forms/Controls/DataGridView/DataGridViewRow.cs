@@ -67,12 +67,13 @@ public partial class DataGridViewRow : DataGridViewBand
     {
         get
         {
-            if (DataGridView is not null &&
-                DataGridView.DataConnection is not null &&
-                Index > -1 &&
-                Index != DataGridView.NewRowIndex)
+            if (DataGridView is not null
+                && DataGridView.DataConnection is not null
+                && DataGridView.DataConnection.CurrencyManager is not null
+                && Index > -1
+                && Index != DataGridView.NewRowIndex)
             {
-                return DataGridView.DataConnection.CurrencyManager![Index];
+                return DataGridView.DataConnection.CurrencyManager[Index];
             }
             else
             {
