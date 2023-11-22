@@ -4,7 +4,7 @@
 namespace Windows.Win32.UI.Controls;
 
 internal unsafe struct ToolInfoWrapper<T>
-            where T : IHandle<HWND>
+    where T : IHandle<HWND>
 {
     public TTTOOLINFOW Info;
     public string? Text { get; set; }

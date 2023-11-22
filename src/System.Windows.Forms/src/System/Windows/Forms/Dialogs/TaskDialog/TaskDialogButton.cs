@@ -411,8 +411,7 @@ public class TaskDialogButton : TaskDialogControl
         return text;
     }
 
-    internal TASKDIALOG_COMMON_BUTTON_FLAGS GetStandardButtonFlag() =>
-        !IsStandardButton ?
+    internal TASKDIALOG_COMMON_BUTTON_FLAGS GetStandardButtonFlag() => !IsStandardButton ?
         throw new InvalidOperationException() :
         GetStandardButtonFlagForResult(_standardButtonResult!.Value);
 
