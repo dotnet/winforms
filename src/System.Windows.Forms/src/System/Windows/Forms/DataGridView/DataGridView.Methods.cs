@@ -11232,7 +11232,6 @@ public partial class DataGridView
                         dataGridViewCellNew.OwningRow = dataGridViewRow;
                         dataGridViewCellNew.OwningColumn = dataGridViewColumn;
 
-                        Debug.Assert(KeyboardToolTip is not null);
                         KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
                     }
                 }
@@ -11435,7 +11434,6 @@ public partial class DataGridView
                 dataGridViewCell.ReadOnlyInternal = false;
             }
 
-            Debug.Assert(KeyboardToolTip is not null);
             KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
 
             columnIndex++;
@@ -17494,7 +17492,6 @@ public partial class DataGridView
             DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
             if (dataGridViewRow.Cells.Count > newColumnCount)
             {
-                Debug.Assert(KeyboardToolTip is not null);
                 KeyboardToolTipStateMachine.Instance.Unhook(dataGridViewRow.Cells[columnIndex], KeyboardToolTip);
                 dataGridViewRow.Cells.RemoveAtInternal(columnIndex);
             }
@@ -17621,7 +17618,6 @@ public partial class DataGridView
 
         if (rowIndexDeleted >= 0 && rowIndexDeleted < Rows.Count)
         {
-            Debug.Assert(KeyboardToolTip is not null);
             foreach (DataGridViewCell cell in Rows[rowIndexDeleted].Cells)
             {
                 KeyboardToolTipStateMachine.Instance.Unhook(cell, KeyboardToolTip);
