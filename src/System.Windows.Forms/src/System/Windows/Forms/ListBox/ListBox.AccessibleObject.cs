@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -30,7 +29,7 @@ public partial class ListBox
         internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
             owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         internal override bool IsSelectionRequired
             => this.IsOwnerHandleCreated(out ListBox? owner) && owner.SelectionMode != SelectionMode.None;

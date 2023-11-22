@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 using IScrollProvider = Windows.Win32.UI.Accessibility.IScrollProvider;
 using ScrollAmount = Windows.Win32.UI.Accessibility.ScrollAmount;
 
@@ -64,8 +63,7 @@ public partial class PrintPreviewControl
                 _ => base.IsPatternSupported(patternId)
             };
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

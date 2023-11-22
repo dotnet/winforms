@@ -50,7 +50,7 @@ public partial class ScrollBar
         public override AccessibleStates State
             => ParentInternal.SystemIAccessible.TryGetState(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => ParentInternal;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => ParentInternal;
 
         internal virtual bool IsDisplayed => OwningScrollBar.Visible;
 

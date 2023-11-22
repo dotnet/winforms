@@ -4,7 +4,6 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -59,8 +58,8 @@ internal partial class PropertyGridView
                 };
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-                => this.TryGetOwnerAs(out GridViewTextBox? owner)
+            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+                this.TryGetOwnerAs(out GridViewTextBox? owner)
                     ? owner.PropertyGridView.OwnerGrid?.AccessibilityObject
                     : null;
 

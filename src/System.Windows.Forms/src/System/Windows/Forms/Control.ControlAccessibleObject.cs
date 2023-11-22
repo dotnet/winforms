@@ -530,8 +530,8 @@ public partial class Control
         // If the control is used as an item of a ToolStrip via ToolStripControlHost,
         // its accessible object should provide info about the owning ToolStrip
         // to build a correct ToolStrip accessibility tree.
-        private protected override UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot
-            => Owner?.ToolStripControlHost?.Owner?.AccessibilityObject;
+        private protected override IRawElementProviderFragmentRoot.Interface? ToolStripFragmentRoot =>
+            Owner?.ToolStripControlHost?.Owner?.AccessibilityObject;
 
         public override string ToString()
             => $"{nameof(ControlAccessibleObject)}: Owner = {Owner?.ToString() ?? "null"}";

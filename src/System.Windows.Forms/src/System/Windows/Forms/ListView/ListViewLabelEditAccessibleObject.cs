@@ -4,7 +4,6 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
-using UiaCore = Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -26,20 +25,20 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
         _textProvider = new(owningListView, labelEdit, this);
     }
 
-    private ListViewSubItemAccessibleObject? OwningSubItemAccessibleObject
-        => _owningListView.TryGetTarget(out ListView? target)
-        ? target._listViewSubItem?.AccessibilityObject as ListViewSubItemAccessibleObject
-        : null;
+    private ListViewSubItemAccessibleObject? OwningSubItemAccessibleObject =>
+        _owningListView.TryGetTarget(out ListView? target)
+            ? target._listViewSubItem?.AccessibilityObject as ListViewSubItemAccessibleObject
+            : null;
 
-    private AccessibleObject? OwningListViewItemAccessibleObject
-        => _owningListView.TryGetTarget(out ListView? target)
-        ? target._selectedItem?.AccessibilityObject
-        : null;
+    private AccessibleObject? OwningListViewItemAccessibleObject =>
+        _owningListView.TryGetTarget(out ListView? target)
+            ? target._selectedItem?.AccessibilityObject
+            : null;
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
 
-    public override AccessibleObject? Parent
-        => _owningListView.TryGetTarget(out ListView? target)
+    public override AccessibleObject? Parent =>
+        _owningListView.TryGetTarget(out ListView? target)
         ? target._listViewSubItem is null
             ? OwningListViewItemAccessibleObject
             : target.View == View.Tile
@@ -47,20 +46,23 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
                 : OwningSubItemAccessibleObject
         : null;
 
-    internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
-        => propertyID switch
+    internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        propertyID switch
         {
             UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.TryGetTarget(out ListView? target) ? (VARIANT)target.Enabled : VARIANT.False,
             _ => base.GetPropertyValue(propertyID)
         };
 
-    internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
-        => direction switch
+    internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction) =>
+        direction switch
         {
             NavigateDirection.NavigateDirection_NextSibling
                 => _owningListView.TryGetTarget(out ListView? target) && target.View == View.Tile ? target._selectedItem?.SubItems[1].AccessibilityObject : null,
             _ => base.FragmentNavigate(direction)
         };
 
-    internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => _owningListView.TryGetTarget(out ListView? target) ? target.AccessibilityObject : null;
+    internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+        _owningListView.TryGetTarget(out ListView? target)
+            ? target.AccessibilityObject
+            : null;
 }

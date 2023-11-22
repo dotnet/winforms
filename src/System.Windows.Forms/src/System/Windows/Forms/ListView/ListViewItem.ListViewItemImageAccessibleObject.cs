@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -30,8 +29,7 @@ public partial class ListViewItem
 
         public override string DefaultAction => string.Empty;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            => _owningItem.ListView?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningItem.ListView?.AccessibilityObject;
 
         public override AccessibleObject Parent => _owningItem.AccessibilityObject;
 

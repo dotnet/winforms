@@ -6,7 +6,6 @@ using System.Drawing;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -625,8 +624,7 @@ public abstract partial class DataGridViewCell
 
         #region IRawElementProviderFragment Implementation
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            => _owner?.DataGridView?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owner?.DataGridView?.AccessibilityObject;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

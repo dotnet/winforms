@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using IRawElementProviderFragmentRoot = Interop.UiaCore.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms;
 
@@ -38,7 +37,7 @@ public partial class TabControl
             // "get_accState" method to get the "State" property
             => SystemIAccessible.TryGetState(CHILDID_SELF);
 
-        internal override IRawElementProviderFragmentRoot FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         internal override bool IsSelectionRequired => true;
 
