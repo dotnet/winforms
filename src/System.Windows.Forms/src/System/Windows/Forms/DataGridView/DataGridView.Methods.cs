@@ -3321,7 +3321,7 @@ public partial class DataGridView
                 {
                     int oldCurrentCellX = _ptCurrentCell.X;
                     DataConnection!.CancelRowEdit(restoreRow: true, addNewFinished: _dataGridViewState1[State1_NewRowEdited]);
-                    if (DataConnection.List!.Count == 0)
+                    if ((DataConnection.List?.Count ?? 0) == 0)
                     {
                         // There are no rows left in the back end.
                         if (currentCellDirty || _ptCurrentCell.Y == -1 || _ptCurrentCell.X == -1)
@@ -18103,7 +18103,7 @@ public partial class DataGridView
                 && DataConnection.InterestedInRowEvents
                 && !DataConnection.PositionChangingOutsideDataGridView
                 && !DataConnection.ListWasReset
-                && (!calledAddNewOnTheDataConnection || DataConnection.List!.Count > 0))
+                && (!calledAddNewOnTheDataConnection || (DataConnection.List?.Count ?? 0) > 0))
             {
                 DataConnection.OnRowEnter(dgvce);
             }
