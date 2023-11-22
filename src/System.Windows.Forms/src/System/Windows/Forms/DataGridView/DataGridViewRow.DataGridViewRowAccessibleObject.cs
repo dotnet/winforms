@@ -135,7 +135,7 @@ public partial class DataGridViewRow
 
         public override AccessibleRole Role => AccessibleRole.Row;
 
-        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewRowStartsAtOne ? 1 : 0;
+        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1;
 
         internal override int[] RuntimeId
             => _runtimeId ??= new int[]

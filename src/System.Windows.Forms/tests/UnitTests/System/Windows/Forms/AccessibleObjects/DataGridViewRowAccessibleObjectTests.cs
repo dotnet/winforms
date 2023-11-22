@@ -2384,9 +2384,9 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
     {
-        Assert.False(LocalAppContextSwitches.DataGridViewRowStartsAtOne);
+        Assert.False(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero);
 
-        LocalAppContextSwitches.SetDataGridViewRowStartsAtOne(true); 
+        LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(true); 
 
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
@@ -2394,7 +2394,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
 
-        LocalAppContextSwitches.SetDataGridViewRowStartsAtOne(false);
+        LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(false);
 
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
     }

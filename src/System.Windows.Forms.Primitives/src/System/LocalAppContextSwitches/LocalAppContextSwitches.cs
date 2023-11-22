@@ -20,14 +20,14 @@ internal static partial class LocalAppContextSwitches
     internal const string ServicePointManagerCheckCrlSwitchName = "System.Windows.Forms.ServicePointManagerCheckCrl";
     internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
-    internal const string DataGridViewRowStartsAtOneSwitchName = "System.Windows.Forms.DataGridViewRowStartsAtOne";
+    internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
     private static int s_servicePointManagerCheckCrl;
     private static int s_trackBarModernRendering;
     private static int s_doNotCatchUnhandledExceptions;
-    private static int s_dataGridViewRowStartsAtOne;
+    private static int s_dataGridViewUIAStartRowCountAtZero;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -159,11 +159,11 @@ internal static partial class LocalAppContextSwitches
         get => GetCachedSwitchValue(ServicePointManagerCheckCrlSwitchName, ref s_servicePointManagerCheckCrl);
     }
 
-    public static bool DataGridViewRowStartsAtOne
+    public static bool DataGridViewUIAStartRowCountAtZero
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(DataGridViewRowStartsAtOneSwitchName, ref s_dataGridViewRowStartsAtOne);
+        get => GetCachedSwitchValue(DataGridViewUIAStartRowCountAtZeroSwitchName, ref s_dataGridViewUIAStartRowCountAtZero);
     }
 
-    internal static void SetDataGridViewRowStartsAtOne(bool value) => s_dataGridViewRowStartsAtOne = value ? 1 : 0;
+    internal static void SetDataGridViewUIAStartRowCountAtZero(bool value) => s_dataGridViewUIAStartRowCountAtZero = value ? 0 : 1;
 }
