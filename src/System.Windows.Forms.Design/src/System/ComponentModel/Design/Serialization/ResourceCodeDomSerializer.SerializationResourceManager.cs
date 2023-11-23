@@ -130,8 +130,8 @@ internal partial class ResourceCodeDomSerializer
                     forceInvariant,
                     shouldSerializeValue,
                     ensureInvariant,
-                    manager.GetContext<PropertyDescriptor>()!,
-                    manager.GetContext<ExpressionContext>()!);
+                    manager.GetContext<PropertyDescriptor>(),
+                    manager.GetContext<ExpressionContext>());
 
                 if (isMetadata)
                 {
@@ -139,6 +139,16 @@ internal partial class ResourceCodeDomSerializer
                 }
                 else
                 {
+                    if (re.PropertyDescriptor is null)
+                    {
+                        throw new ArgumentException("Serialization manager should have a PropertyDescriptor context");
+                    }
+
+                    if (re.ExpressionContext is null)
+                    {
+                        throw new ArgumentException("Serialization manager should have an ExpressionContext context");
+                    }
+
                     entry.AddResource(re);
                 }
             }
@@ -506,7 +516,8 @@ internal partial class ResourceCodeDomSerializer
                 IResourceService? service = manager.GetService<IResourceService>();
                 IResourceWriter? invariantWriter = service?.GetResourceWriter(CultureInfo.InvariantCulture);
 
-                Dictionary<string, object?>? invariant = GetResourceSet(CultureInfo.InvariantCulture);
+                // GetResourceSet never returns null for CultureInfo.InvariantCulture
+                Dictionary<string, object?> invariant = GetResourceSet(CultureInfo.InvariantCulture)!;
                 Dictionary<string, object?>? metadata;
                 if (invariantWriter is null or ResXResourceWriter)
                 {
@@ -518,7 +529,7 @@ internal partial class ResourceCodeDomSerializer
                     }
 
                     // Note that when we read metadata, for backwards compatibility, we also merge in regular data from the invariant resource. We need to clear that data here, since we are going to write out metadata separately.
-                    invariant!.Remove(resourceName);
+                    invariant.Remove(resourceName);
                     _metadataResourcesDirty = true;
                 }
                 else

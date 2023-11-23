@@ -407,8 +407,9 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
         {
             foreach (ComponentCache.ResourceEntry re in entry.Resources)
             {
-                manager.Context.Push(re.PropertyDescriptor);
-                manager.Context.Push(re.ExpressionContext);
+                // All ResourceEntry objects added to the Resources collection should have a PropertyDescriptor and an ExpressionContext
+                manager.Context.Push(re.PropertyDescriptor!);
+                manager.Context.Push(re.ExpressionContext!);
                 try
                 {
                     sm.SetValue(manager, re.Name, re.Value, re.ForceInvariant, re.ShouldSerializeValue, re.EnsureInvariant, true);
