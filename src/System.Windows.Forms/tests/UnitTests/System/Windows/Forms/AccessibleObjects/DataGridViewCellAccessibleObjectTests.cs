@@ -216,6 +216,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         Assert.Equal(expected, accessibleObject.Name);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected()
     {
@@ -233,6 +234,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected_IfOneRowHidden()
     {
@@ -251,6 +253,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected_IfTwoRowsHidden()
     {

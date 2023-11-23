@@ -72,6 +72,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibilityObject.Name);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [Fact]
     public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected()
     {
@@ -91,6 +92,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [Fact]
     public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfFirstRowHidden()
     {
@@ -111,6 +113,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [Fact]
     public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfSecondRowHidden()
     {
@@ -131,6 +134,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [Fact]
     public void DataGridViewRowAccessibleObject_Name_Get_ReturnsExpected_IfLastRowHidden()
     {
