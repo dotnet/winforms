@@ -106,8 +106,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, -1), accessibleObject1.Name);
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), accessibleObject2.Name);
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject3.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), accessibleObject2.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 2), accessibleObject3.Name);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -2390,11 +2390,11 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
 
         LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(false);
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell
