@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Windows.Win32.UI.Controls;
+using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
@@ -15,7 +15,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        Assert.Equal(4, sizeof(TASKDIALOGCONFIG._Anonymous1_e__Union));
+        Assert.Equal(4, sizeof(TASKDIALOGCONFIG_MainIcon));
     }
 
     [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
@@ -26,7 +26,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG._Anonymous1_e__Union icon = new();
+        TASKDIALOGCONFIG_MainIcon icon = new();
         byte* addr = (byte*)&icon;
 
         Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 4, HICON
@@ -41,7 +41,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        Assert.Equal(8, sizeof(TASKDIALOGCONFIG._Anonymous1_e__Union));
+        Assert.Equal(8, sizeof(TASKDIALOGCONFIG_MainIcon));
     }
 
     [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
@@ -52,7 +52,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG._Anonymous1_e__Union icon = new();
+        TASKDIALOGCONFIG_MainIcon icon = new();
         byte* addr = (byte*)&icon;
 
         Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 8, HICON
