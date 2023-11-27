@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Text;
+using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -95,7 +96,7 @@ public partial class DataGridViewRow
                 }
 
                 int index = _owningDataGridViewRow is { Visible: true, DataGridView: { } }
-                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow)
+                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + RowStartIndex
                         : -1;
 
                 return string.Format(SR.DataGridView_AccRowName, index.ToString(CultureInfo.CurrentCulture));
@@ -132,6 +133,8 @@ public partial class DataGridViewRow
         }
 
         public override AccessibleRole Role => AccessibleRole.Row;
+
+        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1;
 
         internal override int[] RuntimeId
             => _runtimeId ??= new int[]
