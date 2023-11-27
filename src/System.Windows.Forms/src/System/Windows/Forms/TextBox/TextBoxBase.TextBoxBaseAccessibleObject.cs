@@ -79,9 +79,9 @@ public abstract partial class TextBoxBase
             get
             {
                 var name = base.Name;
-                return name is not null ||
-                    (this.TryGetOwnerAs(out TextBoxBase? owner) && !owner.PasswordProtect) ? name : string.Empty;
+                return name is not null ? name : string.Empty;
             }
+
             set => base.Name = value;
         }
 
