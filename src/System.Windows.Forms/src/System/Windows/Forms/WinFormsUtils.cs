@@ -84,7 +84,6 @@ internal sealed partial class WindowsFormsUtils
                                    Math.Min(constrainingBounds.Height - 2, bounds.Height));
 
             // X calculations
-            //
             // scooch so it will fit on the screen.
             if (bounds.Right > constrainingBounds.Right)
             {
