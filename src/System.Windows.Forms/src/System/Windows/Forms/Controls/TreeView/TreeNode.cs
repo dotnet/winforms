@@ -1200,33 +1200,16 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             List<TreeNode> newOrder = new(nodeCount);
             if (parentTreeView?.TreeViewNodeSorter is null)
             {
-                _childNodes.Sort((x, y) =>
-                {
-                    int result = Application.CurrentCulture.CompareInfo.Compare(x.Text, y.Text, CompareOptions.None);
-                    if (result == 1)
-                    {
-                        (x._index, y._index) = (y._index, x._index);
-                    }
-
-                    return result;
-                });
+                _childNodes.Sort((x, y) => Application.CurrentCulture.CompareInfo.Compare(x.Text, y.Text, CompareOptions.None));
             }
             else
             {
-                _childNodes.Sort((x, y) =>
-                {
-                    int result = parentTreeView.TreeViewNodeSorter.Compare(x, y);
-                    if (result == 1)
-                    {
-                        (x._index, y._index) = (y._index, x._index);
-                    }
-
-                    return result;
-                });
+                _childNodes.Sort(parentTreeView.TreeViewNodeSorter.Compare);
             }
 
             for (int i = 0; i < _childNodes.Count; i++)
             {
+                _childNodes[i]._index = i;
                 _childNodes[i].SortChildren(parentTreeView);
             }
         }
