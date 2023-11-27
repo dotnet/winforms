@@ -90,7 +90,7 @@ public partial class Control
                 activeXImpl = new ActiveXImpl(this);
 
                 // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising. Using a
-                // state bit to track PropActiveXImpl instead of fetching from the property store.
+                // state bit to track instead of fetching from the property store.
                 SetExtendedState(ExtendedStates.IsActiveX, true);
                 Properties.SetObject(s_activeXImplProperty, activeXImpl);
             }
