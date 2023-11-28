@@ -86,16 +86,7 @@ public partial class ComboBox
             };
         }
 
-        /// <summary>
-        ///  Gets the top level element.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get
-            {
-                return _owner.AccessibilityObject;
-            }
-        }
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owner.AccessibilityObject;
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch

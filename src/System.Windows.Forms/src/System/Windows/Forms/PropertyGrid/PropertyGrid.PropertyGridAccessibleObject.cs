@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -94,10 +93,7 @@ public partial class PropertyGrid
             return null;
         }
 
-        /// <summary>
-        ///  Return the element that is the root node of this fragment of UI.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         /// <summary>
         ///  Gets the accessible child corresponding to the specified index.

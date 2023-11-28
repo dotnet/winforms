@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using Moq;
 using Moq.Protected;
 using Windows.Win32.System.Variant;
@@ -215,6 +216,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         Assert.Equal(expected, accessibleObject.Name);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected()
     {
@@ -226,12 +228,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows.Add("3");
 
         AccessibleObject accessibleObject = dataGridView.Rows[2].Cells[0].AccessibilityObject;
-        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 2);
+        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 3);
 
         Assert.Equal(expected, accessibleObject.Name);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected_IfOneRowHidden()
     {
@@ -244,12 +247,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows[0].Visible = false;
 
         AccessibleObject accessibleObject = dataGridView.Rows[2].Cells[0].AccessibilityObject;
-        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 1);
+        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 2);
 
         Assert.Equal(expected, accessibleObject.Name);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Whether UIA row indexing is 1-based or 0-based, is controlled by the DataGridViewUIAStartRowCountAtZero switch
     [WinFormsFact]
     public void DataGridViewCellAccessibleObject_Name_ReturnExpected_IfTwoRowsHidden()
     {
@@ -263,7 +267,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows[1].Visible = false;
 
         AccessibleObject accessibleObject = dataGridView.Rows[2].Cells[0].AccessibilityObject;
-        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 0);
+        string expected = string.Format(SR.DataGridView_AccDataGridViewCellName, column.HeaderText, 1);
 
         Assert.Equal(expected, accessibleObject.Name);
         Assert.False(dataGridView.IsHandleCreated);
@@ -1440,6 +1444,23 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         }
 
         return dataGridView;
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/7154
+    [WinFormsFact]
+    public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices()
+    {
+        LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(true);
+
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add(new DataGridViewRow());
+
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 0)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
+
+        LocalAppContextSwitches.SetDataGridViewUIAStartRowCountAtZero(false);
+
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 1)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell

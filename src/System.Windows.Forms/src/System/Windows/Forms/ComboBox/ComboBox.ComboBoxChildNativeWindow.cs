@@ -39,9 +39,9 @@ public partial class ComboBox
                         // Call the focus event for the new selected item accessible object provided by ComboBoxAccessibleObject.
                         // If the owning ComboBox has a custom accessible object,
                         // it should override the logic and implement setting an item focus by itself.
-                        if (before != after &&
-                            _owner.IsAccessibilityObjectCreated &&
-                            _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
+                        if (before != after
+                            && _owner.IsAccessibilityObjectCreated
+                            && _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                         {
                             comboBoxAccessibleObject.SetComboBoxItemFocus();
                         }

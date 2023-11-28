@@ -9753,8 +9753,8 @@ public class RichTextBoxTests
 
         using var control = new RichTextBox();
 
-        Span<char> input = stackalloc char[] { (char)0xA0 };
-        control.Rtf = $"{{\\rtf1\\ansi {input[0]}}}";
+        char input = (char)0xA0;
+        control.Rtf = $"{{\\rtf1\\ansi {input}}}";
 
         Span<byte> output = stackalloc byte[16];
 
@@ -9763,7 +9763,7 @@ public class RichTextBoxTests
         // The non-lossy conversion of nbsp only works single byte Windows code pages (e.g. not Japanese).
         if (currentCodePage >= 1250 && currentCodePage <= 1258)
         {
-            Assert.Equal(input[0], control.Text[0]);
+            Assert.Equal(input, control.Text[0]);
         }
     }
 

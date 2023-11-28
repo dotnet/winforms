@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -35,8 +34,8 @@ public partial class ToolStripComboBox
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-                => this.TryGetOwnerAs(out ToolStripComboBoxControl? owner)
+            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+                this.TryGetOwnerAs(out ToolStripComboBoxControl? owner)
                     ? owner.Owner?.Owner?.AccessibilityObject
                     : base.FragmentRoot;
 

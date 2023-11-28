@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -28,7 +27,7 @@ public partial class ListBox
 
         protected int CurrentIndex => _owningListBox.Items.InnerArray.IndexOf(_itemEntry);
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningAccessibleObject;
 
         internal override bool IsItemSelected => State.HasFlag(AccessibleStates.Selected);
 

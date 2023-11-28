@@ -53,7 +53,7 @@ public partial class TabPage
 
         public override AccessibleStates State => SystemIAccessibleInternal.TryGetState(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => OwningTabControl?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => OwningTabControl?.AccessibilityObject;
 
         internal override bool IsItemSelected => OwningTabControl?.SelectedTab == _owningTabPage;
 

@@ -201,7 +201,12 @@ public partial class Control
 
         // This is used only if control supports IAccessibleEx. We need to provide a unique ID. Others are implementing this in the same manner.
         // First item is static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
-        internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, PARAM.ToInt(HandleInternal) };
+        internal override int[] RuntimeId => new int[]
+        {
+            RuntimeIDFirstItem,
+            PARAM.ToInt(HandleInternal),
+            GetHashCode()
+        };
 
         public override string? Description => Owner?.AccessibleDescription ?? base.Description;
 
@@ -525,8 +530,8 @@ public partial class Control
         // If the control is used as an item of a ToolStrip via ToolStripControlHost,
         // its accessible object should provide info about the owning ToolStrip
         // to build a correct ToolStrip accessibility tree.
-        private protected override UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot
-            => Owner?.ToolStripControlHost?.Owner?.AccessibilityObject;
+        private protected override IRawElementProviderFragmentRoot.Interface? ToolStripFragmentRoot =>
+            Owner?.ToolStripControlHost?.Owner?.AccessibilityObject;
 
         public override string ToString()
             => $"{nameof(ControlAccessibleObject)}: Owner = {Owner?.ToString() ?? "null"}";

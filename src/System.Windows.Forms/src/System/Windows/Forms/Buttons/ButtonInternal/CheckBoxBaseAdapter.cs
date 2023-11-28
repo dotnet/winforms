@@ -306,10 +306,10 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
     private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap? cacheCheckImage)
     {
-        if (cacheCheckImage is not null &&
-            cacheCheckColor.Equals(checkColor) &&
-            cacheCheckImage.Width == fullSize.Width &&
-            cacheCheckImage.Height == fullSize.Height)
+        if (cacheCheckImage is not null
+            && cacheCheckColor.Equals(checkColor)
+            && cacheCheckImage.Width == fullSize.Width
+            && cacheCheckImage.Height == fullSize.Height)
         {
             return cacheCheckImage;
         }

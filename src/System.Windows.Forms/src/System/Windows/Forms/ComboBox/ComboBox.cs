@@ -145,14 +145,14 @@ public partial class ComboBox : ListControl
         {
             //valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            if (DropDownStyle == ComboBoxStyle.DropDownList &&
-                AutoCompleteSource != AutoCompleteSource.ListItems &&
-                value != AutoCompleteMode.None)
+            if (DropDownStyle == ComboBoxStyle.DropDownList
+                && AutoCompleteSource != AutoCompleteSource.ListItems
+                && value != AutoCompleteMode.None)
             {
                 throw new NotSupportedException(SR.ComboBoxAutoCompleteModeOnlyNoneAllowed);
             }
 
-            if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Application.OleRequired() != ApartmentState.STA)
             {
                 throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
@@ -187,9 +187,9 @@ public partial class ComboBox : ListControl
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            if (DropDownStyle == ComboBoxStyle.DropDownList &&
-                AutoCompleteMode != AutoCompleteMode.None &&
-                value != AutoCompleteSource.ListItems)
+            if (DropDownStyle == ComboBoxStyle.DropDownList
+                && AutoCompleteMode != AutoCompleteMode.None
+                && value != AutoCompleteSource.ListItems)
             {
                 throw new NotSupportedException(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed);
             }
@@ -1194,9 +1194,9 @@ public partial class ComboBox : ListControl
                 //valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (value == ComboBoxStyle.DropDownList &&
-                    AutoCompleteSource != AutoCompleteSource.ListItems &&
-                    AutoCompleteMode != AutoCompleteMode.None)
+                if (value == ComboBoxStyle.DropDownList
+                    && AutoCompleteSource != AutoCompleteSource.ListItems
+                    && AutoCompleteMode != AutoCompleteMode.None)
                 {
                     AutoCompleteMode = AutoCompleteMode.None;
                 }
@@ -1261,8 +1261,9 @@ public partial class ComboBox : ListControl
                 {
                     SelectedIndex = -1;
                 }
-                else if (value is not null &&
-                    (selectedItem is null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0)))
+                else if (value is not null
+                    && (selectedItem is null
+                        || string.Compare(value, GetItemText(selectedItem), ignoreCase: false, CultureInfo.CurrentCulture) != 0))
                 {
                     int index = FindStringIgnoreCase(value);
 
@@ -2740,8 +2741,8 @@ public partial class ComboBox : ListControl
 
         if (IsAccessibilityObjectCreated)
         {
-            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject &&
-            (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
+            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject
+                && (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
             {
                 // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
                 // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
@@ -2887,9 +2888,9 @@ public partial class ComboBox : ListControl
     {
         if (_canFireLostFocus)
         {
-            if (AutoCompleteMode != AutoCompleteMode.None &&
-                AutoCompleteSource == AutoCompleteSource.ListItems &&
-                DropDownStyle == ComboBoxStyle.DropDownList)
+            if (AutoCompleteMode != AutoCompleteMode.None
+                && AutoCompleteSource == AutoCompleteSource.ListItems
+                && DropDownStyle == ComboBoxStyle.DropDownList)
             {
                 MatchingText = string.Empty;
             }
@@ -3084,8 +3085,8 @@ public partial class ComboBox : ListControl
             return true;
         }
 
-        if (DropDownStyle != ComboBoxStyle.DropDownList &&
-            (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back)))
+        if (DropDownStyle != ComboBoxStyle.DropDownList
+            && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back)))
         {
             if (SelectionLength != 0)
             {
@@ -3110,10 +3111,10 @@ public partial class ComboBox : ListControl
 
     protected override bool ProcessKeyEventArgs(ref Message m)
     {
-        if (AutoCompleteMode != AutoCompleteMode.None &&
-            AutoCompleteSource == AutoCompleteSource.ListItems &&
-            DropDownStyle == ComboBoxStyle.DropDownList &&
-            InterceptAutoCompleteKeystroke(m))
+        if (AutoCompleteMode != AutoCompleteMode.None
+            && AutoCompleteSource == AutoCompleteSource.ListItems
+            && DropDownStyle == ComboBoxStyle.DropDownList
+            && InterceptAutoCompleteKeystroke(m))
         {
             return true;
         }

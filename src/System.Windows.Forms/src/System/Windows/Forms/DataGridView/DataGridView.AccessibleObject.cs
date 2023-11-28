@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -352,8 +351,7 @@ public partial class DataGridView
                 return null;
             }
 
-            if (row >= 0 && row < RowCount &&
-                column >= 0 && column < ColumnCount)
+            if (row >= 0 && row < RowCount && column >= 0 && column < ColumnCount)
             {
                 row = owner.Rows.DisplayIndexToRowIndex(row);
                 column = owner.Columns.ActualDisplayIndexToColumnIndex(column, DataGridViewElementStates.Visible);
@@ -381,13 +379,7 @@ public partial class DataGridView
 
         #region IRawElementProviderFragment Implementation
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

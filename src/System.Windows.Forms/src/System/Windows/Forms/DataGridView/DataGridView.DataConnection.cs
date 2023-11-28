@@ -129,8 +129,8 @@ public partial class DataGridView
                 // DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl means that the data grid view control
                 // manages the position change
                 // so if DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl is true then the data grid view knows about the position change
-                return !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl] &&
-                        _dataConnectionState[DATACONNECTIONSTATE_positionChangingInCurrencyManager];
+                return !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl]
+                    && _dataConnectionState[DATACONNECTIONSTATE_positionChangingInCurrencyManager];
             }
         }
 
@@ -489,8 +489,8 @@ public partial class DataGridView
             // we received an ListChangedType.ItemAdded and our list has exactly the same number of rows as the back-end.
             // return.
             Debug.Assert(CurrencyManager?.List is not null);
-            if (e.ListChangedType == ListChangedType.ItemAdded &&
-                CurrencyManager.List.Count == (_owner.AllowUserToAddRowsInternal ? _owner.Rows.Count - 1 : _owner.Rows.Count))
+            if (e.ListChangedType == ListChangedType.ItemAdded
+                && CurrencyManager.List.Count == (_owner.AllowUserToAddRowsInternal ? _owner.Rows.Count - 1 : _owner.Rows.Count))
             {
                 if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView])
                 {
@@ -519,16 +519,16 @@ public partial class DataGridView
             // don't do anything - this is the equivalent of removing the row that was added before
             if (e.ListChangedType == ListChangedType.ItemDeleted)
             {
-                if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] &&
-                    _dataConnectionState[DATACONNECTIONSTATE_itemAddedInDeleteOperation] &&
-                    _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView])
+                if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation]
+                    && _dataConnectionState[DATACONNECTIONSTATE_itemAddedInDeleteOperation]
+                    && _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView])
                 {
                     // we removed the item that was added during the delete operation
                     _dataConnectionState[DATACONNECTIONSTATE_itemAddedInDeleteOperation] = false;
                     Debug.Assert(CurrencyManager!.List!.Count == 0, "we deleted the row that the Child table forcefully added");
                 }
-                else if (!_dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] &&
-                         _dataConnectionState[DATACONNECTIONSTATE_inEndCurrentEdit])
+                else if (!_dataConnectionState[DATACONNECTIONSTATE_finishedAddNew]
+                    && _dataConnectionState[DATACONNECTIONSTATE_inEndCurrentEdit])
                 {
                     // EndCurrentEdit caused an item to be deleted while in AddNew.
                     // Recreate the rows.
@@ -659,9 +659,9 @@ public partial class DataGridView
                 }
 
                 // now put the position in the DataGridView control according to the position in the currency manager
-                if (_owner.Rows.Count > 0 &&
-                    !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl] &&
-                    !_owner.InSortOperation)
+                if (_owner.Rows.Count > 0
+                    && !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl]
+                    && !_owner.InSortOperation)
                 {
                     MatchCurrencyManagerPosition(scrollIntoView: false, clearSelection: e.ListChangedType == ListChangedType.Reset);
                 }
@@ -988,9 +988,9 @@ public partial class DataGridView
                 // Go thru the IBindingListView which offers the entire list of sorted columns
                 // and pick the first one as the SortedColumn.
                 ListSortDescriptionCollection sorts = iblv.SortDescriptions;
-                if (sorts is not null &&
-                    sorts.Count > 0 &&
-                    sorts[0]!.PropertyDescriptor is not null)
+                if (sorts is not null
+                    && sorts.Count > 0
+                    && sorts[0]!.PropertyDescriptor is not null)
                 {
                     sortProperty = sorts[0]!.PropertyDescriptor;
                     sortOrder = sorts[0]!.SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
@@ -1263,16 +1263,17 @@ public partial class DataGridView
                 }
 
                 // Scroll target cell into view first.
-                if ((scrollIntoView && !_owner.ScrollIntoView(columnIndex, rowIndex, true)) ||
-                    (columnIndex < _owner.Columns.Count && rowIndex < _owner.Rows.Count &&
-                    !_owner.SetAndSelectCurrentCellAddress(
-                        columnIndex,
-                        rowIndex,
-                        setAnchorCellAddress: true,
-                        validateCurrentCell: false,
-                        throughMouseClick: false,
-                        clearSelection,
-                        forceCurrentCellSelection: false)))
+                if ((scrollIntoView && !_owner.ScrollIntoView(columnIndex, rowIndex, forCurrentCellChange: true))
+                    || (columnIndex < _owner.Columns.Count
+                        && rowIndex < _owner.Rows.Count
+                        && !_owner.SetAndSelectCurrentCellAddress(
+                            columnIndex,
+                            rowIndex,
+                            setAnchorCellAddress: true,
+                            validateCurrentCell: false,
+                            throughMouseClick: false,
+                            clearSelection,
+                            forceCurrentCellSelection: false)))
                 {
                     throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                 }
@@ -1349,9 +1350,10 @@ public partial class DataGridView
             _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl] = true;
             try
             {
-                if (e.RowIndex != _owner.NewRowIndex &&
-                    !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] &&
-                    CurrencyManager.Position != e.RowIndex)            // don't automatically force an EndCurrentEdit on the currency manager
+                // Don't automatically force an EndCurrentEdit on the currency manager
+                if (e.RowIndex != _owner.NewRowIndex
+                    && !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager]
+                    && CurrencyManager.Position != e.RowIndex)
                 {
                     try
                     {

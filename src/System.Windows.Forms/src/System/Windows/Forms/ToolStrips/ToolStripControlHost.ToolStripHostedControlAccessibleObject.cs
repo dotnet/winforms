@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -30,20 +29,12 @@ public partial class ToolStripControlHost
             _toolStripHostedControl = toolStripHostedControl;
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-        {
-            get
-            {
-                if (_toolStripHostedControl is not null // Hosted control should not be null.
-                    && _toolStripControlHost is not null // ToolStripControlHost is a container for ToolStripControl.
-                    && _toolStripControlHost.Owner is not null) // Owner is the ToolStrip.
-                {
-                    return _toolStripControlHost.Owner.AccessibilityObject;
-                }
-
-                return base.FragmentRoot;
-            }
-        }
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _toolStripHostedControl is not null // Hosted control should not be null.
+            && _toolStripControlHost is not null // ToolStripControlHost is a container for ToolStripControl.
+            && _toolStripControlHost.Owner is not null
+                ? _toolStripControlHost.Owner.AccessibilityObject
+                : base.FragmentRoot;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

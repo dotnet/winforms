@@ -21,8 +21,7 @@ internal partial class PropertyGridView
             _owningItem = owningItem;
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _owningGridViewListBox.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningGridViewListBox.AccessibilityObject;
 
         /// <inheritdoc />
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
