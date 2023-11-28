@@ -16,7 +16,6 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
-using static Interop.ComCtl32;
 using NMHEADERW = Windows.Win32.UI.Controls.NMHEADERW;
 using NMLVLINK = Windows.Win32.UI.Controls.NMLVLINK;
 
@@ -3581,14 +3580,14 @@ public partial class ListView : Control
         }
     }
 
-    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
+    internal override unsafe ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
     {
         // The "ShowItemToolTips" flag is required so that when the user hovers over the ListViewItem,
         // their own tooltip is displayed, not the ListViewItem tooltip.
         // The second condition is necessary for the correct display of the keyboard tooltip,
         // since the logic of the external tooltip blocks its display
         bool isExternalTooltip = ShowItemToolTips && tooltip != KeyboardToolTip;
-        ComCtl32.ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
+        ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
         if (isExternalTooltip)
             wrapper.Info.lpszText = (char*)(-1);
 
@@ -4075,7 +4074,7 @@ public partial class ListView : Control
         Debug.Assert(IsHandleCreated, "InsertGroupNative precondition: list-view handle must be created");
         Debug.Assert(group == DefaultGroup || Groups.Contains(group), "Make sure ListView.Groups contains this group before adding the native LVGROUP. Otherwise, custom-drawing may break.");
 
-        nint result = SendGroupMessage(group, PInvoke.LVM_INSERTGROUP, index, LVGF.GROUPID);
+        nint result = SendGroupMessage(group, PInvoke.LVM_INSERTGROUP, index, LVGROUP_MASK.LVGF_GROUPID);
         Debug.Assert(result != -1, "Failed to insert group");
     }
 
@@ -4229,7 +4228,7 @@ public partial class ListView : Control
                 if (GroupsEnabled)
                 {
                     lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-                    lvItem.iGroupId = (LVITEMA_GROUP_ID)GetNativeGroupId(li);
+                    lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
                     IntPtr result = PInvoke.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);
@@ -5765,16 +5764,16 @@ public partial class ListView : Control
         Debug.Assert(result != -1);
     }
 
-    private unsafe nint SendGroupMessage(ListViewGroup group, uint msg, nint lParam, LVGF additionalMask)
+    private unsafe nint SendGroupMessage(ListViewGroup group, uint msg, nint lParam, LVGROUP_MASK additionalMask)
     {
         string header = group.Header;
         string footer = group.Footer;
         string subtitle = group.Subtitle;
         string task = group.TaskLink;
-        LVGROUPW lvgroup = new()
+        LVGROUP lvgroup = new()
         {
-            cbSize = (uint)sizeof(LVGROUPW),
-            mask = LVGF.HEADER | LVGF.ALIGN | LVGF.STATE | LVGF.TITLEIMAGE | additionalMask,
+            cbSize = (uint)sizeof(LVGROUP),
+            mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_ALIGN | LVGROUP_MASK.LVGF_STATE | LVGROUP_MASK.LVGF_TITLEIMAGE | additionalMask,
             cchHeader = header.Length,
             iTitleImage = -1,
             iGroupId = group.ID
@@ -5782,17 +5781,17 @@ public partial class ListView : Control
 
         if (subtitle.Length != 0)
         {
-            lvgroup.mask |= LVGF.SUBTITLE;
+            lvgroup.mask |= LVGROUP_MASK.LVGF_SUBTITLE;
         }
 
         if (task.Length != 0)
         {
-            lvgroup.mask |= LVGF.TASK;
+            lvgroup.mask |= LVGROUP_MASK.LVGF_TASK;
         }
 
         if (footer.Length != 0)
         {
-            lvgroup.mask |= LVGF.FOOTER;
+            lvgroup.mask |= LVGROUP_MASK.LVGF_FOOTER;
         }
 
         if (group.CollapsedState != ListViewGroupCollapsedState.Default)

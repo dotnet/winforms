@@ -1101,7 +1101,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         if (_listView.GroupsEnabled)
         {
             lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-            lvItem.iGroupId = (LVITEMA_GROUP_ID)_listView.GetNativeGroupId(this);
+            lvItem.iGroupId = _listView.GetNativeGroupId(this);
 
             nint result = PInvoke.SendMessage(_listView, PInvoke.LVM_ISGROUPVIEWENABLED);
             Debug.Assert(!updateOwner || result != 0, "Groups not enabled");

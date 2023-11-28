@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -70,7 +69,7 @@ public partial class ErrorProvider
 
             if (_tipWindow is not null)
             {
-                ComCtl32.ToolInfoWrapper<ErrorWindow> toolInfo = new(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
+                ToolInfoWrapper<ErrorWindow> toolInfo = new(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
                 toolInfo.SendMessage(_tipWindow, PInvoke.TTM_ADDTOOLW);
             }
 
@@ -286,7 +285,7 @@ public partial class ErrorProvider
 
             if (_tipWindow is not null)
             {
-                ComCtl32.ToolInfoWrapper<ErrorWindow> info = new(this, item.Id);
+                ToolInfoWrapper<ErrorWindow> info = new(this, item.Id);
                 info.SendMessage(_tipWindow, PInvoke.TTM_DELTOOLW);
             }
 
@@ -381,7 +380,7 @@ public partial class ErrorProvider
                         flags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                     }
 
-                    ComCtl32.ToolInfoWrapper<ErrorWindow> toolInfo = new(this, item.Id, flags, item.Error, iconBounds);
+                    ToolInfoWrapper<ErrorWindow> toolInfo = new(this, item.Id, flags, item.Error, iconBounds);
                     toolInfo.SendMessage(_tipWindow, PInvoke.TTM_SETTOOLINFOW);
                 }
 

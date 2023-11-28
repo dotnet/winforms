@@ -2,9 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using static Interop;
-
+using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
+using TASKDIALOGCONFIG_FooterIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous2_e__Union;
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -259,17 +260,20 @@ public partial class TaskDialog : IWin32Window
 
     private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
-    [UnmanagedCallersOnly]
-    private static HRESULT HandleTaskDialogNativeCallback(
+    // remove suppression if issue resolves https://github.com/dotnet/roslyn/issues/68526
+#pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
+    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+#pragma warning restore CS3016
+    private static unsafe HRESULT HandleTaskDialogNativeCallback(
         HWND hwnd,
-        TASKDIALOG_NOTIFICATIONS msg,
-        IntPtr wParam,
-        IntPtr lParam,
-        IntPtr lpRefData) =>
+        uint msg,
+        WPARAM wParam,
+        LPARAM lParam,
+        nint lpRefData) =>
         // Call the instance method by dereferencing the GC handle.
         (((GCHandle)lpRefData).Target as TaskDialog)!.HandleTaskDialogCallback(
             hwnd,
-            msg,
+            (TASKDIALOG_NOTIFICATIONS)msg,
             wParam,
             lParam);
 
@@ -432,7 +436,7 @@ public partial class TaskDialog : IWin32Window
                 hwndOwner,
                 startupLocation,
                 out IntPtr ptrToFree,
-                out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
+                out TASKDIALOGCONFIG* ptrTaskDialogConfig);
 
             _boundPage = page;
             try
@@ -459,19 +463,21 @@ public partial class TaskDialog : IWin32Window
 
                 HRESULT returnValue;
                 int resultButtonID;
+                int dummyRadioButton;
+                BOOL dummyVerificationFlag;
                 try
                 {
                     // Activate a theming scope so that the task dialog works without having to use an application
                     // manifest that enables common controls v6 (provided that Application.EnableVisualStyles()
                     // was called earlier). Otherwise, the "TaskDialogIndirect" entry point will not be available in
-                    // comctl32.dll.
+                    // dll.
 
                     using ThemingScope scope = new(Application.UseVisualStyles);
-                    returnValue = ComCtl32.TaskDialogIndirect(
+                    returnValue = PInvoke.TaskDialogIndirect(
                         ptrTaskDialogConfig,
-                        out resultButtonID,
-                        out _,
-                        out _);
+                        &resultButtonID,
+                        &dummyRadioButton,
+                        &dummyVerificationFlag);
                 }
                 catch (EntryPointNotFoundException ex)
                 {
@@ -771,8 +777,8 @@ public partial class TaskDialog : IWin32Window
     private HRESULT HandleTaskDialogCallback(
         HWND hWnd,
         TASKDIALOG_NOTIFICATIONS notification,
-        IntPtr wParam,
-        IntPtr lParam)
+        WPARAM wParam,
+        LPARAM lParam)
     {
         Debug.Assert(_boundPage is not null);
 
@@ -908,7 +914,7 @@ public partial class TaskDialog : IWin32Window
                         }
                     }
 
-                    int buttonID = PARAM.ToInt(wParam);
+                    int buttonID = (int)wParam;
                     TaskDialogButton? button = _boundPage.GetBoundButtonByID(buttonID);
 
                     bool applyButtonResult = true;
@@ -994,7 +1000,7 @@ public partial class TaskDialog : IWin32Window
                     return applyButtonResult ? HRESULT.S_OK : HRESULT.S_FALSE;
 
                 case TASKDIALOG_NOTIFICATIONS.TDN_RADIO_BUTTON_CLICKED:
-                    int radioButtonID = PARAM.ToInt(wParam);
+                    int radioButtonID = (int)wParam;
                     TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
 
                     checked
@@ -1014,11 +1020,11 @@ public partial class TaskDialog : IWin32Window
                     break;
 
                 case TASKDIALOG_NOTIFICATIONS.TDN_EXPANDO_BUTTON_CLICKED:
-                    _boundPage.Expander!.HandleExpandoButtonClicked(wParam != IntPtr.Zero);
+                    _boundPage.Expander!.HandleExpandoButtonClicked((nint)wParam != IntPtr.Zero);
                     break;
 
                 case TASKDIALOG_NOTIFICATIONS.TDN_VERIFICATION_CLICKED:
-                    _boundPage.Verification!.HandleCheckBoxClicked(wParam != IntPtr.Zero);
+                    _boundPage.Verification!.HandleCheckBoxClicked((nint)wParam != IntPtr.Zero);
                     break;
 
                 case TASKDIALOG_NOTIFICATIONS.TDN_HELP:
@@ -1152,7 +1158,7 @@ public partial class TaskDialog : IWin32Window
             IntPtr.Zero,
             startupLocation: default,
             out IntPtr ptrToFree,
-            out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
+            out TASKDIALOGCONFIG* ptrTaskDialogConfig);
         try
         {
             // Enqueue the page before sending the message. This ensures
@@ -1210,16 +1216,16 @@ public partial class TaskDialog : IWin32Window
         IntPtr hwndOwner,
         TaskDialogStartupLocation startupLocation,
         out IntPtr ptrToFree,
-        out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig)
+        out TASKDIALOGCONFIG* ptrTaskDialogConfig)
     {
         page.Bind(
             this,
             out TASKDIALOG_FLAGS flags,
-            out ComCtl32.TDCBF standardButtonFlags,
+            out TASKDIALOG_COMMON_BUTTON_FLAGS standardButtonFlags,
             out IEnumerable<(int buttonID, string text)> customButtonElements,
             out IEnumerable<(int buttonID, string text)> radioButtonElements,
-            out ComCtl32.TASKDIALOGCONFIG.IconUnion mainIcon,
-            out ComCtl32.TASKDIALOGCONFIG.IconUnion footerIcon,
+            out TASKDIALOGCONFIG_MainIcon mainIcon,
+            out TASKDIALOGCONFIG_FooterIcon footerIcon,
             out int defaultButtonID,
             out int defaultRadioButtonID);
 
@@ -1238,7 +1244,7 @@ public partial class TaskDialog : IWin32Window
                 // with a Align() call when incrementing the pointer.
                 // Use a byte pointer so we can use byte-wise pointer arithmetics.
                 var sizeToAllocate = (byte*)0;
-                sizeToAllocate += sizeof(ComCtl32.TASKDIALOGCONFIG);
+                sizeToAllocate += sizeof(TASKDIALOGCONFIG);
 
                 // Strings in TasDialogConfig
                 Align(ref sizeToAllocate, sizeof(char));
@@ -1259,7 +1265,7 @@ public partial class TaskDialog : IWin32Window
                     // can cause an unaligned write when assigning the structure (the
                     // same happens with TaskDialogConfig).
                     Align(ref sizeToAllocate);
-                    sizeToAllocate += sizeof(ComCtl32.TASKDIALOG_BUTTON) * customButtonElements.Count();
+                    sizeToAllocate += sizeof(TASKDIALOG_BUTTON) * customButtonElements.Count();
 
                     // Strings in buttons array
                     Align(ref sizeToAllocate, sizeof(char));
@@ -1274,7 +1280,7 @@ public partial class TaskDialog : IWin32Window
                 {
                     // See comment above regarding alignment.
                     Align(ref sizeToAllocate);
-                    sizeToAllocate += sizeof(ComCtl32.TASKDIALOG_BUTTON) * radioButtonElements.Count();
+                    sizeToAllocate += sizeof(TASKDIALOG_BUTTON) * radioButtonElements.Count();
 
                     // Strings in radio buttons array
                     Align(ref sizeToAllocate, sizeof(char));
@@ -1296,19 +1302,19 @@ public partial class TaskDialog : IWin32Window
                     // as additional size when allocating the memory.
                     var currentPtr = (byte*)ptrToFree;
                     Align(ref currentPtr);
-                    ptrTaskDialogConfig = (ComCtl32.TASKDIALOGCONFIG*)currentPtr;
+                    ptrTaskDialogConfig = (TASKDIALOGCONFIG*)currentPtr;
 
-                    ref ComCtl32.TASKDIALOGCONFIG taskDialogConfig = ref *ptrTaskDialogConfig;
-                    currentPtr += sizeof(ComCtl32.TASKDIALOGCONFIG);
+                    ref TASKDIALOGCONFIG taskDialogConfig = ref *ptrTaskDialogConfig;
+                    currentPtr += sizeof(TASKDIALOGCONFIG);
 
                     // Assign the structure with the constructor syntax, which will
                     // automatically initialize its other members with their default
                     // value.
                     Align(ref currentPtr, sizeof(char));
-                    taskDialogConfig = new ComCtl32.TASKDIALOGCONFIG()
+                    taskDialogConfig = new TASKDIALOGCONFIG()
                     {
-                        cbSize = (uint)sizeof(ComCtl32.TASKDIALOGCONFIG),
-                        hwndParent = hwndOwner,
+                        cbSize = (uint)sizeof(TASKDIALOGCONFIG),
+                        hwndParent = (HWND)hwndOwner,
                         dwFlags = flags,
                         dwCommonButtons = standardButtonFlags,
                         mainIcon = mainIcon,
@@ -1333,16 +1339,16 @@ public partial class TaskDialog : IWin32Window
                         int customButtonCount = customButtonElements.Count();
 
                         Align(ref currentPtr);
-                        var customButtonStructs = (ComCtl32.TASKDIALOG_BUTTON*)currentPtr;
+                        var customButtonStructs = (TASKDIALOG_BUTTON*)currentPtr;
                         taskDialogConfig.pButtons = customButtonStructs;
                         taskDialogConfig.cButtons = (uint)customButtonCount;
-                        currentPtr += sizeof(ComCtl32.TASKDIALOG_BUTTON) * customButtonCount;
+                        currentPtr += sizeof(TASKDIALOG_BUTTON) * customButtonCount;
 
                         Align(ref currentPtr, sizeof(char));
                         int i = 0;
                         foreach ((int buttonID, string text) in customButtonElements)
                         {
-                            customButtonStructs[i] = new ComCtl32.TASKDIALOG_BUTTON()
+                            customButtonStructs[i] = new TASKDIALOG_BUTTON()
                             {
                                 nButtonID = buttonID,
                                 pszButtonText = MarshalString(text)
@@ -1358,16 +1364,16 @@ public partial class TaskDialog : IWin32Window
                         int radioButtonCount = radioButtonElements.Count();
 
                         Align(ref currentPtr);
-                        var radioButtonStructs = (ComCtl32.TASKDIALOG_BUTTON*)currentPtr;
+                        var radioButtonStructs = (TASKDIALOG_BUTTON*)currentPtr;
                         taskDialogConfig.pRadioButtons = radioButtonStructs;
                         taskDialogConfig.cRadioButtons = (uint)radioButtonCount;
-                        currentPtr += sizeof(ComCtl32.TASKDIALOG_BUTTON) * radioButtonCount;
+                        currentPtr += sizeof(TASKDIALOG_BUTTON) * radioButtonCount;
 
                         Align(ref currentPtr, sizeof(char));
                         int i = 0;
                         foreach ((int buttonID, string text) in radioButtonElements)
                         {
-                            radioButtonStructs[i] = new ComCtl32.TASKDIALOG_BUTTON()
+                            radioButtonStructs[i] = new TASKDIALOG_BUTTON()
                             {
                                 nButtonID = buttonID,
                                 pszButtonText = MarshalString(text)
@@ -1458,7 +1464,7 @@ public partial class TaskDialog : IWin32Window
                 _windowSubclassHandler.Dispose();
                 _windowSubclassHandler = null;
             }
-            catch (Exception ex) when (ex is InvalidOperationException || ex is Win32Exception)
+            catch (Exception ex) when (ex is InvalidOperationException or Win32Exception)
             {
                 // Ignore. This could happen for example if some other code
                 // also subclassed the window after us but didn't correctly

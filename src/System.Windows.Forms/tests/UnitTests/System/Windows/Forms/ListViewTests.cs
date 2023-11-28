@@ -8,7 +8,6 @@ using Microsoft.DotNet.RemoteExecutor;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
-using static Interop.ComCtl32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1931,10 +1930,10 @@ public class ListViewTests
 
                 Assert.Equal(2, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
 
-                var lvgroup1 = new LVGROUPW
+                var lvgroup1 = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                     pszHeader = headerBuffer,
                     cchHeader = 256,
                     pszFooter = footerBuffer,
@@ -1946,10 +1945,10 @@ public class ListViewTests
                 Assert.True(lvgroup1.iGroupId >= 0);
                 Assert.Equal(0x00000009, (int)lvgroup1.uAlign);
 
-                var lvgroup2 = new LVGROUPW
+                var lvgroup2 = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                     pszHeader = headerBuffer,
                     cchHeader = 256,
                     pszFooter = footerBuffer,
@@ -4791,7 +4790,7 @@ public class ListViewTests
         using var listView = new ListView();
         listView.ShowItemToolTips = showItemToolTips;
         ToolTip toolTip = useKeyboardToolTip ? listView.KeyboardToolTip : new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
         Assert.Equal("Test caption", wrapper.Text);
         //Assert.Equal method does not work because char* cannot be used as an argument to it
@@ -4804,7 +4803,7 @@ public class ListViewTests
         using var listView = new ListView();
         listView.ShowItemToolTips = true;
         ToolTip toolTip = new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
         char* expected = (char*)(-1);
 
         Assert.Null(wrapper.Text);
