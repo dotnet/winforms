@@ -4052,30 +4052,25 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnLoad(EventArgs e)
     {
-        //First - add the form to Application.OpenForms
+        // First - add the form to Application.OpenForms
         Application.OpenForms.Add(this);
         if (Application.UseWaitCursor)
         {
             UseWaitCursor = true;
         }
 
-        // subhag: This will apply AutoScaling to the form just
-        // before the form becomes visible.
-        //
+        // This will apply AutoScaling to the form just before the form becomes visible.
         if (_formState[FormStateAutoScaling] == 1 && !DesignMode)
         {
-            // Turn off autoscaling so we don't do this on every handle
-            // creation.
-            //
+            // Turn off autoscaling so we don't do this on every handle creation.
             _formState[FormStateAutoScaling] = 0;
-            // Obsolete code required here for backwards compat
+
+            // Obsolete code required here for backwards compat.
             ApplyAutoScaling();
         }
 
-        // Also, at this time we can now locate the form the correct
-        // area of the screen.  We must do this after applying any
-        // autoscaling.
-        //
+        // Also, at this time we can now locate the form on the correct area of the screen.
+        // We must do this after applying any autoscaling.
         if (GetState(States.Modal))
         {
             AdjustFormPosition();
@@ -4104,7 +4099,7 @@ public partial class Form : ContainerControl
             }
         }
 
-        //finally fire the newOnShown(unless the form has already been closed)
+        // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
             BeginInvoke(new MethodInvoker(CallShownEvent));

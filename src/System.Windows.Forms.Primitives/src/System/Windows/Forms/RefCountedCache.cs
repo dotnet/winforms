@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <typeparam name="TObject">
 ///  The target object the cache represents. If you're caching <see cref="System.Drawing.Pen"/> that would be the
-///  type you would use here. <see cref="Scope"/> is implicitly convertable to this type.
+///  type you would use here. <see cref="Scope"/> is implicitly convertible to this type.
 /// </typeparam>
 /// <typeparam name="TCacheEntryData">
 ///  The type of data to associate with a cache entry. For a simple cache this can be the same type as
@@ -62,7 +62,9 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey> 
     ///  Find or create the entry for <paramref name="key"/>.
     /// </summary>
     /// <remarks>
-    ///  Override if you want to modify behavior or lock cache access.
+    ///  <para>
+    ///   Override if you want to modify behavior or lock cache access.
+    ///  </para>
     /// </remarks>
     public virtual Scope GetEntry(TKey key)
     {

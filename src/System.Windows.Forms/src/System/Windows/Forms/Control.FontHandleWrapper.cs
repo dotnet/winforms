@@ -7,15 +7,14 @@ namespace System.Windows.Forms;
 
 public partial class Control
 {
-    // Fonts can be a pain to track, so we wrap Hfonts in this class to get a Finalize method.
+    /// <summary>
+    ///  Wrapper for a <see cref="Drawing.Font"/>'s <see cref="HFONT"/>.
+    /// </summary>
     internal sealed class FontHandleWrapper : IDisposable
     {
         private HFONT _handle;
 
-        internal FontHandleWrapper(Font font)
-        {
-            _handle = (HFONT)font.ToHfont();
-        }
+        internal FontHandleWrapper(Font font) => _handle = (HFONT)font.ToHfont();
 
         internal HFONT Handle
         {
@@ -41,9 +40,6 @@ public partial class Control
             }
         }
 
-        ~FontHandleWrapper()
-        {
-            Dispose(false);
-        }
+        ~FontHandleWrapper() => Dispose(disposing: false);
     }
 }

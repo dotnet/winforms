@@ -393,16 +393,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         get
         {
             int ocState = GetOcState();
-            return (_axState[s_fOwnWindow] && (ocState > OC_RUNNING || (IsUserMode() && ocState >= OC_RUNNING))) ||
-                   ocState >= OC_INPLACE;
+            return (_axState[s_fOwnWindow] && (ocState > OC_RUNNING || (IsUserMode() && ocState >= OC_RUNNING)))
+                || ocState >= OC_INPLACE;
         }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected bool PropsValid()
-    {
-        return CanAccessProperties;
-    }
+    protected bool PropsValid() => CanAccessProperties;
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void BeginInit()
@@ -410,12 +407,15 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Signals the object that loading of all peer components and property
-    ///  sets are complete.
-    ///  It should be possible to invoke any property get or set after calling this method.
-    ///  Note that a sideeffect of this method is the creation of the parent control's
-    ///  handle, therefore, this control must be parented before begin is called
+    ///  Signals the object that loading of all peer components and property sets are complete.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   It should be possible to invoke any property get or set after calling this method. Note that a side effect
+    ///   of this method is the creation of the parent control's handle, therefore, this control must be parented
+    ///   before begin is called.
+    ///  </para>
+    /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void EndInit()
     {
