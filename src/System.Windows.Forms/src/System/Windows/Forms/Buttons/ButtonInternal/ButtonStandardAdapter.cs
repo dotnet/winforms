@@ -192,6 +192,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
             PaintField(e, layout, colors, colors.WindowText, true);
         }
 
+        //Added for https://github.com/dotnet/winforms/issues/6514
         if (Application.RenderWithVisualStyles
             && Control.FlatStyle == FlatStyle.Standard
             && state == CheckState.Unchecked)
@@ -221,6 +222,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         }
     }
 
+    //Added for https://github.com/dotnet/winforms/issues/6514
     private void DrawRoundBorder(PaintEventArgs e)
     {
         GraphicsPath path = new GraphicsPath();
