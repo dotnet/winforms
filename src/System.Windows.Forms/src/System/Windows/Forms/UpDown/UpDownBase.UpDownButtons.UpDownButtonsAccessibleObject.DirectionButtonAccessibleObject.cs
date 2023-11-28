@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -70,7 +69,7 @@ public abstract partial class UpDownBase
                         _ => base.FragmentNavigate(direction),
                     };
 
-                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
+                internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => Parent;
 
                 internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
                 {

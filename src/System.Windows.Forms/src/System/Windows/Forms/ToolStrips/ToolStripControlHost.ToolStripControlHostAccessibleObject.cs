@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -75,10 +74,7 @@ public partial class ToolStripControlHost
             return base.FragmentNavigate(direction);
         }
 
-        /// <summary>
-        ///  Return the element that is the root node of this fragment of UI.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            => _ownerItem.RootToolStrip?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _ownerItem.RootToolStrip?.AccessibilityObject;
     }
 }

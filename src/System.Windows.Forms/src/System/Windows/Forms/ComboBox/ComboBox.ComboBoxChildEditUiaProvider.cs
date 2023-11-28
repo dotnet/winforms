@@ -4,7 +4,6 @@
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -61,11 +60,7 @@ public partial class ComboBox
             };
         }
 
-        /// <summary>
-        ///  Gets the top level element.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _owningComboBox.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningComboBox.AccessibilityObject;
 
         public override string Name => base.Name ?? SR.ComboBoxEditDefaultAccessibleName;
 

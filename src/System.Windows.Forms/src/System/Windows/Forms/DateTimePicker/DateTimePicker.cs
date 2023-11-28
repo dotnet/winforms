@@ -1328,9 +1328,7 @@ public partial class DateTimePicker : Control
     {
         if (IsHandleCreated)
         {
-            Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
-            times[0] = (SYSTEMTIME)min;
-            times[1] = (SYSTEMTIME)max;
+            Span<SYSTEMTIME> times = [(SYSTEMTIME)min, (SYSTEMTIME)max];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
             PInvoke.SendMessage(this, PInvoke.DTM_SETRANGE, (WPARAM)(uint)flags, ref times[0]);
         }

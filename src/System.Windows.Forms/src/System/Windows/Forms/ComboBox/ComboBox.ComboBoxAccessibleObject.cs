@@ -4,7 +4,6 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -43,18 +42,6 @@ public partial class ComboBox
             => patternId == UIA_PATTERN_ID.UIA_ExpandCollapsePatternId && this.TryGetOwnerAs(out ComboBox? owner)
                 ? owner.DropDownStyle != ComboBoxStyle.Simple
                 : patternId == UIA_PATTERN_ID.UIA_ValuePatternId ? true : base.IsPatternSupported(patternId);
-
-        internal override int[] RuntimeId
-            => this.TryGetOwnerAs(out ComboBox? owner)
-                ? new int[]
-                {
-                   // We need to provide a unique ID. Others are implementing this in the same manner. First item is
-                   // static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
-                   RuntimeIDFirstItem,
-                   PARAM.ToInt(owner.InternalHandle),
-                   owner.GetHashCode()
-                }
-                : base.RuntimeId;
 
         internal override void Expand() => ComboBoxDefaultAction(true);
 
@@ -114,7 +101,7 @@ public partial class ComboBox
             };
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => this;
 
         public override string DefaultAction
         {

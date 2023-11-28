@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -376,7 +375,7 @@ public partial class ToolStrip
 
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.ToolBar);
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

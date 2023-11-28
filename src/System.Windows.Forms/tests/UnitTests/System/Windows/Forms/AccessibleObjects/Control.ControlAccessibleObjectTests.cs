@@ -1394,7 +1394,7 @@ public class Control_ControlAccessibleObjectTests
         Assert.False(control.IsHandleCreated);
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
-        IRawElementProviderFragment.Interface actual = control.AccessibilityObject.FragmentRoot;
+        IRawElementProviderFragment.Interface actual = (IRawElementProviderFragment.Interface)control.AccessibilityObject.FragmentRoot;
 
         Assert.True(actual is null || actual == control.AccessibilityObject);
     }

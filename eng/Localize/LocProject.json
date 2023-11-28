@@ -178,6 +178,11 @@
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
                                           },
                                           {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\StyleCollectionEditor.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                          },
+                                          {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\SR.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"

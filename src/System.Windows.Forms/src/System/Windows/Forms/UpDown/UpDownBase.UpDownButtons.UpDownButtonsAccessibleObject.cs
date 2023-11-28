@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -41,7 +40,7 @@ public abstract partial class UpDownBase
                     _ => base.FragmentNavigate(direction),
                 };
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+            internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
             private DirectionButtonAccessibleObject UpButton
                 => _upButton ??= new DirectionButtonAccessibleObject(this, true);
@@ -112,13 +111,7 @@ public abstract partial class UpDownBase
 
             public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.SpinButton);
 
-            internal override int[] RuntimeId
-                => _runtimeId ??= !this.TryGetOwnerAs(out UpDownButtons? owner) ? base.RuntimeId : new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(owner.InternalHandle),
-                    owner.GetHashCode()
-                };
+            internal override int[] RuntimeId => _runtimeId ??= base.RuntimeId;
         }
     }
 }

@@ -98,7 +98,7 @@ public partial class ComboBox
             return base.FragmentNavigate(direction);
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningComboBox.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningComboBox.AccessibilityObject;
 
         private int GetCurrentIndex() => _owningComboBox.Items.InnerList.IndexOf(_owningItem);
 

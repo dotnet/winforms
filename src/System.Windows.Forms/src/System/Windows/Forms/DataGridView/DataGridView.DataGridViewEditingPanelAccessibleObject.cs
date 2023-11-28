@@ -23,8 +23,8 @@ public partial class DataGridView
         internal override Rectangle BoundingRectangle
             => this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.Bounds : default;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _ownerDataGridView.TryGetTarget(out var owner)
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot =>
+            _ownerDataGridView.TryGetTarget(out var owner)
                 ? owner.AccessibilityObject
                 : UiaCore.StubFragmentRoot.Instance;
 

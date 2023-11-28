@@ -17,13 +17,13 @@ internal unsafe struct IVsPerPropertyBrowsing : IComIID
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            ReadOnlySpan<byte> data = new byte[]
-            {
+            ReadOnlySpan<byte> data =
+            [
                 0xa3, 0x10, 0xf5, 0x0f,
                 0xa5, 0x5f,
                 0xf1, 0x49,
                 0x8c, 0xcc, 0x19, 0x0d, 0x71, 0x08, 0x3f, 0x3e
-            };
+            ];
 
             return ref Unsafe.As<byte, Guid>(ref MemoryMarshal.GetReference(data));
         }

@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListView;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -77,33 +76,30 @@ public partial class ListViewGroup
             }
         }
 
-        internal int CurrentIndex
+        internal int CurrentIndex =>
             // The default group has 0 index, as it is always displayed first.
-            => _owningGroupIsDefault
+            _owningGroupIsDefault
                 ? 0
                 // When calculating the index of other groups, we add a shift if the default group is displayed
                 : _owningListViewAccessibilityObject.OwnerHasDefaultGroup
                     ? _owningListView.Groups.IndexOf(_owningGroup) + 1
                     : _owningListView.Groups.IndexOf(_owningGroup);
 
-        public override string DefaultAction
-            => SR.AccessibleActionDoubleClick;
+        public override string DefaultAction => SR.AccessibleActionDoubleClick;
 
-        internal override ExpandCollapseState ExpandCollapseState
-            => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
+        internal override ExpandCollapseState ExpandCollapseState =>
+            _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
                 ? ExpandCollapseState.ExpandCollapseState_Collapsed
                 : ExpandCollapseState.ExpandCollapseState_Expanded;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _owningListView.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningListView.AccessibilityObject;
 
-        public override string Name
-            => !string.IsNullOrEmpty(_owningGroup.Subtitle)
+        public override string Name =>
+            !string.IsNullOrEmpty(_owningGroup.Subtitle)
                 ? $"{_owningGroup.Header}. {_owningGroup.Subtitle}"
                 : _owningGroup.Header;
 
-        public override AccessibleRole Role
-            => AccessibleRole.Grouping;
+        public override AccessibleRole Role => AccessibleRole.Grouping;
 
         internal override int[] RuntimeId
         {

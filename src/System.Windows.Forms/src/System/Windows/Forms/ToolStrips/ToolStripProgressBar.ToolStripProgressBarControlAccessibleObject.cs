@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -18,16 +17,11 @@ public partial class ToolStripProgressBar
             _ownerToolStripProgressBarControl = toolStripProgressBarControl;
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-        {
-            get
-            {
-                return _ownerToolStripProgressBarControl.Owner?.Owner?.AccessibilityObject;
-            }
-        }
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _ownerToolStripProgressBarControl.Owner?.Owner?.AccessibilityObject;
 
-        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
-            => direction switch
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction) =>
+            direction switch
             {
                 NavigateDirection.NavigateDirection_Parent
                 or NavigateDirection.NavigateDirection_PreviousSibling

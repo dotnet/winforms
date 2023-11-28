@@ -96,7 +96,7 @@ public partial class ComboBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningComboBox.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningComboBox.AccessibilityObject;
 
         public AccessibleObject? GetChildFragment(int index)
         {
