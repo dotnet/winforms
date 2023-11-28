@@ -381,6 +381,8 @@ IFontDisp
 IGetOleObject
 IGetVBAObject
 IGlobalInterfaceTable
+IGridItemProvider
+IGridProvider
 IHTMLDocument
 IHTMLDocument2
 IHTMLDocument3

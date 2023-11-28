@@ -37,8 +37,8 @@ public unsafe partial class AccessibleObject :
     UiaCore.IToggleProvider,
     UiaCore.ITableProvider,
     UiaCore.ITableItemProvider,
-    UiaCore.IGridProvider,
-    UiaCore.IGridItemProvider,
+    IGridProvider.Interface,
+    IGridItemProvider.Interface,
     IEnumVARIANT.Interface,
     IOleWindow.Interface,
     UiaCore.ILegacyIAccessibleProvider,
@@ -1052,21 +1052,93 @@ public unsafe partial class AccessibleObject :
 
     object[]? UiaCore.ITableItemProvider.GetColumnHeaderItems() => GetColumnHeaderItems();
 
-    object? UiaCore.IGridProvider.GetItem(int row, int column) => GetItem(row, column);
+    HRESULT IGridProvider.Interface.GetItem(int row, int column, IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int UiaCore.IGridProvider.RowCount => RowCount;
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(GetItem(row, column));
+        return HRESULT.S_OK;
+    }
 
-    int UiaCore.IGridProvider.ColumnCount => ColumnCount;
+    HRESULT IGridProvider.Interface.get_RowCount(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int UiaCore.IGridItemProvider.Row => Row;
+        *pRetVal = RowCount;
+        return HRESULT.S_OK;
+    }
 
-    int UiaCore.IGridItemProvider.Column => Column;
+    HRESULT IGridProvider.Interface.get_ColumnCount(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int UiaCore.IGridItemProvider.RowSpan => RowSpan;
+        *pRetVal = ColumnCount;
+        return HRESULT.S_OK;
+    }
 
-    int UiaCore.IGridItemProvider.ColumnSpan => ColumnSpan;
+    HRESULT IGridItemProvider.Interface.get_Row(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    IRawElementProviderSimple.Interface? UiaCore.IGridItemProvider.ContainingGrid => ContainingGrid;
+        *pRetVal = Row;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_Column(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = Column;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_RowSpan(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = RowSpan;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_ColumnSpan(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ColumnSpan;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_ContainingGrid(IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(ContainingGrid);
+        return HRESULT.S_OK;
+    }
 
     void IAccessible.accDoDefaultAction(object childID)
     {
@@ -2504,7 +2576,7 @@ public unsafe partial class AccessibleObject :
         => ((IDispatch.Interface)_dispatchAdapter).GetTypeInfo(iTInfo, lcid, ppTInfo);
 
     HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
-        => ((IDispatch.Interface) _dispatchAdapter).GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
+        => ((IDispatch.Interface)_dispatchAdapter).GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
 
     HRESULT IDispatch.Interface.Invoke(
         int dispIdMember,

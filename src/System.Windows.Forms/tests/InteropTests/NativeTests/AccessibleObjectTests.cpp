@@ -975,7 +975,7 @@ TEST const WCHAR* WINAPI Test_IGridProviderGetColumnCount(IUnknown* pUnknown, in
 
         // Negative tests.
         hr = pGridProvider->get_ColumnCount(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -998,7 +998,7 @@ TEST const WCHAR* WINAPI Test_IGridProviderGetRowCount(IUnknown* pUnknown, int e
 
         // Negative tests.
         hr = pGridProvider->get_RowCount(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1021,7 +1021,7 @@ TEST const WCHAR* WINAPI Test_IGridProviderGetItem(IUnknown* pUnknown, int row, 
 
         // Negative tests.
         hr = pIGridProvider->GetItem(row, column, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1044,7 +1044,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetContainingGrid(IUnknown* pUnkn
 
         // Negative tests.
         hr = pGridItemProvider->get_ContainingGrid(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1067,7 +1067,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetColumn(IUnknown* pUnknown, int
 
         // Negative tests.
         hr = pGridItemProvider->get_Column(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1090,7 +1090,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetColumnSpan(IUnknown* pUnknown,
 
         // Negative tests.
         hr = pGridItemProvider->get_ColumnSpan(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1113,7 +1113,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetRow(IUnknown* pUnknown, int ex
 
         // Negative tests.
         hr = pGridItemProvider->get_Row(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1136,7 +1136,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetRowSpan(IUnknown* pUnknown, in
 
         // Negative tests.
         hr = pGridItemProvider->get_RowSpan(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
