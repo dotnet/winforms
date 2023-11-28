@@ -68,8 +68,8 @@ internal static class Validate
     /// <param name="to">Optional destination point to validate.</param>
     /// <param name="stateValidators">Optional device context state validation to perform.</param>
     internal static IEmfValidator LineTo(
-        EasyPoint? from,
-        EasyPoint? to,
+        Point? from,
+        Point? to,
         params IStateValidator[] stateValidators) => new LineToValidator(
             from,
             to,
