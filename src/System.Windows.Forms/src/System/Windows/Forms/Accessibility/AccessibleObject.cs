@@ -45,7 +45,7 @@ public unsafe partial class AccessibleObject :
     ISelectionProvider.Interface,
     ISelectionItemProvider.Interface,
     IRawElementProviderHwndOverride.Interface,
-    UiaCore.IScrollItemProvider,
+    IScrollItemProvider.Interface,
     UiaCore.IMultipleViewProvider,
     ITextProvider.Interface,
     ITextProvider2.Interface,
@@ -2456,7 +2456,11 @@ public unsafe partial class AccessibleObject :
         return false;
     }
 
-    void UiaCore.IScrollItemProvider.ScrollIntoView() => ScrollIntoView();
+    HRESULT IScrollItemProvider.Interface.ScrollIntoView()
+    {
+        ScrollIntoView();
+        return HRESULT.S_OK;
+    }
 
     internal virtual void ScrollIntoView() => Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
 

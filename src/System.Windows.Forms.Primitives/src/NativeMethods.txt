@@ -455,6 +455,7 @@ IsAccelerator
 IsAppThemed
 IsChild
 IsDialogMessage
+IScrollItemProvider
 IScrollProvider
 ISelectionItemProvider
 ISelectionProvider
