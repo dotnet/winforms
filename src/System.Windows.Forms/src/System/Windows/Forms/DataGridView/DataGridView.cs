@@ -2979,13 +2979,13 @@ public partial class DataGridView : Control, ISupportInitialize
             && dataGridViewCell.OwningColumn.Visible;
     }
 
-    internal ToolTip? KeyboardToolTip
+    internal ToolTip KeyboardToolTip
     {
         get
         {
             if (Properties.TryGetObject(s_propToolTip, out ToolTip? toolTip))
             {
-                return toolTip;
+                return toolTip!;
             }
 
             toolTip = new ToolTip

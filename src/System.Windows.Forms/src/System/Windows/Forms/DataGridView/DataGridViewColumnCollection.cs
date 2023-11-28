@@ -973,7 +973,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         {
             DataGridView.OnInsertedColumn_PostNotification(newCurrentCell);
         }
-        else if (ccea.Action == CollectionChangeAction.Remove)
+        else if (ccea.Action == CollectionChangeAction.Remove && dataGridViewColumn is not null)
         {
             DataGridView.OnRemovedColumn_PostNotification(dataGridViewColumn, newCurrentCell);
         }
