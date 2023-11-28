@@ -224,7 +224,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
     private void DrawRoundBorder(PaintEventArgs e)
     {
         GraphicsPath path = new GraphicsPath();
-        Pen pen = Color.Black.GetCachedPenScope();
+        Pen pen = SystemColors.ControlDarkDark.GetCachedPenScope();
 
         int x = Control.ClientRectangle.X + 1;
         int y = Control.ClientRectangle.Y + 1;
