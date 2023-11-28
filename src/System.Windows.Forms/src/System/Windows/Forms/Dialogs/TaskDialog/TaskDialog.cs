@@ -4,7 +4,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
+using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
+using TASKDIALOGCONFIG_FooterIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous2_e__Union;
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -1223,8 +1224,8 @@ public partial class TaskDialog : IWin32Window
             out TASKDIALOG_COMMON_BUTTON_FLAGS standardButtonFlags,
             out IEnumerable<(int buttonID, string text)> customButtonElements,
             out IEnumerable<(int buttonID, string text)> radioButtonElements,
-            out TASKDIALOGCONFIG._Anonymous1_e__Union mainIcon,
-            out TASKDIALOGCONFIG._Anonymous2_e__Union footerIcon,
+            out TASKDIALOGCONFIG_MainIcon mainIcon,
+            out TASKDIALOGCONFIG_FooterIcon footerIcon,
             out int defaultButtonID,
             out int defaultRadioButtonID);
 
