@@ -420,6 +420,7 @@ ImmSetConversionStatus
 ImmSetOpenStatus
 IMN_*
 IMPLTYPEFLAGS
+IMultipleViewProvider
 InitCommonControls
 InitCommonControlsEx
 INITCOMMONCONTROLSEX_ICC

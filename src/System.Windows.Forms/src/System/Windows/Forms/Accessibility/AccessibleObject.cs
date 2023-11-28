@@ -46,7 +46,7 @@ public unsafe partial class AccessibleObject :
     ISelectionItemProvider.Interface,
     IRawElementProviderHwndOverride.Interface,
     IScrollItemProvider.Interface,
-    UiaCore.IMultipleViewProvider,
+    IMultipleViewProvider.Interface,
     ITextProvider.Interface,
     ITextProvider2.Interface,
     // This IAccessible needs moved first once IManagedWrapper is implemented so it gets chosen by built-in COM interop.
@@ -2327,13 +2327,47 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    int UiaCore.IMultipleViewProvider.CurrentView => GetMultiViewProviderCurrentView();
+    HRESULT IMultipleViewProvider.Interface.get_CurrentView(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int[]? UiaCore.IMultipleViewProvider.GetSupportedViews() => GetMultiViewProviderSupportedViews();
+        *pRetVal = GetMultiViewProviderCurrentView();
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.IMultipleViewProvider.GetViewName(int viewId) => GetMultiViewProviderViewName(viewId);
+    HRESULT IMultipleViewProvider.Interface.GetSupportedViews(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IMultipleViewProvider.SetCurrentView(int viewId) => SetMultiViewProviderCurrentView(viewId);
+        int[]? result = GetMultiViewProviderSupportedViews();
+
+        *pRetVal = result is null ? SAFEARRAY.CreateEmpty(VARENUM.VT_I4) : new SafeArrayScope<int>(result);
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IMultipleViewProvider.Interface.GetViewName(int viewId, BSTR* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = new BSTR(GetMultiViewProviderViewName(viewId));
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IMultipleViewProvider.Interface.SetCurrentView(int viewId)
+    {
+        SetMultiViewProviderCurrentView(viewId);
+        return HRESULT.S_OK;
+    }
 
     BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? true : false;
 
