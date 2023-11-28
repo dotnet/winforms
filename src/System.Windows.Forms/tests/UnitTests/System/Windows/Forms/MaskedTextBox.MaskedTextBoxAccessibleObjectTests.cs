@@ -73,7 +73,7 @@ public class MaskedTextBoxAccessibilityObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(null, null)]
+    [InlineData(null, "")]
     [InlineData("Test", "Test")]
     public void MaskedTextBoxAccessibleObject_Name_IsExpected_WithoutMask(string accessibleName, string expectedAccessibleName)
     {

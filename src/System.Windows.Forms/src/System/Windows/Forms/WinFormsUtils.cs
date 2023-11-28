@@ -244,7 +244,7 @@ internal sealed partial class WindowsFormsUtils
     {
         if (text is null)
         {
-            return string.Empty;
+            return null;
         }
 
         int index = text.IndexOf('&');
