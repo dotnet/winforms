@@ -42,8 +42,8 @@ public unsafe partial class AccessibleObject :
     IEnumVARIANT.Interface,
     IOleWindow.Interface,
     UiaCore.ILegacyIAccessibleProvider,
-    UiaCore.ISelectionProvider,
-    UiaCore.ISelectionItemProvider,
+    ISelectionProvider.Interface,
+    ISelectionItemProvider.Interface,
     IRawElementProviderHwndOverride.Interface,
     UiaCore.IScrollItemProvider,
     UiaCore.IMultipleViewProvider,
@@ -2277,21 +2277,94 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IRangeValueProvider.SetValue(double value) => SetValue(value);
 
-    object[]? UiaCore.ISelectionProvider.GetSelection() => GetSelection();
+    HRESULT ISelectionProvider.Interface.GetSelection(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    BOOL UiaCore.ISelectionProvider.CanSelectMultiple => CanSelectMultiple ? true : false;
+        IRawElementProviderSimple.Interface[]? selection = GetSelection();
+        if (selection is null)
+        {
+            *pRetVal = default;
+        }
+        else
+        {
+            uint length = (uint)selection.Length;
+            ComSafeArrayScope<IRawElementProviderSimple> scope = new(length);
+            for (int i = 0; i < length; i++)
+            {
+                scope[i] = ComHelpers.GetComPointer<IRawElementProviderSimple>(selection[i]);
+            }
 
-    BOOL UiaCore.ISelectionProvider.IsSelectionRequired => IsSelectionRequired ? true : false;
+            *pRetVal = scope;
+        }
 
-    void UiaCore.ISelectionItemProvider.Select() => SelectItem();
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.ISelectionItemProvider.AddToSelection() => AddToSelection();
+    HRESULT ISelectionProvider.Interface.get_CanSelectMultiple(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.ISelectionItemProvider.RemoveFromSelection() => RemoveFromSelection();
+        *pRetVal = CanSelectMultiple ? BOOL.TRUE : BOOL.FALSE;
+        return HRESULT.S_OK;
+    }
 
-    BOOL UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected ? true : false;
+    HRESULT ISelectionProvider.Interface.get_IsSelectionRequired(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    IRawElementProviderSimple.Interface? UiaCore.ISelectionItemProvider.SelectionContainer => ItemSelectionContainer;
+        *pRetVal = IsSelectionRequired ? BOOL.TRUE : BOOL.FALSE;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.Select()
+    {
+        SelectItem();
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.AddToSelection()
+    {
+        AddToSelection();
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.RemoveFromSelection()
+    {
+        RemoveFromSelection();
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.get_IsSelected(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = IsItemSelected ? BOOL.TRUE : BOOL.FALSE;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.get_SelectionContainer(IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(ItemSelectionContainer);
+        return HRESULT.S_OK;
+    }
 
     /// <summary>
     ///  Raises the UIA Notification event.

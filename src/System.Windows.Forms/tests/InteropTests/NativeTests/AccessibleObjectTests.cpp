@@ -1690,7 +1690,7 @@ TEST const WCHAR* WINAPI Test_ISelectionProviderGetSelection(IUnknown* pUnknown,
 
         // Negative tests
         hr = pSelectionProvider->GetSelection(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1713,7 +1713,7 @@ TEST const WCHAR* WINAPI Test_ISelectionProviderGetCanSelectMultiple(IUnknown* p
 
         // Negative tests.
         hr = pRangeSelectionProvider->get_CanSelectMultiple(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1736,7 +1736,7 @@ TEST const WCHAR* WINAPI Test_ISelectionProviderGetIsSelectionRequired(IUnknown*
 
         // Negative tests.
         hr = pRangeSelectionProvider->get_IsSelectionRequired(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

@@ -456,6 +456,8 @@ IsAppThemed
 IsChild
 IsDialogMessage
 IScrollProvider
+ISelectionItemProvider
+ISelectionProvider
 IServiceProvider
 IShellItem
 ISimpleFrameSite
