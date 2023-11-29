@@ -547,10 +547,16 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Provides a way for a designer to get services from the hosting environment.
     /// </summary>
-    protected virtual object? GetService(Type serviceType) => Component?.Site?.GetService(serviceType);
+    protected virtual object? GetService(Type serviceType) => Component.Site?.GetService(serviceType);
 
     internal T? GetService<T>() where T : class
         => GetService(typeof(T)) as T;
+
+    internal T GetRequiredService<T>() where T : class
+    {
+        ISite componentSite = Component.Site ?? throw new InvalidOperationException("Component should have a site");
+        return componentSite.GetRequiredService<T>();
+    }
 
     internal bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
     {

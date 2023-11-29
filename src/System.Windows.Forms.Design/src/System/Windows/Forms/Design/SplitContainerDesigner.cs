@@ -263,7 +263,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
 
     private void OnSplitContainer(object? sender, MouseEventArgs e)
     {
-        var svc = GetService<ISelectionService>()!;
+        var svc = GetRequiredService<ISelectionService>();
         svc.SetSelectedComponents(new object[] { Control });
     }
 

@@ -26,7 +26,7 @@ public partial class ControlDesigner
 
         public override string? Description => _control.AccessibilityObject.Description;
 
-        private IDesignerHost DesignerHost => _host ??= _designer.GetService<IDesignerHost>()!;
+        private IDesignerHost DesignerHost => _host ??= _designer.GetRequiredService<IDesignerHost>()!;
 
         public override string DefaultAction => string.Empty;
 
