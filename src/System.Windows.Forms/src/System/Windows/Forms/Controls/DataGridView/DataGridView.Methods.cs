@@ -5887,13 +5887,13 @@ public partial class DataGridView
         GC.KeepAlive(this);
     }
 
-    private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
+    private void EditingControls_CommonMouseEventHandler(object? sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
     {
         Debug.Assert(_editingPanel is not null);
         Debug.Assert(_ptCurrentCell.X != -1);
         int adjustedX = _editingPanel.Location.X + e.X;
         int adjustedY = _editingPanel.Location.Y + e.Y;
-        if (sender == EditingControl)
+        if (sender == EditingControl && EditingControl is not null)
         {
             adjustedX += EditingControl.Location.X;
             adjustedY += EditingControl.Location.Y;
@@ -6100,7 +6100,7 @@ public partial class DataGridView
         }
     }
 
-    private void EditingControls_Click(object sender, EventArgs e)
+    private void EditingControls_Click(object? sender, EventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         Debug.Assert(_ptCurrentCell.X != -1);
@@ -6110,7 +6110,7 @@ public partial class DataGridView
         }
     }
 
-    private void EditingControls_DoubleClick(object sender, EventArgs e)
+    private void EditingControls_DoubleClick(object? sender, EventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         Debug.Assert(_ptCurrentCell.X != -1);
@@ -6120,25 +6120,25 @@ public partial class DataGridView
         }
     }
 
-    private void EditingControls_MouseClick(object sender, MouseEventArgs e)
+    private void EditingControls_MouseClick(object? sender, MouseEventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseClick);
     }
 
-    private void EditingControls_MouseDoubleClick(object sender, MouseEventArgs e)
+    private void EditingControls_MouseDoubleClick(object? sender, MouseEventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseDoubleClick);
     }
 
-    private void EditingControls_MouseDown(object sender, MouseEventArgs e)
+    private void EditingControls_MouseDown(object? sender, MouseEventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseDown);
     }
 
-    private void EditingControls_MouseEnter(object sender, EventArgs e)
+    private void EditingControls_MouseEnter(object? sender, EventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         if (sender == _editingPanel)
@@ -6158,7 +6158,7 @@ public partial class DataGridView
         UpdateMouseEnteredCell(hti: null, e: null);
     }
 
-    private void EditingControls_MouseLeave(object sender, EventArgs e)
+    private void EditingControls_MouseLeave(object? sender, EventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         if (sender == _editingPanel)
@@ -6180,13 +6180,13 @@ public partial class DataGridView
         }
     }
 
-    private void EditingControls_MouseMove(object sender, MouseEventArgs e)
+    private void EditingControls_MouseMove(object? sender, MouseEventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseMove);
     }
 
-    private void EditingControls_MouseUp(object sender, MouseEventArgs e)
+    private void EditingControls_MouseUp(object? sender, MouseEventArgs e)
     {
         Debug.Assert(sender == EditingControl || sender == _editingPanel);
         EditingControls_CommonMouseEventHandler(sender, e, DataGridViewMouseEvent.MouseUp);
@@ -27437,7 +27437,12 @@ public partial class DataGridView
             rowIndexToTmp = rowIndexFrom;
         }
 
-        SelectCellRange(columnIndexFromTmp, rowIndexFromTmp, columnIndexToTmp, rowIndexToTmp, select);
+        SelectCellRange(
+            columnIndexFromTmp,
+            rowIndexFromTmp,
+            columnIndexToTmp,
+            rowIndexToTmp,
+            select);
     }
 
     private void SelectColumnRange(int columnIndexFrom, int columnIndexTo, bool select)
@@ -28984,7 +28989,7 @@ public partial class DataGridView
 
         return true;
     }
-
+#nullable enable
     private void UnwireEditingControlEvents()
     {
         Debug.Assert(_editingPanel is not null);
@@ -29055,7 +29060,7 @@ public partial class DataGridView
     private void UpdateColumnsDisplayedState(bool displayed)
     {
         // Make sure all displayed frozen columns have their Displayed state set to this.Visible
-        DataGridViewColumn dataGridViewColumnTmp;
+        DataGridViewColumn? dataGridViewColumnTmp;
         int numDisplayedFrozenCols = DisplayedBandsInfo.NumDisplayedFrozenCols;
         if (numDisplayedFrozenCols > 0)
         {
@@ -29137,7 +29142,7 @@ public partial class DataGridView
 
     public void UpdateRowHeightInfo(int rowIndex, bool updateToEnd)
     {
-        UpdateRowHeightInfoPrivate(rowIndex, updateToEnd, true /*invalidInAdjustFillingColumns*/);
+        UpdateRowHeightInfoPrivate(rowIndex, updateToEnd, invalidInAdjustFillingColumns: true);
     }
 
     private void UpdateRowHeightInfoPrivate(int rowIndex, bool updateToEnd, bool invalidInAdjustFillingColumns)
@@ -29162,7 +29167,11 @@ public partial class DataGridView
                 }
                 else
                 {
-                    PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, invalidInAdjustFillingColumns, false /*repositionEditingControl*/);
+                    PerformLayoutPrivate(
+                        useRowShortcut: false,
+                        computeVisibleRows: false,
+                        invalidInAdjustFillingColumns,
+                        repositionEditingControl: false);
                 }
 
                 Rectangle bottomArea = _layout.Data;
@@ -29195,7 +29204,7 @@ public partial class DataGridView
 
                 if (EditingControl is not null)
                 {
-                    PositionEditingControl(true /*setLocation*/, true /*setSize*/, false /*setFocus*/);
+                    PositionEditingControl(setLocation: true, setSize: true, setFocus: false);
                 }
             }
             else
@@ -29208,7 +29217,11 @@ public partial class DataGridView
                     }
                     else
                     {
-                        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, invalidInAdjustFillingColumns, false /*repositionEditingControl*/);
+                        PerformLayoutPrivate(
+                            useRowShortcut: false,
+                            computeVisibleRows: false,
+                            invalidInAdjustFillingColumns,
+                            repositionEditingControl: false);
                     }
 
                     Invalidate();
@@ -29226,7 +29239,11 @@ public partial class DataGridView
                         }
                         else
                         {
-                            PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, invalidInAdjustFillingColumns, false /*repositionEditingControl*/);
+                            PerformLayoutPrivate(
+                                useRowShortcut: false,
+                                computeVisibleRows: false,
+                                invalidInAdjustFillingColumns,
+                                repositionEditingControl: false);
                         }
                     }
 
@@ -29304,7 +29321,7 @@ public partial class DataGridView
         }
     }
 
-    private void UpdateMouseEnteredCell(HitTestInfo hti, MouseEventArgs e)
+    private void UpdateMouseEnteredCell(HitTestInfo? hti, MouseEventArgs? e)
     {
         // Don't force handle creation.
         if (!IsHandleCreated)
@@ -29400,16 +29417,26 @@ public partial class DataGridView
             &&  oldEdgeRowIndex == newEdgeRowIndex)
         {
             // h1
-            DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             Debug.Assert(dataGridViewColumn is not null);
             if (anchorRowIndex <= newEdgeRowIndex)
             {
-                SelectCellRange(dataGridViewColumn.Index, anchorRowIndex, newEdgeColumnIndex, newEdgeRowIndex, true);
+                SelectCellRange(
+                    dataGridViewColumn.Index,
+                    anchorRowIndex,
+                    newEdgeColumnIndex,
+                    newEdgeRowIndex,
+                    select: true);
             }
             else
             {
                 // newEdgeRowIndex < anchorRowIndex
-                SelectCellRange(dataGridViewColumn.Index, newEdgeRowIndex, newEdgeColumnIndex, anchorRowIndex, true);
+                SelectCellRange(
+                    dataGridViewColumn.Index,
+                    newEdgeRowIndex,
+                    newEdgeColumnIndex,
+                    anchorRowIndex,
+                    select: true);
             }
         }
         else if (Columns.DisplayInOrder(newEdgeColumnIndex, oldEdgeColumnIndex)
@@ -29417,16 +29444,26 @@ public partial class DataGridView
             && oldEdgeRowIndex == newEdgeRowIndex)
         {
             // h2
-            DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             Debug.Assert(dataGridViewColumn is not null);
             if (anchorRowIndex <= newEdgeRowIndex)
             {
-                SelectCellRange(newEdgeColumnIndex, anchorRowIndex, dataGridViewColumn.Index, newEdgeRowIndex, true);
+                SelectCellRange(
+                    newEdgeColumnIndex,
+                    anchorRowIndex,
+                    dataGridViewColumn.Index,
+                    newEdgeRowIndex,
+                    select: true);
             }
             else
             {
                 // newEdgeRowIndex < anchorRowIndex
-                SelectCellRange(newEdgeColumnIndex, newEdgeRowIndex, dataGridViewColumn.Index, anchorRowIndex, true);
+                SelectCellRange(
+                    newEdgeColumnIndex,
+                    newEdgeRowIndex,
+                    dataGridViewColumn.Index,
+                    anchorRowIndex,
+                    select: true);
             }
         }
         else if (newEdgeRowIndex > oldEdgeRowIndex && anchorRowIndex <= oldEdgeRowIndex && newEdgeColumnIndex == oldEdgeColumnIndex)
@@ -29434,7 +29471,8 @@ public partial class DataGridView
             // h3
             if (Columns.DisplayInOrder(anchorColumnIndex, newEdgeColumnIndex) || anchorColumnIndex == newEdgeColumnIndex)
             {
-                SelectCellRange(anchorColumnIndex,
+                SelectCellRange(
+                    anchorColumnIndex,
                     Rows.GetNextRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
                     newEdgeColumnIndex,
                     newEdgeRowIndex,
@@ -29443,7 +29481,8 @@ public partial class DataGridView
             else
             {
                 // newEdgeColumnIndex before anchorColumnIndex
-                SelectCellRange(newEdgeColumnIndex,
+                SelectCellRange(
+                    newEdgeColumnIndex,
                     Rows.GetNextRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
                     anchorColumnIndex,
                     newEdgeRowIndex,
@@ -29455,20 +29494,22 @@ public partial class DataGridView
             // h4
             if (Columns.DisplayInOrder(anchorColumnIndex, newEdgeColumnIndex) || anchorColumnIndex == newEdgeColumnIndex)
             {
-                SelectCellRange(anchorColumnIndex,
+                SelectCellRange(
+                    anchorColumnIndex,
                     newEdgeRowIndex,
                     newEdgeColumnIndex,
                     Rows.GetPreviousRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
-                    true);
+                    select: true);
             }
             else
             {
                 // newEdgeColumnIndex before anchorColumnIndex
-                SelectCellRange(newEdgeColumnIndex,
+                SelectCellRange(
+                    newEdgeColumnIndex,
                     newEdgeRowIndex,
                     anchorColumnIndex,
                     Rows.GetPreviousRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
-                    true);
+                    select: true);
             }
         }
         else if (Columns.DisplayInOrder(oldEdgeColumnIndex, newEdgeColumnIndex)
@@ -29476,14 +29517,20 @@ public partial class DataGridView
             && newEdgeRowIndex > oldEdgeRowIndex && anchorRowIndex <= oldEdgeRowIndex)
         {
             // h5
-            DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             Debug.Assert(dataGridViewColumn is not null);
-            SelectCellRange(dataGridViewColumn.Index, anchorRowIndex, newEdgeColumnIndex, oldEdgeRowIndex, true);
-            SelectCellRange(anchorColumnIndex,
+            SelectCellRange(
+                dataGridViewColumn.Index,
+                anchorRowIndex,
+                newEdgeColumnIndex,
+                oldEdgeRowIndex,
+                select: true);
+            SelectCellRange(
+                anchorColumnIndex,
                 Rows.GetNextRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
                 newEdgeColumnIndex,
                 newEdgeRowIndex,
-                true);
+                select: true);
         }
         else if (Columns.DisplayInOrder(oldEdgeColumnIndex, newEdgeColumnIndex)
             && newEdgeRowIndex < oldEdgeRowIndex && oldEdgeRowIndex <= anchorRowIndex)
@@ -29491,14 +29538,20 @@ public partial class DataGridView
             if (!Columns.DisplayInOrder(oldEdgeColumnIndex, anchorColumnIndex))
             {
                 // h6
-                DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+                DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                 Debug.Assert(dataGridViewColumn is not null);
-                SelectCellRange(dataGridViewColumn.Index, oldEdgeRowIndex, newEdgeColumnIndex, anchorRowIndex, true);
-                SelectCellRange(anchorColumnIndex,
+                SelectCellRange(
+                    dataGridViewColumn.Index,
+                    oldEdgeRowIndex,
+                    newEdgeColumnIndex,
+                    anchorRowIndex,
+                    select: true);
+                SelectCellRange(
+                    anchorColumnIndex,
                     newEdgeRowIndex,
                     newEdgeColumnIndex,
                     Rows.GetPreviousRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
-                    true);
+                    select: true);
             }
             else
             {
@@ -29507,21 +29560,37 @@ public partial class DataGridView
                     if (anchorRowIndex == oldEdgeRowIndex)
                     {
                         // g2
-                        SelectCellRange(oldEdgeColumnIndex, anchorRowIndex, anchorColumnIndex, oldEdgeRowIndex, false);
-                        SelectCellRange(newEdgeColumnIndex, newEdgeRowIndex, anchorColumnIndex, anchorRowIndex, true);
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            anchorRowIndex,
+                            anchorColumnIndex,
+                            oldEdgeRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            newEdgeColumnIndex,
+                            newEdgeRowIndex,
+                            anchorColumnIndex,
+                            anchorRowIndex,
+                            select: true);
                     }
                     else
                     {
                         // b4
-                        DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+                        DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                         Debug.Assert(dataGridViewColumn is not null);
                         Debug.Assert(oldEdgeRowIndex < anchorRowIndex);
-                        SelectCellRange(oldEdgeColumnIndex, oldEdgeRowIndex, dataGridViewColumn.Index, anchorRowIndex, false);
-                        SelectCellRange(newEdgeColumnIndex,
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            oldEdgeRowIndex,
+                            dataGridViewColumn.Index,
+                            anchorRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            newEdgeColumnIndex,
                             newEdgeRowIndex,
                             anchorColumnIndex,
                             Rows.GetPreviousRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
-                            true);
+                            select: true);
                     }
                 }
             }
@@ -29532,35 +29601,57 @@ public partial class DataGridView
             if (!Columns.DisplayInOrder(anchorColumnIndex, oldEdgeColumnIndex))
             {
                 // h7
-                DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+                DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                 Debug.Assert(dataGridViewColumn is not null);
-                SelectCellRange(newEdgeColumnIndex, oldEdgeRowIndex, dataGridViewColumn.Index, anchorRowIndex, true);
-                SelectCellRange(newEdgeColumnIndex,
+                SelectCellRange(
+                    newEdgeColumnIndex,
+                    oldEdgeRowIndex,
+                    dataGridViewColumn.Index,
+                    anchorRowIndex,
+                    select: true);
+                SelectCellRange(
+                    newEdgeColumnIndex,
                     newEdgeRowIndex,
                     anchorColumnIndex,
                     Rows.GetPreviousRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
-                    true);
+                    select: true);
             }
             else
             {
                 if (Columns.DisplayInOrder(anchorColumnIndex, newEdgeColumnIndex))
                 {
                     // a4
-                    DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+                    DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                     Debug.Assert(dataGridViewColumn is not null);
                     Debug.Assert(oldEdgeRowIndex <= anchorRowIndex);
-                    SelectCellRange(dataGridViewColumn.Index, oldEdgeRowIndex, oldEdgeColumnIndex, anchorRowIndex, false);
-                    SelectCellRange(anchorColumnIndex,
+                    SelectCellRange(
+                        dataGridViewColumn.Index,
+                        oldEdgeRowIndex,
+                        oldEdgeColumnIndex,
+                        anchorRowIndex,
+                        select: false);
+                    SelectCellRange(
+                        anchorColumnIndex,
                         newEdgeRowIndex,
                         newEdgeColumnIndex,
                         Rows.GetPreviousRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
-                        true);
+                        select: true);
                 }
                 else
                 {
                     // g8
-                    SelectCellRange(anchorColumnIndex, oldEdgeRowIndex, oldEdgeColumnIndex, anchorRowIndex, false);
-                    SelectCellRange(newEdgeColumnIndex, newEdgeRowIndex, anchorColumnIndex, anchorRowIndex, true);
+                    SelectCellRange(
+                        anchorColumnIndex,
+                        oldEdgeRowIndex,
+                        oldEdgeColumnIndex,
+                        anchorRowIndex,
+                        select: false);
+                    SelectCellRange(
+                        newEdgeColumnIndex,
+                        newEdgeRowIndex,
+                        anchorColumnIndex,
+                        anchorRowIndex,
+                        select: true);
                 }
             }
         }
@@ -29569,18 +29660,24 @@ public partial class DataGridView
             && newEdgeRowIndex > oldEdgeRowIndex && anchorRowIndex <= oldEdgeRowIndex)
         {
             // h8
-            DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             Debug.Assert(dataGridViewColumn is not null);
-            SelectCellRange(newEdgeColumnIndex, anchorRowIndex, dataGridViewColumn.Index, oldEdgeRowIndex, true);
-            SelectCellRange(newEdgeColumnIndex,
+            SelectCellRange(
+                newEdgeColumnIndex,
+                anchorRowIndex,
+                dataGridViewColumn.Index,
+                oldEdgeRowIndex,
+                select: true);
+            SelectCellRange(
+                newEdgeColumnIndex,
                 Rows.GetNextRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
                 anchorColumnIndex,
                 newEdgeRowIndex,
-                true);
+                select: true);
         }
         else if (Columns.DisplayInOrder(newEdgeColumnIndex, oldEdgeColumnIndex))
         {
-            DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             if (newEdgeRowIndex == oldEdgeRowIndex)
             {
                 if (Columns.DisplayInOrder(anchorColumnIndex, newEdgeColumnIndex) || (anchorColumnIndex == newEdgeColumnIndex))
@@ -29589,11 +29686,21 @@ public partial class DataGridView
                     Debug.Assert(dataGridViewColumn is not null);
                     if (oldEdgeRowIndex > anchorRowIndex)
                     {
-                        SelectCellRange(dataGridViewColumn.Index, anchorRowIndex, oldEdgeColumnIndex, oldEdgeRowIndex, false);
+                        SelectCellRange(
+                            dataGridViewColumn.Index,
+                            anchorRowIndex,
+                            oldEdgeColumnIndex,
+                            oldEdgeRowIndex,
+                            select: false);
                     }
                     else
                     {
-                        SelectCellRange(dataGridViewColumn.Index, oldEdgeRowIndex, oldEdgeColumnIndex, anchorRowIndex, false);
+                        SelectCellRange(
+                            dataGridViewColumn.Index,
+                            oldEdgeRowIndex,
+                            oldEdgeColumnIndex,
+                            anchorRowIndex,
+                            select: false);
                     }
                 }
             }
@@ -29611,12 +29718,18 @@ public partial class DataGridView
                                 {
                                     // a2
                                     Debug.Assert(dataGridViewColumn is not null);
-                                    SelectCellRange(dataGridViewColumn.Index, anchorRowIndex, oldEdgeColumnIndex, oldEdgeRowIndex, false);
-                                    SelectCellRange(anchorColumnIndex,
+                                    SelectCellRange(
+                                        dataGridViewColumn.Index,
+                                        anchorRowIndex,
+                                        oldEdgeColumnIndex,
+                                        oldEdgeRowIndex,
+                                        select: false);
+                                    SelectCellRange(
+                                        anchorColumnIndex,
                                         Rows.GetNextRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
                                         newEdgeColumnIndex,
                                         oldEdgeRowIndex,
-                                        false);
+                                        select: false);
                                 }
                             }
                             else
@@ -29624,16 +29737,18 @@ public partial class DataGridView
                                 // d3
                                 dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                                 Debug.Assert(dataGridViewColumn is not null);
-                                SelectCellRange(oldEdgeColumnIndex,
+                                SelectCellRange(
+                                    oldEdgeColumnIndex,
                                     Rows.GetNextRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
                                     anchorColumnIndex,
                                     oldEdgeRowIndex,
-                                    false);
-                                SelectCellRange(newEdgeColumnIndex,
+                                    select: false);
+                                SelectCellRange(
+                                    newEdgeColumnIndex,
                                     anchorRowIndex,
                                     dataGridViewColumn.Index,
                                     newEdgeRowIndex,
-                                    true);
+                                    select: true);
                             }
                         }
                     }
@@ -29648,12 +29763,18 @@ public partial class DataGridView
                     {
                         // a3
                         Debug.Assert(dataGridViewColumn is not null);
-                        SelectCellRange(dataGridViewColumn.Index, oldEdgeRowIndex, oldEdgeColumnIndex, anchorRowIndex, false);
-                        SelectCellRange(anchorColumnIndex,
+                        SelectCellRange(
+                            dataGridViewColumn.Index,
+                            oldEdgeRowIndex,
+                            oldEdgeColumnIndex,
+                            anchorRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            anchorColumnIndex,
                             oldEdgeRowIndex,
                             newEdgeColumnIndex,
                             Rows.GetPreviousRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
-                            false);
+                            select: false);
                     }
                     else
                     {
@@ -29664,16 +29785,18 @@ public partial class DataGridView
                                 // c3
                                 dataGridViewColumn = Columns.GetPreviousColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                                 Debug.Assert(dataGridViewColumn is not null);
-                                SelectCellRange(oldEdgeColumnIndex,
+                                SelectCellRange(
+                                    oldEdgeColumnIndex,
                                     oldEdgeRowIndex,
                                     anchorColumnIndex,
                                     Rows.GetPreviousRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
-                                    false);
-                                SelectCellRange(newEdgeColumnIndex,
+                                    select: false);
+                                SelectCellRange(
+                                    newEdgeColumnIndex,
                                     newEdgeRowIndex,
                                     dataGridViewColumn.Index,
                                     anchorRowIndex,
-                                    true);
+                                    select: true);
                             }
                         }
                     }
@@ -29685,19 +29808,25 @@ public partial class DataGridView
                         // a5
                         Debug.Assert(oldEdgeRowIndex >= anchorRowIndex);
                         Debug.Assert(dataGridViewColumn is not null);
-                        SelectCellRange(dataGridViewColumn.Index, anchorRowIndex, oldEdgeColumnIndex, oldEdgeRowIndex, false);
-                        SelectCellRange(anchorColumnIndex,
+                        SelectCellRange(
+                            dataGridViewColumn.Index,
+                            anchorRowIndex,
+                            oldEdgeColumnIndex,
+                            oldEdgeRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            anchorColumnIndex,
                             Rows.GetNextRow(anchorRowIndex, DataGridViewElementStates.Visible),
                             newEdgeColumnIndex,
                             newEdgeRowIndex,
-                            true);
+                            select: true);
                     }
                 }
             }
         }
         else if (Columns.DisplayInOrder(oldEdgeColumnIndex, newEdgeColumnIndex))
         {
-            DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(Columns[newEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             if (newEdgeRowIndex == oldEdgeRowIndex)
             {
                 if (Columns.DisplayInOrder(newEdgeColumnIndex, anchorColumnIndex) || (newEdgeColumnIndex == anchorColumnIndex))
@@ -29706,11 +29835,21 @@ public partial class DataGridView
                     Debug.Assert(dataGridViewColumn is not null);
                     if (oldEdgeRowIndex > anchorRowIndex)
                     {
-                        SelectCellRange(oldEdgeColumnIndex, anchorRowIndex, dataGridViewColumn.Index, oldEdgeRowIndex, false);
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            anchorRowIndex,
+                            dataGridViewColumn.Index,
+                            oldEdgeRowIndex,
+                            select: false);
                     }
                     else
                     {
-                        SelectCellRange(oldEdgeColumnIndex, oldEdgeRowIndex, dataGridViewColumn.Index, anchorRowIndex, false);
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            oldEdgeRowIndex,
+                            dataGridViewColumn.Index,
+                            anchorRowIndex,
+                            select: false);
                     }
                 }
             }
@@ -29719,15 +29858,22 @@ public partial class DataGridView
                 if (oldEdgeRowIndex > anchorRowIndex)
                 {
                     if ((Columns.DisplayInOrder(newEdgeColumnIndex, anchorColumnIndex) || (newEdgeColumnIndex == anchorColumnIndex))
-                        && newEdgeRowIndex >= anchorRowIndex)
+                        && newEdgeRowIndex >= anchorRowIndex
+                        && dataGridViewColumn is not null)
                     {
                         // b2
-                        SelectCellRange(oldEdgeColumnIndex, anchorRowIndex, dataGridViewColumn.Index, oldEdgeRowIndex, false);
-                        SelectCellRange(newEdgeColumnIndex,
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            anchorRowIndex,
+                            dataGridViewColumn.Index,
+                            oldEdgeRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            newEdgeColumnIndex,
                             Rows.GetNextRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
                             anchorColumnIndex,
                             oldEdgeRowIndex,
-                            false);
+                            select: false);
                     }
                     else
                     {
@@ -29738,16 +29884,18 @@ public partial class DataGridView
                                 // d2
                                 dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                                 Debug.Assert(dataGridViewColumn is not null);
-                                SelectCellRange(anchorColumnIndex,
+                                SelectCellRange(
+                                    anchorColumnIndex,
                                     Rows.GetNextRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
                                     oldEdgeColumnIndex,
                                     oldEdgeRowIndex,
-                                    false);
-                                SelectCellRange(dataGridViewColumn.Index,
+                                    select: false);
+                                SelectCellRange(
+                                    dataGridViewColumn.Index,
                                     anchorRowIndex,
                                     newEdgeColumnIndex,
                                     newEdgeRowIndex,
-                                    true);
+                                    select: true);
                             }
                         }
                     }
@@ -29758,15 +29906,22 @@ public partial class DataGridView
                 if (oldEdgeRowIndex < anchorRowIndex)
                 {
                     if ((Columns.DisplayInOrder(newEdgeColumnIndex, anchorColumnIndex) || (anchorColumnIndex == newEdgeColumnIndex))
-                        && newEdgeRowIndex <= anchorRowIndex)
+                        && newEdgeRowIndex <= anchorRowIndex
+                        && dataGridViewColumn is not null)
                     {
                         // b3
-                        SelectCellRange(oldEdgeColumnIndex, oldEdgeRowIndex, dataGridViewColumn.Index, anchorRowIndex, false);
-                        SelectCellRange(newEdgeColumnIndex,
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            oldEdgeRowIndex,
+                            dataGridViewColumn.Index,
+                            anchorRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            newEdgeColumnIndex,
                             oldEdgeRowIndex,
                             anchorColumnIndex,
                             Rows.GetPreviousRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
-                            false);
+                            select: false);
                     }
                     else
                     {
@@ -29777,32 +29932,41 @@ public partial class DataGridView
                                 // c2
                                 dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                                 Debug.Assert(dataGridViewColumn is not null);
-                                SelectCellRange(anchorColumnIndex,
+                                SelectCellRange(
+                                    anchorColumnIndex,
                                     oldEdgeRowIndex,
                                     oldEdgeColumnIndex,
                                     Rows.GetPreviousRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
-                                    false);
-                                SelectCellRange(dataGridViewColumn.Index,
+                                    select: false);
+                                SelectCellRange(
+                                    dataGridViewColumn.Index,
                                     newEdgeRowIndex,
                                     newEdgeColumnIndex,
                                     anchorRowIndex,
-                                    true);
+                                    select: true);
                             }
                         }
                     }
                 }
                 else
                 {
-                    if (Columns.DisplayInOrder(newEdgeColumnIndex, anchorColumnIndex) || (anchorColumnIndex == newEdgeColumnIndex))
+                    if ((Columns.DisplayInOrder(newEdgeColumnIndex, anchorColumnIndex) || (anchorColumnIndex == newEdgeColumnIndex))
+                        && dataGridViewColumn is not null)
                     {
                         // b5
                         Debug.Assert(oldEdgeRowIndex >= anchorRowIndex);
-                        SelectCellRange(oldEdgeColumnIndex, anchorRowIndex, dataGridViewColumn.Index, oldEdgeRowIndex, false);
-                        SelectCellRange(newEdgeColumnIndex,
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
+                            anchorRowIndex,
+                            dataGridViewColumn.Index,
+                            oldEdgeRowIndex,
+                            select: false);
+                        SelectCellRange(
+                            newEdgeColumnIndex,
                             Rows.GetNextRow(oldEdgeRowIndex, DataGridViewElementStates.Visible),
                             anchorColumnIndex,
                             newEdgeRowIndex,
-                            true);
+                            select: true);
                     }
                 }
             }
@@ -29816,19 +29980,21 @@ public partial class DataGridView
                     // c1
                     if (Columns.DisplayInOrder(anchorColumnIndex, oldEdgeColumnIndex))
                     {
-                        SelectCellRange(anchorColumnIndex,
+                        SelectCellRange(
+                            anchorColumnIndex,
                             oldEdgeRowIndex,
                             oldEdgeColumnIndex,
                             Rows.GetPreviousRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
-                            false);
+                            select: false);
                     }
                     else
                     {
-                        SelectCellRange(oldEdgeColumnIndex,
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
                             oldEdgeRowIndex,
                             anchorColumnIndex,
                             Rows.GetPreviousRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
-                            false);
+                            select: false);
                     }
                 }
             }
@@ -29842,19 +30008,21 @@ public partial class DataGridView
                     // d1
                     if (Columns.DisplayInOrder(anchorColumnIndex, oldEdgeColumnIndex))
                     {
-                        SelectCellRange(anchorColumnIndex,
+                        SelectCellRange(
+                            anchorColumnIndex,
                             Rows.GetNextRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
                             oldEdgeColumnIndex,
                             oldEdgeRowIndex,
-                            false);
+                            select: false);
                     }
                     else
                     {
-                        SelectCellRange(oldEdgeColumnIndex,
+                        SelectCellRange(
+                            oldEdgeColumnIndex,
                             Rows.GetNextRow(newEdgeRowIndex, DataGridViewElementStates.Visible),
                             anchorColumnIndex,
                             oldEdgeRowIndex,
-                            false);
+                            select: false);
                     }
                 }
             }
@@ -29864,7 +30032,7 @@ public partial class DataGridView
         oldEdgeRowIndex = newEdgeRowIndex;
     }
 
-    private void VertScrollTimer_Tick(object sender, EventArgs e)
+    private void VertScrollTimer_Tick(object? sender, EventArgs e)
     {
         BeginInvoke(new MethodInvoker(VertScrollTimerHandler));
     }
@@ -29884,7 +30052,12 @@ public partial class DataGridView
             {
                 int absYOffset = Math.Abs(yOffset), normOffset = yOffset / absYOffset;
                 ScrollRowsByCount(normOffset, normOffset < 0 ? ScrollEventType.SmallDecrement : ScrollEventType.SmallIncrement);
-                _vertScrollTimer.Interval = GetRowScrollRate(absYOffset);
+
+                if (_vertScrollTimer is not null)
+                {
+                    _vertScrollTimer.Interval = GetRowScrollRate(absYOffset);
+                }
+
                 if (_dataGridViewOper[OperationTrackRowSelect])
                 {
                     hti = HitTest(mouseX, ptMouse.Y - yOffset - normOffset);
@@ -29971,7 +30144,7 @@ public partial class DataGridView
     /// </summary>
     internal override void WmContextMenu(ref Message m)
     {
-        ContextMenuStrip contextMenuStrip;
+        ContextMenuStrip? contextMenuStrip;
         Point client;
         bool keyboardActivated = false;
 
@@ -29986,7 +30159,7 @@ public partial class DataGridView
         {
             client = PointToClient(PARAM.ToPoint(m.LParamInternal));
             HitTestInfo hti = HitTest(client.X, client.Y);
-            DataGridViewCell dataGridViewCell = null;
+            DataGridViewCell? dataGridViewCell = null;
             switch (hti.Type)
             {
                 case DataGridViewHitTestType.Cell:
@@ -30075,7 +30248,7 @@ public partial class DataGridView
 
         return false;
     }
-#nullable enable
+
     protected override void WndProc(ref Message m)
     {
         switch (m.MsgInternal)
