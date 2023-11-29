@@ -7113,6 +7113,53 @@ public class TreeViewTests
         treeView.TreeViewNodeSorter = treeSorter;
     }
 
+    [WinFormsTheory]
+    [InlineData("A", "B")]
+    [InlineData("A", "A")]
+    [InlineData("B", "A")]
+    public void Clear_AfterSort_ShouldNotGetStuck(string firstNodeText, string secondNodeText)
+    {
+        using TreeView treeView = new();
+        TreeNode parent = new("Parent");
+        treeView.Nodes.Add(parent);
+
+        TreeNode firstNode = new(firstNodeText);
+        parent.Nodes.Add(firstNode);
+        TreeNode secondNode = new(secondNodeText);
+        parent.Nodes.Add(secondNode);
+
+        treeView.Sort();
+
+        Action action = () => parent.Nodes.Clear();
+
+        action.ExecutionTime().Should().BeLessThanOrEqualTo(TimeSpan.FromMilliseconds(500));
+        action.Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData("A", "B")]
+    [InlineData("A", "A")]
+    [InlineData("B", "A")]
+    public void Remove_AfterSort_ShouldNotThrowException(string firstNodeText, string secondNodeText)
+    {
+        using TreeView treeView = new();
+        TreeNode parent = new("Parent");
+        treeView.Nodes.Add(parent);
+
+        TreeNode firstNode = new(firstNodeText);
+        parent.Nodes.Add(firstNode);
+        TreeNode secondNode = new(secondNodeText);
+        parent.Nodes.Add(secondNode);
+
+        treeView.Sort();
+
+        parent.Nodes.Remove(firstNode);
+
+        Action action = () => parent.Nodes.Remove(secondNode);
+
+        action.Should().NotThrow();
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;
