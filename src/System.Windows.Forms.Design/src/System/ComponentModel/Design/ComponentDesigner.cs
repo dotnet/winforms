@@ -18,6 +18,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     private DesignerActionListCollection? _actionLists;
     private ShadowPropertyCollection? _shadowProperties;
     private bool _settingsKeyExplicitlySet;
+    private IComponent? _component;
 
     private protected const string SettingsKeyName = "SettingsKey";
 
@@ -34,18 +35,17 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     private protected virtual void UpdateTextualDefaultProperty()
     {
-        var component = Component;
-        if (component?.Site is { } site)
+        if (_component?.Site is { } site)
         {
-            PropertyDescriptor? defaultProperty = TypeDescriptor.GetDefaultProperty(component);
+            PropertyDescriptor? defaultProperty = TypeDescriptor.GetDefaultProperty(_component);
             if (defaultProperty is null)
             {
                 return;
             }
 
-            if (defaultProperty.TryGetValue(component, out string? currentValue) && string.IsNullOrEmpty(currentValue))
+            if (defaultProperty.TryGetValue(_component, out string? currentValue) && string.IsNullOrEmpty(currentValue))
             {
-                defaultProperty.SetValue(component, site.Name);
+                defaultProperty.SetValue(_component, site.Name);
             }
         }
     }
@@ -169,7 +169,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Gets or sets the component this designer is designing.
     /// </summary>
-    public IComponent Component { get; private set; } = null!;
+    public IComponent Component => _component ?? throw new InvalidOperationException("Designer is not initialized");
 
     /// <summary>
     ///  Gets the design-time verbs supported by the component associated with the designer.
@@ -356,10 +356,10 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         get
         {
             Debug.Assert(
-                Component is not null,
+                _component is not null,
                 "this.component needs to be set before this method is valid.");
 
-            return TryGetService(out IDesignerHost? host) && Component == host.RootComponent;
+            return TryGetService(out IDesignerHost? host) && _component == host.RootComponent;
         }
     }
 
@@ -368,7 +368,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// </summary>
     public virtual void Initialize(IComponent component)
     {
-        Component = component;
+        _component = component;
 
         // For inherited components, save off the current values so we can compute a delta.  We also do this for
         // the root component, but, as it is ALWAYS inherited, the computation of default values favors the
@@ -453,7 +453,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            Component = null!;
+            _component = null;
             _inheritedProps = null;
         }
     }
