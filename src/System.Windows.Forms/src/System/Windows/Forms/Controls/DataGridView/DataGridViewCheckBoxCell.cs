@@ -515,7 +515,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             paint: false);
 
 #if DEBUG
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
         Rectangle checkBoxBoundsDebug = PaintPrivate(
             graphics,
             cellBounds,

@@ -3358,7 +3358,7 @@ public partial class DataGridView
                     DataGridViewCell dataGridViewCell = CurrentCellInternal;
                     if (IsCurrentCellInEditMode)
                     {
-                        DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCell.GetInheritedStyle(null, _ptCurrentCell.Y, true);
+                        DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: true);
                         if (EditingControl is not null)
                         {
                             InitializeEditingControlValue(ref dataGridViewCellStyle, dataGridViewCell);
@@ -3471,7 +3471,7 @@ public partial class DataGridView
             return false;
         }
 
-        if (DataConnection.CurrencyManager!.Count <= _ptCurrentCell.Y)
+        if ((DataConnection.CurrencyManager?.Count ?? 0) <= _ptCurrentCell.Y)
         {
             // don't validate a row beyond the last row in the back end list
             return false;
@@ -13461,8 +13461,8 @@ public partial class DataGridView
         DataGridViewDataErrorContexts context)
     {
         DataGridViewCell currentCell = dataGridViewCell ?? CurrentCellInternal;
-        DataGridViewCellStyle dataGridViewCellStyle = currentCell.GetInheritedStyle(null, rowIndex, false);
-        object val = currentCell.GetValueInternal(rowIndex);
+        DataGridViewCellStyle dataGridViewCellStyle = currentCell.GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
+        object? val = currentCell.GetValueInternal(rowIndex);
         object? editedFormattedValue = currentCell.GetEditedFormattedValue(val, rowIndex, ref dataGridViewCellStyle, context);
         DataGridViewCellValidatingEventArgs dgvcfvce = new DataGridViewCellValidatingEventArgs(columnIndex, rowIndex, editedFormattedValue);
         OnCellValidating(dgvcfvce);
@@ -25515,7 +25515,7 @@ public partial class DataGridView
         {
             DataGridViewCell dataGridViewCurrentCell = CurrentCellInternal;
             Debug.Assert(dataGridViewCurrentCell is not null);
-            object nullValue = dataGridViewCurrentCell.GetInheritedStyle(null, _ptCurrentCell.Y, false).NullValue;
+            object nullValue = dataGridViewCurrentCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: false).NullValue;
             if (nullValue is null
                 || (dataGridViewCurrentCell.FormattedValueType is not null && dataGridViewCurrentCell.FormattedValueType.IsAssignableFrom(nullValue.GetType())))
             {
@@ -25690,7 +25690,7 @@ public partial class DataGridView
         {
             Debug.Assert(_ptCurrentCell.Y != -1);
             DataGridViewCell dataGridViewCurrentCell = CurrentCellInternal;
-            DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCurrentCell.GetInheritedStyle(null, _ptCurrentCell.Y, true);
+            DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCurrentCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: true);
             if (EditingControl is not null)
             {
                 if (InitializeEditingControlValue(ref dataGridViewCellStyle, dataGridViewCurrentCell))

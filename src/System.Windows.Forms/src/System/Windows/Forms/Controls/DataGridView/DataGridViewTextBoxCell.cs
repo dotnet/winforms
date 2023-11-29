@@ -280,7 +280,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
             return Rectangle.Empty;
         }
 
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
         object? formattedValue = GetFormattedValue(
             value,
             rowIndex,
@@ -375,7 +375,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
             paint: false);
 
 #if DEBUG
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
         object? formattedValue = GetFormattedValue(
             value,
             rowIndex,

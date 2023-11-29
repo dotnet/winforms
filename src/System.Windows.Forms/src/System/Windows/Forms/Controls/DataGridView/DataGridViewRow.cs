@@ -67,12 +67,13 @@ public partial class DataGridViewRow : DataGridViewBand
     {
         get
         {
-            if (DataGridView is not null &&
-                DataGridView.DataConnection is not null &&
-                Index > -1 &&
-                Index != DataGridView.NewRowIndex)
+            if (DataGridView is not null
+                && DataGridView.DataConnection is not null
+                && DataGridView.DataConnection.CurrencyManager is not null
+                && Index > -1
+                && Index != DataGridView.NewRowIndex)
             {
-                return DataGridView.DataConnection.CurrencyManager![Index];
+                return DataGridView.DataConnection.CurrencyManager[Index];
             }
             else
             {
@@ -1555,7 +1556,7 @@ public partial class DataGridViewRow : DataGridViewBand
                     cellState |= cell.State;
                 }
 
-                cell.GetInheritedStyle(inheritedCellStyle, rowIndex, true);
+                cell.GetInheritedStyle(inheritedCellStyle, rowIndex, includeColors: true);
 
                 dgvabsEffective = cell.AdjustCellBorderStyle(dataGridView.AdvancedCellBorderStyle, dataGridViewAdvancedBorderStylePlaceholder,
                     dataGridView.SingleVerticalBorderAdded,
@@ -1645,7 +1646,7 @@ public partial class DataGridViewRow : DataGridViewBand
                             cellState |= cell.State;
                         }
 
-                        cell.GetInheritedStyle(inheritedCellStyle, rowIndex, true);
+                        cell.GetInheritedStyle(inheritedCellStyle, rowIndex, includeColors: true);
 
                         dgvabsEffective = cell.AdjustCellBorderStyle(dataGridView.AdvancedCellBorderStyle, dataGridViewAdvancedBorderStylePlaceholder,
                             dataGridView.SingleVerticalBorderAdded,

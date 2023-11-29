@@ -626,7 +626,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             singleHorizontalBorderAdded: false,
             isFirstDisplayedColumn: false,
             isFirstDisplayedRow: false);
-        DataGridViewCellStyle cellStyle = GetInheritedStyle(null, rowIndex, includeColors: false);
+        DataGridViewCellStyle cellStyle = GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
         Rectangle borderAndPaddingWidths = BorderWidths(dgvabsEffective);
         borderAndPaddingWidths.X += cellStyle.Padding.Left;
         borderAndPaddingWidths.Y += cellStyle.Padding.Top;
@@ -831,7 +831,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return Rectangle.Empty;
         }
 
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
         object? formattedValue = GetEditedFormattedValue(
             value,
             rowIndex,
@@ -1328,7 +1328,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         ((IDataGridViewEditingControl)EditingComboBox).EditingControlValueChanged = false;
         int rowIndex = ((IDataGridViewEditingControl)EditingComboBox).EditingControlRowIndex;
         Debug.Assert(rowIndex > -1);
-        DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
+        DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
         EditingComboBox.Text = (string)GetFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
     }
 
@@ -1816,7 +1816,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         if ((FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System) && DataGridView.ApplyVisualStylesToInnerCells)
         {
             int rowIndex = e.RowIndex;
-            DataGridViewCellStyle cellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
+            DataGridViewCellStyle cellStyle = GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
 
             // get the border style
             bool singleVerticalBorderAdded = !DataGridView.RowHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;

@@ -36,7 +36,7 @@ public partial class DataGridViewRowCollection
             _ascending = ascending;
         }
 
-        internal object GetComparedObject(int rowIndex)
+        internal object? GetComparedObject(int rowIndex)
         {
             if (_dataGridView.NewRowIndex != -1)
             {
@@ -60,7 +60,7 @@ public partial class DataGridViewRowCollection
             }
         }
 
-        internal int CompareObjects(object value1, object value2, int rowIndex1, int rowIndex2)
+        internal int CompareObjects(object? value1, object? value2, int rowIndex1, int rowIndex2)
         {
             if (value1 is ComparedObjectMax)
             {
