@@ -1196,12 +1196,14 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         if (_childNodes.Count > 0)
         {
-            TreeNode[] newOrder = new TreeNode[_childNodes.Count];
+            List<TreeNode> newOrder = new(_childNodes.Count);
             if (parentTreeView is null || parentTreeView.TreeViewNodeSorter is null)
             {
                 CompareInfo compare = Application.CurrentCulture.CompareInfo;
                 for (int i = 0; i < _childNodes.Count; i++)
                 {
+                    newOrder.Add(_childNodes[i]);
+
                     int min = -1;
                     for (int j = 0; j < _childNodes.Count; j++)
                     {
@@ -1229,13 +1231,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     newOrder[i].SortChildren(parentTreeView);
                 }
 
-                _childNodes = newOrder.ToList();
+                _childNodes = newOrder;
             }
             else
             {
                 IComparer sorter = parentTreeView.TreeViewNodeSorter;
                 for (int i = 0; i < _childNodes.Count; i++)
                 {
+                    newOrder.Add(_childNodes[i]);
+
                     int min = -1;
                     for (int j = 0; j < _childNodes.Count; j++)
                     {
@@ -1263,7 +1267,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     newOrder[i].SortChildren(parentTreeView);
                 }
 
-                _childNodes = newOrder.ToList();
+                _childNodes = newOrder;
             }
         }
     }
