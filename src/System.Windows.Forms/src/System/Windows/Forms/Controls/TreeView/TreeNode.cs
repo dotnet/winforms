@@ -1194,81 +1194,83 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     private void SortChildren(TreeView? parentTreeView)
     {
-        if (_childNodes.Count > 0)
+        if (_childNodes.Count <= 0)
         {
-            List<TreeNode> newOrder = new(_childNodes.Count);
-            if (parentTreeView is null || parentTreeView.TreeViewNodeSorter is null)
+            return;
+        }
+
+        List<TreeNode> newOrder = new(_childNodes.Count);
+        if (parentTreeView is null || parentTreeView.TreeViewNodeSorter is null)
+        {
+            CompareInfo compare = Application.CurrentCulture.CompareInfo;
+            for (int i = 0; i < _childNodes.Count; i++)
             {
-                CompareInfo compare = Application.CurrentCulture.CompareInfo;
-                for (int i = 0; i < _childNodes.Count; i++)
+                newOrder.Add(_childNodes[i]);
+
+                int min = -1;
+                for (int j = 0; j < _childNodes.Count; j++)
                 {
-                    newOrder.Add(_childNodes[i]);
-
-                    int min = -1;
-                    for (int j = 0; j < _childNodes.Count; j++)
+                    if (_childNodes[j] is null)
                     {
-                        if (_childNodes[j] is null)
-                        {
-                            continue;
-                        }
-
-                        if (min == -1)
-                        {
-                            min = j;
-                            continue;
-                        }
-
-                        if (compare.Compare(_childNodes[j].Text, _childNodes[min].Text) <= 0)
-                        {
-                            min = j;
-                        }
+                        continue;
                     }
 
-                    Debug.Assert(min != -1, "Bad sorting");
-                    newOrder[i] = _childNodes[min];
-                    _childNodes[min] = null!;
-                    newOrder[i]._index = i;
-                    newOrder[i].SortChildren(parentTreeView);
-                }
-
-                _childNodes = newOrder;
-            }
-            else
-            {
-                IComparer sorter = parentTreeView.TreeViewNodeSorter;
-                for (int i = 0; i < _childNodes.Count; i++)
-                {
-                    newOrder.Add(_childNodes[i]);
-
-                    int min = -1;
-                    for (int j = 0; j < _childNodes.Count; j++)
+                    if (min == -1)
                     {
-                        if (_childNodes[j] is null)
-                        {
-                            continue;
-                        }
-
-                        if (min == -1)
-                        {
-                            min = j;
-                            continue;
-                        }
-
-                        if (sorter.Compare(_childNodes[j] /*previous*/, _childNodes[min] /*current*/) <= 0)
-                        {
-                            min = j;
-                        }
+                        min = j;
+                        continue;
                     }
 
-                    Debug.Assert(min != -1, "Bad sorting");
-                    newOrder[i] = _childNodes[min];
-                    _childNodes[min] = null!;
-                    newOrder[i]._index = i;
-                    newOrder[i].SortChildren(parentTreeView);
+                    if (compare.Compare(_childNodes[j].Text, _childNodes[min].Text) <= 0)
+                    {
+                        min = j;
+                    }
                 }
 
-                _childNodes = newOrder;
+                Debug.Assert(min != -1, "Bad sorting");
+                newOrder[i] = _childNodes[min];
+                _childNodes[min] = null!;
+                newOrder[i]._index = i;
+                newOrder[i].SortChildren(parentTreeView);
             }
+
+            _childNodes = newOrder;
+        }
+        else
+        {
+            IComparer sorter = parentTreeView.TreeViewNodeSorter;
+            for (int i = 0; i < _childNodes.Count; i++)
+            {
+                newOrder.Add(_childNodes[i]);
+
+                int min = -1;
+                for (int j = 0; j < _childNodes.Count; j++)
+                {
+                    if (_childNodes[j] is null)
+                    {
+                        continue;
+                    }
+
+                    if (min == -1)
+                    {
+                        min = j;
+                        continue;
+                    }
+
+                    if (sorter.Compare(_childNodes[j] /*previous*/, _childNodes[min] /*current*/) <= 0)
+                    {
+                        min = j;
+                    }
+                }
+
+                Debug.Assert(min != -1, "Bad sorting");
+                newOrder[i] = _childNodes[min];
+                _childNodes[min] = null!;
+                newOrder[i]._index = i;
+                newOrder[i].SortChildren(parentTreeView);
+            }
+
+            _childNodes = newOrder;
         }
     }
 
