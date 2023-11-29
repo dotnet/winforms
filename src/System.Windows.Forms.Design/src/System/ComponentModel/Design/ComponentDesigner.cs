@@ -484,29 +484,31 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         get
         {
             string? settingsKeyName = (string?)ShadowProperties[SettingsKeyName];
-            if (string.IsNullOrEmpty(settingsKeyName))
+            if (!string.IsNullOrEmpty(settingsKeyName))
             {
-                IComponent? rootComponent = GetService<IDesignerHost>()?.RootComponent;
+                return settingsKeyName;
+            }
 
-                if (Component is IPersistComponentSettings persistableComponent && rootComponent is not null)
+            IComponent? rootComponent = this.GetService<IDesignerHost>()?.RootComponent;
+
+            if (this.Component is IPersistComponentSettings persistableComponent && rootComponent is not null)
+            {
+                if (string.IsNullOrEmpty(persistableComponent.SettingsKey))
                 {
-                    if (string.IsNullOrEmpty(persistableComponent.SettingsKey))
+                    Debug.Assert(this.Component.Site is not null);
+                    if (rootComponent != persistableComponent)
                     {
-                        Debug.Assert(Component.Site is not null);
-                        if (rootComponent != persistableComponent)
-                        {
-                            settingsKeyName = $"{rootComponent.Site!.Name}.{Component.Site.Name}";
-                        }
-                        else
-                        {
-                            settingsKeyName = Component.Site.Name;
-                        }
-
-                        ShadowProperties[SettingsKeyName] = settingsKeyName;
+                        settingsKeyName = $"{rootComponent.Site!.Name}.{this.Component.Site.Name}";
+                    }
+                    else
+                    {
+                        settingsKeyName = this.Component.Site.Name;
                     }
 
-                    persistableComponent.SettingsKey = settingsKeyName;
+                    this.ShadowProperties[SettingsKeyName] = settingsKeyName;
                 }
+
+                persistableComponent.SettingsKey = settingsKeyName;
             }
 
             return settingsKeyName;
