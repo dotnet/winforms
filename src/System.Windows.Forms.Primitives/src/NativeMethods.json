@@ -62,6 +62,7 @@
       "IEnumVARIANT.Reset",
       "IEnumVARIANT.Clone",
       "IErrorInfo.GetDescription",
+      "IExpandCollapseProvider.get_ExpandCollapseState",
       "IFileDialog.Show",
       "IFileDialog.GetResult",
       "IFileOpenDialog.GetResults",

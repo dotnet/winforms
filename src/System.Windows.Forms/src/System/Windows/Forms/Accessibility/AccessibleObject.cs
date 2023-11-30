@@ -33,7 +33,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.IInvokeProvider,
     IValueProvider.Interface,
     IRangeValueProvider.Interface,
-    UiaCore.IExpandCollapseProvider,
+    IExpandCollapseProvider.Interface,
     IToggleProvider.Interface,
     ITableProvider.Interface,
     ITableItemProvider.Interface,
@@ -982,11 +982,28 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.ILegacyIAccessibleProvider.SetValue(string szValue) => SetValue(szValue);
 
-    void UiaCore.IExpandCollapseProvider.Expand() => Expand();
+    HRESULT IExpandCollapseProvider.Interface.Expand()
+    {
+        Expand();
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.IExpandCollapseProvider.Collapse() => Collapse();
+    HRESULT IExpandCollapseProvider.Interface.Collapse()
+    {
+        Collapse();
+        return HRESULT.S_OK;
+    }
 
-    UIA.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
+    HRESULT IExpandCollapseProvider.Interface.get_ExpandCollapseState(ExpandCollapseState* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ExpandCollapseState;
+        return HRESULT.S_OK;
+    }
 
     void UiaCore.IInvokeProvider.Invoke() => Invoke();
 

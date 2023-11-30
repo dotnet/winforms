@@ -720,7 +720,7 @@ TEST const WCHAR* WINAPI Test_IExpandCollapseProviderGetExpandCollapseState(IUnk
 
         // Negative tests.
         hr = pExpandCollapseProvider->get_ExpandCollapseState(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

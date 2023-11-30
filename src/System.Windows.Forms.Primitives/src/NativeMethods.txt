@@ -371,6 +371,7 @@ IEnumFORMATETC
 IEnumOLEVERB
 IEnumVARIANT
 IErrorInfo
+IExpandCollapseProvider
 IFileDialog
 IFileDialogCustomize
 IFileDialogEvents
