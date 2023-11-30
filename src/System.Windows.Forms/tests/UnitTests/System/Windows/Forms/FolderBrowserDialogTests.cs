@@ -84,6 +84,25 @@ public class FolderBrowserDialogTests
 
     [WinFormsTheory]
     [BoolData]
+    public void FolderBrowserDialog_Multiselect_Set_GetReturnsExpected(bool value)
+    {
+        using var dialog = new FolderBrowserDialog
+        {
+            Multiselect = value
+        };
+        Assert.Equal(value, dialog.Multiselect);
+
+        // Set same.
+        dialog.Multiselect = value;
+        Assert.Equal(value, dialog.Multiselect);
+
+        // Set different.
+        dialog.Multiselect = !value;
+        Assert.Equal(!value, dialog.Multiselect);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
     public void FolderBrowserDialog_OkRequiresInteraction_Set_GetReturnsExpected(bool value)
     {
         using var dialog = new FolderBrowserDialog
@@ -252,6 +271,7 @@ public class FolderBrowserDialogTests
             AddToRecent = false,
             AutoUpgradeEnabled = false,
             Description = "A description",
+            Multiselect = true,
             RootFolder = Environment.SpecialFolder.CommonAdminTools,
             InitialDirectory = @"C:\",
             OkRequiresInteraction = true,
