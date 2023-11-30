@@ -31,8 +31,8 @@ public unsafe partial class AccessibleObject :
     IRawElementProviderFragment.Interface,
     IRawElementProviderFragmentRoot.Interface,
     UiaCore.IInvokeProvider,
-    UiaCore.IValueProvider,
-    UiaCore.IRangeValueProvider,
+    IValueProvider.Interface,
+    IRangeValueProvider.Interface,
     UiaCore.IExpandCollapseProvider,
     IToggleProvider.Interface,
     ITableProvider.Interface,
@@ -1023,11 +1023,33 @@ public unsafe partial class AccessibleObject :
     HRESULT ITextProvider2.Interface.RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
         => GetRangeFromAnnotation(annotationElement, pRetVal);
 
-    BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? true : false;
+    HRESULT IValueProvider.Interface.SetValue(PCWSTR val)
+    {
+        SetValue(val.ToString());
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.IValueProvider.Value => Value;
+    HRESULT IValueProvider.Interface.get_Value(BSTR* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IValueProvider.SetValue(string? newValue) => SetValue(newValue);
+        *pRetVal = Value is null ? default : new(Value);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IValueProvider.Interface.get_IsReadOnly(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = IsReadOnly;
+        return HRESULT.S_OK;
+    }
 
     HRESULT IToggleProvider.Interface.Toggle()
     {
@@ -2434,19 +2456,77 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? true : false;
+    HRESULT IRangeValueProvider.Interface.SetValue(double val)
+    {
+        SetValue(val);
+        return HRESULT.S_OK;
+    }
 
-    double UiaCore.IRangeValueProvider.LargeChange => LargeChange;
+    HRESULT IRangeValueProvider.Interface.get_Value(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    double UiaCore.IRangeValueProvider.Maximum => Maximum;
+        *pRetVal = RangeValue;
+        return HRESULT.S_OK;
+    }
 
-    double UiaCore.IRangeValueProvider.Minimum => Minimum;
+    HRESULT IRangeValueProvider.Interface.get_IsReadOnly(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    double UiaCore.IRangeValueProvider.SmallChange => SmallChange;
+        *pRetVal = IsReadOnly;
+        return HRESULT.S_OK;
+    }
 
-    double UiaCore.IRangeValueProvider.Value => RangeValue;
+    HRESULT IRangeValueProvider.Interface.get_Maximum(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IRangeValueProvider.SetValue(double value) => SetValue(value);
+        *pRetVal = Maximum;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRangeValueProvider.Interface.get_Minimum(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = Minimum;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRangeValueProvider.Interface.get_LargeChange(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = LargeChange;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRangeValueProvider.Interface.get_SmallChange(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = SmallChange;
+        return HRESULT.S_OK;
+    }
 
     HRESULT ISelectionProvider.Interface.GetSelection(SAFEARRAY** pRetVal)
     {

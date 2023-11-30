@@ -487,7 +487,7 @@ TEST const WCHAR* WINAPI Test_IValueProviderGetIsReadOnly(IUnknown* pUnknown, BO
 
         // Negative tests.
         hr = pRangeValueProvider->get_IsReadOnly(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -511,7 +511,7 @@ TEST const WCHAR* WINAPI Test_IValueProviderGetValue(IUnknown* pUnknown, LPCWSTR
 
         // Negative tests.
         hr = pRangeValueProvider->get_Value(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -560,7 +560,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetIsReadOnly(IUnknown* pUnknow
 
         // Negative tests.
         hr = pRangeValueProvider->get_IsReadOnly(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -583,7 +583,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetLargeChange(IUnknown* pUnkno
 
         // Negative tests.
         hr = pRangeValueProvider->get_LargeChange(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -606,7 +606,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetMaximum(IUnknown* pUnknown, 
 
         // Negative tests.
         hr = pRangeValueProvider->get_Maximum(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -629,7 +629,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetMinimum(IUnknown* pUnknown, 
 
         // Negative tests.
         hr = pRangeValueProvider->get_Minimum(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -652,7 +652,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetSmallChange(IUnknown* pUnkno
 
         // Negative tests.
         hr = pRangeValueProvider->get_SmallChange(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -675,7 +675,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetValue(IUnknown* pUnknown, do
 
         // Negative tests.
         hr = pRangeValueProvider->get_Value(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

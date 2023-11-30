@@ -448,6 +448,7 @@ IPictureDisp
 IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
+IRangeValueProvider
 IRawElementProviderFragment
 IRawElementProviderFragmentRoot
 IRawElementProviderHwndOverride
@@ -484,6 +485,7 @@ ITextProvider
 ITextProvider2
 ITextRangeProvider
 IToggleProvider
+IValueProvider
 IVBFormat
 IVBGetControl
 IViewObject
