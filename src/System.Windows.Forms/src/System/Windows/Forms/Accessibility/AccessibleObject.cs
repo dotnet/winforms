@@ -874,19 +874,10 @@ public unsafe partial class AccessibleObject :
         }
 
         IRawElementProviderSimple.Interface[]? fragmentRoots = GetEmbeddedFragmentRoots();
-        if (fragmentRoots is null)
-        {
-            *pRetVal = default;
-            return HRESULT.S_OK;
-        }
+        *pRetVal = fragmentRoots is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(fragmentRoots);
 
-        ComSafeArrayScope<IRawElementProviderSimple> scope = new((uint)fragmentRoots.Length);
-        for (int i = 0; i < fragmentRoots.Length; i++)
-        {
-            scope[i] = ComHelpers.GetComPointer<IRawElementProviderSimple>(fragmentRoots[i]);
-        }
-
-        *pRetVal = scope;
         return HRESULT.S_OK;
     }
 
@@ -2391,21 +2382,9 @@ public unsafe partial class AccessibleObject :
         }
 
         IRawElementProviderSimple.Interface[]? selection = GetSelection();
-        if (selection is null)
-        {
-            *pRetVal = default;
-        }
-        else
-        {
-            uint length = (uint)selection.Length;
-            ComSafeArrayScope<IRawElementProviderSimple> scope = new(length);
-            for (int i = 0; i < length; i++)
-            {
-                scope[i] = ComHelpers.GetComPointer<IRawElementProviderSimple>(selection[i]);
-            }
-
-            *pRetVal = scope;
-        }
+        *pRetVal = selection is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(selection);
 
         return HRESULT.S_OK;
     }
