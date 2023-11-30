@@ -258,7 +258,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
     [Browsable(false)]
     public virtual bool HasDropDownItems
         =>
-            //Use count of visible DisplayedItems instead so that we take into account things that aren't visible
+            // Use count of visible DisplayedItems instead so that we take into account things that aren't visible
             (_dropDown is not null) && _dropDown.HasVisibleItems;
 
     [Browsable(false)]
@@ -430,7 +430,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
     protected override void OnBoundsChanged()
     {
         base.OnBoundsChanged();
-        //Reset the Bounds...
+        // Reset the Bounds...
         if (_dropDown is not null && _dropDown.Visible)
         {
             _dropDown.Bounds = GetDropDownBounds(DropDownDirection);

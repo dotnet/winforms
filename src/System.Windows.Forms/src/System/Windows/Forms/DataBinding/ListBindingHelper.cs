@@ -561,7 +561,7 @@ public static class ListBindingHelper
             if (props[idx].GetIndexParameters().Length > 0 && props[idx].PropertyType != typeof(object))
             {
                 indexer = props[idx];
-                //Prefer the standard indexer, if there is one
+                // Prefer the standard indexer, if there is one
                 if (indexer.Name == "Item")
                 {
                     break;

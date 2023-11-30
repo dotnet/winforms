@@ -36,11 +36,11 @@ public partial class Screen
 
     private readonly int _bitDepth;
 
-    private static readonly object s_syncLock = new(); //used to lock this class before syncing to SystemEvents
+    private static readonly object s_syncLock = new(); // used to lock this class before syncing to SystemEvents
 
-    private static int s_desktopChangedCount = -1; //static counter of desktop size changes
+    private static int s_desktopChangedCount = -1; // static counter of desktop size changes
 
-    private int _currentDesktopChangedCount = -1; //instance-based counter used to invalidate WorkingArea
+    private int _currentDesktopChangedCount = -1; // instance-based counter used to invalidate WorkingArea
 
     // This identifier is just for us, so that we don't try to call the multimon functions if we just need the
     // primary monitor. This is safer for non-multimon OSes.
@@ -183,8 +183,8 @@ public partial class Screen
     {
         get
         {
-            //if the static Screen class has a different desktop change count
-            //than this instance then update the count and recalculate our working area
+            // if the static Screen class has a different desktop change count
+            // than this instance then update the count and recalculate our working area
             if (_currentDesktopChangedCount != DesktopChangedCount)
             {
                 Interlocked.Exchange(ref _currentDesktopChangedCount, DesktopChangedCount);

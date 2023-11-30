@@ -8,7 +8,7 @@ public enum HorizontalAlign
     Left = 0,
     Center = 1,
     Right = 2,
-    //      TM_ENUM(0, HA, LEFT)
+    // TM_ENUM(0, HA, LEFT)
     //      TM_ENUM(1, HA, CENTER)
     //      TM_ENUM(2, HA, RIGHT)
 }

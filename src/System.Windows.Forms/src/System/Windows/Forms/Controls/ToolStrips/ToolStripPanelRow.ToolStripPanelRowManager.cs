@@ -179,7 +179,7 @@ public partial class ToolStripPanelRow
 
         public virtual void MoveControl(ToolStrip movingControl, Point startClientLocation, Point endClientLocation)
         {
-            //     ToolStripPanel.Join(movingControl, endScreenLocation);
+            // ToolStripPanel.Join(movingControl, endScreenLocation);
         }
 
         public virtual void LeaveRow(ToolStrip toolStripToDrag)

@@ -173,7 +173,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                   | ExtendedStates.UserPreferredSizeCache, // this class overrides GetPreferredSizeCore, let Control automatically cache the result
                    true);
 
-        //add a weak ref link in ToolstripManager
+        // add a weak ref link in ToolstripManager
         ToolStripManager.ToolStrips.Add(this);
 
         _layoutEngine = new ToolStripSplitStackLayout(this);
@@ -864,7 +864,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         set
         {
-            //valid values are 0x0 to 0x1
+            // valid values are 0x0 to 0x1
             SourceGenerated.EnumValidator.Validate(value);
             if (_toolStripGripStyle != value)
             {
@@ -1249,7 +1249,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         set
         {
-            //valid values are 0x0 to 0x4
+            // valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
             if (_layoutStyle != value)
             {
@@ -1648,7 +1648,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value == ToolStripRenderMode.Custom)
             {
@@ -1790,7 +1790,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             Properties.SetObject(ToolStrip.s_propTextDirection, value);
 
@@ -2224,7 +2224,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             if (DisplayedItems[current].CanKeyboardSelect)
             {
                 s_selectionDebug.TraceVerbose($"[SelectDBG GetNextToolStripItem] selecting {DisplayedItems[current].Text}");
-                //ClearAllSelectionsExcept(Items[current]);
+                // ClearAllSelectionsExcept(Items[current]);
                 return DisplayedItems[current];
             }
         }
@@ -2277,7 +2277,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 continue;
             }
 
-            //[ otherControl ]
+            // [ otherControl ]
             //       *
             Point otherItemMidLocation = new Point(otherItem.Bounds.X + otherItem.Width / 2, (down) ? otherItem.Bounds.Top : otherItem.Bounds.Bottom);
             int oppositeSide = otherItemMidLocation.X - midPointOfCurrent.X;
@@ -2336,7 +2336,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // scenarios where that is not the case is when the hypotenuse
             // winner is clearly closer than the angle winner.
 
-            //   [a.winner]                       |       [s]
+            // [a.winner]                       |       [s]
             //                                    |         [h.winner]
             //       [h.winner]                   |
             //     [s]                            |    [a.winner]
@@ -2430,7 +2430,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         else
         {
-            maxSize.Width += 2;  //add Padding of 2 Pixels to the right if not Overflow.
+            maxSize.Width += 2;  // add Padding of 2 Pixels to the right if not Overflow.
         }
 
         if (toolStrip.GripStyle == ToolStripGripStyle.Visible)
@@ -2488,7 +2488,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         else
         {
-            maxSize.Height += 2;  //add Padding to the bottom if not Overflow.
+            maxSize.Height += 2;  // add Padding to the bottom if not Overflow.
         }
 
         if (toolStrip.GripStyle == ToolStripGripStyle.Visible)
@@ -2628,7 +2628,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
     }
 
-    //initialize ToolStrip
+    // initialize ToolStrip
     private void InitializeRenderer(ToolStripRenderer renderer)
     {
         // wrap this in a LayoutTransaction so that if they change sizes
@@ -3991,21 +3991,21 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                     new Point[]
                     {
                         new(verticalBeamStart, _lastInsertionMarkRect.Y), new(verticalBeamStart, _lastInsertionMarkRect.Bottom - 1), // first vertical line
-                        new(verticalBeamStart + 1, _lastInsertionMarkRect.Y), new(verticalBeamStart + 1, _lastInsertionMarkRect.Bottom - 1), //second  vertical line
+                        new(verticalBeamStart + 1, _lastInsertionMarkRect.Y), new(verticalBeamStart + 1, _lastInsertionMarkRect.Bottom - 1), // second  vertical line
                     });
                 // then two top horizontal
                 g.DrawLines(SystemPens.ControlText,
                     new Point[]
                     {
-                        new(start, _lastInsertionMarkRect.Bottom - 1), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Bottom - 1), //bottom line
-                        new(start + 1, _lastInsertionMarkRect.Bottom - 2), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Bottom - 2), //bottom second line
+                        new(start, _lastInsertionMarkRect.Bottom - 1), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Bottom - 1), // bottom line
+                        new(start + 1, _lastInsertionMarkRect.Bottom - 2), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Bottom - 2), // bottom second line
                     });
                 // then two bottom horizontal
                 g.DrawLines(SystemPens.ControlText,
                      new Point[]
                      {
-                         new(start, _lastInsertionMarkRect.Y), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Y), //top line
-                         new(start + 1, _lastInsertionMarkRect.Y + 1), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1) //top second line
+                         new(start, _lastInsertionMarkRect.Y), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Y), // top line
+                         new(start + 1, _lastInsertionMarkRect.Y + 1), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1) // top second line
                      });
             }
             else
@@ -4019,21 +4019,21 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                     new Point[]
                     {
                         new(_lastInsertionMarkRect.X, horizontalBeamStart), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart), // first vertical line
-                        new(_lastInsertionMarkRect.X, horizontalBeamStart + 1), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart + 1), //second  vertical line
+                        new(_lastInsertionMarkRect.X, horizontalBeamStart + 1), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart + 1), // second  vertical line
                     });
                 // then two left vertical
                 g.DrawLines(SystemPens.ControlText,
                     new Point[]
                     {
-                        new(_lastInsertionMarkRect.X, start), new(_lastInsertionMarkRect.X, start + widthOfBeam - 1), //left line
-                        new(_lastInsertionMarkRect.X + 1, start + 1), new(_lastInsertionMarkRect.X + 1, start + widthOfBeam - 2), //second left line
+                        new(_lastInsertionMarkRect.X, start), new(_lastInsertionMarkRect.X, start + widthOfBeam - 1), // left line
+                        new(_lastInsertionMarkRect.X + 1, start + 1), new(_lastInsertionMarkRect.X + 1, start + widthOfBeam - 2), // second left line
                     });
                 // then two right vertical
                 g.DrawLines(SystemPens.ControlText,
                      new Point[]
                      {
-                         new(_lastInsertionMarkRect.Right - 1, start), new(_lastInsertionMarkRect.Right - 1, start + widthOfBeam - 1), //right line
-                         new(_lastInsertionMarkRect.Right - 2, start + 1), new(_lastInsertionMarkRect.Right - 2, start + widthOfBeam - 2), //second right line
+                         new(_lastInsertionMarkRect.Right - 1, start), new(_lastInsertionMarkRect.Right - 1, start + widthOfBeam - 1), // right line
+                         new(_lastInsertionMarkRect.Right - 2, start + 1), new(_lastInsertionMarkRect.Right - 2, start + widthOfBeam - 2), // second right line
                      });
             }
         }
@@ -4752,7 +4752,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             using (new LayoutTransaction(this, this, PropertyNames.Orientation))
             {
-                //  We want the ToolStrip to size appropriately when the dock has switched.
+                // We want the ToolStrip to size appropriately when the dock has switched.
                 if (newDock == DockStyle.Left || newDock == DockStyle.Right)
                 {
                     UpdateOrientation(Orientation.Vertical);
@@ -4778,7 +4778,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             using (new LayoutTransaction(this, this, PropertyNames.Orientation))
             {
-                //  We want the ToolStrip to size appropriately when the rafting container orientation has switched.
+                // We want the ToolStrip to size appropriately when the rafting container orientation has switched.
                 UpdateOrientation(newRaftingRowOrientation);
                 if (LayoutEngine is ToolStripSplitStackLayout && _layoutStyle == ToolStripLayoutStyle.StackWithOverflow)
                 {

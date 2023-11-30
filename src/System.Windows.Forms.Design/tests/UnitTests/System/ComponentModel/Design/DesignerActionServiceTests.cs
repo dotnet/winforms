@@ -204,7 +204,7 @@ public class DesignerActionServiceTests
             Assert.Same(service, sender);
             Assert.True(e.RelatedObject == component1 || e.RelatedObject == component2);
             Assert.Equal(DesignerActionListsChangedType.ActionListsRemoved, e.ChangeType);
-            //Assert.Same(actionList, Assert.Single(e.ActionLists));
+            // Assert.Same(actionList, Assert.Single(e.ActionLists));
             callCount++;
         };
         service.DesignerActionListsChanged += handler;

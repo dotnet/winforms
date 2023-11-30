@@ -48,9 +48,9 @@ public unsafe partial class WebBrowserBase : Control
     private IOleControl.Interface? _axOleControl;
     private WebBrowserBaseNativeWindow? _axWindow;
     // We need to change the size of the inner ActiveX control before the
-    //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
-    //is changed) for better visual effect. We use this field to know what size
-    //the WebBrowserBase control is changing to.
+    // WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
+    // is changed) for better visual effect. We use this field to know what size
+    // the WebBrowserBase control is changing to.
     private Size _webBrowserBaseChangingSize = Size.Empty;
     private WebBrowserContainer? _wbContainer;
 
@@ -154,8 +154,8 @@ public unsafe partial class WebBrowserBase : Control
     {
     }
 
-    //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
-    //still call base so that this has a chance to work if it can.
+    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // still call base so that this has a chance to work if it can.
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
     {
@@ -522,7 +522,7 @@ public unsafe partial class WebBrowserBase : Control
 
     protected override void OnRightToLeftChanged(EventArgs e)
     {
-        //Do nothing: no point in recreating the handle when we don't obey RTL
+        // Do nothing: no point in recreating the handle when we don't obey RTL
     }
 
     //
@@ -1156,7 +1156,7 @@ public unsafe partial class WebBrowserBase : Control
     private bool EditMode =>
         _axEditMode != WebBrowserHelper.AXEditMode.None;
 
-    //Find the uppermost ContainerControl that this control lives in
+    // Find the uppermost ContainerControl that this control lives in
     internal ContainerControl? FindContainerControlInternal()
     {
         if (Site is not null)
@@ -1580,7 +1580,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    //Everett
+    // Everett
     public new event HelpEventHandler? HelpRequested
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));

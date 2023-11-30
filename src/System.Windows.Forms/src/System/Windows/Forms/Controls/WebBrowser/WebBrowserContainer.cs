@@ -330,7 +330,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     internal void RemoveControl(Control ctl)
     {
-        //ctl may not be in containerCache: Remove is a no-op if it's not there.
+        // ctl may not be in containerCache: Remove is a no-op if it's not there.
         containerCache.Remove(ctl);
     }
 

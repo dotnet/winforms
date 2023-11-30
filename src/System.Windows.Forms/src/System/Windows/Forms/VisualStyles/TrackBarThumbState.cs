@@ -8,6 +8,6 @@ public enum TrackBarThumbState
     Normal = 1,
     Hot = 2,
     Pressed = 3,
-    //Focused = 4,
+    // Focused = 4,
     Disabled = 5
 }

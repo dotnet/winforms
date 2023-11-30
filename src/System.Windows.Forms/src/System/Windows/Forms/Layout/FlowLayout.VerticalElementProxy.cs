@@ -19,9 +19,9 @@ internal partial class FlowLayout
             get
             {
                 AnchorStyles anchorStyles = LayoutUtils.GetUnifiedAnchor(Element!);
-                bool isStretch = (anchorStyles & LayoutUtils.HorizontalAnchorStyles) == LayoutUtils.HorizontalAnchorStyles; //whether the control stretches to fill in the whole space
-                bool isLeft = (anchorStyles & AnchorStyles.Left) != 0;  //whether the control anchors to left and does not stretch;
-                bool isRight = (anchorStyles & AnchorStyles.Right) != 0; //whether the control anchors to right and does not stretch;
+                bool isStretch = (anchorStyles & LayoutUtils.HorizontalAnchorStyles) == LayoutUtils.HorizontalAnchorStyles; // whether the control stretches to fill in the whole space
+                bool isLeft = (anchorStyles & AnchorStyles.Left) != 0;  // whether the control anchors to left and does not stretch;
+                bool isRight = (anchorStyles & AnchorStyles.Right) != 0; // whether the control anchors to right and does not stretch;
                 if (isStretch)
                 {
                     return LayoutUtils.VerticalAnchorStyles;

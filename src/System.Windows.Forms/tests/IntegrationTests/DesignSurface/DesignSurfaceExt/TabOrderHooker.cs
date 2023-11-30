@@ -9,12 +9,12 @@ public class TabOrderHooker
 
     private object _tabOrder;
 
-    //- Enables/Disables visual TabOrder on the view.
-    //- internal override
+    // - Enables/Disables visual TabOrder on the view.
+    // - internal override
     public void HookTabOrder(IDesignerHost host)
     {
-        //- the TabOrder must be called AFTER the DesignSurface has been loaded
-        //- therefore we do a little check
+        // - the TabOrder must be called AFTER the DesignSurface has been loaded
+        // - therefore we do a little check
         if (host.RootComponent is null)
             throw new Exception($"{_Name_}::HookTabOrder() - Exception: the TabOrder must be invoked after the DesignSurface has been loaded! ");
 
@@ -24,7 +24,7 @@ public class TabOrderHooker
             Type tabOrderType = designAssembly.GetType("System.Windows.Forms.Design.TabOrder");
             if (_tabOrder is null)
             {
-                //- call the ctor passing the IDesignerHost target object
+                // - call the ctor passing the IDesignerHost target object
                 _tabOrder = Activator.CreateInstance(tabOrderType, new object[] { host });
             }
             else
@@ -38,7 +38,7 @@ public class TabOrderHooker
         }
     }
 
-    //- Disposes the tab order
+    // - Disposes the tab order
     public void DisposeTabOrder()
     {
         if (_tabOrder is null)

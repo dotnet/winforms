@@ -436,7 +436,7 @@ public partial class ComboBox
                     // Minimum compatibility fix
                     if (selected)
                     {
-                        _owner.OnSelectedItemChanged(EventArgs.Empty);   //we do this because set_SelectedIndex does this. (for consistency)
+                        _owner.OnSelectedItemChanged(EventArgs.Empty);   // we do this because set_SelectedIndex does this. (for consistency)
                         _owner.OnSelectedIndexChanged(EventArgs.Empty);
                     }
                 }

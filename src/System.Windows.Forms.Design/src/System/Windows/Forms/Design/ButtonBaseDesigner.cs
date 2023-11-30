@@ -68,9 +68,9 @@ internal class ButtonBaseDesigner : ControlDesigner
 
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
-            //based on the type of control and it's style, we need to add certain deltas to make
-            //the snapline appear in the right place. Rather than adding a class for each control
-            //we special case it here - for perf reasons.
+            // based on the type of control and it's style, we need to add certain deltas to make
+            // the snapline appear in the right place. Rather than adding a class for each control
+            // we special case it here - for perf reasons.
 
             if ((Control is CheckBox) || (Control is RadioButton))
             {
@@ -97,7 +97,7 @@ internal class ButtonBaseDesigner : ControlDesigner
                 }
             }
             else
-            { //default case
+            { // default case
                 baseline += DefaultBaselineOffset(alignment, flatStyle);
             }
 
@@ -117,7 +117,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             }
             else
             {
-                return 0; //FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
+                return 0; // FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
             }
         }
         else if ((alignment & DesignerUtils.AnyTopAlignment) != 0)
@@ -137,11 +137,11 @@ internal class ButtonBaseDesigner : ControlDesigner
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
         else
-        {//bottom alignment
+        {// bottom alignment
             if (flatStyle == FlatStyle.Standard)
             {
                 return -3;
@@ -157,7 +157,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
     }
@@ -172,7 +172,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             }
             else
             {
-                return 0; //FlatStyle.Standard || FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
+                return 0; // FlatStyle.Standard || FlatStyle.Flat || FlatStyle.Popup || Unknown FlatStyle
             }
         }
         else
@@ -188,7 +188,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
     }
@@ -216,7 +216,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             else
             {
                 Debug.Fail("Unknown FlatStyle");
-                return 0; //Unknown FlatStyle
+                return 0; // Unknown FlatStyle
             }
         }
     }

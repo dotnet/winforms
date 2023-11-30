@@ -234,7 +234,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside set_ImeModeBase({value}), this = {this}");
             Debug.Indent();
 
-            //valid values are -1 to 0xb
+            // valid values are -1 to 0xb
             SourceGenerated.EnumValidator.Validate(value);
 
             ImeMode oldImeMode = CachedImeMode;
@@ -1319,7 +1319,7 @@ public readonly struct ImeModeConversion
 
     // Tables of conversions from IME context bits to IME mode
     //
-    //internal const int ImeNotAvailable = 0;
+    // internal const int ImeNotAvailable = 0;
     internal const int ImeDisabled = 1;
     internal const int ImeDirectInput = 2;
     internal const int ImeClosed = 3;

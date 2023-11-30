@@ -327,7 +327,7 @@ public static partial class ControlPaint
         PInvoke.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
         PInvoke.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
         PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
-        //RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
+        // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
         return (IntPtr)colorMask;
     }
@@ -2219,7 +2219,7 @@ public static partial class ControlPaint
                 }
             }
 
-            //  High contrast        Normal (dark)       Normal (light)     Normal (light, base transparent)
+            // High contrast        Normal (dark)       Normal (light)     Normal (light, base transparent)
             //
             // | trnsp | black |    | black | invrt |   | base  | black |   | white | black |
             // | black | trnsp |    | invrt | black |   | black | base  |   | black | white |
@@ -2439,7 +2439,7 @@ public static partial class ControlPaint
             case TableLayoutPanelCellBorderStyle.OutsetPartial:
                 g.DrawRectangle(SystemPens.Control, bound);
 
-                //draw the shadow
+                // draw the shadow
                 bound = new Rectangle(bound.X + 1, bound.Y + 1, bound.Width - 1, bound.Height - 1);
                 g.DrawLine(SystemPens.ControlDark, bound.X, bound.Y, bound.X + bound.Width - 1, bound.Y);
                 g.DrawLine(SystemPens.ControlDark, bound.X, bound.Y, bound.X, bound.Y + bound.Height - 1);

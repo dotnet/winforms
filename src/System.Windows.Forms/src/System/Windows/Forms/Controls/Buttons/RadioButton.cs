@@ -104,7 +104,7 @@ public partial class RadioButton : ButtonBase
         {
             if (_appearance != value)
             {
-                //valid values are 0x0 to 0x1
+                // valid values are 0x0 to 0x1
                 SourceGenerated.EnumValidator.Validate(value);
 
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
@@ -419,8 +419,8 @@ public partial class RadioButton : ButtonBase
         {
             if (PInvoke.GetKeyState((int)Keys.Tab) >= 0)
             {
-                //We enter the radioButton by using arrow keys
-                //Paint in raised state...
+                // We enter the radioButton by using arrow keys
+                // Paint in raised state...
                 ResetFlagsandPaint();
                 if (!ValidationCancelled)
                 {
@@ -429,11 +429,11 @@ public partial class RadioButton : ButtonBase
             }
             else
             {
-                //we enter the radioButton by pressing Tab
+                // we enter the radioButton by pressing Tab
                 PerformAutoUpdates(true);
-                //reset the TabStop so we can come back later
-                //notice that PerformAutoUpdates will set the
-                //TabStop of this button to false
+                // reset the TabStop so we can come back later
+                // notice that PerformAutoUpdates will set the
+                // TabStop of this button to false
                 TabStop = true;
             }
         }

@@ -29,7 +29,7 @@ internal class ComboBoxDesigner : ControlDesigner
         {
             ArrayList snapLines = base.SnapLines as ArrayList;
 
-            //a single text-baseline for the label (and linklabel) control
+            // a single text-baseline for the label (and linklabel) control
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
             baseline += 3;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));

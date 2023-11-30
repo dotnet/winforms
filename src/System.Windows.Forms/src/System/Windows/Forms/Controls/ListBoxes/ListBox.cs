@@ -71,10 +71,10 @@ public partial class ListBox : ListControl
 
     private SelectionMode _cachedSelectionMode = SelectionMode.One;
 
-    //We need to know that we are in middle of handleRecreate through Setter of SelectionMode.
-    //In this case we set a bool denoting that we are changing SelectionMode and
-    //in this case we should always use the cachedValue instead of the currently set value.
-    //We need to change this in the count as well as SelectedIndex code where we access the SelectionMode.
+    // We need to know that we are in middle of handleRecreate through Setter of SelectionMode.
+    // In this case we set a bool denoting that we are changing SelectionMode and
+    // in this case we should always use the cachedValue instead of the currently set value.
+    // We need to change this in the count as well as SelectedIndex code where we access the SelectionMode.
     private bool _selectionModeChanging;
 
     /// <summary>
@@ -402,7 +402,7 @@ public partial class ListBox : ListControl
 
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_drawMode != value)
             {
@@ -1849,8 +1849,8 @@ public partial class ListBox : ListControl
     protected override void OnParentChanged(EventArgs e)
     {
         base.OnParentChanged(e);
-        //No need to RecreateHandle if we are removing the Listbox from controls collection...
-        //so check the parent before recreating the handle...
+        // No need to RecreateHandle if we are removing the Listbox from controls collection...
+        // so check the parent before recreating the handle...
         if (ParentInternal is not null)
         {
             RecreateHandle();
@@ -1904,7 +1904,7 @@ public partial class ListBox : ListControl
         // into the backEnd. We do not need to do that.
         if (DataManager is not null && DataManager.Position != SelectedIndex)
         {
-            //read this as "if everett or   (whidbey and selindex is valid)"
+            // read this as "if everett or   (whidbey and selindex is valid)"
             if (!FormattingEnabled || SelectedIndex != -1)
             {
                 // Don't change dataManager position if we simply unselected everything.
@@ -1959,7 +1959,7 @@ public partial class ListBox : ListControl
     {
         if (_drawMode == DrawMode.OwnerDrawVariable)
         {
-            //Fire MeasureItem for Each Item in the Listbox...
+            // Fire MeasureItem for Each Item in the Listbox...
             int cnt = Items.Count;
             Graphics graphics = CreateGraphicsInternal();
 

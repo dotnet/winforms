@@ -2744,7 +2744,7 @@ public partial class PropertyGridTests
         var previousActiveDesigner = propertyGrid.ActiveDesigner;
         propertyGridTestAccessor.SaveSelectedTabIndex();
 
-        //Set other Site
+        // Set other Site
         propertyGrid.Site = CreateISiteObject();
         Assert.NotNull(propertyGrid.ActiveDesigner);
         Assert.NotEqual(previousActiveDesigner, propertyGrid.ActiveDesigner);

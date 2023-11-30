@@ -369,7 +369,7 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         DataGridViewLinkColumn dataGridViewColumn;
         Type thisType = GetType();
 
-        if (thisType == s_columnType) //performance improvement
+        if (thisType == s_columnType) // performance improvement
         {
             dataGridViewColumn = new DataGridViewLinkColumn();
         }

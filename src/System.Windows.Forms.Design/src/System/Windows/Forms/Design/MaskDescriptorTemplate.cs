@@ -61,7 +61,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 culture = CultureInfo.InvariantCulture;
                 goto case "en";
 
-            //case "en-US": // English US.
+            // case "en-US": // English US.
             case "en": // English.
                 // Numeric.
                 maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Numeric (5-digits)", "12345", typeof(int), culture));
@@ -83,7 +83,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("00000-9999", "Zip Code", "980526399", null, culture));
                 break;
 
-            //case "ar-SA": // Arabic Saudi Arabia.
+            // case "ar-SA": // Arabic Saudi Arabia.
             case "ar": // Arabic.
                 // Phone Number.
                 maskDescriptors.Add(new MaskDescriptorTemplate("(999)000-0000", "Phone Number", "0123456789", null, culture));
@@ -101,7 +101,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("00:00", "Time (24 Hour)", "1430", typeof(DateTime), culture));
                 break;
 
-            //case "de-DE": // German Germany.
+            // case "de-DE": // German Germany.
             case "de": // German.
                 // Short Date.
                 maskDescriptors.Add(new MaskDescriptorTemplate("00/00/0000", "Datum kurz", "28112005", typeof(DateTime), culture));
@@ -113,7 +113,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Postleitzahl", "91450", null, culture));
                 break;
 
-            //case "fr-FR": // French.
+            // case "fr-FR": // French.
             case "fr": // French.
                 // Special-case date sample format for French-Canada.
                 string dateSample = culture.Name == "fr-CA" ? "11282005" : "28112005";
@@ -133,7 +133,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Code postal (France)", "91450", null, culture));
                 break;
 
-            //case "it-IT": // Italian Italy.
+            // case "it-IT": // Italian Italy.
             case "it": // Italian.
                 // Numeric.
                 maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numerico (5 Cifre)", "12345", typeof(int), culture));
@@ -151,7 +151,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Codice postale", "12345", null, culture));
                 break;
 
-            //case "es-ES": // Spanish Spain.
+            // case "es-ES": // Spanish Spain.
             case "es": // Spanish.
                 // Numeric.
                 maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numérico", "12345", typeof(int), culture));
@@ -173,7 +173,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Código postal", "12345", null, culture));
                 break;
 
-            //case "ja-JP": // Japanese.
+            // case "ja-JP": // Japanese.
             case "ja": // Japanese.
                 // Numeric.
                 maskDescriptors.Add(new MaskDescriptorTemplate("99999", "数値（５桁）", "12345", typeof(int), culture));
@@ -205,7 +205,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("90時90分", "時間（日本語）", " 633", typeof(DateTime), culture));
                 break;
 
-            //case "zh-CN":  // People's Republic of China.
+            // case "zh-CN":  // People's Republic of China.
             case "zh-CHS":  // Simplified Chinese.
             case "zh-Hans":  // New name of Simplified Chinese.
                 // Numeric.
@@ -236,7 +236,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("000000", "邮政编码", "100080", null, culture));
                 break;
 
-            //case "zh-TW":  // Chinese (Taiwan).
+            // case "zh-TW":  // Chinese (Taiwan).
             case "zh-CHT":  // Traditional Chinese.
             case "zh-Hant":  // New name of Traditional Chinese.
                 // Phone Number.
@@ -261,7 +261,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
                 maskDescriptors.Add(new MaskDescriptorTemplate("99000", "3+2郵遞區號", "80407", null, culture));
                 break;
 
-            //case "ko-KR": // Korean.
+            // case "ko-KR": // Korean.
             case "ko": // Korean.
                 // Numeric.
                 maskDescriptors.Add(new MaskDescriptorTemplate("99999", "숫자(5자리)", "12345", typeof(int), culture));

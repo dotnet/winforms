@@ -123,7 +123,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     {
         get
         {
-            //Always return false ... as Splitcontainer doesnt support AutoScroll
+            // Always return false ... as Splitcontainer doesnt support AutoScroll
             return false;
         }
         set => base.AutoScroll = value;
@@ -345,7 +345,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_fixedPanel != value)
@@ -383,7 +383,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
     public bool IsSplitterFixed { get; set; }
 
-    //Private property used to check whether the splitter can be moved by the user.
+    // Private property used to check whether the splitter can be moved by the user.
     private bool IsSplitterMovable
     {
         get
@@ -420,12 +420,12 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         get { return _orientation; }
         set
         {
-            //valid values are 0x0 to 0x1
+            // valid values are 0x0 to 0x1
             SourceGenerated.EnumValidator.Validate(value);
             if (_orientation != value)
             {
                 _orientation = value;
-                //update the splitterDistance to validate it w.r.t the new Orientation.
+                // update the splitterDistance to validate it w.r.t the new Orientation.
                 _splitDistance = 0;
                 SplitterDistance = SplitterDistanceInternal;
                 UpdateSplitter();
@@ -932,7 +932,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     {
         Debug.Assert(Enabled, "SplitContainer.OnKeyDown should not be called if the button is disabled");
         base.OnKeyDown(e);
-        //If the Panel1MinSize + Panel2MinSize < SplitContainer.Size then carry on the splitter move...
+        // If the Panel1MinSize + Panel2MinSize < SplitContainer.Size then carry on the splitter move...
         if (IsSplitterMovable && !IsSplitterFixed)
         {
             if (e.KeyData == Keys.Escape && _splitBegin)
@@ -942,7 +942,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 return;
             }
 
-            //valid Keys that move the splitter...
+            // valid Keys that move the splitter...
             if (_splitterFocused
                 && (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
             {
@@ -951,14 +951,14 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                     _splitMove = true;
                 }
 
-                //left OR up
+                // left OR up
                 if (_splitterFocused && (e.KeyData == Keys.Left || e.KeyData == Keys.Up))
                 {
                     _splitterDistance -= SplitterIncrement;
                     _splitterDistance = (_splitterDistance < Panel1MinSize) ? _splitterDistance + SplitterIncrement : Math.Max(_splitterDistance, _borderSize);
                 }
 
-                //right OR down
+                // right OR down
                 if (_splitterFocused && (e.KeyData == Keys.Right || e.KeyData == Keys.Down))
                 {
                     _splitterDistance += SplitterIncrement;
@@ -977,7 +977,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                     _splitBegin = true;
                 }
 
-                //draw Helper start
+                // draw Helper start
                 if (_splitBegin && !_splitMove)
                 {
                     _initialSplitterDistance = SplitterDistanceInternal;
@@ -985,9 +985,9 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 }
                 else
                 {
-                    //draw helper move
+                    // draw helper move
                     DrawSplitBar(DrawMove);
-                    //Moving by mouse .....gives the origin of the splitter..
+                    // Moving by mouse .....gives the origin of the splitter..
                     Rectangle r = CalcSplitLine(_splitterDistance, 0);
                     int xSplit = r.X;
                     int ySplit = r.Y;
@@ -998,8 +998,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                         SplitEnd(false);
                     }
                 }
-            } //End Valid Keys....
-        } //End SplitterFixed Check...
+            } // End Valid Keys....
+        } // End SplitterFixed Check...
     }
 
     /// <summary>
@@ -1067,7 +1067,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         base.OnMouseMove(e);
         if (!IsSplitterFixed && IsSplitterMovable)
         {
-            //change cursor if default and user hasnt changed the cursor.
+            // change cursor if default and user hasnt changed the cursor.
             if (Cursor == DefaultCursor && SplitterRectangle.Contains(e.Location))
             {
                 if (Orientation == Orientation.Vertical)
@@ -1134,7 +1134,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     protected override void OnMouseDown(MouseEventArgs e)
     {
         base.OnMouseDown(e);
-        //If the Panel1MinSize + Panel2MinSize < SplitContainer.Size then carry on the splitter move...
+        // If the Panel1MinSize + Panel2MinSize < SplitContainer.Size then carry on the splitter move...
         if (IsSplitterMovable && SplitterRectangle.Contains(e.Location))
         {
             if (!Enabled)
@@ -1278,7 +1278,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         _panel1MinSize = value;
         if (value > SplitterDistanceInternal)
         {
-            SplitterDistanceInternal = value;  //Set the Splitter Distance to the end of Panel1
+            SplitterDistanceInternal = value;  // Set the Splitter Distance to the end of Panel1
         }
     }
 
@@ -1310,7 +1310,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         _panel2MinSize = value;
         if (value > Panel2.Width)
         {
-            SplitterDistanceInternal = Panel2.Width + SplitterWidthInternal;  //Set the Splitter Distance to the start of Panel2
+            SplitterDistanceInternal = Panel2.Width + SplitterWidthInternal;  // Set the Splitter Distance to the start of Panel2
         }
     }
 
@@ -1647,7 +1647,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                             _splitterDistance = Math.Max((int)(Math.Floor(Width / _ratioWidth)), Panel1MinSize);
                         }
 
-                        Panel1.WidthInternal = _splitterDistance; //Default splitter distance from left or top.
+                        Panel1.WidthInternal = _splitterDistance; // Default splitter distance from left or top.
                         Panel1.HeightInternal = Height;
                         Panel2.Size = new Size(Math.Max(Width - _splitterDistance - SplitterWidthInternal, Panel2MinSize), Height);
                     }
@@ -1685,7 +1685,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 {
                     if (FixedPanel == FixedPanel.Panel1)
                     {
-                        //Default splitter distance from left or top.
+                        // Default splitter distance from left or top.
                         Panel1.Size = new Size(Width, _panelSize);
                         int panel2Start = _panelSize + SplitterWidthInternal;
                         Panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
@@ -1704,13 +1704,13 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
                     if (FixedPanel == FixedPanel.None)
                     {
-                        //NO PANEL FIXED !!
+                        // NO PANEL FIXED !!
                         if (_ratioHeight != 0.0)
                         {
                             _splitterDistance = Math.Max((int)(Math.Floor(Height / _ratioHeight)), Panel1MinSize);
                         }
 
-                        Panel1.HeightInternal = _splitterDistance; //Default splitter distance from left or top.
+                        Panel1.HeightInternal = _splitterDistance; // Default splitter distance from left or top.
                         Panel1.WidthInternal = Width;
                         int panel2Start = _splitterDistance + SplitterWidthInternal;
                         Panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
@@ -1809,7 +1809,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
         else
         {
-            //If this SplitContainer cannot be selected let the parent select the next in line
+            // If this SplitContainer cannot be selected let the parent select the next in line
             try
             {
                 Control? parent = ParentInternal;
@@ -1850,7 +1850,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
             if (ctl is SplitterPanel panel && panel.Visible)
             {
-                //We have crossed over to the second Panel...
+                // We have crossed over to the second Panel...
                 if (firstPanel is not null)
                 {
                     break;
@@ -1861,7 +1861,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
             if (!forward && firstPanel is not null && ctl?.ParentInternal != firstPanel)
             {
-                //goback to start correct re-ordering ....
+                // goback to start correct re-ordering ....
                 ctl = firstPanel;
                 break;
             }
@@ -1890,7 +1890,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         while (ctl is not null);
         if (ctl is not null && TabStop)
         {
-            //we are on Splitter.....Focus it
+            // we are on Splitter.....Focus it
             _splitterFocused = true;
             IContainerControl? c = ParentInternal?.GetContainerControl();
             if (c is not null)
@@ -1972,13 +1972,13 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
         while (ctl is not null);
 
-        //If CTL is null .. we r out of the Current SplitContainer...
+        // If CTL is null .. we r out of the Current SplitContainer...
         if (ctl is null || (ctl is SplitterPanel && !ctl.Visible))
         {
             _callBaseVersion = true;
         }
 
-        //IF the CTL == typeof(SplitterPanel) find the NEXT Control... so that we know
+        // IF the CTL == typeof(SplitterPanel) find the NEXT Control... so that we know
         // we can focus the NEXT control within this SPLITCONTAINER....
         else
         {
@@ -2184,11 +2184,11 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         {
             bool isRTL = RightToLeft == RightToLeft.Yes;
 
-            //NO PANEL FIXED !!
+            // NO PANEL FIXED !!
             if (!CollapsedMode)
             {
                 Panel1.HeightInternal = Height;
-                Panel1.WidthInternal = _splitterDistance; //Default splitter distance from left or top.
+                Panel1.WidthInternal = _splitterDistance; // Default splitter distance from left or top.
                 Panel2.Size = new Size(Width - _splitterDistance - SplitterWidthInternal, Height);
 
                 if (!isRTL)
@@ -2231,13 +2231,13 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
         else
         {
-            //NO PANEL FIXED !!
+            // NO PANEL FIXED !!
             if (!CollapsedMode)
             {
                 Panel1.Location = new Point(0, 0);
                 Panel1.WidthInternal = Width;
 
-                Panel1.HeightInternal = SplitterDistanceInternal; //Default splitter distance from left or top.
+                Panel1.HeightInternal = SplitterDistanceInternal; // Default splitter distance from left or top.
                 int panel2Start = _splitterDistance + SplitterWidthInternal;
                 Panel2.Size = new Size(Width, Height - panel2Start);
                 Panel2.Location = new Point(0, panel2Start);
@@ -2391,7 +2391,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
             }
             else
             {
-                //We are om Splitter ......
+                // We are om Splitter ......
                 _splitterFocused = true;
                 IContainerControl? c = ParentInternal?.GetContainerControl();
                 if (c is not null)

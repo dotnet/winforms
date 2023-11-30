@@ -337,8 +337,8 @@ public partial class Form : ContainerControl
         }
     }
 
-    //we don't repaint the mdi child that used to be active any more.  We used to do this in Activated, but no
-    //longer do because of added event Deactivate.
+    // we don't repaint the mdi child that used to be active any more.  We used to do this in Activated, but no
+    // longer do because of added event Deactivate.
     private Form? FormerlyActiveMdiChild
     {
         get
@@ -866,9 +866,9 @@ public partial class Form : ContainerControl
 
             if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
             {
-                //We want to turn on mirroring for Form explicitly.
+                // We want to turn on mirroring for Form explicitly.
                 cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
-                //Don't need these styles when mirroring is turned on.
+                // Don't need these styles when mirroring is turned on.
                 cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
             }
 
@@ -988,7 +988,7 @@ public partial class Form : ContainerControl
 
         set
         {
-            //valid values are 0x0 to 0x7
+            // valid values are 0x0 to 0x7
             SourceGenerated.EnumValidator.Validate(value);
 
             _dialogResult = value;
@@ -1168,8 +1168,8 @@ public partial class Form : ContainerControl
                 _ctlClient.Dispose();
             }
 
-            //since we paint the background when mdi is true, we need
-            //to invalidate here
+            // since we paint the background when mdi is true, we need
+            // to invalidate here
             //
             Invalidate();
         }
@@ -1952,7 +1952,7 @@ public partial class Form : ContainerControl
             //  as its nCmdShow parameter. Subsequent calls to ShowWindow must use one of the values in the given list,
             //  instead of the one specified by the WinMain function's nCmdShow parameter.
 
-            //  As noted in the discussion of the nCmdShow parameter, the nCmdShow value is ignored in the first call
+            // As noted in the discussion of the nCmdShow parameter, the nCmdShow value is ignored in the first call
             //  to ShowWindow if the program that launched the application specifies startup information in the
             //  STARTUPINFO structure. In this case, ShowWindow uses the information specified in the STARTUPINFO
             //  structure to show the window. On subsequent calls, the application must call ShowWindow with nCmdShow
@@ -2020,9 +2020,9 @@ public partial class Form : ContainerControl
         {
             if (SizeGripStyle != value)
             {
-                //do some bounds checking here
+                // do some bounds checking here
                 //
-                //valid values are 0x0 to 0x2
+                // valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _formState[FormStateSizeGripStyle] = (int)value;
@@ -2047,7 +2047,7 @@ public partial class Form : ContainerControl
         }
         set
         {
-            //valid values are 0x0 to 0x4
+            // valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
             _formState[FormStateStartPos] = (int)value;
         }
@@ -2346,7 +2346,7 @@ public partial class Form : ContainerControl
             OnVisibleChanged(EventArgs.Empty);
         }
 
-        //(
+        // (
 
         if (value && !IsMdiChild && (WindowState == FormWindowState.Maximized || TopMost))
         {
@@ -4521,7 +4521,7 @@ public partial class Form : ContainerControl
                     button = (IButtonControl?)Properties.GetObject(PropDefaultButton);
                     if (button is not null)
                     {
-                        //PerformClick now checks for validationcancelled...
+                        // PerformClick now checks for validationcancelled...
                         if (button is Control)
                         {
                             button.PerformClick();
@@ -4540,9 +4540,9 @@ public partial class Form : ContainerControl
                         // the focus on Escape. If we do, we end up with giving it
                         // the focus when we reshow the dialog.
                         //
-                        //if (button is Control) {
+                        // if (button is Control) {
                         //    ((Control)button).Focus();
-                        //}
+                        // }
                         button.PerformClick();
                         return true;
                     }
@@ -6206,8 +6206,8 @@ public partial class Form : ContainerControl
                     }
                 }
 
-                //Always fire OnClosing irrespectively of the validation result
-                //Pass the validation result into the EventArgs...
+                // Always fire OnClosing irrespectively of the validation result
+                // Pass the validation result into the EventArgs...
 
                 // Call OnClosing/OnFormClosing on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
@@ -6217,7 +6217,7 @@ public partial class Form : ContainerControl
                     FormClosingEventArgs cfe = new FormClosingEventArgs(CloseReason.FormOwnerClosing, e.Cancel);
                     if (ownedForms[i] is not null)
                     {
-                        //Call OnFormClosing on the child forms.
+                        // Call OnFormClosing on the child forms.
                         ownedForms[i].OnFormClosing(cfe);
                         if (cfe.Cancel)
                         {
@@ -6283,7 +6283,7 @@ public partial class Form : ContainerControl
                     fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
                     if (ownedForms[i] is not null)
                     {
-                        //Call OnClosed and OnFormClosed on the child forms.
+                        // Call OnClosed and OnFormClosed on the child forms.
                         ownedForms[i].OnClosed(fc);
                         ownedForms[i].OnFormClosed(fc);
                     }
@@ -6674,7 +6674,7 @@ public partial class Form : ContainerControl
             case PInvoke.WM_WINDOWPOSCHANGED:
                 WmWindowPosChanged(ref m);
                 break;
-            //case PInvoke.WM_WINDOWPOSCHANGING:
+            // case PInvoke.WM_WINDOWPOSCHANGING:
             //    WmWindowPosChanging(ref m);
             //    break;
             case PInvoke.WM_ENTERMENULOOP:

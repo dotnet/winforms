@@ -26,7 +26,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     private const TREE_VIEW_ITEM_STATE_FLAGS UNCHECKED = (TREE_VIEW_ITEM_STATE_FLAGS)(1 << SHIFTVAL);
     private const int ALLOWEDIMAGES = 14;
 
-    //the threshold value used to optimize AddRange and Clear operations for a big number of nodes
+    // the threshold value used to optimize AddRange and Clear operations for a big number of nodes
     internal const int MAX_TREENODES_OPS = 200;
 
     // we use it to store font and color data in a minimal-memory-cost manner
@@ -39,7 +39,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     // note: as the checked state of a node is user controlled, and this variable is simply for
     // state caching when a node hasn't yet been realized, you should use the Checked property to
     // find out the check state of a node, and not this member variable.
-    //private bool isChecked = false;
+    // private bool isChecked = false;
     private const int TREENODESTATE_isChecked = 0x00000001;
 
     private Collections.Specialized.BitVector32 _treeNodeState;
@@ -58,7 +58,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            //Demand create the imageIndexer
+            // Demand create the imageIndexer
             _imageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
 
             return _imageIndexer;
@@ -69,7 +69,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            //Demand create the imageIndexer
+            // Demand create the imageIndexer
             _selectedImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
 
             return _selectedImageIndexer;
@@ -80,7 +80,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            //Demand create the imageIndexer
+            // Demand create the imageIndexer
             _stateImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
 
             return _stateImageIndexer;
@@ -814,7 +814,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return null;
             }
 
-            //fixedIndex is used for perf. optimization in case of adding big ranges of nodes
+            // fixedIndex is used for perf. optimization in case of adding big ranges of nodes
             int currentInd = _index;
             int fixedInd = _parent.Nodes.FixedIndex;
 
@@ -1417,7 +1417,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        //terminating condition for recursion...
+        // terminating condition for recursion...
         //
         if (ignoreChildren)
         {

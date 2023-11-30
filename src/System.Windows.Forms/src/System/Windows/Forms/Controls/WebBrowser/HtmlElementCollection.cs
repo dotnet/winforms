@@ -47,7 +47,7 @@ public sealed unsafe class HtmlElementCollection : ICollection
     {
         get
         {
-            //do some bounds checking here...
+            // do some bounds checking here...
             ArgumentOutOfRangeException.ThrowIfNegative(index);
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 

@@ -136,7 +136,7 @@ public class UserControl : ContainerControl
         {
             if (_borderStyle != value)
             {
-                //valid values are 0x0 to 0x2
+                // valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _borderStyle = value;

@@ -119,7 +119,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     {
         DataGridViewTextBoxCell dataGridViewCell;
         Type thisType = GetType();
-        if (thisType == s_cellType) //performance improvement
+        if (thisType == s_cellType) // performance improvement
         {
             dataGridViewCell = new DataGridViewTextBoxCell();
         }

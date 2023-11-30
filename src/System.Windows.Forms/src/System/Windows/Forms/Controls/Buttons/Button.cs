@@ -321,7 +321,7 @@ public partial class Button : ButtonBase, IButtonControl
             bool validate = ValidateActiveControl(out bool validatedControlAllowsFocusChange);
             if (!ValidationCancelled && (validate || validatedControlAllowsFocusChange))
             {
-                //Paint in raised state...
+                // Paint in raised state...
                 ResetFlagsandPaint();
                 OnClick(EventArgs.Empty);
             }

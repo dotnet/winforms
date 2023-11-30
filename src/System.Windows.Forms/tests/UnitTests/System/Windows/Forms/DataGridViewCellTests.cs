@@ -581,7 +581,7 @@ public class DataGridViewCellTests
         //    So test will pass of course.
         // Test must check: Assert.Equal(gridVisible && columnVisible, cell.Displayed);
         // And with new implementation it will work no mater where you put row = control.Rows.SharedRow(0);
-        Assert.Equal(gridVisible && columnVisible, cell.Displayed); //old test implementation: Assert.False(cell.Displayed);
+        Assert.Equal(gridVisible && columnVisible, cell.Displayed); // old test implementation: Assert.False(cell.Displayed);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);

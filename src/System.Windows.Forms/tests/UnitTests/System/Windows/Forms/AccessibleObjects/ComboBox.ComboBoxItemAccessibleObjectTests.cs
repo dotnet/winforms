@@ -331,7 +331,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
             }
             else
             {
-                //  ScrollIntoView method should scroll to the item or
+                // ScrollIntoView method should scroll to the item or
                 //  the first item that is visible if dropdown is scrolled to the bottom
                 expected = itemIndex > lastFirstVisible ? lastFirstVisible : itemIndex;
             }

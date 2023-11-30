@@ -81,7 +81,7 @@ public partial class CheckBox : ButtonBase
 
         set
         {
-            //valid values are 0x0 to 0x1
+            // valid values are 0x0 to 0x1
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_appearance != value)
@@ -587,7 +587,7 @@ public partial class CheckBox : ButtonBase
         {
             if (Focus())
             {
-                //Paint in raised state...
+                // Paint in raised state...
                 ResetFlagsandPaint();
                 if (!ValidationCancelled)
                 {

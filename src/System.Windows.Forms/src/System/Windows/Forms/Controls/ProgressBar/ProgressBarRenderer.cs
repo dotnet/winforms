@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class ProgressBarRenderer
 {
-    //Make this per-thread, so that different threads can safely use these methods.
+    // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
 

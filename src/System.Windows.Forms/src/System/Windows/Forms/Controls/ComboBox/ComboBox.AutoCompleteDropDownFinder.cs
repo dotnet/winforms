@@ -24,7 +24,7 @@ public partial class ComboBox
         {
             if (!subclass)
             {
-                //generating a before snapshot -- lets lose the null handles
+                // generating a before snapshot -- lets lose the null handles
                 ACNativeWindow.ClearNullACWindows();
             }
 

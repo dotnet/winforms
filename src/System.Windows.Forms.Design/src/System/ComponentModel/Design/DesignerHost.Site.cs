@@ -212,7 +212,7 @@ internal sealed partial class DesignerHost
             set
             {
                 _disposed = value;
-                //We need to do the cleanup when the site is set as disposed by its user
+                // We need to do the cleanup when the site is set as disposed by its user
                 if (_disposed)
                 {
                     _dictionary = null;

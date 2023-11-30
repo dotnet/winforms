@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class ComboBoxRenderer
 {
-    //Make this per-thread, so that different threads can safely use these methods.
+    // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
     private static readonly VisualStyleElement ComboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
@@ -27,7 +27,7 @@ public static class ComboBoxRenderer
     {
         t_visualStyleRenderer!.DrawBackground(g, bounds);
 
-        //for disabled comboboxes, comctl does not use the window backcolor, so
+        // for disabled comboboxes, comctl does not use the window backcolor, so
         // we don't refill here in that case.
         if (state != ComboBoxState.Disabled)
         {
@@ -36,7 +36,7 @@ public static class ComboBoxRenderer
             {
                 Rectangle fillRect = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
                 fillRect.Inflate(-2, -2);
-                //then we need to re-fill the background.
+                // then we need to re-fill the background.
                 g.FillRectangle(SystemBrushes.Window, fillRect);
             }
         }

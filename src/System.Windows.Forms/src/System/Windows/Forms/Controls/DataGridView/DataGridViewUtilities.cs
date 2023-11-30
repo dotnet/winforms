@@ -145,7 +145,7 @@ internal static class DataGridViewUtilities
         }
         else
         {
-            //tff |= TextFormatFlags.NoFullWidthCharacterBreak;
+            // tff |= TextFormatFlags.NoFullWidthCharacterBreak;
             tff |= TextFormatFlags.WordBreak;
         }
 

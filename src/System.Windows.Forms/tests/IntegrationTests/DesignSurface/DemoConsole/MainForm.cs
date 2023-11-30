@@ -32,16 +32,16 @@ public partial class MainForm : Form
         tabPage4.Text = "Align control by hand";
         tabPage5.Text = "TabControl and TableLayoutPanel";
 
-        //- enable the UndoEngines
+        // - enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
         {
             IDesignSurfaceExt isurf = _listOfDesignSurface[i];
             isurf.GetUndoEngineExt().Enabled = true;
         }
 
-        //- ISelectionService
-        //- try to get a ptr to ISelectionService interface
-        //- if we obtain it then hook the SelectionChanged event
+        // - ISelectionService
+        // - try to get a ptr to ISelectionService interface
+        // - if we obtain it then hook the SelectionChanged event
         for (int i = 0; i < tabControl1.TabCount; i++)
         {
             IDesignSurfaceExt isurf = _listOfDesignSurface[i];
@@ -51,7 +51,7 @@ public partial class MainForm : Form
         }
     }
 
-    //- When the selection changes this sets the PropertyGrid's selected component
+    // - When the selection changes this sets the PropertyGrid's selected component
     private void OnSelectionChanged(object sender, System.EventArgs e)
     {
         if (_selectionService is null)
@@ -67,17 +67,17 @@ public partial class MainForm : Form
 
     private void CreateDesignSurface(int n)
     {
-        //- step.0
-        //- create a DesignSurface and put it inside a Form in DesignTime
+        // - step.0
+        // - create a DesignSurface and put it inside a Form in DesignTime
         DesignSurfaceExt.DesignSurfaceExt surface = new DesignSurfaceExt.DesignSurfaceExt();
-        //-
-        //-
-        //- store for later use
+        // -
+        // -
+        // - store for later use
         _listOfDesignSurface.Add(surface);
-        //-
-        //-
-        //- step.1
-        //- choose an alignment mode...
+        // -
+        // -
+        // - step.1
+        // - choose an alignment mode...
         switch (n)
         {
             case 1:
@@ -100,10 +100,10 @@ public partial class MainForm : Form
                 break;
         }
 
-        //-
-        //-
-        //- step.2
-        //- create the Root component, in these cases a Form
+        // -
+        // -
+        // - step.2
+        // - create the Root component, in these cases a Form
         try
         {
             Form rootComponent = null;
@@ -114,8 +114,8 @@ public partial class MainForm : Form
                         rootComponent = surface.CreateRootComponent<Form>(new Size(400, 400));
                         rootComponent.BackColor = Color.Gray;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.1";
-                        //- step.3
-                        //- create some Controls at DesignTime
+                        // - step.3
+                        // - create some Controls at DesignTime
                         TextBox t1 = surface.CreateControl<TextBox>(new Size(200, 23), new Point(172, 12));
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(172, 63));
                         CustomButton b2 = surface.CreateControl<CustomButton>(new Size(200, 40), new Point(100, 200));
@@ -162,8 +162,8 @@ public partial class MainForm : Form
                         rootComponent = surface.CreateRootComponent<Form>(new Size(640, 480));
                         rootComponent.BackColor = Color.Yellow;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.2";
-                        //- step.3
-                        //- create some Controls at DesignTime
+                        // - step.3
+                        // - create some Controls at DesignTime
                         TextBox t1 = surface.CreateControl<TextBox>(new Size(200, 20), new Point(10, 10));
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 40));
                         Label l1 = surface.CreateControl<Label>(new Size(200, 100), new Point(10, 100));
@@ -191,8 +191,8 @@ public partial class MainForm : Form
                         rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
                         rootComponent.BackColor = Color.YellowGreen;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.3";
-                        //- step.3
-                        //- create some Controls at DesignTime
+                        // - step.3
+                        // - create some Controls at DesignTime
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 10));
                         Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(100, 100));
                         Button b3 = surface.CreateControl<Button>(new Size(200, 40), new Point(22, 22));
@@ -212,9 +212,9 @@ public partial class MainForm : Form
                     {
                         rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
                         rootComponent.BackColor = Color.Orange;
-                        rootComponent.Text = "Root Component hosted by the DesignSurface N.4";       //- step.1
-                                                                                                     //- step.3
-                                                                                                     //- create some Controls at DesignTime
+                        rootComponent.Text = "Root Component hosted by the DesignSurface N.4";       // - step.1
+                                                                                                     // - step.3
+                                                                                                     // - create some Controls at DesignTime
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 10));
                         Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 60));
                         b1.Text = "I'm the first Button";
@@ -270,17 +270,17 @@ public partial class MainForm : Form
                     break;
             }
 
-            //-
-            //-
-            //- step.4
-            //- display the DesignSurface
+            // -
+            // -
+            // - step.4
+            // - display the DesignSurface
             Control view = surface.GetView();
             if (view is null)
                 return;
-            //- change some properties
+            // - change some properties
             view.Text = $"Test Form N. {n}";
             view.Dock = DockStyle.Fill;
-            //- Note these assignments
+            // - Note these assignments
             switch (n)
             {
                 case 1:
@@ -312,7 +312,7 @@ public partial class MainForm : Form
 
     private void SelectRootComponent()
     {
-        //- find out the DesignSurfaceExt control hosted by the TabPage
+        // - find out the DesignSurfaceExt control hosted by the TabPage
         IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         if (isurf is not null)
             propertyGrid.SelectedObject = isurf.GetIDesignerHost().RootComponent;
@@ -337,7 +337,7 @@ public partial class MainForm : Form
 
     private void toolStripMenuItemTabOrder_Click(object sender, EventArgs e)
     {
-        //- find out the DesignSurfaceExt control hosted by the TabPage
+        // - find out the DesignSurfaceExt control hosted by the TabPage
         IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         isurf?.SwitchTabOrder();
     }
@@ -348,7 +348,7 @@ public partial class MainForm : Form
 
         tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(OnTabPageSelected);
 
-        //- select into the propertygrid the current Form
+        // - select into the propertygrid the current Form
         SelectRootComponent();
     }
 

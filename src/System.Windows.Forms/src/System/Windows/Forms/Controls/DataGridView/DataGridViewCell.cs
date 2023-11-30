@@ -55,7 +55,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     private static readonly Type s_stringType = typeof(string);        // cache the string type for performance
 
     private byte _flags;
-    private bool _useDefaultToolTipText;  //  The tooltip text of this cell has not been set by a customer yet.
+    private bool _useDefaultToolTipText;  // The tooltip text of this cell has not been set by a customer yet.
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewCell"/> class.
@@ -2435,7 +2435,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
         if (ColumnIndex < 0 || RowIndex < 0)
         {
-            return toolTipText;  //  Cells in the Unit tests have ColumnIndex & RowIndex < 0 and
+            return toolTipText;  // Cells in the Unit tests have ColumnIndex & RowIndex < 0 and
                                  //  we should return an expected result. It doesn't have an impact on UI cells.
         }
 

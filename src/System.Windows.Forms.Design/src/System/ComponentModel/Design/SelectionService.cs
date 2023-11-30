@@ -464,7 +464,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         // Notify that our selection has changed
         if (fChanged)
         {
-            //Set the SelectionInformation
+            // Set the SelectionInformation
             if (_selection?.Count > 0)
             {
                 _statusCommandUI.SetStatusInformation(_selection[0] as Component);

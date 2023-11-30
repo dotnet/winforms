@@ -6245,7 +6245,7 @@ public class TreeViewTests
         EventHandler handler = (sender, e) =>
         {
             Assert.Same(control, sender);
-            //Assert.Same(eventArgs, e);
+            // Assert.Same(eventArgs, e);
             callCount++;
         };
 
@@ -6619,7 +6619,7 @@ public class TreeViewTests
         char* expected = (char*)(-1);
 
         Assert.Null(wrapper.Text);
-        //Assert.Equal method does not work because char* cannot be used as an argument to it
+        // Assert.Equal method does not work because char* cannot be used as an argument to it
         Assert.True(wrapper.Info.lpszText == expected);
     }
 

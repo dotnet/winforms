@@ -17,10 +17,10 @@ internal sealed class DragAssistanceManager
 {
     private readonly BehaviorService _behaviorService;
     private readonly IServiceProvider _serviceProvider;
-    private readonly Graphics _graphics; //graphics to the adornerwindow
-    private readonly IntPtr _rootComponentHandle; //used for mapping window points of nested controls
-    private Point _dragOffset; //the offset from the new drag pos compared to the last
-    private Rectangle _cachedDragRect; //used to store drag rect between erasing & waiting to render
+    private readonly Graphics _graphics; // graphics to the adornerwindow
+    private readonly IntPtr _rootComponentHandle; // used for mapping window points of nested controls
+    private Point _dragOffset; // the offset from the new drag pos compared to the last
+    private Rectangle _cachedDragRect; // used to store drag rect between erasing & waiting to render
     private readonly Pen _edgePen = SystemPens.Highlight;
     private readonly bool _disposeEdgePen;
     private readonly Pen _baselinePen = new(Color.Fuchsia);
@@ -44,10 +44,10 @@ internal sealed class DragAssistanceManager
     private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = new();
     // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc.  From there, if we receive a test hook message requesting these - we got 'em
     private Line[] _recentLines;
-    private readonly Image _backgroundImage; //instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
-    private const int SnapDistance = 8; //default snapping distance (pixels)
-    private int _snapPointX, _snapPointY; //defines the snap adjustment that needs to be made during the mousemove/drag operation
-    private const int INVALID_VALUE = 0x1111; //used to represent 'un-set' distances
+    private readonly Image _backgroundImage; // instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
+    private const int SnapDistance = 8; // default snapping distance (pixels)
+    private int _snapPointX, _snapPointY; // defines the snap adjustment that needs to be made during the mousemove/drag operation
+    private const int INVALID_VALUE = 0x1111; // used to represent 'un-set' distances
     private readonly bool _resizing; // Are we resizing?
     private readonly bool _ctrlDrag; // Are we in a ctrl-drag?
 
@@ -104,7 +104,7 @@ internal sealed class DragAssistanceManager
 
         if (serviceProvider.GetService(typeof(IUIService)) is IUIService uiService)
         {
-            //Can't use 'as' here since Color is a value type
+            // Can't use 'as' here since Color is a value type
             if (uiService.Styles["VsColorSnaplines"] is Color)
             {
                 _edgePen = new Pen((Color)uiService.Styles["VsColorSnaplines"]);
@@ -131,9 +131,9 @@ internal sealed class DragAssistanceManager
     private void AddSnapLines(ControlDesigner controlDesigner, List<SnapLine> horizontalList, List<SnapLine> verticalList, bool isTarget, bool validTarget)
     {
         IList snapLines = controlDesigner.SnapLines;
-        //Used for padding snaplines
+        // Used for padding snaplines
         Rectangle controlRect = controlDesigner.Control.ClientRectangle;
-        //Used for all others
+        // Used for all others
         Rectangle controlBounds = controlDesigner.Control.Bounds;
         // Now map the location
         controlBounds.Location = controlRect.Location = _behaviorService.ControlToAdornerWindow(controlDesigner.Control);
@@ -144,15 +144,15 @@ internal sealed class DragAssistanceManager
         // THIS IS ONLY NEEDED FOR PADDING SNAPLINES
         // We need to adjust the bounds to the client area. This is so that we don't include borders + titlebar in the snaplines. In order to add padding, we need to get the offset from the usable client area of our control and the actual origin of our control.  In other words: how big is the non-client area here? Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
         Point offset = controlDesigner.GetOffsetToClientArea();
-        controlRect.X += offset.X; //offset for non-client area
-        controlRect.Y += offset.Y; //offset for non-client area
+        controlRect.X += offset.X; // offset for non-client area
+        controlRect.Y += offset.Y; // offset for non-client area
 
-        //Adjust each snapline to local coords and add it to our global list
+        // Adjust each snapline to local coords and add it to our global list
         foreach (SnapLine snapLine in snapLines)
         {
             if (isTarget)
             {
-                //we will remove padding snaplines from targets - it doesn't make sense to snap to the target's padding lines
+                // we will remove padding snaplines from targets - it doesn't make sense to snap to the target's padding lines
                 if (snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding))
                 {
                     continue;
@@ -215,7 +215,7 @@ internal sealed class DragAssistanceManager
                 }
             }
 
-            int smallestDelta = INVALID_VALUE; //some large #
+            int smallestDelta = INVALID_VALUE; // some large #
             for (int j = 0; j < targetSnapLines.Count; j++)
             {
                 SnapLine targetSnapLine = targetSnapLines[j];
@@ -232,7 +232,7 @@ internal sealed class DragAssistanceManager
 
             distances[i] = smallestDelta;
             int pri = (int)snapLines[i].Priority;
-            //save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to physically move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
+            // save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to physically move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
             if ((Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) ||
                 ((Math.Abs(smallestDelta) == Math.Abs(smallestDistance)) && (pri > highestPriority)))
             {
@@ -344,8 +344,8 @@ internal sealed class DragAssistanceManager
 
     private void IdentifyAndStoreValidLines(List<SnapLine> snapLines, int[] distances, Rectangle dragBounds, int smallestDistance)
     {
-        int highestPriority = 1; //low
-        //identify top pri
+        int highestPriority = 1; // low
+        // identify top pri
         for (int i = 0; i < distances.Length; i++)
         {
             if (distances[i] == smallestDistance)
@@ -358,13 +358,13 @@ internal sealed class DragAssistanceManager
             }
         }
 
-        //store all snapLines equal to the smallest distance (of the highest priority)
+        // store all snapLines equal to the smallest distance (of the highest priority)
         for (int i = 0; i < distances.Length; i++)
         {
             if ((distances[i] == smallestDistance) &&
               (((int)snapLines[i].Priority == highestPriority) ||
                 ((int)snapLines[i].Priority == (int)SnapLinePriority.Always)))
-            { //always render SnapLines with Priority.Always which has the same distance.
+            { // always render SnapLines with Priority.Always which has the same distance.
                 StoreSnapLine(snapLines[i], dragBounds);
             }
         }
@@ -373,13 +373,13 @@ internal sealed class DragAssistanceManager
     // Returns true of this child component (off the root control) should add its snaplines to the collection
     private bool AddChildCompSnaplines(IComponent comp, List<IComponent> dragComponents, Rectangle clipBounds, Control targetControl)
     {
-        if (!(comp is Control control) || //has to be a control to get snaplines
-           (dragComponents is not null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
-           IsChildOfParent(control, targetControl) || //cannot be a child of the control we will drag
-           !clipBounds.IntersectsWith(control.Bounds) || //has to be partially visible on the rootcomp's surface
+        if (!(comp is Control control) || // has to be a control to get snaplines
+           (dragComponents is not null && dragComponents.Contains(comp) && !_ctrlDrag) || // cannot be something that we are dragging, unless we are in a ctrlDrag
+           IsChildOfParent(control, targetControl) || // cannot be a child of the control we will drag
+           !clipBounds.IntersectsWith(control.Bounds) || // has to be partially visible on the rootcomp's surface
            control.Parent is null || // control must have a parent.
            !control.Visible)
-        { //control itself has to be visible -- we do mean visible, not ShadowedVisible
+        { // control itself has to be visible -- we do mean visible, not ShadowedVisible
             return false;
         }
 
@@ -431,7 +431,7 @@ internal sealed class DragAssistanceManager
         // the clipping bounds will be used to ignore all controls that are completely outside of our rootcomponent's bounds -this way we won't end up snapping to controls that are not visible on the form's surface
         Rectangle clipBounds = new Rectangle(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
         clipBounds.Inflate(-1, -1);
-        //determine the screen offset from our rootComponent to the AdornerWindow (since all drag notification coords will be in adorner window coords)
+        // determine the screen offset from our rootComponent to the AdornerWindow (since all drag notification coords will be in adorner window coords)
         if (targetControl is not null)
         {
             _dragOffset = _behaviorService.ControlToAdornerWindow(targetControl);
@@ -448,13 +448,13 @@ internal sealed class DragAssistanceManager
         if (targetControl is not null)
         {
             bool disposeDesigner = false;
-            //get all the target snapline information we need to create one then
+            // get all the target snapline information we need to create one then
             if (!(host.GetDesigner(targetControl) is ControlDesigner designer))
             {
                 designer = TypeDescriptor.CreateDesigner(targetControl, typeof(IDesigner)) as ControlDesigner;
                 if (designer is not null)
                 {
-                    //Make sure the control is not forced visible
+                    // Make sure the control is not forced visible
                     designer.ForceVisible = false;
                     designer.Initialize(targetControl);
                     disposeDesigner = true;
@@ -468,7 +468,7 @@ internal sealed class DragAssistanceManager
             }
         }
 
-        //get SnapLines for all our children (nested too) off our root control
+        // get SnapLines for all our children (nested too) off our root control
         foreach (IComponent comp in host.Container.Components)
         {
             if (!AddChildCompSnaplines(comp, dragComponents, clipBounds, targetControl))
@@ -542,7 +542,7 @@ internal sealed class DragAssistanceManager
     {
         _targetHorizontalSnapLines.Clear();
         _targetVerticalSnapLines.Clear();
-        //manually add our snaplines as targets
+        // manually add our snaplines as targets
         foreach (SnapLine snapline in targetSnaplines)
         {
             if (snapline.IsHorizontal)
@@ -566,16 +566,16 @@ internal sealed class DragAssistanceManager
         Point offset = Point.Empty;
         Rectangle currentBounds = new Rectangle(_behaviorService.ControlToAdornerWindow(targetControl), targetControl.Size);
         if (directionOffset.X != 0)
-        {//movement somewhere in the x dir
-            //first, build up our distance array
+        {// movement somewhere in the x dir
+            // first, build up our distance array
             BuildDistanceArray(_verticalSnapLines, _targetVerticalSnapLines, _verticalDistances, currentBounds);
-            //now start with the smallest distance and find the first snapline we would intercept given our horizontal direction
+            // now start with the smallest distance and find the first snapline we would intercept given our horizontal direction
             int minRange = directionOffset.X < 0 ? 0 : currentBounds.X;
             int maxRange = directionOffset.X < 0 ? currentBounds.Right : int.MaxValue;
             offset.X = FindSmallestValidDistance(_verticalSnapLines, _verticalDistances, minRange, maxRange, directionOffset.X);
             if (offset.X != 0)
             {
-                //store off the line structs for actual rendering
+                // store off the line structs for actual rendering
                 IdentifyAndStoreValidLines(_verticalSnapLines, _verticalDistances, currentBounds, offset.X);
                 if (directionOffset.X < 0)
                 {
@@ -585,16 +585,16 @@ internal sealed class DragAssistanceManager
         }
 
         if (directionOffset.Y != 0)
-        {//movement somewhere in the y dir
-            //first, build up our distance array
+        {// movement somewhere in the y dir
+            // first, build up our distance array
             BuildDistanceArray(_horizontalSnapLines, _targetHorizontalSnapLines, _horizontalDistances, currentBounds);
-            //now start with the smallest distance and find the first snapline we would intercept given our horizontal direction
+            // now start with the smallest distance and find the first snapline we would intercept given our horizontal direction
             int minRange = directionOffset.Y < 0 ? 0 : currentBounds.Y;
             int maxRange = directionOffset.Y < 0 ? currentBounds.Bottom : int.MaxValue;
             offset.Y = FindSmallestValidDistance(_horizontalSnapLines, _horizontalDistances, minRange, maxRange, directionOffset.Y);
             if (offset.Y != 0)
             {
-                //store off the line structs for actual rendering
+                // store off the line structs for actual rendering
                 IdentifyAndStoreValidLines(_horizontalSnapLines, _horizontalDistances, currentBounds, offset.Y);
                 if (directionOffset.Y < 0)
                 {
@@ -605,7 +605,7 @@ internal sealed class DragAssistanceManager
 
         if (!offset.IsEmpty)
         {
-            //setup the cached info for drawing
+            // setup the cached info for drawing
             _cachedDragRect = currentBounds;
             _cachedDragRect.Offset(offset.X, offset.Y);
             if (offset.X != 0)
@@ -656,13 +656,13 @@ internal sealed class DragAssistanceManager
     {
         distanceValue = INVALID_VALUE;
         int smallestIndex = INVALID_VALUE;
-        //check for valid array
+        // check for valid array
         if (distances.Length == 0)
         {
             return smallestIndex;
         }
 
-        //find the next smallest
+        // find the next smallest
         for (int i = 0; i < distances.Length; i++)
         {
             // If a distance is 0 or if it is to our left and we're heading right or if it is to our right and we're heading left then we can null this value out
@@ -682,7 +682,7 @@ internal sealed class DragAssistanceManager
 
         if (smallestIndex < distances.Length)
         {
-            //return and clear the smallest one we found
+            // return and clear the smallest one we found
             distances[smallestIndex] = INVALID_VALUE;
         }
 
@@ -701,7 +701,7 @@ internal sealed class DragAssistanceManager
             {
                 currentPen = _edgePen;
                 if (lines[i].x1 == lines[i].x2)
-                {//vertical margin
+                {// vertical margin
                     int coord = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
                     coord += (Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom) - coord) / 2;
                     lines[i].y1 = lines[i].y2 = coord;
@@ -722,10 +722,10 @@ internal sealed class DragAssistanceManager
                         lines[i].x2 = lines[i].OriginalBounds.Right;
                     }
 
-                    lines[i].x2--; //off by 1 adjust
+                    lines[i].x2--; // off by 1 adjust
                 }
                 else
-                {//horizontal margin
+                {// horizontal margin
                     int coord = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
                     coord += (Math.Min(dragRect.Right, lines[i].OriginalBounds.Right) - coord) / 2;
                     lines[i].x1 = lines[i].x2 = coord;
@@ -746,25 +746,25 @@ internal sealed class DragAssistanceManager
                         lines[i].y2 = lines[i].OriginalBounds.Bottom;
                     }
 
-                    lines[i].y2--; //off by 1 adjust
+                    lines[i].y2--; // off by 1 adjust
                 }
             }
             else if (lines[i].LineType == LineType.Baseline)
             {
                 currentPen = _baselinePen;
-                lines[i].x2 -= 1; //off by 1 adjust
+                lines[i].x2 -= 1; // off by 1 adjust
             }
             else
             {
-                //default to edgePen
+                // default to edgePen
                 currentPen = _edgePen;
                 if (lines[i].x1 == lines[i].x2)
                 {
-                    lines[i].y2--; //off by 1 adjustment
+                    lines[i].y2--; // off by 1 adjustment
                 }
                 else
                 {
-                    lines[i].x2--; //off by 1 adjustment
+                    lines[i].x2--; // off by 1 adjustment
                 }
             }
 
@@ -808,7 +808,7 @@ internal sealed class DragAssistanceManager
             type = snapLine.Filter.StartsWith(SnapLine.Margin) ? LineType.Margin : LineType.Padding;
         }
 
-        //propagate the baseline through to the linetype
+        // propagate the baseline through to the linetype
         else if (snapLine.SnapLineType == SnapLineType.Baseline)
         {
             type = LineType.Baseline;
@@ -899,7 +899,7 @@ internal sealed class DragAssistanceManager
             }
         }
 
-        //valid overlapping margin line
+        // valid overlapping margin line
         return true;
     }
 
@@ -921,7 +921,7 @@ internal sealed class DragAssistanceManager
 
         _targetHorizontalSnapLines.Clear();
         _targetVerticalSnapLines.Clear();
-        //manually add our snaplines as targets
+        // manually add our snaplines as targets
         foreach (SnapLine snapline in snapLines)
         {
             if (snapline.IsHorizontal)
@@ -966,7 +966,7 @@ internal sealed class DragAssistanceManager
         _dragOffset = new Point(dragBounds.X - _dragOffset.X, dragBounds.Y - _dragOffset.Y);
         if (offsetSnapLines)
         {
-            //offset our targetSnapLines by the amount we have dragged it
+            // offset our targetSnapLines by the amount we have dragged it
             for (int i = 0; i < _targetHorizontalSnapLines.Count; i++)
             {
                 _targetHorizontalSnapLines[i].AdjustOffset(_dragOffset.Y);
@@ -978,7 +978,7 @@ internal sealed class DragAssistanceManager
             }
         }
 
-        //First pass - build up a distance array of all same-type-alignment pts to the closest point on our targetControl.  Also, keep track of the smallestdistance overall
+        // First pass - build up a distance array of all same-type-alignment pts to the closest point on our targetControl.  Also, keep track of the smallestdistance overall
         int smallestDistanceVert = BuildDistanceArray(_verticalSnapLines, _targetVerticalSnapLines, _verticalDistances, dragBounds);
         int smallestDistanceHorz = INVALID_VALUE;
         if (shouldSnapHorizontally)
@@ -986,7 +986,7 @@ internal sealed class DragAssistanceManager
             smallestDistanceHorz = BuildDistanceArray(_horizontalSnapLines, _targetHorizontalSnapLines, _horizontalDistances, dragBounds);
         }
 
-        //Second Pass!  We only need to do a second pass if the smallest delta is <= SnapDistance. If this is the case - then we draw snap lines for every line equal to the smallest distance available in the distance array
+        // Second Pass!  We only need to do a second pass if the smallest delta is <= SnapDistance. If this is the case - then we draw snap lines for every line equal to the smallest distance available in the distance array
         _snapPointX = (Math.Abs(smallestDistanceVert) <= SnapDistance) ? -smallestDistanceVert : INVALID_VALUE;
         _snapPointY = (Math.Abs(smallestDistanceHorz) <= SnapDistance) ? -smallestDistanceHorz : INVALID_VALUE;
         // certain behaviors (like resize) might want to know whether we really snapped or not. They can't check the returned snapPoint for (0,0) since that is a valid snapPoint.
@@ -1005,20 +1005,20 @@ internal sealed class DragAssistanceManager
 
         Point snapPoint = new Point(_snapPointX != INVALID_VALUE ? _snapPointX : 0, _snapPointY != INVALID_VALUE ? _snapPointY : 0);
         Rectangle tempDragRect = new Rectangle(dragBounds.Left + snapPoint.X, dragBounds.Top + snapPoint.Y, dragBounds.Width, dragBounds.Height);
-        //out with the old...
+        // out with the old...
         _vertLines = EraseOldSnapLines(_vertLines, _tempVertLines);
         _horzLines = EraseOldSnapLines(_horzLines, _tempHorzLines);
-        //store this drag rect - we'll use it when we are (eventually) called back on to actually render our lines
+        // store this drag rect - we'll use it when we are (eventually) called back on to actually render our lines
 
-        //NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
+        // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
         _cachedDragRect = tempDragRect;
-        //reset the dragoffset to this last location
+        // reset the dragoffset to this last location
         _dragOffset = dragBounds.Location;
-        //this 'snapPoint' will be the amount we want the dragBehavior to shift the dragging control by ('cause we snapped somewhere)
+        // this 'snapPoint' will be the amount we want the dragBehavior to shift the dragging control by ('cause we snapped somewhere)
         return snapPoint;
     }
 
-    //NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
+    // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
     /// <summary>
     ///  Called by the ResizeBehavior after it has finished drawing
     /// </summary>
@@ -1118,7 +1118,7 @@ internal sealed class DragAssistanceManager
 
         public static Line[] GetDiffs(Line l1, Line l2)
         {
-            //x's align
+            // x's align
             if (l1.x1 == l1.x2 && l1.x1 == l2.x1)
             {
                 return [
@@ -1127,7 +1127,7 @@ internal sealed class DragAssistanceManager
                 ];
             }
 
-            //y's align
+            // y's align
             if (l1.y1 == l1.y2 && l1.y1 == l2.y1)
             {
                 return [

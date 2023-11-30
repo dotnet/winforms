@@ -562,7 +562,7 @@ public sealed class PrintDialog : CommonDialog
 
         pageSettings?.SetHdevmode(hDevMode);
 
-        //Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
+        // Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
         if (settings.Copies == 1)
         {
             settings.Copies = copies;

@@ -97,7 +97,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         DataGridViewColumnHeaderCell dataGridViewCell;
         Type thisType = GetType();
 
-        if (thisType == s_cellType) //performance improvement
+        if (thisType == s_cellType) // performance improvement
         {
             dataGridViewCell = new DataGridViewColumnHeaderCell();
         }

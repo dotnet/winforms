@@ -38,7 +38,7 @@ internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
             ToolStrip? parent = item.GetCurrentParent();
             if (parent is not null && parent.Site is null)
             {
-                //don't serialize anything...
+                // don't serialize anything...
                 return null;
             }
         }

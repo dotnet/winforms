@@ -25,7 +25,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(codeObject);
 
-        //Attempt to suspend all components within the icontainer
+        // Attempt to suspend all components within the icontainer
         IContainer? container = manager.GetService<IContainer>();
         List<Control>? suspendedComponents = null;
 
@@ -39,7 +39,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
                 {
                     control.SuspendLayout();
 
-                    //Add this control to our suspended components list so we can resume later
+                    // Add this control to our suspended components list so we can resume later
                     suspendedComponents.Add(control);
                 }
             }
@@ -61,7 +61,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
         }
         finally
         {
-            //resume all suspended comps we found earlier
+            // resume all suspended comps we found earlier
             if (suspendedComponents is not null)
             {
                 foreach (Control control in suspendedComponents)

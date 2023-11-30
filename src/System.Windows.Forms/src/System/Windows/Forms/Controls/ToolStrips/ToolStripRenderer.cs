@@ -619,7 +619,7 @@ public abstract class ToolStripRenderer
         {
             Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
             // if the width is odd - favor pushing it over one pixel right.
-            //middle.X += (dropDownRect.Width % 2);
+            // middle.X += (dropDownRect.Width % 2);
 
             Point[]? arrow = null;
 

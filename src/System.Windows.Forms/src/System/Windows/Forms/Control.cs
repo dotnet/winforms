@@ -626,7 +626,7 @@ public unsafe partial class Control :
         }
         set
         {
-            //valid values are -1 to 0x40
+            // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
             Properties.SetInteger(s_accessibleRoleProperty, (int)value);
         }
@@ -3203,7 +3203,7 @@ public unsafe partial class Control :
         }
         set
         {
-            //valid values are 0x0 to 0x2.
+            // valid values are 0x0 to 0x2.
             SourceGenerated.EnumValidator.Validate(value);
 
             RightToLeft oldValue = RightToLeft;
@@ -3823,7 +3823,7 @@ public unsafe partial class Control :
         bool returnValue = false;
         while (!processed)
         {
-            //Get the thread's exit code, if we found the thread as expected
+            // Get the thread's exit code, if we found the thread as expected
             if (threadHandle != 0)
             {
                 returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
@@ -9757,7 +9757,7 @@ public unsafe partial class Control :
                 // SetParent back after the parent's handle has been recreated.
                 // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
-                //fish out control collection w/o demand creating one.
+                // fish out control collection w/o demand creating one.
                 ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection is not null && controlsCollection.Count > 0)
                 {
@@ -10561,7 +10561,7 @@ public unsafe partial class Control :
 
                 if (alreadyWrapped)
                 {
-                    return null; //prevent infinite wrapping.
+                    return null; // prevent infinite wrapping.
                 }
 
                 alreadyWrapped = true;
@@ -10591,7 +10591,7 @@ public unsafe partial class Control :
     /// </summary>
     private void SelectNextIfFocused()
     {
-        //           We want to move focus away from hidden controls, so this
+        // We want to move focus away from hidden controls, so this
         //           function was added.
         if (ContainsFocus && ParentInternal is not null)
         {

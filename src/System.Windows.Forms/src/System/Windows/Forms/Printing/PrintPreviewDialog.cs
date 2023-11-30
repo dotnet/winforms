@@ -59,7 +59,7 @@ public partial class PrintPreviewDialog : Form
         InitForm();
     }
 
-    //subhag addition
+    // subhag addition
     //-------------------------------------------------------------------------------------------------------------
     /// <summary>
     ///  Indicates the <see cref="Button"/> control on the form that is clicked when
@@ -847,7 +847,7 @@ public partial class PrintPreviewDialog : Form
     }
 
     //-------------------------------------------------------------------------------------------------------------
-    //end addition
+    // end addition
 
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
@@ -1209,7 +1209,7 @@ public partial class PrintPreviewDialog : Form
         _previewControl.Dock = DockStyle.Fill;
         _previewControl.StartPageChanged += new EventHandler(previewControl_StartPageChanged);
 
-        //EVENTS and Images ...
+        // EVENTS and Images ...
         _printToolStripButton.Click += new EventHandler(OnprintToolStripButtonClick);
         _autoToolStripMenuItem.Click += new EventHandler(ZoomAuto);
         _toolStripMenuItem1.Click += new EventHandler(Zoom500);
@@ -1227,7 +1227,7 @@ public partial class PrintPreviewDialog : Form
         _sixPagesToolStripButton.Click += new EventHandler(OnsixpagesToolStripButtonClick);
         _closeToolStripButton.Click += new EventHandler(OncloseToolStripButtonClick);
         _closeToolStripButton.Paint += new PaintEventHandler(OncloseToolStripButtonPaint);
-        //Images
+        // Images
         _toolStrip1.ImageList = _imageList;
         _printToolStripButton.ImageIndex = 0;
         _zoomToolStripSplitButton.ImageIndex = 1;
@@ -1237,14 +1237,14 @@ public partial class PrintPreviewDialog : Form
         _fourPagesToolStripButton.ImageIndex = 5;
         _sixPagesToolStripButton.ImageIndex = 6;
 
-        //tabIndex
+        // tabIndex
         _previewControl.TabIndex = 0;
         _toolStrip1.TabIndex = 1;
 
-        //DefaultItem on the Zoom SplitButton
+        // DefaultItem on the Zoom SplitButton
         _zoomToolStripSplitButton.DefaultItem = _autoToolStripMenuItem;
 
-        //ShowCheckMargin
+        // ShowCheckMargin
         if (_zoomToolStripSplitButton.DropDown is ToolStripDropDownMenu menu)
         {
             menu.ShowCheckMargin = true;
@@ -1252,7 +1252,7 @@ public partial class PrintPreviewDialog : Form
             menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
         }
 
-        //Create the ToolStripControlHost
+        // Create the ToolStripControlHost
         _pageCounterItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 
         _toolStrip1.Items.Add(_pageCounterItem);

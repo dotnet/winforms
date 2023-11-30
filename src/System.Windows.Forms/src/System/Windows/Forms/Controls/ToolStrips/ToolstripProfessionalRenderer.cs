@@ -624,7 +624,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             }
             else if (item.Selected)
             {
-                //Hot, Pressed behavior
+                // Hot, Pressed behavior
                 // Fill with orange
                 Color borderColor = ColorTable.MenuItemBorder;
 
@@ -828,7 +828,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         e.Graphics.Clear(ColorTable.ToolStripContentPanelGradientEnd);
 
-        //        RenderBackgroundGradient(e.Graphics, toolStripContentPanel, ColorTable.ToolStripContentPanelGradientBegin, ColorTable.ToolStripContentPanelGradientEnd);
+        // RenderBackgroundGradient(e.Graphics, toolStripContentPanel, ColorTable.ToolStripContentPanelGradientBegin, ColorTable.ToolStripContentPanelGradientEnd);
     }
 
     #region PrivatePaintHelpers

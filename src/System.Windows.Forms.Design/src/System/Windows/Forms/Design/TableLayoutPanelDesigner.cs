@@ -17,24 +17,24 @@ namespace System.Windows.Forms.Design;
 
 internal class TableLayoutPanelDesigner : FlowPanelDesigner
 {
-    private TableLayoutPanelBehavior tlpBehavior;//every resize col/row glyph is associated with this instance of behavior
-    private Point droppedCellPosition = InvalidPoint;//used to insert new children
+    private TableLayoutPanelBehavior tlpBehavior;// every resize col/row glyph is associated with this instance of behavior
+    private Point droppedCellPosition = InvalidPoint;// used to insert new children
 
     // NEVER USE undoing DIRECTLY. ALWAYS USE THE PROPERTY
     private bool undoing;
     private UndoEngine undoEngine;
 
-    private Control localDragControl;//only valid if we're currently dragging a child control of the table
-    private List<IComponent> _dragComponents;          //the components we are dragging
-    private DesignerVerbCollection verbs;//add col/row and remove col/row tab verbs
+    private Control localDragControl;// only valid if we're currently dragging a child control of the table
+    private List<IComponent> _dragComponents;          // the components we are dragging
+    private DesignerVerbCollection verbs;// add col/row and remove col/row tab verbs
     private DesignerTableLayoutControlCollection controls;
     private DesignerVerb removeRowVerb;
     private DesignerVerb removeColVerb;
-    private DesignerActionListCollection actionLists;//action list for the Smart Tag
+    private DesignerActionListCollection actionLists;// action list for the Smart Tag
 
     private BaseContextMenuStrip designerContextMenuStrip;
-    private int curRow = -1; //row cursor was over when context menu was dropped
-    private int curCol = -1;  //col cursor was over when context menu was dropped
+    private int curRow = -1; // row cursor was over when context menu was dropped
+    private int curCol = -1;  // col cursor was over when context menu was dropped
 
     private IComponentChangeService compSvc;
     private PropertyDescriptor rowStyleProp;
@@ -475,8 +475,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void ControlAddedInternal(Control control, Point newControlPosition, bool localReposition, bool fullTable, DragEventArgs de)
     {
-        //If the table is full - we'll want to 'autogrow' either the row or column based on the grow style property
-        //before we actually add the control.
+        // If the table is full - we'll want to 'autogrow' either the row or column based on the grow style property
+        // before we actually add the control.
         if (fullTable)
         {
             if (Table.GrowStyle == TableLayoutPanelGrowStyle.AddRows)
@@ -497,14 +497,14 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             }
             else
             {
-                //fixed growstyle - what do we do here?
+                // fixed growstyle - what do we do here?
             }
         }
 
         DesignerTransaction trans = null;
         PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Table)["Controls"];
-        //find the control that currently resides at our newControlPosition - we'll want to either
-        //remove it or swap it.
+        // find the control that currently resides at our newControlPosition - we'll want to either
+        // remove it or swap it.
         try
         {
             // Are we doing a local copy
@@ -525,9 +525,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 PropChanging(controlsProp);
             }
 
-            //does the newControlPosition contain a valid control
-            //if so - we need to perform a 'swap' function if this is local - or default
-            //to controls.add if this is from an external source
+            // does the newControlPosition contain a valid control
+            // if so - we need to perform a 'swap' function if this is local - or default
+            // to controls.add if this is from an external source
             else if (existingControl is not null && !existingControl.Equals(control))
             {
                 if (localReposition)
@@ -542,22 +542,22 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
                     // Need to do this after the transaction is created
                     PropChanging(controlsProp);
-                    RemoveControlInternal(existingControl);//we found our control to swap
+                    RemoveControlInternal(existingControl);// we found our control to swap
                 }
                 else
                 {
-                    //here we externally dragged a control onto a valid control in our table
-                    //we'll try to find a place to put it (since we shouldn't be here if our table
-                    //was full
+                    // here we externally dragged a control onto a valid control in our table
+                    // we'll try to find a place to put it (since we shouldn't be here if our table
+                    // was full
 
                     // MartinTh -- we shouldn't ever get here...
                     PropChanging(controlsProp);
-                    existingControl = null;//null this out since we're not swapping
+                    existingControl = null;// null this out since we're not swapping
                 }
             }
             else
             {
-                //here we have a truly empty cell
+                // here we have a truly empty cell
 
                 // If we are not doing a local move, then the DropSourceBehavior created the transaction for us
                 if (localReposition)
@@ -573,7 +573,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 PropChanging(controlsProp);
             }
 
-            //Need to do this after the transaction has been created
+            // Need to do this after the transaction has been created
             if (localCopy)
             {
                 List<IComponent> temp = new() { control };
@@ -581,9 +581,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 control = temp[0] as Control;
             }
 
-            //if we are locally repositioning this control - remove it (internally)
-            //from the table's child collection and add something in its place.  This
-            //will be a control to swap it with
+            // if we are locally repositioning this control - remove it (internally)
+            // from the table's child collection and add something in its place.  This
+            // will be a control to swap it with
             if (localReposition)
             {
                 Point oldPosition = GetControlPosition(control);
@@ -592,25 +592,25 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     RemoveControlInternal(control);
 
                     if (oldPosition != newControlPosition)
-                    {//guard against dropping it back on itself
+                    {// guard against dropping it back on itself
                         if (existingControl is not null)
                         {
-                            //we have something to swap...
+                            // we have something to swap...
                             AddControlInternal(existingControl, oldPosition.X, oldPosition.Y);
                         }
                     }
                 }
             }
 
-            //Finally - set our new control to the new position
+            // Finally - set our new control to the new position
             if (localReposition)
             {
-                //If we are doing a local drag, then the control previously got removed
+                // If we are doing a local drag, then the control previously got removed
                 AddControlInternal(control, newControlPosition.X, newControlPosition.Y);
             }
             else
             {
-                //If not, then the control has already been added, and all we need to do is set the position
+                // If not, then the control has already been added, and all we need to do is set the position
                 Table.SetCellPosition(control, new TableLayoutPanelCellPosition(newControlPosition.X, newControlPosition.Y));
             }
 
@@ -654,14 +654,14 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void CreateEmptyTable()
     {
-        //set the table's default rows and columns
+        // set the table's default rows and columns
         PropertyDescriptor colProp = TypeDescriptor.GetProperties(Table)["ColumnCount"];
         colProp?.SetValue(Table, DesignerUtils.DEFAULTCOLUMNCOUNT);
 
         PropertyDescriptor rowProp = TypeDescriptor.GetProperties(Table)["RowCount"];
         rowProp?.SetValue(Table, DesignerUtils.DEFAULTROWCOUNT);
 
-        //this will make sure we have styles created for every row & column
+        // this will make sure we have styles created for every row & column
         EnsureAvailableStyles();
 
         InitializeNewStyles();
@@ -669,13 +669,13 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void InitializeNewStyles()
     {
-        //adjust the two absolutely positioned columns
+        // adjust the two absolutely positioned columns
         Table.ColumnStyles[0].SizeType = SizeType.Percent;
         Table.ColumnStyles[0].Width = DesignerUtils.MINIMUMSTYLEPERCENT;
         Table.ColumnStyles[1].SizeType = SizeType.Percent;
         Table.ColumnStyles[1].Width = DesignerUtils.MINIMUMSTYLEPERCENT;
 
-        //adjust two absolutely positioned rows
+        // adjust two absolutely positioned rows
         Table.RowStyles[0].SizeType = SizeType.Percent;
         Table.RowStyles[0].Height = DesignerUtils.MINIMUMSTYLEPERCENT;
         Table.RowStyles[1].SizeType = SizeType.Percent;
@@ -855,7 +855,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         if (Table.CellBorderStyle != TableLayoutPanelCellBorderStyle.None)
         {
-            //only draw a fake border if there is no borderstyle.
+            // only draw a fake border if there is no borderstyle.
             return;
         }
 
@@ -930,7 +930,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         Table.SuspendLayout();
         try
         {
-            //if we have more columns then column styles add some...
+            // if we have more columns then column styles add some...
             if (cw.Length > Table.ColumnStyles.Count)
             {
                 int colDifference = cw.Length - Table.ColumnStyles.Count;
@@ -943,7 +943,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 PropChanged(rowStyleProp);
             }
 
-            //if we have more rows then row styles add some...
+            // if we have more rows then row styles add some...
             if (rh.Length > Table.RowStyles.Count)
             {
                 int rowDifference = rh.Length - Table.RowStyles.Count;
@@ -977,11 +977,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private Point GetCellPosition(Point pos)
     {
-        //get some runtime table info
+        // get some runtime table info
         int[] rows = Table.GetRowHeights();
         int[] columns = Table.GetColumnWidths();
 
-        //By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399557
+        // By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399557
         Point startingPoint = Table.PointToScreen(Table.DisplayRectangle.Location);
         Rectangle bounds = new Rectangle(startingPoint, Table.DisplayRectangle.Size);
 
@@ -1001,7 +1001,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             { // it must be within the bounds
                 offset = bounds.Right;
 
-                //loop through the columns and identify where the mouse is
+                // loop through the columns and identify where the mouse is
                 for (int i = 0; i < columns.Length; i++)
                 {
                     position.X = i;
@@ -1022,7 +1022,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             }
             else if (pos.X > bounds.X)
             { // if pos.X <= bounds.X, position.X = -1.
-              //loop through the columns and identify where the mouse is
+              // loop through the columns and identify where the mouse is
                 for (int i = 0; i < columns.Length; i++)
                 { // it must be within the bounds
                     position.X = i;
@@ -1045,7 +1045,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
         else if (pos.Y > bounds.Y)
         { // if pos.Y <= bounds.Y, position.Y = -1
-          //loop through the rows and identify where the mouse is
+          // loop through the rows and identify where the mouse is
             for (int i = 0; i < rows.Length; i++)
             {
                 if (pos.Y <= offset + rows[i])
@@ -1079,15 +1079,15 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["Locked"];
         bool locked = (prop is not null) ? ((bool)prop.GetValue(Component)) : false;
 
-        //Before adding glyphs for every row/column, make sure we have a column/rowstyle for every column/row
+        // Before adding glyphs for every row/column, make sure we have a column/rowstyle for every column/row
         bool safeToRefresh = EnsureAvailableStyles();
 
-        //if we're somehow selected, not locked, and not inherited -then offer up glyphs for every
-        //column/row line
+        // if we're somehow selected, not locked, and not inherited -then offer up glyphs for every
+        // column/row line
         if (selectionType != GlyphSelectionType.NotSelected && !locked && InheritanceAttribute != InheritanceAttribute.InheritedReadOnly)
         {
-            //get the correctly translated bounds
-            //By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399689
+            // get the correctly translated bounds
+            // By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399689
             Point loc = BehaviorService.MapAdornerWindowPoint(Table.Handle, Table.DisplayRectangle.Location);
             Rectangle bounds = new Rectangle(loc, Table.DisplayRectangle.Size);
 
@@ -1103,11 +1103,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             if (safeToRefresh)
             {
-                //add resize glyphs for each column and row
+                // add resize glyphs for each column and row
                 for (int i = 0; i < cw.Length - 1; i++)
                 {
-                    //Do not add a glyph for columns of 0 width. This can happen for percentage columns, where the table is not
-                    //big enough for there to be any space for percentage columns
+                    // Do not add a glyph for columns of 0 width. This can happen for percentage columns, where the table is not
+                    // big enough for there to be any space for percentage columns
                     if (cw[i] == 0)
                     {
                         continue;
@@ -1119,11 +1119,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     }
                     else
                     {
-                        startLoc += cw[i];//x offset of column line
+                        startLoc += cw[i];// x offset of column line
                     }
 
                     Rectangle gBounds = new Rectangle(startLoc - halfSize, checkBounds.Top, DesignerUtils.RESIZEGLYPHSIZE, checkBounds.Height);
-                    //Don't add glyphs for columns that are not within the clientrectangle.
+                    // Don't add glyphs for columns that are not within the clientrectangle.
                     if (!checkBounds.Contains(gBounds))
                     {
                         continue;
@@ -1137,18 +1137,18 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     }
                 }
 
-                startLoc = bounds.Y;//reset for the rows...
+                startLoc = bounds.Y;// reset for the rows...
 
                 for (int i = 0; i < rh.Length - 1; i++)
                 {
-                    //Do not add a glyph for rows of 0 height. This can happen for percentage columns, where the table is not
-                    //big enough for there to be any space for percentage columns
+                    // Do not add a glyph for rows of 0 height. This can happen for percentage columns, where the table is not
+                    // big enough for there to be any space for percentage columns
                     if (rh[i] == 0)
                     {
                         continue;
                     }
 
-                    startLoc += rh[i];//y offset of row line
+                    startLoc += rh[i];// y offset of row line
                     Rectangle gBounds = new Rectangle(checkBounds.Left, startLoc - halfSize, checkBounds.Width, DesignerUtils.RESIZEGLYPHSIZE);
                     if (!checkBounds.Contains(gBounds))
                     {
@@ -1257,8 +1257,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             }
         }
 
-        //The control we are about to place, have already been added to the TLP's control collection, so -1 here.
-        //This is because we want to know if the table was full BEFORE the control was added.
+        // The control we are about to place, have already been added to the TLP's control collection, so -1 here.
+        // This is because we want to know if the table was full BEFORE the control was added.
 
         bool fullTable = (totalArea - 1) >= (Math.Max(1, colCountBeforeAdd) * Math.Max(1, rowCountBeforeAdd));
 
@@ -1302,9 +1302,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             Control existingControl = (Control)((TableLayoutPanel)Control).GetControlFromPosition(dropPoint.X, dropPoint.Y);
 
-            //If the cell is not empty, and we are not doing a local drag, then show the no-smoking cursor
-            //or if we are doing a multi-select local drag, then show the no-smoking cursor.
-            //or if we are doig a local drag, and the cell is not empty, and we are doing a copy
+            // If the cell is not empty, and we are not doing a local drag, then show the no-smoking cursor
+            // or if we are doing a multi-select local drag, then show the no-smoking cursor.
+            // or if we are doig a local drag, and the cell is not empty, and we are doing a copy
             if ((existingControl is not null && localDragControl is null) ||
                 (localDragControl is not null && _dragComponents.Count > 1) ||
                 (localDragControl is not null && existingControl is not null && Control.ModifierKeys == Keys.Control))
@@ -1323,7 +1323,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         curRow = cell.Y;
         curCol = cell.X;
 
-        //Set the SizeMode correctly
+        // Set the SizeMode correctly
         EnsureAvailableStyles();
 
         DesignerContextMenuStrip.Show(x, y);
@@ -1333,8 +1333,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         base.OnDragEnter(de);
 
-        //peak at what just entered her e- it it's a local control
-        //we'll cache it off
+        // peak at what just entered her e- it it's a local control
+        // we'll cache it off
         if (localDragControl is null)
         {
             Control dragControl = ExtractControlFromDragEvent(de);
@@ -1347,7 +1347,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     protected override void OnDragLeave(EventArgs e)
     {
-        localDragControl = null; //VSWhidbey #275678
+        localDragControl = null; // VSWhidbey #275678
         _dragComponents = null;
         base.OnDragLeave(e);
     }
@@ -1356,10 +1356,10 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         droppedCellPosition = GetCellPosition(Control.MousePosition);
 
-        //the scenario where we just dropped our own child control
+        // the scenario where we just dropped our own child control
         if (localDragControl is not null)
         {
-            //local drag to our TLP - we need to re-insert or swap it...
+            // local drag to our TLP - we need to re-insert or swap it...
             ControlAddedInternal(localDragControl, droppedCellPosition, true, false, de);
             localDragControl = null;
         }
@@ -1368,7 +1368,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             rowCountBeforeAdd = Math.Max(0, Table.GetRowHeights().Length); // don't want negative
             colCountBeforeAdd = Math.Max(0, Table.GetColumnWidths().Length);
 
-            //If from the outside, just let the base class handle it
+            // If from the outside, just let the base class handle it
             base.OnDragDrop(de);
 
             // VSWhidbey #390230
@@ -1466,14 +1466,14 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
     {
-        //VSWhidbey 233871
-        //When the Row or Column property is being set on a control in the TLP, a Row/Col Style is not being added.
-        //After the property is being set, the SelectionManager::OnSelectionChanged gets called. It in turn calls
-        //GetGlyphs, and the TLP designer's GetGlyphs calls EnsureAvaiableStyles. Since no style was added, we will add
-        //a default one of type Absolute, Height/Width 20. But but but... If the control has added its glyph before we
-        //add the style, the glyphs wil be misaligned, since EnsureAvailableStyles also causes the TLP to do a layout. This
-        //layout will actually size the control to a smaller size. So let's trap the Row/Col property changing, call
-        //EnsureAvailableStyles, which will force the layout BEFORE the SelectionManager is called.
+        // VSWhidbey 233871
+        // When the Row or Column property is being set on a control in the TLP, a Row/Col Style is not being added.
+        // After the property is being set, the SelectionManager::OnSelectionChanged gets called. It in turn calls
+        // GetGlyphs, and the TLP designer's GetGlyphs calls EnsureAvaiableStyles. Since no style was added, we will add
+        // a default one of type Absolute, Height/Width 20. But but but... If the control has added its glyph before we
+        // add the style, the glyphs wil be misaligned, since EnsureAvailableStyles also causes the TLP to do a layout. This
+        // layout will actually size the control to a smaller size. So let's trap the Row/Col property changing, call
+        // EnsureAvailableStyles, which will force the layout BEFORE the SelectionManager is called.
         if (e.Component is not null)
         {
             Control c = e.Component as Control;
@@ -1512,7 +1512,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             if (selSvc.GetComponentSelected(Table) || selectedComponentHasTableParent)
             {
-                //force an internal 'onlayout' event to refresh our control
+                // force an internal 'onlayout' event to refresh our control
                 Table.SuspendLayout();
                 EnsureAvailableStyles();
                 Table.ResumeLayout(false);
@@ -1558,7 +1558,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         if (IsOverValidCell(true))
         {
-            //make sure we have a valid toolbox item and we're not just drawing a rect
+            // make sure we have a valid toolbox item and we're not just drawing a rect
             IToolboxService tbx = (IToolboxService)GetService(typeof(IToolboxService));
             if (tbx is not null && tbx.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) is not null)
             {
@@ -1576,8 +1576,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     protected override void OnMouseDragMove(int x, int y)
     {
-        //If they are trying to draw in a cell that already has a control, then we
-        //do not want to draw an outline
+        // If they are trying to draw in a cell that already has a control, then we
+        // do not want to draw an outline
         if (droppedCellPosition == InvalidPoint)
         {
             Cursor.Current = Cursors.No;
@@ -1601,7 +1601,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     private void OnRowColMenuOpening(object sender, CancelEventArgs e)
     {
         e.Cancel = false;
-        //Set the size mode correctly
+        // Set the size mode correctly
         ToolStripDropDownMenu menu = sender as ToolStripDropDownMenu;
         if (menu is not null)
         {
@@ -1649,7 +1649,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
                 if ((isRow ? Table.RowCount : Table.ColumnCount) < 2)
                 {
-                    //can't remove a row/column if we only have
+                    // can't remove a row/column if we only have
                     menu.Items["delete"].Enabled = false;
                 }
             }
@@ -1690,7 +1690,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private void OnAddClick(object sender, EventArgs e) => OnAdd((bool)((ToolStripMenuItem)sender).Tag); //Tag = isRow
+    private void OnAddClick(object sender, EventArgs e) => OnAdd((bool)((ToolStripMenuItem)sender).Tag); // Tag = isRow
 
     internal void InsertRowCol(bool isRow, int index)
     {
@@ -1746,21 +1746,21 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             if (currentIndex == -1)
             {
-                //this is a flow element. We don't really know where
-                //this is going to go, so we cannot fix up anything.
+                // this is a flow element. We don't really know where
+                // this is going to go, so we cannot fix up anything.
                 continue;
             }
 
-            //push all controls >= the original row/col into the new row/col
+            // push all controls >= the original row/col into the new row/col
             if (currentIndex >= index)
             {
                 prop?.SetValue(child, currentIndex + 1);
             }
             else
             {
-                //If the control is before the row/col we are inserting and the control has a span that includes the inserted row/col
-                //the increase the span to include the insert row/col
-                int span = isRow ? Table.GetRowSpan(child) : Table.GetColumnSpan(child); //span is always at least 1
+                // If the control is before the row/col we are inserting and the control has a span that includes the inserted row/col
+                // the increase the span to include the insert row/col
+                int span = isRow ? Table.GetRowSpan(child) : Table.GetColumnSpan(child); // span is always at least 1
                 if (currentIndex + span > index)
                 {
                     spanProp?.SetValue(child, span + 1);
@@ -1821,8 +1821,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             if (currentIndex == index)
             {
-                //We add the deleteList.Contains check just to make extra sure. Could be
-                //that the deleteList for some reason already contained the child.
+                // We add the deleteList.Contains check just to make extra sure. Could be
+                // that the deleteList for some reason already contained the child.
                 if (!deleteList.Contains(child))
                 {
                     deleteList.Add(child);
@@ -1833,26 +1833,26 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             if (currentIndex == -1 || deleteList.Contains(child))
             {
-                //If this is a flow element. We don't really know where this is going to go, so we cannot fix up anything.
-                //If the child has already been marked for deletion, we can keep going
+                // If this is a flow element. We don't really know where this is going to go, so we cannot fix up anything.
+                // If the child has already been marked for deletion, we can keep going
                 continue;
             }
 
             Debug.Assert(currentIndex != index);
 
-            //push all controls >= the original row/col into the new row/col, but only
+            // push all controls >= the original row/col into the new row/col, but only
             if (currentIndex > index)
             {
                 prop?.SetValue(child, currentIndex - 1);
             }
             else
             {
-                //If the control is before the row/col we are removing and the control has a span that includes the row/col
-                //we are deleting, then decrease the span.
-                int span = isRow ? Table.GetRowSpan(child) : Table.GetColumnSpan(child); //span is always at least 1
+                // If the control is before the row/col we are removing and the control has a span that includes the row/col
+                // we are deleting, then decrease the span.
+                int span = isRow ? Table.GetRowSpan(child) : Table.GetColumnSpan(child); // span is always at least 1
                 if (currentIndex + span > index)
                 {
-                    //We've bled into the row/col, shrink up as expected
+                    // We've bled into the row/col, shrink up as expected
                     spanProp?.SetValue(child, span - 1);
                 }
             }
@@ -1893,7 +1893,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         if ((isRow ? Table.RowCount : Table.ColumnCount) < 2)
         {
-            //can't remove a row/column if we only have 1
+            // can't remove a row/column if we only have 1
             return;
         }
 
@@ -1908,12 +1908,12 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     Table.SuspendLayout();
                     List<Control> deleteList = new();
 
-                    //First fix up any controls in the row/col we are deleting
+                    // First fix up any controls in the row/col we are deleting
                     FixUpControlsOnDelete(isRow, index, deleteList);
-                    //Then delete the row col
+                    // Then delete the row col
                     DeleteRowCol(isRow, index);
 
-                    //Now delete any child control
+                    // Now delete any child control
 
                     // IF YOU CHANGE THIS, YOU SHOULD ALSO CHANGE THE CODE IN StyleCollectionEditor.OnOkButtonClick
                     if (deleteList.Count > 0)
@@ -1996,7 +1996,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             if ((isRow && rh.Length < index - 1) || (!isRow && ch.Length < index - 1))
             {
-                //something got messed up
+                // something got messed up
                 Debug.Fail("Our indices are outta whack, how did that happen?");
                 return;
             }
@@ -2095,14 +2095,14 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void OnVerbRemove(object sender, EventArgs e)
     {
-        //sniff the text of the verb to see if we're adding columns or rows
+        // sniff the text of the verb to see if we're adding columns or rows
         bool isRow = ((DesignerVerb)sender).Text.Equals(ReplaceText(SR.TableLayoutPanelDesignerRemoveRow));
         OnRemove(isRow);
     }
 
     private void OnVerbAdd(object sender, EventArgs e)
     {
-        //sniff the text of the verb to see if we're adding columns or rows
+        // sniff the text of the verb to see if we're adding columns or rows
         bool isRow = ((DesignerVerb)sender).Text.Equals(ReplaceText(SR.TableLayoutPanelDesignerAddRow));
         OnAdd(isRow);
     }
@@ -2153,7 +2153,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void Refresh()
     {
-        //refresh selection, glyphs, and adorners
+        // refresh selection, glyphs, and adorners
         BehaviorService.SyncSelection();
 
         Table?.Invalidate(true);

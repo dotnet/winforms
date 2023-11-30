@@ -218,7 +218,7 @@ public static class CheckBoxRenderer
         {
             InitializeRenderer((int)state);
 
-            //Keep this drawing order! It matches default drawing order.
+            // Keep this drawing order! It matches default drawing order.
             t_visualStyleRenderer.DrawImage(g, imageBounds, image);
             t_visualStyleRenderer.DrawBackground(g, glyphBounds);
             textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);

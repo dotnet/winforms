@@ -499,7 +499,7 @@ internal abstract partial class ButtonBaseAdapter
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    //don't draw chiseled text if themed as win32 app does.
+                    // don't draw chiseled text if themed as win32 app does.
                     TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, colors.ButtonShadow, formatFlags);
                 }
                 else

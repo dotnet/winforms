@@ -390,7 +390,7 @@ public partial class ToolStripContainer : ContainerControl
 
     internal override void RecreateHandleCore()
     {
-        //If ToolStripContainer's Handle is getting created demand create the childControl handle's
+        // If ToolStripContainer's Handle is getting created demand create the childControl handle's
         if (IsHandleCreated)
         {
             foreach (Control c in Controls)

@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class ButtonRenderer
 {
-    //Make this per-thread, so that different threads can safely use these methods.
+    // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
     private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
@@ -45,7 +45,7 @@ public static class ButtonRenderer
         }
         else
         {
-            return false; //for downlevel, this is false
+            return false; // for downlevel, this is false
         }
     }
 

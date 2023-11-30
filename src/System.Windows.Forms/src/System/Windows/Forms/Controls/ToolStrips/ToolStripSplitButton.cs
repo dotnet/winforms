@@ -84,8 +84,8 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
     {
         get
         {
-            //Rectangle bounds = SplitButtonButton.Bounds;
-            //bounds.Offset(this.Bounds.Location);
+            // Rectangle bounds = SplitButtonButton.Bounds;
+            // bounds.Offset(this.Bounds.Location);
             return SplitButtonButton.Bounds;
         }
     }

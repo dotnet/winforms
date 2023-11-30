@@ -26,7 +26,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     private ToolStripPanelSelectionGlyph? _containerSelectorGlyph;
     private ToolStripPanelSelectionBehavior? _behavior;
 
-    //Designer context Menu for this designer
+    // Designer context Menu for this designer
     private BaseContextMenuStrip? _contextMenu;
 
     // The SelectionService..
@@ -172,7 +172,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
         if (!typeof(ToolStrip).IsAssignableFrom(toolType))
         {
-            //ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
+            // ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
             if (_panel?.Parent is ToolStripContainer parent
                 && parent.ContentPanel is { } contentPanel
                 && _designerHost?.GetDesigner(contentPanel) is PanelDesigner designer)
@@ -252,7 +252,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     {
         if (_containerSelectorGlyph is null && Component.Site is not null)
         {
-            //get the adorner window-relative coordinates for the container control
+            // get the adorner window-relative coordinates for the container control
             _behavior = new ToolStripPanelSelectionBehavior(_panel!, Component.Site);
             _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel!, Component.Site, _behavior);
         }
@@ -288,7 +288,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         // Add own Glyphs.
         if (_containerSelectorGlyph is null && Component.Site is not null)
         {
-            //get the adorner window-relative coordinates for the container control
+            // get the adorner window-relative coordinates for the container control
             _behavior = new ToolStripPanelSelectionBehavior(_panel, Component.Site);
             _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel, Component.Site, _behavior);
         }

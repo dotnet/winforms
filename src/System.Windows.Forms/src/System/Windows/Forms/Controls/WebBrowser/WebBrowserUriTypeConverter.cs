@@ -9,8 +9,8 @@ internal class WebBrowserUriTypeConverter : UriTypeConverter
 {
     public override object? ConvertFrom(ITypeDescriptorContext? context, Globalization.CultureInfo? culture, object value)
     {
-        //The UriTypeConverter gives back a relative Uri for things like "www.microsoft.com".  If
-        //the Uri is relative, we'll try sticking "http://" on the front to see whether that fixes it up.
+        // The UriTypeConverter gives back a relative Uri for things like "www.microsoft.com".  If
+        // the Uri is relative, we'll try sticking "http://" on the front to see whether that fixes it up.
         Uri? uri = base.ConvertFrom(context, culture, value) as Uri;
         if (uri is not null && !string.IsNullOrEmpty(uri.OriginalString) && !uri.IsAbsoluteUri)
         {
@@ -20,8 +20,8 @@ internal class WebBrowserUriTypeConverter : UriTypeConverter
             }
             catch (UriFormatException)
             {
-                //We can't throw "http://" on the front: just return the original (relative) Uri,
-                //which will throw an exception with reasonable text later.
+                // We can't throw "http://" on the front: just return the original (relative) Uri,
+                // which will throw an exception with reasonable text later.
             }
         }
 
