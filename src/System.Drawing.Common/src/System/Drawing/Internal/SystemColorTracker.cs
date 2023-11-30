@@ -16,7 +16,7 @@ internal static class SystemColorTracker
     private const float EXPAND_THRESHOLD = 0.75f;
     private const int EXPAND_FACTOR = 2;
 
-    private static WeakReference<ISystemColorTracker>[] s_list = new WeakReference<ISystemColorTracker>[INITIAL_SIZE];
+    private static WeakReference<ISystemColorTracker>?[] s_list = new WeakReference<ISystemColorTracker>?[INITIAL_SIZE];
     private static int count;
     private static bool addedTracker;
     private static readonly object lockObject = new();
@@ -46,14 +46,14 @@ internal static class SystemColorTracker
             count++;
 
             // COM+ takes forever to Finalize() weak references, so it pays to reuse them.
-            if (s_list[index] is null)
+            if (s_list[index] is not WeakReference<ISystemColorTracker> reference)
             {
                 s_list[index] = new(obj);
             }
             else
             {
-                Debug.Assert(!s_list[index].TryGetTarget(out _), $"Trying to reuse a weak reference that isn't broken yet: list[{index}], length = {s_list.Length}");
-                s_list[index].SetTarget(obj);
+                Debug.Assert(!reference.TryGetTarget(out _), $"Trying to reuse a weak reference that isn't broken yet: list[{index}], length = {s_list.Length}");
+                reference.SetTarget(obj);
             }
         }
     }
@@ -74,9 +74,9 @@ internal static class SystemColorTracker
         // and anything to the right of "right" is broken.
         while (true)
         {
-            while (left < length && s_list[left].TryGetTarget(out _))
+            while (left < length && s_list[left]?.TryGetTarget(out _) == true)
                 left++;
-            while (right >= 0 && !s_list[right].TryGetTarget(out _))
+            while (right >= 0 && s_list[right]?.TryGetTarget(out _) != true)
                 right--;
 
             if (left >= right)
@@ -106,7 +106,7 @@ internal static class SystemColorTracker
 
         for (int i = count; i < s_list.Length; i++)
         {
-            Debug.Assert(!s_list[i].TryGetTarget(out _), "Partitioning didn't work");
+            Debug.Assert(s_list[i]?.TryGetTarget(out _) == false, "Partitioning didn't work");
         }
 #endif
     }
@@ -131,7 +131,7 @@ internal static class SystemColorTracker
             for (int i = 0; i < count; i++)
             {
                 Debug.Assert(s_list[i] is not null, "null value in active part of list");
-                if (s_list[i].TryGetTarget(out ISystemColorTracker? target))
+                if (s_list[i]?.TryGetTarget(out ISystemColorTracker? target) == true)
                 {
                     target.OnSystemColorChanged();
                 }
