@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace System.Windows.Forms.Tests;
 
