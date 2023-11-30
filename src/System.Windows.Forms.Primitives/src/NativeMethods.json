@@ -334,6 +334,7 @@
       "ITextRange.GetText",
       "ITextRange.ScrollIntoView",
       "ITextRange.StartOf",
+      "IToggleProvider.get_ToggleState",
       "ITypeInfo.GetDocumentation",
       "ITypeInfo.GetFuncDesc",
       "ITypeInfo.GetIDsOfNames",

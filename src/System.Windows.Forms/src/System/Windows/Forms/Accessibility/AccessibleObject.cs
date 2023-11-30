@@ -34,7 +34,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.IValueProvider,
     UiaCore.IRangeValueProvider,
     UiaCore.IExpandCollapseProvider,
-    UiaCore.IToggleProvider,
+    IToggleProvider.Interface,
     ITableProvider.Interface,
     ITableItemProvider.Interface,
     IGridProvider.Interface,
@@ -1029,9 +1029,22 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IValueProvider.SetValue(string? newValue) => SetValue(newValue);
 
-    void UiaCore.IToggleProvider.Toggle() => Toggle();
+    HRESULT IToggleProvider.Interface.Toggle()
+    {
+        Toggle();
+        return HRESULT.S_OK;
+    }
 
-    ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
+    HRESULT IToggleProvider.Interface.get_ToggleState(ToggleState* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ToggleState;
+        return HRESULT.S_OK;
+    }
 
     HRESULT ITableProvider.Interface.GetRowHeaders(SAFEARRAY** pRetVal)
     {

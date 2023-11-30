@@ -483,6 +483,7 @@ ITextDocument
 ITextProvider
 ITextProvider2
 ITextRangeProvider
+IToggleProvider
 IVBFormat
 IVBGetControl
 IViewObject

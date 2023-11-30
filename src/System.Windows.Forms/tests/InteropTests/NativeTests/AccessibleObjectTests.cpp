@@ -803,7 +803,7 @@ TEST const WCHAR* WINAPI Test_IToggleProviderGetToggleState(IUnknown* pUnknown, 
 
         // Negative tests.
         hr = pToggleProvider->get_ToggleState(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
