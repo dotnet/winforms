@@ -218,6 +218,11 @@ public partial class MainForm : Form
             // Test GetPreferredSize output https://github.com/dotnet/winforms/issues/2576
             MainFormControlsTabOrder.ToolStripSeparatorPreferredSize,
             new InitInfo("ToolStripSeparatorPreferredSize", (obj, e) => new ToolStripSeparatorPreferredSize().Show(this))
+        },
+        {
+            // Test possible approach to https://github.com/dotnet/winforms/issues/6514
+            MainFormControlsTabOrder.CustomComCtl32Button,
+            new InitInfo("ComCtl32 Button Custom Border", (obj, e) => new CustomComCtl32Button().Show(this))
         }
     };
 
