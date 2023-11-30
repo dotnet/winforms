@@ -301,11 +301,8 @@ internal sealed class ToolStripDesignerUtils
                     }
                 }
 
-                if (creatableTypes.Count > 0)
-                {
-                    s_customToolStripItemCount = creatableTypes.Count;
-                    return [.. creatableTypes];
-                }
+                s_customToolStripItemCount = creatableTypes.Count;
+                return [.. creatableTypes];
             }
         }
 
