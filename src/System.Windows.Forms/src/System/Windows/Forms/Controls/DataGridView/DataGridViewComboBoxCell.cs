@@ -1676,7 +1676,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     ///  We use the display value and DisplayMember to look up the item in the
     ///  ComboBox datasource. We then use ValueMember to get the value.
     /// </summary>
-    private bool LookupValue(object formattedValue, out object? value)
+    private bool LookupValue(object? formattedValue, out object? value)
     {
         if (formattedValue is null)
         {
@@ -2507,7 +2507,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 cellStyle,
                 formattedValueTypeConverter,
                 DisplayTypeConverter);
-            object originalValue = value;
+            object? originalValue = value;
             if (!LookupValue(originalValue, out value))
             {
                 if (originalValue == System.DBNull.Value)
