@@ -1837,23 +1837,26 @@ public partial class RichTextBox : TextBoxBase
                 cpMin = position
             };
 
-            //Look for kashidas in the string.  A kashida is an arabic visual justification character
-            //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C
-            //represent Arabic characters and _ represents a kashida).  We should highlight the text
-            //including the kashida.
+            // Look for kashidas in the string. A kashida is an arabic visual justification character
+            // that's not semantically meaningful. Searching for ABC might find AB_C (where A,B, and C
+            // represent Arabic characters and _ represents a kashida). We should highlight the text
+            // including the kashida.
             const char kashida = (char)0x640;
             ReadOnlySpan<char> kashidaString = [kashida];
+
+            // Using FindInternal here because RichEdit handles position/length differently than .NET strings
+            // depending on characters and text formatting elements involved.
             int startIndex = FindInternal(kashidaString, position, position + str.Length, options);
             if (startIndex == -1)
             {
-                //No kashida in the string
+                // No kashida in the string
                 chrg.cpMax = position + str.Length;
             }
             else
             {
-                //There's at least one kashida
-                int searchingCursor; //index into search string
-                int foundCursor; //index into Text
+                // There's at least one kashida
+                int searchingCursor; // index into search string
+                int foundCursor; // index into Text
                 for (searchingCursor = startIndex, foundCursor = position + startIndex; searchingCursor < str.Length;
                     searchingCursor++, foundCursor++)
                 {
@@ -1871,85 +1874,85 @@ public partial class RichTextBox : TextBoxBase
         }
 
         return position;
-    }
 
-    private unsafe int FindInternal(ReadOnlySpan<char> str, int start, int end, RichTextBoxFinds options)
-    {
-        int textLen = TextLength;
-        ArgumentOutOfRangeException.ThrowIfNegative(start);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLen);
+        unsafe int FindInternal(ReadOnlySpan<char> str, int start, int end, RichTextBoxFinds options)
+        {
+            int textLen = TextLength;
+            ArgumentOutOfRangeException.ThrowIfNegative(start);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLen);
 
-        if (end < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
-        }
+            if (end < -1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
+            }
 
-        if (end == -1)
-        {
-            end = textLen;
-        }
+            if (end == -1)
+            {
+                end = textLen;
+            }
 
-        if (start > end)
-        {
-            throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
-        }
+            if (start > end)
+            {
+                throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
+            }
 
-        FINDTEXTW ft = default;
-        if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
-        {
-            // normal
-            ft.chrg.cpMin = start;
-            ft.chrg.cpMax = end;
-        }
-        else
-        {
-            // reverse
-            ft.chrg.cpMin = end;
-            ft.chrg.cpMax = start;
-        }
-
-        // force complete search if we ended up with a zero length search
-        if (ft.chrg.cpMin == ft.chrg.cpMax)
-        {
+            FINDTEXTW ft = default;
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
             {
-                ft.chrg.cpMin = 0;
-                ft.chrg.cpMax = -1;
+                // normal
+                ft.chrg.cpMin = start;
+                ft.chrg.cpMax = end;
             }
             else
             {
-                ft.chrg.cpMin = textLen;
-                ft.chrg.cpMax = 0;
+                // reverse
+                ft.chrg.cpMin = end;
+                ft.chrg.cpMax = start;
             }
-        }
 
-        // set up the options for the search
-        FINDREPLACE_FLAGS findOptions = 0;
-        if ((options & RichTextBoxFinds.WholeWord) == RichTextBoxFinds.WholeWord)
-        {
-            findOptions |= FINDREPLACE_FLAGS.FR_WHOLEWORD;
-        }
+            // force complete search if we ended up with a zero length search
+            if (ft.chrg.cpMin == ft.chrg.cpMax)
+            {
+                if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
+                {
+                    ft.chrg.cpMin = 0;
+                    ft.chrg.cpMax = -1;
+                }
+                else
+                {
+                    ft.chrg.cpMin = textLen;
+                    ft.chrg.cpMax = 0;
+                }
+            }
 
-        if ((options & RichTextBoxFinds.MatchCase) == RichTextBoxFinds.MatchCase)
-        {
-            findOptions |= FINDREPLACE_FLAGS.FR_MATCHCASE;
-        }
+            // set up the options for the search
+            FINDREPLACE_FLAGS findOptions = 0;
+            if ((options & RichTextBoxFinds.WholeWord) == RichTextBoxFinds.WholeWord)
+            {
+                findOptions |= FINDREPLACE_FLAGS.FR_WHOLEWORD;
+            }
 
-        if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
-        {
-            // The default for RichEdit 2.0 is to search in reverse
-            findOptions |= FINDREPLACE_FLAGS.FR_DOWN;
-        }
+            if ((options & RichTextBoxFinds.MatchCase) == RichTextBoxFinds.MatchCase)
+            {
+                findOptions |= FINDREPLACE_FLAGS.FR_MATCHCASE;
+            }
 
-        // Perform the find, will return ubyte position
-        int position;
-        fixed (char* pText = str)
-        {
-            ft.lpstrText = pText;
-            position = (int)PInvoke.SendMessage(this, PInvoke.EM_FINDTEXT, (WPARAM)(uint)findOptions, ref ft);
-        }
+            if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
+            {
+                // The default for RichEdit 2.0 is to search in reverse
+                findOptions |= FINDREPLACE_FLAGS.FR_DOWN;
+            }
 
-        return position;
+            // Perform the find, will return ubyte position
+            int position;
+            fixed (char* pText = str)
+            {
+                ft.lpstrText = pText;
+                position = (int)PInvoke.SendMessage(this, PInvoke.EM_FINDTEXT, (WPARAM)(uint)findOptions, ref ft);
+            }
+
+            return position;
+        }
     }
 
     /// <summary>
