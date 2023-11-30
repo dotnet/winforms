@@ -254,7 +254,7 @@ internal sealed class ToolStripDesignerUtils
             Type[] stockItemTypeList = GetStandardItemTypes(component);
             if (currentToolStripVisibility != ToolStripItemDesignerAvailability.None)
             {
-                ArrayList creatableTypes = new ArrayList(itemTypes.Count);
+                List<Type> creatableTypes = new(itemTypes.Count);
                 foreach (Type t in itemTypes)
                 {
                     if (t.IsAbstract)
@@ -303,10 +303,8 @@ internal sealed class ToolStripDesignerUtils
 
                 if (creatableTypes.Count > 0)
                 {
-                    Type[] creatableTypesArray = new Type[creatableTypes.Count];
-                    creatableTypes.CopyTo(creatableTypesArray, 0);
                     s_customToolStripItemCount = creatableTypes.Count;
-                    return creatableTypesArray;
+                    return [.. creatableTypes];
                 }
             }
         }
