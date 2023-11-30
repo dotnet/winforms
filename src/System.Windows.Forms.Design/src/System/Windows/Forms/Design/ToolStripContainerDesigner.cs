@@ -117,7 +117,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
     public override IList SnapLines
         // We don't want padding SnapLines, so call directly to the internal method.
-        => SnapLinesInternal();
+        => (IList)EdgeAndMarginSnapLines();
 
     /// <summary>
     ///  Returns the internal control designer with the specified index in the ControlDesigner.
