@@ -14,7 +14,7 @@ internal class FlowPanelDesigner : PanelDesigner
     {
         get
         {
-            IList snapLines = base.SnapLines;
+            IList<SnapLine> snapLines = SnapLinesInternal;
 
             // identify and remove all paddings
             for (int i = snapLines.Count - 1; i >= 0; i--)
@@ -26,7 +26,7 @@ internal class FlowPanelDesigner : PanelDesigner
                 }
             }
 
-            return snapLines;
+            return (IList)snapLines;
         }
     }
 

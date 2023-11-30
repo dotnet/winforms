@@ -31,7 +31,7 @@ internal class LabelDesigner : ControlDesigner
     {
         get
         {
-            IList snapLines = base.SnapLines;
+            IList<SnapLine> snapLines = SnapLinesInternal;
             ContentAlignment alignment = ContentAlignment.TopLeft;
 
             PropertyDescriptor prop;
@@ -93,7 +93,7 @@ internal class LabelDesigner : ControlDesigner
                 }
             }
 
-            return snapLines;
+            return (IList)snapLines;
         }
     }
 

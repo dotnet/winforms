@@ -43,7 +43,7 @@ internal class UpDownBaseDesigner : ControlDesigner
     {
         get
         {
-            IList snapLines = base.SnapLines;
+            IList<SnapLine> snapLines = SnapLinesInternal;
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
             PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
@@ -53,7 +53,7 @@ internal class UpDownBaseDesigner : ControlDesigner
 
             baseline += borderStyle == BorderStyle.None ? -1 : 2;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
-            return snapLines;
+            return (IList)snapLines;
         }
     }
 }
