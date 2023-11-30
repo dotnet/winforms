@@ -477,6 +477,8 @@ IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
 IsZoomed
+ITableItemProvider
+ITableProvider
 ITextDocument
 ITextProvider
 ITextProvider2

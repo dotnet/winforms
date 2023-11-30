@@ -35,8 +35,8 @@ public unsafe partial class AccessibleObject :
     UiaCore.IRangeValueProvider,
     UiaCore.IExpandCollapseProvider,
     UiaCore.IToggleProvider,
-    UiaCore.ITableProvider,
-    UiaCore.ITableItemProvider,
+    ITableProvider.Interface,
+    ITableItemProvider.Interface,
     IGridProvider.Interface,
     IGridItemProvider.Interface,
     IEnumVARIANT.Interface,
@@ -1033,15 +1033,76 @@ public unsafe partial class AccessibleObject :
 
     ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
 
-    object[]? UiaCore.ITableProvider.GetRowHeaders() => GetRowHeaders();
+    HRESULT ITableProvider.Interface.GetRowHeaders(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    object[]? UiaCore.ITableProvider.GetColumnHeaders() => GetColumnHeaders();
+        IRawElementProviderSimple.Interface[]? rowHeaders = GetRowHeaders();
+        *pRetVal = rowHeaders is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(rowHeaders);
 
-    RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
+        return HRESULT.S_OK;
+    }
 
-    object[]? UiaCore.ITableItemProvider.GetRowHeaderItems() => GetRowHeaderItems();
+    HRESULT ITableProvider.Interface.GetColumnHeaders(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    object[]? UiaCore.ITableItemProvider.GetColumnHeaderItems() => GetColumnHeaderItems();
+        IRawElementProviderSimple.Interface[]? columnHeaders = GetColumnHeaders();
+        *pRetVal = columnHeaders is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(columnHeaders);
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITableProvider.Interface.get_RowOrColumnMajor(RowOrColumnMajor* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = RowOrColumnMajor;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITableItemProvider.Interface.GetRowHeaderItems(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        IRawElementProviderSimple.Interface[]? rowHeaderItems = GetRowHeaderItems();
+        *pRetVal = rowHeaderItems is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(rowHeaderItems);
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITableItemProvider.Interface.GetColumnHeaderItems(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        IRawElementProviderSimple.Interface[]? columnHeaderItems = GetColumnHeaderItems();
+        *pRetVal = columnHeaderItems is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(columnHeaderItems);
+
+        return HRESULT.S_OK;
+    }
 
     HRESULT IGridProvider.Interface.GetItem(int row, int column, IRawElementProviderSimple** pRetVal)
     {

@@ -328,6 +328,7 @@
       "IStorage.CreateStream",
       "IStorage.OpenStream",
       "ISupportErrorInfo.InterfaceSupportsErrorInfo",
+      "ITableProvider.get_RowOrColumnMajor",
       "ITextDocument.Range",
       "ITextRange.EndOf",
       "ITextRange.GetText",

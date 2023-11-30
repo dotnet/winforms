@@ -856,7 +856,7 @@ TEST const WCHAR* WINAPI Test_ITableProviderGetRowOrColumnMajor(IUnknown* pUnkno
 
         // Negative tests.
         hr = pTableProvider->get_RowOrColumnMajor(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -872,15 +872,14 @@ TEST const WCHAR* WINAPI Test_ITableProviderGetColumnHeaders(IUnknown* pUnknown)
         hr = pUnknown->QueryInterface(IID_ITableProvider, (void**)&pTableProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableProvider->GetColumnHeaders(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableProvider->GetColumnHeaders(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -896,15 +895,14 @@ TEST const WCHAR* WINAPI Test_ITableProviderGetRowHeaders(IUnknown* pUnknown)
         hr = pUnknown->QueryInterface(IID_ITableProvider, (void**)&pTableProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableProvider->GetRowHeaders(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableProvider->GetRowHeaders(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -920,15 +918,14 @@ TEST const WCHAR* WINAPI Test_ITableItemProviderGetColumnHeaderItems(IUnknown* p
         hr = pUnknown->QueryInterface(IID_ITableItemProvider, (void**)&pTableItemProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableItemProvider->GetColumnHeaderItems(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableItemProvider->GetColumnHeaderItems(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -944,15 +941,14 @@ TEST const WCHAR* WINAPI Test_ITableItemProviderGetRowHeaderItems(IUnknown* pUnk
         hr = pUnknown->QueryInterface(IID_ITableItemProvider, (void**)&pTableItemProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableItemProvider->GetRowHeaderItems(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableItemProvider->GetRowHeaderItems(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
