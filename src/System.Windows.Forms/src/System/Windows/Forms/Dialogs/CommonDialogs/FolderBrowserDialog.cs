@@ -176,10 +176,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.FolderBrowserDialogSelectedPathsDescr))]
-    public string[] SelectedPaths
-    {
-        get => _selectedPaths.Length > 0 ? (string[])_selectedPaths.Clone() : Array.Empty<string>();
-    }
+    public string[] SelectedPaths => _selectedPaths.Length > 0 ? (string[])_selectedPaths.Clone() : Array.Empty<string>();
 
     /// <summary>
     ///  Gets or sets the initial directory displayed by the folder browser dialog.
