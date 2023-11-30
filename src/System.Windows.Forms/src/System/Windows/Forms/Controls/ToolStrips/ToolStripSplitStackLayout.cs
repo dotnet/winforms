@@ -117,7 +117,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         ResetItemPlacements();
 
         ToolStrip toolStrip = ToolStrip;
-        int currentHeight = 0; //toolStrip.Padding.Vertical;
+        int currentHeight = 0; // toolStrip.Padding.Vertical;
 
         if (ToolStrip.CanOverflow)
         {
@@ -307,7 +307,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
                 if (((item.Alignment == ToolStripItemAlignment.Right) && (toolStrip.RightToLeft == RightToLeft.No)) || ((item.Alignment == ToolStripItemAlignment.Left) && (toolStrip.RightToLeft == RightToLeft.Yes)))
                 {
-                    //                  lastRight   x     Margin.Right
+                    // lastRight   x     Margin.Right
                     //             [Item]<----------[Item]----------->|
                     //                   Margin.Left
                     // this item should be placed to the right
@@ -320,7 +320,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 }
                 else
                 {
-                    //             x     Margin.Right lastLeft
+                    // x     Margin.Right lastLeft
                     // |<----------[Item]------------>|
                     //  Margin.Left
                     // this item should be placed to the left

@@ -86,7 +86,7 @@ public partial class ToolStripDropDownButton
 
                     options.Client.Height -= heightOfDropDown;
 
-                    //  [ rest of button / v]
+                    // [ rest of button / v]
                     _dropDownArrowRect = new Rectangle(0, options.Client.Bottom + _scaledDropDownArrowPadding.Top, _ownerItem.Bounds.Width - 1, s_dropDownArrowSize.Height);
                 }
             }

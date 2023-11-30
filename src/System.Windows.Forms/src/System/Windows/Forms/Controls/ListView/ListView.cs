@@ -252,7 +252,7 @@ public partial class ListView : Control
 
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             if (HotTracking && value != ItemActivation.OneClick)
@@ -740,9 +740,9 @@ public partial class ListView : Control
 
             if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
             {
-                //We want to turn on mirroring for Form explicitly.
+                // We want to turn on mirroring for Form explicitly.
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
-                //Don't need these styles when mirroring is turned on.
+                // Don't need these styles when mirroring is turned on.
                 cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
             }
 
@@ -1031,7 +1031,7 @@ public partial class ListView : Control
         get { return _headerStyle; }
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_headerStyle != value)
             {
@@ -1536,7 +1536,7 @@ public partial class ListView : Control
         }
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_sorting != value)
             {
@@ -1856,7 +1856,7 @@ public partial class ListView : Control
 
             FlipViewToLargeIconAndSmallIcon = false;
 
-            //valid values are 0x0 to 0x4
+            // valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value == View.Tile && VirtualMode)
@@ -2748,9 +2748,9 @@ public partial class ListView : Control
                         // by default, we want to skip the customDrawCode
                         bool skipCustomDrawCode = true;
 
-                        //The ListView will send notifications for every column, even if no
-                        //corresponding subitem exists for a particular item. We shouldn't
-                        //fire events in such cases.
+                        // The ListView will send notifications for every column, even if no
+                        // corresponding subitem exists for a particular item. We shouldn't
+                        // fire events in such cases.
                         if (nmcd->iSubItem < Items[itemIndex].SubItems.Count)
                         {
                             Rectangle subItemBounds = GetSubItemRect(itemIndex, nmcd->iSubItem);
@@ -3732,7 +3732,7 @@ public partial class ListView : Control
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(subItemIndex, Columns.Count);
         }
 
-        //valid values are 0x0 to 0x3
+        // valid values are 0x0 to 0x3
         SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
         if (Columns.Count == 0)
@@ -5337,7 +5337,7 @@ public partial class ListView : Control
     {
         ColumnHeader columnHeader = GetColumnHeader(columnIndex);
 
-        //valid values are 0x0 to 0x2
+        // valid values are 0x0 to 0x2
         SourceGenerated.EnumValidator.Validate(headerAutoResize, nameof(headerAutoResize));
 
         int width = 0;
@@ -5960,11 +5960,11 @@ public partial class ListView : Control
 
     private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
     {
-        //Always Reset the MouseupFired....
+        // Always Reset the MouseupFired....
         _listViewState[LISTVIEWSTATE_mouseUpFired] = false;
         _listViewState[LISTVIEWSTATE_expectingMouseUp] = true;
 
-        //This is required to FORCE Validation before Windows ListView pushes its own message loop...
+        // This is required to FORCE Validation before Windows ListView pushes its own message loop...
         Focus();
 
         // Windows ListView pushes its own Windows ListView in WM_xBUTTONDOWN, so fire the
@@ -6072,7 +6072,7 @@ public partial class ListView : Control
                         }
 
                     default:
-                        return false; //default handling
+                        return false; // default handling
                 }
             }
             catch (Exception e)
@@ -6731,7 +6731,7 @@ public partial class ListView : Control
                 int index = GetIndexOfClickedItem();
                 if (index != -1)
                 {
-                    //just maintain state and fire double click.. in final mouseUp...
+                    // just maintain state and fire double click.. in final mouseUp...
                     _listViewState[LISTVIEWSTATE_doubleclickFired] = true;
                 }
 
@@ -7104,7 +7104,7 @@ public partial class ListView : Control
                 }
                 else
                 {
-                    goto default;  //default handling needed
+                    goto default;  // default handling needed
                 }
 
             case PInvoke.WM_SETFOCUS:

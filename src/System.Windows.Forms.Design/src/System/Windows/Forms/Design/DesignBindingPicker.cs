@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Design
             _rootDataSource = rootDataSource;
             _rootDataMember = rootDataMember;
 
-            //Attempt to adjust the linklabel colors if we can get our ui service
+            // Attempt to adjust the linklabel colors if we can get our ui service
             IUIService? uiService = _serviceProvider?.GetService(typeof(IUIService)) as IUIService;
             if (uiService is not null)
             {
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design
             FillTree(initialSelectedItem);
 
             // Set initial state of the various sub-panels
-            //addNewPanel.Visible = (showDataSources && dspSvc is not null && dspSvc.SupportsAddNewDataSource);
+            // addNewPanel.Visible = (showDataSources && dspSvc is not null && dspSvc.SupportsAddNewDataSource);
             _helpTextPanel.Visible = (showDataSources);
 
             // Set initial help text in help pane

@@ -15,11 +15,11 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 internal sealed class ContainerSelectorBehavior : Behavior
 {
-    private Control _containerControl; //our related control
-    private IServiceProvider _serviceProvider; //used for starting a drag/drop
-    private BehaviorService _behaviorService; //ptr to where we start our drag/drop operation
-    private bool _okToMove; //state identifying if we are allowed to move the container
-    private Point _initialDragPoint; //cached "mouse down" point
+    private Control _containerControl; // our related control
+    private IServiceProvider _serviceProvider; // used for starting a drag/drop
+    private BehaviorService _behaviorService; // ptr to where we start our drag/drop operation
+    private bool _okToMove; // state identifying if we are allowed to move the container
+    private Point _initialDragPoint; // cached "mouse down" point
 
     // For some controls, we want to change the original drag point to be the upper-left of the control in  order to make it easier to drop the control at a desired location. But not all controls want this behavior. E.g. we want to do it for Panel and ToolStrip, but not for Label. Label has a ContainerSelectorBehavior via the NoResizeSelectionBorder glyph.
     private readonly bool _setInitialDragPoint;
@@ -84,7 +84,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
     {
         if (button == MouseButtons.Left)
         {
-            //select our component
+            // select our component
             ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             if (selSvc is not null && !_containerControl.Equals(selSvc.PrimarySelection as Control))
             {
@@ -129,7 +129,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
             else
             {
                 InitialDragPoint = DetermineInitialDragPoint(mouseLoc);
-                //set 'okToMove' to true since the user actually clicked down on the glyph
+                // set 'okToMove' to true since the user actually clicked down on the glyph
                 OkToMove = true;
             }
         }
@@ -169,7 +169,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
             Size delta = new Size(Math.Abs(mouseLoc.X - InitialDragPoint.X), Math.Abs(mouseLoc.Y - InitialDragPoint.Y));
             if (delta.Width >= DesignerUtils.MinDragSize.Width / 2 || delta.Height >= DesignerUtils.MinDragSize.Height / 2)
             {
-                //start our drag!
+                // start our drag!
                 Point screenLoc = _behaviorService.AdornerWindowToScreen();
                 screenLoc.Offset(mouseLoc.X, mouseLoc.Y);
                 StartDragOperation(screenLoc);
@@ -194,7 +194,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
     /// </summary>
     private void StartDragOperation(Point initialMouseLocation)
     {
-        //need to grab a hold of some services
+        // need to grab a hold of some services
         ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
         IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
         if (selSvc is null || host is null)
@@ -203,18 +203,18 @@ internal sealed class ContainerSelectorBehavior : Behavior
             return;
         }
 
-        //must identify a required parent to avoid dragging mixes of children
+        // must identify a required parent to avoid dragging mixes of children
         Control requiredParent = _containerControl.Parent;
         List<IComponent> dragControls = new();
         ICollection selComps = selSvc.GetSelectedComponents();
-        //create our list of controls-to-drag
+        // create our list of controls-to-drag
         foreach (IComponent comp in selComps)
         {
             if ((comp is Control ctrl) && (ctrl.Parent is not null))
             {
                 if (!ctrl.Parent.Equals(requiredParent))
                 {
-                    continue; //mixed selection of different parents - don't add this
+                    continue; // mixed selection of different parents - don't add this
                 }
 
                 if (host.GetDesigner(ctrl) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)
@@ -224,7 +224,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
             }
         }
 
-        //if we have controls-to-drag, create our new behavior and start the drag/drop operation
+        // if we have controls-to-drag, create our new behavior and start the drag/drop operation
         if (dragControls.Count > 0)
         {
             Point controlOrigin;

@@ -427,7 +427,7 @@ public partial class ToolStripPanelRow
                                 continue;
                             }
 
-                            //  [:   ]  [: x  ]
+                            // [:   ]  [: x  ]
                             if (Row.Cells[index].Bounds.Contains(locationToDrag))
                             {
                                 break;

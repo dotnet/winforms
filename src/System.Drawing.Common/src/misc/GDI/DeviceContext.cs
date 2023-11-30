@@ -278,7 +278,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
     ///</summary>
     public void IntersectClip(WindowsRegion wr)
     {
-        //if the incoming windowsregion is infinite, there is no need to do any intersecting.
+        // if the incoming windowsregion is infinite, there is no need to do any intersecting.
         if (wr.HRegion == IntPtr.Zero)
         {
             return;

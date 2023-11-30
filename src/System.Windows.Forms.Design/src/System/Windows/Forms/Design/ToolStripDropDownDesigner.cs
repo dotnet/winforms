@@ -27,7 +27,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
     private FormDocumentDesigner parentFormDesigner;
     internal ToolStripMenuItem currentParent;
-    private INestedContainer _nestedContainer; //NestedContainer for our DesignTime MenuItem.
+    private INestedContainer _nestedContainer; // NestedContainer for our DesignTime MenuItem.
     private UndoEngine _undoEngine;
 
     /// <summary>
@@ -197,7 +197,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     // We have to add the glyphs ourselves.
     private void AddSelectionGlyphs(SelectionManager selectionManager, ISelectionService selectionService)
     {
-        //If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
+        // If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
         ICollection selComponents = selectionService.GetSelectedComponents();
         GlyphCollection glyphs = new GlyphCollection();
         foreach (object selComp in selComponents)
@@ -451,7 +451,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                 }
             }
         }
-        else if (comp is ToolStripItem) //case (c)
+        else if (comp is ToolStripItem) // case (c)
         {
             if (!(((ToolStripItem)comp).GetCurrentParent() is ToolStripDropDown parent))
             {

@@ -191,7 +191,7 @@ internal partial class OleDragDropHandler
                         defaultValues["Location"] = new Point(x, y);
                     if (hasSize)
                         defaultValues["Size"] = new Size(width, height);
-                    //store off extra behavior drag/drop information
+                    // store off extra behavior drag/drop information
                     if (e is not null)
                         defaultValues["ToolboxSnapDragDropEventArgs"] = e;
 
@@ -407,7 +407,7 @@ internal partial class OleDragDropHandler
 
     private static void DrawReversibleFrame(HWND handle, Rectangle rectangle, Color backColor)
     {
-        //Bug # 71547 <subhag> to make drag rect visible if any the dimensions of the control are 0
+        // Bug # 71547 <subhag> to make drag rect visible if any the dimensions of the control are 0
         if (rectangle.Width == 0)
             rectangle.Width = 5;
         if (rectangle.Height == 0)
@@ -499,7 +499,7 @@ internal partial class OleDragDropHandler
         // ASURT 90345 -- this causes some subtle bugs, so i'm turning it off to see if we really need it, and if we do
         // if we can find a better way.
         //
-        //freezePainting = true;
+        // freezePainting = true;
 
         AddCurrentDrag(data, Destination.Component);
 
@@ -827,7 +827,7 @@ internal partial class OleDragDropHandler
 
                                 if (oldDesignerControl is not null)
                                 {
-                                    //((ComponentDataObject)dataObj).ShowControls();
+                                    // ((ComponentDataObject)dataObj).ShowControls();
                                     PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                                     oldDesignerControl.Invalidate(true);
                                 }

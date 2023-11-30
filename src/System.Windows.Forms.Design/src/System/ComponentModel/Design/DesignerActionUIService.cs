@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design;
 public sealed class DesignerActionUIService : IDisposable
 {
     private DesignerActionUIStateChangeEventHandler _designerActionUIStateChangedEventHandler;
-    private readonly IServiceProvider _serviceProvider; //standard service provider
+    private readonly IServiceProvider _serviceProvider; // standard service provider
     private readonly DesignerActionService _designerActionService;
 
     internal DesignerActionUIService(IServiceProvider serviceProvider)

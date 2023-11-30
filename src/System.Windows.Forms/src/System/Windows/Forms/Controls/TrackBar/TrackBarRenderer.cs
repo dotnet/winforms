@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class TrackBarRenderer
 {
-    //Make this per-thread, so that different threads can safely use these methods.
+    // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
     private const int lineWidth = 2;
@@ -114,7 +114,7 @@ public static class TrackBarRenderer
 
         InitializeRenderer(VisualStyleElement.TrackBar.Ticks.Normal, 1);
 
-        //trivial case -- avoid calcs
+        // trivial case -- avoid calcs
         if (numTicks == 1)
         {
             t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
@@ -125,7 +125,7 @@ public static class TrackBarRenderer
 
         while (numTicks > 0)
         {
-            //draw the nth tick
+            // draw the nth tick
             float x = bounds.X + ((float)(numTicks - 1)) * inc;
             t_visualStyleRenderer.DrawEdge(g, new Rectangle((int)Math.Round(x), bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
             numTicks--;
@@ -144,7 +144,7 @@ public static class TrackBarRenderer
 
         InitializeRenderer(VisualStyleElement.TrackBar.TicksVertical.Normal, 1);
 
-        //trivial case
+        // trivial case
         if (numTicks == 1)
         {
             t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, bounds.Y, bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
@@ -155,7 +155,7 @@ public static class TrackBarRenderer
 
         while (numTicks > 0)
         {
-            //draw the nth tick
+            // draw the nth tick
             float y = bounds.Y + ((float)(numTicks - 1)) * inc;
             t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, (int)Math.Round(y), bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
             numTicks--;

@@ -109,7 +109,7 @@ public partial class TabControl : Control
         {
             if (_alignment != value)
             {
-                //valid values are 0x0 to 0x3
+                // valid values are 0x0 to 0x3
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _alignment = value;
@@ -151,13 +151,13 @@ public partial class TabControl : Control
         {
             if (_appearance != value)
             {
-                //valid values are 0x0 to 0x2
+                // valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _appearance = value;
                 RecreateHandle();
 
-                //Fire OnStyleChanged(EventArgs.Empty) here since we are no longer calling UpdateStyles( ) but always reCreating the Handle.
+                // Fire OnStyleChanged(EventArgs.Empty) here since we are no longer calling UpdateStyles( ) but always reCreating the Handle.
                 OnStyleChanged(EventArgs.Empty);
             }
         }
@@ -169,9 +169,9 @@ public partial class TabControl : Control
     {
         get
         {
-            //The tab control can only be rendered in 1 color: System's Control color.
-            //So, always return this value... otherwise, we're inheriting the forms backcolor
-            //and passing it on to the pab pages.
+            // The tab control can only be rendered in 1 color: System's Control color.
+            // So, always return this value... otherwise, we're inheriting the forms backcolor
+            // and passing it on to the pab pages.
             return SystemColors.Control;
         }
         set
@@ -333,9 +333,9 @@ public partial class TabControl : Control
 
             if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
             {
-                //We want to turn on mirroring for Form explicitly.
+                // We want to turn on mirroring for Form explicitly.
                 cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
-                //Don't need these styles when mirroring is turned on.
+                // Don't need these styles when mirroring is turned on.
                 cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
             }
 
@@ -406,7 +406,7 @@ public partial class TabControl : Control
 
         set
         {
-            //valid values are 0x0 to 0x1
+            // valid values are 0x0 to 0x1
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_drawMode != value)
@@ -760,7 +760,7 @@ public partial class TabControl : Control
                 return;
             }
 
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             _sizeMode = value;
@@ -1234,7 +1234,7 @@ public partial class TabControl : Control
             return;
         }
 
-        //Add the handle to hashtable for Ids ..
+        // Add the handle to hashtable for Ids ..
         _windowId = NativeWindow.CreateWindowId(this);
         _handleInTable = true;
 
@@ -2046,10 +2046,10 @@ public partial class TabControl : Control
                 switch (nmhdr->code)
                 {
                     // new switch added to prevent the TabControl from changing to next TabPage ...
-                    //in case of validation cancelled...
-                    //Turn  tabControlState[State.UISelection] = false and Return So that no WmSelChange() gets fired.
-                    //If validation not cancelled then tabControlState[State.UISelection] is turned ON to set the focus on to the ...
-                    //next TabPage..
+                    // in case of validation cancelled...
+                    // Turn  tabControlState[State.UISelection] = false and Return So that no WmSelChange() gets fired.
+                    // If validation not cancelled then tabControlState[State.UISelection] is turned ON to set the focus on to the ...
+                    // next TabPage..
 
                     case PInvoke.TCN_SELCHANGING:
                         if (WmSelChanging())

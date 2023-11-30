@@ -23,21 +23,21 @@ internal partial class DesignerActionUI : IDisposable
 {
     private static readonly TraceSwitch s_designerActionPanelTraceSwitch = new("DesignerActionPanelTrace", "DesignerActionPanel tracing");
 
-    private Adorner _designerActionAdorner; //used to add designeraction-related glyphs
-    private IServiceProvider _serviceProvider; //standard service provider
-    private ISelectionService _selectionService; //used to determine if comps have selection or not
-    private DesignerActionService _designerActionService; //this is how all designeractions will be managed
-    private DesignerActionUIService _designerActionUIService; //this is how all designeractions UI elements will be managed
-    private BehaviorService _behaviorService; //this is how all of our UI is implemented (glyphs, behaviors, etc...)
-    private DesignerActionKeyboardBehavior? _designerActionKeyboardBehavior;   //out keyboard behavior
-    private readonly Dictionary<object, DesignerActionGlyph> _componentToGlyph; //used for quick reference between components and our glyphs
-    private Control _marshalingControl; //used to invoke events on our main gui thread
+    private Adorner _designerActionAdorner; // used to add designeraction-related glyphs
+    private IServiceProvider _serviceProvider; // standard service provider
+    private ISelectionService _selectionService; // used to determine if comps have selection or not
+    private DesignerActionService _designerActionService; // this is how all designeractions will be managed
+    private DesignerActionUIService _designerActionUIService; // this is how all designeractions UI elements will be managed
+    private BehaviorService _behaviorService; // this is how all of our UI is implemented (glyphs, behaviors, etc...)
+    private DesignerActionKeyboardBehavior? _designerActionKeyboardBehavior;   // out keyboard behavior
+    private readonly Dictionary<object, DesignerActionGlyph> _componentToGlyph; // used for quick reference between components and our glyphs
+    private Control _marshalingControl; // used to invoke events on our main gui thread
     private IComponent? _lastPanelComponent;
 
     private readonly IWin32Window? _mainParentWindow;
     internal DesignerActionToolStripDropDown? designerActionHost;
 
-    private readonly MenuCommand? _cmdShowDesignerActions; //used to respond to the Alt+Shift+F10 command
+    private readonly MenuCommand? _cmdShowDesignerActions; // used to respond to the Alt+Shift+F10 command
     private bool _inTransaction;
     private IComponent? _relatedComponentTransaction;
     private DesignerActionGlyph? _relatedGlyphTransaction;
@@ -69,10 +69,10 @@ internal partial class DesignerActionUI : IDisposable
         _behaviorService = behaviorService;
         _selectionService = selectionService;
 
-        //query for our DesignerActionService
+        // query for our DesignerActionService
         if (!serviceProvider.TryGetService(out DesignerActionService? designerActionService))
         {
-            //start the service
+            // start the service
             designerActionService = new DesignerActionService(serviceProvider);
             _disposeActionService = true;
         }
@@ -187,10 +187,10 @@ internal partial class DesignerActionUI : IDisposable
             {
                 DesignerActionBehavior dab = new DesignerActionBehavior(_serviceProvider, comp, dalColl, this);
 
-                //if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
+                // if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
                 if (comp is not Control or ToolStripDropDown)
                 {
-                    //Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
+                    // Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
                     ComponentTray? componentTray = _serviceProvider.GetService<ComponentTray>();
                     if (componentTray is not null)
                     {
@@ -203,11 +203,11 @@ internal partial class DesignerActionUI : IDisposable
                     }
                 }
 
-                //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
-                //if the related comp is a control, then this shortcut will be off its bounds
+                // either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
+                // if the related comp is a control, then this shortcut will be off its bounds
                 designerActionGlyph ??= new DesignerActionGlyph(dab, _designerActionAdorner);
 
-                //store off this relationship
+                // store off this relationship
                 _componentToGlyph[comp] = designerActionGlyph;
             }
             else
@@ -235,7 +235,7 @@ internal partial class DesignerActionUI : IDisposable
     /// </summary>
     private void OnComponentChanged(object? source, ComponentChangedEventArgs ce)
     {
-        //validate event args
+        // validate event args
         if (ce.Component is null || ce.Member is null || !IsDesignerActionPanelVisible)
         {
             return;
@@ -247,7 +247,7 @@ internal partial class DesignerActionUI : IDisposable
             return;
         }
 
-        //if something changed on a component we have actions associated with then invalidate all (repaint & reposition)
+        // if something changed on a component we have actions associated with then invalidate all (repaint & reposition)
         if (_componentToGlyph.TryGetValue(ce.Component, out DesignerActionGlyph? glyph))
         {
             glyph.Invalidate();
@@ -322,7 +322,7 @@ internal partial class DesignerActionUI : IDisposable
             return;
         }
 
-        //recreate a designeraction panel
+        // recreate a designeraction panel
         if (glyphWithPanelToRegen.Behavior is DesignerActionBehavior behaviorWithPanelToRegen)
         {
             Debug.Assert(behaviorWithPanelToRegen.RelatedComponent is not null, "could not find related component for this refresh");
@@ -437,7 +437,7 @@ internal partial class DesignerActionUI : IDisposable
 
         if (e.ChangeType == DesignerActionListsChangedType.ActionListsRemoved && e.ActionLists!.Count == 0)
         {
-            //only remove our glyph if there are no more DesignerActions associated with it.
+            // only remove our glyph if there are no more DesignerActions associated with it.
             RemoveActionGlyph(e.RelatedObject);
         }
         else if (g is not null)
@@ -458,14 +458,14 @@ internal partial class DesignerActionUI : IDisposable
     // we cannot attach several menu command to the same command id, we need a single entry point, we put it in designershortcutui. but we need a way to call the show ui on the related behavior hence this internal function to hack it together. we return false if we have nothing to display, we hide it and return true if we're already displaying
     internal bool ShowDesignerActionPanelForPrimarySelection()
     {
-        //can't do anything w/o selection service
+        // can't do anything w/o selection service
         if (_selectionService is null)
         {
             return false;
         }
 
         object? primarySelection = _selectionService.PrimarySelection;
-        //verify that we have obtained a valid component with designer actions
+        // verify that we have obtained a valid component with designer actions
         if (primarySelection is null || !_componentToGlyph.TryGetValue(primarySelection, out DesignerActionGlyph? glyph))
         {
             return false;
@@ -648,7 +648,7 @@ internal partial class DesignerActionUI : IDisposable
             glyphLocationScreenCoord = _behaviorService.AdornerWindowPointToScreen(glyph.Bounds.Location);
         }
 
-        //ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem
+        // ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem
         else if (relatedComponent is ToolStripItem item)
         {
             if (item.Owner is not null)

@@ -399,7 +399,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value == MaskFormat.IncludePrompt)
@@ -515,7 +515,7 @@ public partial class MaskedTextBox : TextBoxBase
         }
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_insertMode != value)
@@ -570,7 +570,7 @@ public partial class MaskedTextBox : TextBoxBase
                     // Note that the insert key state should be per process and its initial state insert, this is the
                     // behavior of apps like WinWord, WordPad and VS; so we have to keep track of it and not query its
                     // system value.
-                    //return Control.IsKeyLocked(Keys.Insert);
+                    // return Control.IsKeyLocked(Keys.Insert);
                     return _flagState[INSERT_TOGGLED];
 
                 default:
@@ -714,8 +714,8 @@ public partial class MaskedTextBox : TextBoxBase
                 _maskedTextProvider.PasswordChar,
                 _maskedTextProvider.AsciiOnly);
 
-            //text is null when setting to a different mask value or when resetting the mask to null.
-            //text is not null only when setting the mask from null to some value.
+            // text is null when setting to a different mask value or when resetting the mask to null.
+            // text is not null only when setting the mask from null to some value.
             SetMaskedTextProvider(newProvider, text);
         }
     }
@@ -1250,8 +1250,8 @@ public partial class MaskedTextBox : TextBoxBase
         {
             if (_textAlign != value)
             {
-                //verify that 'value' is a valid enum type...
-                //valid values are 0x0 to 0x2
+                // verify that 'value' is a valid enum type...
+                // valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _textAlign = value;
@@ -1311,7 +1311,7 @@ public partial class MaskedTextBox : TextBoxBase
                 return;
             }
 
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
             // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
@@ -1608,8 +1608,8 @@ public partial class MaskedTextBox : TextBoxBase
         }
 
         // Reposition caret.  Call base.SelectInternal for perf reasons.
-        //this.SelectionLength = 0;
-        //this.SelectionStart  = _caretTestPos; // new caret position.
+        // this.SelectionLength = 0;
+        // this.SelectionStart  = _caretTestPos; // new caret position.
         base.SelectInternal(_caretTestPos, 0, _maskedTextProvider.Length);
 
         return;
@@ -1877,8 +1877,8 @@ public partial class MaskedTextBox : TextBoxBase
             {
                 // Unsupported keys should not be handled to allow generating the corresponding message
                 // which is handled in the WndProc.
-                //case Keys.Z:  // ctrl-z == Undo.
-                //case Keys.Y:  // ctrl-y == Redo.
+                // case Keys.Z:  // ctrl-z == Undo.
+                // case Keys.Y:  // ctrl-y == Redo.
                 //    e.Handled = true;
                 //    return;
 
@@ -2813,7 +2813,7 @@ public partial class MaskedTextBox : TextBoxBase
             }
         }
 
-        return false; //message not handled.
+        return false; // message not handled.
     }
 
     /// <summary>

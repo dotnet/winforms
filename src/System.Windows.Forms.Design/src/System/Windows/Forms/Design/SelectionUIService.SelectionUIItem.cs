@@ -148,7 +148,7 @@ internal sealed partial class SelectionUIService
             brush.Dispose();
             graphics.Clip = oldClip;
             ControlPaint.DrawSelectionFrame(graphics, false, outer, inner, borderColor);
-            //if it's not locked & it is sizeable...
+            // if it's not locked & it is sizeable...
             if (((GetRules() & SelectionRules.Locked) == SelectionRules.None) && (GetRules() & SelectionRules.AllSizeable) != SelectionRules.None)
             {
                 // upper left

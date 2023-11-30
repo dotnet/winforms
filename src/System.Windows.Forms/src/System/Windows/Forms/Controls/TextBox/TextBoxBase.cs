@@ -64,8 +64,8 @@ public abstract partial class TextBoxBase : Control
     private int _requestedHeight;
     private bool _integralHeightAdjust;
 
-    //these indices are used to cache the values of the selection, by doing this
-    //if the handle isn't created yet, we don't force a creation.
+    // these indices are used to cache the values of the selection, by doing this
+    // if the handle isn't created yet, we don't force a creation.
     private int _selectionStart;
     private int _selectionLength;
 
@@ -637,7 +637,7 @@ public abstract partial class TextBoxBase : Control
         }
         set
         {
-            //unparse this string list...
+            // unparse this string list...
             if (value is not null && value.Length > 0)
             {
                 Text = string.Join(Environment.NewLine, value);
@@ -836,7 +836,7 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    //  GetPreferredSizeCore
+    // GetPreferredSizeCore
     //  This method can return a different value than PreferredHeight!  It properly handles
     //  border style + multiline and wordwrap.
 
@@ -909,8 +909,8 @@ public abstract partial class TextBoxBase : Control
             PInvoke.SendMessage(this, PInvoke.EM_GETSEL, (WPARAM)(&startResult), ref end);
             start = startResult;
 
-            //Here, we return the max of either 0 or the # returned by
-            //the windows call.  This eliminates a problem on nt4 where
+            // Here, we return the max of either 0 or the # returned by
+            // the windows call.  This eliminates a problem on nt4 where
             // a huge negative # is being returned.
             start = Math.Max(0, start);
             // ditto for end
@@ -1750,8 +1750,8 @@ public abstract partial class TextBoxBase : Control
 
         if (start > textLen)
         {
-            //We shouldn't allow positive length if you're starting at the end, but
-            //should allow negative length.
+            // We shouldn't allow positive length if you're starting at the end, but
+            // should allow negative length.
             long longLength = Math.Min(0, (long)length + start - textLen);
             if (longLength < int.MinValue)
             {
@@ -1778,7 +1778,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private protected virtual void SelectInternal(int start, int length, int textLen)
     {
-        //if our handle is created - send message...
+        // if our handle is created - send message...
         if (IsHandleCreated)
         {
             AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
@@ -1792,8 +1792,8 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            //otherwise, wait until handle is created to send this message.
-            //Store the indices until then...
+            // otherwise, wait until handle is created to send this message.
+            // Store the indices until then...
             _selectionStart = start;
             _selectionLength = length;
             _textBoxFlags[setSelectionOnHandleCreated] = true;
@@ -1875,7 +1875,7 @@ public abstract partial class TextBoxBase : Control
                 }
                 catch (OverflowException)
                 {
-                    //Since we overflowed, cap at the max/min value: we'll correct the value below
+                    // Since we overflowed, cap at the max/min value: we'll correct the value below
                     end = start > 0 ? int.MaxValue : int.MinValue;
                 }
             }

@@ -9,7 +9,7 @@ internal partial class TableLayout
     {
         private int _maxSize;
         private int _minSize;
-        private bool _isStart;  //whether there is an element starting in this strip
+        private bool _isStart;  // whether there is an element starting in this strip
 
         public int MinSize
         {

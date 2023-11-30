@@ -16,16 +16,16 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 internal class ToolboxItemSnapLineBehavior : Behavior
 {
-    private readonly IServiceProvider serviceProvider; //used for snaplines
-    private readonly BehaviorService behaviorService; //pointer to our big & bad service
-    private readonly ControlDesigner designer; //used for snaplines as well
-    private bool isPushed; //used to track if this is currently on the stack or not
-    private Rectangle lastRectangle; //cache the last mouse loc - so we can ignore when mouse doesn't move
-    private Point lastOffset; //cache the last snap so we know where to create our control if dropped
-    private DragAssistanceManager dragManager; //used to apply snaplines when dragging a new tool rect on the designer's surface
-    private readonly bool targetAllowsSnapLines; //indicates if the drop target allows snaplines (flowpanels don't for ex)
-    private readonly StatusCommandUI statusCommandUI; //used to update the StatusBar Information.
-    private readonly bool targetAllowsDragBox;    //indicates if the drop target allows the generic drag box to be drawn
+    private readonly IServiceProvider serviceProvider; // used for snaplines
+    private readonly BehaviorService behaviorService; // pointer to our big & bad service
+    private readonly ControlDesigner designer; // used for snaplines as well
+    private bool isPushed; // used to track if this is currently on the stack or not
+    private Rectangle lastRectangle; // cache the last mouse loc - so we can ignore when mouse doesn't move
+    private Point lastOffset; // cache the last snap so we know where to create our control if dropped
+    private DragAssistanceManager dragManager; // used to apply snaplines when dragging a new tool rect on the designer's surface
+    private readonly bool targetAllowsSnapLines; // indicates if the drop target allows snaplines (flowpanels don't for ex)
+    private readonly StatusCommandUI statusCommandUI; // used to update the StatusBar Information.
+    private readonly bool targetAllowsDragBox;    // indicates if the drop target allows the generic drag box to be drawn
 
     /// <summary>
     ///  Constructor that caches the designer (which invoked us) and a ptr
@@ -48,7 +48,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
         : this(serviceProvider, behaviorService)
     {
         designer = controlDesigner;
-        //check to see if the current designer participate with SnapLines
+        // check to see if the current designer participate with SnapLines
         if (controlDesigner is not null && !controlDesigner.ParticipatesWithSnapLines)
         {
             targetAllowsSnapLines = false;
@@ -83,7 +83,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             }
             else
             {
-                //clean up all our temp objects
+                // clean up all our temp objects
                 if (!lastRectangle.IsEmpty)
                 {
                     behaviorService.Invalidate(lastRectangle);
@@ -92,7 +92,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 lastOffset = Point.Empty;
                 lastRectangle = Rectangle.Empty;
 
-                //destroy the snapline engine (if we used it)
+                // destroy the snapline engine (if we used it)
                 if (dragManager is not null)
                 {
                     dragManager.OnMouseUp();
@@ -110,11 +110,11 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     /// </summary>
     private ToolboxSnapDragDropEventArgs CreateToolboxSnapArgs(DragEventArgs e, Point mouseLoc)
     {
-        //we're trying to set these two vars here...
+        // we're trying to set these two vars here...
         ToolboxSnapDragDropEventArgs.SnapDirection snapDirections = ToolboxSnapDragDropEventArgs.SnapDirection.None;
         Point offset = Point.Empty;
 
-        //as soon as these vars are true - we can stop looking at lines
+        // as soon as these vars are true - we can stop looking at lines
         bool horizontalComponentIdentified = false;
         bool verticalComponentIdentified = false;
 
@@ -128,16 +128,16 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 {
                     if (!horizontalComponentIdentified && line.x1 == line.x2)
                     {
-                        //check for vertical equality
+                        // check for vertical equality
                         if (line.x1 == lastRectangle.Left)
                         {
-                            //we had a line on the left of the box - so we must have snapped left
+                            // we had a line on the left of the box - so we must have snapped left
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Left;
                             offset.X = lastRectangle.Left - mouseLoc.X;
                         }
                         else
-                        {//MUST BE RIGHT?  if (lines.x1 == lastRectangle.Right) {
-                         //we had a line on the right of the box - so we must have snapped right
+                        {// MUST BE RIGHT?  if (lines.x1 == lastRectangle.Right) {
+                         // we had a line on the right of the box - so we must have snapped right
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Right;
                             offset.X = lastRectangle.Right - mouseLoc.X;
                         }
@@ -146,16 +146,16 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                     }
                     else if (!verticalComponentIdentified && line.y1 == line.y2)
                     {
-                        //check for vertical equality
+                        // check for vertical equality
                         if (line.y1 == lastRectangle.Top)
                         {
-                            //we had a line on the top of the box - so we must have snapped top
+                            // we had a line on the top of the box - so we must have snapped top
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Top;
                             offset.Y = lastRectangle.Top - mouseLoc.Y;
                         }
                         else if (line.y1 == lastRectangle.Bottom)
                         {
-                            //we had a line on the bottom of the box - so we must have snapped bottom
+                            // we had a line on the bottom of the box - so we must have snapped bottom
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Bottom;
                             offset.Y = lastRectangle.Bottom - mouseLoc.Y;
                         }
@@ -168,16 +168,16 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 {
                     if (!verticalComponentIdentified && line.x1 == line.x2)
                     {
-                        //now, we're looking at a vertical margin line - is it above?
+                        // now, we're looking at a vertical margin line - is it above?
                         if (Math.Max(line.y1, line.y2) <= lastRectangle.Top)
                         {
-                            //aha - we had a margin line at the top of the box
+                            // aha - we had a margin line at the top of the box
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Top;
                             offset.Y = lastRectangle.Top - mouseLoc.Y;
                         }
                         else
                         {
-                            //aha - we had a margin line at the bottom of the box
+                            // aha - we had a margin line at the bottom of the box
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Bottom;
                             offset.Y = lastRectangle.Bottom - mouseLoc.Y;
                         }
@@ -186,16 +186,16 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                     }
                     else if (!horizontalComponentIdentified && line.y1 == line.y2)
                     {
-                        //now, we're looking at a horz margin line - is it left?
+                        // now, we're looking at a horz margin line - is it left?
                         if (Math.Max(line.x1, line.x2) <= lastRectangle.Left)
                         {
-                            //aha - we had a margin line at the left of the box
+                            // aha - we had a margin line at the left of the box
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Left;
                             offset.X = lastRectangle.Left - mouseLoc.X;
                         }
                         else
                         {
-                            //aha - we had a margin line at the right of the box
+                            // aha - we had a margin line at the right of the box
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Right;
                             offset.X = lastRectangle.Right - mouseLoc.X;
                         }
@@ -206,13 +206,13 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 
                 if (horizontalComponentIdentified && verticalComponentIdentified)
                 {
-                    //we've found both components - stop looping
+                    // we've found both components - stop looping
                     break;
                 }
             }
         }
 
-        //set default values is we haven't identified any 'snaps'
+        // set default values is we haven't identified any 'snaps'
         if (!horizontalComponentIdentified)
         {
             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Left;
@@ -225,7 +225,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             offset.Y = lastRectangle.Top - mouseLoc.Y;
         }
 
-        //create our arg and pass it back
+        // create our arg and pass it back
         return new ToolboxSnapDragDropEventArgs(snapDirections, offset, e);
     }
 
@@ -258,17 +258,17 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 
         try
         {
-            //offset the mouse loc to screen coords for calculations on drops
+            // offset the mouse loc to screen coords for calculations on drops
             Point screenOffset = behaviorService.AdornerWindowToScreen();
 
-            //build up our extra-special event args
+            // build up our extra-special event args
             ToolboxSnapDragDropEventArgs se = CreateToolboxSnapArgs(e, new Point(e.X - screenOffset.X, e.Y - screenOffset.Y));
 
             base.OnDragDrop(g, se);
         }
         finally
         {
-            //clear everything up
+            // clear everything up
             IsPushed = false;
         }
     }
@@ -309,18 +309,18 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 
         if (altKeyPressed && dragManager is not null)
         {
-            //erase any snaplines (if we had any)
+            // erase any snaplines (if we had any)
             dragManager.EraseSnapLines();
         }
 
-        //call base
+        // call base
         bool retValue = base.OnMouseMove(g, button, mouseLoc);
 
-        //identify where the new box should be...
+        // identify where the new box should be...
         Rectangle newRectangle = new Rectangle(mouseLoc.X - DesignerUtils.BOXIMAGESIZE / 2, mouseLoc.Y - DesignerUtils.BOXIMAGESIZE / 2,
                                           DesignerUtils.BOXIMAGESIZE, DesignerUtils.BOXIMAGESIZE);
 
-        //don't do anything if the loc is the same
+        // don't do anything if the loc is the same
         if (newRectangle != lastRectangle)
         {
             if (dragManager is not null && targetAllowsSnapLines && !altKeyPressed)
@@ -329,10 +329,10 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 newRectangle.Offset(lastOffset.X, lastOffset.Y);
             }
 
-            //erase old
+            // erase old
             if (!lastRectangle.IsEmpty)
             {
-                //build up the invalid region
+                // build up the invalid region
                 using Region invalidRegion = new Region(lastRectangle);
                 invalidRegion.Exclude(newRectangle);
                 behaviorService.Invalidate(invalidRegion);
@@ -344,7 +344,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 graphics.DrawImage(DesignerUtils.BoxImage, newRectangle.Location);
             }
 
-            //offset the mouse loc to screen coords for calculations on drops
+            // offset the mouse loc to screen coords for calculations on drops
             IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
             if (host is not null)
             {
@@ -362,7 +362,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 dragManager.RenderSnapLinesInternal();
             }
 
-            //store this off for the next time around
+            // store this off for the next time around
             lastRectangle = newRectangle;
         }
 

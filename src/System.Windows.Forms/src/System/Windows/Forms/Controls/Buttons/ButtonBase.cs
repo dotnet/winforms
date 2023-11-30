@@ -124,7 +124,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         set
         {
             base.AutoSize = value;
-            //don't show ellipsis if the control is autosized
+            // don't show ellipsis if the control is autosized
             if (value)
             {
                 AutoEllipsis = false;
@@ -851,7 +851,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 _imageList.Disposed -= new EventHandler(DetachImageList);
             }
 
-            //Dispose the tooltip if one present..
+            // Dispose the tooltip if one present..
             if (_textToolTip is not null)
             {
                 _textToolTip.Dispose();

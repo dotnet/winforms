@@ -4793,7 +4793,7 @@ public class ListViewTests
         ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
         Assert.Equal("Test caption", wrapper.Text);
-        //Assert.Equal method does not work because char* cannot be used as an argument to it
+        // Assert.Equal method does not work because char* cannot be used as an argument to it
         Assert.Equal(string.Empty, new string(wrapper.Info.lpszText));
     }
 
@@ -4807,7 +4807,7 @@ public class ListViewTests
         char* expected = (char*)(-1);
 
         Assert.Null(wrapper.Text);
-        //Assert.Equal method does not work because char* cannot be used as an argument to it
+        // Assert.Equal method does not work because char* cannot be used as an argument to it
         Assert.True(wrapper.Info.lpszText == expected);
     }
 

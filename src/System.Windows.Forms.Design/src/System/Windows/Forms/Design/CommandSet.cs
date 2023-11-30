@@ -45,11 +45,11 @@ internal partial class CommandSet : IDisposable
 
     private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2"; // See VSWhidbey #172531
 
-    //these are used for snapping control via keyboard movement
-    protected DragAssistanceManager? dragManager; //point to the snapline engine (only valid between keydown and timer expiration)
-    private Timer? _snapLineTimer; //used to track the time from when a snapline is rendered until it should expire
-    private BehaviorService? _behaviorService; //demand created pointer to the behaviorservice
-    private StatusCommandUI _statusCommandUI; //Used to update the statusBar Information.
+    // these are used for snapping control via keyboard movement
+    protected DragAssistanceManager? dragManager; // point to the snapline engine (only valid between keydown and timer expiration)
+    private Timer? _snapLineTimer; // used to track the time from when a snapline is rendered until it should expire
+    private BehaviorService? _behaviorService; // demand created pointer to the behaviorservice
+    private StatusCommandUI _statusCommandUI; // Used to update the statusBar Information.
     private readonly IUIService? _uiService;
 
     /// <summary>
@@ -260,7 +260,7 @@ internal partial class CommandSet : IDisposable
         {
             if (_snapLineTimer is null)
             {
-                //instantiate our snapline timer
+                // instantiate our snapline timer
                 _snapLineTimer = new Timer
                 {
                     Interval = DesignerUtils.SNAPELINEDELAY
@@ -315,7 +315,7 @@ internal partial class CommandSet : IDisposable
                 {
                     IWin32Window? parent = null;
 
-                    //REVIEW: This smells wrong
+                    // REVIEW: This smells wrong
                     if (obj is IWin32Window)
                     {
 #pragma warning disable 1717 // assignment to self
@@ -792,11 +792,11 @@ internal partial class CommandSet : IDisposable
 
             try
             {
-                //if we can find the behaviorservice, then we can use it and the SnapLineEngine to help us
-                //move these controls...
+                // if we can find the behaviorservice, then we can use it and the SnapLineEngine to help us
+                // move these controls...
                 if (BehaviorService is not null)
                 {
-                    Control? primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponentTray)
+                    Control? primaryControl = comp as Control; // this can be null (when we are moving a component in the ComponentTray)
 
                     bool useSnapLines = BehaviorService.UseSnapLines;
 
@@ -806,19 +806,19 @@ internal partial class CommandSet : IDisposable
                         EndDragManager();
                     }
 
-                    //If we CTRL+Arrow and we're using SnapLines - snap to the next location
-                    //Don't snap if we are moving a component in the ComponentTray
+                    // If we CTRL+Arrow and we're using SnapLines - snap to the next location
+                    // Don't snap if we are moving a component in the ComponentTray
                     if (invertSnap && useSnapLines && primaryControl is not null)
                     {
                         List<IComponent> selComps = SelectionService.GetSelectedComponents().Cast<IComponent>().ToList();
 
-                        //create our snapline engine
+                        // create our snapline engine
                         dragManager = new DragAssistanceManager(comp.Site, selComps);
 
-                        //ask our snapline engine to find the nearest snap position with the given direction
+                        // ask our snapline engine to find the nearest snap position with the given direction
                         Point snappedOffset = dragManager.OffsetToNearestSnapLocation(primaryControl, new Point(moveOffsetX, moveOffsetY));
 
-                        //update the offset according to the snapline engine
+                        // update the offset according to the snapline engine
 
                         // This is the offset assuming origin is in the upper-left.
                         moveOffsetX = snappedOffset.X;
@@ -843,7 +843,7 @@ internal partial class CommandSet : IDisposable
                         }
                     }
 
-                    //if we used a regular arrow key and we're in SnapToGrid mode...
+                    // if we used a regular arrow key and we're in SnapToGrid mode...
 
                     else if (!invertSnap && !useSnapLines)
                     {
@@ -862,7 +862,7 @@ internal partial class CommandSet : IDisposable
 
                             if (primaryControl is not null)
                             {
-                                //ask the parent to adjust our wanna-be snapped position
+                                // ask the parent to adjust our wanna-be snapped position
                                 if (host.GetDesigner(primaryControl.Parent!) is ParentControlDesigner parentDesigner)
                                 {
                                     Point loc = primaryControl.Location;
@@ -887,7 +887,7 @@ internal partial class CommandSet : IDisposable
 
                                     loc = parentDesigner.GetSnappedPoint(loc);
 
-                                    //reset our offsets now that we've snapped correctly
+                                    // reset our offsets now that we've snapped correctly
                                     if (moveOffsetX != 0)
                                     {
                                         moveOffsetX = loc.X - primaryControl.Location.X;
@@ -922,7 +922,7 @@ internal partial class CommandSet : IDisposable
                     {
                         if (host.GetDesigner(component) is ControlDesigner des && ((des.SelectionRules & rules) != rules))
                         {
-                            //the control must match the rules, if not, then we don't move it
+                            // the control must match the rules, if not, then we don't move it
                             continue;
                         }
 
@@ -936,7 +936,7 @@ internal partial class CommandSet : IDisposable
                             propLoc.SetValue(component, loc);
                         }
 
-                        //change the Status information ....
+                        // change the Status information ....
                         if (component == SelectionService.PrimarySelection)
                         {
                             _statusCommandUI?.SetStatusInformation(component as Component);
@@ -950,10 +950,10 @@ internal partial class CommandSet : IDisposable
 
                 if (dragManager is not null)
                 {
-                    //start our timer for the snaplines
+                    // start our timer for the snaplines
                     SnapLineTimer.Start();
 
-                    //render any lines
+                    // render any lines
                     dragManager.RenderSnapLinesInternal();
                 }
             }
@@ -969,9 +969,9 @@ internal partial class CommandSet : IDisposable
         MenuCommand cmd = (MenuCommand)sender!;
         CommandID id = cmd.CommandID!;
 
-        //Need to get the location for the primary control, we do this here
-        //(instead of onselectionchange) because the control could be dragged
-        //around once it is selected and might have a new location
+        // Need to get the location for the primary control, we do this here
+        // (instead of onselectionchange) because the control could be dragged
+        // around once it is selected and might have a new location
         Point primaryLocation = GetLocation(primarySelection!);
         Size primarySize = GetSize(primarySelection!);
 
@@ -1162,7 +1162,7 @@ internal partial class CommandSet : IDisposable
 
                         if (prop is null || gridSize.IsEmpty)
                         {
-                            //bail silently here
+                            // bail silently here
                             return;
                         }
                     }
@@ -1280,7 +1280,7 @@ internal partial class CommandSet : IDisposable
                     trans = host.CreateTransaction(batchString);
                 }
 
-                //subhag calculate the union REctangle : ASURT 67753
+                // subhag calculate the union REctangle : ASURT 67753
                 //
                 int top = int.MaxValue;
                 int left = int.MaxValue;
@@ -1314,8 +1314,8 @@ internal partial class CommandSet : IDisposable
                         Size size = (Size)sizeProp.GetValue(comp)!;
                         Point loc = (Point)locProp.GetValue(comp)!;
 
-                        //cache the first parent we see - if there's a mix of different parents - we'll
-                        //just center based on the first one
+                        // cache the first parent we see - if there's a mix of different parents - we'll
+                        // just center based on the first one
                         viewParent ??= comp.Parent;
 
                         if (loc.X < left)
@@ -1329,8 +1329,8 @@ internal partial class CommandSet : IDisposable
                     }
                 }
 
-                //if we never found a viewParent (some read-only inherited scenarios
-                //then simply bail
+                // if we never found a viewParent (some read-only inherited scenarios
+                // then simply bail
                 if (viewParent is null)
                 {
                     return;
@@ -1508,7 +1508,7 @@ internal partial class CommandSet : IDisposable
                                     continue;
                                 }
 
-                                //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
+                                // Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                 // see bug 488115
                                 Control? parent = c.Parent;
                                 if (parent is not null
@@ -1532,10 +1532,10 @@ internal partial class CommandSet : IDisposable
                                     continue;
                                 }
 
-                                //VSWhidbey # 370813.
-                                //Cannot use idx = 1 to check (see diff) due to the call to PrependComponentNames, which
-                                //adds non IComponent objects to the beginning of selectedComponents. Thus when we finally get
-                                //here idx would be > 1.
+                                // VSWhidbey # 370813.
+                                // Cannot use idx = 1 to check (see diff) due to the call to PrependComponentNames, which
+                                // adds non IComponent objects to the beginning of selectedComponents. Thus when we finally get
+                                // here idx would be > 1.
                                 if (obj is Control selectedControl)
                                 {
                                     if (commonParent is null)
@@ -1634,7 +1634,7 @@ internal partial class CommandSet : IDisposable
                                 continue;
                             }
 
-                            //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
+                            // Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                             // see bug 488115
                             if (obj is Control c)
                             {
@@ -1932,7 +1932,7 @@ internal partial class CommandSet : IDisposable
                     //
                     if (components is not null && components.Count > 0)
                     {
-                        //Make copy of Items in Array..
+                        // Make copy of Items in Array..
                         object[] allComponents = new object[components.Count];
                         components.CopyTo(allComponents, 0);
 
@@ -2034,7 +2034,7 @@ internal partial class CommandSet : IDisposable
 
                                     if (foundAssociatedControl)
                                     {
-                                        continue; //continue from here so that we don't add the associated component of a control that failed paste operation.
+                                        continue; // continue from here so that we don't add the associated component of a control that failed paste operation.
                                     }
                                 }
 
@@ -2046,7 +2046,7 @@ internal partial class CommandSet : IDisposable
                                     continue;
                                 }
 
-                                //store associatedComponents.
+                                // store associatedComponents.
                                 ICollection? designerComps = cDesigner.AssociatedComponents;
 
                                 ComponentDesigner? parentCompDesigner = ((ITreeDesigner)cDesigner).Parent as ComponentDesigner;
@@ -2076,7 +2076,7 @@ internal partial class CommandSet : IDisposable
 
                                     if (!designer!.AddComponent(curComp, name!, createdItems))
                                     {
-                                        //cache the associatedComponents only for FAILED control.
+                                        // cache the associatedComponents only for FAILED control.
                                         associatedCompsOfFailedControl = designerComps;
                                         // now we will jump out of the using block and call trans.Dispose()
                                         // which in turn calls trans.Cancel for an uncommitted transaction,
@@ -2347,7 +2347,7 @@ internal partial class CommandSet : IDisposable
                 PropertyDescriptor? sizeProp = GetProperty(component, "Size");
                 if (sizeProp is null)
                 {
-                    //if we couldn't get a valid size for our primary selection, we'll fail silently
+                    // if we couldn't get a valid size for our primary selection, we'll fail silently
                     return;
                 }
 
@@ -2373,7 +2373,7 @@ internal partial class CommandSet : IDisposable
                     if (obj.Equals(selPrimary))
                         continue;
 
-                    //if the component is locked, no sizing is allowed...
+                    // if the component is locked, no sizing is allowed...
                     PropertyDescriptor? lockedDesc = GetProperty(obj, "Locked");
                     if (lockedDesc is not null && (bool)lockedDesc.GetValue(obj)!)
                     {
@@ -2632,7 +2632,7 @@ internal partial class CommandSet : IDisposable
 
             SortSelection(selectedObjects, sort);
 
-            //now that we're sorted, lets get our primary selection and it's index
+            // now that we're sorted, lets get our primary selection and it's index
             //
             object? primary = SelectionService.PrimarySelection;
             int primaryIndex = 0;
@@ -2777,7 +2777,7 @@ internal partial class CommandSet : IDisposable
 
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
 
-                //Check to see if the component we are about to move is locked...
+                // Check to see if the component we are about to move is locked...
                 //
                 PropertyDescriptor? lockedDesc = props["Locked"];
                 if (lockedDesc is not null && (bool)lockedDesc.GetValue(curComp)!)
@@ -3547,7 +3547,7 @@ internal partial class CommandSet : IDisposable
             Point pLoc = (Point)pProp.GetValue(p)!;
             Point qLoc = (Point)qProp.GetValue(q)!;
 
-            //if our lefts are equal, then compare tops
+            // if our lefts are equal, then compare tops
             return pLoc.X == qLoc.X ? pLoc.Y - qLoc.Y : pLoc.X - qLoc.X;
         }
     }
@@ -3565,7 +3565,7 @@ internal partial class CommandSet : IDisposable
             Point pLoc = (Point)pProp.GetValue(p)!;
             Point qLoc = (Point)qProp.GetValue(q)!;
 
-            //if our tops are equal, then compare lefts
+            // if our tops are equal, then compare lefts
             return pLoc.Y == qLoc.Y ? pLoc.X - qLoc.X : pLoc.Y - qLoc.Y;
         }
     }

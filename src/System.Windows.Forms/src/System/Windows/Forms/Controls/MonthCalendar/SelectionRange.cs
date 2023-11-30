@@ -33,7 +33,7 @@ public sealed class SelectionRange
     /// </summary>
     public SelectionRange(DateTime lower, DateTime upper)
     {
-        //NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
+        // NOTE: simcooke: we explicitly DO NOT want to throw an exception here - just silently
         //                swap them around. This is because the win32 control can return non-
         //                normalized ranges.
 

@@ -122,7 +122,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 Image = new Icon(typeof(ToolStripMenuItem), "image").ToBitmap(),
                 ImageTransparentColor = Color.Magenta
             };
-            //Add event Handlers
+            // Add event Handlers
             imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
             enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
             AddRange(new ToolStripItem[] { imageToolStripMenuItem, enabledToolStripMenuItem });
@@ -283,7 +283,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         Type t = senderItem.ItemType;
         if (senderItem.ConvertTo)
         {
-            //we are morphing the currentItem
+            // we are morphing the currentItem
             MorphToolStripItem(t);
         }
         else
@@ -519,7 +519,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 ((ComponentDesigner)designer).InitializeNewComponent(null);
             }
 
-            //Set the Image property and DisplayStyle...
+            // Set the Image property and DisplayStyle...
             if (component is ToolStripButton || component is ToolStripSplitButton || component is ToolStripDropDownButton)
             {
                 Image image = null;
@@ -576,7 +576,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         return true;
     }
 
-    //helper function to get the property on the actual Control
+    // helper function to get the property on the actual Control
     private object GetProperty(string propertyName)
     {
         PropertyDescriptor getProperty = TypeDescriptor.GetProperties(currentItem)[propertyName];
@@ -589,7 +589,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         return null;
     }
 
-    //helper function to change the property on the actual Control
+    // helper function to change the property on the actual Control
     protected void ChangeProperty(string propertyName, object value)
     {
         ChangeProperty(currentItem, propertyName, value);

@@ -127,7 +127,7 @@ public static class Help
         // If we can't, though, we can't assume that the path's no good: it might be in
         // the Windows help directory.
         Uri? file = null;
-        string? pathAndFileName = url; //This is our best guess at the path yet.
+        string? pathAndFileName = url; // This is our best guess at the path yet.
 
         file = Resolve(url);
         if (file is not null)

@@ -209,7 +209,7 @@ public partial class ListBox
 
             int currentIndex = CurrentIndex;
 
-            if (_owningListBox.SelectedIndex == -1) //no item selected
+            if (_owningListBox.SelectedIndex == -1) // no item selected
             {
                 PInvoke.SendMessage(_owningListBox, PInvoke.LB_SETCARETINDEX, (WPARAM)currentIndex);
                 return;

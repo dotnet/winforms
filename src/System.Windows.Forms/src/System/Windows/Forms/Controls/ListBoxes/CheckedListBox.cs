@@ -194,7 +194,7 @@ public partial class CheckedListBox : ListBox
         get => base.SelectionMode;
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != SelectionMode.One
                 && value != SelectionMode.None)
@@ -427,7 +427,7 @@ public partial class CheckedListBox : ListBox
         AccessibilityNotifyClients(AccessibleEvents.Focus, index);
         AccessibilityNotifyClients(AccessibleEvents.Selection, index);
 
-        //# VS7 86
+        // # VS7 86
         if (!_killnextselect && (index == _lastSelected || CheckOnClick))
         {
             CheckState currentValue = CheckedItems.GetCheckedState(index);
@@ -643,7 +643,7 @@ public partial class CheckedListBox : ListBox
                 using StringFormat format = new StringFormat();
                 if (UseTabStops)
                 {
-                    //  Set tab stops so it looks similar to a ListBox, at least with the default font size.
+                    // Set tab stops so it looks similar to a ListBox, at least with the default font size.
                     float tabDistance = 3.6f * Font.Height; // about 7 characters
                     float[] tabStops = new float[15];
                     float tabOffset = -(_idealCheckSize + (scaledListItemStartPosition * 2));
@@ -665,7 +665,7 @@ public partial class CheckedListBox : ListBox
                 }
                 else if (UseCustomTabOffsets)
                 {
-                    //Set TabStops to userDefined values
+                    // Set TabStops to userDefined values
                     int wpar = CustomTabOffsets.Count;
                     float[] tabStops = new float[wpar];
                     CustomTabOffsets.CopyTo(tabStops, 0);
@@ -788,7 +788,7 @@ public partial class CheckedListBox : ListBox
             LbnSelChange();
         }
 
-        if (FormattingEnabled) //We want to fire KeyPress only when FormattingEnabled (this is a whidbey property)
+        if (FormattingEnabled) // We want to fire KeyPress only when FormattingEnabled (this is a whidbey property)
         {
             base.OnKeyPress(e);
         }
@@ -847,7 +847,7 @@ public partial class CheckedListBox : ListBox
             savedCheckedItems[i] = CheckedItems.GetCheckedState(i);
         }
 
-        //call the base
+        // call the base
         base.RefreshItems();
 
         // restore the checkedItems...

@@ -272,7 +272,7 @@ public static partial class DataFormats
         {
             s_formatList = new Format[]
             {
-                //         Text name                  Win32 format ID
+                // Text name                  Win32 format ID
                 new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
                 new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
                 new(BitmapConstant,            (int)CLIPBOARD_FORMAT.CF_BITMAP),

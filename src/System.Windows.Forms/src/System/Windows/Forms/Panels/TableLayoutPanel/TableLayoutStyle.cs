@@ -70,7 +70,7 @@ public abstract class TableLayoutStyle
         set { _owner = value; }
     }
 
-    //set the size without doing a layout
+    // set the size without doing a layout
     internal void SetSize(float size)
     {
         Debug.Assert(size >= 0);

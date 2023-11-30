@@ -426,7 +426,7 @@ public class ImageCollectionTests
             bitmap.SetPixel(0, 0, Color.FromArgb(0x12, 0x34, 0x56, 0x78));
             yield return new object[] { transparentColor, bitmap };
 
-            //yield return new object[] { transparentColor, new Bitmap("bitmaps/10x16_one_entry_32bit.ico") };
+            // yield return new object[] { transparentColor, new Bitmap("bitmaps/10x16_one_entry_32bit.ico") };
         }
     }
 
@@ -583,7 +583,7 @@ public class ImageCollectionTests
                 bitmap.SetPixel(0, 0, Color.FromArgb(0x12, 0x34, 0x56, 0x78));
                 yield return new object[] { listTransparentColor, bitmap, transparentColor };
 
-                //yield return new object[] { listTransparentColor, new Bitmap("bitmaps/10x16_one_entry_32bit.ico"), transparentColor };
+                // yield return new object[] { listTransparentColor, new Bitmap("bitmaps/10x16_one_entry_32bit.ico"), transparentColor };
             }
         }
     }

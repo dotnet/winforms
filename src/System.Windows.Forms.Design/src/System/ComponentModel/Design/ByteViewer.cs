@@ -82,21 +82,21 @@ public class ByteViewer : TableLayoutPanel
         int c2 = buffer[index + 2] << 8 | buffer[index + 3];
         int c4, c5;
 
-        //Assign an index (label) value for first two bytes
+        // Assign an index (label) value for first two bytes
         c4 = GetEncodingIndex(c1);
-        //Assign an index (label) value for 3rd and 4th byte
+        // Assign an index (label) value for 3rd and 4th byte
         c5 = GetEncodingIndex(c2);
 
-        //Bellow table is to identify Encoding type based on
-        //first four bytes, those we have converted in index
-        //values for this look up table
-        //values on column are first two bytes and
-        //values on rows are 3rd and 4th byte
+        // Bellow table is to identify Encoding type based on
+        // first four bytes, those we have converted in index
+        // values for this look up table
+        // values on column are first two bytes and
+        // values on rows are 3rd and 4th byte
 
 #pragma warning disable SA1001 // Commas should be spaced correctly
         int[,] encodings =
         {
-               //Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
+               // Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
        /*Unknown*/ { 1   ,5   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
           /*0000*/ { 1   ,1   ,1   ,11   ,1   ,10  ,4   ,1   ,1    ,1    ,1    ,1    ,1   },
           /*feff*/ { 2   ,9   ,5   ,2    ,2   ,2   ,2   ,2   ,2    ,2    ,2    ,2    ,2   },
@@ -279,37 +279,37 @@ public class ByteViewer : TableLayoutPanel
         switch (AnalyzeByteOrderMark(_dataBuf, 0))
         {
             case 2:
-                //_Encoding = Encoding.BigEndianUnicode;
+                // _Encoding = Encoding.BigEndianUnicode;
                 return DisplayMode.Hexdump;
             case 3:
-                //_Encoding = Encoding.Unicode;
+                // _Encoding = Encoding.Unicode;
                 return DisplayMode.Unicode;
             case 4:
             case 5:
-                //_Encoding = Ucs4Encoding.UCS4_Bigendian;
+                // _Encoding = Ucs4Encoding.UCS4_Bigendian;
                 return DisplayMode.Hexdump;
             case 6:
             case 7:
-                //_Encoding = Ucs4Encoding.UCS4_Littleendian;
+                // _Encoding = Ucs4Encoding.UCS4_Littleendian;
                 return DisplayMode.Hexdump;
             case 8:
             case 9:
-                //_Encoding = Ucs4Encoding.UCS4_3412;
+                // _Encoding = Ucs4Encoding.UCS4_3412;
                 return DisplayMode.Hexdump;
             case 10:
             case 11:
-                //_Encoding = Ucs4Encoding.UCS4_2143;
+                // _Encoding = Ucs4Encoding.UCS4_2143;
                 return DisplayMode.Hexdump;
             case 12:
-                //8 ebcdic
+                // 8 ebcdic
                 return DisplayMode.Hexdump;
-            case 13: //9
-                     //_Encoding = new UTF8Encoding(false);
+            case 13: // 9
+                     // _Encoding = new UTF8Encoding(false);
                 return DisplayMode.Ansi;
             case 14:
                 return DisplayMode.Ansi;
             default:
-                //If ByteOrderMark not detected try
+                // If ByteOrderMark not detected try
                 if (_dataBuf.Length > 1024)
                 {
                     size = 512;
@@ -321,7 +321,7 @@ public class ByteViewer : TableLayoutPanel
 
                 for (int i = 0; i < size; i++)
                 {
-                    char c = (char)_dataBuf[i]; //OK we do not care for Unicode now
+                    char c = (char)_dataBuf[i]; // OK we do not care for Unicode now
                     if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))
                     {
                         printablesCount++;
@@ -392,7 +392,7 @@ public class ByteViewer : TableLayoutPanel
             case 0xa794:
                 return 12;
             default:
-                return 0; //unknown
+                return 0; // unknown
         }
     }
 

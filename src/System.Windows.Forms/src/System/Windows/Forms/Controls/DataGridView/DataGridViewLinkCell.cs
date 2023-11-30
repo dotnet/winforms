@@ -441,7 +441,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         DataGridViewLinkCell dataGridViewCell;
         Type thisType = GetType();
 
-        if (thisType == s_cellType) //performance improvement
+        if (thisType == s_cellType) // performance improvement
         {
             dataGridViewCell = new DataGridViewLinkCell();
         }

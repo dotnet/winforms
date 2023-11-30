@@ -321,7 +321,7 @@ public partial class Label : Control, IAutomationLiveRegion
         get => (FlatStyle)_labelState[s_stateFlatStyle];
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_labelState[s_stateFlatStyle] == (int)value)
@@ -972,7 +972,7 @@ public partial class Label : Control, IAutomationLiveRegion
                 Properties.SetObject(s_propImage, null);
             }
 
-            //Dispose the tooltip if one present..
+            // Dispose the tooltip if one present..
             if (_textToolTip is not null)
             {
                 _textToolTip.Dispose();
@@ -1025,7 +1025,7 @@ public partial class Label : Control, IAutomationLiveRegion
         // COMPAT: Everett added random numbers to the height of the label
         if (UseCompatibleTextRendering)
         {
-            //Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
+            // Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
             if (BorderStyle != BorderStyle.None)
             {
                 bordersAndPadding.Height += 6; // taken from Everett.PreferredHeight

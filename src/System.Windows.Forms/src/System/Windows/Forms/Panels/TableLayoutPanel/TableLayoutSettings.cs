@@ -69,10 +69,10 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         get => _borderStyle;
         set
         {
-            //valid values are 0x0 to 0x6
+            // valid values are 0x0 to 0x6
             SourceGenerated.EnumValidator.Validate(value);
             _borderStyle = value;
-            //set the CellBorderWidth according to the current CellBorderStyle.
+            // set the CellBorderWidth according to the current CellBorderStyle.
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
             LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.CellBorderStyle);
@@ -193,7 +193,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);

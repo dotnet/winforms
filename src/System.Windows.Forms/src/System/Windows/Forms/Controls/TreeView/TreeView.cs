@@ -131,12 +131,12 @@ public partial class TreeView : Control
     internal TreeNode? _editNode;
     internal TreeNode _root;
     internal Dictionary<IntPtr, TreeNode> _nodesByHandle = new();
-    internal bool _nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
+    internal bool _nodesCollectionClear; // this is set when the treeNodeCollection is getting cleared and used by TreeView
     internal TreeViewLabelEditNativeWindow? _labelEdit;
     private MouseButtons _downButton;
     private TreeViewDrawMode _drawMode = TreeViewDrawMode.Normal;
 
-    //Properties newly added to TreeView....
+    // Properties newly added to TreeView....
     private ImageList? _internalStateImageList;
     private TreeNode? _topNode;
     private ImageList? _stateImageList;
@@ -146,7 +146,7 @@ public partial class TreeView : Control
     // Sorting
     private IComparer? _treeViewNodeSorter;
 
-    //Events
+    // Events
     private TreeNodeMouseClickEventHandler? _onNodeMouseClick;
     private TreeNodeMouseClickEventHandler? _onNodeMouseDoubleClick;
 
@@ -394,9 +394,9 @@ public partial class TreeView : Control
             {
                 if (RightToLeftLayout)
                 {
-                    //We want to turn on mirroring for TreeView explicitly.
+                    // We want to turn on mirroring for TreeView explicitly.
                     cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
-                    //Don't need these styles when mirroring is turned on.
+                    // Don't need these styles when mirroring is turned on.
                     cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
                 else
@@ -647,7 +647,7 @@ public partial class TreeView : Control
     {
         if (_imageList is not null)
         {
-            //NOTE: any handlers added here should be removed in DetachImageListHandlers
+            // NOTE: any handlers added here should be removed in DetachImageListHandlers
             _imageList.RecreateHandle += new EventHandler(ImageListRecreateHandle);
             _imageList.Disposed += new EventHandler(DetachImageList);
             _imageList.ChangeHandle += new EventHandler(ImageListChangedHandle);
@@ -668,7 +668,7 @@ public partial class TreeView : Control
     {
         if (_stateImageList is not null)
         {
-            //NOTE: any handlers added here should be removed in DetachStateImageListHandlers
+            // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
             _stateImageList.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
             _stateImageList.Disposed += new EventHandler(DetachStateImageList);
             _stateImageList.ChangeHandle += new EventHandler(StateImageListChangedHandle);
@@ -923,7 +923,7 @@ public partial class TreeView : Control
         get => _drawMode;
         set
         {
-            //valid values are 0x0 to 0x2
+            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_drawMode != value)
@@ -2835,7 +2835,7 @@ public partial class TreeView : Control
                 goto default;
 
             case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPOSTPAINT:
-                //User draws only the text in OwnerDrawText mode, as explained in comments above
+                // User draws only the text in OwnerDrawText mode, as explained in comments above
                 if (_drawMode == TreeViewDrawMode.OwnerDrawText)
                 {
                     Debug.Assert(nmtvcd->nmcd.dwItemSpec != 0, "Invalid node handle in ITEMPOSTPAINT");
@@ -2862,7 +2862,7 @@ public partial class TreeView : Control
 
                         if (e.DrawDefault)
                         {
-                            //Simulate default text drawing here
+                            // Simulate default text drawing here
                             TreeNodeStates curState = e.State;
 
                             Font font = node.NodeFont ?? node.TreeView.Font;
@@ -3411,7 +3411,7 @@ public partial class TreeView : Control
                 // Always Reset the MouseUpFired....
                 _treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
 
-                //Cache the hit-tested node for verification when mouse up is fired
+                // Cache the hit-tested node for verification when mouse up is fired
                 TVHITTESTINFO tvhit = new()
                 {
                     pt = PARAM.ToPoint(m.LParamInternal)

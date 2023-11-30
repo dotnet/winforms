@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Design;
 
 public partial class ComponentEditorForm
 {
-    //  This should be moved into a shared location
+    // This should be moved into a shared location
     //  Its a duplication of what exists in the StyleBuilder.
     internal sealed class PageSelector : TreeView
     {

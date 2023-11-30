@@ -131,8 +131,8 @@ internal static class Formatter
             }
         }
 
-        //The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the
-        //type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
+        // The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the
+        // type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
         Type sourceType = value.GetType();
         TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
         if (sourceConverter is not null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))

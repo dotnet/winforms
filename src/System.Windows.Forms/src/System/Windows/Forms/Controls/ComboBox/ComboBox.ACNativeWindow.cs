@@ -71,7 +71,7 @@ public partial class ComboBox
             if (m.MsgInternal == PInvoke.WM_NCDESTROY)
             {
                 Debug.Assert(s_ACWindows.ContainsKey(HWND));
-                s_ACWindows.Remove(HWND);   //so we do not leak ac windows.
+                s_ACWindows.Remove(HWND);   // so we do not leak ac windows.
             }
         }
 
@@ -81,7 +81,7 @@ public partial class ComboBox
             {
                 if (value is null)
                 {
-                    s_ACWindows.Remove(acHandle); //if an external handle got destroyed, don't let it stop us.
+                    s_ACWindows.Remove(acHandle); // if an external handle got destroyed, don't let it stop us.
                 }
             }
 

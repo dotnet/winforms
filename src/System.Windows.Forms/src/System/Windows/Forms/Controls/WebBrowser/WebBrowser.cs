@@ -105,8 +105,8 @@ public unsafe partial class WebBrowser : WebBrowserBase
         }
         set
         {
-            //Note: you lose this value when you load a new document: the value needs to be refreshed in
-            //OnDocumentCompleted.
+            // Note: you lose this value when you load a new document: the value needs to be refreshed in
+            // OnDocumentCompleted.
             if (value != AllowWebBrowserDrop)
             {
                 using var webBrowser2 = AxIWebBrowser2.GetInterface();
@@ -322,8 +322,8 @@ public unsafe partial class WebBrowser : WebBrowserBase
         {
             value ??= string.Empty;
 
-            //string length is a good initial guess for capacity --
-            //if it needs more room, it'll take it.
+            // string length is a good initial guess for capacity --
+            // if it needs more room, it'll take it.
             MemoryStream ms = new MemoryStream(value.Length);
             StreamWriter sw = new StreamWriter(ms, Encoding.UTF8);
             sw.Write(value);

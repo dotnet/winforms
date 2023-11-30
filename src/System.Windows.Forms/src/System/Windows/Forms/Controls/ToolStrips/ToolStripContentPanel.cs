@@ -331,7 +331,7 @@ public class ToolStripContentPanel : Panel
         if (Renderer is ToolStripProfessionalRenderer)
         {
             _state[s_stateLastDoubleBuffer] = DoubleBuffered;
-            //this.DoubleBuffered = true;
+            // this.DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
         else

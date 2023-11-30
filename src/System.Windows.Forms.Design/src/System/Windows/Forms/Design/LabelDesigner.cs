@@ -42,14 +42,14 @@ internal class LabelDesigner : ControlDesigner
                 alignment = (ContentAlignment)prop.GetValue(Component);
             }
 
-            //a single text-baseline for the label (and linklabel) control
+            // a single text-baseline for the label (and linklabel) control
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
             if ((prop = props["AutoSize"]) is not null)
             {
                 if ((bool)prop.GetValue(Component) == false)
                 {
-                    //Only adjust if AutoSize is false
+                    // Only adjust if AutoSize is false
                     BorderStyle borderStyle = BorderStyle.None;
                     if ((prop = props["BorderStyle"]) is not null)
                     {
@@ -117,7 +117,7 @@ internal class LabelDesigner : ControlDesigner
             }
         }
         else
-        {//bottom alignment
+        {// bottom alignment
             if (borderStyle == BorderStyle.None)
             {
                 return -1;

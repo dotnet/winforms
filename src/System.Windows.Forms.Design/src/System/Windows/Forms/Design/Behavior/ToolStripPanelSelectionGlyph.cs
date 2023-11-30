@@ -61,7 +61,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
         }
 
         Rectangle translatedBounds = _behaviorService.ControlRectInAdornerWindow(_relatedPanel!);
-        //Reset the glyph.
+        // Reset the glyph.
         _glyphBounds = Rectangle.Empty;
 
         // Refresh the parent

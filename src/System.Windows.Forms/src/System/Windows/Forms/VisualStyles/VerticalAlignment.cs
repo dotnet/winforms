@@ -8,7 +8,7 @@ public enum VerticalAlignment
     Top = 0,
     Center = 1,
     Bottom = 2,
-    //      TM_ENUM(0, VA, TOP)
+    // TM_ENUM(0, VA, TOP)
     //      TM_ENUM(1, VA, CENTER)
     //      TM_ENUM(2, VA, BOTTOM)
 }

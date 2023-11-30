@@ -579,8 +579,8 @@ public class ToolboxItem : ISerializable
             AssemblyName = assemblyName;
             DisplayName = type.Name;
 
-            //if the Type is a reflectonly type, these values must be set through a config object or manually
-            //after construction.
+            // if the Type is a reflectonly type, these values must be set through a config object or manually
+            // after construction.
             if (!type.Assembly.ReflectionOnly)
             {
                 object[] companyattrs = type.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), true);
@@ -589,7 +589,7 @@ public class ToolboxItem : ISerializable
                     Company = company.Company;
                 }
 
-                //set the description based off the description attribute of the given type.
+                // set the description based off the description attribute of the given type.
                 if (TypeDescriptorHelper.TryGetAttribute(type, out DescriptionAttribute? descattr))
                 {
                     Description = descattr.Description;
@@ -645,13 +645,13 @@ public class ToolboxItem : ISerializable
             return null;
         }
 
-        //if looking for myself, just return it. (not a reference)
+        // if looking for myself, just return it. (not a reference)
         if (type.Assembly.FullName == policiedAssemblyName.FullName)
         {
             return policiedAssemblyName;
         }
 
-        //first search for an exact match -- we prefer this over a partial match.
+        // first search for an exact match -- we prefer this over a partial match.
         foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
         {
             if (name.FullName == policiedAssemblyName.FullName)
@@ -660,7 +660,7 @@ public class ToolboxItem : ISerializable
             }
         }
 
-        //next search for a partial match -- we just compare the Name portions (ignore version and publickey)
+        // next search for a partial match -- we just compare the Name portions (ignore version and publickey)
         foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
         {
             if (name.Name == policiedAssemblyName.Name)
@@ -669,7 +669,7 @@ public class ToolboxItem : ISerializable
             }
         }
 
-        //finally, the most expensive -- its possible that retargeting policy is on an assembly whose name changes
+        // finally, the most expensive -- its possible that retargeting policy is on an assembly whose name changes
         // an example of this is the device System.Windows.Forms.Datagrid.dll
         // in this case, we need to try to load each device assemblyname through policy to see if it results
         // in assemblyname.

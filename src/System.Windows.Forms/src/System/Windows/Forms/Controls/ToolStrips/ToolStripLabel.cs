@@ -146,7 +146,7 @@ public partial class ToolStripLabel : ToolStripItem
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (_linkBehavior != value)
             {

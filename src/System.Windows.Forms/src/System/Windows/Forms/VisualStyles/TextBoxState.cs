@@ -9,7 +9,7 @@ public enum TextBoxState
     Hot = 2,
     Selected = 3,
     Disabled = 4,
-    //Focused = 5,
+    // Focused = 5,
     Readonly = 6,
     Assist = 7
 }

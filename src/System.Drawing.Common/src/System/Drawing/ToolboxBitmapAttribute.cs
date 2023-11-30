@@ -163,13 +163,13 @@ public class ToolboxBitmapAttribute : Attribute
                 string? ext = Path.GetExtension(imageFile);
                 if (ext is not null && string.Equals(ext, ".ico", StringComparison.OrdinalIgnoreCase))
                 {
-                    //ico files support both large and small, so we respect the large flag here.
+                    // ico files support both large and small, so we respect the large flag here.
                     using FileStream reader = File.OpenRead(imageFile!);
                     image = GetIconFromStream(reader, large, scaled);
                 }
                 else if (!large)
                 {
-                    //we only read small from non-ico files.
+                    // we only read small from non-ico files.
                     image = Image.FromFile(imageFile!);
                     Bitmap? b = image as Bitmap;
                     if (DpiHelper.IsScalingRequired && scaled)

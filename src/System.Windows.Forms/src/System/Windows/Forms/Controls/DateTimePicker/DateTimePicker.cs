@@ -410,9 +410,9 @@ public partial class DateTimePicker : Control
 
             if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
             {
-                //We want to turn on mirroring for DateTimePicker explicitly.
+                // We want to turn on mirroring for DateTimePicker explicitly.
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
-                //Don't need these styles when mirroring is turned on.
+                // Don't need these styles when mirroring is turned on.
                 cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
             }
 
@@ -1187,7 +1187,7 @@ public partial class DateTimePicker : Control
     {
         base.OnFontChanged(e);
 
-        //clear the pref height cache
+        // clear the pref height cache
         _prefHeightCache = -1;
 
         Height = PreferredHeight;

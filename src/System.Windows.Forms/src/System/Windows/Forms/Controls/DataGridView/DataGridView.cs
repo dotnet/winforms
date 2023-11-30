@@ -3625,10 +3625,10 @@ public partial class DataGridView : Control, ISupportInitialize
                     throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
                 }
 
-                //if (dataGridViewRow.Selected)
-                //{
+                // if (dataGridViewRow.Selected)
+                // {
                 //    throw new InvalidOperationException(SR.DataGridView_RowTemplateCannotBeSelected);
-                //}
+                // }
             }
 
             _rowTemplate = dataGridViewRow;

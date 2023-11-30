@@ -954,7 +954,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             if (!newuMode)
             {
-                //SetupClass_Info(this);
+                // SetupClass_Info(this);
             }
         }
     }
@@ -1389,7 +1389,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                         if (IsUserMode())
                         {
                             // start the events flowing!
-                            //createSink();
+                            // createSink();
                             StartEvents();
                         }
 

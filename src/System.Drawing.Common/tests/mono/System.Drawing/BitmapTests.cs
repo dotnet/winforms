@@ -597,7 +597,7 @@ public class TestBitmap
         return MD5.Create().ComputeHash(pixels);
     }
 
-    //  Tests the LockBitmap functions. Makes a hash of the block of pixels that it returns
+    // Tests the LockBitmap functions. Makes a hash of the block of pixels that it returns
     // firsts, changes them, and then using GetPixel does another check of the changes.
     // The results match the .NET Framework
     private static byte[] DefaultBitmapHash = new byte[] { 0xD8, 0xD3, 0x68, 0x9C, 0x86, 0x7F, 0xB6, 0xA0, 0x76, 0xD6, 0x00, 0xEF, 0xFF, 0xE5, 0x8E, 0x1B };
@@ -1379,7 +1379,7 @@ public class BitmapFullTrustTest
         // hbitmap survives original bitmap disposal
         using (Image image = Image.FromHbitmap(hbitmap))
         {
-            //Assert.Equal (PixelFormat.Format32bppRgb, image.PixelFormat);
+            // Assert.Equal (PixelFormat.Format32bppRgb, image.PixelFormat);
             Assert.Equal(0, image.Palette.Entries.Length);
             Assert.Equal(183, image.Height);
             Assert.Equal(173, image.Width);
@@ -1407,7 +1407,7 @@ public class BitmapFullTrustTest
         // hbitmap survives original bitmap disposal
         using (Image image = Image.FromHbitmap(hbitmap))
         {
-            //Assert.Equal (PixelFormat.Format32bppRgb, image.PixelFormat);
+            // Assert.Equal (PixelFormat.Format32bppRgb, image.PixelFormat);
             Assert.Equal(0, image.Palette.Entries.Length);
             Assert.Equal(183, image.Height);
             Assert.Equal(173, image.Width);
@@ -1417,7 +1417,7 @@ public class BitmapFullTrustTest
 
         using (Image image2 = Image.FromHbitmap(hbitmap))
         {
-            //Assert.Equal (PixelFormat.Format32bppRgb, image2.PixelFormat);
+            // Assert.Equal (PixelFormat.Format32bppRgb, image2.PixelFormat);
             Assert.Equal(0, image2.Palette.Entries.Length);
             Assert.Equal(183, image2.Height);
             Assert.Equal(173, image2.Width);

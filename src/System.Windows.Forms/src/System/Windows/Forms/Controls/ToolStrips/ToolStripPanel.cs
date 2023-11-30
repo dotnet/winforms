@@ -1032,7 +1032,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
 #if DEBUG
         Debug_VerifyOneToOneCellRowControlMatchup();
-        //            Debug_VerifyCountRows();
+        // Debug_VerifyCountRows();
         if (draggedControl.IsCurrentlyDragging && changedRow && !debugModeOnly_ChangedContainers)
         {
             // if we have changed containers, we're in a SuspendLayout.

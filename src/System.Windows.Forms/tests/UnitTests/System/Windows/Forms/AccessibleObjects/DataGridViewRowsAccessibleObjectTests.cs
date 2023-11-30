@@ -21,7 +21,7 @@ public class DataGridViewRowsAccessibleObjectTests
         dataGridView.Rows[3].Height = 20;
         dataGridView.Rows[4].Height = 20;
 
-        AccessibleObject accObject = dataGridView.AccessibilityObject; //it is necessary to be in time to initialize elements
+        AccessibleObject accObject = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
         int accRowHeightSum = 0;
         for (int i = 0; i < 5; i++)
@@ -30,7 +30,7 @@ public class DataGridViewRowsAccessibleObjectTests
         }
 
         int accDataGridViewHeight = dataGridView.AccessibilityObject.BoundingRectangle.Height;
-        int borders = 2 * dataGridView.BorderWidth; //top border and bottom border
+        int borders = 2 * dataGridView.BorderWidth; // top border and bottom border
 
         Assert.Equal(accRowHeightSum, accDataGridViewHeight - borders - dataGridView.ColumnHeadersHeight);
     }
@@ -50,7 +50,7 @@ public class DataGridViewRowsAccessibleObjectTests
         dataGridView.Rows[3].Height = 20;
         dataGridView.Rows[4].Height = 20;
 
-        AccessibleObject accObject = dataGridView.AccessibilityObject; //it is necessary to be in time to initialize elements
+        AccessibleObject accObject = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
         int accRowHeightSum = 0;
         for (int i = 0; i < 5; i++)

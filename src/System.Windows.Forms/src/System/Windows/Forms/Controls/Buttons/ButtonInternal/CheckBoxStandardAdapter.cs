@@ -36,7 +36,7 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
 
             if (!string.IsNullOrEmpty(Control.Text))
             {
-                //minor adjustment to make sure the appearance is exactly the same as Win32 app.
+                // minor adjustment to make sure the appearance is exactly the same as Win32 app.
                 int focusRectFixup = layout.Focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
                 if (!Application.RenderWithVisualStyles)
                 {

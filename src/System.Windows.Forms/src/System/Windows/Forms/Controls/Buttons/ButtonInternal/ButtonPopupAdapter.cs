@@ -177,7 +177,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
     {
         LayoutOptions layout = CommonLayout();
         layout.BorderSize = paintedBorder;
-        layout.PaddingSize = 2 - paintedBorder; //3 - paintedBorder - (Control.IsDefault ? 1 : 0);
+        layout.PaddingSize = 2 - paintedBorder; // 3 - paintedBorder - (Control.IsDefault ? 1 : 0);
         layout.HintTextUp = false;
         layout.TextOffset = !up;
         layout.ShadowedText = SystemInformation.HighContrast;

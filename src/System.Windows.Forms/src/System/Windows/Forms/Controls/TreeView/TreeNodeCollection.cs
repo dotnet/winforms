@@ -325,7 +325,7 @@ public class TreeNodeCollection : IList
         }
         else
         {
-            //if fixedIndex != -1 capacity was ensured by AddRange
+            // if fixedIndex != -1 capacity was ensured by AddRange
             Debug.Assert(delta == 0, "delta should be 0");
             node._index = _owner._childNodes.Count;
         }

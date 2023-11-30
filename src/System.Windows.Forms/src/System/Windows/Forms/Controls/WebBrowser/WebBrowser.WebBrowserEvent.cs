@@ -45,7 +45,7 @@ public partial class WebBrowser
             ref bool cancel)
         {
             Debug.Assert(_parent is not null, "Parent should have been set");
-            //Note: we want to allow navigation if we haven't already navigated.
+            // Note: we want to allow navigation if we haven't already navigated.
             if (AllowNavigation || !_haveNavigated)
             {
                 Debug.Assert(urlObject is null || urlObject is string, "invalid url type");

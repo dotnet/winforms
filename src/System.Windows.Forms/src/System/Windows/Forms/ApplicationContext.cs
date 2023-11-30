@@ -30,7 +30,7 @@ public class ApplicationContext : IDisposable
     /// </summary>
     public ApplicationContext(Form? mainForm)
     {
-        //  These are subclasses of the ApplicationContext for which we don't need to call the finalizer,
+        // These are subclasses of the ApplicationContext for which we don't need to call the finalizer,
         //  because it's empty. See https://github.com/dotnet/winforms/issues/6858.
         if (GetType() == typeof(ApplicationContext) || GetType() == Application.s_typeOfModalApplicationContext)
             GC.SuppressFinalize(this);

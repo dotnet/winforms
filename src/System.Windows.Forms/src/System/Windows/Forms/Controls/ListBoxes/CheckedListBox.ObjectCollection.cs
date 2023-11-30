@@ -29,7 +29,7 @@ public partial class CheckedListBox
         /// </summary>
         public int Add(object item, CheckState check)
         {
-            //validate the enum that's passed in here
+            // validate the enum that's passed in here
             //
             // Valid values are 0-2 inclusive.
             SourceGenerated.EnumValidator.Validate(check, nameof(check));

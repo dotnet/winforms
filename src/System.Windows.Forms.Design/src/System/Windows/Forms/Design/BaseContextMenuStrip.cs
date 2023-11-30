@@ -149,7 +149,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddVerbMenuItem()
     {
-        //Add Designer Verbs..
+        // Add Designer Verbs..
         if (serviceProvider.TryGetService(out IMenuCommandService? menuCommandService))
         {
             DesignerVerbCollection verbCollection = menuCommandService.Verbs;
@@ -192,7 +192,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void InitializeContextMenu()
     {
-        //this.Opening += new CancelEventHandler(OnContextMenuOpening);
+        // this.Opening += new CancelEventHandler(OnContextMenuOpening);
         Name = "designerContextMenuStrip";
 
         if (serviceProvider.TryGetService(out IUIService? uis))

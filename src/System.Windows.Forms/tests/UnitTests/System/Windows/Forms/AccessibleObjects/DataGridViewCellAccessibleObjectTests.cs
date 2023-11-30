@@ -46,7 +46,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Columns[2].Width = 40;
         dataGridView.Columns[3].Width = 40;
 
-        AccessibleObject rr = dataGridView.AccessibilityObject; //it is necessary to be in time to initialize elements
+        AccessibleObject rr = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
         var accCellWidthSum = 0;
         for (int i = 0; i < 4; i++)
@@ -77,7 +77,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Columns[2].Width = 40;
         dataGridView.Columns[3].Width = 40;
 
-        AccessibleObject rr = dataGridView.AccessibilityObject; //it is necessary to be in time to initialize elements
+        AccessibleObject rr = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
         var accCellWidthSum = 0;
         for (int i = 0; i < 4; i++)
@@ -660,7 +660,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
-        //DataGridViewCellAccessibleObject name couldn't be set, it's gathered dynamically in the Name property accessor
+        // DataGridViewCellAccessibleObject name couldn't be set, it's gathered dynamically in the Name property accessor
         Assert.Equal(accessibleObject.Name, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
         Assert.Equal(accessibleObject.Name, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);

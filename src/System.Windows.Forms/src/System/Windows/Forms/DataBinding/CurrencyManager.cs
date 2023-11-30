@@ -921,7 +921,7 @@ public class CurrencyManager : BindingManagerBase
         _onListChanged?.Invoke(this, e);
     }
 
-    //Exists in Everett
+    // Exists in Everett
     protected internal void OnMetaDataChanged(EventArgs e)
     {
         _onMetaDataChangedHandler?.Invoke(this, e);
@@ -1025,7 +1025,7 @@ public class CurrencyManager : BindingManagerBase
             {
                 // we will call end edit when moving from bound state to unbounded state
                 //
-                //bool endCurrentEdit = bound && !newBound;
+                // bool endCurrentEdit = bound && !newBound;
                 _bound = newBound;
                 int newPos = newBound ? 0 : -1;
                 ChangeRecordState(newPos, _bound, (Position != newPos), true, false);

@@ -143,7 +143,7 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (DropDownStyle == ComboBoxStyle.DropDownList
                 && AutoCompleteSource != AutoCompleteSource.ListItems
@@ -430,7 +430,7 @@ public partial class ComboBox : ListControl
         {
             if (DrawMode != value)
             {
-                //valid values are 0x0 to 0x2.
+                // valid values are 0x0 to 0x2.
                 SourceGenerated.EnumValidator.Validate(value);
                 ResetHeightCache();
                 Properties.SetInteger(PropDrawMode, (int)value);
@@ -558,7 +558,7 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             _flatStyle = value;
             Invalidate();
@@ -850,8 +850,8 @@ public partial class ComboBox : ListControl
         {
             if (!FormattingEnabled)
             {
-                //do preferred height the old broken way for everett apps
-                //we need this for compat reasons because (get this)
+                // do preferred height the old broken way for everett apps
+                // we need this for compat reasons because (get this)
                 //  (a) everett PreferredHeight was always wrong.
                 //  (b) so, when combobox1.Size = actualdefaultsize was called, it would enter setboundscore
                 //  (c) this updated requestedheight
@@ -863,7 +863,7 @@ public partial class ComboBox : ListControl
                 //  (1) user uses default size = setting dropdownstyle=simple will revert to simple height
                 //  (2) user uses nondefault size = setting dropdownstyle=simple will not change height from this value
 
-                //In everett
+                // In everett
                 //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidbey.(1) above
                 //  user usually uses nondefault size and will experience whidbey.(2) above
 
@@ -1191,7 +1191,7 @@ public partial class ComboBox : ListControl
             if (DropDownStyle != value)
             {
                 // verify that 'value' is a valid enum type...
-                //valid values are 0x0 to 0x2
+                // valid values are 0x0 to 0x2
                 SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == ComboBoxStyle.DropDownList
@@ -1225,7 +1225,7 @@ public partial class ComboBox : ListControl
         {
             if (SelectedItem is not null && !BindingFieldEmpty)
             {
-                //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
+                // preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
                 if (FormattingEnabled)
                 {
                     string? candidate = GetItemText(SelectedItem);
@@ -1233,13 +1233,13 @@ public partial class ComboBox : ListControl
                     {
                         if (string.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0)
                         {
-                            return candidate;   //for whidbey, if we only differ by case -- return the candidate;
+                            return candidate;   // for whidbey, if we only differ by case -- return the candidate;
                         }
                     }
                 }
                 else
                 {
-                    return FilterItemOnProperty(SelectedItem)!.ToString()!;       //heinous.
+                    return FilterItemOnProperty(SelectedItem)!.ToString()!;       // heinous.
                 }
             }
 
@@ -1267,8 +1267,8 @@ public partial class ComboBox : ListControl
                 {
                     int index = FindStringIgnoreCase(value);
 
-                    //we cannot set the index to -1 unless we want to do something unusual and save/restore text
-                    //because the native control will erase the text when we change the index to -1
+                    // we cannot set the index to -1 unless we want to do something unusual and save/restore text
+                    // because the native control will erase the text when we change the index to -1
                     if (index != -1)
                     {
                         SelectedIndex = index;
@@ -1280,7 +1280,7 @@ public partial class ComboBox : ListControl
 
     private int FindStringIgnoreCase(string value)
     {
-        //look for an exact match and then a case insensitive match if that fails.
+        // look for an exact match and then a case insensitive match if that fails.
         int index = FindStringExact(value, -1, false);
 
         if (index == -1)
@@ -1328,7 +1328,7 @@ public partial class ComboBox : ListControl
             }
         }
 
-        //don't fire TextChanged if we had set the selectedindex -- because it was already fired if so.
+        // don't fire TextChanged if we had set the selectedindex -- because it was already fired if so.
         if (textChanged && !selectedIndexSet)
         {
             // No match, just fire a TextChanged
@@ -1968,9 +1968,9 @@ public partial class ComboBox : ListControl
                 childWindow = _childListBox;
             }
 
-            //childwindow could be null if the handle was recreated while within a message handler
+            // childwindow could be null if the handle was recreated while within a message handler
             // and then whoever recreated the handle allowed the message to continue to be processed
-            //we cannot really be sure the new child will properly handle this window message, so we eat it.
+            // we cannot really be sure the new child will properly handle this window message, so we eat it.
             childWindow?.DefWndProc(ref m);
         }
     }
@@ -2286,7 +2286,7 @@ public partial class ComboBox : ListControl
         {
             if (DroppedDown || _autoCompleteDroppedDown)
             {
-                //old behavior
+                // old behavior
                 return true;
             }
             else if (SystemAutoCompleteEnabled && ACNativeWindow.AutoCompleteActive)
@@ -2397,7 +2397,7 @@ public partial class ComboBox : ListControl
         base.RecreateHandleCore();
         if (!string.IsNullOrEmpty(oldText) && string.IsNullOrEmpty(WindowText))
         {
-            WindowText = oldText;   //restore the window text
+            WindowText = oldText;   // restore the window text
         }
     }
 
@@ -2477,8 +2477,8 @@ public partial class ComboBox : ListControl
             Height = _requestedHeight;
         }
 
-        //If HandleCreated set the AutoComplete...
-        //this function checks if the correct properties are set to enable AutoComplete feature on combobox.
+        // If HandleCreated set the AutoComplete...
+        // this function checks if the correct properties are set to enable AutoComplete feature on combobox.
         try
         {
             _fromHandleCreate = true;
@@ -2605,14 +2605,14 @@ public partial class ComboBox : ListControl
     {
         base.OnKeyPress(e);
 
-        //return when dropped down already fires commit.
+        // return when dropped down already fires commit.
         if (!e.Handled && (e.KeyChar == (char)(int)Keys.Return || e.KeyChar == (char)(int)Keys.Escape)
             && DroppedDown)
         {
             _dropDown = false;
             if (FormattingEnabled)
             {
-                //Set the Text which would Compare the WindowText with the TEXT and change SelectedIndex.
+                // Set the Text which would Compare the WindowText with the TEXT and change SelectedIndex.
                 Text = WindowText;
                 SelectAll();
                 e.Handled = false;
@@ -2770,7 +2770,7 @@ public partial class ComboBox : ListControl
         // don't change the position if SelectedIndex is -1 because this indicates a selection not from the list.
         if (DataManager is not null && DataManager.Position != SelectedIndex)
         {
-            //read this as "if everett or   (whidbey and selindex is valid)"
+            // read this as "if everett or   (whidbey and selindex is valid)"
             if (!FormattingEnabled || SelectedIndex != -1)
             {
                 DataManager.Position = SelectedIndex;
@@ -2831,7 +2831,7 @@ public partial class ComboBox : ListControl
         }
         else
         {
-            //we always will recreate the handle when autocomplete mode is on
+            // we always will recreate the handle when autocomplete mode is on
             RecreateHandle();
         }
 
@@ -2944,7 +2944,7 @@ public partial class ComboBox : ListControl
 
     private void UpdateControl(bool recreate)
     {
-        //clear the pref height cache
+        // clear the pref height cache
         ResetHeightCache();
 
         if (IsHandleCreated)
@@ -3277,7 +3277,7 @@ public partial class ComboBox : ListControl
         {
             if (!_fromHandleCreate && recreate && IsHandleCreated)
             {
-                //RecreateHandle to avoid Leak.
+                // RecreateHandle to avoid Leak.
                 // notice the use of member variable to avoid re-entrancy
                 AutoCompleteMode backUpMode = AutoCompleteMode;
                 _autoCompleteMode = AutoCompleteMode.None;
@@ -3501,7 +3501,7 @@ public partial class ComboBox : ListControl
     {
         if (!_dropDownHandle.IsNull)
         {
-            //Now use the DropDownHeight property instead of calculating the Height...
+            // Now use the DropDownHeight property instead of calculating the Height...
             int height = DropDownHeight;
             if (height == DefaultDropDownHeight)
             {
@@ -3565,7 +3565,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void UpdateText()
     {
-        //           Fire text changed for dropdown combos when the selection
+        // Fire text changed for dropdown combos when the selection
         //           changes, since the text really does change.  We've got
         //           to do this asynchronously because the actual edit text
         //           isn't updated until a bit later

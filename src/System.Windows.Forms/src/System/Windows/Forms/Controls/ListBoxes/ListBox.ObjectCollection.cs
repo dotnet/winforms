@@ -108,7 +108,7 @@ public partial class ListBox
                     if (index < 0)
                     {
                         // getting the index of the first element that is larger than the search value
-                        //this index will be used for insert
+                        // this index will be used for insert
                         index = ~index;
                     }
                 }
@@ -239,7 +239,7 @@ public partial class ListBox
         /// </summary>
         internal void ClearInternal()
         {
-            //update the width.. to reset Scrollbars..
+            // update the width.. to reset Scrollbars..
             // Clear the selection state.
             int cnt = _owner.Items.Count;
             for (int i = 0; i < cnt; i++)

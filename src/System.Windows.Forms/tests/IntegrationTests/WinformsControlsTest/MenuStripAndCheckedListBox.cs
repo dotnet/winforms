@@ -25,14 +25,14 @@ public partial class MenuStripAndCheckedListBox : Form
 
         float factor = (float)e.DeviceDpiNew / e.DeviceDpiOld;
 
-        //foreach (ToolStripMenuItem item in menuStrip1.Items)
-        //{
+        // foreach (ToolStripMenuItem item in menuStrip1.Items)
+        // {
         //    item.Size = new Size((int)Math.Round(factor * item.Width), (int)Math.Round(factor * item.Height));
-        //}
+        // }
 
-        //int width = menuStrip1.Width;
-        //int height = menuStrip1.Height;
-        //menuStrip1.Size = new Size((int)Math.Round(factor * menuStrip1.Width), (int)Math.Round(factor * menuStrip1.Height));
+        // int width = menuStrip1.Width;
+        // int height = menuStrip1.Height;
+        // menuStrip1.Size = new Size((int)Math.Round(factor * menuStrip1.Width), (int)Math.Round(factor * menuStrip1.Height));
 
         Font f = menuStrip1.Font;
         menuStrip1.Font = new Font(f.FontFamily, f.Size * factor, f.Style);

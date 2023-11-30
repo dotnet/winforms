@@ -49,8 +49,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     // Autosizing changed for VS
     // We need to make ItemFromComboBoxDataSource as fast as possible because ItemFromComboBoxDataSource is getting called a lot
     // during AutoSize. To do that we keep a copy of the key and the value.
-    //private object keyUsedDuringAutoSize    = null;
-    //private object valueUsedDuringAutoSize  = null;
+    // private object keyUsedDuringAutoSize    = null;
+    // private object valueUsedDuringAutoSize  = null;
 
     private static bool s_isScalingInitialized;
     private const int Offset2Pixels = 2;
@@ -732,7 +732,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         DataGridViewComboBoxCell dataGridViewCell;
         Type thisType = GetType();
 
-        if (thisType == s_cellType) //performance improvement
+        if (thisType == s_cellType) // performance improvement
         {
             dataGridViewCell = new DataGridViewComboBoxCell();
         }
@@ -1485,16 +1485,16 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
         ArgumentNullException.ThrowIfNull(key);
 
-        //if (key == this.keyUsedDuringAutoSize)
-        //{
+        // if (key == this.keyUsedDuringAutoSize)
+        // {
         //    return this.valueUsedDuringAutoSize;
-        //}
+        // }
 
         Debug.Assert(property is not null);
         Debug.Assert(DataManager is not null);
         object item = null;
 
-        //If the data source is a bindinglist use that as it's probably more efficient
+        // If the data source is a bindinglist use that as it's probably more efficient
         if ((DataManager.List is IBindingList) && ((IBindingList)DataManager.List).SupportsSearching)
         {
             int index = ((IBindingList)DataManager.List).Find(property, key);
@@ -1505,7 +1505,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         else
         {
-            //Otherwise walk across the items looking for the item we want
+            // Otherwise walk across the items looking for the item we want
             for (int i = 0; i < DataManager.List.Count; i++)
             {
                 object itemTmp = DataManager.List[i];
@@ -1619,13 +1619,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         object item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
-            //Now look up the item in the Combobox datasource - this can be horribly inefficient
-            //and it uses reflection which makes it expensive - ripe for optimization
+            // Now look up the item in the Combobox datasource - this can be horribly inefficient
+            // and it uses reflection which makes it expensive - ripe for optimization
             item = ItemFromComboBoxDataSource(ValueMemberProperty ?? DisplayMemberProperty, value);
         }
         else
         {
-            //Find the item in the Items collection based on the provided ValueMember or DisplayMember
+            // Find the item in the Items collection based on the provided ValueMember or DisplayMember
             item = ItemFromComboBoxItems(rowIndex, string.IsNullOrEmpty(ValueMember) ? DisplayMember : ValueMember, value);
         }
 
@@ -1635,7 +1635,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return false;
         }
 
-        //Now we've got the item for the value - we can get the display text using the DisplayMember
+        // Now we've got the item for the value - we can get the display text using the DisplayMember
 
         // DisplayMember & ValueMember may be null in which case we will use the item itself
         displayValue = GetItemDisplayValue(item);
@@ -1662,13 +1662,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         object item = null;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
-            //Now look up the item in the DataGridViewComboboxCell datasource - this can be horribly inefficient
-            //and it uses reflection which makes it expensive - ripe for optimization
+            // Now look up the item in the DataGridViewComboboxCell datasource - this can be horribly inefficient
+            // and it uses reflection which makes it expensive - ripe for optimization
             item = ItemFromComboBoxDataSource(DisplayMemberProperty ?? ValueMemberProperty, formattedValue);
         }
         else
         {
-            //Find the item in the Items collection based on the provided DisplayMember or ValueMember
+            // Find the item in the Items collection based on the provided DisplayMember or ValueMember
             item = ItemFromComboBoxItems(RowIndex, string.IsNullOrEmpty(DisplayMember) ? ValueMember : DisplayMember, formattedValue);
         }
 
@@ -1678,7 +1678,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return false;
         }
 
-        //Now we've got the item for the value - we can get the value using the ValueMember
+        // Now we've got the item for the value - we can get the value using the ValueMember
         value = GetItemValue(item);
         return true;
     }

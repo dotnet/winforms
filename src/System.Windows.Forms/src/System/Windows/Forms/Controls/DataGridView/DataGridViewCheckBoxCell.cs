@@ -451,7 +451,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         DataGridViewCheckBoxCell dataGridViewCell;
         Type thisType = GetType();
-        if (thisType == s_cellType) //performance improvement
+        if (thisType == s_cellType) // performance improvement
         {
             dataGridViewCell = new DataGridViewCheckBoxCell();
         }

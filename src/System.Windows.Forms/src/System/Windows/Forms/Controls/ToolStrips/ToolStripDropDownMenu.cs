@@ -402,7 +402,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
 
             // align the checkmark
             nextPoint = new Point(1, _scaledCheckPadding.Top);
-            //    nextPoint = new Point(scaledCheckPadding.Left, scaledCheckPadding.Top);
+            // nextPoint = new Point(scaledCheckPadding.Left, scaledCheckPadding.Top);
             _checkRectangle = LayoutUtils.Align(maxCheckSize, new Rectangle(nextPoint.X, nextPoint.Y, checkAndImageMarginWidth, _maxItemSize.Height), ContentAlignment.MiddleCenter);
 
             _imageRectangle = Rectangle.Empty;
@@ -438,7 +438,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         // if we didnt have a check - make sure to ignore check padding
 
         // consider: should we constrain to a reasonable width?
-        //imageMarginBounds = new Rectangle(0, 0, Math.Max(imageMarginWidth,DefaultImageMarginWidth), this.Height);
+        // imageMarginBounds = new Rectangle(0, 0, Math.Max(imageMarginWidth,DefaultImageMarginWidth), this.Height);
         _imageMarginBounds = new Rectangle(0, 0, checkAndImageMarginWidth, Height);
 
         // calculate space for shortcut and text

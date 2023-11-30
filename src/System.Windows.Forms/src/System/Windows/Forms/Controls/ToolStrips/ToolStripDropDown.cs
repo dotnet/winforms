@@ -266,11 +266,11 @@ public partial class ToolStripDropDown : ToolStrip
             }
             else if (topLevel)
             {
-                //From MSDN: Menus, dialog boxes, and combo list boxes have the CS_SAVEBITS style. When you use this style for a window,
-                //Windows saves a bitmap copy of the screen image that the window obscures. First, Windows asks the display driver to save the bits.
-                //If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
-                //saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
-                //When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
+                // From MSDN: Menus, dialog boxes, and combo list boxes have the CS_SAVEBITS style. When you use this style for a window,
+                // Windows saves a bitmap copy of the screen image that the window obscures. First, Windows asks the display driver to save the bits.
+                // If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
+                // saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
+                // When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
                 cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_SAVEBITS;
             }
             else if (!topLevel)
@@ -894,7 +894,7 @@ public partial class ToolStripDropDown : ToolStrip
         set => base.TextDirection = value;
     }
 
-    //Consistency: match casing of Form.TopMost, which shipped in Everett, even though it's wrong
+    // Consistency: match casing of Form.TopMost, which shipped in Everett, even though it's wrong
     protected virtual bool TopMost
     {
         get { return true; }
@@ -1629,7 +1629,7 @@ public partial class ToolStripDropDown : ToolStrip
         SuspendLayout();
         try
         {
-            //Get size values in advance to prevent one change from affecting another.
+            // Get size values in advance to prevent one change from affecting another.
             Size clientSize = ClientSize;
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;

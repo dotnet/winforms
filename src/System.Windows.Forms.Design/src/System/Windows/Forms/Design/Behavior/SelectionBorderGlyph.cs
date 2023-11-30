@@ -27,7 +27,7 @@ internal class SelectionBorderGlyph : SelectionGlyphBase
         rules = SelectionRules.None;
         hitTestCursor = Cursors.Default;
 
-        //this will return the rect representing the bounds of the glyph
+        // this will return the rect representing the bounds of the glyph
         bounds = DesignerUtils.GetBoundsForSelectionType(controlBounds, type);
         hitBounds = bounds;
 

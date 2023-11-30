@@ -122,7 +122,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
             Control.FlatAppearance.BorderSize).Layout();
 
-        //Paint with the BorderColor if Set.
+        // Paint with the BorderColor if Set.
         if (!Control.FlatAppearance.BorderColor.IsEmpty)
         {
             colors.WindowFrame = Control.FlatAppearance.BorderColor;
@@ -172,7 +172,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
         }
 
-        //Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
+        // Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
         if (hasCustomBorder)
         {
             if (Control.FlatAppearance.BorderSize != BorderSize)

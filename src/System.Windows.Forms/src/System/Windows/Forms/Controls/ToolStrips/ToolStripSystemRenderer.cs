@@ -445,7 +445,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                 {
                     // Scoot in by 2 pixels when selected
                     fillRect.X += 2;
-                    fillRect.Width -= 3; //its already 1 away from the right edge
+                    fillRect.Width -= 3; // its already 1 away from the right edge
                 }
 
                 if (item.Selected || item.Pressed)
