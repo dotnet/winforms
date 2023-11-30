@@ -19,6 +19,7 @@ public class FolderBrowserDialogTests
         Assert.False(dialog.Multiselect);
         Assert.Empty(dialog.SelectedPath);
         Assert.Empty(dialog.SelectedPaths);
+        Assert.Same(dialog.SelectedPaths, dialog.SelectedPaths);
         Assert.False(dialog.ShowHiddenFiles);
         Assert.True(dialog.ShowPinnedPlaces);
         Assert.True(dialog.ShowNewFolderButton);
@@ -132,18 +133,39 @@ public class FolderBrowserDialogTests
     }
 
     [WinFormsTheory]
-    [StringWithNullData]
-    public void FolderBrowserDialog_SelectedPath_Set_GetReturnsExpected(string value)
+    [InlineData(null, new string[0])]
+    [InlineData("", new string[] { "" })]
+    [InlineData("selectedPath", new string[] { "selectedPath" })]
+    public void FolderBrowserDialog_SelectedPath_Set_GetReturnsExpected(string value, string[] expectedSelectedPaths)
     {
         using var dialog = new FolderBrowserDialog
         {
             SelectedPath = value
         };
         Assert.Equal(value ?? string.Empty, dialog.SelectedPath);
+        Assert.Equal(expectedSelectedPaths, dialog.SelectedPaths);
+        if (expectedSelectedPaths.Length > 0)
+        {
+            Assert.Equal(dialog.SelectedPaths, dialog.SelectedPaths);
+            Assert.NotSame(dialog.SelectedPaths, dialog.SelectedPaths);
+        }
+        else
+        {
+            Assert.Same(dialog.SelectedPaths, dialog.SelectedPaths);
+        }
 
         // Set same.
         dialog.SelectedPath = value;
         Assert.Equal(value ?? string.Empty, dialog.SelectedPath);
+        if (expectedSelectedPaths.Length > 0)
+        {
+            Assert.Equal(dialog.SelectedPaths, dialog.SelectedPaths);
+            Assert.NotSame(dialog.SelectedPaths, dialog.SelectedPaths);
+        }
+        else
+        {
+            Assert.Same(dialog.SelectedPaths, dialog.SelectedPaths);
+        }
     }
 
     [WinFormsTheory]
@@ -253,6 +275,7 @@ public class FolderBrowserDialogTests
         Assert.False(dialog.Multiselect);
         Assert.Empty(dialog.SelectedPath);
         Assert.Empty(dialog.SelectedPaths);
+        Assert.Same(dialog.SelectedPaths, dialog.SelectedPaths);
         Assert.False(dialog.ShowHiddenFiles);
         Assert.True(dialog.ShowPinnedPlaces);
         Assert.True(dialog.ShowNewFolderButton);
