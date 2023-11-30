@@ -30,7 +30,7 @@ public unsafe partial class AccessibleObject :
     IRawElementProviderSimple.Interface,
     IRawElementProviderFragment.Interface,
     IRawElementProviderFragmentRoot.Interface,
-    UiaCore.IInvokeProvider,
+    IInvokeProvider.Interface,
     IValueProvider.Interface,
     IRangeValueProvider.Interface,
     IExpandCollapseProvider.Interface,
@@ -1005,7 +1005,11 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    void UiaCore.IInvokeProvider.Invoke() => Invoke();
+    HRESULT IInvokeProvider.Interface.Invoke()
+    {
+        Invoke();
+        return HRESULT.S_OK;
+    }
 
     ITextRangeProvider* ITextProvider.Interface.DocumentRange => DocumentRangeInternal;
 
