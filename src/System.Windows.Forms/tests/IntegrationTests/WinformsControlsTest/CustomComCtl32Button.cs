@@ -119,6 +119,5 @@ internal class CustomComCtl32Button : Form
                 g.DrawPath(pen, path);
             }
         }
-
     }
 }
