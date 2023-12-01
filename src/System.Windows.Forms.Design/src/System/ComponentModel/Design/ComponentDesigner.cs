@@ -549,7 +549,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Provides a way for a designer to get services from the hosting environment.
     /// </summary>
-    protected virtual object? GetService(Type serviceType) => Component.Site?.GetService(serviceType);
+    protected virtual object? GetService(Type serviceType) => _component?.Site?.GetService(serviceType);
 
     internal T? GetService<T>() where T : class
         => GetService(typeof(T)) as T;
