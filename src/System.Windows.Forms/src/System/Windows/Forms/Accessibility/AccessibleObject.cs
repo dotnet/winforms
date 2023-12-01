@@ -41,7 +41,7 @@ public unsafe partial class AccessibleObject :
     IGridItemProvider.Interface,
     IEnumVARIANT.Interface,
     IOleWindow.Interface,
-    UiaCore.ILegacyIAccessibleProvider,
+    ILegacyIAccessibleProvider.Interface,
     ISelectionProvider.Interface,
     ISelectionItemProvider.Interface,
     IRawElementProviderHwndOverride.Interface,
@@ -927,27 +927,25 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    string? UiaCore.ILegacyIAccessibleProvider.DefaultAction => DefaultAction;
+    HRESULT ILegacyIAccessibleProvider.Interface.Select(int flagsSelect)
+    {
+        Select((AccessibleSelection)flagsSelect);
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.ILegacyIAccessibleProvider.Description => Description;
+    HRESULT ILegacyIAccessibleProvider.Interface.DoDefaultAction()
+    {
+        DoDefaultAction();
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.ILegacyIAccessibleProvider.Help => Help;
+    HRESULT ILegacyIAccessibleProvider.Interface.SetValue(PCWSTR szValue)
+    {
+        SetValue(szValue.ToString());
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.ILegacyIAccessibleProvider.KeyboardShortcut => KeyboardShortcut;
-
-    string? UiaCore.ILegacyIAccessibleProvider.Name => Name;
-
-    uint UiaCore.ILegacyIAccessibleProvider.Role => (uint)Role;
-
-    uint UiaCore.ILegacyIAccessibleProvider.State => (uint)State;
-
-    string? UiaCore.ILegacyIAccessibleProvider.Value => Value;
-
-    int UiaCore.ILegacyIAccessibleProvider.ChildId => GetChildId();
-
-    void UiaCore.ILegacyIAccessibleProvider.DoDefaultAction() => DoDefaultAction();
-
-    HRESULT UiaCore.ILegacyIAccessibleProvider.GetIAccessible(UIA.IAccessible** ppAccessible)
+    HRESULT ILegacyIAccessibleProvider.Interface.GetIAccessible(UIA.IAccessible** ppAccessible)
     {
         if (ppAccessible is null)
         {
@@ -973,14 +971,127 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    IRawElementProviderSimple.Interface[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
-        => GetSelected() is IRawElementProviderSimple.Interface selected
-            ? [selected]
-            : [];
+    HRESULT ILegacyIAccessibleProvider.Interface.get_ChildId(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.ILegacyIAccessibleProvider.Select(int flagsSelect) => Select((AccessibleSelection)flagsSelect);
+        *pRetVal = GetChildId();
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.ILegacyIAccessibleProvider.SetValue(string szValue) => SetValue(szValue);
+    HRESULT ILegacyIAccessibleProvider.Interface.get_Name(BSTR* pszName)
+    {
+        if (pszName is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pszName = Name is null ? default : new(Name);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_Value(BSTR* pszValue)
+    {
+        {
+            if (pszValue is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pszValue = Value is null ? default : new(Value);
+            return HRESULT.S_OK;
+        }
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_Description(BSTR* pszDescription)
+    {
+        if (pszDescription is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pszDescription = Description is null ? default : new(Description);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_Role(uint* pdwRole)
+    {
+        if (pdwRole is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pdwRole = (uint)Role;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_State(uint* pdwState)
+    {
+        if (pdwState is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pdwState = (uint)State;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_Help(BSTR* pszHelp)
+    {
+        if (pszHelp is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pszHelp = Help is null ? default : new(Help);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_KeyboardShortcut(BSTR* pszKeyboardShortcut)
+    {
+        if (pszKeyboardShortcut is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pszKeyboardShortcut = KeyboardShortcut is null ? default : new(KeyboardShortcut);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.GetSelection(SAFEARRAY** pvarSelectedChildren)
+    {
+        if (pvarSelectedChildren is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (GetSelected() is not IRawElementProviderSimple.Interface selected)
+        {
+            *pvarSelectedChildren = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
+        }
+        else
+        {
+            ComSafeArrayScope<IRawElementProviderSimple> scope = new(1);
+            scope[0] = ComHelpers.GetComPointer<IRawElementProviderSimple>(selected);
+            *pvarSelectedChildren = scope;
+        }
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ILegacyIAccessibleProvider.Interface.get_DefaultAction(BSTR* pszDefaultAction)
+    {
+        if (pszDefaultAction is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pszDefaultAction = DefaultAction is null ? default : new(DefaultAction);
+        return HRESULT.S_OK;
+    }
 
     HRESULT IExpandCollapseProvider.Interface.Expand()
     {
