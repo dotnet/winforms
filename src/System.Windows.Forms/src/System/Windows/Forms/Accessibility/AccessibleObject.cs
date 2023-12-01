@@ -876,7 +876,7 @@ public unsafe partial class AccessibleObject :
         IRawElementProviderSimple.Interface[]? fragmentRoots = GetEmbeddedFragmentRoots();
         *pRetVal = fragmentRoots is null
             ? default
-            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(fragmentRoots);
+            : fragmentRoots.CreateComSafeArrayScope<IRawElementProviderSimple, IRawElementProviderSimple.Interface>();
 
         return HRESULT.S_OK;
     }
@@ -1099,7 +1099,7 @@ public unsafe partial class AccessibleObject :
         IRawElementProviderSimple.Interface[]? rowHeaders = GetRowHeaders();
         *pRetVal = rowHeaders is null
             ? default
-            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(rowHeaders);
+            : rowHeaders.CreateComSafeArrayScope<IRawElementProviderSimple, IRawElementProviderSimple.Interface>();
 
         return HRESULT.S_OK;
     }
@@ -1114,7 +1114,7 @@ public unsafe partial class AccessibleObject :
         IRawElementProviderSimple.Interface[]? columnHeaders = GetColumnHeaders();
         *pRetVal = columnHeaders is null
             ? default
-            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(columnHeaders);
+            : columnHeaders.CreateComSafeArrayScope<IRawElementProviderSimple, IRawElementProviderSimple.Interface>();
 
         return HRESULT.S_OK;
     }
@@ -1140,7 +1140,7 @@ public unsafe partial class AccessibleObject :
         IRawElementProviderSimple.Interface[]? rowHeaderItems = GetRowHeaderItems();
         *pRetVal = rowHeaderItems is null
             ? default
-            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(rowHeaderItems);
+            : rowHeaderItems.CreateComSafeArrayScope<IRawElementProviderSimple, IRawElementProviderSimple.Interface>();
 
         return HRESULT.S_OK;
     }
@@ -1155,7 +1155,7 @@ public unsafe partial class AccessibleObject :
         IRawElementProviderSimple.Interface[]? columnHeaderItems = GetColumnHeaderItems();
         *pRetVal = columnHeaderItems is null
             ? default
-            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(columnHeaderItems);
+            : columnHeaderItems.CreateComSafeArrayScope<IRawElementProviderSimple, IRawElementProviderSimple.Interface>();
 
         return HRESULT.S_OK;
     }
@@ -2559,7 +2559,7 @@ public unsafe partial class AccessibleObject :
         IRawElementProviderSimple.Interface[]? selection = GetSelection();
         *pRetVal = selection is null
             ? default
-            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(selection);
+            : selection.CreateComSafeArrayScope<IRawElementProviderSimple, IRawElementProviderSimple.Interface>();
 
         return HRESULT.S_OK;
     }
