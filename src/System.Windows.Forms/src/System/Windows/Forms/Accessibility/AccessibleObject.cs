@@ -30,23 +30,23 @@ public unsafe partial class AccessibleObject :
     IRawElementProviderSimple.Interface,
     IRawElementProviderFragment.Interface,
     IRawElementProviderFragmentRoot.Interface,
-    UiaCore.IInvokeProvider,
-    UiaCore.IValueProvider,
-    UiaCore.IRangeValueProvider,
-    UiaCore.IExpandCollapseProvider,
-    UiaCore.IToggleProvider,
-    UiaCore.ITableProvider,
-    UiaCore.ITableItemProvider,
-    UiaCore.IGridProvider,
-    UiaCore.IGridItemProvider,
+    IInvokeProvider.Interface,
+    IValueProvider.Interface,
+    IRangeValueProvider.Interface,
+    IExpandCollapseProvider.Interface,
+    IToggleProvider.Interface,
+    ITableProvider.Interface,
+    ITableItemProvider.Interface,
+    IGridProvider.Interface,
+    IGridItemProvider.Interface,
     IEnumVARIANT.Interface,
     IOleWindow.Interface,
     UiaCore.ILegacyIAccessibleProvider,
-    UiaCore.ISelectionProvider,
-    UiaCore.ISelectionItemProvider,
+    ISelectionProvider.Interface,
+    ISelectionItemProvider.Interface,
     IRawElementProviderHwndOverride.Interface,
-    UiaCore.IScrollItemProvider,
-    UiaCore.IMultipleViewProvider,
+    IScrollItemProvider.Interface,
+    IMultipleViewProvider.Interface,
     ITextProvider.Interface,
     ITextProvider2.Interface,
     // This IAccessible needs moved first once IManagedWrapper is implemented so it gets chosen by built-in COM interop.
@@ -874,19 +874,10 @@ public unsafe partial class AccessibleObject :
         }
 
         IRawElementProviderSimple.Interface[]? fragmentRoots = GetEmbeddedFragmentRoots();
-        if (fragmentRoots is null)
-        {
-            *pRetVal = default;
-            return HRESULT.S_OK;
-        }
+        *pRetVal = fragmentRoots is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(fragmentRoots);
 
-        ComSafeArrayScope<IRawElementProviderSimple> scope = new((uint)fragmentRoots.Length);
-        for (int i = 0; i < fragmentRoots.Length; i++)
-        {
-            scope[i] = ComHelpers.GetComPointer<IRawElementProviderSimple>(fragmentRoots[i]);
-        }
-
-        *pRetVal = scope;
         return HRESULT.S_OK;
     }
 
@@ -991,13 +982,34 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.ILegacyIAccessibleProvider.SetValue(string szValue) => SetValue(szValue);
 
-    void UiaCore.IExpandCollapseProvider.Expand() => Expand();
+    HRESULT IExpandCollapseProvider.Interface.Expand()
+    {
+        Expand();
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.IExpandCollapseProvider.Collapse() => Collapse();
+    HRESULT IExpandCollapseProvider.Interface.Collapse()
+    {
+        Collapse();
+        return HRESULT.S_OK;
+    }
 
-    UIA.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
+    HRESULT IExpandCollapseProvider.Interface.get_ExpandCollapseState(ExpandCollapseState* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IInvokeProvider.Invoke() => Invoke();
+        *pRetVal = ExpandCollapseState;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IInvokeProvider.Interface.Invoke()
+    {
+        Invoke();
+        return HRESULT.S_OK;
+    }
 
     ITextRangeProvider* ITextProvider.Interface.DocumentRange => DocumentRangeInternal;
 
@@ -1032,41 +1044,209 @@ public unsafe partial class AccessibleObject :
     HRESULT ITextProvider2.Interface.RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
         => GetRangeFromAnnotation(annotationElement, pRetVal);
 
-    BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? true : false;
+    HRESULT IValueProvider.Interface.SetValue(PCWSTR val)
+    {
+        SetValue(val.ToString());
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.IValueProvider.Value => Value;
+    HRESULT IValueProvider.Interface.get_Value(BSTR* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IValueProvider.SetValue(string? newValue) => SetValue(newValue);
+        *pRetVal = Value is null ? default : new(Value);
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.IToggleProvider.Toggle() => Toggle();
+    HRESULT IValueProvider.Interface.get_IsReadOnly(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
+        *pRetVal = IsReadOnly;
+        return HRESULT.S_OK;
+    }
 
-    object[]? UiaCore.ITableProvider.GetRowHeaders() => GetRowHeaders();
+    HRESULT IToggleProvider.Interface.Toggle()
+    {
+        Toggle();
+        return HRESULT.S_OK;
+    }
 
-    object[]? UiaCore.ITableProvider.GetColumnHeaders() => GetColumnHeaders();
+    HRESULT IToggleProvider.Interface.get_ToggleState(ToggleState* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
+        *pRetVal = ToggleState;
+        return HRESULT.S_OK;
+    }
 
-    object[]? UiaCore.ITableItemProvider.GetRowHeaderItems() => GetRowHeaderItems();
+    HRESULT ITableProvider.Interface.GetRowHeaders(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    object[]? UiaCore.ITableItemProvider.GetColumnHeaderItems() => GetColumnHeaderItems();
+        IRawElementProviderSimple.Interface[]? rowHeaders = GetRowHeaders();
+        *pRetVal = rowHeaders is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(rowHeaders);
 
-    object? UiaCore.IGridProvider.GetItem(int row, int column) => GetItem(row, column);
+        return HRESULT.S_OK;
+    }
 
-    int UiaCore.IGridProvider.RowCount => RowCount;
+    HRESULT ITableProvider.Interface.GetColumnHeaders(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int UiaCore.IGridProvider.ColumnCount => ColumnCount;
+        IRawElementProviderSimple.Interface[]? columnHeaders = GetColumnHeaders();
+        *pRetVal = columnHeaders is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(columnHeaders);
 
-    int UiaCore.IGridItemProvider.Row => Row;
+        return HRESULT.S_OK;
+    }
 
-    int UiaCore.IGridItemProvider.Column => Column;
+    HRESULT ITableProvider.Interface.get_RowOrColumnMajor(RowOrColumnMajor* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int UiaCore.IGridItemProvider.RowSpan => RowSpan;
+        *pRetVal = RowOrColumnMajor;
+        return HRESULT.S_OK;
+    }
 
-    int UiaCore.IGridItemProvider.ColumnSpan => ColumnSpan;
+    HRESULT ITableItemProvider.Interface.GetRowHeaderItems(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    IRawElementProviderSimple.Interface? UiaCore.IGridItemProvider.ContainingGrid => ContainingGrid;
+        IRawElementProviderSimple.Interface[]? rowHeaderItems = GetRowHeaderItems();
+        *pRetVal = rowHeaderItems is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(rowHeaderItems);
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITableItemProvider.Interface.GetColumnHeaderItems(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        IRawElementProviderSimple.Interface[]? columnHeaderItems = GetColumnHeaderItems();
+        *pRetVal = columnHeaderItems is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(columnHeaderItems);
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridProvider.Interface.GetItem(int row, int column, IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(GetItem(row, column));
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridProvider.Interface.get_RowCount(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = RowCount;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridProvider.Interface.get_ColumnCount(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ColumnCount;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_Row(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = Row;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_Column(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = Column;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_RowSpan(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = RowSpan;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_ColumnSpan(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ColumnSpan;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IGridItemProvider.Interface.get_ContainingGrid(IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(ContainingGrid);
+        return HRESULT.S_OK;
+    }
 
     void IAccessible.accDoDefaultAction(object childID)
     {
@@ -2255,43 +2435,196 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    int UiaCore.IMultipleViewProvider.CurrentView => GetMultiViewProviderCurrentView();
+    HRESULT IMultipleViewProvider.Interface.get_CurrentView(int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int[]? UiaCore.IMultipleViewProvider.GetSupportedViews() => GetMultiViewProviderSupportedViews();
+        *pRetVal = GetMultiViewProviderCurrentView();
+        return HRESULT.S_OK;
+    }
 
-    string? UiaCore.IMultipleViewProvider.GetViewName(int viewId) => GetMultiViewProviderViewName(viewId);
+    HRESULT IMultipleViewProvider.Interface.GetSupportedViews(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IMultipleViewProvider.SetCurrentView(int viewId) => SetMultiViewProviderCurrentView(viewId);
+        int[]? result = GetMultiViewProviderSupportedViews();
 
-    BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? true : false;
+        *pRetVal = result is null ? SAFEARRAY.CreateEmpty(VARENUM.VT_I4) : new SafeArrayScope<int>(result);
 
-    double UiaCore.IRangeValueProvider.LargeChange => LargeChange;
+        return HRESULT.S_OK;
+    }
 
-    double UiaCore.IRangeValueProvider.Maximum => Maximum;
+    HRESULT IMultipleViewProvider.Interface.GetViewName(int viewId, BSTR* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    double UiaCore.IRangeValueProvider.Minimum => Minimum;
+        *pRetVal = new BSTR(GetMultiViewProviderViewName(viewId));
+        return HRESULT.S_OK;
+    }
 
-    double UiaCore.IRangeValueProvider.SmallChange => SmallChange;
+    HRESULT IMultipleViewProvider.Interface.SetCurrentView(int viewId)
+    {
+        SetMultiViewProviderCurrentView(viewId);
+        return HRESULT.S_OK;
+    }
 
-    double UiaCore.IRangeValueProvider.Value => RangeValue;
+    HRESULT IRangeValueProvider.Interface.SetValue(double val)
+    {
+        SetValue(val);
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.IRangeValueProvider.SetValue(double value) => SetValue(value);
+    HRESULT IRangeValueProvider.Interface.get_Value(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    object[]? UiaCore.ISelectionProvider.GetSelection() => GetSelection();
+        *pRetVal = RangeValue;
+        return HRESULT.S_OK;
+    }
 
-    BOOL UiaCore.ISelectionProvider.CanSelectMultiple => CanSelectMultiple ? true : false;
+    HRESULT IRangeValueProvider.Interface.get_IsReadOnly(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    BOOL UiaCore.ISelectionProvider.IsSelectionRequired => IsSelectionRequired ? true : false;
+        *pRetVal = IsReadOnly;
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.ISelectionItemProvider.Select() => SelectItem();
+    HRESULT IRangeValueProvider.Interface.get_Maximum(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.ISelectionItemProvider.AddToSelection() => AddToSelection();
+        *pRetVal = Maximum;
+        return HRESULT.S_OK;
+    }
 
-    void UiaCore.ISelectionItemProvider.RemoveFromSelection() => RemoveFromSelection();
+    HRESULT IRangeValueProvider.Interface.get_Minimum(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    BOOL UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected ? true : false;
+        *pRetVal = Minimum;
+        return HRESULT.S_OK;
+    }
 
-    IRawElementProviderSimple.Interface? UiaCore.ISelectionItemProvider.SelectionContainer => ItemSelectionContainer;
+    HRESULT IRangeValueProvider.Interface.get_LargeChange(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = LargeChange;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRangeValueProvider.Interface.get_SmallChange(double* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = SmallChange;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionProvider.Interface.GetSelection(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        IRawElementProviderSimple.Interface[]? selection = GetSelection();
+        *pRetVal = selection is null
+            ? default
+            : ComSafeArrayScope<IRawElementProviderSimple>.CreateFromInterfaceArray(selection);
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionProvider.Interface.get_CanSelectMultiple(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = CanSelectMultiple ? BOOL.TRUE : BOOL.FALSE;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionProvider.Interface.get_IsSelectionRequired(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = IsSelectionRequired ? BOOL.TRUE : BOOL.FALSE;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.Select()
+    {
+        SelectItem();
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.AddToSelection()
+    {
+        AddToSelection();
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.RemoveFromSelection()
+    {
+        RemoveFromSelection();
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.get_IsSelected(BOOL* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = IsItemSelected ? BOOL.TRUE : BOOL.FALSE;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ISelectionItemProvider.Interface.get_SelectionContainer(IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(ItemSelectionContainer);
+        return HRESULT.S_OK;
+    }
 
     /// <summary>
     ///  Raises the UIA Notification event.
@@ -2383,7 +2716,11 @@ public unsafe partial class AccessibleObject :
         return false;
     }
 
-    void UiaCore.IScrollItemProvider.ScrollIntoView() => ScrollIntoView();
+    HRESULT IScrollItemProvider.Interface.ScrollIntoView()
+    {
+        ScrollIntoView();
+        return HRESULT.S_OK;
+    }
 
     internal virtual void ScrollIntoView() => Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
 
@@ -2427,7 +2764,7 @@ public unsafe partial class AccessibleObject :
         => ((IDispatch.Interface)_dispatchAdapter).GetTypeInfo(iTInfo, lcid, ppTInfo);
 
     HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
-        => ((IDispatch.Interface) _dispatchAdapter).GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
+        => ((IDispatch.Interface)_dispatchAdapter).GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
 
     HRESULT IDispatch.Interface.Invoke(
         int dispIdMember,

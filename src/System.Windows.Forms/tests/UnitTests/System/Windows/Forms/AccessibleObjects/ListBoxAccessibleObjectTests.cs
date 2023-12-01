@@ -160,7 +160,7 @@ public class ListBoxAccessibleObjectTests
     [InlineData(SelectionMode.None, false)]
     [InlineData(SelectionMode.MultiSimple, true)]
     [InlineData(SelectionMode.MultiExtended, true)]
-    public void ListBoxItemAccessibleObject_GetPropertyValue_IsSelectionRequired(SelectionMode mode, bool expected)
+    public unsafe void ListBoxItemAccessibleObject_GetPropertyValue_IsSelectionRequired(SelectionMode mode, bool expected)
     {
         using ListBox listBox = InitializeListBoxWithItems();
         listBox.SelectionMode = mode;
@@ -171,8 +171,9 @@ public class ListBoxAccessibleObjectTests
 
         Assert.Equal(expected, (bool)actual);
 
-        Interop.UiaCore.ISelectionProvider provider = listBoxAccessibleObject;
-        Assert.Equal(expected, (bool)provider.IsSelectionRequired);
+        ISelectionProvider.Interface provider = listBoxAccessibleObject;
+        Assert.True(provider.get_IsSelectionRequired(out BOOL result).Succeeded);
+        Assert.Equal(expected, (bool)result);
     }
 
     [WinFormsTheory]
@@ -180,7 +181,7 @@ public class ListBoxAccessibleObjectTests
     [InlineData(SelectionMode.None, false)]
     [InlineData(SelectionMode.MultiSimple, true)]
     [InlineData(SelectionMode.MultiExtended, true)]
-    public void ListBoxItemAccessibleObject_GetPropertyValue_CanSelectMultiple(SelectionMode mode, bool expected)
+    public unsafe void ListBoxItemAccessibleObject_GetPropertyValue_CanSelectMultiple(SelectionMode mode, bool expected)
     {
         using ListBox listBox = InitializeListBoxWithItems();
         listBox.SelectionMode = mode;
@@ -191,8 +192,9 @@ public class ListBoxAccessibleObjectTests
 
         Assert.Equal(expected, (bool)actual);
 
-        Interop.UiaCore.ISelectionProvider provider = listBoxAccessibleObject;
-        Assert.Equal(expected, (bool)provider.CanSelectMultiple);
+        ISelectionProvider.Interface provider = listBoxAccessibleObject;
+        Assert.True(provider.get_CanSelectMultiple(out BOOL result).Succeeded);
+        Assert.Equal(expected, (bool)result);
     }
 
     [WinFormsFact]
@@ -205,7 +207,7 @@ public class ListBoxAccessibleObjectTests
         listBox.SetSelected(2, value: true);
 
         var listBoxAccessibleObject = listBox.AccessibilityObject;
-        Interop.UiaCore.ISelectionItemProvider provider = listBoxAccessibleObject.GetChild(0);
+        ISelectionItemProvider.Interface provider = listBoxAccessibleObject.GetChild(0);
         provider.RemoveFromSelection();
 
         var indices = listBox.SelectedIndices;

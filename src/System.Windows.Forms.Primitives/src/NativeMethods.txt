@@ -371,6 +371,7 @@ IEnumFORMATETC
 IEnumOLEVERB
 IEnumVARIANT
 IErrorInfo
+IExpandCollapseProvider
 IFileDialog
 IFileDialogCustomize
 IFileDialogEvents
@@ -381,6 +382,8 @@ IFontDisp
 IGetOleObject
 IGetVBAObject
 IGlobalInterfaceTable
+IGridItemProvider
+IGridProvider
 IHTMLDocument
 IHTMLDocument2
 IHTMLDocument3
@@ -390,6 +393,7 @@ IHTMLElement3
 IHTMLElementCollection
 IHTMLWindow3
 IHTMLWindow4
+IInvokeProvider
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create
@@ -418,6 +422,7 @@ ImmSetConversionStatus
 ImmSetOpenStatus
 IMN_*
 IMPLTYPEFLAGS
+IMultipleViewProvider
 InitCommonControls
 InitCommonControlsEx
 INITCOMMONCONTROLSEX_ICC
@@ -445,6 +450,7 @@ IPictureDisp
 IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
+IRangeValueProvider
 IRawElementProviderFragment
 IRawElementProviderFragmentRoot
 IRawElementProviderHwndOverride
@@ -455,7 +461,10 @@ IsAccelerator
 IsAppThemed
 IsChild
 IsDialogMessage
+IScrollItemProvider
 IScrollProvider
+ISelectionItemProvider
+ISelectionProvider
 IServiceProvider
 IShellItem
 ISimpleFrameSite
@@ -471,10 +480,14 @@ IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
 IsZoomed
+ITableItemProvider
+ITableProvider
 ITextDocument
 ITextProvider
 ITextProvider2
 ITextRangeProvider
+IToggleProvider
+IValueProvider
 IVBFormat
 IVBGetControl
 IViewObject
