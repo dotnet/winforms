@@ -11,7 +11,6 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 using IAccessible = Accessibility.IAccessible;
 using UIA = Windows.Win32.UI.Accessibility;
@@ -25,7 +24,7 @@ public unsafe partial class AccessibleObject :
     StandardOleMarshalObject,
     IReflect,
     IAccessible,
-    UiaCore.IAccessibleEx,
+    IAccessibleEx.Interface,
     ComIServiceProvider.Interface,
     IRawElementProviderSimple.Interface,
     IRawElementProviderFragment.Interface,
@@ -710,7 +709,7 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    unsafe HRESULT ComIServiceProvider.Interface.QueryService(Guid* service, Guid* riid, void** ppvObject)
+    HRESULT ComIServiceProvider.Interface.QueryService(Guid* service, Guid* riid, void** ppvObject)
     {
         if (service is null || riid is null)
         {
@@ -724,12 +723,12 @@ public unsafe partial class AccessibleObject :
 
         if (IsIAccessibleExSupported())
         {
-            Guid IID_IAccessibleEx = typeof(UiaCore.IAccessibleEx).GUID;
+            Guid IID_IAccessibleEx = *IID.Get<IAccessibleEx>();
             if (service->Equals(IID_IAccessibleEx) && riid->Equals(IID_IAccessibleEx))
             {
                 // We want to return the internal, secure, object, which we don't have access here
                 // Return non-null, which will be interpreted in internal method, to mean returning casted object to IAccessibleEx
-                *ppvObject = (void*)Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
+                *ppvObject = ComHelpers.GetComPointer<IAccessibleEx>(this);
                 return HRESULT.S_OK;
             }
         }
@@ -737,32 +736,55 @@ public unsafe partial class AccessibleObject :
         return HRESULT.E_NOINTERFACE;
     }
 
-    UiaCore.IAccessibleEx? UiaCore.IAccessibleEx.GetObjectForChild(int idChild) => null;
-
-    unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object? ppAcc, int* pidChild)
+    HRESULT IAccessibleEx.Interface.GetObjectForChild(int idChild, IAccessibleEx** pRetVal)
     {
-        if (pidChild is null)
+        if (pRetVal is null)
         {
-            ppAcc = null;
-            return HRESULT.E_INVALIDARG;
+            return HRESULT.E_POINTER;
         }
 
-        ppAcc = this;
+        *pRetVal = default;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IAccessibleEx.Interface.GetIAccessiblePair(UIA.IAccessible** ppAcc, int* pidChild)
+    {
+        if (ppAcc is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (pidChild is null)
+        {
+            *ppAcc = default;
+            return HRESULT.E_POINTER;
+        }
+
+        *ppAcc = ComHelpers.GetComPointer<UIA.IAccessible>(this);
         *pidChild = (int)PInvoke.CHILDID_SELF;
         return HRESULT.S_OK;
     }
 
-    int[]? UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
-
-    unsafe HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(IRawElementProviderSimple.Interface pIn, IntPtr* ppRetValOut)
+    HRESULT IAccessibleEx.Interface.GetRuntimeId(SAFEARRAY** pRetVal)
     {
-        if (ppRetValOut == null)
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = new SafeArrayScope<int>(RuntimeId);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IAccessibleEx.Interface.ConvertReturnedElement(IRawElementProviderSimple* pIn, IAccessibleEx** ppRetValOut)
+    {
+        if (ppRetValOut is null)
         {
             return HRESULT.E_POINTER;
         }
 
         // No need to implement this for patterns and properties
-        *ppRetValOut = IntPtr.Zero;
+        *ppRetValOut = default;
         return HRESULT.E_NOTIMPL;
     }
 

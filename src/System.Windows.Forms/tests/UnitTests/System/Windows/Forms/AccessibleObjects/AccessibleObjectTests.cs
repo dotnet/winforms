@@ -2,13 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using static Interop;
-using System.Reflection;
-using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
 using Windows.Win32.System.Variant;
+using UIA = Windows.Win32.UI.Accessibility;
+using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -2671,10 +2671,12 @@ public partial class AccessibleObjectTests
         int idChild = unchecked((int)0xdeadbeef);
         Assert.NotEqual(expectedIdChild, idChild);
 
-        HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, &idChild);
+        using ComScope<UIA.IAccessible> accessible = new(null);
+        HRESULT result = ((UIA.IAccessibleEx.Interface)accessibleObject).GetIAccessiblePair(accessible, &idChild);
+        using ComScope<UIA.IAccessible> expected = new((UIA.IAccessible*)Marshal.GetComInterfaceForObject<AccessibleObject, IAccessible>(accessibleObject));
 
         Assert.Equal(HRESULT.S_OK, result);
-        Assert.Equal(accessibleObject, pAcc);
+        Assert.Equal((nint)expected.Value, (nint)accessible.Value);
         Assert.Equal(expectedIdChild, idChild);
     }
 
@@ -2683,10 +2685,11 @@ public partial class AccessibleObjectTests
     {
         AccessibleObject accessibleObject = new();
 
-        HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, null);
+        using ComScope<UIA.IAccessible> accessible = new(null);
+        HRESULT result = ((UIA.IAccessibleEx.Interface)accessibleObject).GetIAccessiblePair(accessible, pidChild: null);
 
-        Assert.Equal(HRESULT.E_INVALIDARG, result);
-        Assert.Null(pAcc);
+        Assert.Equal(HRESULT.E_POINTER, result);
+        Assert.True(accessible.IsNull);
     }
 
     [WinFormsFact]

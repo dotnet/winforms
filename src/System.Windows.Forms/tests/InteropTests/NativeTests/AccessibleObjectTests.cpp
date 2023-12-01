@@ -62,24 +62,17 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetIAccessiblePair(IUnknown* pUnknown
         // Negative tests.
         idChild = 1;
         hr = pAccessibleEx->GetIAccessiblePair(NULL, &idChild);
-#if false
+
         assertEqualHr(E_POINTER, hr);
-#else
-        assertEqualHr(S_OK, hr);
-#endif
         assertEqualInt(1, idChild);
 
         result = NULL;
         hr = pAccessibleEx->GetIAccessiblePair(&result, NULL);
-        assertEqualHr(E_INVALIDARG, hr);
+        assertEqualHr(E_POINTER, hr);
         assertNull(result.p);
 
         hr = pAccessibleEx->GetIAccessiblePair(NULL, NULL);
-#if false
         assertEqualHr(E_POINTER, hr);
-#else
-        assertEqualHr(S_OK, hr);
-#endif
 
         return S_OK;
     });
@@ -95,14 +88,14 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown, int*
         hr = pUnknown->QueryInterface(IID_IAccessibleEx, (void**)&pAccessibleEx);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pAccessibleEx->GetRuntimeId(&result);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(S_OK, hr);
         SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pAccessibleEx->GetRuntimeId(NULL);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -126,7 +119,7 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetObjectForChild(IUnknown* pUnknown,
 
         // Negative tests.
         hr = pAccessibleEx->GetObjectForChild(idChild, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

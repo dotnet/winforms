@@ -351,6 +351,7 @@ HT*
 HTREEITEM
 HWND_*
 IAccessible
+IAccessibleEx
 IAutoComplete2
 IClassFactory
 IClassFactory2
