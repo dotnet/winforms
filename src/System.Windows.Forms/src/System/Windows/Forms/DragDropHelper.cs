@@ -249,10 +249,10 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Determines whether the specified format is a drag loop format.
+    ///  Determines whether the specified format is a drag loop format.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="format"/> is a drag loop format; otherwise <see langword="false"/>.
+    ///  <see langword="true"/> if <paramref name="format"/> is a drag loop format; otherwise <see langword="false"/>.
     /// </returns>
     public static bool IsInDragLoopFormat(FORMATETC format)
     {
@@ -525,9 +525,7 @@ internal static class DragDropHelper
     /// </para>
     /// </remarks>
     private static void SetIsShowingText(IComDataObject dataObject, bool isShowingText)
-    {
-        SetBooleanFormat(dataObject, ISSHOWINGTEXT, isShowingText);
-    }
+        => SetBooleanFormat(dataObject, ISSHOWINGTEXT, isShowingText);
 
     /// <summary>
     /// Sets the UsingDefaultDragImage format into a data object.
@@ -538,9 +536,7 @@ internal static class DragDropHelper
     /// </para>
     /// </remarks>
     private static void SetUsingDefaultDragImage(IComDataObject dataObject, bool usingDefaultDragImage)
-    {
-        SetBooleanFormat(dataObject, USINGDEFAULTDRAGIMAGE, usingDefaultDragImage);
-    }
+        => SetBooleanFormat(dataObject, USINGDEFAULTDRAGIMAGE, usingDefaultDragImage);
 
     /// <summary>
     /// Creates an in-process server drag-image manager object and returns the specified interface pointer.

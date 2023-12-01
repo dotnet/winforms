@@ -68,7 +68,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
 
         _peer.OnGiveFeedback(gfbEvent);
 
-        if (IsDropTargetWindowInCurrentThread() && !gfbEvent.DragImageEquals(_lastGiveFeedbacEventArgs))
+        if (IsDropTargetWindowInCurrentThread() && !gfbEvent.Equals(_lastGiveFeedbacEventArgs))
         {
             _lastGiveFeedbacEventArgs = gfbEvent.Clone();
             UpdateDragImage(_lastGiveFeedbacEventArgs, _dataObject, _lastHwndTarget);
@@ -100,7 +100,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
     public unsafe HRESULT DragEnterTarget(HWND hwndTarget)
     {
         _lastHwndTarget = hwndTarget;
-        _lastHwndTargetThreadId = PInvoke.GetWindowThreadProcessId(hwndTarget, null);
+        _lastHwndTargetThreadId = PInvoke.GetWindowThreadProcessId(hwndTarget, lpdwProcessId: null);
         return HRESULT.S_OK;
     }
 
