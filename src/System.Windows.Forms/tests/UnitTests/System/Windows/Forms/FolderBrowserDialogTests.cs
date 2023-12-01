@@ -166,6 +166,7 @@ public class FolderBrowserDialogTests
         if (expectedSelectedPaths.Length > 0)
         {
             Assert.Equal(dialog.SelectedPaths, dialog.SelectedPaths);
+            Assert.Equal(dialog.SelectedPath, dialog.SelectedPaths[0]);
             Assert.NotSame(dialog.SelectedPaths, dialog.SelectedPaths);
         }
         else
@@ -179,6 +180,7 @@ public class FolderBrowserDialogTests
         if (expectedSelectedPaths.Length > 0)
         {
             Assert.Equal(dialog.SelectedPaths, dialog.SelectedPaths);
+            Assert.Equal(dialog.SelectedPath, dialog.SelectedPaths[0]);
             Assert.NotSame(dialog.SelectedPaths, dialog.SelectedPaths);
         }
         else
