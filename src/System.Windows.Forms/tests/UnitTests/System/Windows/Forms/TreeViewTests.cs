@@ -7160,6 +7160,129 @@ public class TreeViewTests
         action.Should().NotThrow();
     }
 
+    [WinFormsFact]
+    public void Remove_MultipleLevelsNodes_AfterSort()
+    {
+        using TreeView treeView = new();
+        TreeNode parent = new("Parent");
+        treeView.Nodes.Add(parent);
+
+        TreeNode treeNode1 = new("Node1");
+        TreeNode treeNode2 = new("Node0");
+        TreeNode treeNode3 = new("Node2");
+        TreeNode treeNode4 = new("SubNode1-1-1-1", new[] { treeNode1, treeNode2, treeNode3 });
+        TreeNode treeNode5 = new("SubNode1-1-1", new[] { treeNode4 });
+        TreeNode treeNode6 = new("SubNode1-1", new[] { treeNode5 });
+        TreeNode treeNode7 = new("SubNode1", new[] { treeNode6 });
+        TreeNode treeNode8 = new("Parent", new[] { treeNode7 });
+        parent.Nodes.AddRange(new TreeNode[] { treeNode8 });
+
+        treeView.Sort();
+
+        Assert.Equal(1, treeNode5.Nodes.Count);
+
+        parent.Nodes.Remove(treeNode4);
+        Assert.Equal(0, treeNode5.Nodes.Count);
+
+        Action action = () =>
+        {
+            parent.Nodes.Remove(treeNode5);
+            parent.Nodes.Remove(treeNode6);
+            parent.Nodes.Remove(treeNode7);
+            parent.Nodes.Remove(treeNode8);
+        };
+
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void Clear_MultipleLevelsNodes_AfterSort()
+    {
+        using TreeView treeView = new();
+        TreeNode parent = new("Parent");
+        treeView.Nodes.Add(parent);
+
+        TreeNode lastSubNode1 = new("Node1");
+        TreeNode lastSubNode2 = new("Node2");
+        TreeNode lastSubNode3 = new("Node3");
+        TreeNode fifthSubNode1 = new("SubNode1-1-1-1", new[] { lastSubNode2, lastSubNode3, lastSubNode1 });
+        TreeNode fifthSubNode2 = new("SubNode1-1-1-2");
+        TreeNode fourthSubNode1 = new("SubNode1-1-1", new[] { fifthSubNode1, fifthSubNode2 });
+        TreeNode fourthSubNode2 = new("SubNode1-1-2");
+        TreeNode thirdSubNode1 = new("SubNode1-1", new[] { fourthSubNode2, fourthSubNode1 });
+        TreeNode thirdSubNode2 = new("SubNode1-2");
+        TreeNode secondSubNode1 = new("SubNode1", new[] { thirdSubNode2, thirdSubNode1 });
+        TreeNode secondSubNode2 = new("SubNode2");
+        TreeNode firstSubNode = new("Parent", new[] { secondSubNode1, secondSubNode2 });
+        parent.Nodes.AddRange(new TreeNode[] { firstSubNode });
+
+        // Make sure all nodes have been added as expected.
+        Assert.Equal(3, fifthSubNode1.Nodes.Count);
+        Assert.Equal(2, parent.Nodes[0].Nodes.Count);
+        Assert.Equal(1, parent.Nodes.Count);
+        Assert.Equal(fourthSubNode2, thirdSubNode1.Nodes[0]);
+        Assert.Equal(lastSubNode3, fifthSubNode1.Nodes[1]);
+
+        treeView.Sort();
+
+        // Verify that the sort is successful.
+        Assert.Equal(fourthSubNode2, thirdSubNode1.Nodes[1]);
+        Assert.Equal(lastSubNode3, fifthSubNode1.Nodes[2]);
+
+        // Clear the last non-leaf nodes.
+        fifthSubNode1.Nodes.Clear();
+        Assert.Equal(0, fifthSubNode1.Nodes.Count);
+
+        // Clear the first-level child nodes.
+        firstSubNode.Nodes.Clear();
+        Assert.Equal(0, firstSubNode.Nodes.Count);
+
+        // Clear top-level nodes.
+        Action action = parent.Nodes.Clear;
+        action.Should().NotThrow();
+        Assert.Equal(0, parent.Nodes.Count);
+    }
+
+    [WinFormsFact]
+    public void Verify_NodeValue_AfterSortAndRemove()
+    {
+        using TreeView treeView = new();
+
+        TreeNode treeNode1 = new("Node1");
+        TreeNode treeNode2 = new("Node2");
+        TreeNode treeNode3 = new("Node3");
+        TreeNode treeNode4 = new("Node3");
+        TreeNode parent = new("Parent", [treeNode2, treeNode3, treeNode1, treeNode4]);
+        parent.Nodes.Add("Node1", "Node1");
+        treeView.Nodes.AddRange(parent);
+
+        treeView.Sort();
+
+        // Remove treeNode3, which has the same text as treeNode4.
+        Assert.Equal(treeNode3, parent.Nodes[3]);
+
+        parent.Nodes.Remove(treeNode3);
+        Assert.Equal(4, parent.Nodes.Count);
+        Assert.Equal(treeNode4, parent.Nodes[3]);
+
+        // Remove node "Node1" by key, which has the same text as treeNode1.
+        Assert.True(parent.Nodes.ContainsKey("Node1"));
+
+        parent.Nodes.RemoveByKey("Node1");
+        Assert.False(parent.Nodes.ContainsKey("Node1"));
+        Assert.Equal(treeNode1, parent.Nodes[0]);
+
+        // Remove the first child node.
+        parent.Nodes.Remove(parent.Nodes[0]);
+        Assert.Equal(2, parent.Nodes.Count);
+        Assert.Equal(treeNode2, parent.Nodes[0]);
+
+        // Remove the last child node.
+        parent.Nodes.Remove(parent.Nodes[1]);
+        Assert.Equal(1, parent.Nodes.Count);
+        Assert.Equal(treeNode2, parent.Nodes[0]);
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;
