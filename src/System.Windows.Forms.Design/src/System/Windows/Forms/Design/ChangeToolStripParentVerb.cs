@@ -43,7 +43,7 @@ internal class ChangeToolStripParentVerb
         try
         {
             Cursor.Current = Cursors.WaitCursor;
-            //Add a New ToolStripContainer to the RootComponent ...
+            // Add a New ToolStripContainer to the RootComponent ...
             Control root = _host.RootComponent as Control;
             if (_host.GetDesigner(root) is ParentControlDesigner rootDesigner)
             {
@@ -73,25 +73,25 @@ internal class ChangeToolStripParentVerb
                             if (oldParent is not null)
                             {
                                 changeService.OnComponentChanging(oldParent, controlsProp);
-                                //remove control from the old parent
+                                // remove control from the old parent
                                 oldParent.Controls.Remove(toolStrip);
                             }
 
                             if (newParent is not null)
                             {
                                 changeService.OnComponentChanging(newParent, controlsProp);
-                                //finally add & relocate the control with the new parent
+                                // finally add & relocate the control with the new parent
                                 newParent.Controls.Add(toolStrip);
                             }
 
-                            //fire our comp changed events
+                            // fire our comp changed events
                             if (changeService is not null && oldParent is not null && newParent is not null)
                             {
                                 changeService.OnComponentChanged(oldParent, controlsProp);
                                 changeService.OnComponentChanged(newParent, controlsProp);
                             }
 
-                            //Set the Selection on the new Parent ... so that the selection is restored to the new item,
+                            // Set the Selection on the new Parent ... so that the selection is restored to the new item,
                             if (_provider.GetService(typeof(ISelectionService)) is ISelectionService selSvc)
                             {
                                 selSvc.SetSelectedComponents(new IComponent[] { tsc });

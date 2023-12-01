@@ -237,7 +237,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             }
             else
             {
-                //ensure we are popped off
+                // ensure we are popped off
                 PopBehavior();
             }
         }
@@ -306,7 +306,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             return false;
         }
 
-        return _initializing ? (Component != host.RootComponent)  //for non root components, respect the name that the base Control serialized unless changed
+        return _initializing ? (Component != host.RootComponent)  // for non root components, respect the name that the base Control serialized unless changed
             : ShadowProperties.ShouldSerializeValue(nameof(Name), null);
     }
 

@@ -28,16 +28,16 @@ public class UndoEngineExt : UndoEngine
                 UndoEngine.UndoUnit unit = undoStack.Pop();
                 unit.Undo();
                 redoStack.Push(unit);
-                //Log("::Undo - undo action performed: " + unit.Name);
+                // Log("::Undo - undo action performed: " + unit.Name);
             }
             catch
             {
-                //Log("::Undo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
+                // Log("::Undo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
             }
         }
         else
         {
-            //Log("::Undo - NO undo action to perform!");
+            // Log("::Undo - NO undo action to perform!");
         }
     }
 
@@ -50,16 +50,16 @@ public class UndoEngineExt : UndoEngine
                 UndoEngine.UndoUnit unit = redoStack.Pop();
                 unit.Undo();
                 undoStack.Push(unit);
-                //Log("::Redo - redo action performed: " + unit.Name);
+                // Log("::Redo - redo action performed: " + unit.Name);
             }
             catch
             {
-                //Log("::Redo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
+                // Log("::Redo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
             }
         }
         else
         {
-            //Log("::Redo - NO redo action to perform!");
+            // Log("::Redo - NO redo action to perform!");
         }
     }
 

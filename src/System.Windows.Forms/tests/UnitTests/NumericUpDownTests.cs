@@ -56,7 +56,7 @@ public class NumericUpDownTests
             Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
             Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
             Validate.LineTo(
-                (0, 18), (16, 18),
+                new(0, 18), new(16, 18),
                 State.Pen(1, upDown.BackColor, PEN_STYLE.PS_SOLID)));
     }
 
@@ -91,7 +91,7 @@ public class NumericUpDownTests
             Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
             Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
             Validate.LineTo(
-                (0, 18), (16, 18),
+                new(0, 18), new(16, 18),
                 State.Pen(1, upDown.BackColor, PEN_STYLE.PS_SOLID)));
     }
 

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../StyleCollectionEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Column and Row Styles</source>
+        <target state="translated">열 및 행 스타일</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="absoluteNumericUpDown.AccessibleName">
+        <source>Absolute</source>
+        <target state="translated">절대</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="absoluteRadioButton.Text">
+        <source>A&amp;bsolute</source>
+        <target state="translated">절대(&amp;B)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="addButton.Text">
+        <source>&amp;Add</source>
+        <target state="translated">추가(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="autoSizedRadioButton.Text">
+        <source>A&amp;utoSize</source>
+        <target state="translated">크기 자동 조정(&amp;U)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">취소</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsAndRowsListView.AccessibleName">
+        <source>Columns and Rows List</source>
+        <target state="translated">열 및 행 목록</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsOrRowsComboBox.Items">
+        <source>Columns</source>
+        <target state="translated">열</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsOrRowsComboBox.Items1">
+        <source>Rows</source>
+        <target state="translated">행</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="helperLinkLabel1.Text">
+        <source>Column and row spanning:
+If you want a control to span multiple rows or columns, set the RowSpan and ColumnSpan properties on the control.</source>
+        <target state="translated">열 및 행 확장:
+컨트롤을 여러 행이나 열로 확장하려면 컨트롤에 RowSpan 및 ColumnSpan 속성을 설정하십시오.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="helperLinkLabel2.Text">
+        <source>Alignment and stretching:
+If you want to align a control within a cell, or if you want a control to stretch within a cell, use the control's Anchor property.</source>
+        <target state="translated">맞춤 및 늘이기:
+셀 안에서 컨트롤을 맞추거나 늘이려면 컨트롤의 Anchor 속성을 사용하십시오.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="insertButton.Text">
+        <source>&amp;Insert</source>
+        <target state="translated">삽입(&amp;I)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="memberTypeLabel.Text">
+        <source>&amp;Show:</source>
+        <target state="translated">표시(&amp;S):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="membersColumnHeader.Text">
+        <source>Member</source>
+        <target state="translated">구성원</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">확인</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="percentLabel.Text">
+        <source>%</source>
+        <target state="translated">%</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="percentNumericUpDown.AccessibleName">
+        <source>Percent</source>
+        <target state="translated">백분율</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="percentRadioButton.Text">
+        <source>&amp;Percent</source>
+        <target state="translated">백분율(&amp;P)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="pixelsLabel.Text">
+        <source>pixels</source>
+        <target state="translated">픽셀</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="removeButton.Text">
+        <source>&amp;Delete</source>
+        <target state="translated">삭제(&amp;D)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sizeTypeColumnHeader.Text">
+        <source>Size Type</source>
+        <target state="translated">크기 형식</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sizeTypeGroupBox.Text">
+        <source>Size Type</source>
+        <target state="translated">크기 형식</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="valueColumnHeader.Text">
+        <source>Value</source>
+        <target state="translated">값</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -24,7 +24,7 @@ public enum TextMetricsCharacterSet
     Arabic = 178,
     Hebrew = 177,
     Thai = 222,
-    //      #define ANSI_CHARSET            0
+    // #define ANSI_CHARSET            0
     //      #define BALTIC_CHARSET          186
     //      #define CHINESEBIG5_CHARSET     136
     //      #define DEFAULT_CHARSET         1

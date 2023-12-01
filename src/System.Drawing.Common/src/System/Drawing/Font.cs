@@ -240,12 +240,12 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
         // here.
         // We need to call properties on the passed-in object since it could be a proxy in a remoting scenario and proxies don't
         // have access to private/internal fields.
-        return font.FontFamily.Equals(FontFamily) &&
-            font.GdiVerticalFont == GdiVerticalFont &&
-            font.GdiCharSet == GdiCharSet &&
-            font.Style == Style &&
-            font.Size == Size &&
-            font.Unit == Unit;
+        return font.FontFamily.Equals(FontFamily)
+            && font.GdiVerticalFont == GdiVerticalFont
+            && font.GdiCharSet == GdiCharSet
+            && font.Style == Style
+            && font.Size == Size
+            && font.Unit == Unit;
     }
 
     /// <summary>

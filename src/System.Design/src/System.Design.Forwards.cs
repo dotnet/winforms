@@ -21,6 +21,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListViewSubItemCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskPropertyEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskedTextBoxTextEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StyleCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SelectedPathEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringArrayEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]

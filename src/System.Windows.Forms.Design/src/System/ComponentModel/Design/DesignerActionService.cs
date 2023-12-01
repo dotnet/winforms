@@ -14,7 +14,7 @@ public class DesignerActionService : IDisposable
     private DesignerActionListsChangedEventHandler? _designerActionListsChanged;
     private readonly IServiceProvider? _serviceProvider; // standard service provider
     private readonly ISelectionService? _selectionService; // selection service
-    private readonly HashSet<IComponent> _componentToVerbsEventHookedUp; //Hashset of components which have events hooked up.
+    private readonly HashSet<IComponent> _componentToVerbsEventHookedUp; // Hashset of components which have events hooked up.
     // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
     private bool _reEntrantCode;
 
@@ -67,7 +67,7 @@ public class DesignerActionService : IDisposable
             _designerActionLists.Add(comp, designerActionListCollection);
         }
 
-        //fire event
+        // fire event
         OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsAdded, GetComponentActions(comp)));
     }
 
@@ -307,7 +307,7 @@ public class DesignerActionService : IDisposable
     {
         ArgumentNullException.ThrowIfNull(actionList);
 
-        //find the associated component
+        // find the associated component
         foreach (IComponent comp in _designerActionLists.Keys)
         {
             if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection? dacl) && dacl.Contains(actionList))
@@ -333,17 +333,17 @@ public class DesignerActionService : IDisposable
 
         if (actionLists.Count == 1)
         {
-            //this is the last action for this object, remove the entire thing
+            // this is the last action for this object, remove the entire thing
             Remove(comp);
         }
         else
         {
-            //remove each instance of this action
+            // remove each instance of this action
             for (int i = actionLists.Count - 1; i >= 0; i--)
             {
                 if (actionList.Equals(actionLists[i]))
                 {
-                    //found one to remove
+                    // found one to remove
                     actionLists.RemoveAt(i);
                 }
             }

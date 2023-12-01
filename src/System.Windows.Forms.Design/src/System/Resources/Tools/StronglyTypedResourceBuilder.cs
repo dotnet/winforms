@@ -47,11 +47,11 @@ public static partial class StronglyTypedResourceBuilder
     private const string CultureInfoPropertyName = "Culture";
 
     // When fixing up identifiers, we will replace all these chars with ReplacementChar ('_').
-    private static ReadOnlySpan<char> CharsToReplace => new char[]
-    {
+    private static ReadOnlySpan<char> CharsToReplace =>
+    [
         ' ', '\u00A0' /* non-breaking space */, '.', ',', ';', '|', '~', '@', '#', '%', '^', '&', '*', '+', '-',
         '/', '\\', '<', '>', '?', '[', ']', '(', ')', '{', '}', '\"', '\'', ':', '!'
-    };
+    ];
 
     private const char ReplacementChar = '_';
 

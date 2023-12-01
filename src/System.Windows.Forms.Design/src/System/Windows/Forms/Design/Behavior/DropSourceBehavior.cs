@@ -17,48 +17,48 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 {
     private struct DragComponent
     {
-        public IComponent dragComponent; //the dragComponent
-        public int zorderIndex; //the dragComponent's z-order index
-        public Point originalControlLocation; //the original control of the control in AdornerWindow coordinates
-        public Point draggedLocation; //the location of the component after each drag - in AdornerWindow coordinates
-        public Bitmap dragImage; //bitblt'd image of control
-        public Point positionOffset; //control position offset from primary selection
+        public IComponent dragComponent; // the dragComponent
+        public int zorderIndex; // the dragComponent's z-order index
+        public Point originalControlLocation; // the original control of the control in AdornerWindow coordinates
+        public Point draggedLocation; // the location of the component after each drag - in AdornerWindow coordinates
+        public Bitmap dragImage; // bitblt'd image of control
+        public Point positionOffset; // control position offset from primary selection
     }
 
     private readonly DragComponent[] dragComponents;
     private List<IComponent> dragObjects; // used to initialize the DragAssistanceManager
-    private readonly BehaviorDataObject data; //drag data that represents the controls we're dragging & the effect/action
-    private readonly DragDropEffects allowedEffects; //initial allowed effects for the drag operation
-    private DragDropEffects lastEffect; //the last effect we saw (used for determining a valid drop)
+    private readonly BehaviorDataObject data; // drag data that represents the controls we're dragging & the effect/action
+    private readonly DragDropEffects allowedEffects; // initial allowed effects for the drag operation
+    private DragDropEffects lastEffect; // the last effect we saw (used for determining a valid drop)
 
-    private bool targetAllowsSnapLines; //indicates if the drop target allows snaplines (flowpanels don't for ex)
-    private IComponent lastDropTarget; //indicates the drop target on the last 'give feedback' event
-    private Point lastSnapOffset; //the last snapoffset we used.
+    private bool targetAllowsSnapLines; // indicates if the drop target allows snaplines (flowpanels don't for ex)
+    private IComponent lastDropTarget; // indicates the drop target on the last 'give feedback' event
+    private Point lastSnapOffset; // the last snapoffset we used.
     // These 2 could be different (e.g. if dropping between forms)
-    private readonly BehaviorService behaviorServiceSource; //ptr back to the BehaviorService in the drop source
-    private BehaviorService behaviorServiceTarget; //ptr back to the BehaviorService in the drop target
+    private readonly BehaviorService behaviorServiceSource; // ptr back to the BehaviorService in the drop source
+    private BehaviorService behaviorServiceTarget; // ptr back to the BehaviorService in the drop target
 
-    //this object will integrate SnapLines into the drag
+    // this object will integrate SnapLines into the drag
     private DragAssistanceManager dragAssistanceManager;
 
-    private Graphics graphicsTarget; //graphics object of the adornerwindows (via BehaviorService) in drop target
+    private Graphics graphicsTarget; // graphics object of the adornerwindows (via BehaviorService) in drop target
 
     private readonly IServiceProvider serviceProviderSource;
     private IServiceProvider serviceProviderTarget;
 
-    private Point initialMouseLoc; //original mouse location in screen coordinates
+    private Point initialMouseLoc; // original mouse location in screen coordinates
 
-    private Image dragImage; //A single image of the controls we are actually dragging around
-    private Rectangle dragImageRect; //Rectangle of the dragImage -- in SOURCE AdornerWindow coordinates
-    private Rectangle clearDragImageRect; //Rectangle used to remember the last dragimage rect we cleared
-    private Point originalDragImageLocation; //original location of the drag image
+    private Image dragImage; // A single image of the controls we are actually dragging around
+    private Rectangle dragImageRect; // Rectangle of the dragImage -- in SOURCE AdornerWindow coordinates
+    private Rectangle clearDragImageRect; // Rectangle used to remember the last dragimage rect we cleared
+    private Point originalDragImageLocation; // original location of the drag image
     private Region dragImageRegion;
 
     private Point lastFeedbackLocation; // the last position we got feedback at
-    private Control suspendedParent; //pointer to the parent that we suspended @ the beginning of the drag
-    private Size parentGridSize; //used to snap around to grid dots if layoutmode == SnapToGrid
-    private Point parentLocation; //location of parent on AdornerWindow - used for grid snap calculations
-    private bool shareParent = true; //do dragged components share the parent
+    private Control suspendedParent; // pointer to the parent that we suspended @ the beginning of the drag
+    private Size parentGridSize; // used to snap around to grid dots if layoutmode == SnapToGrid
+    private Point parentLocation; // location of parent on AdornerWindow - used for grid snap calculations
+    private bool shareParent = true; // do dragged components share the parent
     private bool cleanedUpDrag;
     private StatusCommandUI statusCommandUITarget; // UI for setting the StatusBar Information in the drop target
 
@@ -135,10 +135,10 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// </summary>
     private Point AdjustToGrid(Point dragLoc)
     {
-        //location of the drag with respect to the parent
+        // location of the drag with respect to the parent
         Point controlLocation = new Point(dragLoc.X - parentLocation.X, dragLoc.Y - parentLocation.Y);
         Point offset = Point.Empty;
-        //determine which way we need to snap
+        // determine which way we need to snap
         int xDelta = controlLocation.X % parentGridSize.Width;
         int yDelta = controlLocation.Y % parentGridSize.Height;
         // if we're more than half way to the next grid - then snap that way, otherwise snap back
@@ -227,7 +227,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         Control currentControl = dragComponents[dragComponentIndex].dragComponent as Control;
         if (lastEffect == DragDropEffects.Copy || (srcHost != destHost && destHost is not null))
         {
-            //between forms or copy
+            // between forms or copy
             currentControl.Visible = true;
             bool visibleState = true;
             PropertyDescriptor propLoc = TypeDescriptor.GetProperties(currentControl)["Visible"];
@@ -240,12 +240,12 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             // Hook the control to its new designerHost
             SetDesignerHost(currentControl);
             currentControl.Parent = dragTarget;
-            //Make sure and set the Visible property to the correct value
+            // Make sure and set the Visible property to the correct value
             propLoc?.SetValue(currentControl, visibleState);
         }
         else if (!localDrag && currentControl.Parent.Equals(dragSource))
         {
-            //between containers
+            // between containers
             dragSource.Controls.Remove(currentControl);
             currentControl.Visible = true;
             dragTarget.Controls.Add(currentControl);
@@ -262,7 +262,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             if (currentControl.Parent is ScrollableControl p)
             {
                 Point ptScroll = p.AutoScrollPosition;
-                pt.Offset(-ptScroll.X, -ptScroll.Y); //always want to add the control below/right of the AutoScrollPosition
+                pt.Offset(-ptScroll.X, -ptScroll.Y); // always want to add the control below/right of the AutoScrollPosition
             }
 
             propLoc.SetValue(currentControl, pt);
@@ -281,7 +281,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     {
         if (!(data.Target is Control dragTarget))
         {
-            return; //can't deal with a non-control drop target yet
+            return; // can't deal with a non-control drop target yet
         }
 
         // If for some reason we couldn't get these guys, let's try and get them here
@@ -567,7 +567,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     {
         // cache off this last effect so in QueryContinueDrag we can identify (if dropped) a valid drop operation
         lastEffect = e.Effect;
-        //if our target is null, we can't drop anywhere, so don't even draw images
+        // if our target is null, we can't drop anywhere, so don't even draw images
         if (data.Target is null || e.Effect == DragDropEffects.None)
         {
             if (clearDragImageRect != dragImageRect)
@@ -587,7 +587,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
         if (altKeyPressed && dragAssistanceManager is not null)
         {
-            //erase any snaplines (if we had any)
+            // erase any snaplines (if we had any)
             dragAssistanceManager.EraseSnapLines();
         }
 
@@ -621,7 +621,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 }
 
                 targetAllowsSnapLines = true;
-                //check to see if the current designer participate with SnapLines
+                // check to see if the current designer participate with SnapLines
                 if (newDestHost.GetDesigner(target) is ControlDesigner designer && !designer.ParticipatesWithSnapLines)
                 {
                     targetAllowsSnapLines = false;
@@ -697,22 +697,22 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             // Create new dragassistancemanager if needed
             if (createNewDragAssistance && behaviorServiceTarget.UseSnapLines)
             {
-                //erase any snaplines (if we had any)
+                // erase any snaplines (if we had any)
                 dragAssistanceManager?.EraseSnapLines();
 
                 dragAssistanceManager = new DragAssistanceManager(serviceProviderTarget, graphicsTarget, dragObjects, null, lastEffect == DragDropEffects.Copy);
             }
 
-            //The new position of the primary control, i.e. where did we just drag it to
+            // The new position of the primary control, i.e. where did we just drag it to
             Point newPosition = new Point(mouseLoc.X - initialMouseLoc.X + dragComponents[primaryComponentIndex].originalControlLocation.X,
                                             mouseLoc.Y - initialMouseLoc.Y + dragComponents[primaryComponentIndex].originalControlLocation.Y);
             // Map it to the target's adorner window so that we can snap correctly
             newPosition = MapPointFromSourceToTarget(newPosition);
-            //The new rectangle
+            // The new rectangle
             Rectangle newRect = new Rectangle(newPosition.X, newPosition.Y,
                                                 dragComponents[primaryComponentIndex].dragImage.Width,
                                                 dragComponents[primaryComponentIndex].dragImage.Height);
-            //if we have a valid snapline engine - ask it to offset our drag
+            // if we have a valid snapline engine - ask it to offset our drag
             if (dragAssistanceManager is not null)
             {
                 if (targetAllowsSnapLines && !altKeyPressed)
@@ -722,11 +722,11 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 }
                 else
                 {
-                    dragAssistanceManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*///);
+                    dragAssistanceManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*/// );
                 }
             }
 
-            //if we know our parent is forcing grid sizes
+            // if we know our parent is forcing grid sizes
             else if (!parentGridSize.IsEmpty)
             {
                 lastSnapOffset = AdjustToGrid(newPosition);
@@ -836,7 +836,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 PropertyDescriptor gridProp = TypeDescriptor.GetProperties(parentControl)["GridSize"];
                 if (gridProp is not null)
                 {
-                    //cache of the gridsize and the location of the parent on the adornerwindow
+                    // cache of the gridsize and the location of the parent on the adornerwindow
                     if (dragComponents[primaryComponentIndex].dragComponent is Control)
                     {
                         parentGridSize = (Size)gridProp.GetValue(parentControl);
@@ -861,7 +861,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             bodyGlyphAdorner = selMgr.BodyGlyphAdorner;
         }
 
-        //disable all adorners except for body glyph adorner
+        // disable all adorners except for body glyph adorner
         foreach (Adorner a in behaviorService.Adorners)
         {
             if (bodyGlyphAdorner is not null && a.Equals(bodyGlyphAdorner))
@@ -894,7 +894,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         clearDragImageRect = Rectangle.Empty;
         initialMouseLoc = initialMouseLocation;
 
-        //loop through every control we need to drag, calculate the offsets and get a snapshot
+        // loop through every control we need to drag, calculate the offsets and get a snapshot
         for (int i = 0; i < dragObjects.Count; i++)
         {
             Control dragControl = (Control)dragObjects[i];
@@ -914,10 +914,10 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 dragImageRegion.Union(controlRect);
             }
 
-            //Initialize the dragged location to be the current position of the control
+            // Initialize the dragged location to be the current position of the control
             dragComponents[i].draggedLocation = controlRect.Location;
             dragComponents[i].originalControlLocation = dragComponents[i].draggedLocation;
-            //take snapshot of each control
+            // take snapshot of each control
             DesignerUtils.GenerateSnapShot(dragControl, out dragComponents[i].dragImage, i == 0 ? 2 : 1, 1, backColor);
 
             // The dragged components are not in any specific order. If they all share the same parent, we will sort them by their index in that parent's control's collection to preserve correct Z-order
@@ -947,7 +947,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         }
 
         Debug.Assert(primaryComponentIndex != -1, "primaryComponentIndex was not set!");
-        //suspend layout of the parent
+        // suspend layout of the parent
         if (primaryParent is not null)
         {
             suspendedParent = primaryParent;
@@ -998,14 +998,14 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         }
 
         originalDragImageLocation = new Point(dragImageRect.X, dragImageRect.Y);
-        //hide actual controls - this might cause a brief flicker, we are okay with that.
+        // hide actual controls - this might cause a brief flicker, we are okay with that.
         ShowHideDragControls(false);
         cleanedUpDrag = false;
     }
 
     internal List<IComponent> GetSortedDragControls(out int primaryControlIndex)
     {
-        //create our list of controls-to-drag
+        // create our list of controls-to-drag
         List<IComponent> dragControls = new();
         primaryControlIndex = -1;
         if ((dragComponents is not null) && (dragComponents.Length > 0))
@@ -1025,7 +1025,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// </summary>
     internal void QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
     {
-        //Clean up if the action was cancelled, or we had no effect when dropped. Otherwise EndDragDrop() will do this after the locations have been properly changed.
+        // Clean up if the action was cancelled, or we had no effect when dropped. Otherwise EndDragDrop() will do this after the locations have been properly changed.
         if (behaviorServiceSource is not null && behaviorServiceSource.CancelDrag)
         {
             e.Action = DragAction.Cancel;
@@ -1038,7 +1038,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             return;
         }
 
-        //Clean up if the action was cancelled, or we had no effect when dropped. Otherwise EndDragDrop() will do this after the locations have been properly changed.
+        // Clean up if the action was cancelled, or we had no effect when dropped. Otherwise EndDragDrop() will do this after the locations have been properly changed.
         if (e.Action == DragAction.Cancel || lastEffect == DragDropEffects.None)
         {
             CleanupDrag(true);
@@ -1095,7 +1095,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             finally
             {
                 suspendedParent = null;
-                //re-enable all glyphs in all adorners
+                // re-enable all glyphs in all adorners
                 behaviorServiceSource.EnableAllAdorners(true);
                 if (destHost != srcHost && destHost is not null)
                 {

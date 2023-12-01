@@ -454,7 +454,7 @@ public partial class PageSettings : ICloneable
         }
 
         return new PaperSize(PaperKind.Custom, "custom",
-                                 //mode.dmPaperWidth, mode.dmPaperLength);
+                                 // mode.dmPaperWidth, mode.dmPaperLength);
                                  PrinterUnitConvert.Convert(mode.dmPaperWidth, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
                                  PrinterUnitConvert.Convert(mode.dmPaperLength, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
     }

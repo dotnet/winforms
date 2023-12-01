@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
@@ -60,8 +60,7 @@ public static class SystemPens
             throw new ArgumentException(SR.Format(SR.ColorNotSystemColor, c.ToString()));
         }
 
-        Pen[]? systemPens = (Pen[]?)Gdip.ThreadData[s_systemPensKey];
-        if (systemPens is null)
+        if (!Gdip.ThreadData.TryGetValue(s_systemPensKey, out object? tempSystemPens) || tempSystemPens is not Pen[] systemPens)
         {
             systemPens = new Pen[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemPensKey] = systemPens;

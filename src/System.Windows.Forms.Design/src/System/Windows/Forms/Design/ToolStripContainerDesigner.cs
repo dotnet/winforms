@@ -237,7 +237,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             return base.GetControlGlyph(selectionType);
         }
 
-        //Create BodyGlyphs for all _panels
+        // Create BodyGlyphs for all _panels
         for (int i = 0; i <= 4; i++)
         {
             Control currentPanel = _panels![i];
@@ -247,7 +247,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
             if (panelDesigner is not null)
             {
-                //create our glyph, and set its cursor appropriately
+                // create our glyph, and set its cursor appropriately
                 ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
                 selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
 

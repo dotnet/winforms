@@ -4888,7 +4888,7 @@ public class ToolStripDropDownTests
         items.Add("Fourth item");
         items.Add("Fifth item");
 
-        for (int i = 1; i < items.Count; i++) //it needs for correct work of ToolStrip.GetNextItemVertical method
+        for (int i = 1; i < items.Count; i++) // it needs for correct work of ToolStrip.GetNextItemVertical method
         {
             items[i].SetBounds(0, items[i - 1].Bounds.Bottom + 1, items[i].Bounds.Width, items[i].Bounds.Height);
         }

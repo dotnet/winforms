@@ -18,7 +18,7 @@ internal class FlowPanelDesigner : PanelDesigner
         {
             ArrayList snapLines = (ArrayList)base.SnapLines;
 
-            //identify all the paddings to remove
+            // identify all the paddings to remove
             ArrayList paddingsToRemove = new ArrayList(4);
             foreach (SnapLine line in snapLines)
             {
@@ -28,7 +28,7 @@ internal class FlowPanelDesigner : PanelDesigner
                 }
             }
 
-            //remove all padding
+            // remove all padding
             foreach (SnapLine line in paddingsToRemove)
             {
                 snapLines.Remove(line);

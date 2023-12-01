@@ -112,7 +112,7 @@ internal class ToolStripEditorManager
         }
     }
 
-    //  Private Class Implemented for InSitu Editor. This class just Wraps the ToolStripEditor from the TemplateNode and puts it in  a Panel.
+    // Private Class Implemented for InSitu Editor. This class just Wraps the ToolStripEditor from the TemplateNode and puts it in  a Panel.
     private class ToolStripEditorControl : Panel
     {
         private readonly Control _wrappedEditor;

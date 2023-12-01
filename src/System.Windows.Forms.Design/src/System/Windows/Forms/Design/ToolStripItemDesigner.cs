@@ -21,17 +21,17 @@ internal class ToolStripItemDesigner : ComponentDesigner
     private bool isEditorActive;
     // this property is used in the InitializeNewComponent not to set the text for the ToolstripItem
     private bool internalCreate;
-    //hook to SelectionService to listen to SelectionChanged
+    // hook to SelectionService to listen to SelectionChanged
     private ISelectionService _selectionService;
-    //ToolStripItems Visibility needs to be WYSIWYG.
+    // ToolStripItems Visibility needs to be WYSIWYG.
     private bool currentVisible;
     // Required to remove Body Glyphs...
     internal ControlBodyGlyph bodyGlyph;
-    //bool which is set if we Add Dummy Item
+    // bool which is set if we Add Dummy Item
     internal bool dummyItemAdded;
-    //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
+    // Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
     internal Rectangle dragBoxFromMouseDown = Rectangle.Empty;
-    //defaulted to invalid index. this will be set by the behaviour.
+    // defaulted to invalid index. this will be set by the behaviour.
     internal int indexOfItemUnderMouseToDrag = -1;
     private ToolStripItemCustomMenuItemCollection toolStripItemCustomMenuItemCollection;
 
@@ -368,11 +368,11 @@ internal class ToolStripItemDesigner : ComponentDesigner
             }
             else
             {
-                //create our transaction
+                // create our transaction
                 DesignerTransaction designerTransaction = designerHost.CreateTransaction(SR.ToolStripItemPropertyChangeTransaction);
                 try
                 {
-                    //Change the Text...
+                    // Change the Text...
                     PropertyDescriptor textProp = TypeDescriptor.GetProperties(ToolStripItem)["Text"];
                     string oldValue = (string)textProp.GetValue(ToolStripItem);
                     if (textProp is not null && text != oldValue)
@@ -406,7 +406,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 }
             }
 
-            //Reset the DummyItem flag
+            // Reset the DummyItem flag
             dummyItemAdded = false;
         }
         else
@@ -673,7 +673,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
-        //Set the Text only if the item is not created internally (via InSitu Edit)
+        // Set the Text only if the item is not created internally (via InSitu Edit)
         if (!internalCreate)
         {
             ISite site = Component.Site;
@@ -760,9 +760,9 @@ internal class ToolStripItemDesigner : ComponentDesigner
             }
 
             serializedData = serializationService.CreateStore();
-            serializationService.Serialize(serializedData, Component); //notice the use of component... since we want to preserve the type.
+            serializationService.Serialize(serializedData, Component); // notice the use of component... since we want to preserve the type.
 
-            //Serialize all the DropDownItems for this Item....
+            // Serialize all the DropDownItems for this Item....
             SerializationStore _serializedDataForDropDownItems = null;
             ToolStripDropDownItem dropDownItem = ToolStripItem as ToolStripDropDownItem;
             if (dropDownItem is not null && typeof(ToolStripDropDownItem).IsAssignableFrom(t))
@@ -771,7 +771,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 dropDownItem.HideDropDown();
                 _serializedDataForDropDownItems = serializationService.CreateStore();
                 SerializeDropDownItems(dropDownItem, ref _serializedDataForDropDownItems, serializationService);
-                //close the SerializationStore to Serialize Items..
+                // close the SerializationStore to Serialize Items..
                 _serializedDataForDropDownItems.Close();
             }
 
@@ -795,9 +795,9 @@ internal class ToolStripItemDesigner : ComponentDesigner
             FireComponentChanging(dropDownItem);
             parent.Items.Remove(ToolStripItem);
             host.DestroyComponent(ToolStripItem);
-            //Create our new Item
+            // Create our new Item
             ToolStripItem component = (ToolStripItem)host.CreateComponent(t, name);
-            //Since destroying the original item took away its DropDownItems. We need to Deserialize the items again...
+            // Since destroying the original item took away its DropDownItems. We need to Deserialize the items again...
             if (component is ToolStripDropDownItem)
             {
                 if (_serializedDataForDropDownItems is not null)
@@ -806,11 +806,11 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 }
             }
 
-            //Now deserialize the newItem to morph to the old item...
+            // Now deserialize the newItem to morph to the old item...
             serializationService.DeserializeTo(serializedData, host.Container, false, true);
             // Add the new Item...
             newItem = (ToolStripItem)host.Container.Components[name];
-            //Set the Image property and DisplayStyle...
+            // Set the Image property and DisplayStyle...
             if (newItem.Image is null && newItem is ToolStripButton)
             {
                 Image image = null;
@@ -862,7 +862,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
             // re start the ComponentAdding/Added events
             ToolStripDesigner.s_autoAddNewItems = true;
-            //Invalidate the AdornerWindow to refresh selectionglyphs.
+            // Invalidate the AdornerWindow to refresh selectionglyphs.
             if (newItem is not null)
             {
                 if (newItem is ToolStripSeparator)
@@ -923,8 +923,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
             Rectangle r = ToolStripItem.Bounds;
             r.Offset(location);
             r.Inflate(GLYPHINSET, GLYPHINSET);
-            //this will allow any Glyphs to re-paint
-            //after this control and its designer has painted
+            // this will allow any Glyphs to re-paint
+            // after this control and its designer has painted
             behaviorService.ProcessPaintMessage(r);
         }
     }
@@ -939,7 +939,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
             return;
         }
 
-        //determine if we are selected
+        // determine if we are selected
         ToolStripItem currentSelection = sSvc.PrimarySelection as ToolStripItem;
         // Accessibility information
         if (ToolStripItem.AccessibilityObject is ToolStripItem.ToolStripItemAccessibleObject acc)
@@ -1059,7 +1059,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
             return;
         }
 
-        //Remove the dummy Item since the Edit was CANCELLED..
+        // Remove the dummy Item since the Edit was CANCELLED..
         ToolStrip parent = (ToolStrip)ImmediateParent;
         if (parent is ToolStripOverflow)
         {
@@ -1222,7 +1222,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 BehaviorService behaviorService = GetService<BehaviorService>();
                 Point location = behaviorService.ControlToAdornerWindow(parent);
 
-                //Get the original ToolStripItem bounds.
+                // Get the original ToolStripItem bounds.
                 Rectangle origBoundsInAdornerWindow = ToolStripItem.Bounds;
                 origBoundsInAdornerWindow.Offset(location);
                 ToolStripItem.AutoSize = false;
@@ -1247,7 +1247,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                     Rectangle boundsInAdornerWindow = ToolStripItem.Bounds;
                     boundsInAdornerWindow.Offset(location);
 
-                    //Center it in verticaldirection.
+                    // Center it in verticaldirection.
                     if (parent.Orientation == Orientation.Horizontal)
                     {
                         boundsInAdornerWindow.X++;
@@ -1281,7 +1281,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 else
                 {
                     ToolStripItem.AutoSize = AutoSize;
-                    if (ToolStripItem is ToolStripDropDownItem) //We have no place to show this item... so Hide the DropDown
+                    if (ToolStripItem is ToolStripDropDownItem) // We have no place to show this item... so Hide the DropDown
                     {
                         if (ToolStripItem is ToolStripDropDownItem ddItem)
                         {

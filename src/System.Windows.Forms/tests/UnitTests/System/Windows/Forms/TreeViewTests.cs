@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -6246,7 +6245,7 @@ public class TreeViewTests
         EventHandler handler = (sender, e) =>
         {
             Assert.Same(control, sender);
-            //Assert.Same(eventArgs, e);
+            // Assert.Same(eventArgs, e);
             callCount++;
         };
 
@@ -6603,7 +6602,7 @@ public class TreeViewTests
         using var treeView = new TreeView();
         treeView.ShowNodeToolTips = showNodeToolTips;
         ToolTip toolTip = useKeyboardToolTip ? treeView.KeyboardToolTip : new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
         Assert.Equal("Test caption", wrapper.Text);
         // Assert.Equal method does not work because char* cannot be used as an argument to it
@@ -6616,11 +6615,11 @@ public class TreeViewTests
         using var treeView = new TreeView();
         treeView.ShowNodeToolTips = true;
         ToolTip toolTip = new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
         char* expected = (char*)(-1);
 
         Assert.Null(wrapper.Text);
-        //Assert.Equal method does not work because char* cannot be used as an argument to it
+        // Assert.Equal method does not work because char* cannot be used as an argument to it
         Assert.True(wrapper.Info.lpszText == expected);
     }
 
@@ -7112,6 +7111,53 @@ public class TreeViewTests
 
         // Setting TreeViewNodeSorter invokes sorting automatically
         treeView.TreeViewNodeSorter = treeSorter;
+    }
+
+    [WinFormsTheory]
+    [InlineData("A", "B")]
+    [InlineData("A", "A")]
+    [InlineData("B", "A")]
+    public void Clear_AfterSort_ShouldNotGetStuck(string firstNodeText, string secondNodeText)
+    {
+        using TreeView treeView = new();
+        TreeNode parent = new("Parent");
+        treeView.Nodes.Add(parent);
+
+        TreeNode firstNode = new(firstNodeText);
+        parent.Nodes.Add(firstNode);
+        TreeNode secondNode = new(secondNodeText);
+        parent.Nodes.Add(secondNode);
+
+        treeView.Sort();
+
+        Action action = () => parent.Nodes.Clear();
+
+        action.ExecutionTime().Should().BeLessThanOrEqualTo(TimeSpan.FromMilliseconds(500));
+        action.Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData("A", "B")]
+    [InlineData("A", "A")]
+    [InlineData("B", "A")]
+    public void Remove_AfterSort_ShouldNotThrowException(string firstNodeText, string secondNodeText)
+    {
+        using TreeView treeView = new();
+        TreeNode parent = new("Parent");
+        treeView.Nodes.Add(parent);
+
+        TreeNode firstNode = new(firstNodeText);
+        parent.Nodes.Add(firstNode);
+        TreeNode secondNode = new(secondNodeText);
+        parent.Nodes.Add(secondNode);
+
+        treeView.Sort();
+
+        parent.Nodes.Remove(firstNode);
+
+        Action action = () => parent.Nodes.Remove(secondNode);
+
+        action.Should().NotThrow();
     }
 
     private class SubTreeView : TreeView

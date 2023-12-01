@@ -111,7 +111,7 @@ public sealed partial class NotifyIcon : Component
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != _balloonTipIcon)
             {
@@ -552,7 +552,7 @@ public sealed partial class NotifyIcon : Component
             throw new ArgumentException(SR.NotifyIconEmptyOrNullTipText);
         }
 
-        //valid values are 0x0 to 0x3
+        // valid values are 0x0 to 0x3
         SourceGenerated.EnumValidator.Validate(tipIcon, nameof(tipIcon));
 
         if (_added)
@@ -709,7 +709,7 @@ public sealed partial class NotifyIcon : Component
     private void WmMouseUp(MouseButtons button)
     {
         OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
-        //subhag
+        // subhag
         if (!_doubleClick)
         {
             OnClick(new MouseEventArgs(button, 0, 0, 0, 0));

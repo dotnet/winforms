@@ -232,7 +232,7 @@ public unsafe partial class Control :
     private static readonly int s_controlsCollectionProperty = PropertyStore.CreateKey();
     private static readonly int s_backColorProperty = PropertyStore.CreateKey();
     private static readonly int s_foreColorProperty = PropertyStore.CreateKey();
-    internal static readonly int s_fontProperty = PropertyStore.CreateKey();
+    private static readonly int s_fontProperty = PropertyStore.CreateKey();
 
     private static readonly int s_backgroundImageProperty = PropertyStore.CreateKey();
     private static readonly int s_fontHandleWrapperProperty = PropertyStore.CreateKey();
@@ -266,7 +266,7 @@ public unsafe partial class Control :
     private static readonly int s_lastCanEnableImeProperty = PropertyStore.CreateKey();
 
     private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
-    private static readonly int s_acheTextFieldProperty = PropertyStore.CreateKey();
+    private static readonly int s_cacheTextFieldProperty = PropertyStore.CreateKey();
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
@@ -626,7 +626,7 @@ public unsafe partial class Control :
         }
         set
         {
-            //valid values are -1 to 0x40
+            // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
             Properties.SetInteger(s_accessibleRoleProperty, (int)value);
         }
@@ -1246,37 +1246,37 @@ public unsafe partial class Control :
         remove => Events.RemoveHandler(s_causesValidationEvent, value);
     }
 
-    ///  This is for perf. Turn this property on to temporarily enable text caching.  This is good for
-    ///  operations such as layout or painting where we don't expect the text to change (we will update the
-    ///  cache if it does) but prevents us from sending a ton of messages turing layout.  See the PaintWithErrorHandling
+    /// <summary>
+    ///  This is for perf. Turn this property on to temporarily enable text caching. This is good for operations such
+    ///  as layout or painting where we don't expect the text to change (we will update the cache if it does). It
+    ///  prevents us from sending a ton of messages during layout. See the <see cref="PaintWithErrorHandling(PaintEventArgs, short)"/>
     ///  function.
-    ///
+    /// </summary>
     internal bool CacheTextInternal
     {
         get
         {
-            // check if we're caching text.
+            // Check if we're caching text.
             int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
 
             return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
         }
         set
         {
-            // Ff this control always caches text or the handle hasn't been created,
-            // just bail.
+            // If this control always caches text or the handle hasn't been created, just bail.
             if (GetStyle(ControlStyles.CacheText) || !IsHandleCreated)
             {
                 return;
             }
 
-            // otherwise, get the state and update the cache if necessary.
+            // Otherwise, get the state and update the cache if necessary.
             int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
 
             if (value)
             {
                 if (cacheTextCounter == 0)
                 {
-                    Properties.SetObject(s_acheTextFieldProperty, _text);
+                    Properties.SetObject(s_cacheTextFieldProperty, _text);
                     _text ??= WindowText;
                 }
 
@@ -1287,7 +1287,7 @@ public unsafe partial class Control :
                 cacheTextCounter--;
                 if (cacheTextCounter == 0)
                 {
-                    _text = (string?)Properties.GetObject(s_acheTextFieldProperty, out _);
+                    _text = (string?)Properties.GetObject(s_cacheTextFieldProperty, out _);
                 }
             }
 
@@ -2055,65 +2055,54 @@ public unsafe partial class Control :
     public virtual Font Font
     {
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
-        get
-        {
-            return GetCurrentFontAndDpi(out _);
-        }
+        get => GetCurrentFontAndDpi(out _);
 
         [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
         set
         {
-            var local = (Font?)Properties.GetObject(s_fontProperty);
-            bool localChanged;
-            if (value is null)
+            if (Equals((Font?)Properties.GetObject(s_fontProperty), value))
             {
-                localChanged = local is not null;
-            }
-            else
-            {
-                localChanged = local is null ? true : !value.Equals(local);
+                // Explicitly set font for this control is unchanged, do nothing.
+                return;
             }
 
-            if (localChanged)
+            Font currentFont = Font;
+            Properties.SetObject(s_fontProperty, value);
+
+            // Clear the current cached HFONT, if any.
+            DisposeFontHandle();
+
+            // If the value being assigned is the same as the current effective font, we do not need to raise the
+            // FontChanged event. Just make sure the WM_SETFONT message is sent.
+            if (currentFont.Equals(value))
             {
-                // If the value being assigned is the same as the current default font, we do not need to raise FontChangedEvent.
-                Font currentDefaultFont = Font;
-                Properties.SetObject(s_fontProperty, value);
-
-                if (!currentDefaultFont.Equals(value))
+                if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint))
                 {
-                    // Cleanup any local fonts and handle wrappers...
-                    DisposeFontHandle();
-
-                    if (DpiHelper.IsPerMonitorV2Awareness)
-                    {
-                        // Reset the ScaledControlFont value when the font is being set explicitly, in order to keep it
-                        // in sync when the application is moved between monitors with different Dpi settings.
-                        ScaledControlFont = null;
-                        ClearDpiFonts();
-                    }
-
-                    if (Properties.ContainsInteger(s_fontHeightProperty))
-                    {
-                        Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
-                    }
-
-                    // Font is an ambient property.  We need to layout our parent because Font may
-                    // change our size.  We need to layout ourselves because our children may change
-                    // size by inheriting the new value.
-                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                    {
-                        OnFontChanged(EventArgs.Empty);
-                    }
+                    SetWindowFont();
                 }
-                else
-                {
-                    if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint))
-                    {
-                        DisposeFontHandle();
-                        SetWindowFont();
-                    }
-                }
+
+                return;
+            }
+
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                // Reset the ScaledControlFont value when the font is being set explicitly, in order to keep it
+                // in sync when the application is moved between monitors with different Dpi settings.
+                ScaledControlFont = null;
+                ClearDpiFonts();
+            }
+
+            if (Properties.ContainsInteger(s_fontHeightProperty))
+            {
+                Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+            }
+
+            // Font is an ambient property.  We need to layout our parent because Font may
+            // change our size.  We need to layout ourselves because our children may change
+            // size by inheriting the new value.
+            using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+            {
+                OnFontChanged(EventArgs.Empty);
             }
         }
     }
@@ -2168,11 +2157,10 @@ public unsafe partial class Control :
     {
         get
         {
-            // if application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
+            // If application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
             if (ScaledControlFont is not null)
             {
                 _scaledFontWrapper ??= new FontHandleWrapper(ScaledControlFont);
-
                 return _scaledFontWrapper.Handle;
             }
 
@@ -2235,17 +2223,15 @@ public unsafe partial class Control :
             {
                 return fontHeight;
             }
-            else
+
+            if (TryGetExplicitlySetFont(out Font? font))
             {
-                if (TryGetExplicitlySetFont(out Font? font))
-                {
-                    fontHeight = font.Height;
-                    Properties.SetInteger(s_fontHeightProperty, fontHeight);
-                    return fontHeight;
-                }
+                fontHeight = font.Height;
+                Properties.SetInteger(s_fontHeightProperty, fontHeight);
+                return fontHeight;
             }
 
-            //ask the parent if it has the font height
+            // Ask the parent if it has the font height.
             int localFontHeight = -1;
 
             if (ParentInternal is not null && ParentInternal.CanAccessProperties)
@@ -2253,7 +2239,7 @@ public unsafe partial class Control :
                 localFontHeight = ParentInternal.FontHeight;
             }
 
-            //if we still have a bad value, then get the actual font height
+            // If we still have a bad value, then get the actual font height.
             if (localFontHeight == -1)
             {
                 localFontHeight = Font.Height;
@@ -2262,10 +2248,7 @@ public unsafe partial class Control :
 
             return localFontHeight;
         }
-        set
-        {
-            Properties.SetInteger(s_fontHeightProperty, value);
-        }
+        set => Properties.SetInteger(s_fontHeightProperty, value);
     }
 
     /// <summary>
@@ -3220,7 +3203,7 @@ public unsafe partial class Control :
         }
         set
         {
-            //valid values are 0x0 to 0x2.
+            // valid values are 0x0 to 0x2.
             SourceGenerated.EnumValidator.Validate(value);
 
             RightToLeft oldValue = RightToLeft;
@@ -3502,12 +3485,11 @@ public unsafe partial class Control :
 
             if (IsMnemonicsListenerAxSourced)
             {
-                for (Control? ctl = this; ctl is not null; ctl = ctl.ParentInternal)
+                for (Control? control = this; control is not null; control = control.ParentInternal)
                 {
-                    ActiveXImpl? activeXImpl = (ActiveXImpl?)ctl.Properties.GetObject(s_activeXImplProperty);
-                    if (activeXImpl is not null)
+                    if (control.IsActiveX && control.Properties.GetObject(s_activeXImplProperty) is ActiveXImpl activeX)
                     {
-                        activeXImpl.UpdateAccelTable();
+                        activeX.UpdateAccelTable();
                         break;
                     }
                 }
@@ -3835,22 +3817,23 @@ public unsafe partial class Control :
 
         HANDLE threadHandle = ctx.Handle;
         bool processed = false;
+
         // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
         uint exitCode = 0;
         bool returnValue = false;
         while (!processed)
         {
-            //Get the thread's exit code, if we found the thread as expected
+            // Get the thread's exit code, if we found the thread as expected
             if (threadHandle != 0)
             {
                 returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
             }
 
-            //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
-            //if we don't know, we shouldn't throw.
-            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE) ||
-                (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
-                AppDomain.CurrentDomain.IsFinalizingForUnload())
+            // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
+            // if we don't know, we shouldn't throw.
+            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE)
+                || (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE)
+                || AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
                 if (waitHandle.WaitOne(1, false))
                 {
@@ -5860,12 +5843,11 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    /// Gets the control <see cref="Font"/>. If the font is inherited, traverse through the parent hierarchy and retreives the font.
+    ///  Gets the control <see cref="Font"/>. If the font is inherited, traverse through the parent hierarchy and
+    ///  retrieve the font.
     /// </summary>
     /// <param name="fontDpi">Dpi of the control for which <see cref="Font"/> is evaluated.</param>
-    /// <returns>
-    /// <para>The control's <see cref="Font"/></para>
-    /// </returns>
+    /// <returns>The control's <see cref="Font"/></returns>
     internal Font GetCurrentFontAndDpi(out int fontDpi)
     {
         fontDpi = _deviceDpi;
@@ -5896,13 +5878,7 @@ public unsafe partial class Control :
             }
         }
 
-        AmbientProperties? ambient = AmbientPropertiesService;
-        if (ambient is not null && ambient.Font is not null)
-        {
-            return ambient.Font;
-        }
-
-        return DefaultFont;
+        return AmbientPropertiesService?.Font ?? DefaultFont;
     }
 
     private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
@@ -6574,8 +6550,9 @@ public unsafe partial class Control :
                     // This code matches the behavior above.  Basically, if we're debugging, don't
                     // do this because the exception would have been handled above.  If we're
                     // not debugging, raise the exception here.
-                    if (!NativeWindow.WndProcShouldBeDebuggable &&
-                        current._exception is not null && !current._synchronous)
+                    if (!NativeWindow.WndProcShouldBeDebuggable
+                        && current._exception is not null
+                        && !current._synchronous)
                     {
                         Application.OnThreadException(current._exception);
                     }
@@ -7786,46 +7763,9 @@ public unsafe partial class Control :
                 SetWindowFont();
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
-            {
-                int old = _deviceDpi;
-                Font localFont = GetCurrentFontAndDpi(out int fontDpi);
-                _deviceDpi = (int)PInvoke.GetDpiForWindow(this);
-                if (old != _deviceDpi)
-                {
-                    if (fontDpi != _deviceDpi)
-                    {
-                        // Controls are by default font scaled.
-                        // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
-                        Font fontForDpi = GetScaledFont(localFont, _deviceDpi, fontDpi);
-                        ScaledControlFont = fontForDpi;
+            HandleHighDpi();
 
-                        // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
-                        // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
-                        // 'OnFontChanged' event explicitly. ex: winforms designer natively hosted in VS.
-                        if (IsFontSet())
-                        {
-                            SetScaledFont(fontForDpi);
-                        }
-                    }
-
-                    RescaleConstantsForDpi(old, _deviceDpi);
-
-                    // If control is top-level window ( for ex: Top level Form) and control's StartPosition is not WindowsDefaultLocation,
-                    // resizing the control would need Location of the control to be recalculated.
-                    // ex: Form centered as FormStartPosition.CenterParent or FormStartPosition.CenterScreen, would need recalculation for Location
-                    // property to place on center to parent/screen.
-                    if (this is Form form && form.TopLevel)
-                    {
-                        // Form gets location information form CreateParams but these were calculated before handle created for the Form.
-                        // In case of launching the Form on secondary monitor, DPI is evaluated only after handle is created for the Form and the
-                        // Form resized according to the new DPI.Hence, Form location need to be recalculated with new bounds information.
-                        form.AdjustFormPosition();
-                    }
-                }
-            }
-
-            // Restore dragdrop status. Ole Initialize happens when the ThreadContext in Application is created.
+            // Restore drag drop status. Ole Initialize happens when the ThreadContext in Application is created.
             SetAcceptDrops(AllowDrop);
 
             Region? region = Region;
@@ -7883,6 +7823,53 @@ public unsafe partial class Control :
             {
                 PInvoke.PostMessage(this, s_threadCallbackMessage);
                 SetState(States.ThreadMarshalPending, false);
+            }
+        }
+
+        void HandleHighDpi()
+        {
+            if (!PInvoke.AreDpiAwarenessContextsEqualInternal(
+                DpiAwarenessContext,
+                DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            {
+                return;
+            }
+
+            int old = _deviceDpi;
+            Font localFont = GetCurrentFontAndDpi(out int fontDpi);
+            _deviceDpi = (int)PInvoke.GetDpiForWindow(this);
+            if (old == _deviceDpi)
+            {
+                return;
+            }
+
+            if (fontDpi != _deviceDpi)
+            {
+                // Controls are by default font scaled.
+                // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
+                Font fontForDpi = GetScaledFont(localFont, _deviceDpi, fontDpi);
+                ScaledControlFont = fontForDpi;
+
+                // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
+                // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
+                // 'OnFontChanged' event explicitly. ex: Windows Forms designer natively hosted in VS.
+                if (IsFontSet())
+                {
+                    SetScaledFont(fontForDpi);
+                }
+            }
+
+            RescaleConstantsForDpi(old, _deviceDpi);
+
+            // If the control is top-level window and its StartPosition is not WindowsDefaultLocation, Location needs
+            // recalculated. For example, a Form centered as FormStartPosition.CenterParent or FormStartPosition.CenterScreen,
+            // would need recalculated to place it correctly.
+            if (this is Form form && form.TopLevel)
+            {
+                // Form gets location information from CreateParams but the values are calculated before the handle creation.
+                // When launching the Form on a secondary monitor, DPI is evaluated only after handle is created. for the Form and the
+                // Form resized according to the new DPI.Hence, Form location need to be recalculated with new bounds information.
+                form.AdjustFormPosition();
             }
         }
     }
@@ -8172,8 +8159,8 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnKeyUp(KeyEventArgs e)
     {
-        if (OsVersion.IsWindows11_OrGreater() &&
-            (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
+        if (OsVersion.IsWindows11_OrGreater()
+            && (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
         {
             KeyboardToolTipStateMachine.HidePersistentTooltip();
         }
@@ -8777,9 +8764,6 @@ public unsafe partial class Control :
         }
     }
 
-    // Exceptions during painting are nasty, because paint events happen so often.
-    // So if user painting code has an issue, we make sure never to call it again,
-    // so as not to spam the end-user with exception dialogs.
     private void PaintWithErrorHandling(PaintEventArgs e, short layer)
     {
         try
@@ -8791,39 +8775,39 @@ public unsafe partial class Control :
                 {
                     PaintException(e);
                 }
+
+                return;
             }
-            else
+
+            try
             {
-                bool exceptionThrown = true;
-                try
+                switch (layer)
                 {
-                    switch (layer)
-                    {
-                        case PaintLayerForeground:
-                            OnPaint(e);
-                            break;
-                        case PaintLayerBackground:
-                            if (!GetStyle(ControlStyles.Opaque))
-                            {
-                                OnPaintBackground(e);
-                            }
+                    case PaintLayerForeground:
+                        OnPaint(e);
+                        break;
+                    case PaintLayerBackground:
+                        if (!GetStyle(ControlStyles.Opaque))
+                        {
+                            OnPaintBackground(e);
+                        }
 
-                            break;
-                        default:
-                            Debug.Fail($"Unknown PaintLayer {layer}");
-                            break;
-                    }
+                        break;
+                    default:
+                        Debug.Fail($"Unknown PaintLayer {layer}");
+                        break;
+                }
+            }
+            catch
+            {
+                // Exceptions during painting are nasty, because paint events happen so often.
+                // So if user painting code has an issue, we make sure never to call it again,
+                // so as not to spam the end-user with exception dialogs.
 
-                    exceptionThrown = false;
-                }
-                finally
-                {
-                    if (exceptionThrown)
-                    {
-                        SetState(States.ExceptionWhilePainting, true);
-                        Invalidate();
-                    }
-                }
+                SetState(States.ExceptionWhilePainting, true);
+                Invalidate();
+
+                throw;
             }
         }
         finally
@@ -8996,18 +8980,18 @@ public unsafe partial class Control :
         foreach (Control c in Controls)
         {
             // First, if the control is a container, recurse into its descendants.
-            if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren &&
-                c.ShouldPerformContainerValidation() &&
-                c.PerformContainerValidation(validationConstraints))
+            if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren
+                && c.ShouldPerformContainerValidation()
+                && c.PerformContainerValidation(validationConstraints))
             {
                 failed = true;
             }
 
             // Next, use input flags to decide whether to validate the control itself
-            if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable)) ||
-                ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled) ||
-                ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible) ||
-                ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
+            if (((validationConstraints & ValidationConstraints.Selectable) == ValidationConstraints.Selectable && !c.GetStyle(ControlStyles.Selectable))
+                || ((validationConstraints & ValidationConstraints.Enabled) == ValidationConstraints.Enabled && !c.Enabled)
+                || ((validationConstraints & ValidationConstraints.Visible) == ValidationConstraints.Visible && !c.Visible)
+                || ((validationConstraints & ValidationConstraints.TabStop) == ValidationConstraints.TabStop && !c.TabStop))
             {
                 continue;
             }
@@ -9773,7 +9757,7 @@ public unsafe partial class Control :
                 // SetParent back after the parent's handle has been recreated.
                 // This behavior can be overridden in OnParentHandleRecreat* and is in ListView.
 
-                //fish out control collection w/o demand creating one.
+                // fish out control collection w/o demand creating one.
                 ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection is not null && controlsCollection.Count > 0)
                 {
@@ -10558,8 +10542,7 @@ public unsafe partial class Control :
 
     private Control? GetNextSelectableControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
     {
-        if (!Contains(ctl) ||
-            (!nested && ctl?._parent != this))
+        if (!Contains(ctl) || (!nested && ctl?._parent != this))
         {
             ctl = null;
         }
@@ -10578,7 +10561,7 @@ public unsafe partial class Control :
 
                 if (alreadyWrapped)
                 {
-                    return null; //prevent infinite wrapping.
+                    return null; // prevent infinite wrapping.
                 }
 
                 alreadyWrapped = true;
@@ -10608,7 +10591,7 @@ public unsafe partial class Control :
     /// </summary>
     private void SelectNextIfFocused()
     {
-        //           We want to move focus away from hidden controls, so this
+        // We want to move focus away from hidden controls, so this
         //           function was added.
         if (ContainsFocus && ParentInternal is not null)
         {
@@ -10645,8 +10628,7 @@ public unsafe partial class Control :
     /// </summary>
     public void SetBounds(int x, int y, int width, int height)
     {
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        if (_x != x || _y != y || _width != width || _height != height)
         {
             _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
             try
@@ -10694,8 +10676,7 @@ public unsafe partial class Control :
             height = _height;
         }
 
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        if (_x != x || _y != y || _width != width || _height != height)
         {
             _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
             try
@@ -11290,10 +11271,7 @@ public unsafe partial class Control :
         return align;
     }
 
-    private void SetWindowFont()
-    {
-        PInvoke.SendMessage(this, PInvoke.WM_SETFONT, (WPARAM)FontHandle, (LPARAM)(BOOL)false);
-    }
+    private void SetWindowFont() => PInvoke.SendMessage(this, PInvoke.WM_SETFONT, (WPARAM)FontHandle, (LPARAM)(BOOL)false);
 
     private void SetWindowStyle(int flag, bool value)
     {
@@ -11371,17 +11349,16 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+    ///  Retrieve Font from property bag. This is the Font that was explicitly set on control by the application.
     /// </summary>
-    internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? localFont)
+    private protected bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? font)
     {
-        localFont = (Font?)Properties.GetObject(s_fontProperty);
-
-        return localFont is not null;
+        font = (Font?)Properties.GetObject(s_fontProperty);
+        return font is not null;
     }
 
     /// <summary>
-    /// Sets the scaled font value with the option to control whether <see cref="OnFontChanged(EventArgs)"/> event is raised.
+    ///  Sets the scaled font value with the option to control whether <see cref="OnFontChanged(EventArgs)"/> event is raised.
     /// </summary>
     /// <param name="scaledFont">The scaled <see cref="Font"/> value to be set.</param>
     /// <param name="raiseOnFontChangedEvent">Indicates whether to raise <see cref="OnFontChanged(EventArgs)"/> event.</param>
@@ -11494,8 +11471,7 @@ public unsafe partial class Control :
 #endif // DEBUG
 
         bool newLocation = _x != x || _y != y;
-        bool newSize = Width != width || Height != height ||
-                       _clientWidth != clientWidth || _clientHeight != clientHeight;
+        bool newSize = Width != width || Height != height || _clientWidth != clientWidth || _clientHeight != clientHeight;
 
         _x = x;
         _y = y;
@@ -13575,7 +13551,7 @@ public unsafe partial class Control :
         }
     }
 
-    internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
+    internal virtual ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
         => new(this, flags, caption);
 
     private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference

@@ -55,7 +55,7 @@ internal sealed class ToolStripDesignerUtils
         // adjust bounds as per item
         if (!(item is ToolStripControlHost && item.IsOnDropDown))
         {
-            //Deflate the SelectionGlyph for the MenuItems...
+            // Deflate the SelectionGlyph for the MenuItems...
             if (item is ToolStripMenuItem && item.IsOnDropDown)
             {
                 r.Inflate(-3, -2);
@@ -428,7 +428,7 @@ internal sealed class ToolStripDesignerUtils
             return;
         }
 
-        //InvalidateOriginal SelectedComponents.
+        // InvalidateOriginal SelectedComponents.
         Region invalidateRegion = null;
         Region itemRegion = null;
         int GLYPHBORDER = 1;
@@ -515,12 +515,12 @@ internal sealed class ToolStripDesignerUtils
     /// <summary> represents cached information about the display</summary>
     internal static class DisplayInformation
     {
-        private static bool s_highContrast;  //whether we are under hight contrast mode
-        private static bool s_lowRes;  //whether we are under low resolution mode
-        private static bool s_isTerminalServerSession;   //whether this application is run on a terminal server (remote desktop)
-        private static bool s_highContrastSettingValid;   //indicates whether the high contrast setting is correct
-        private static bool s_lowResSettingValid;  //indicates whether the low resolution setting is correct
-        private static bool s_terminalSettingValid; //indicates whether the terminal server setting is correct
+        private static bool s_highContrast;  // whether we are under hight contrast mode
+        private static bool s_lowRes;  // whether we are under low resolution mode
+        private static bool s_isTerminalServerSession;   // whether this application is run on a terminal server (remote desktop)
+        private static bool s_highContrastSettingValid;   // indicates whether the high contrast setting is correct
+        private static bool s_lowResSettingValid;  // indicates whether the low resolution setting is correct
+        private static bool s_terminalSettingValid; // indicates whether the terminal server setting is correct
         private static short s_bitsPerPixel;
         private static bool s_dropShadowSettingValid;
         private static bool s_dropShadowEnabled;

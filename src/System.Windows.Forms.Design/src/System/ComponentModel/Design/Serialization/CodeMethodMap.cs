@@ -44,7 +44,7 @@ internal class CodeMethodMap
 
     internal CodeStatementCollection FieldAssignments => _fields ??= new CodeStatementCollection();
 
-    //TODO: Should we update RootCodeDomSerializer as well?
+    // TODO: Should we update RootCodeDomSerializer as well?
     internal CodeStatementCollection VariableAssignments => _variables ??= new CodeStatementCollection();
 
     internal void Add(CodeStatementCollection statements)

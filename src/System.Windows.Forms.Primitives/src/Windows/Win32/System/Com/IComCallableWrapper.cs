@@ -19,11 +19,11 @@ internal unsafe struct IComCallableWrapper : IComIID, IVTable<IComCallableWrappe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            ReadOnlySpan<byte> data = new byte[]
-            {
+            ReadOnlySpan<byte> data =
+            [
                 // 0x73b17daf, 0x0480, 0x4702, 0xaf, 0x7c, 0xaf, 0x3b, 0xd4, 0x71, 0x5d, 0x71);
                 0xaf, 0x7d, 0xb1, 0x73, 0x80, 0x04, 0x02, 0x47, 0xaf, 0x7c, 0xaf, 0x3b, 0xd4, 0x71, 0x5d, 0x71
-            };
+            ];
 
             return ref Unsafe.As<byte, Guid>(ref MemoryMarshal.GetReference(data));
         }

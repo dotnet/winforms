@@ -11,7 +11,7 @@ internal class BackCompatibleStringComparer : IEqualityComparer<string>
     {
     }
 
-    //For backcompat
+    // For backcompat
     public int GetHashCode([DisallowNull] string obj)
     {
         unsafe

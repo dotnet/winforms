@@ -617,7 +617,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             }
 
             // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
-            //List<Control> originalControls = new();
+            // List<Control> originalControls = new();
             ArrayList originalControls = new();
 
             // Remove the controls in the drag collection - don't need to do this if we are copying.
@@ -676,7 +676,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             children.SetChildIndex(_primaryDragControl, _insertionIndex);
             ++_insertionIndex;
 
-            //Set the Selection ..
+            // Set the Selection ..
             SelectionService.SetSelectedComponents(new IComponent[] { _primaryDragControl }, SelectionTypes.Primary | SelectionTypes.Replace);
 
             // Note _dragControls are in opposite order than what FLP uses,

@@ -88,13 +88,13 @@ internal unsafe struct IExtender : IComIID, IVTable<IExtender, IExtender.Vtbl>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            ReadOnlySpan<byte> data = new byte[]
-            {
+            ReadOnlySpan<byte> data =
+            [
                 0x7e, 0x8d, 0x08, 0x39,
                 0x1e, 0xb7,
                 0xd1, 0x11,
                 0x8f, 0x39, 0x00, 0xc0, 0x4f, 0xd9, 0x46, 0xd0
-            };
+            ];
 
             return ref Unsafe.As<byte, Guid>(ref MemoryMarshal.GetReference(data));
         }

@@ -64,7 +64,7 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
         // we do the cleanup here and clear out the cache of the localizedlanguage
         _localizationLanguage = null;
 
-        //unhook the event
+        // unhook the event
         IDesignerSerializationManager? manager = sender as IDesignerSerializationManager;
         Debug.Assert(manager is not null, "manager should not be null!");
 

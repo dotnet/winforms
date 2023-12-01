@@ -44,7 +44,7 @@ public class BindingSourceTests
         Assert.True(source.RaiseListChangedEvents);
         Assert.Null(source.Site);
         Assert.Null(source.Sort);
-        Assert.Null(source.SortDescriptions);
+        Assert.Empty(source.SortDescriptions);
         Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
         Assert.Null(source.SortProperty);
         Assert.False(source.SupportsAdvancedSorting);
@@ -103,7 +103,7 @@ public class BindingSourceTests
         Assert.True(source.RaiseListChangedEvents);
         Assert.Null(source.Site);
         Assert.Null(source.Sort);
-        Assert.Null(source.SortDescriptions);
+        Assert.Empty(source.SortDescriptions);
         Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
         Assert.Null(source.SortProperty);
         Assert.False(source.SupportsAdvancedSorting);
@@ -167,7 +167,7 @@ public class BindingSourceTests
         Assert.True(source.RaiseListChangedEvents);
         Assert.Null(source.Site);
         Assert.Null(source.Sort);
-        Assert.Null(source.SortDescriptions);
+        Assert.Empty(source.SortDescriptions);
         Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
         Assert.Null(source.SortProperty);
         Assert.False(source.SupportsAdvancedSorting);
@@ -253,7 +253,7 @@ public class BindingSourceTests
         Assert.True(source.RaiseListChangedEvents);
         Assert.Null(source.Site);
         Assert.Null(source.Sort);
-        Assert.Null(source.SortDescriptions);
+        Assert.Empty(source.SortDescriptions);
         Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
         Assert.Null(source.SortProperty);
         Assert.False(source.SupportsAdvancedSorting);
@@ -325,7 +325,7 @@ public class BindingSourceTests
         Assert.True(source.RaiseListChangedEvents);
         Assert.Null(source.Site);
         Assert.Null(source.Sort);
-        Assert.Null(source.SortDescriptions);
+        Assert.Empty(source.SortDescriptions);
         Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
         Assert.Null(source.SortProperty);
         Assert.False(source.SupportsAdvancedSorting);
@@ -507,7 +507,7 @@ public class BindingSourceTests
         Assert.True(source.RaiseListChangedEvents);
         Assert.NotNull(source.Site);
         Assert.Null(source.Sort);
-        Assert.Null(source.SortDescriptions);
+        Assert.Empty(source.SortDescriptions);
         Assert.Equal(ListSortDirection.Ascending, source.SortDirection);
         Assert.Null(source.SortProperty);
         Assert.False(source.SupportsAdvancedSorting);

@@ -349,7 +349,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             return;
         }
 
-        //      2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are creating the default cell style
+        // 2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are creating the default cell style
         //      then we copy all the public properties.
         DataGridViewColumn? defaultSrcColumn = null;
         try
@@ -366,7 +366,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             defaultSrcColumn = null;
         }
 
-        //      2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property that are changed from the default values;
+        // 2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property that are changed from the default values;
         if (defaultSrcColumn is null || defaultSrcColumn.DefaultCellStyle.Alignment != srcColumn.DefaultCellStyle.Alignment)
         {
             destColumn.DefaultCellStyle.Alignment = srcColumn.DefaultCellStyle.Alignment;

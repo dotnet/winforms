@@ -189,7 +189,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleHostRawElementProvider(IU
 
         // Negative tests.
         hr = pRawElementProviderSimple->get_HostRawElementProvider(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -212,7 +212,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleProviderOptions(IUnknown*
 
         // Negative tests.
         hr = pRawElementProviderSimple->get_ProviderOptions(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -242,7 +242,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleGetPatternProvider(IUnkno
 
         // Negative tests.
         hr = pRawElementProviderSimple->GetPatternProvider(UIA_DockPatternId, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -263,7 +263,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleGetPropertyValue(IUnknown
 
         // Negative tests.
         hr = pRawElementProviderSimple->GetPropertyValue(UIA_DockPatternId, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -289,7 +289,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetBoundingRectangle(IU
 
         // Negative tests.
         hr = pRawElementProviderFragment->get_BoundingRectangle(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -312,7 +312,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetFragmentRoot(IUnknow
 
         // Negative tests.
         hr = pRawElementProviderFragment->get_FragmentRoot(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -336,7 +336,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetEmbeddedFragmentRoot
 
         // Negative tests.
         hr = pRawElementProviderFragment->GetEmbeddedFragmentRoots(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -351,15 +351,13 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetRuntimeId(IUnknown* 
 
         hr = pUnknown->QueryInterface(IID_IRawElementProviderFragment, (void**)&pRawElementProviderFragment);
         assertEqualHr(S_OK, hr);
-
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pRawElementProviderFragment->GetRuntimeId(&result);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
-        SafeArrayDestroy(result);
+        assertEqualHr(S_OK, hr);
 
         // Negative tests.
         hr = pRawElementProviderFragment->GetRuntimeId(NULL);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -382,7 +380,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentNavigate(IUnknown* pUnk
 
         // Negative tests.
         hr = pRawElementProviderFragment->Navigate(NavigateDirection_Parent, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -426,7 +424,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentRootElementProviderFrom
 
         // Negative tests.
         hr = pRawElementProviderFragmentRoot->ElementProviderFromPoint(0, 0, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -449,7 +447,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentRootGetFocus(IUnknown* 
 
         // Negative tests.
         hr = pRawElementProviderFragmentRoot->GetFocus(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
