@@ -277,7 +277,7 @@ public sealed partial class BehaviorService
         /// </summary>
         protected override unsafe void WndProc(ref Message m)
         {
-            //special test hooks
+            // special test hooks
             if (m.Msg == (int)WM_GETALLSNAPLINES)
             {
                 _behaviorService.TestHook_GetAllSnapLines(ref m);

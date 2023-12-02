@@ -83,7 +83,7 @@ internal class FormatStringDialog : Form
         }
     }
 
-    //HACK: if we're adjusting positions after the form's loaded, we didn't set the form up correctly.
+    // HACK: if we're adjusting positions after the form's loaded, we didn't set the form up correctly.
     internal void FormatControlFinishedLoading()
     {
         _okButton.Top = _formatControl1.Bottom + 5;

@@ -285,8 +285,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                             }
                         }
 
-                        //add a check for root designer -- this allows an extra level of checking so we can skip classes
-                        //that cannot be designed.
+                        // add a check for root designer -- this allows an extra level of checking so we can skip classes
+                        // that cannot be designed.
                         if (_rootSerializer is null && HasRootDesignerAttribute(baseType))
                         {
                             _typeSerializer = manager.GetSerializer<TypeCodeDomSerializer>(baseType);

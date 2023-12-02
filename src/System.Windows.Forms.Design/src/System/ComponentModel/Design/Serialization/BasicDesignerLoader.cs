@@ -618,9 +618,9 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     protected virtual void OnEndLoad(bool successful, ICollection? errors)
     {
-        //we don't want successful to be true here if there were load errors.
-        //this may allow a situation where we have a dirtied WSOD and might allow
-        //a user to save a partially loaded designer docdata.
+        // we don't want successful to be true here if there were load errors.
+        // this may allow a situation where we have a dirtied WSOD and might allow
+        // a user to save a partially loaded designer docdata.
         successful = successful && (errors is null || errors.Count == 0)
                                 && (_serializationManager!.Errors is null
                                 || _serializationManager.Errors.Count == 0);
@@ -727,7 +727,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         _state[s_stateReloadAtIdle] = false;
 
-        //check to see if we are actually the active document.
+        // check to see if we are actually the active document.
         DesignSurfaceManager? mgr = GetService<DesignSurfaceManager>();
         DesignSurface? thisSurface = GetService<DesignSurface>();
         Debug.Assert(mgr is not null && thisSurface is not null);
@@ -736,9 +736,9 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         {
             if (!ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
             {
-                //somehow, we got deactivated and weren't told.
+                // somehow, we got deactivated and weren't told.
                 _state[s_stateActiveDocument] = false;
-                _state[s_stateDeferredReload] = true; //reload on activate
+                _state[s_stateDeferredReload] = true; // reload on activate
                 return;
             }
         }

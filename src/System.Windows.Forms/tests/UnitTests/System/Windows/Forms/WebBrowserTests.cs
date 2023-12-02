@@ -2316,7 +2316,7 @@ public class WebBrowserTests
             // xUnit doesn't support dynamic test skipping, https://github.com/xunit/xunit/issues/2073
             // just return. The test will be marked as success, but it is better than just fail.
             //
-            //Skip.If(true, "Windows doesn't have IE browser capability installed");
+            // Skip.If(true, "Windows doesn't have IE browser capability installed");
             return;
         }
 
@@ -2350,7 +2350,7 @@ public class WebBrowserTests
             // xUnit doesn't support dynamic test skipping, https://github.com/xunit/xunit/issues/2073
             // just return. The test will be marked as success, but it is better than just fail.
             //
-            //Skip.If(true, "Windows doesn't have IE browser capability installed");
+            // Skip.If(true, "Windows doesn't have IE browser capability installed");
             return;
         }
 

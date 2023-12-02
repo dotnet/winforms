@@ -111,7 +111,7 @@ public sealed partial class CodeDomComponentSerializationService
             private void OnResolveName(object? sender, ResolveNameEventArgs e)
             {
                 string name = e.Name!;
-                //note: this recursionguard does not fix the problem, but rather avoids a stack overflow which will bring down VS and cause loss of data.
+                // note: this recursionguard does not fix the problem, but rather avoids a stack overflow which will bring down VS and cause loss of data.
                 if (!_nameResolveGuard.Add(name))
                 {
                     return;

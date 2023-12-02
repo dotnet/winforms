@@ -425,7 +425,7 @@ public class PrinterSettings : ICloneable
             _printerName = value;
             // PrinterName can be set through a fulltrusted assembly without using  the PrintDialog.
             // So dont set this variable here.
-            //PrintDialogDisplayed = true;
+            // PrintDialogDisplayed = true;
         }
     }
 
@@ -560,7 +560,7 @@ public class PrinterSettings : ICloneable
 
         try
         {
-            //Copy the PageSettings to the DEVMODE...
+            // Copy the PageSettings to the DEVMODE...
             pageSettings.CopyToHdevmode(modeHandle);
             dc = CreateDeviceContext(modeHandle);
         }
@@ -589,7 +589,7 @@ public class PrinterSettings : ICloneable
 
         try
         {
-            //Copy the PageSettings to the DEVMODE...
+            // Copy the PageSettings to the DEVMODE...
             pageSettings.CopyToHdevmode(modeHandle);
             dc = CreateInformationContext(modeHandle);
         }
@@ -615,7 +615,7 @@ public class PrinterSettings : ICloneable
         return CreateMeasurementGraphics(DefaultPageSettings);
     }
 
-    //whatever the call stack calling HardMarginX and HardMarginY here is safe
+    // whatever the call stack calling HardMarginX and HardMarginY here is safe
     public Graphics CreateMeasurementGraphics(bool honorOriginAtMargins)
     {
         Graphics g = CreateMeasurementGraphics();
@@ -637,7 +637,7 @@ public class PrinterSettings : ICloneable
         return g;
     }
 
-    //whatever the call stack calling HardMarginX and HardMarginY here is safe
+    // whatever the call stack calling HardMarginX and HardMarginY here is safe
     public Graphics CreateMeasurementGraphics(PageSettings pageSettings, bool honorOriginAtMargins)
     {
         Graphics g = CreateMeasurementGraphics();
@@ -676,7 +676,7 @@ public class PrinterSettings : ICloneable
         data.nCopies = 1;
     }
 
-    //  Use FastDeviceCapabilities where possible -- computing PrinterName is quite slow
+    // Use FastDeviceCapabilities where possible -- computing PrinterName is quite slow
     private int DeviceCapabilities(short capability, IntPtr pointerToBuffer, int defaultValue)
     {
         string printerName = PrinterName;
@@ -835,7 +835,7 @@ public class PrinterSettings : ICloneable
         IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
         IntPtr pointer = Kernel32.GlobalLock(handle);
 
-        //Get the DevMode only if its not cached....
+        // Get the DevMode only if its not cached....
         if (_cachedDevmode is not null)
         {
             Marshal.Copy(_cachedDevmode, 0, pointer, _devmodebytes);
@@ -1029,7 +1029,7 @@ public class PrinterSettings : ICloneable
 
     internal unsafe PaperSize[] Get_PaperSizes()
     {
-        string printerName = PrinterName; //  this is quite expensive if PrinterName is left default
+        string printerName = PrinterName; // this is quite expensive if PrinterName is left default
 
         int count = FastDeviceCapabilities(SafeNativeMethods.DC_PAPERNAMES, IntPtr.Zero, -1, printerName);
         if (count == -1)
@@ -1077,7 +1077,7 @@ public class PrinterSettings : ICloneable
 
     internal unsafe PaperSource[] Get_PaperSources()
     {
-        string printerName = PrinterName; //  this is quite expensive if PrinterName is left default
+        string printerName = PrinterName; // this is quite expensive if PrinterName is left default
 
         int count = FastDeviceCapabilities(SafeNativeMethods.DC_BINNAMES, IntPtr.Zero, -1, printerName);
         if (count == -1)
@@ -1117,13 +1117,13 @@ public class PrinterSettings : ICloneable
 
     internal unsafe PrinterResolution[] Get_PrinterResolutions()
     {
-        string printerName = PrinterName; //  this is quite expensive if PrinterName is left default
+        string printerName = PrinterName; // this is quite expensive if PrinterName is left default
         PrinterResolution[] result;
 
         int count = FastDeviceCapabilities(SafeNativeMethods.DC_ENUMRESOLUTIONS, IntPtr.Zero, -1, printerName);
         if (count == -1)
         {
-            //Just return the standard values if custom resolutions are absent ....
+            // Just return the standard values if custom resolutions are absent ....
             result = new PrinterResolution[4];
             result[0] = new PrinterResolution(PrinterResolutionKind.High, -4, -1);
             result[1] = new PrinterResolution(PrinterResolutionKind.Medium, -3, -1);
@@ -1174,7 +1174,7 @@ public class PrinterSettings : ICloneable
         IntPtr pointer = Kernel32.GlobalLock(hdevmode);
         Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
 
-        //Copy entire public devmode as a byte array...
+        // Copy entire public devmode as a byte array...
         _devmodebytes = mode.dmSize;
         if (_devmodebytes > 0)
         {
@@ -1182,7 +1182,7 @@ public class PrinterSettings : ICloneable
             Marshal.Copy(pointer, _cachedDevmode, 0, _devmodebytes);
         }
 
-        //Copy private devmode as a byte array..
+        // Copy private devmode as a byte array..
         _extrabytes = mode.dmDriverExtra;
         if (_extrabytes > 0)
         {

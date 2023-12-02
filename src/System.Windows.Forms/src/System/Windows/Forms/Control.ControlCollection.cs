@@ -363,7 +363,7 @@ public partial class Control
         {
             get
             {
-                //do some bounds checking here...
+                // do some bounds checking here...
                 ArgumentOutOfRangeException.ThrowIfNegative(index);
                 ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 

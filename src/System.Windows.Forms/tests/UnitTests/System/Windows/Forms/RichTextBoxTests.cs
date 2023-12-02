@@ -7931,6 +7931,20 @@ public class RichTextBoxTests
         Assert.Throws<NullReferenceException>(() => control.CanPaste(null));
     }
 
+    [WinFormsFact]
+    public void RichTextBox_Find_String_Table_ReturnsExpected()
+    {
+        using var control = new RichTextBox
+        {
+            Rtf = "{\\rtf1\\ansi\\deff0\\trowd\\pard\\intbl Test\\cell Example\\cell Meow\\cell Woof\\cell \\row}"
+        };
+
+        Assert.Equal(2, control.Find("Test"));
+        Assert.Equal(7, control.Find("Example"));
+        Assert.Equal(15, control.Find("Meow"));
+        Assert.Equal(20, control.Find("Woof"));
+    }
+
     public static IEnumerable<object[]> Find_String_TestData()
     {
         yield return new object[] { string.Empty, string.Empty, -1 };

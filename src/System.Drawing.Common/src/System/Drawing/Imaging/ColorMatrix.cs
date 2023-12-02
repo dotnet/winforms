@@ -51,22 +51,22 @@ public sealed class ColorMatrix
          */
 
         _matrix00 = 1.0f;
-        //matrix01 = 0.0f;
-        //matrix02 = 0.0f;
-        //matrix03 = 0.0f;
-        //matrix04 = 0.0f;
-        //matrix10 = 0.0f;
+        // matrix01 = 0.0f;
+        // matrix02 = 0.0f;
+        // matrix03 = 0.0f;
+        // matrix04 = 0.0f;
+        // matrix10 = 0.0f;
         _matrix11 = 1.0f;
-        //matrix12 = 0.0f;
-        //matrix13 = 0.0f;
-        //matrix14 = 0.0f;
-        //matrix20 = 0.0f;
-        //matrix21 = 0.0f;
+        // matrix12 = 0.0f;
+        // matrix13 = 0.0f;
+        // matrix14 = 0.0f;
+        // matrix20 = 0.0f;
+        // matrix21 = 0.0f;
         _matrix22 = 1.0f;
         // matrix23 = 0.0f;
         // matrix24 = 0.0f;
         // matrix30 = 0.0f;
-        //matrix31 = 0.0f;
+        // matrix31 = 0.0f;
         // matrix32 = 0.0f;
         _matrix33 = 1.0f;
         // matrix34 = 0.0f;

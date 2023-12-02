@@ -12,18 +12,18 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 internal sealed class SelectionManager : IDisposable
 {
-    private BehaviorService _behaviorService;           //ptr back to our BehaviorService
-    private IServiceProvider _serviceProvider;          //standard service provider
-    private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    //used for quick look up of designers related to components
-    private readonly Control _rootComponent;            //root component being designed
-    private ISelectionService _selectionService;                  //we cache the selection service for perf.
-    private IDesignerHost _designerHost;                //we cache the designerhost for perf.
-    private Rectangle[]? _previousSelectionBounds;           //used to only repaint the changing part of the selection
-    private object? _previousPrimarySelection;               //used to check if the primary selection changed
+    private BehaviorService _behaviorService;           // ptr back to our BehaviorService
+    private IServiceProvider _serviceProvider;          // standard service provider
+    private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    // used for quick look up of designers related to components
+    private readonly Control _rootComponent;            // root component being designed
+    private ISelectionService _selectionService;                  // we cache the selection service for perf.
+    private IDesignerHost _designerHost;                // we cache the designerhost for perf.
+    private Rectangle[]? _previousSelectionBounds;           // used to only repaint the changing part of the selection
+    private object? _previousPrimarySelection;               // used to check if the primary selection changed
     private Rectangle[]? _currentSelectionBounds;
     private int _curCompIndex;
     private DesignerActionUI? _designerActionUI;         // the "container" for all things related to the designer action (smarttags) UI
-    private bool _selectionChanging;                    //we don't want the OnSelectionChanged to be recursively called.
+    private bool _selectionChanging;                    // we don't want the OnSelectionChanged to be recursively called.
 
     /// <summary>
     ///  Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
@@ -38,17 +38,17 @@ internal sealed class SelectionManager : IDisposable
         _selectionService = serviceProvider.GetRequiredService<ISelectionService>();
         _designerHost = serviceProvider.GetRequiredService<IDesignerHost>();
 
-        //sync the BehaviorService's begindrag event
+        // sync the BehaviorService's begindrag event
         behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
 
-        //sync the BehaviorService's Synchronize event
+        // sync the BehaviorService's Synchronize event
         behaviorService.Synchronize += new EventHandler(OnSynchronize);
 
         _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
         _rootComponent = (Control)_designerHost.RootComponent;
 
-        //create and add both of our adorners,
-        //one for selection, one for bodies
+        // create and add both of our adorners,
+        // one for selection, one for bodies
         SelectionGlyphAdorner = new Adorner();
         BodyGlyphAdorner = new Adorner();
         behaviorService.Adorners.Add(BodyGlyphAdorner);
@@ -293,7 +293,7 @@ internal sealed class SelectionManager : IDisposable
     {
         _componentToDesigner.Remove(ce.Component!);
 
-        //remove the associated designeractionpanel
+        // remove the associated designeractionpanel
         _designerActionUI?.RemoveActionGlyph(ce.Component);
     }
 
@@ -402,7 +402,7 @@ internal sealed class SelectionManager : IDisposable
             List<IComponent> selComps = _selectionService.GetSelectedComponents().Cast<IComponent>().ToList();
             object? primarySelection = _selectionService.PrimarySelection;
 
-            //add all control glyphs to all controls on rootComp
+            // add all control glyphs to all controls on rootComp
             _curCompIndex = 0;
             _currentSelectionBounds = new Rectangle[selComps.Count];
             AddAllControlGlyphs(_rootComponent, selComps, primarySelection);

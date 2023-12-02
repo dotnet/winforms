@@ -8,9 +8,9 @@ using System.ComponentModel.Design.Serialization;
 
 namespace System.Windows.Forms.Design;
 
-//This is the serializer for TableLayoutControlCollection. It uses the Add(control, col, row)
-//syntax to add a control to the specific cell of the table whenever appropriate.
-//most of the code is copied from CollectionCodeDomSerializer.
+// This is the serializer for TableLayoutControlCollection. It uses the Add(control, col, row)
+// syntax to add a control to the specific cell of the table whenever appropriate.
+// most of the code is copied from CollectionCodeDomSerializer.
 internal class TableLayoutControlCollectionCodeDomSerializer : CollectionCodeDomSerializer
 {
     /// <summary>

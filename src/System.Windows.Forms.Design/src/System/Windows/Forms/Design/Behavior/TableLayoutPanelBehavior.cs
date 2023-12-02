@@ -12,15 +12,15 @@ namespace System.Windows.Forms.Design.Behavior;
 
 internal class TableLayoutPanelBehavior : Behavior
 {
-    private TableLayoutPanelDesigner designer; //pointer back to our designer.
-    private Point lastMouseLoc; //used to track mouse movement deltas
-    private bool pushedBehavior; //tracks if we've pushed ourself onto the stack
-    private BehaviorService behaviorService; //used for bounds translation
-    private IServiceProvider serviceProvider; //cached to allow our behavior to get services
-    private TableLayoutPanelResizeGlyph tableGlyph; //the glyph being resized
-    private DesignerTransaction resizeTransaction; //used to make size adjustments within transaction
-    private PropertyDescriptor resizeProp; //cached property descriptor representing either the row or column styles
-    private PropertyDescriptor changedProp;  //cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
+    private TableLayoutPanelDesigner designer; // pointer back to our designer.
+    private Point lastMouseLoc; // used to track mouse movement deltas
+    private bool pushedBehavior; // tracks if we've pushed ourself onto the stack
+    private BehaviorService behaviorService; // used for bounds translation
+    private IServiceProvider serviceProvider; // cached to allow our behavior to get services
+    private TableLayoutPanelResizeGlyph tableGlyph; // the glyph being resized
+    private DesignerTransaction resizeTransaction; // used to make size adjustments within transaction
+    private PropertyDescriptor resizeProp; // cached property descriptor representing either the row or column styles
+    private PropertyDescriptor changedProp;  // cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
     private TableLayoutPanel table;
     private StyleHelper rightStyle;
     private StyleHelper leftStyle;
@@ -48,7 +48,7 @@ internal class TableLayoutPanelBehavior : Behavior
 
     private void FinishResize()
     {
-        //clear state
+        // clear state
         pushedBehavior = false;
         behaviorService.PopBehavior(this);
         lastMouseLoc = Point.Empty;
@@ -62,7 +62,7 @@ internal class TableLayoutPanelBehavior : Behavior
             changedProp = null;
         }
 
-        //attempt to refresh the selection
+        // attempt to refresh the selection
         SelectionManager selManager = serviceProvider.GetService(typeof(SelectionManager)) as SelectionManager;
         selManager?.Refresh();
     }
@@ -88,18 +88,18 @@ internal class TableLayoutPanelBehavior : Behavior
 
     public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
     {
-        //we only care about the right mouse button for resizing
+        // we only care about the right mouse button for resizing
         if (button == MouseButtons.Left && g is TableLayoutPanelResizeGlyph)
         {
             tableGlyph = g as TableLayoutPanelResizeGlyph;
 
-            //select the table
+            // select the table
             ISelectionService selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
             selSvc?.SetSelectedComponents(new object[] { designer.Component }, SelectionTypes.Primary);
 
             bool isColumn = tableGlyph.Type == TableLayoutPanelResizeGlyph.TableLayoutResizeType.Column;
 
-            //cache some state
+            // cache some state
             lastMouseLoc = mouseLoc;
             resizeProp = TypeDescriptor.GetProperties(tableGlyph.Style)[isColumn ? "Width" : "Height"];
             Debug.Assert(resizeProp is not null, "Unable to get the resize property for tableGlyph's Style");
@@ -156,7 +156,7 @@ internal class TableLayoutPanelBehavior : Behavior
                 }
             }
 
-            //push this resizebehavior
+            // push this resizebehavior
             behaviorService.PushCaptureBehavior(this);
             pushedBehavior = true;
         }
@@ -284,7 +284,7 @@ internal class TableLayoutPanelBehavior : Behavior
 
                 int totalPercent = 0;
 
-                //simplest case: two absolute columns just affect each other.
+                // simplest case: two absolute columns just affect each other.
                 if (_styles[rightIndex].SizeType == SizeType.Absolute &&
                     _styles[leftIndex].SizeType == SizeType.Absolute)
                 {
@@ -346,7 +346,7 @@ internal class TableLayoutPanelBehavior : Behavior
                     }
 #endif
 
-                    //mixed - just update absolute
+                    // mixed - just update absolute
                     int absIndex = _styles[rightIndex].SizeType == SizeType.Absolute ? rightIndex : leftIndex;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(_styles[absIndex])[isColumn ? "Width" : "Height"];
                     if (prop is not null)
@@ -411,7 +411,7 @@ internal class TableLayoutPanelBehavior : Behavior
         if (pushedBehavior)
         {
             FinishResize();
-            //commit transaction
+            // commit transaction
             if (resizeTransaction is not null)
             {
                 DesignerTransaction t = resizeTransaction;

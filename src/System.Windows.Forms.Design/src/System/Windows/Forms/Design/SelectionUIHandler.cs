@@ -330,7 +330,7 @@ internal abstract class SelectionUIHandler
                 }
             }
 
-            //Bug #72905  <subhag> Form X,Y defaulted to (0,0)
+            // Bug #72905  <subhag> Form X,Y defaulted to (0,0)
             //
 
             IDesignerHost? host = GetService<IDesignerHost>();

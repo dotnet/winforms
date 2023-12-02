@@ -192,7 +192,7 @@ internal class StandardMenuStripVerb
                         rootItem.DropDownItems.Add(item);
                     }
 
-                    //If Last SubItem Added the Raise the Events
+                    // If Last SubItem Added the Raise the Events
                     if (i == menuArray.Length - 1)
                     {
                         // member is OK to be null...
@@ -205,7 +205,7 @@ internal class StandardMenuStripVerb
                 // finally, add it to the MainMenu.
                 rootItem.DropDown.ResumeLayout(false);
                 tool.Items.Add(rootItem);
-                //If Last SubItem Added the Raise the Events
+                // If Last SubItem Added the Raise the Events
                 if (j == menuItemNames.Length - 1)
                 {
                     // member is OK to be null...
@@ -243,7 +243,7 @@ internal class StandardMenuStripVerb
             ISelectionService selSvc = (ISelectionService)_provider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { _designer.Component });
 
-            //Refresh the Glyph
+            // Refresh the Glyph
             DesignerActionUIService actionUIService = (DesignerActionUIService)_provider.GetService(typeof(DesignerActionUIService));
             actionUIService?.Refresh(_designer.Component);
 
@@ -289,7 +289,7 @@ internal class StandardMenuStripVerb
                 }
             }
 
-            //keep an index in the MenuItemImageNames .. so that mapping is maintained.
+            // keep an index in the MenuItemImageNames .. so that mapping is maintained.
             int menuItemImageNamesCount = 0;
             // now build the menu items themselves.
             foreach (string itemText in menuItemNames)
@@ -348,7 +348,7 @@ internal class StandardMenuStripVerb
                 }
 
                 tool.Items.Add(item);
-                //increment the counter...
+                // increment the counter...
                 menuItemImageNamesCount++;
             }
 
@@ -373,7 +373,7 @@ internal class StandardMenuStripVerb
         }
         finally
         {
-            //Reset the AutoAdd state
+            // Reset the AutoAdd state
             ToolStripDesigner.s_autoAddNewItems = true;
             if (createMenu is not null)
             {
@@ -386,7 +386,7 @@ internal class StandardMenuStripVerb
             ISelectionService selSvc = (ISelectionService)_provider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { _designer.Component });
 
-            //Refresh the Glyph
+            // Refresh the Glyph
             DesignerActionUIService actionUIService = (DesignerActionUIService)_provider.GetService(typeof(DesignerActionUIService));
             actionUIService?.Refresh(_designer.Component);
 

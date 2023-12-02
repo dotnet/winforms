@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
-using static Interop;
+using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
+using TASKDIALOGCONFIG_FooterIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous2_e__Union;
 
 namespace System.Windows.Forms;
 
@@ -400,8 +400,8 @@ public class TaskDialogPage
 
             if (BoundDialog is not null)
             {
-                (ComCtl32.TASKDIALOGCONFIG.IconUnion icon, bool? iconIsFromHandle) =
-                    GetIconValue(value);
+                (TASKDIALOGCONFIG_MainIcon icon, bool? iconIsFromHandle) =
+                    GetMainIconValue(value);
 
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
@@ -413,7 +413,7 @@ public class TaskDialogPage
 
                 BoundDialog.UpdateIconElement(
                      TASKDIALOG_ICON_ELEMENTS.TDIE_ICON_MAIN,
-                    _boundIconIsFromHandle ? icon.hIcon : (IntPtr)icon.pszIcon);
+                    _boundIconIsFromHandle ? icon.hMainIcon : (IntPtr)(char*)icon.pszMainIcon);
             }
 
             _icon = value;
@@ -634,10 +634,10 @@ public class TaskDialogPage
         return string.IsNullOrEmpty(str) || str[0] == '\0';
     }
 
-    internal static unsafe (ComCtl32.TASKDIALOGCONFIG.IconUnion iconUnion, bool? iconIsFromHandle)
-        GetIconValue(TaskDialogIcon? icon)
+    internal static unsafe (TASKDIALOGCONFIG_MainIcon iconUnion, bool? iconIsFromHandle)
+        GetMainIconValue(TaskDialogIcon? icon)
     {
-        ComCtl32.TASKDIALOGCONFIG.IconUnion iconUnion = default;
+        TASKDIALOGCONFIG_MainIcon iconUnion = default;
         bool? iconIsFromHandle = null;
 
         // If no icon is specified (icon is null), the iconIsFromHandle variable will be
@@ -645,14 +645,39 @@ public class TaskDialogPage
         // of whether the bound icon is a handle icon or a non-handle icon.
         if (icon?.IsHandleIcon == true)
         {
-            iconUnion.hIcon = icon.IconHandle;
+            iconUnion.hMainIcon = (HICON)icon.IconHandle;
             iconIsFromHandle = true;
         }
         else if (icon?.IsStandardIcon == true)
         {
             // Convert the value to an ushort before converting it to a pointer,
             // which corresponds to using the MAKEINTRESOURCEW macro in native code.
-            iconUnion.pszIcon = (char*)checked((ushort)icon.StandardIcon);
+            iconUnion.pszMainIcon = (char*)checked((ushort)icon.StandardIcon);
+            iconIsFromHandle = false;
+        }
+
+        return (iconUnion, iconIsFromHandle);
+    }
+
+    internal static unsafe (TASKDIALOGCONFIG_FooterIcon iconUnion, bool? iconIsFromHandle)
+        GetFooterIconValue(TaskDialogIcon? icon)
+    {
+        TASKDIALOGCONFIG_FooterIcon iconUnion = default;
+        bool? iconIsFromHandle = null;
+
+        // If no icon is specified (icon is null), the iconIsFromHandle variable will be
+        // null, which allows to clear the dialog's icon while it is shown, regardless
+        // of whether the bound icon is a handle icon or a non-handle icon.
+        if (icon?.IsHandleIcon == true)
+        {
+            iconUnion.hFooterIcon = (HICON)icon.IconHandle;
+            iconIsFromHandle = true;
+        }
+        else if (icon?.IsStandardIcon == true)
+        {
+            // Convert the value to an ushort before converting it to a pointer,
+            // which corresponds to using the MAKEINTRESOURCEW macro in native code.
+            iconUnion.pszFooterIcon = (char*)checked((ushort)icon.StandardIcon);
             iconIsFromHandle = false;
         }
 
@@ -807,11 +832,11 @@ public class TaskDialogPage
     internal void Bind(
         TaskDialog owner,
         out TASKDIALOG_FLAGS flags,
-        out ComCtl32.TDCBF buttonFlags,
+        out TASKDIALOG_COMMON_BUTTON_FLAGS buttonFlags,
         out IEnumerable<(int buttonID, string text)> customButtonElements,
         out IEnumerable<(int buttonID, string text)> radioButtonElements,
-        out ComCtl32.TASKDIALOGCONFIG.IconUnion mainIcon,
-        out ComCtl32.TASKDIALOGCONFIG.IconUnion footnoteIcon,
+        out TASKDIALOGCONFIG_MainIcon mainIcon,
+        out TASKDIALOGCONFIG_FooterIcon footnoteIcon,
         out int defaultButtonID,
         out int defaultRadioButtonID)
     {
@@ -828,7 +853,7 @@ public class TaskDialogPage
         _updateTextOnInitialization = false;
         _updateHeadingOnInitialization = false;
 
-        (ComCtl32.TASKDIALOGCONFIG.IconUnion localIconValue, bool? iconIsFromHandle) = GetIconValue(_icon);
+        (TASKDIALOGCONFIG_MainIcon localIconValue, bool? iconIsFromHandle) = GetMainIconValue(_icon);
         (mainIcon, _boundIconIsFromHandle) = (localIconValue, iconIsFromHandle ?? false);
 
         if (_boundIconIsFromHandle)

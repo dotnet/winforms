@@ -16,7 +16,7 @@ namespace Windows.Win32.System.Com;
 ///   Use in a <see langword="using" /> statement to ensure the <see cref="SAFEARRAY"/> gets disposed.
 ///  </para>
 /// </remarks>
-internal readonly unsafe ref struct ComSafeArrayScope<T> where T: unmanaged, IComIID
+internal readonly unsafe ref struct ComSafeArrayScope<T> where T : unmanaged, IComIID
 {
     private readonly SafeArrayScope<nint> _value;
 
@@ -39,6 +39,32 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T: unmanaged, ICo
         };
 
         _value = new(PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound));
+    }
+
+    /// <summary>
+    ///  Creates a <see cref="ComSafeArrayScope{T}"/> from an array of COM interfaces.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <typeparamref name="T"/> must implement <see cref="IComInterface{T}"/> where T is <typeparamref name="TComInterface"/>.
+    ///   Otherwise an <see cref="ArgumentException"/> will be thrown.
+    ///  </para>
+    /// </remarks>
+    public static ComSafeArrayScope<T> CreateFromInterfaceArray<TComInterface>(TComInterface[] array)
+    {
+        if (!typeof(T).IsAssignableTo(typeof(IComInterface<TComInterface>)))
+        {
+            throw new ArgumentException($"{typeof(T).Name} must implement {nameof(IComInterface<TComInterface>)}<{typeof(TComInterface).Name}>");
+        }
+
+        uint length = (uint)array.Length;
+        ComSafeArrayScope<T> scope = new(length);
+        for (int i = 0; i < length; i++)
+        {
+            scope[i] = ComHelpers.GetComPointer<T>(array[i]);
+        }
+
+        return scope;
     }
 
     /// <remarks>

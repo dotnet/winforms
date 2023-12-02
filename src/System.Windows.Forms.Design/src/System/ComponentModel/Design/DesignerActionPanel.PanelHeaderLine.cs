@@ -79,7 +79,7 @@ internal sealed partial class DesignerActionPanel
             // TODO: Figure out better rect
             _formActive = true;
             ActionPanel.Invalidate();
-            //ActionPanel.Invalidate(new Rectangle(EditRegionLocation, EditRegionSize), false);
+            // ActionPanel.Invalidate(new Rectangle(EditRegionLocation, EditRegionSize), false);
         }
 
         private void OnFormDeactivate(object? sender, EventArgs e)

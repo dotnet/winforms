@@ -225,13 +225,13 @@ internal partial class LayoutUtils
 
         if (rect1.X <= rect2.X && rect1.X + rect1.Width >= rect2.X + rect2.Width)
         {
-            //rect 1 contains rect 2 horizontally
+            // rect 1 contains rect 2 horizontally
             return true;
         }
 
         if (rect2.X <= rect1.X && rect2.X + rect2.Width >= rect1.X + rect1.Width)
         {
-            //rect 2 contains rect 1 horizontally
+            // rect 2 contains rect 1 horizontally
             return true;
         }
 
@@ -247,20 +247,20 @@ internal partial class LayoutUtils
 
         if (rect1.Y <= rect2.Y && rect1.Y + rect1.Width >= rect2.Y + rect2.Width)
         {
-            //rect 1 contains rect 2 vertically
+            // rect 1 contains rect 2 vertically
             return true;
         }
 
         if (rect2.Y <= rect1.Y && rect2.Y + rect2.Width >= rect1.Y + rect1.Width)
         {
-            //rect 2 contains rect 1 vertically
+            // rect 2 contains rect 1 vertically
             return true;
         }
 
         return false;
     }
 
-    //returns anchorStyles, transforms from DockStyle if necessary
+    // returns anchorStyles, transforms from DockStyle if necessary
     internal static AnchorStyles GetUnifiedAnchor(IArrangedElement element)
     {
         DockStyle dockStyle = DefaultLayout.GetDock(element);

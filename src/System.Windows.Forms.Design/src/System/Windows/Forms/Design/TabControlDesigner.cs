@@ -117,7 +117,7 @@ internal class TabControlDesigner : ParentControlDesigner
 
         TabControl tc = (TabControl)Component;
         if (tc is not null)
-        { //always Select the First Tab on Initialising the component...
+        { // always Select the First Tab on Initialising the component...
             tc.SelectedIndex = 0;
         }
     }
@@ -137,7 +137,7 @@ internal class TabControlDesigner : ParentControlDesigner
     protected override IComponent[] CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
     {
         TabControl tc = ((TabControl)Control);
-        //VSWhidbey #409457
+        // VSWhidbey #409457
         if (tc.SelectedTab is null)
         {
             throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, tool.DisplayName));
@@ -414,7 +414,7 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
 
-        tabControlSelected = false;//this is for HitTest purposes
+        tabControlSelected = false;// this is for HitTest purposes
 
         if (svc is not null)
         {
@@ -426,14 +426,14 @@ internal class TabControlDesigner : ParentControlDesigner
             {
                 if (comp == tabControl)
                 {
-                    tabControlSelected = true;//this is for HitTest purposes
+                    tabControlSelected = true;// this is for HitTest purposes
                 }
 
                 TabPage page = GetTabPageOfComponent(tabControl, comp);
 
                 if (page is not null && page.Parent == tabControl)
                 {
-                    tabControlSelected = false; //this is for HitTest purposes
+                    tabControlSelected = false; // this is for HitTest purposes
                     tabControl.SelectedTab = page;
                     SelectionManager selMgr = (SelectionManager)GetService(typeof(SelectionManager));
                     selMgr.Refresh();
@@ -583,8 +583,8 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         if (forwardOnDrag)
         {
-            //Need to make sure that we are over a valid area. VSWhidbey# 354139. Now that all dragging/dropping is done via
-            //the behavior service and adorner window, we have to do our own validation, and cannot rely on the OS to do it for us.
+            // Need to make sure that we are over a valid area. VSWhidbey# 354139. Now that all dragging/dropping is done via
+            // the behavior service and adorner window, we have to do our own validation, and cannot rely on the OS to do it for us.
             TabControl tc = ((TabControl)Control);
             Point dropPoint = Control.PointToClient(new Point(de.X, de.Y));
             if (!tc.DisplayRectangle.Contains(dropPoint))
@@ -648,8 +648,8 @@ internal class TabControlDesigner : ParentControlDesigner
                 break;
             case PInvoke.WM_HSCROLL:
             case PInvoke.WM_VSCROLL:
-                //We do this so that we can update the areas covered by glyphs correctly. VSWhidbey# 187405.
-                //We just invalidate the area corresponding to the ClientRectangle in the adornerwindow.
+                // We do this so that we can update the areas covered by glyphs correctly. VSWhidbey# 187405.
+                // We just invalidate the area corresponding to the ClientRectangle in the adornerwindow.
                 BehaviorService.Invalidate(BehaviorService.ControlRectInAdornerWindow(Control));
                 base.WndProc(ref m);
                 break;

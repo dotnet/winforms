@@ -10,7 +10,7 @@ public enum FillType
     HorizontalGradient = 2,
     RadialGradient = 3,
     TileImage = 4,
-    //      TM_ENUM(0, FT, SOLID)
+    // TM_ENUM(0, FT, SOLID)
     //      TM_ENUM(1, FT, VERTGRADIENT)
     //      TM_ENUM(2, FT, HORZGRADIENT)
     //      TM_ENUM(3, FT, RADIALGRADIENT)

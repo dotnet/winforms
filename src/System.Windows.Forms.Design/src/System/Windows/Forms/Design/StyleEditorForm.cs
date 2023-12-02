@@ -593,7 +593,7 @@ internal partial class StyleCollectionEditor
         {
             _columnsAndRowsListView.Items.Clear();
 
-            string baseName = _isRowCollection ? "Row" : "Column"; //these should not be localized
+            string baseName = _isRowCollection ? "Row" : "Column"; // these should not be localized
 
             int styleCount = _isRowCollection ? _tableLayoutPanel.RowStyles.Count : _tableLayoutPanel.ColumnStyles.Count;
 
