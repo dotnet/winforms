@@ -101,7 +101,7 @@ public class DragDropHelperTests
 
     [WinFormsTheory(Skip ="Causing issues with other tests on x86 from the command line")]
     [MemberData(nameof(DragImage_DataObject_Bitmap_Point_bool_TestData))]
-    public unsafe void SetDragImage_DataObject_Bitmap_Point_bool_ReturnsExptected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+    public unsafe void SetDragImage_DataObject_Bitmap_Point_bool_ReturnsExpected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
     {
         try
         {
@@ -125,7 +125,7 @@ public class DragDropHelperTests
 
     [WinFormsTheory(Skip = "Causing issues with other tests on x86 from the command line")]
     [MemberData(nameof(DragImage_DataObject_GiveFeedbackEventArgs_TestData))]
-    public unsafe void SetDragImage_DataObject_GiveFeedbackEventArgs_ReturnsExptected(DataObject dataObject, GiveFeedbackEventArgs e)
+    public unsafe void SetDragImage_DataObject_GiveFeedbackEventArgs_ReturnsExpected(DataObject dataObject, GiveFeedbackEventArgs e)
     {
         try
         {
@@ -236,7 +236,7 @@ public class DragDropHelperTests
 
     [Theory]
     [MemberData(nameof(DropDescription_DataObject_DropImageType_string_string_TestData))]
-    public void SetDropDescription_ReleaseDragDropFormats_ReturnsExptected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+    public void SetDropDescription_ReleaseDragDropFormats_ReturnsExpected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
     {
         DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
         DragDropHelper.ReleaseDragDropFormats(dataObject);
@@ -255,7 +255,7 @@ public class DragDropHelperTests
 
     [Theory]
     [MemberData(nameof(DropDescription_DragEventArgs_TestData))]
-    public unsafe void SetDropDescription_DragEventArgs_ReturnsExptected(DragEventArgs e)
+    public unsafe void SetDropDescription_DragEventArgs_ReturnsExpected(DragEventArgs e)
     {
         try
         {
@@ -282,7 +282,7 @@ public class DragDropHelperTests
 
     [Theory]
     [MemberData(nameof(DropDescription_DataObject_DropImageType_string_string_TestData))]
-    public unsafe void SetDropDescription_DataObject_DropImageType_string_string_ReturnsExptected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
+    public unsafe void SetDropDescription_DataObject_DropImageType_string_string_ReturnsExpected(DataObject dataObject, DropImageType dropImageType, string message, string messageReplacementToken)
     {
         try
         {
@@ -313,7 +313,7 @@ public class DragDropHelperTests
 
     [Theory]
     [MemberData(nameof(InDragLoop_TestData))]
-    public unsafe void SetInDragLoop_ReturnsExptected(DataObject dataObject, bool inDragLoop)
+    public unsafe void SetInDragLoop_ReturnsExpected(DataObject dataObject, bool inDragLoop)
     {
         try
         {

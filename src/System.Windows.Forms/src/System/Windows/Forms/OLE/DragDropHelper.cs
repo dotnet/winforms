@@ -329,8 +329,8 @@ internal static class DragDropHelper
     /// <remarks>
     /// <para>
     /// Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
-    /// always pass a bitmap without premultiplied alpha blending. Note that no error will result from passing a bitmap
-    /// with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
+    /// always pass a bitmap without pre-multiplied alpha blending. Note that no error will result from passing a bitmap
+    /// with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
     /// </para>
     /// </remarks>
     public static void SetDragImage(IComDataObject dataObject, GiveFeedbackEventArgs e)
@@ -345,8 +345,8 @@ internal static class DragDropHelper
     /// <remarks>
     /// <para>
     /// Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
-    /// always pass a bitmap without premultiplied alpha blending. Note that no error will result from passing a bitmap
-    /// with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
+    /// always pass a bitmap without pre-multiplied alpha blending. Note that no error will result from passing a bitmap
+    /// with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
     /// </para>
     /// </remarks>
     public static void SetDragImage(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool usingDefaultDragImage)

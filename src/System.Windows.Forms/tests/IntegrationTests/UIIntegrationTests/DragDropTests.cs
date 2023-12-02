@@ -339,7 +339,7 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected_Async()
+    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExpected_Async()
     {
         await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
         {
@@ -420,7 +420,7 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
+    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExpected_Async()
     {
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
@@ -450,7 +450,7 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
+    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExpected_Async()
     {
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
