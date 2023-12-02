@@ -136,7 +136,7 @@ public class GraphicsTest : IDisposable
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = TextRenderingHint.SystemDefault;
 
-            //Clipping set/get tested in clipping functions
+            // Clipping set/get tested in clipping functions
             Assert.Equal(CompositingMode.SourceCopy, g.CompositingMode);
             Assert.Equal(CompositingQuality.GammaCorrected, g.CompositingQuality);
             Assert.Equal(InterpolationMode.HighQualityBilinear, g.InterpolationMode);
@@ -1694,7 +1694,7 @@ public class GraphicsTest : IDisposable
             Assert.Equal(0xFFFF0000, (uint)bitmap.GetPixel(16, 4).ToArgb());
             Assert.Equal(0xFFFF0000, (uint)bitmap.GetPixel(16, 5).ToArgb());
             Assert.Equal(0xFFFF0000, (uint)bitmap.GetPixel(16, 6).ToArgb());
-            //end
+            // end
             Assert.Equal(0xFFFF0000, (uint)bitmap.GetPixel(14, 15).ToArgb());
             Assert.Equal(0xFF0000FF, (uint)bitmap.GetPixel(15, 15).ToArgb());
             Assert.Equal(0xFFFF0000, (uint)bitmap.GetPixel(16, 15).ToArgb());
@@ -2436,7 +2436,7 @@ public class GraphicsTest : IDisposable
     {
         if (PlatformDetection.IsArmOrArm64Process)
         {
-            //ActiveIssue: 35744
+            // ActiveIssue: 35744
             throw new SkipTestException("Precision on float numbers");
         }
 
@@ -2483,7 +2483,7 @@ public class GraphicsTest : IDisposable
     {
         if (PlatformDetection.IsArmOrArm64Process)
         {
-            //ActiveIssue: 35744
+            // ActiveIssue: 35744
             throw new SkipTestException("Precision on float numbers");
         }
 

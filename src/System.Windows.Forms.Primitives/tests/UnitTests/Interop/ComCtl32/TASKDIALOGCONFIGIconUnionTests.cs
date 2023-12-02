@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.ComCtl32;
+using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
@@ -15,7 +15,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        Assert.Equal(4, sizeof(TASKDIALOGCONFIG.IconUnion));
+        Assert.Equal(4, sizeof(TASKDIALOGCONFIG_MainIcon));
     }
 
     [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
@@ -26,11 +26,11 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG.IconUnion sut = new TASKDIALOGCONFIG.IconUnion();
-        byte* addr = (byte*)&sut;
+        TASKDIALOGCONFIG_MainIcon icon = new();
+        byte* addr = (byte*)&icon;
 
-        Assert.Equal(0, (byte*)&sut.hIcon - addr);  // 4, HICON
-        Assert.Equal(0, (byte*)&sut.pszIcon - addr);  // 4, PCWSTR
+        Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 4, HICON
+        Assert.Equal(0, (byte*)&icon.pszMainIcon - addr);  // 4, PCWSTR
     }
 
     [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
@@ -41,7 +41,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        Assert.Equal(8, sizeof(TASKDIALOGCONFIG.IconUnion));
+        Assert.Equal(8, sizeof(TASKDIALOGCONFIG_MainIcon));
     }
 
     [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
@@ -52,10 +52,10 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG.IconUnion sut = new TASKDIALOGCONFIG.IconUnion();
-        byte* addr = (byte*)&sut;
+        TASKDIALOGCONFIG_MainIcon icon = new();
+        byte* addr = (byte*)&icon;
 
-        Assert.Equal(0, (byte*)&sut.hIcon - addr);  // 8, HICON
-        Assert.Equal(0, (byte*)&sut.pszIcon - addr);  // 8, PCWSTR
+        Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 8, HICON
+        Assert.Equal(0, (byte*)&icon.pszMainIcon - addr);  // 8, PCWSTR
     }
 }

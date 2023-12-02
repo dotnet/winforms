@@ -33,7 +33,7 @@ public class StandardPrintController : PrintController
         Gdi32.DOCINFO info = new Gdi32.DOCINFO();
         info.lpszDocName = document.DocumentName;
         if (document.PrinterSettings.PrintToFile)
-            info.lpszOutput = document.PrinterSettings.OutputPort; //This will be "FILE:"
+            info.lpszOutput = document.PrinterSettings.OutputPort; // This will be "FILE:"
         else
             info.lpszOutput = null;
         info.lpszDatatype = null;

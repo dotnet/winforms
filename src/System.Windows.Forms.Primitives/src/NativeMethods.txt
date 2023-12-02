@@ -28,6 +28,8 @@ CDM_GETSPEC
 CDRF_*
 CFE_EFFECTS
 CFM_MASK
+CFSTR_DROPDESCRIPTION
+CFSTR_INDRAGLOOP
 CHILDID_SELF
 ChildWindowFromPointEx
 CSIDL_*
@@ -141,6 +143,7 @@ DrawThemeText
 DROPDESCRIPTION
 DROPFILES
 DROPIMAGETYPE
+DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
@@ -371,6 +374,7 @@ IEnumFORMATETC
 IEnumOLEVERB
 IEnumVARIANT
 IErrorInfo
+IExpandCollapseProvider
 IFileDialog
 IFileDialogCustomize
 IFileDialogEvents
@@ -381,6 +385,8 @@ IFontDisp
 IGetOleObject
 IGetVBAObject
 IGlobalInterfaceTable
+IGridItemProvider
+IGridProvider
 IHTMLDocument
 IHTMLDocument2
 IHTMLDocument3
@@ -390,6 +396,7 @@ IHTMLElement3
 IHTMLElementCollection
 IHTMLWindow3
 IHTMLWindow4
+IInvokeProvider
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create
@@ -418,6 +425,7 @@ ImmSetConversionStatus
 ImmSetOpenStatus
 IMN_*
 IMPLTYPEFLAGS
+IMultipleViewProvider
 InitCommonControls
 InitCommonControlsEx
 INITCOMMONCONTROLSEX_ICC
@@ -445,6 +453,7 @@ IPictureDisp
 IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
+IRangeValueProvider
 IRawElementProviderFragment
 IRawElementProviderFragmentRoot
 IRawElementProviderHwndOverride
@@ -455,7 +464,10 @@ IsAccelerator
 IsAppThemed
 IsChild
 IsDialogMessage
+IScrollItemProvider
 IScrollProvider
+ISelectionItemProvider
+ISelectionProvider
 IServiceProvider
 IShellItem
 ISimpleFrameSite
@@ -471,10 +483,14 @@ IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
 IsZoomed
+ITableItemProvider
+ITableProvider
 ITextDocument
 ITextProvider
 ITextProvider2
 ITextRangeProvider
+IToggleProvider
+IValueProvider
 IVBFormat
 IVBGetControl
 IViewObject
@@ -516,9 +532,10 @@ LVCOLUMNW
 LVCOLUMNW_FORMAT
 LVCOLUMNW_MASK
 LVGGR_*
+LVGROUP
 LVFINDINFOW
 LVFINDINFOW_FLAGS
-LVHITTESTINFO_FLAGS
+LVHITTESTINFO
 LVINSERTMARK
 LVIR_*
 LVM_*
@@ -769,6 +786,7 @@ TASKDIALOG_FLAGS
 TASKDIALOG_ICON_ELEMENTS
 TASKDIALOG_MESSAGES
 TASKDIALOG_NOTIFICATIONS
+TaskDialogIndirect
 TB_*
 TBS_*
 TBM_*
@@ -791,9 +809,11 @@ TREE_VIEW_ITEM_STATE_FLAGS
 TTDT_*
 TTM_*
 TTN_*
+TTTOOLINFOW
 TTS_*
 TVGN_*
 TVHITTESTINFO
+TVINSERTSTRUCTW
 TVITEM_MASK
 TVITEMW
 TVI_*

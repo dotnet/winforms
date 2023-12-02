@@ -48,7 +48,7 @@ public abstract partial class CodeDomSerializerBase
     /// </summary>
     internal static string GetTypeNameFromCodeTypeReference(IDesignerSerializationManager manager, CodeTypeReference typeref)
     {
-        //we do this to avoid an extra gettype for the usual nongeneric case.
+        // we do this to avoid an extra gettype for the usual nongeneric case.
         if (typeref.TypeArguments is null || typeref.TypeArguments.Count == 0)
         {
             return typeref.BaseType;
@@ -64,7 +64,7 @@ public abstract partial class CodeDomSerializerBase
         if (typeref.TypeArguments is null || typeref.TypeArguments.Count == 0)
         {
             Type? t = manager.GetType(typeref.BaseType);
-            //we use the assemblyqualifiedname where we can so that GetType will find it correctly.
+            // we use the assemblyqualifiedname where we can so that GetType will find it correctly.
             if (t is not null)
             {
                 // get type which exists in the target framework if any
@@ -77,7 +77,7 @@ public abstract partial class CodeDomSerializerBase
         }
         else
         {
-            //create the MyGeneric`2[ part
+            // create the MyGeneric`2[ part
             if (!typeref.BaseType.Contains('`'))
             {
                 typeName.Append($"`{typeref.TypeArguments.Count}");
@@ -85,7 +85,7 @@ public abstract partial class CodeDomSerializerBase
 
             typeName.Append('[');
 
-            //now create each sub-argument part.
+            // now create each sub-argument part.
             foreach (CodeTypeReference childref in typeref.TypeArguments)
             {
                 typeName.Append('[');
@@ -579,7 +579,7 @@ public abstract partial class CodeDomSerializerBase
         using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeAssignStatement)}"))
         {
             // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
-            //Perf: is -> as changes, change ordering based on possibility of occurrence
+            // Perf: is -> as changes, change ordering based on possibility of occurrence
             CodeExpression expression = statement.Left;
 
             Trace(TraceLevel.Verbose, "Processing LHS");
@@ -657,7 +657,7 @@ public abstract partial class CodeDomSerializerBase
                         }
                         else
                         {
-                            //lets try it as a property:
+                            // lets try it as a property:
                             CodePropertyReferenceExpression propRef = new CodePropertyReferenceExpression
                             {
                                 TargetObject = fieldReferenceEx.TargetObject,
@@ -759,7 +759,7 @@ public abstract partial class CodeDomSerializerBase
                     break;
                 }
                 else if (result is CodeThisReferenceExpression)
-                { //(is -> as doesn't help here, since the cast is different)
+                { // (is -> as doesn't help here, since the cast is different)
                     Trace(TraceLevel.Verbose, "'this' reference");
                     if (manager.TryGetContext(out RootContext? rootExp))
                     {
@@ -908,7 +908,7 @@ public abstract partial class CodeDomSerializerBase
                             }
                             else
                             {
-                                //lets try it as a property:
+                                // lets try it as a property:
                                 CodePropertyReferenceExpression propRef = new CodePropertyReferenceExpression
                                 {
                                     TargetObject = fieldReferenceEx.TargetObject,
@@ -1039,7 +1039,7 @@ public abstract partial class CodeDomSerializerBase
                     break;
                 }
                 else if (result is CodeBaseReferenceExpression)
-                { //(is -> as doesn't help here, since the cast is different)
+                { // (is -> as doesn't help here, since the cast is different)
                     RootContext? rootExp = manager.GetContext<RootContext>();
                     result = rootExp?.Value;
 
@@ -1754,12 +1754,12 @@ public abstract partial class CodeDomSerializerBase
                     }
                 }
 
-                //We need to ensure that no virtual types leak into the runtime code
-                //So if we ever assign a property value to a Type -- we make sure that the Type is a
+                // We need to ensure that no virtual types leak into the runtime code
+                // So if we ever assign a property value to a Type -- we make sure that the Type is a
                 // real System.Type.
                 if (rhs is Type rhsType && rhsType.UnderlyingSystemType is not null)
                 {
-                    rhs = rhsType.UnderlyingSystemType; //unwrap this "type" that came because it was not actually a real bcl type.
+                    rhs = rhsType.UnderlyingSystemType; // unwrap this "type" that came because it was not actually a real bcl type.
                 }
 
                 // Next: see if the RHS of this expression was a property reference too.  If it was, then
@@ -2082,7 +2082,7 @@ public abstract partial class CodeDomSerializerBase
         if (manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value))
         {
             CodeExpression expression = ctx.Expression;
-            //Okay, we found a preset creation expression. We just need to find if it isComplete.
+            // Okay, we found a preset creation expression. We just need to find if it isComplete.
             if (converter.CanConvertTo(typeof(InstanceDescriptor)))
             {
                 if (converter.ConvertTo(value, typeof(InstanceDescriptor)) is InstanceDescriptor descriptor && descriptor.MemberInfo is not null)

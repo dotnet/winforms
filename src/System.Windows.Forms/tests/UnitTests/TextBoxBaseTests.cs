@@ -2014,8 +2014,8 @@ public partial class TextBoxBaseTests
         {
             Assert.Same(parent, sender);
             Assert.Same(control, e.AffectedControl);
-            //TODO
-            //Assert.Equal("Bounds", e.AffectedProperty);
+            // TODO
+            // Assert.Equal("Bounds", e.AffectedProperty);
             parentLayoutCallCount++;
         }
 

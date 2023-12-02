@@ -212,7 +212,7 @@ internal class FormDocumentDesigner : DocumentDesigner
 
                         if (paddingsFound == 4)
                         {
-                            break; //we adjusted all of our paddings
+                            break; // we adjusted all of our paddings
                         }
                     }
                 }

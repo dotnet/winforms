@@ -117,11 +117,11 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
             model = CodeDomLocalizationModel.None;
         }
 
-        //Nifty, but this causes everything to be loc'd because our provider
-        //comes in before the default one
-        //if (model == CodeDomLocalizationModel.None && currentSerializer is null) {
+        // Nifty, but this causes everything to be loc'd because our provider
+        // comes in before the default one
+        // if (model == CodeDomLocalizationModel.None && currentSerializer is null) {
         //    model = CodeDomLocalizationModel.PropertyAssignment;
-        //}
+        // }
 
         if (model != CodeDomLocalizationModel.None)
         {

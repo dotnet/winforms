@@ -12,8 +12,8 @@ internal unsafe partial struct IUnknown
         // helpers a bit more.
         // https://github.com/microsoft/CsWin32/issues/723
 
-        //internal unsafe HRESULT QueryInterface(Guid* riid, void** ppvObject);
-        //internal uint AddRef();
-        //internal uint Release();
+        // internal unsafe HRESULT QueryInterface(Guid* riid, void** ppvObject);
+        // internal uint AddRef();
+        // internal uint Release();
     }
 }

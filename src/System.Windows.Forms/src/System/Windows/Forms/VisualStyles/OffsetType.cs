@@ -19,7 +19,7 @@ public enum OffsetType
     RightOfLastButton = 11,
     AboveLastButton = 12,
     BelowLastButton = 13,
-    //      TM_ENUM(0, OT, TOPLEFT)
+    // TM_ENUM(0, OT, TOPLEFT)
     //      TM_ENUM(1, OT, TOPRIGHT)
     //      TM_ENUM(2, OT, TOPMIDDLE)
     //      TM_ENUM(3, OT, BOTTOMLEFT)

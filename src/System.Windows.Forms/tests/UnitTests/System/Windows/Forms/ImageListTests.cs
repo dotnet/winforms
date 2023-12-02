@@ -129,7 +129,7 @@ public class ImageListTests
         EventHandler handler = (sender, e) =>
         {
             Assert.Same(list, sender);
-            //Assert.Same(EventArgs.Empty, e);
+            // Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
         list.RecreateHandle += handler;
@@ -310,7 +310,7 @@ public class ImageListTests
         EventHandler handler = (sender, e) =>
         {
             Assert.Same(list, sender);
-            //Assert.Same(EventArgs.Empty, e);
+            // Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
         list.RecreateHandle += handler;

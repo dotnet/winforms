@@ -10,7 +10,7 @@ public enum IconEffect
     Shadow = 2,
     Pulse = 3,
     Alpha = 4,
-    //      TM_ENUM(0, ICE, NONE)
+    // TM_ENUM(0, ICE, NONE)
     //      TM_ENUM(1, ICE, GLOW)
     //      TM_ENUM(2, ICE, SHADOW)
     //      TM_ENUM(3, ICE, PULSE)

@@ -59,7 +59,7 @@ public partial class ErrorProvider
             {
                 int currentIndex = CurrentIndex;
 
-                //Is a last child
+                // Is a last child
                 if (currentIndex >= ControlItemsCount - 1 || currentIndex < 0)
                 {
                     return null;
@@ -72,7 +72,7 @@ public partial class ErrorProvider
             {
                 int currentIndex = CurrentIndex;
 
-                //Is a first child
+                // Is a first child
                 if (currentIndex <= 0 || currentIndex > ControlItemsCount - 1)
                 {
                     return null;

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -118,8 +116,8 @@ public sealed class TaskDialogFootnote : TaskDialogControl
 
             if (BoundPage is not null)
             {
-                (ComCtl32.TASKDIALOGCONFIG.IconUnion icon, bool? iconIsFromHandle) =
-                    TaskDialogPage.GetIconValue(value);
+                (TASKDIALOGCONFIG._Anonymous2_e__Union icon, bool? iconIsFromHandle) =
+                    TaskDialogPage.GetFooterIconValue(value);
 
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
@@ -131,7 +129,7 @@ public sealed class TaskDialogFootnote : TaskDialogControl
 
                 BoundPage.BoundDialog!.UpdateIconElement(
                      TASKDIALOG_ICON_ELEMENTS.TDIE_ICON_FOOTER,
-                    _boundIconIsFromHandle ? icon.hIcon : (IntPtr)icon.pszIcon);
+                    _boundIconIsFromHandle ? icon.hFooterIcon : (IntPtr)(char*)icon.pszFooterIcon);
             }
 
             _icon = value;
@@ -146,11 +144,11 @@ public sealed class TaskDialogFootnote : TaskDialogControl
     /// <returns>A string that contains the control text.</returns>
     public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
-    internal TASKDIALOG_FLAGS Bind(TaskDialogPage page, out ComCtl32.TASKDIALOGCONFIG.IconUnion icon)
+    internal TASKDIALOG_FLAGS Bind(TaskDialogPage page, out TASKDIALOGCONFIG._Anonymous2_e__Union icon)
     {
         TASKDIALOG_FLAGS result = base.Bind(page);
 
-        icon = TaskDialogPage.GetIconValue(_icon).iconUnion;
+        icon = TaskDialogPage.GetFooterIconValue(_icon).iconUnion;
 
         return result;
     }
@@ -160,7 +158,7 @@ public sealed class TaskDialogFootnote : TaskDialogControl
         TASKDIALOG_FLAGS flags = base.BindCore();
 
         _updateTextOnInitialization = false;
-        _boundIconIsFromHandle = TaskDialogPage.GetIconValue(_icon).iconIsFromHandle ?? false;
+        _boundIconIsFromHandle = TaskDialogPage.GetFooterIconValue(_icon).iconIsFromHandle ?? false;
 
         if (_boundIconIsFromHandle)
         {

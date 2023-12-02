@@ -35,7 +35,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private UndoEngine undoEngine;
     private bool initializing;   // is the designer initializing?
 
-    //used to keep the state of the tab order view
+    // used to keep the state of the tab order view
     //
     private bool queriedTabOrder;
     private MenuCommand tabOrderCommand;
@@ -317,7 +317,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             }
         }
 
-        //ToolStripItems cannot be dropped on any ParentControlDesigners since they have custom DataObject Format.
+        // ToolStripItems cannot be dropped on any ParentControlDesigners since they have custom DataObject Format.
         if (de.Data is ToolStripItemDataObject)
         {
             return false;
@@ -371,7 +371,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         serializationData = dataObject.GetData(OleDragDropHandler.DataFormat, false);
         if (serializationData is not null)
-        {    //backcompat
+        {    // backcompat
             return new OleDragDropHandler.CfCodeToolboxItem(serializationData);
             ;
         }
@@ -391,7 +391,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
             if (host is not null)
             {
-                //Remove Adorner Window which hosts DropDowns.
+                // Remove Adorner Window which hosts DropDowns.
                 ToolStripAdornerWindowService toolWindow = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
                 if (toolWindow is not null)
                 {
@@ -594,7 +594,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 // the lock glyph
                 glyphs.Add(new LockedHandleGlyph(translatedBounds, primarySelection));
 
-                //the four locked border glyphs
+                // the four locked border glyphs
                 glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Top));
                 glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Bottom));
                 glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Left));
@@ -605,10 +605,10 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             // for components that are not Forms.
             else if (autoSize && (mode == AutoSizeMode.GrowAndShrink) && !(Control is Form))
             {
-                //the non-resizeable grab handle
+                // the non-resizeable grab handle
                 glyphs.Add(new NoResizeHandleGlyph(translatedBounds, rules, primarySelection, null));
 
-                //the four resizeable border glyphs
+                // the four resizeable border glyphs
                 glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Top, null));
                 glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Bottom, null));
                 glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, null));
@@ -882,7 +882,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     private void OnUndone(object source, EventArgs e)
     {
-        //resume all suspended comps we found earlier
+        // resume all suspended comps we found earlier
         if (suspendedComponents is not null)
         {
             foreach (Control c in suspendedComponents)
@@ -909,8 +909,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                     if (comp is Control control)
                     {
                         control.SuspendLayout();
-                        //add this control to our suspended components list so we can resume
-                        //later
+                        // add this control to our suspended components list so we can resume
+                        // later
                         suspendedComponents.Add(control);
                     }
                 }
@@ -1509,8 +1509,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// preparations.
     /// </summary>
 
-    //We can live with this one. We have obsoleted some of the enum values. This method
-    //only takes on argument, so it is pretty obvious what argument is bad.
+    // We can live with this one. We have obsoleted some of the enum values. This method
+    // only takes on argument, so it is pretty obvious what argument is bad.
     [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
     object IRootDesigner.GetView(ViewTechnology technology)
     {
