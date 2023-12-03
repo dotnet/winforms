@@ -407,17 +407,15 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             PropertyDescriptor[] values = new PropertyDescriptor[properties.Count];
             properties.CopyTo(values, 0);
 
-            for (int i = 0; i < values.Length; i++)
+            foreach (PropertyDescriptor prop in values)
             {
-                PropertyDescriptor prop = values[i];
-
                 // Skip some properties
                 if (Equals(prop.Attributes[typeof(DesignOnlyAttribute)], DesignOnlyAttribute.Yes))
                 {
                     continue;
                 }
 
-                if (prop.SerializationVisibility == DesignerSerializationVisibility.Hidden && !prop.IsBrowsable)
+                if (prop is { SerializationVisibility: DesignerSerializationVisibility.Hidden, IsBrowsable: false })
                 {
                     continue;
                 }
@@ -628,9 +626,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         EventDescriptor?[] values = new EventDescriptor[events.Values.Count];
         events.Values.CopyTo(values, 0);
 
-        for (int i = 0; i < values.Length; i++)
+        foreach (EventDescriptor? evt in values)
         {
-            EventDescriptor? evt = values[i];
             if (evt is not null)
             {
                 events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
