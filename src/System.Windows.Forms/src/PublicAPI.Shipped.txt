@@ -38,8 +38,8 @@ override System.Windows.Forms.DataGridView.OnMouseWheel(System.Windows.Forms.Mou
 override System.Windows.Forms.DataGridView.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.DataGridView.OnResize(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridView.OnRightToLeftChanged(System.EventArgs! e) -> void
-~override System.Windows.Forms.DataGridView.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
-~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
+override System.Windows.Forms.DataGridView.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
+override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridView.Text.get -> string!
 override System.Windows.Forms.DataGridView.Text.set -> void
 override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
@@ -767,30 +767,30 @@ virtual System.Windows.Forms.DataGridView.OnRowHeaderMouseClick(System.Windows.F
 virtual System.Windows.Forms.DataGridView.OnRowHeaderMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnRowHeadersBorderStyleChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnRowHeadersDefaultCellStyleChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeadersWidthChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeadersWidthSizeModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeightInfoNeeded(System.Windows.Forms.DataGridViewRowHeightInfoNeededEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowHeightInfoPushed(System.Windows.Forms.DataGridViewRowHeightInfoPushedEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowLeave(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowMinimumHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowPostPaint(System.Windows.Forms.DataGridViewRowPostPaintEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowPrePaint(System.Windows.Forms.DataGridViewRowPrePaintEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowsAdded(System.Windows.Forms.DataGridViewRowsAddedEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowsDefaultCellStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowsRemoved(System.Windows.Forms.DataGridViewRowsRemovedEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowStateChanged(int rowIndex, System.Windows.Forms.DataGridViewRowStateChangedEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowUnshared(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowValidated(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnRowValidating(System.Windows.Forms.DataGridViewCellCancelEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnScroll(System.Windows.Forms.ScrollEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnSelectionChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnSortCompare(System.Windows.Forms.DataGridViewSortCompareEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnSorted(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnUserAddedRow(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnUserDeletedRow(System.Windows.Forms.DataGridViewRowEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnUserDeletingRow(System.Windows.Forms.DataGridViewRowCancelEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.PaintBackground(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle gridBounds) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeadersWidthChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeadersWidthSizeModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeightInfoNeeded(System.Windows.Forms.DataGridViewRowHeightInfoNeededEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowHeightInfoPushed(System.Windows.Forms.DataGridViewRowHeightInfoPushedEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowLeave(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowMinimumHeightChanged(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowPostPaint(System.Windows.Forms.DataGridViewRowPostPaintEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowPrePaint(System.Windows.Forms.DataGridViewRowPrePaintEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowsAdded(System.Windows.Forms.DataGridViewRowsAddedEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowsDefaultCellStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowsRemoved(System.Windows.Forms.DataGridViewRowsRemovedEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowStateChanged(int rowIndex, System.Windows.Forms.DataGridViewRowStateChangedEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowUnshared(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowValidated(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnRowValidating(System.Windows.Forms.DataGridViewCellCancelEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnScroll(System.Windows.Forms.ScrollEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnSelectionChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnSortCompare(System.Windows.Forms.DataGridViewSortCompareEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnSorted(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnUserAddedRow(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnUserDeletedRow(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnUserDeletingRow(System.Windows.Forms.DataGridViewRowCancelEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.PaintBackground(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle gridBounds) -> void
 ~virtual System.Windows.Forms.DataGridView.ProcessDataGridViewKey(System.Windows.Forms.KeyEventArgs e) -> bool
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Collections.IComparer comparer) -> void
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.ComponentModel.ListSortDirection direction) -> void
@@ -6238,10 +6238,10 @@ System.Windows.Forms.DataGridViewSelectionMode.FullColumnSelect = 2 -> System.Wi
 System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect = 1 -> System.Windows.Forms.DataGridViewSelectionMode
 System.Windows.Forms.DataGridViewSelectionMode.RowHeaderSelect = 3 -> System.Windows.Forms.DataGridViewSelectionMode
 System.Windows.Forms.DataGridViewSortCompareEventArgs
-System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue1.get -> object!
-System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object!
+System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue1.get -> object?
+System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object?
 System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn!
-System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn, object! cellValue1, object! cellValue2, int rowIndex1, int rowIndex2) -> void
+System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn, object? cellValue1, object? cellValue2, int rowIndex1, int rowIndex2) -> void
 System.Windows.Forms.DataGridViewSortCompareEventArgs.RowIndex1.get -> int
 System.Windows.Forms.DataGridViewSortCompareEventArgs.RowIndex2.get -> int
 System.Windows.Forms.DataGridViewSortCompareEventArgs.SortResult.get -> int
