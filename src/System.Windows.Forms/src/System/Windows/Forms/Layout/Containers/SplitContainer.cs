@@ -1838,7 +1838,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                                   bool nested, bool wrap)
     {
         if (!Contains(ctl) ||
-            (!nested && ctl?.ParentInternal != this))
+            (!nested && ctl.ParentInternal != this))
         {
             ctl = null;
         }
@@ -1941,7 +1941,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                                   bool nested, bool wrap)
     {
         if (!Contains(ctl) ||
-            (!nested && ctl?.ParentInternal != this))
+            (!nested && ctl.ParentInternal != this))
         {
             ctl = null;
         }
