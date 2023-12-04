@@ -124,10 +124,10 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             ChildCollection.Clear();
 
             var mergedProperties = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(
-                _mergedDescriptor.GetValues(_objects),
+                _mergedDescriptor.GetValues(_objects)!,
                 this,
                 _propertySort,
-                OwnerTab);
+                OwnerTab!);
 
             Debug.WriteLineIf(
                 CompModSwitches.DebugGridView.TraceVerbose && mergedProperties is null,

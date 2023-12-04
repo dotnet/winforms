@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms.Design;
@@ -13,17 +11,15 @@ internal partial class MultiSelectRootGridEntry
 {
     internal static class PropertyMerger
     {
-        public static MultiPropertyDescriptorGridEntry[] GetMergedProperties(
+        public static MultiPropertyDescriptorGridEntry[]? GetMergedProperties(
             object[] objects,
             GridEntry parentEntry,
             PropertySort sort,
             PropertyTab tab)
         {
-            MultiPropertyDescriptorGridEntry[] result = null;
+            MultiPropertyDescriptorGridEntry[]? result = null;
             try
             {
-                int length = objects.Length;
-
                 if ((sort & PropertySort.Alphabetical) != 0)
                 {
                     var commonProperties = GetCommonProperties(objects, presort: true, tab, parentEntry);
@@ -43,13 +39,10 @@ internal partial class MultiSelectRootGridEntry
                 }
                 else
                 {
-                    object[] sortObjects = new object[length - 1];
-                    Array.Copy(objects, 1, sortObjects, 0, length - 1);
-
-                    var properties = GetCommonProperties(sortObjects, presort: true, tab, parentEntry);
+                    var properties = GetCommonProperties(objects.AsSpan(1), presort: true, tab, parentEntry);
 
                     // This will work for just one as well.
-                    var firstProperties = GetCommonProperties(new object[] { objects[0] }, presort: false, tab, parentEntry);
+                    var firstProperties = GetCommonProperties(objects.AsSpan(0, 1), presort: false, tab, parentEntry);
 
                     var firstPropertyDescriptors = new PropertyDescriptor[firstProperties.Count];
                     for (int i = 0; i < firstProperties.Count; i++)
@@ -84,20 +77,27 @@ internal partial class MultiSelectRootGridEntry
         /// <summary>
         ///  Returns a list of <see cref="PropertyDescriptor"/> arrays, one for each component.
         /// </summary>
-        private static IList<PropertyDescriptor[]> GetCommonProperties(
-            object[] objects,
+        private static List<PropertyDescriptor[]> GetCommonProperties(
+            ReadOnlySpan<object> objects,
             bool presort,
             PropertyTab tab,
             GridEntry parentEntry)
         {
             var objectProperties = new PropertyDescriptorCollection[objects.Length];
-            var attributes = new Attribute[parentEntry.BrowsableAttributes.Count];
-
-            parentEntry.BrowsableAttributes.CopyTo(attributes, 0);
+            Attribute[]? attributes;
+            if (parentEntry.BrowsableAttributes is not null)
+            {
+                attributes = new Attribute[parentEntry.BrowsableAttributes.Count];
+                parentEntry.BrowsableAttributes.CopyTo(attributes, 0);
+            }
+            else
+            {
+                attributes = null;
+            }
 
             for (int i = 0; i < objects.Length; i++)
             {
-                var properties = tab.GetProperties(parentEntry, objects[i], attributes);
+                var properties = tab.GetProperties(parentEntry, objects[i], attributes)!;
                 if (presort)
                 {
                     properties = properties.Sort(s_propertyComparer);
@@ -120,7 +120,7 @@ internal partial class MultiSelectRootGridEntry
             {
                 PropertyDescriptor pivotProperty = objectProperties[0][i];
 
-                bool match = pivotProperty.GetAttribute<MergablePropertyAttribute>().IsDefaultAttribute();
+                bool match = pivotProperty.GetAttribute<MergablePropertyAttribute>()?.IsDefaultAttribute() ?? false;
 
                 for (int j = 1; match && j < objectProperties.Length; j++)
                 {
@@ -136,14 +136,14 @@ internal partial class MultiSelectRootGridEntry
                     {
                         positions[j] += 1;
 
-                        if (!property.GetAttribute<MergablePropertyAttribute>().IsDefaultAttribute())
+                        if (property.GetAttribute<MergablePropertyAttribute>()?.IsDefaultAttribute() ?? false)
                         {
-                            match = false;
-                            break;
+                            matchArray[j] = property;
+                            continue;
                         }
 
-                        matchArray[j] = property;
-                        continue;
+                        match = false;
+                        break;
                     }
 
                     int position = positions[j];
@@ -157,14 +157,13 @@ internal partial class MultiSelectRootGridEntry
                         // Got a match!
                         if (pivotProperty.Equals(property))
                         {
-                            if (!property.GetAttribute<MergablePropertyAttribute>().IsDefaultAttribute())
+                            match = property.GetAttribute<MergablePropertyAttribute>()?.IsDefaultAttribute() ?? false;
+                            if (!match)
                             {
-                                match = false;
                                 position++;
                             }
                             else
                             {
-                                match = true;
                                 matchArray[j] = property;
                                 positions[j] = position + 1;
                             }
@@ -205,7 +204,7 @@ internal partial class MultiSelectRootGridEntry
 
         private static MultiPropertyDescriptorGridEntry[] SortParenEntries(MultiPropertyDescriptorGridEntry[] entries)
         {
-            MultiPropertyDescriptorGridEntry[] newEntries = null;
+            MultiPropertyDescriptorGridEntry[]? newEntries = null;
             int newPosition = 0;
 
             // First scan the list and move any parenthesized properties to the front.
@@ -216,12 +215,12 @@ internal partial class MultiSelectRootGridEntry
                     newEntries ??= new MultiPropertyDescriptorGridEntry[entries.Length];
 
                     newEntries[newPosition++] = entries[i];
-                    entries[i] = null;
+                    entries[i] = null!;
                 }
             }
 
             // Second pass, copy any that didn't have the parens.
-            if (newPosition > 0)
+            if (newEntries is not null)
             {
                 for (int i = 0; i < entries.Length; i++)
                 {
@@ -231,7 +230,7 @@ internal partial class MultiSelectRootGridEntry
                     }
                 }
 
-                entries = newEntries;
+                return newEntries;
             }
 
             return entries;
@@ -242,19 +241,15 @@ internal partial class MultiSelectRootGridEntry
         ///  have already been merged. The resulting array is the intersection of entries between the two,
         ///  but in the order of <paramref name="baseEntries"/>.
         /// </summary>
-        private static IList<PropertyDescriptor[]> UnsortedMerge(
+        private static List<PropertyDescriptor[]> UnsortedMerge(
             PropertyDescriptor[] baseEntries,
-            IList<PropertyDescriptor[]> sortedMergedEntries)
+            List<PropertyDescriptor[]> sortedMergedEntries)
         {
             List<PropertyDescriptor[]> mergedEntries = new();
-            var mergeArray = new PropertyDescriptor[sortedMergedEntries[0].Length + 1];
 
-            for (int i = 0; i < baseEntries.Length; i++)
+            foreach (PropertyDescriptor basePropertyDescriptor in baseEntries)
             {
-                PropertyDescriptor basePropertyDescriptor = baseEntries[i];
-
                 // First do a binary search for a matching item.
-                PropertyDescriptor[] mergedEntryList = null;
                 string entryName = $"{basePropertyDescriptor.Name} {basePropertyDescriptor.PropertyType.FullName}";
 
                 int length = sortedMergedEntries.Count;
@@ -271,7 +266,7 @@ internal partial class MultiSelectRootGridEntry
                     int result = string.Compare(entryName, sortString, ignoreCase: false, CultureInfo.InvariantCulture);
                     if (result == 0)
                     {
-                        mergedEntryList = propertyDescriptors;
+                        mergedEntries.Add([basePropertyDescriptor, ..propertyDescriptors]);
                         break;
                     }
                     else if (result < 0)
@@ -286,13 +281,6 @@ internal partial class MultiSelectRootGridEntry
                     }
 
                     offset = length / 2;
-                }
-
-                if (mergedEntryList is not null)
-                {
-                    mergeArray[0] = basePropertyDescriptor;
-                    Array.Copy(mergedEntryList, 0, mergeArray, 1, mergedEntryList.Length);
-                    mergedEntries.Add((PropertyDescriptor[])mergeArray.Clone());
                 }
             }
 
