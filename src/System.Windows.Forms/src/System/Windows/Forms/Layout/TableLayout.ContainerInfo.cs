@@ -24,7 +24,7 @@ internal partial class TableLayout
         private static readonly int s_stateChildHasColumnSpan = BitVector32.CreateMask(s_stateChildInfoValid);
         private static readonly int s_stateChildHasRowSpan = BitVector32.CreateMask(s_stateChildHasColumnSpan);
 
-        private int _cellBorderWidth;  //the width for the cell border
+        private int _cellBorderWidth;  // the width for the cell border
         private Strip[] _cols = s_emptyStrip;
         private Strip[] _rows = s_emptyStrip;
         private int _maxRows;
@@ -111,7 +111,7 @@ internal partial class TableLayout
                 {
                     _maxRows = value;
 
-                    //invalidate the cache whenever we change the number of rows
+                    // invalidate the cache whenever we change the number of rows
                     Valid = false;
                 }
             }
@@ -130,7 +130,7 @@ internal partial class TableLayout
                 {
                     _maxColumns = value;
 
-                    //invalidate the cache whenever we change the number of columns
+                    // invalidate the cache whenever we change the number of columns
                     Valid = false;
                 }
             }

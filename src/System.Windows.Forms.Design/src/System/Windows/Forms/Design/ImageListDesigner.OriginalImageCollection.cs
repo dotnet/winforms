@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design;
 
 internal partial class ImageListDesigner
 {
-    //  Shadow ImageList.Images to allow arbitrary handle recreation.
+    // Shadow ImageList.Images to allow arbitrary handle recreation.
     [Editor($"System.Windows.Forms.Design.ImageCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     internal class OriginalImageCollection : IList
     {

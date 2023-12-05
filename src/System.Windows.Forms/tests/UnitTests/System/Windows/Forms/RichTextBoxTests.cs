@@ -7931,6 +7931,20 @@ public class RichTextBoxTests
         Assert.Throws<NullReferenceException>(() => control.CanPaste(null));
     }
 
+    [WinFormsFact]
+    public void RichTextBox_Find_String_Table_ReturnsExpected()
+    {
+        using var control = new RichTextBox
+        {
+            Rtf = "{\\rtf1\\ansi\\deff0\\trowd\\pard\\intbl Test\\cell Example\\cell Meow\\cell Woof\\cell \\row}"
+        };
+
+        Assert.Equal(2, control.Find("Test"));
+        Assert.Equal(7, control.Find("Example"));
+        Assert.Equal(15, control.Find("Meow"));
+        Assert.Equal(20, control.Find("Woof"));
+    }
+
     public static IEnumerable<object[]> Find_String_TestData()
     {
         yield return new object[] { string.Empty, string.Empty, -1 };
@@ -9753,8 +9767,8 @@ public class RichTextBoxTests
 
         using var control = new RichTextBox();
 
-        Span<char> input = stackalloc char[] { (char)0xA0 };
-        control.Rtf = $"{{\\rtf1\\ansi {input[0]}}}";
+        char input = (char)0xA0;
+        control.Rtf = $"{{\\rtf1\\ansi {input}}}";
 
         Span<byte> output = stackalloc byte[16];
 
@@ -9763,7 +9777,7 @@ public class RichTextBoxTests
         // The non-lossy conversion of nbsp only works single byte Windows code pages (e.g. not Japanese).
         if (currentCodePage >= 1250 && currentCodePage <= 1258)
         {
-            Assert.Equal(input[0], control.Text[0]);
+            Assert.Equal(input, control.Text[0]);
         }
     }
 

@@ -23,7 +23,7 @@ public partial class DocumentDesigner
         public AxToolboxItem(string clsid) : base(typeof(AxHost))
         {
             this._clsid = clsid;
-            Company = null; //we don't get any company info for ax controls.
+            Company = null; // we don't get any company info for ax controls.
             LoadVersionInfo();
         }
 

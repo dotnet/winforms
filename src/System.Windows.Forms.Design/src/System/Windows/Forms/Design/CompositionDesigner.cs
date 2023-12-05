@@ -80,8 +80,8 @@ public class ComponentDocumentDesigner : ComponentDesigner, IRootDesigner, ITool
     ///  after this call is made and make any necessary
     ///  preparations.
     /// </summary>
-    //We can live with this one. We have obsoleted some of the enum values. This method
-    //only takes on argument, so it is pretty obvious what argument is bad.
+    // We can live with this one. We have obsoleted some of the enum values. This method
+    // only takes on argument, so it is pretty obvious what argument is bad.
     object IRootDesigner.GetView(ViewTechnology technology)
     {
         throw new NotImplementedException(SR.NotImplementedByDesign);

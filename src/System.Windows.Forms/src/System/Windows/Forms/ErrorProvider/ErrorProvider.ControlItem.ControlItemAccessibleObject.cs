@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -49,7 +48,7 @@ public partial class ErrorProvider
                     _ => base.FragmentNavigate(direction),
                 };
 
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => Parent;
+            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => Parent;
 
             internal override int GetChildId()
             {
@@ -60,7 +59,7 @@ public partial class ErrorProvider
             {
                 int currentIndex = CurrentIndex;
 
-                //Is a last child
+                // Is a last child
                 if (currentIndex >= ControlItemsCount - 1 || currentIndex < 0)
                 {
                     return null;
@@ -73,7 +72,7 @@ public partial class ErrorProvider
             {
                 int currentIndex = CurrentIndex;
 
-                //Is a first child
+                // Is a first child
                 if (currentIndex <= 0 || currentIndex > ControlItemsCount - 1)
                 {
                     return null;

@@ -78,7 +78,7 @@ public abstract class Behavior
                 return null;
             }
         }
-        catch //Catch any exception and return null MenuCommand.
+        catch // Catch any exception and return null MenuCommand.
         {
             return null;
         }

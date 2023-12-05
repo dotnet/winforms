@@ -549,7 +549,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     iconBitDepth = 8;
                 }
 
-                //  Windows rules for specifing an icon:
+                // Windows rules for specifing an icon:
                 //
                 //  1.  The icon with the closest size match.
                 //  2.  For matching sizes, the image with the closest bit depth.

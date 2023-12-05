@@ -3010,7 +3010,7 @@ public partial class ToolStripTests
             yield return new object[] { dock, ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripLayoutStyle.VerticalStackWithOverflow, Orientation.Vertical, ToolStripGripDisplayStyle.Horizontal, 0 };
         }
 
-        foreach (DockStyle dock in new DockStyle[] { DockStyle.Right }) //, DockStyle.Left })
+        foreach (DockStyle dock in new DockStyle[] { DockStyle.Right }) // , DockStyle.Left })
         {
             yield return new object[] { dock, ToolStripLayoutStyle.Flow, ToolStripLayoutStyle.Flow, ToolStripLayoutStyle.Flow, Orientation.Horizontal, ToolStripGripDisplayStyle.Horizontal, 0 };
             yield return new object[] { dock, ToolStripLayoutStyle.Flow, ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripLayoutStyle.HorizontalStackWithOverflow, Orientation.Horizontal, ToolStripGripDisplayStyle.Vertical, 0 };

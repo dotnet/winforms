@@ -9,14 +9,37 @@ internal static partial class Interop
 {
     internal static partial class UiaCore
     {
-        public unsafe class StubFragmentRoot : IRawElementProviderFragmentRoot
+        public unsafe class StubFragmentRoot :
+            IRawElementProviderFragmentRoot.Interface,
+            IRawElementProviderFragment.Interface,
+            IRawElementProviderSimple.Interface,
+            IManagedWrapper<IRawElementProviderFragmentRoot, IRawElementProviderFragment, IRawElementProviderSimple>
         {
             private StubFragmentRoot() { }
 
             public static StubFragmentRoot Instance { get; } = new();
 
-            object? IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => default;
-            object? IRawElementProviderFragmentRoot.GetFocus() => default;
+            HRESULT IRawElementProviderFragmentRoot.Interface.ElementProviderFromPoint(double x, double y, IRawElementProviderFragment** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            HRESULT IRawElementProviderFragmentRoot.Interface.GetFocus(IRawElementProviderFragment** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
 
             HRESULT IRawElementProviderFragment.Interface.Navigate(NavigateDirection direction, IRawElementProviderFragment** pRetVal)
             {

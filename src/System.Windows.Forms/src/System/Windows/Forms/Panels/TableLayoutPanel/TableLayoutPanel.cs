@@ -203,23 +203,23 @@ public class TableLayoutPanel : Panel, IExtenderProvider
         Debug.Assert(GetRowSpan(control) == value, "GetRowSpan should be the same as we set it");
     }
 
-    //get the row position of the control
-    [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
+    // get the row position of the control
+    [DefaultValue(-1)]  // if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
     [SRDescription(nameof(SR.GridPanelRowDescr))]
     [SRCategory(nameof(SR.CatLayout))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [DisplayName("Row")]
     public int GetRow(Control control) => _tableLayoutSettings.GetRow(control);
 
-    //set the row position of the control
+    // set the row position of the control
     public void SetRow(Control control, int row)
     {
         _tableLayoutSettings.SetRow(control, row);
         Debug.Assert(GetRow(control) == row, "GetRow should be the same as we set it");
     }
 
-    //get the row and column position of the control
-    [DefaultValue(typeof(TableLayoutPanelCellPosition), "-1,-1")]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
+    // get the row and column position of the control
+    [DefaultValue(typeof(TableLayoutPanelCellPosition), "-1,-1")]  // if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
     [SRDescription(nameof(SR.GridPanelCellPositionDescr))]
     [SRCategory(nameof(SR.CatLayout))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -227,19 +227,19 @@ public class TableLayoutPanel : Panel, IExtenderProvider
     public TableLayoutPanelCellPosition GetCellPosition(Control control) =>
         _tableLayoutSettings.GetCellPosition(control);
 
-    //set the row and column of the control
+    // set the row and column of the control
     public void SetCellPosition(Control control, TableLayoutPanelCellPosition position) =>
         _tableLayoutSettings.SetCellPosition(control, position);
 
-    //get the column position of the control
-    [DefaultValue(-1)]  //if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
+    // get the column position of the control
+    [DefaultValue(-1)]  // if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
     [SRDescription(nameof(SR.GridPanelColumnDescr))]
     [SRCategory(nameof(SR.CatLayout))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [DisplayName("Column")]
     public int GetColumn(Control control) => _tableLayoutSettings.GetColumn(control);
 
-    //set the column position of the control
+    // set the column position of the control
     public void SetColumn(Control control, int column)
     {
         _tableLayoutSettings.SetColumn(control, column);

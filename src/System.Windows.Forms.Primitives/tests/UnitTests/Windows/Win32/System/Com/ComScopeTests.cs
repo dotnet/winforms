@@ -50,11 +50,11 @@ public unsafe class ComScopeTests
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                ReadOnlySpan<byte> data = new byte[]
-                {
+                ReadOnlySpan<byte> data =
+                [
                     // "3BE9EE32-26FB-4E7A-B8A8-25795A7EFB53"
                     0x70, 0x73, 0x0A, 0x63, 0x3D, 0x73, 0xE9, 0x43, 0x81, 0x41, 0x68, 0x5D, 0xAE, 0x2B, 0xDB, 0x44
-                };
+                ];
 
                 return ref Unsafe.As<byte, Guid>(ref MemoryMarshal.GetReference(data));
             }

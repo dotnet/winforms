@@ -40,7 +40,7 @@ public partial class ErrorProvider
                     _ => base.FragmentNavigate(direction),
                 };
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+            internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
             public override AccessibleObject? GetChild(int index)
             {

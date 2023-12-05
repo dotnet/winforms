@@ -1129,10 +1129,10 @@ public partial class Binding
 
     [MemberNotNullWhen(true, nameof(_bindingManagerBase))]
     internal bool IsBindable =>
-        BindableComponent is not null &&
-        !string.IsNullOrEmpty(PropertyName) &&
-        DataSource is not null &&
-        _bindingManagerBase is not null;
+        BindableComponent is not null
+        && !string.IsNullOrEmpty(PropertyName)
+        && DataSource is not null
+        && _bindingManagerBase is not null;
 
     internal void UpdateIsBinding()
     {

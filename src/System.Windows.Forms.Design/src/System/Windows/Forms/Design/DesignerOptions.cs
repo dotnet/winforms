@@ -26,7 +26,7 @@ public class DesignerOptions
         get => _gridSize;
         set
         {
-            //do some validation checking here
+            // do some validation checking here
             if (value.Width < MinGridSize)
             {
                 value.Width = MinGridSize;

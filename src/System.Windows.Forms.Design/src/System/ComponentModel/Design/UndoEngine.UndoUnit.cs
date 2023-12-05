@@ -234,7 +234,7 @@ public abstract partial class UndoEngine
 #endif
                     ChangeUndoEvent? changeEvent = null;
                     bool serializeBeforeState = true;
-                    //perf: if this object was added in this undo unit we do not want to serialize before state for ChangeEvent since undo will remove it anyway
+                    // perf: if this object was added in this undo unit we do not want to serialize before state for ChangeEvent since undo will remove it anyway
                     if (_ignoreAddedList is not null && _ignoreAddedList.Contains(e.Component))
                     {
                         serializeBeforeState = false;

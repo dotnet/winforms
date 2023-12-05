@@ -49,7 +49,7 @@ public sealed partial class BehaviorService : IDisposable
     private static readonly TraceSwitch s_dragDropSwitch
         = new("BSDRAGDROP", "Behavior service drag & drop messages");
 
-    //test hooks for SnapLines
+    // test hooks for SnapLines
     private static MessageId WM_GETALLSNAPLINES;
     private static MessageId WM_GETRECENTSNAPLINES;
     private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
@@ -502,16 +502,16 @@ public sealed partial class BehaviorService : IDisposable
                     // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
                     Glyph newGlyph = Adorners[i].Glyphs[j];
 
-                    //with a valid hit test, fire enter/leave events
+                    // with a valid hit test, fire enter/leave events
                     InvokeMouseEnterLeave(_hitTestedGlyph, newGlyph);
                     if (_validDragArgs is null)
                     {
-                        //if we're not dragging, set the appropriate cursor
+                        // if we're not dragging, set the appropriate cursor
                         SetAppropriateCursor(hitTestCursor);
                     }
 
                     _hitTestedGlyph = newGlyph;
-                    //return true if we hit on a transparentBehavior, otherwise false
+                    // return true if we hit on a transparentBehavior, otherwise false
                     return (_hitTestedGlyph.Behavior is ControlDesigner.TransparentBehavior);
                 }
             }

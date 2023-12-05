@@ -169,7 +169,7 @@ public partial class BorderSidesEditor
             ResumeLayout(false);
             PerformLayout();
 
-            //Events
+            // Events
             _rightCheckBox.CheckedChanged += rightCheckBox_CheckedChanged;
             _leftCheckBox.CheckedChanged += leftCheckBox_CheckedChanged;
             _bottomCheckBox.CheckedChanged += bottomCheckBox_CheckedChanged;

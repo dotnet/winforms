@@ -27,10 +27,10 @@ internal sealed class MetafileHeaderWmf
     public int Width;
     public int Height;
 
-    //The below datatype, WmfHeader, file is defined natively
-    //as a union with EmfHeader.  Since EmfHeader is a larger
-    //structure, we need to pad the struct below so that this
-    //will marshal correctly.
+    // The below datatype, WmfHeader, file is defined natively
+    // as a union with EmfHeader.  Since EmfHeader is a larger
+    // structure, we need to pad the struct below so that this
+    // will marshal correctly.
 #pragma warning disable CS0618 // Legacy code: We don't care about using obsolete API's.
     [MarshalAs(UnmanagedType.Struct)]
 #pragma warning restore CS0618

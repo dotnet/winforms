@@ -56,13 +56,12 @@ internal static class DeviceContextExtensions
     internal static void DrawLine(this HDC hdc, HPEN hpen, Point p1, Point p2)
         => DrawLine(hdc, hpen, p1.X, p1.Y, p2.X, p2.Y);
 
-    internal static unsafe void DrawLine(this DeviceContextHdcScope hdc, HPEN hpen, int x1, int y1, int x2, int y2)
+    internal static void DrawLine(this DeviceContextHdcScope hdc, HPEN hpen, int x1, int y1, int x2, int y2)
         => DrawLine(hdc.HDC, hpen, x1, y1, x2, y2);
 
-    internal static unsafe void DrawLine(this HDC hdc, HPEN hpen, int x1, int y1, int x2, int y2)
+    internal static void DrawLine(this HDC hdc, HPEN hpen, int x1, int y1, int x2, int y2)
     {
-        ReadOnlySpan<int> lines = stackalloc int[] { x1, y1, x2, y2 };
-        DrawLines(hdc, hpen, lines);
+        DrawLines(hdc, hpen, [ x1, y1, x2, y2 ]);
     }
 
     /// <summary>
@@ -71,7 +70,7 @@ internal static class DeviceContextExtensions
     /// <param name="lines">
     ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
     /// </param>
-    internal static unsafe void DrawLines(this DeviceContextHdcScope hdc, HPEN hpen, ReadOnlySpan<int> lines)
+    internal static void DrawLines(this DeviceContextHdcScope hdc, HPEN hpen, ReadOnlySpan<int> lines)
         => DrawLines(hdc.HDC, hpen, lines);
 
     /// <summary>

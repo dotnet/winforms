@@ -19,10 +19,10 @@ internal class KeyboardSimulator
 
     internal KeyboardSimulator KeyDown(VIRTUAL_KEY key)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.KeyDown(key),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -30,10 +30,10 @@ internal class KeyboardSimulator
 
     internal KeyboardSimulator KeyUp(VIRTUAL_KEY key)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.KeyUp(key),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -41,11 +41,11 @@ internal class KeyboardSimulator
 
     internal KeyboardSimulator KeyPress(VIRTUAL_KEY key)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.KeyDown(key),
             InputBuilder.KeyUp(key),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -53,11 +53,11 @@ internal class KeyboardSimulator
 
     internal KeyboardSimulator TextEntry(char character)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.CharacterDown(character),
             InputBuilder.CharacterUp(character),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;

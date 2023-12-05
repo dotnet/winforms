@@ -124,7 +124,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
                             }
                         }
                     }
-                    else if (comp is ToolStripDropDown) //case for ToolStripDropDown..
+                    else if (comp is ToolStripDropDown) // case for ToolStripDropDown..
                     {
                         if (host.GetDesigner(comp) is ToolStripDropDownDesigner designer)
                         {
@@ -242,7 +242,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
             ToolStripInSituService inSituService = (ToolStripInSituService)_sp.GetService(typeof(ISupportInSituService));
             if (inSituService is not null)
             {
-                //since we are going away .. restore the old commands.
+                // since we are going away .. restore the old commands.
                 _designerHost.RemoveService<ISupportInSituService>();
             }
         }

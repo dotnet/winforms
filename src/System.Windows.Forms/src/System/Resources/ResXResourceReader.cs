@@ -425,10 +425,10 @@ public partial class ResXResourceReader : IResourceReader
             string? readerTypeName = GetPrefix(_resHeaderReaderType);
             string? writerTypeName = GetPrefix(_resHeaderWriterType);
 
-            if (readerTypeName is not null &&
-                writerTypeName is not null &&
-                readerTypeName.Equals(readerType.FullName) &&
-                writerTypeName.Equals(writerType.FullName))
+            if (readerTypeName is not null
+                && writerTypeName is not null
+                && readerTypeName.Equals(readerType.FullName)
+                && writerTypeName.Equals(writerType.FullName))
             {
                 validFile = true;
             }

@@ -258,7 +258,7 @@ public class PngCodecTest
             Assert.Equal(PixelFormat.Format32bppArgb, bmp.PixelFormat);
 
             // MS returns a random Flags value (not a good sign)
-            //Assert.Equal (0, bmp.Palette.Flags);
+            // Assert.Equal (0, bmp.Palette.Flags);
             Assert.Equal(0, bmp.Palette.Entries.Length);
 
             Assert.Equal(100, bmp.Width);

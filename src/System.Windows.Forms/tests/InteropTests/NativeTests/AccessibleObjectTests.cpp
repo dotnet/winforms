@@ -189,7 +189,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleHostRawElementProvider(IU
 
         // Negative tests.
         hr = pRawElementProviderSimple->get_HostRawElementProvider(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -212,7 +212,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleProviderOptions(IUnknown*
 
         // Negative tests.
         hr = pRawElementProviderSimple->get_ProviderOptions(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -242,7 +242,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleGetPatternProvider(IUnkno
 
         // Negative tests.
         hr = pRawElementProviderSimple->GetPatternProvider(UIA_DockPatternId, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -263,7 +263,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderSimpleGetPropertyValue(IUnknown
 
         // Negative tests.
         hr = pRawElementProviderSimple->GetPropertyValue(UIA_DockPatternId, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -289,7 +289,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetBoundingRectangle(IU
 
         // Negative tests.
         hr = pRawElementProviderFragment->get_BoundingRectangle(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -312,7 +312,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetFragmentRoot(IUnknow
 
         // Negative tests.
         hr = pRawElementProviderFragment->get_FragmentRoot(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -336,7 +336,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetEmbeddedFragmentRoot
 
         // Negative tests.
         hr = pRawElementProviderFragment->GetEmbeddedFragmentRoots(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -351,15 +351,13 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetRuntimeId(IUnknown* 
 
         hr = pUnknown->QueryInterface(IID_IRawElementProviderFragment, (void**)&pRawElementProviderFragment);
         assertEqualHr(S_OK, hr);
-
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pRawElementProviderFragment->GetRuntimeId(&result);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
-        SafeArrayDestroy(result);
+        assertEqualHr(S_OK, hr);
 
         // Negative tests.
         hr = pRawElementProviderFragment->GetRuntimeId(NULL);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -382,7 +380,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentNavigate(IUnknown* pUnk
 
         // Negative tests.
         hr = pRawElementProviderFragment->Navigate(NavigateDirection_Parent, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -426,7 +424,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentRootElementProviderFrom
 
         // Negative tests.
         hr = pRawElementProviderFragmentRoot->ElementProviderFromPoint(0, 0, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -449,7 +447,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentRootGetFocus(IUnknown* 
 
         // Negative tests.
         hr = pRawElementProviderFragmentRoot->GetFocus(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -489,7 +487,7 @@ TEST const WCHAR* WINAPI Test_IValueProviderGetIsReadOnly(IUnknown* pUnknown, BO
 
         // Negative tests.
         hr = pRangeValueProvider->get_IsReadOnly(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -513,7 +511,7 @@ TEST const WCHAR* WINAPI Test_IValueProviderGetValue(IUnknown* pUnknown, LPCWSTR
 
         // Negative tests.
         hr = pRangeValueProvider->get_Value(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -562,7 +560,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetIsReadOnly(IUnknown* pUnknow
 
         // Negative tests.
         hr = pRangeValueProvider->get_IsReadOnly(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -585,7 +583,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetLargeChange(IUnknown* pUnkno
 
         // Negative tests.
         hr = pRangeValueProvider->get_LargeChange(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -608,7 +606,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetMaximum(IUnknown* pUnknown, 
 
         // Negative tests.
         hr = pRangeValueProvider->get_Maximum(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -631,7 +629,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetMinimum(IUnknown* pUnknown, 
 
         // Negative tests.
         hr = pRangeValueProvider->get_Minimum(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -654,7 +652,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetSmallChange(IUnknown* pUnkno
 
         // Negative tests.
         hr = pRangeValueProvider->get_SmallChange(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -677,7 +675,7 @@ TEST const WCHAR* WINAPI Test_IRangeValueProviderGetValue(IUnknown* pUnknown, do
 
         // Negative tests.
         hr = pRangeValueProvider->get_Value(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -722,7 +720,7 @@ TEST const WCHAR* WINAPI Test_IExpandCollapseProviderGetExpandCollapseState(IUnk
 
         // Negative tests.
         hr = pExpandCollapseProvider->get_ExpandCollapseState(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -805,7 +803,7 @@ TEST const WCHAR* WINAPI Test_IToggleProviderGetToggleState(IUnknown* pUnknown, 
 
         // Negative tests.
         hr = pToggleProvider->get_ToggleState(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -858,7 +856,7 @@ TEST const WCHAR* WINAPI Test_ITableProviderGetRowOrColumnMajor(IUnknown* pUnkno
 
         // Negative tests.
         hr = pTableProvider->get_RowOrColumnMajor(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -874,15 +872,14 @@ TEST const WCHAR* WINAPI Test_ITableProviderGetColumnHeaders(IUnknown* pUnknown)
         hr = pUnknown->QueryInterface(IID_ITableProvider, (void**)&pTableProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableProvider->GetColumnHeaders(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableProvider->GetColumnHeaders(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -898,15 +895,14 @@ TEST const WCHAR* WINAPI Test_ITableProviderGetRowHeaders(IUnknown* pUnknown)
         hr = pUnknown->QueryInterface(IID_ITableProvider, (void**)&pTableProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableProvider->GetRowHeaders(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableProvider->GetRowHeaders(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -922,15 +918,14 @@ TEST const WCHAR* WINAPI Test_ITableItemProviderGetColumnHeaderItems(IUnknown* p
         hr = pUnknown->QueryInterface(IID_ITableItemProvider, (void**)&pTableItemProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableItemProvider->GetColumnHeaderItems(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableItemProvider->GetColumnHeaderItems(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -946,15 +941,14 @@ TEST const WCHAR* WINAPI Test_ITableItemProviderGetRowHeaderItems(IUnknown* pUnk
         hr = pUnknown->QueryInterface(IID_ITableItemProvider, (void**)&pTableItemProvider);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pTableItemProvider->GetRowHeaderItems(&result);
         assertEqualHr(S_OK, hr);
         assertNull(result);
-        SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pTableItemProvider->GetRowHeaderItems(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -977,7 +971,7 @@ TEST const WCHAR* WINAPI Test_IGridProviderGetColumnCount(IUnknown* pUnknown, in
 
         // Negative tests.
         hr = pGridProvider->get_ColumnCount(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1000,7 +994,7 @@ TEST const WCHAR* WINAPI Test_IGridProviderGetRowCount(IUnknown* pUnknown, int e
 
         // Negative tests.
         hr = pGridProvider->get_RowCount(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1023,7 +1017,7 @@ TEST const WCHAR* WINAPI Test_IGridProviderGetItem(IUnknown* pUnknown, int row, 
 
         // Negative tests.
         hr = pIGridProvider->GetItem(row, column, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1046,7 +1040,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetContainingGrid(IUnknown* pUnkn
 
         // Negative tests.
         hr = pGridItemProvider->get_ContainingGrid(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1069,7 +1063,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetColumn(IUnknown* pUnknown, int
 
         // Negative tests.
         hr = pGridItemProvider->get_Column(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1092,7 +1086,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetColumnSpan(IUnknown* pUnknown,
 
         // Negative tests.
         hr = pGridItemProvider->get_ColumnSpan(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1115,7 +1109,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetRow(IUnknown* pUnknown, int ex
 
         // Negative tests.
         hr = pGridItemProvider->get_Row(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1138,7 +1132,7 @@ TEST const WCHAR* WINAPI Test_IGridItemProviderGetRowSpan(IUnknown* pUnknown, in
 
         // Negative tests.
         hr = pGridItemProvider->get_RowSpan(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1692,7 +1686,7 @@ TEST const WCHAR* WINAPI Test_ISelectionProviderGetSelection(IUnknown* pUnknown,
 
         // Negative tests
         hr = pSelectionProvider->GetSelection(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1715,7 +1709,7 @@ TEST const WCHAR* WINAPI Test_ISelectionProviderGetCanSelectMultiple(IUnknown* p
 
         // Negative tests.
         hr = pRangeSelectionProvider->get_CanSelectMultiple(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1738,7 +1732,7 @@ TEST const WCHAR* WINAPI Test_ISelectionProviderGetIsSelectionRequired(IUnknown*
 
         // Negative tests.
         hr = pRangeSelectionProvider->get_IsSelectionRequired(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

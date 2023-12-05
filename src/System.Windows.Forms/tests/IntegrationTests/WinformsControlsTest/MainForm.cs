@@ -209,6 +209,20 @@ public partial class MainForm : Form
         {
             MainFormControlsTabOrder.PasswordButton,
             new InitInfo("Password", (obj, e) => new Password().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ChartControlButton,
+            new InitInfo("ChartControl", (obj, e) => new ChartControl().Show(this))
+        },
+        {
+            // Test GetPreferredSize output https://github.com/dotnet/winforms/issues/2576
+            MainFormControlsTabOrder.ToolStripSeparatorPreferredSize,
+            new InitInfo("ToolStripSeparatorPreferredSize", (obj, e) => new ToolStripSeparatorPreferredSize().Show(this))
+        },
+        {
+            // Test possible approach to https://github.com/dotnet/winforms/issues/6514
+            MainFormControlsTabOrder.CustomComCtl32Button,
+            new InitInfo("ComCtl32 Button Custom Border", (obj, e) => new CustomComCtl32Button().Show(this))
         }
     };
 
@@ -270,11 +284,12 @@ public partial class MainForm : Form
 
         overarchingFlowLayoutPanel.ResumeLayout(true);
 
-        // 4. Calculate the new form size showing all buttons in two vertical columns
+        // 4. Calculate the new form size showing all buttons in three vertical columns
         int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
+
         ClientSize = new Size(
-            (biggestButton.Width + padding * 2) * 2 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
-            (overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2)
+            (biggestButton.Width + padding * 2) * 3 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
+            (overarchingFlowLayoutPanel.Controls.Count + 1) / 3 * (biggestButton.Height + padding * 2)
                 + padding * 2 + overarchingFlowLayoutPanel.Location.Y * 2);
         MinimumSize = Size;
         Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
