@@ -54,6 +54,8 @@ public sealed partial class Application
     // Used to avoid recursive exit
     private static bool s_exiting;
 
+    private static bool s_parkingWindowCreated;
+
     /// <summary>
     ///  This class is static, there is no need to ever create it.
     /// </summary>
@@ -250,8 +252,7 @@ public sealed partial class Application
     ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
     /// </summary>
     /// <value>One of the enumeration values that indicates the high DPI mode.</value>
-    public static HighDpiMode HighDpiMode
-        => DpiHelper.GetWinformsApplicationDpiAwareness();
+    public static HighDpiMode HighDpiMode => ScaleHelper.GetThreadHighDpiMode();
 
     /// <summary>
     ///  Gets the path for the application data specific to a local, non-roaming user.
@@ -1017,10 +1018,10 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Park control handle on a parkingwindow that has matching DpiAwareness.
+    ///  Park control handle on a parking window that has matching DpiAwareness.
     /// </summary>
-    /// <param name="cp"> create params for control handle</param>
-    /// <param name="dpiAwarenessContext"> dpi awareness</param>
+    /// <param name="cp">Create params for control handle.</param>
+    /// <param name="dpiAwarenessContext">DPI awareness.</param>
     internal static void ParkHandle(CreateParams cp, DPI_AWARENESS_CONTEXT dpiAwarenessContext)
     {
         ThreadContext threadContext = ThreadContext.FromCurrent();
@@ -1134,31 +1135,6 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().RunMessageLoop(msoloop.ModalForm, new ModalApplicationContext(form));
 
     /// <summary>
-    /// Scale the default font (if it is set) as per the Settings display text scale settings.
-    /// </summary>
-    /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
-    internal static void ScaleDefaultFont(float textScaleFactor)
-    {
-        if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater())
-        {
-            return;
-        }
-
-        if (s_defaultFontScaled is not null)
-        {
-            s_defaultFontScaled.Dispose();
-            s_defaultFontScaled = null;
-        }
-
-        // Restore the text scale if it isn't the default value in the valid text scale factor value
-        textScaleFactor = Math.Min(DpiHelper.MaxTextScaleFactorValue, textScaleFactor);
-        if (textScaleFactor > DpiHelper.MinTextScaleFactorValue)
-        {
-            s_defaultFontScaled = s_defaultFont.WithSize(s_defaultFont.Size * textScaleFactor);
-        }
-    }
-
-    /// <summary>
     ///  Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in.
     ///  This switch determines the default text rendering engine to use by some controls that support
     ///  switching rendering engine.
@@ -1199,25 +1175,22 @@ public sealed partial class Application
             throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
 
         // If user made a prior call to this API with a different custom fonts, we want to clean it up.
-        if (s_defaultFont is not null)
+        if (s_defaultFont is not null && !ReferenceEquals(s_defaultFont, font))
         {
-            s_defaultFont?.Dispose();
-            s_defaultFont = null;
-            s_defaultFontScaled?.Dispose();
-            s_defaultFontScaled = null;
+            s_defaultFont.Dispose();
         }
 
-        if (font.IsSystemFont)
-        {
-            // The system font is managed the .NET runtime, and it is already scaled to the current text scale factor.
-            // We need to clone it because our reference will no longer be scaled by the .NET runtime.
-            s_defaultFont = (Font)font.Clone();
-        }
-        else
-        {
-            s_defaultFont = font;
-            ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
-        }
+        s_defaultFont = font;
+        ScaleDefaultFont();
+    }
+
+    internal static void ScaleDefaultFont()
+    {
+        // It is possible the existing scaled font will be identical after scaling the default font again. Figuring
+        // that out requires additional complexity that doesn't appear to be strictly necessary.
+        s_defaultFontScaled?.Dispose();
+        s_defaultFontScaled = null;
+        s_defaultFontScaled = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
     }
 
     /// <summary>
@@ -1228,8 +1201,7 @@ public sealed partial class Application
     public static bool SetHighDpiMode(HighDpiMode highDpiMode)
     {
         SourceGenerated.EnumValidator.Validate(highDpiMode, nameof(highDpiMode));
-
-        return !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
+        return !s_parkingWindowCreated && ScaleHelper.SetProcessHighDpiMode(highDpiMode);
     }
 
     /// <summary>

@@ -7207,30 +7207,15 @@ public partial class ToolStripTests
     [InlineData("ScrollButtonUp", 144, 24)]
     [InlineData("ScrollButtonUp", 168, 32)]
     [InlineData("ScrollButtonUp", 288, 48)]
-    public void ToolStripScrollButton_Arrows_Size_ReturnsExpected(string resourceName, int dpi, int expectedSide)
+    public void ToolStripScrollButton_Arrows_Size_ReturnsExpected(string resourceName, int dpi, int expectedSize)
     {
-        Type toolStripScrollButtonType = typeof(ToolStripScrollButton);
-        var accessor = typeof(DpiHelper).TestAccessor();
         Size defaultSize = new(16, 16);
-        int oldDeviceDpi = DpiHelper.DeviceDpi;
-        DpiTestData dpiTestData = new()
-        {
-            ResourceName = resourceName,
-            Dpi = dpi,
-            ExpectedSide = expectedSide,
-        };
-
-        try
-        {
-            accessor.Dynamic.DeviceDpi = dpiTestData.Dpi;
-            Bitmap bitmap = DpiHelper.GetScaledBitmapFromIcon(toolStripScrollButtonType, dpiTestData.ResourceName, defaultSize);
-            Assert.Equal(dpiTestData.ExpectedSide, bitmap.Width);
-            Assert.Equal(dpiTestData.ExpectedSide, bitmap.Height);
-        }
-        finally
-        {
-            accessor.Dynamic.DeviceDpi = oldDeviceDpi;
-        }
+        using Bitmap bitmap = ScaleHelper.GetIconResourceAsBestMatchBitmap(
+            typeof(ToolStripScrollButton),
+            resourceName,
+            ScaleHelper.ScaleToDpi(defaultSize, dpi));
+        Assert.Equal(expectedSize, bitmap.Width);
+        Assert.Equal(expectedSize, bitmap.Height);
     }
 
     [WinFormsTheory]

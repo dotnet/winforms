@@ -336,14 +336,14 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
             case AutoScaleMode.Dpi:
                 // Screen Dpi
-                if (DpiHelper.IsPerMonitorV2Awareness)
+                if (ScaleHelper.IsThreadPerMonitorV2Aware)
                 {
                     currentAutoScaleDimensions = new SizeF(_deviceDpi, _deviceDpi);
                 }
                 else
                 {
                     // This Dpi value comes from the primary monitor.
-                    currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
+                    currentAutoScaleDimensions = new SizeF(ScaleHelper.InitialSystemDpi, ScaleHelper.InitialSystemDpi);
                 }
 
                 break;

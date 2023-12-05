@@ -148,7 +148,7 @@ public partial class CheckedListBox : ListBox
         get
         {
             // this should take FontHeight + buffer into Consideration.
-            return Font.Height + scaledListItemBordersHeight;
+            return Font.Height + _listItemBordersHeight;
         }
         set
         {
@@ -172,16 +172,12 @@ public partial class CheckedListBox : ListBox
         }
     }
 
-    // Computes the maximum width of all items in the ListBox
-    //
     internal override int MaxItemWidth
     {
         get
         {
             // Overridden to include the size of the checkbox
-            // Allows for one pixel either side of the checkbox, plus another 1 pixel buffer = 3 pixels
-            //
-            return base.MaxItemWidth + _idealCheckSize + scaledListItemPaddingBuffer;
+            return base.MaxItemWidth + _idealCheckSize + _listItemPaddingBuffer;
         }
     }
 
@@ -196,8 +192,7 @@ public partial class CheckedListBox : ListBox
         {
             // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            if (value != SelectionMode.One
-                && value != SelectionMode.None)
+            if (value is not SelectionMode.One and not SelectionMode.None)
             {
                 throw new ArgumentException(SR.CheckedListBoxInvalidSelectionMode);
             }
@@ -543,17 +538,15 @@ public partial class CheckedListBox : ListBox
             }
 
             Rectangle box = new Rectangle(
-                bounds.X + scaledListItemStartPosition,
+                bounds.X + _listItemStartPosition,
                 bounds.Y + centeringFactor,
                 _idealCheckSize,
                 _idealCheckSize);
 
             if (RightToLeft == RightToLeft.Yes)
             {
-                // For a RightToLeft checked list box, we want the checkbox
-                // to be drawn at the right.
-                // So we override the X position.
-                box.X = bounds.X + bounds.Width - _idealCheckSize - scaledListItemStartPosition;
+                // Draw the CheckBox at the right.
+                box.X = bounds.X + bounds.Width - _idealCheckSize - _listItemStartPosition;
             }
 
             // Draw the checkbox.
@@ -574,16 +567,14 @@ public partial class CheckedListBox : ListBox
 
             // Determine bounds for the text portion of the item
             Rectangle textBounds = new Rectangle(
-                bounds.X + _idealCheckSize + (scaledListItemStartPosition * 2),
+                bounds.X + _idealCheckSize + (_listItemStartPosition * 2),
                 bounds.Y,
-                bounds.Width - (_idealCheckSize + (scaledListItemStartPosition * 2)),
+                bounds.Width - (_idealCheckSize + (_listItemStartPosition * 2)),
                 bounds.Height);
 
             if (RightToLeft == RightToLeft.Yes)
             {
-                // For a RightToLeft checked list box, we want the text
-                // to be drawn at the left.
-                // So we override the X position.
+                // Draw text at the left.
                 textBounds.X = bounds.X;
             }
 
@@ -646,7 +637,7 @@ public partial class CheckedListBox : ListBox
                     // Set tab stops so it looks similar to a ListBox, at least with the default font size.
                     float tabDistance = 3.6f * Font.Height; // about 7 characters
                     float[] tabStops = new float[15];
-                    float tabOffset = -(_idealCheckSize + (scaledListItemStartPosition * 2));
+                    float tabOffset = -(_idealCheckSize + (_listItemStartPosition * 2));
                     for (int i = 1; i < tabStops.Length; i++)
                     {
                         tabStops[i] = tabDistance;

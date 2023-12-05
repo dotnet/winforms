@@ -3,92 +3,110 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms.Primitives.Resources;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Helper class for scaling coordinates and images according to current DPI scaling set in Windows for the primary screen.
+///  Helper class for scaling.
 /// </summary>
-internal static partial class DpiHelper
+internal static partial class ScaleHelper
 {
-    // The default(100) and max(225) text scale factor is value what Settings display text scale
-    // applies and also clamps the text scale factor value between 100 and 225 value.
-    // See https://docs.microsoft.com/windows/uwp/design/input/text-scaling.
-    internal const short MinTextScaleValue = 100;
-    internal const short MaxTextScaleValue = 225;
-    internal const float MinTextScaleFactorValue = 1.00f;
-    internal const float MaxTextScaleFactorValue = 2.25f;
-
-    internal const double LogicalDpi = 96.0;
-    private static InterpolationMode s_interpolationMode;
+    /// <summary>
+    ///  Pixels per inch at 100% scaling.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Some historical discussion of this can be found
+    ///   <see href="https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards">here</see>.
+    ///  </para>
+    /// </remarks>
+    internal const int OneHundredPercentLogicalDpi = 96;
 
     // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
-    private static bool s_perMonitorAware;
+    private static bool s_processPerMonitorAware;
 
-    internal static int DeviceDpi { get; private set; }
+    /// <summary>
+    ///  The initial primary monitor DPI (logical pixels per inch) for the process.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This value may change when <see cref="SetProcessHighDpiMode(HighDpiMode)"/> is called.
+    ///   Application.SetHighDpiMode makes this call. This is intended to be an initial setup step and will not
+    ///   change after the application has created the first window. As such you can treat this as a "constant".
+    ///  </para>
+    ///  <para>
+    ///   The System DPI can, of course, change if the user changes the primary monitor's DPI.
+    ///  </para>
+    ///  <para>
+    ///   If the startup thread is unaware this will always be 96 (100%).
+    ///  </para>
+    /// </remarks>
+    internal static int InitialSystemDpi { get; private set; }
 
-    static DpiHelper() => Initialize();
+    static ScaleHelper() => InitializeStatics();
 
-    private static void Initialize()
+    private static void InitializeStatics()
     {
-        s_interpolationMode = InterpolationMode.Invalid;
-        s_perMonitorAware = GetPerMonitorAware();
-        DeviceDpi = GetDeviceDPI();
-    }
+        s_processPerMonitorAware = GetPerMonitorAware();
+        InitialSystemDpi = GetSystemDpi();
 
-    private static int GetDeviceDPI()
-    {
-        // This will only change when the first call to set the process DPI awareness is made. Multiple calls to
-        // set the DPI have no effect after making the first call. Depending on what the DPI awareness settings are
-        // we'll get either the actual DPI of the primary display at process startup or the default LogicalDpi;
-
-        if (!OsVersion.IsWindows10_1607OrGreater())
+        static int GetSystemDpi()
         {
-            using var dc = GetDcScope.ScreenDC;
-            return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            // This will only change when the first call to set the process DPI awareness is made. Multiple calls to
+            // set the DPI have no effect after making the first call. Depending on what the DPI awareness settings are
+            // we'll get either the actual DPI of the primary display at process startup or the default LogicalDpi;
+
+            if (!OsVersion.IsWindows10_1607OrGreater())
+            {
+                using var dc = GetDcScope.ScreenDC;
+                return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            }
+
+            // This avoids needing to create a DC
+            return (int)PInvoke.GetDpiForSystem();
         }
 
-        // This avoids needing to create a DC
-        return (int)PInvoke.GetDpiForSystem();
-    }
-
-    private static bool GetPerMonitorAware()
-    {
-        if (!OsVersion.IsWindows10_1607OrGreater())
+        static bool GetPerMonitorAware()
         {
-            return false;
+            if (!OsVersion.IsWindows10_1607OrGreater())
+            {
+                return false;
+            }
+
+            HRESULT result = PInvoke.GetProcessDpiAwareness(
+                HANDLE.Null,
+                out PROCESS_DPI_AWARENESS processDpiAwareness);
+
+            Debug.Assert(result.Succeeded, $"Failed to get ProcessDpi HRESULT: {result}");
+            Debug.Assert(Enum.IsDefined(processDpiAwareness));
+
+            return result.Succeeded && processDpiAwareness switch
+            {
+                PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE => false,
+                PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE => false,
+                PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE => true,
+                _ => true
+            };
         }
-
-        HRESULT result = PInvoke.GetProcessDpiAwareness(
-            HANDLE.Null,
-            out PROCESS_DPI_AWARENESS processDpiAwareness);
-
-        Debug.Assert(result.Succeeded, $"Failed to get ProcessDpi HRESULT: {result}");
-        Debug.Assert(Enum.IsDefined(processDpiAwareness));
-
-        return result.Succeeded && processDpiAwareness switch
-        {
-            PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE => false,
-            PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE => false,
-            PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE => true,
-            _ => true
-        };
     }
 
     /// <summary>
     ///  Returns a boolean to specify if we should enable processing of WM_DPICHANGED and related messages
     /// </summary>
-    internal static bool IsPerMonitorV2Awareness
+    internal static bool IsThreadPerMonitorV2Aware
     {
         get
         {
-            if (s_perMonitorAware)
+            if (s_processPerMonitorAware)
             {
                 // We can't cache this value because different top level windows can have different DPI awareness context
                 // for mixed mode applications.
                 DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
-                return PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                return PInvoke.AreDpiAwarenessContextsEqualInternal(
+                    dpiAwareness,
+                    DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             }
             else
             {
@@ -100,97 +118,145 @@ internal static partial class DpiHelper
     /// <summary>
     ///  Indicates, if rescaling becomes necessary, either because we are not 96 DPI or we're PerMonitorV2Aware.
     /// </summary>
-    internal static bool IsScalingRequirementMet => IsScalingRequired || s_perMonitorAware;
+    internal static bool IsScalingRequirementMet => IsScalingRequired || s_processPerMonitorAware;
 
     /// <summary>
-    ///  Returns the ratio of <see cref="DeviceDpi"/> to <see cref="LogicalDpi"/>.
+    ///  Copies the given <see cref="Bitmap"/>, scaling if needed.
     /// </summary>
-    internal static double LogicalToDeviceUnitsScalingFactor => DeviceDpi / LogicalDpi;
+    /// <inheritdoc cref="ScaleToSize(Bitmap, Size, bool, bool)"/>
+    internal static Bitmap CopyAndScaleToSize(Bitmap bitmap, Size desiredSize)
+        => ScaleToSize(bitmap, desiredSize, disposeBitmap: false, alwaysCopy: true);
 
-    private static InterpolationMode InterpolationMode
+    /// <summary>
+    ///  Scales the given <see cref="Bitmap"/> to the desired size if needed.
+    /// </summary>
+    /// <param name="disposeBitmap">
+    ///  If <see langword="true"/>, the original bitmap will be disposed if a new bitmap is created.
+    /// </param>
+    /// <param name="alwaysCopy">
+    ///  If <see langword="true"/>, the original will be copied even if it doesn't need scaled.
+    /// </param>
+    private static Bitmap ScaleToSize(Bitmap bitmap, Size desiredSize, bool disposeBitmap = false, bool alwaysCopy = false)
     {
-        get
+        Size originalSize = bitmap.Size;
+        if (originalSize == desiredSize)
         {
-            if (s_interpolationMode == InterpolationMode.Invalid)
+            if (alwaysCopy)
             {
-                int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
+                Bitmap copy = new(bitmap);
+                if (disposeBitmap)
+                {
+                    bitmap.Dispose();
+                }
 
-                // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
-                // This produces sharp edges in the scaled image and doesn't cause distortions of the original image.
-                // For any other scale factors we will prefer a high quality resizing algorithm. While that introduces fuzziness in the resulting image,
-                // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
-                // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better
-                // results because it uses less neighboring pixels.
-                if ((dpiScalePercent % 100) == 0)
-                {
-                    s_interpolationMode = InterpolationMode.NearestNeighbor;
-                }
-                else if (dpiScalePercent < 100)
-                {
-                    s_interpolationMode = InterpolationMode.HighQualityBilinear;
-                }
-                else
-                {
-                    s_interpolationMode = InterpolationMode.HighQualityBicubic;
-                }
+                bitmap = copy;
             }
 
-            return s_interpolationMode;
+            return bitmap;
         }
-    }
 
-    private static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize)
-    {
-        Bitmap deviceImage;
-        deviceImage = new Bitmap(deviceImageSize.Width, deviceImageSize.Height, logicalImage.PixelFormat);
+        // In general this is the best quality interpolation mode we have available. While it introduces fuzziness in
+        // the resulting image, it will not distort it as NearestNeighbor would (which is extremely important for
+        // small zoom factors like 125%, 150%).
+        InterpolationMode interpolationMode = InterpolationMode.HighQualityBicubic;
 
-        using (Graphics graphics = Graphics.FromImage(deviceImage))
+        if (desiredSize.Width % originalSize.Width == 0 && desiredSize.Height % originalSize.Height == 0)
         {
-            graphics.InterpolationMode = InterpolationMode;
-
-            RectangleF sourceRect = new RectangleF(0, 0, logicalImage.Size.Width, logicalImage.Size.Height);
-            RectangleF destRect = new RectangleF(0, 0, deviceImageSize.Width, deviceImageSize.Height);
-
-            // Specify a source rectangle shifted by half of pixel to account for GDI+ considering the source origin the center of top-left pixel
-            // Failing to do so will result in the right and bottom of the bitmap lines being interpolated with the graphics' background color,
-            // and will appear black even if we cleared the background with transparent color.
-            // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
-            // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor also shows them.
-            sourceRect.Offset(-0.5f, -0.5f);
-
-            graphics.DrawImage(logicalImage, destRect, sourceRect, GraphicsUnit.Pixel);
+            // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel
+            // become a 2x2, 3x3, 4x4, etc rectangle. This produces sharp edges in the scaled image and doesn't
+            // cause distortions of the original image.
+            interpolationMode = InterpolationMode.NearestNeighbor;
+        }
+        else if (desiredSize.Width < originalSize.Width && desiredSize.Height < originalSize.Height)
+        {
+            // Shrinking the graphic, use Bilinear. Produces better results as it uses less neighboring pixels.
+            interpolationMode = InterpolationMode.HighQualityBilinear;
         }
 
-        return deviceImage;
+        Bitmap scaledBitmap = new(desiredSize.Width, desiredSize.Height, bitmap.PixelFormat);
+
+        using (Bitmap? dispose = disposeBitmap ? bitmap : null)
+        using (Graphics graphics = Graphics.FromImage(scaledBitmap))
+        {
+            graphics.InterpolationMode = interpolationMode;
+
+            RectangleF sourceBounds = new(0, 0, bitmap.Size.Width, bitmap.Size.Height);
+            RectangleF destinationBounds = new(0, 0, desiredSize.Width, desiredSize.Height);
+
+            // Specify a source rectangle shifted by half of pixel to account for GDI+ considering the source origin the
+            // center of top-left pixel.
+            //
+            // Failing to do so will result in the right and bottom of the bitmap lines being interpolated with the
+            // graphics' background color, and will appear black even if we cleared the background with transparent color.
+            // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
+            // (e.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor
+            // also shows them).
+            sourceBounds.Offset(-0.5f, -0.5f);
+
+            graphics.DrawImage(bitmap, destinationBounds, sourceBounds, GraphicsUnit.Pixel);
+        }
+
+        return scaledBitmap;
     }
 
-    public static Bitmap CreateScaledBitmap(Bitmap logicalImage, int deviceDpi = 0)
-    {
-        Size deviceImageSize = LogicalToDeviceUnits(logicalImage.Size, deviceDpi);
-        return ScaleBitmapToSize(logicalImage, deviceImageSize);
-    }
+    /// <summary>
+    ///  Scales a logical (100%) <see cref="Bitmap"/> value to the specified DPI.
+    /// </summary>
+    /// <param name="logicalBitmap"><see cref="Bitmap"/> in logical units (pixels at 100%).</param>
+    /// <returns>Scaled <see cref="Bitmap"/>.</returns>
+    internal static Bitmap ScaleToDpi(Bitmap logicalBitmap, int dpi, bool disposeBitmap = false) =>
+        dpi == OneHundredPercentLogicalDpi
+            ? logicalBitmap
+            : ScaleToSize(logicalBitmap, ScaleToDpi(logicalBitmap.Size, dpi), disposeBitmap);
 
     /// <summary>
     ///  Returns whether scaling is required when converting between logical-device units,
     ///  if the application opted in the automatic scaling in the .config file.
     /// </summary>
-    public static bool IsScalingRequired => DeviceDpi != LogicalDpi;
+    internal static bool IsScalingRequired => InitialSystemDpi != OneHundredPercentLogicalDpi;
 
     /// <summary>
-    /// Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
-    /// The settings are stored in the registry under HKCU\Software\Microsoft\Accessibility in (DWORD)TextScaleFactor.
+    ///  Creates a scaled version of the given <see cref="Font"/> to the Windows Accessibility Text Size setting (also
+    ///  known as Text Scaling) if needed, otherwise returns <see langword="null"/>.
     /// </summary>
-    /// <returns>The scaling factor in the range [1.0, 2.25].</returns>
-    /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
-    public static float GetTextScaleFactor()
+    internal static Font? ScaleToSystemTextSize(Font? font)
     {
-        short textScaleValue = MinTextScaleValue;
+        if (!OsVersion.IsWindows10_1507OrGreater() || font is null || font.IsSystemFont)
+        {
+            return null;
+        }
+
+        if (font.IsSystemFont)
+        {
+            // Recreating the SystemFont will have it scaled to the right size for the current setting. This could be
+            // done more efficiently by querying the OS to see if this is necessary for the specific font.
+            //
+            // This should never return null.
+            Font newSystemFont = SystemFonts.GetFontByName(font.SystemFontName)!;
+            if (newSystemFont.Size == font.Size)
+            {
+                // No point in keeping an identical one, free the resource.
+                newSystemFont.Dispose();
+                return null;
+            }
+
+            return newSystemFont;
+        }
+
+        // The default(100) and max(225) text scale factor is value what Settings display text scale
+        // applies and also clamps the text scale factor value between 100 and 225 value.
+        // See https://docs.microsoft.com/windows/uwp/design/input/text-scaling.
+        const int MinTextScaleValue = 100;
+        const int MaxTextScaleValue = 225;
+
         try
         {
-            RegistryKey? key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
-            if (key is not null && key.GetValue("TextScaleFactor") is int _textScaleValue)
+            // Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
+            using RegistryKey? key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
+            if (key is not null && key.GetValue("TextScaleFactor") is int textScale)
             {
-                textScaleValue = (short)_textScaleValue;
+                textScale = Math.Clamp(textScale, MinTextScaleValue, MaxTextScaleValue);
+                return textScale == 100 ? null : font.WithSize(font.Size * (textScale / 100.0f));
             }
         }
         catch
@@ -201,169 +267,115 @@ internal static partial class DpiHelper
 #endif
         }
 
-        // Restore the text scale if it isn't the default value in the valid text scale factor value
-        if (textScaleValue > MinTextScaleValue && textScaleValue <= MaxTextScaleValue)
+        return null;
+    }
+
+    /// <summary>
+    ///  Scale the given value the specified percent. Never returns less than 1.
+    /// </summary>
+    /// <param name="percent">Percentage value, with 1.0 equaling 100%.</param>
+    internal static int ScaleToPercent(int value, double percent) => Math.Max(1, (int)Math.Round(value * percent));
+
+    /// <summary>
+    ///  Scales a logical (100%) pixel value to the specified DPI.
+    /// </summary>
+    /// <param name="logicalValue">Value in logical units (pixels at 100%).</param>
+    internal static int ScaleToDpi(int logicalValue, int dpi)
+    {
+        Debug.Assert(dpi >= 96);
+        if (dpi == OneHundredPercentLogicalDpi)
         {
-            return (float)textScaleValue / MinTextScaleValue;
+            return logicalValue;
         }
 
-        return MinTextScaleFactorValue;
+        double scalingFactor = dpi / (double)OneHundredPercentLogicalDpi;
+        return (int)Math.Round(scalingFactor * logicalValue);
     }
 
     /// <summary>
-    /// scale logical pixel to the factor
+    ///  Scales a logical (100%) <see cref="Padding"/> value to the specified DPI.
     /// </summary>
-    public static int ConvertToGivenDpiPixel(int value, double pixelFactor)
-    {
-        var scaledValue = (int)Math.Round(value * pixelFactor);
-        return scaledValue == 0 ? 1 : scaledValue;
-    }
+    /// <param name="logicalPadding"><see cref="Padding"/> in logical units (pixels at 100%).</param>
+    internal static Padding ScaleToDpi(Padding logicalPadding, int dpi) => dpi == OneHundredPercentLogicalDpi
+        ? logicalPadding
+        : new(
+            ScaleToDpi(logicalPadding.Left, dpi),
+            ScaleToDpi(logicalPadding.Top, dpi),
+            ScaleToDpi(logicalPadding.Right, dpi),
+            ScaleToDpi(logicalPadding.Bottom, dpi));
 
     /// <summary>
-    ///  Transforms a horizontal or vertical integer coordinate from logical to device units
-    ///  by scaling it up for current DPI and rounding to nearest integer value
+    ///  Scales a logical (100%) pixel value to the initial system DPI.
     /// </summary>
-    /// <param name="value">value in logical units</param>
-    /// <returns>value in device units</returns>
-    public static int LogicalToDeviceUnits(int value, int devicePixels = 0)
+    /// <param name="logicalValue">Value in logical units (pixels at 100%).</param>
+    internal static int ScaleToInitialSystemDpi(int logicalValue) => ScaleToDpi(logicalValue, InitialSystemDpi);
+
+    /// <summary>
+    ///  Scales a logical (100%) <see cref="Size"/> value to the specified DPI.
+    /// </summary>
+    /// <param name="logicalSize"><see cref="Size"/> in logical units (pixels at 100%).</param>
+    internal static Size ScaleToDpi(Size logicalSize, int dpi) => dpi == OneHundredPercentLogicalDpi
+        ? logicalSize
+        : new(ScaleToDpi(logicalSize.Width, dpi), ScaleToDpi(logicalSize.Height, dpi));
+
+    internal static Size SystemIconSize => new(
+        PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
+        PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
+
+    /// <summary>
+    ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
+    /// </summary>
+    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource)
+        => GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
+
+    /// <summary>
+    ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
+    /// </summary>
+    internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
+        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(SystemIconSize, dpi));
+
+    /// <summary>
+    ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.
+    /// </summary>
+    internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, Size size)
     {
-        if (devicePixels == 0)
+        if (size.IsEmpty)
         {
-            return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * value);
+            size = SystemIconSize;
         }
 
-        double scalingFactor = devicePixels / LogicalDpi;
-        return (int)Math.Round(scalingFactor * value);
+        return ScaleToSize(
+            GetIconResourceAsBestMatchBitmap(type, resource, size),
+            size,
+            disposeBitmap: true);
     }
 
     /// <summary>
-    ///  Returns a new Padding with the input's
-    ///  dimensions converted from logical units to device units.
+    ///  Gets the given icon resource that is closest to the given size as a <see cref="Bitmap"/>.
     /// </summary>
-    /// <param name="logicalPadding">Padding in logical units</param>
-    /// <returns>Padding in device units</returns>
-    public static Padding LogicalToDeviceUnits(Padding logicalPadding, int deviceDpi = 0)
+    internal static Bitmap GetIconResourceAsBestMatchBitmap(Stream resourceStream, Size size)
     {
-        return new Padding(
-            LogicalToDeviceUnits(logicalPadding.Left, deviceDpi),
-            LogicalToDeviceUnits(logicalPadding.Top, deviceDpi),
-            LogicalToDeviceUnits(logicalPadding.Right, deviceDpi),
-            LogicalToDeviceUnits(logicalPadding.Bottom, deviceDpi));
+        // While more efficient than what we were doing, this could be even more so if we grabbed the bitmap data
+        // directly out of the data stream.
+        using Icon icon = new(resourceStream, size.IsEmpty ? SystemIconSize : size);
+        return icon.ToBitmap();
     }
 
     /// <summary>
-    ///  Transforms a horizontal integer coordinate from logical to device units
-    ///  by scaling it up  for current DPI and rounding to nearest integer value
+    ///  Gets the given icon resource that is closest to the given size as a <see cref="Bitmap"/>.
     /// </summary>
-    /// <param name="value">The horizontal value in logical units</param>
-    /// <returns>The horizontal value in device units</returns>
-    public static int LogicalToDeviceUnitsX(int value)
+    internal static Bitmap GetIconResourceAsBestMatchBitmap(Type type, string resource, Size size)
     {
-        return LogicalToDeviceUnits(value, 0);
+        using Stream stream = type.Module.Assembly.GetManifestResourceStream(type, resource)
+            ?? throw new ArgumentException(string.Format(SR.ResourceNotFound, type, resource));
+
+        return GetIconResourceAsBestMatchBitmap(stream, size);
     }
 
     /// <summary>
-    ///  Transforms a vertical integer coordinate from logical to device units
-    ///  by scaling it up  for current DPI and rounding to nearest integer value
+    ///  Gets the DPI mode for the current thread.
     /// </summary>
-    /// <param name="value">The vertical value in logical units</param>
-    /// <returns>The vertical value in device units</returns>
-    public static int LogicalToDeviceUnitsY(int value)
-    {
-        return LogicalToDeviceUnits(value, 0);
-    }
-
-    /// <summary>
-    ///  Returns a new Size with the input's
-    ///  dimensions converted from logical units to device units.
-    /// </summary>
-    /// <param name="logicalSize">Size in logical units</param>
-    /// <returns>Size in device units</returns>
-    public static Size LogicalToDeviceUnits(Size logicalSize, int deviceDpi = 0)
-    {
-        return new Size(LogicalToDeviceUnits(logicalSize.Width, deviceDpi),
-                        LogicalToDeviceUnits(logicalSize.Height, deviceDpi));
-    }
-
-    /// <summary>
-    ///  Create and return a new bitmap scaled to the specified size.
-    /// </summary>
-    /// <param name="logicalImage">The image to scale from logical units to device units</param>
-    /// <param name="targetImageSize">The size to scale image to</param>
-    [return: NotNullIfNotNull("logicalImage")]
-    public static Bitmap? CreateResizedBitmap(Bitmap? logicalImage, Size targetImageSize)
-    {
-        if (logicalImage is null)
-        {
-            return null;
-        }
-
-        return ScaleBitmapToSize(logicalImage, targetImageSize);
-    }
-
-    /// <summary>
-    ///  Creating bitmap from Icon resource
-    /// </summary>
-    public static Bitmap GetBitmapFromIcon(Type t, string name)
-    {
-        Icon b = new Icon(t, name);
-        Bitmap bitmap = b.ToBitmap();
-        b.Dispose();
-        return bitmap;
-    }
-
-    /// <summary>
-    ///  Creates a new bitmap scaled to the closest size from the icon set according to the current DPI mode.
-    /// </summary>
-    /// <param name="type">Resource type</param>
-    /// <param name="name">Resource name</param>
-    /// <param name="defaultSize">Default size for 100% DPI</param>
-    /// <returns>New scaled bitmap</returns>
-    internal static Bitmap GetScaledBitmapFromIcon(Type type, string name, Size defaultSize)
-    {
-        using Icon icon = new(type, name);
-        Size scaledSize = LogicalToDeviceUnits(defaultSize);
-        Size deltaSize = icon.Size - scaledSize;
-        if (Math.Abs(deltaSize.Height) <= 2 && Math.Abs(deltaSize.Width) <= 2)
-        {
-            return icon.ToBitmap();
-        }
-
-        using Icon scaledIcon = new(icon, scaledSize);
-        return scaledIcon.ToBitmap();
-    }
-
-    /// <summary>
-    ///  Create a new bitmap scaled for the device units.
-    ///  When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
-    /// </summary>
-    /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
-    public static void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap, int deviceDpi = 0)
-    {
-        if (logicalBitmap is null)
-        {
-            return;
-        }
-
-        Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap, deviceDpi);
-        if (deviceBitmap is not null)
-        {
-            logicalBitmap.Dispose();
-            logicalBitmap = deviceBitmap;
-        }
-    }
-
-    /// <summary>
-    ///  Indicates whether the first (Parking)Window has been created. From that moment on,
-    ///  we will not be able nor allowed to change the Process' DpiMode.
-    /// </summary>
-    internal static bool FirstParkingWindowCreated { get; set; }
-
-    /// <summary>
-    ///  Gets the DPI awareness.
-    /// </summary>
-    /// <returns>The thread's/process' current HighDpi mode</returns>
-    internal static HighDpiMode GetWinformsApplicationDpiAwareness()
+    internal static HighDpiMode GetThreadHighDpiMode()
     {
         // For Windows 10 RS2 and above
         if (OsVersion.IsWindows10_1607OrGreater())
@@ -410,46 +422,47 @@ internal static partial class DpiHelper
         }
         else
         {
-            // Available on Vista and higher
+            // Available on Vista and higher.
             return PInvoke.IsProcessDPIAware() ? HighDpiMode.SystemAware : HighDpiMode.DpiUnaware;
         }
 
-        // We should never get here, except someone ported this with force to < Windows 7.
+        // We should never get here.
+        Debug.Fail("Unexpected DPI state.");
         return HighDpiMode.DpiUnaware;
     }
 
     /// <summary>
-    ///  Sets the DPI awareness. If not available on the current OS, it falls back to the next possible.
+    ///  Sets the requested DPI mode. If the current OS does not support the requested mode,
     /// </summary>
-    /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
-    internal static bool SetWinformsApplicationDpiAwareness(HighDpiMode highDpiMode)
+    /// <returns><see langword="true"/> if the mode was successfully set.</returns>
+    internal static bool SetProcessHighDpiMode(HighDpiMode highDpiMode)
     {
         bool success = false;
 
         if (OsVersion.IsWindows10_1703OrGreater())
         {
-            var rs2AndAboveDpiFlag = highDpiMode switch
+            DPI_AWARENESS_CONTEXT dpiAwareness = highDpiMode switch
             {
                 HighDpiMode.SystemAware => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
                 HighDpiMode.PerMonitor => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE,
                 HighDpiMode.PerMonitorV2 =>
                     // Necessary for RS1, since this SetProcessIntPtr IS available here.
                     PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
-                    ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
-                    : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
+                        ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
                 HighDpiMode.DpiUnawareGdiScaled =>
-                    // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
+                    // Make sure we do not try to set a value which has been introduced in later Windows releases.
                     PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)
-                    ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED
-                    : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
+                        ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
                 _ => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
             };
 
-            success = PInvoke.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
+            success = PInvoke.SetProcessDpiAwarenessContext(dpiAwareness);
         }
         else if (OsVersion.IsWindows8_1OrGreater())
         {
-            var dpiFlag = highDpiMode switch
+            PROCESS_DPI_AWARENESS dpiAwareness = highDpiMode switch
             {
                 HighDpiMode.DpiUnaware or HighDpiMode.DpiUnawareGdiScaled => PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE,
                 HighDpiMode.SystemAware => PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE,
@@ -457,12 +470,12 @@ internal static partial class DpiHelper
                 _ => PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE,
             };
 
-            success = PInvoke.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
+            success = PInvoke.SetProcessDpiAwareness(dpiAwareness).Succeeded;
         }
         else
         {
             // Vista or higher has SetProcessDPIAware
-            PROCESS_DPI_AWARENESS dpiFlag = (PROCESS_DPI_AWARENESS)(-1);
+            PROCESS_DPI_AWARENESS dpiAwareness = (PROCESS_DPI_AWARENESS)(-1);
             switch (highDpiMode)
             {
                 case HighDpiMode.DpiUnaware:
@@ -472,41 +485,19 @@ internal static partial class DpiHelper
                 case HighDpiMode.SystemAware:
                 case HighDpiMode.PerMonitor:
                 case HighDpiMode.PerMonitorV2:
-                    dpiFlag = PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                    dpiAwareness = PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
                     break;
             }
 
-            if (dpiFlag == PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE)
+            if (dpiAwareness == PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE)
             {
                 success = PInvoke.SetProcessDPIAware();
             }
         }
 
-        // Need to reset as our DPI will change if this was the first call to set the DPI context for the process.
-        Initialize();
+        // Need to reset as our DPI might change if this was the first call to set the DPI context for the process.
+        InitializeStatics();
 
         return success;
-    }
-
-    /// <summary>
-    ///  Create a new button bitmap scaled for the device units.
-    ///  Note: original image might be disposed.
-    /// </summary>
-    public static Image? ScaleButtonImageLogicalToDevice(Image? buttonImage)
-    {
-        if (buttonImage is null)
-        {
-            return null;
-        }
-
-        Bitmap? buttonBitmap = buttonImage as Bitmap;
-        if (buttonBitmap is null)
-        {
-            return null;
-        }
-
-        Bitmap deviceBitmap = CreateScaledBitmap(buttonBitmap);
-        buttonImage.Dispose();
-        return deviceBitmap;
     }
 }

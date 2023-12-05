@@ -483,17 +483,10 @@ public partial class DataGridView : Control, ISupportInitialize
         PerformLayout();
 
         _toolTipControl = new DataGridViewToolTip(this);
-        RowHeadersWidth = ScaleToCurrentDpi(DefaultRowHeadersWidth);
-        _columnHeadersHeight = ScaleToCurrentDpi(DefaultColumnHeadersHeight);
+        RowHeadersWidth = LogicalToDeviceUnits(DefaultRowHeadersWidth);
+        _columnHeadersHeight = LogicalToDeviceUnits(DefaultColumnHeadersHeight);
         Invalidate();
     }
-
-    /// <summary>
-    ///  Scaling row header width and column header height.
-    /// </summary>
-    private int ScaleToCurrentDpi(int value) => DpiHelper.IsScalingRequirementMet
-        ? LogicalToDeviceUnits(value)
-        : value;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]

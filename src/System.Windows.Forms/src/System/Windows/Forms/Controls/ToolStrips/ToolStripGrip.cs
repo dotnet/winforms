@@ -14,56 +14,24 @@ internal partial class ToolStripGrip : ToolStripButton
     private Point _lastEndLocation = ToolStrip.s_invalidMouseEnter;
     private static Size s_dragSize = LayoutUtils.s_maxSize;
 
-    private static readonly Padding _defaultPadding = new(2);
-    private const int GripThicknessDefault = 3;
-    private const int GripThicknessVisualStylesEnabled = 5;
-    private Padding _scaledDefaultPadding = _defaultPadding;
-    private int _scaledGripThickness = GripThicknessDefault;
-    private int _scaledGripThicknessVisualStylesEnabled = GripThicknessVisualStylesEnabled;
+    private Padding _defaultPadding;
 
     internal ToolStripGrip()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(_defaultPadding);
-            _scaledGripThickness = DpiHelper.LogicalToDeviceUnitsX(GripThicknessDefault);
-            _scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnitsX(GripThicknessVisualStylesEnabled);
-        }
-
-        // if we're using Visual Styles we've got to be a bit thicker.
-        GripThickness = ToolStripManager.VisualStylesEnabled ? _scaledGripThicknessVisualStylesEnabled : _scaledGripThickness;
+        ScaleConstants(ScaleHelper.InitialSystemDpi);
         SupportsItemClick = false;
     }
 
-    /// <summary>
-    ///  Deriving classes can override this to configure a default size for their control.
-    ///  This is more efficient than setting the size in the control's constructor.
-    /// </summary>
-    protected internal override Padding DefaultMargin
-    {
-        get
-        {
-            return _scaledDefaultPadding;
-        }
-    }
+    protected internal override Padding DefaultMargin => _defaultPadding;
 
-    public override bool CanSelect
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public override bool CanSelect => false;
 
     internal int GripThickness { get; private set; }
 
     [MemberNotNullWhen(true, nameof(ToolStripPanelRow))]
     internal bool MovingToolStrip
     {
-        get
-        {
-            return ((ToolStripPanelRow is not null) && _movingToolStrip);
-        }
+        get => (ToolStripPanelRow is not null) && _movingToolStrip;
         set
         {
             if ((_movingToolStrip != value) && ParentInternal is not null)
@@ -227,9 +195,6 @@ internal partial class ToolStripGrip : ToolStripButton
         base.OnMouseEnter(e);
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="e"></param>
     protected override void OnMouseLeave(EventArgs e)
     {
         if (_oldCursor is not null && ParentInternal is not null && !ParentInternal.IsInDesignMode)
@@ -265,14 +230,21 @@ internal partial class ToolStripGrip : ToolStripButton
 
     internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi)
     {
-        base.RescaleConstantsInternal(newDpi);
-        _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(_defaultPadding, newDpi);
-        _scaledGripThickness = DpiHelper.LogicalToDeviceUnits(GripThicknessDefault, newDpi);
-        _scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(GripThicknessVisualStylesEnabled, newDpi);
+        RescaleConstantsInternal(newDpi);
+        ScaleConstants(newDpi);
         Margin = DefaultMargin;
-
-        GripThickness = ToolStripManager.VisualStylesEnabled ? _scaledGripThicknessVisualStylesEnabled : _scaledGripThickness;
-
         OnFontChanged(EventArgs.Empty);
+    }
+
+    private void ScaleConstants(int dpi)
+    {
+        const int LogicalDefaultPadding = 2;
+        const int LogicalGripThickness = 3;
+        const int LogicalGripThicknessVisualStylesEnabled = 5;
+
+        _defaultPadding = new(ScaleHelper.ScaleToDpi(LogicalDefaultPadding, dpi));
+        GripThickness = ScaleHelper.ScaleToDpi(
+            ToolStripManager.VisualStylesEnabled ? LogicalGripThicknessVisualStylesEnabled : LogicalGripThickness,
+            dpi);
     }
 }

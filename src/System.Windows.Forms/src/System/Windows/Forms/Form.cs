@@ -2125,21 +2125,17 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Gets or sets a value indicating whether to display the form as a top-level
-    ///  window.
+    ///  Gets or sets a value indicating whether to display the form as a top-level window.
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool TopLevel
     {
-        get
-        {
-            return GetTopLevel();
-        }
+        get => GetTopLevel();
         set
         {
-            if (!value && this.IsMdiContainer && !DesignMode)
+            if (!value && IsMdiContainer && !DesignMode)
             {
                 throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
             }

@@ -22,6 +22,11 @@
         <target state="translated">Una o más entradas no son válidas en el parámetro IDictionary. Compruebe que todos los valores coinciden con las propiedades del objeto.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ResourceNotFound">
+        <source>Resource '{1}' cannot be found in class '{0}'.</source>
+        <target state="new">Resource '{1}' cannot be found in class '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">No se pudo analizar el texto esperado Text("{0}") en formato "{1}".</target>

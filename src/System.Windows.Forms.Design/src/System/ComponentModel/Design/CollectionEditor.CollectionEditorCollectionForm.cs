@@ -50,7 +50,7 @@ public partial class CollectionEditor
         {
             _editor = editor;
             InitializeComponent();
-            if (DpiHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequired)
             {
                 ScaleButtonImageLogicalToDevice(_downButton);
                 ScaleButtonImageLogicalToDevice(_upButton);
@@ -1113,9 +1113,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            Bitmap deviceBitmap = DpiHelper.CreateScaledBitmap(buttonBitmap);
-            button.Image.Dispose();
-            button.Image = deviceBitmap;
+            button.Image = ScaleHelper.ScaleToDpi(buttonBitmap, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
         }
 
         /// <summary>

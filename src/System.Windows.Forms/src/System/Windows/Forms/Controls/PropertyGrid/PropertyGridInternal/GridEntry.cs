@@ -96,17 +96,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
         get
         {
-            const int OutlineIconPaddingDefault = 5;
-
-            if (DpiHelper.IsScalingRequirementMet)
-            {
-                if (OwnerGridView is not null)
-                {
-                    return OwnerGridView.LogicalToDeviceUnits(OutlineIconPaddingDefault);
-                }
-            }
-
-            return OutlineIconPaddingDefault;
+            const int LogicalOutlineIconPadding = 5;
+            return OwnerGridView?.LogicalToDeviceUnits(LogicalOutlineIconPadding) ?? LogicalOutlineIconPadding;
         }
     }
 

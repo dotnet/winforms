@@ -51,11 +51,7 @@ public partial class ToolStripDropDown : ToolStrip
 
     public ToolStripDropDown()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding);
-        }
-
+        scaledDefaultPadding = ScaleHelper.ScaleToDpi(defaultPadding, ScaleHelper.InitialSystemDpi);
         SuspendLayout();
         Initialize();
         ResumeLayout(false);
@@ -1616,7 +1612,7 @@ public partial class ToolStripDropDown : ToolStrip
     {
         base.ResetScaling(newDpi);
         CommonProperties.xClearPreferredSizeCache(this);
-        scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
+        scaledDefaultPadding = ScaleHelper.ScaleToDpi(defaultPadding, newDpi);
     }
 
     /// <summary>

@@ -15,50 +15,40 @@ namespace System.Windows.Forms;
 [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
 public partial class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
 {
-    private static readonly Padding defaultMargin = new(0, 3, 0, 2);
-    private Padding _scaledDefaultMargin = defaultMargin;
+    private Padding _defaultMargin = ScaleHelper.ScaleToDpi(new Padding(0, 3, 0, 2), ScaleHelper.InitialSystemDpi);
 
     private Border3DStyle _borderStyle = Border3DStyle.Flat;
     private ToolStripStatusLabelBorderSides _borderSides = ToolStripStatusLabelBorderSides.None;
     private bool _spring;
     private AutomationLiveSetting _liveSetting;
 
-    /// <summary>
-    ///  A non selectable ToolStrip item
-    /// </summary>
     public ToolStripStatusLabel()
     {
-        Initialize();
     }
 
     public ToolStripStatusLabel(string? text)
         : base(text, image: null, isLink: false, onClick: null)
     {
-        Initialize();
     }
 
     public ToolStripStatusLabel(Image? image)
         : base(text: null, image, isLink: false, onClick: null)
     {
-        Initialize();
     }
 
     public ToolStripStatusLabel(string? text, Image? image)
         : base(text, image, isLink: false, onClick: null)
     {
-        Initialize();
     }
 
     public ToolStripStatusLabel(string? text, Image? image, EventHandler? onClick)
         : base(text, image, isLink: false, onClick, name: null)
     {
-        Initialize();
     }
 
     public ToolStripStatusLabel(string? text, Image? image, EventHandler? onClick, string? name)
         : base(text, image, isLink: false, onClick, name)
     {
-        Initialize();
     }
 
     /// <summary>
@@ -132,24 +122,7 @@ public partial class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegio
         }
     }
 
-    /// <summary>
-    ///  Called by all constructors of ToolStripButton.
-    /// </summary>
-    private void Initialize()
-    {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
-        }
-    }
-
-    protected internal override Padding DefaultMargin
-    {
-        get
-        {
-            return _scaledDefaultMargin;
-        }
-    }
+    protected internal override Padding DefaultMargin => _defaultMargin;
 
     [DefaultValue(false)]
     [SRDescription(nameof(SR.ToolStripStatusLabelSpringDescr))]

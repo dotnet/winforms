@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Design
 
         private DesignBinding? _selectedItem;      // Describes the initial selection on open, and the final selection on close
         private TreeNode? _selectedNode;      // Tree node that matches the initial selected item (selectedItem)
-        private bool _inSelectNode;      // Prevents processing of node expansion events when auot-selecting a tree node
+        private bool _inSelectNode;      // Prevents processing of node expansion events when auto-selecting a tree node
 
         private NoneNode? _noneNode;          // "None" tree node
         private OtherNode? _otherNode;         // "Other Data Sources" tree node
@@ -117,14 +117,13 @@ namespace System.Windows.Forms.Design
         private InstancesNode? _instancesNode;     // "Form List Instances" tree node
 
         private const int MinimumDimension = 250;
-        private static int _minimumHeight = MinimumDimension;
-        private static int _minimumWidth = MinimumDimension;
-        private static bool _isScalingInitialized;
+        private static int s_minimumHeight = MinimumDimension;
+        private static int s_minimumWidth = MinimumDimension;
+        private static bool s_isScalingInitialized;
         private ITypeDescriptorContext? _context;   // Context of the current 'pick' operation
 
-        private int _pixel_1 = 1;
         private Size _initialSize;
-        private BindingContext _bindingContext = new();
+        private readonly BindingContext _bindingContext = new();
 
         // The type of RuntimeType.
         // When binding to a business object, the DesignBindingPicker needs to create an instance of the business object.
@@ -137,57 +136,73 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void BuildBindingPicker(int newDpi, int oldDpi)
         {
-            var factor = ((double)newDpi) / oldDpi;
-            Label addNewDiv = new Label();
-            addNewDiv.Height = DpiHelper.ConvertToGivenDpiPixel(_pixel_1, factor);
-            addNewDiv.BackColor = SystemColors.ControlDark;
-            addNewDiv.Dock = DockStyle.Top;
+            double scalePercent = ((double)newDpi) / oldDpi;
+            Label addNewDiv = new()
+            {
+                Height = ScaleHelper.ScaleToDpi(1, newDpi),
+                BackColor = SystemColors.ControlDark,
+                Dock = DockStyle.Top
+            };
 
-            _addNewCtrl = new BindingPickerLink();
-            _addNewCtrl.Text = SR.DesignBindingPickerAddProjDataSourceLabel;
-            _addNewCtrl.TextAlign = ContentAlignment.MiddleLeft;
-            _addNewCtrl.BackColor = SystemColors.Window;
-            _addNewCtrl.ForeColor = SystemColors.WindowText;
-            _addNewCtrl.LinkBehavior = LinkBehavior.HoverUnderline;
+            _addNewCtrl = new BindingPickerLink
+            {
+                Text = SR.DesignBindingPickerAddProjDataSourceLabel,
+                TextAlign = ContentAlignment.MiddleLeft,
+                BackColor = SystemColors.Window,
+                ForeColor = SystemColors.WindowText,
+                LinkBehavior = LinkBehavior.HoverUnderline
+            };
+
             _addNewCtrl.LinkClicked += addNewCtrl_Click;
 
             // BindingPickerLink always initialize to primary monitor Dpi. Resizing to current Dpi.
-            _addNewCtrl.Height = DpiHelper.ConvertToGivenDpiPixel(_addNewCtrl.Height, factor);
+            _addNewCtrl.Height = ScaleHelper.ScaleToPercent(_addNewCtrl.Height, scalePercent);
 
-            Bitmap addNewBitmap = new Bitmap(BitmapSelector.GetResourceStream(typeof(DesignBindingPicker), "AddNewDataSource.bmp"));
+            Bitmap addNewBitmap = new(
+                BitmapSelector.GetResourceStream(typeof(DesignBindingPicker), "AddNewDataSource.bmp")
+                ?? throw new InvalidOperationException());
+
             addNewBitmap.MakeTransparent(Color.Magenta);
-            DpiHelper.ScaleBitmapLogicalToDevice(ref addNewBitmap, newDpi);
+            addNewBitmap = ScaleHelper.ScaleToDpi(addNewBitmap, newDpi, disposeBitmap: true);
 
-            PictureBox addNewIcon = new PictureBox();
-            addNewIcon.Image = addNewBitmap;
-            addNewIcon.BackColor = SystemColors.Window;
-            addNewIcon.ForeColor = SystemColors.WindowText;
-            addNewIcon.Width = _addNewCtrl.Height;
-            addNewIcon.Height = _addNewCtrl.Height;
-            addNewIcon.Dock = DockStyle.Left;
-            addNewIcon.SizeMode = PictureBoxSizeMode.CenterImage;
-            addNewIcon.AccessibleRole = AccessibleRole.Graphic;
+            PictureBox addNewIcon = new()
+            {
+                Image = addNewBitmap,
+                BackColor = SystemColors.Window,
+                ForeColor = SystemColors.WindowText,
+                Width = _addNewCtrl.Height,
+                Height = _addNewCtrl.Height,
+                Dock = DockStyle.Left,
+                SizeMode = PictureBoxSizeMode.CenterImage,
+                AccessibleRole = AccessibleRole.Graphic
+            };
 
-            Label helpTextDiv = new Label();
-            helpTextDiv.Height = DpiHelper.ConvertToGivenDpiPixel(_pixel_1, factor);
-            helpTextDiv.BackColor = SystemColors.ControlDark;
-            helpTextDiv.Dock = DockStyle.Top;
+            Label helpTextDiv = new()
+            {
+                Height = ScaleHelper.ScaleToDpi(1, newDpi),
+                BackColor = SystemColors.ControlDark,
+                Dock = DockStyle.Top
+            };
 
-            _helpTextCtrl = new HelpTextLabel();
-            _helpTextCtrl.TextAlign = ContentAlignment.TopLeft;
-            _helpTextCtrl.BackColor = SystemColors.Window;
-            _helpTextCtrl.ForeColor = SystemColors.WindowText;
+            _helpTextCtrl = new HelpTextLabel
+            {
+                TextAlign = ContentAlignment.TopLeft,
+                BackColor = SystemColors.Window,
+                ForeColor = SystemColors.WindowText
+            };
+
             _helpTextCtrl.Height *= 2;
-            int helpTextHeight = DpiHelper.ConvertToGivenDpiPixel(_helpTextCtrl.Height, factor);
 
-            _addNewPanel.Height = addNewIcon.Height + _pixel_1;
+            int helpTextHeight = ScaleHelper.ScaleToPercent(_helpTextCtrl.Height, scalePercent);
+
+            _addNewPanel.Height = addNewIcon.Height + 1;
             _addNewPanel.Controls.Add(_addNewCtrl);
             _addNewPanel.Controls.Add(addNewIcon);
             _addNewPanel.Controls.Add(addNewDiv);
 
             _helpTextPanel.Controls.Add(_helpTextCtrl);
             _helpTextPanel.Controls.Add(helpTextDiv);
-            _helpTextPanel.Height = helpTextHeight + _pixel_1;
+            _helpTextPanel.Height = helpTextHeight + 1;
             ResetStyles(false);
 
             Controls.Add(_addNewPanel);
@@ -238,30 +253,30 @@ namespace System.Windows.Forms.Design
         public DesignBindingPicker()
         {
             SuspendLayout();
-            if (!_isScalingInitialized)
+            if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    _minimumHeight = DpiHelper.LogicalToDeviceUnitsY(MinimumDimension);
-                    _minimumWidth = DpiHelper.LogicalToDeviceUnitsX(MinimumDimension);
-                }
-
-                _isScalingInitialized = true;
+                s_minimumHeight = ScaleHelper.ScaleToInitialSystemDpi(MinimumDimension);
+                s_minimumWidth = ScaleHelper.ScaleToInitialSystemDpi(MinimumDimension);
+                s_isScalingInitialized = true;
             }
 
             InitTreeViewCtl();
 
-            Label addNewDiv = new Label();
-            addNewDiv.Height = 1;
-            addNewDiv.BackColor = SystemColors.ControlDark;
-            addNewDiv.Dock = DockStyle.Top;
+            Label addNewDiv = new()
+            {
+                Height = 1,
+                BackColor = SystemColors.ControlDark,
+                Dock = DockStyle.Top
+            };
 
-            _addNewCtrl = new BindingPickerLink();
-            _addNewCtrl.Text = (SR.DesignBindingPickerAddProjDataSourceLabel);
-            _addNewCtrl.TextAlign = ContentAlignment.MiddleLeft;
-            _addNewCtrl.BackColor = SystemColors.Window;
-            _addNewCtrl.ForeColor = SystemColors.WindowText;
-            _addNewCtrl.LinkBehavior = LinkBehavior.HoverUnderline;
+            _addNewCtrl = new BindingPickerLink
+            {
+                Text = (SR.DesignBindingPickerAddProjDataSourceLabel),
+                TextAlign = ContentAlignment.MiddleLeft,
+                BackColor = SystemColors.Window,
+                ForeColor = SystemColors.WindowText,
+                LinkBehavior = LinkBehavior.HoverUnderline
+            };
 
             // use height of text for both dimensions of the Icon
             int addNewHeight = _addNewCtrl.Height;
@@ -271,22 +286,19 @@ namespace System.Windows.Forms.Design
 
             Bitmap addNewBitmap = new Bitmap(typeof(DesignBindingPicker), "AddNewDataSource.bmp");
             addNewBitmap.MakeTransparent(Color.Magenta);
-            if (DpiHelper.IsScalingRequired)
-            {
-                DpiHelper.ScaleBitmapLogicalToDevice(ref addNewBitmap);
-                addNewHeight = DpiHelper.LogicalToDeviceUnitsY(_addNewCtrl.Height);
-                addNewWidth = DpiHelper.LogicalToDeviceUnitsX(_addNewCtrl.Height);
-            }
+            addNewBitmap = ScaleHelper.ScaleToDpi(addNewBitmap, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
 
-            PictureBox addNewIcon = new PictureBox();
-            addNewIcon.Image = addNewBitmap;
-            addNewIcon.BackColor = SystemColors.Window;
-            addNewIcon.ForeColor = SystemColors.WindowText;
-            addNewIcon.Width = addNewWidth;
-            addNewIcon.Height = addNewHeight;
-            addNewIcon.Dock = DockStyle.Left;
-            addNewIcon.SizeMode = PictureBoxSizeMode.CenterImage;
-            addNewIcon.AccessibleRole = AccessibleRole.Graphic;
+            PictureBox addNewIcon = new()
+            {
+                Image = addNewBitmap,
+                BackColor = SystemColors.Window,
+                ForeColor = SystemColors.WindowText,
+                Width = addNewWidth,
+                Height = addNewHeight,
+                Dock = DockStyle.Left,
+                SizeMode = PictureBoxSizeMode.CenterImage,
+                AccessibleRole = AccessibleRole.Graphic
+            };
 
             _addNewPanel = new Panel();
             _addNewPanel.Controls.Add(_addNewCtrl);
@@ -295,21 +307,22 @@ namespace System.Windows.Forms.Design
             _addNewPanel.Height = addNewHeight + 1;
             _addNewPanel.Dock = DockStyle.Bottom;
 
-            Label helpTextDiv = new Label();
-            helpTextDiv.Height = 1;
-            helpTextDiv.BackColor = SystemColors.ControlDark;
-            helpTextDiv.Dock = DockStyle.Top;
-
-            _helpTextCtrl = new HelpTextLabel();
-            _helpTextCtrl.TextAlign = ContentAlignment.TopLeft;
-            _helpTextCtrl.BackColor = SystemColors.Window;
-            _helpTextCtrl.ForeColor = SystemColors.WindowText;
-            _helpTextCtrl.Height *= 2;
-            int helpTextHeight = _helpTextCtrl.Height;
-            if (DpiHelper.IsScalingRequired)
+            Label helpTextDiv = new()
             {
-                helpTextHeight = DpiHelper.LogicalToDeviceUnitsY(helpTextHeight);
-            }
+                Height = 1,
+                BackColor = SystemColors.ControlDark,
+                Dock = DockStyle.Top
+            };
+
+            _helpTextCtrl = new HelpTextLabel
+            {
+                TextAlign = ContentAlignment.TopLeft,
+                BackColor = SystemColors.Window,
+                ForeColor = SystemColors.WindowText
+            };
+
+            _helpTextCtrl.Height *= 2;
+            int helpTextHeight = ScaleHelper.ScaleToInitialSystemDpi(_helpTextCtrl.Height);
 
             _helpTextCtrl.Dock = DockStyle.Fill;
 
@@ -323,12 +336,12 @@ namespace System.Windows.Forms.Design
             Controls.Add(_addNewPanel);
             Controls.Add(_helpTextPanel);
 
-            ResumeLayout(false);
+            ResumeLayout(performLayout: false);
 
             Size = _initialSize;
             BackColor = SystemColors.Control;
             ActiveControl = _treeViewCtrl;
-            AccessibleName = (SR.DesignBindingPickerAccessibleName);
+            AccessibleName = SR.DesignBindingPickerAccessibleName;
 
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         }
@@ -356,11 +369,6 @@ namespace System.Windows.Forms.Design
         ///     the user picked, or null if no selection was made.
         ///
         /// </devdoc>
-
-        ///  FXCOP suggests we use generics to avoid boxing of value types when referencing
-        ///  values in the uiService.Styles hashtable.  However, the values contained within
-        ///  can be of differing types - so we cannot do this.  Hence the suppression.
-        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         public DesignBinding? Pick(ITypeDescriptorContext? context,
                                   IServiceProvider provider,
                                   bool showDataSources,
@@ -372,12 +380,10 @@ namespace System.Windows.Forms.Design
         {
             // Get services
             _serviceProvider = provider;
-            _windowsFormsEditorService = _serviceProvider?.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-#pragma warning disable VSSDK006
-            _dataSourceProviderService = _serviceProvider?.GetService(typeof(DataSourceProviderService)) as DataSourceProviderService;
-            _typeResolutionService = _serviceProvider?.GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
-            _designerHost = _serviceProvider?.GetService(typeof(IDesignerHost)) as IDesignerHost;
-#pragma warning restore VSSDK006
+            _windowsFormsEditorService = _serviceProvider.GetService<IWindowsFormsEditorService>();
+            _dataSourceProviderService = _serviceProvider.GetService<DataSourceProviderService>();
+            _typeResolutionService = _serviceProvider.GetService<ITypeResolutionService>();
+            _designerHost = _serviceProvider.GetService<IDesignerHost>();
 
             if (_windowsFormsEditorService is null)
             {
@@ -442,10 +448,13 @@ namespace System.Windows.Forms.Design
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-            var factor = (double)deviceDpiNew / deviceDpiOld;
-            _minimumWidth = DpiHelper.ConvertToGivenDpiPixel(_minimumWidth, factor);
-            _minimumHeight = DpiHelper.ConvertToGivenDpiPixel(_minimumHeight, factor);
-            Size = new Size(DpiHelper.ConvertToGivenDpiPixel(_initialSize.Width, factor), DpiHelper.ConvertToGivenDpiPixel(_initialSize.Height, factor));
+            double scalePercent = (double)deviceDpiNew / deviceDpiOld;
+            s_minimumWidth = ScaleHelper.ScaleToDpi(MinimumDimension, deviceDpiNew);
+            s_minimumHeight = ScaleHelper.ScaleToDpi(MinimumDimension, deviceDpiNew);
+            Size = new Size(
+                ScaleHelper.ScaleToPercent(_initialSize.Width, scalePercent),
+                ScaleHelper.ScaleToPercent(_initialSize.Height, scalePercent));
+
             SuspendLayout();
             try
             {
@@ -1652,12 +1661,12 @@ namespace System.Windows.Forms.Design
         {
             if ((specified & BoundsSpecified.Width) == BoundsSpecified.Width)
             {
-                width = Math.Max(width, _minimumWidth);
+                width = Math.Max(width, s_minimumWidth);
             }
 
             if ((specified & BoundsSpecified.Height) == BoundsSpecified.Height)
             {
-                height = Math.Max(height, _minimumHeight);
+                height = Math.Max(height, s_minimumHeight);
             }
 
             base.SetBoundsCore(x, y, width, height, specified);
@@ -1918,7 +1927,7 @@ namespace System.Windows.Forms.Design
 
             private static ImageList CreateScaledCopy(ImageList imageList, int dpi)
             {
-                Size scaledSize = DpiHelper.LogicalToDeviceUnits(imageList.ImageSize, dpi);
+                Size scaledSize = ScaleHelper.ScaleToDpi(imageList.ImageSize, dpi);
 
                 ImageList copy = new()
                 {
@@ -1929,7 +1938,7 @@ namespace System.Windows.Forms.Design
 
                 foreach (Image image in imageList.Images)
                 {
-                    Bitmap scaledImage = DpiHelper.CreateResizedBitmap((Bitmap)image, scaledSize);
+                    Bitmap scaledImage = ScaleHelper.CopyAndScaleToSize((Bitmap)image, scaledSize);
                     copy.Images.Add(scaledImage);
                 }
 
@@ -1941,7 +1950,7 @@ namespace System.Windows.Forms.Design
             // Every instance of BindingPickerTree has it's own cache,
             // but the basic set of images is shared, see s_defaultImages.
             private readonly Dictionary<int, ImageList> _imageListCacheByDPI = new();
-            private int _dpi = (int)DpiHelper.LogicalDpi;
+            private int _dpi = ScaleHelper.OneHundredPercentLogicalDpi;
 
             internal BindingPickerTree()
             {
@@ -1951,7 +1960,7 @@ namespace System.Windows.Forms.Design
             internal void ResetImages()
             {
                 // reset current DPI to logical (96)
-                _dpi = (int)DpiHelper.LogicalDpi;
+                _dpi = ScaleHelper.OneHundredPercentLogicalDpi;
 
                 // Clear scaled images cache
                 foreach (var imageList in _imageListCacheByDPI.Values)
@@ -1966,7 +1975,7 @@ namespace System.Windows.Forms.Design
                 ImageList = CreateCopy(s_defaultImages);
 
                 // Cache current ImageList instance as default for scaling
-                _imageListCacheByDPI.Add((int)DpiHelper.LogicalDpi, ImageList);
+                _imageListCacheByDPI.Add(ScaleHelper.OneHundredPercentLogicalDpi, ImageList);
             }
 
             internal void RescaleImages(int dpi)
@@ -1986,7 +1995,7 @@ namespace System.Windows.Forms.Design
                 // Get ImageList from cache or create new one from unscaled
                 if (!_imageListCacheByDPI.TryGetValue(dpi, out ImageList? scaledImageList))
                 {
-                    ImageList unscaledImageList = _imageListCacheByDPI[(int)DpiHelper.LogicalDpi];
+                    ImageList unscaledImageList = _imageListCacheByDPI[ScaleHelper.OneHundredPercentLogicalDpi];
                     scaledImageList = CreateScaledCopy(unscaledImageList, dpi);
                     _imageListCacheByDPI.Add(dpi, scaledImageList);
                 }

@@ -93,7 +93,7 @@ internal sealed partial class DropDownButton : Button
                     hdc,
                     dropDownButtonRect,
                     state,
-                    DpiHelper.IsScalingRequirementMet ? HWNDInternal : HWND.Null);
+                    ScaleHelper.IsScalingRequirementMet ? HWNDInternal : HWND.Null);
             }
 
             // Redraw focus cues.

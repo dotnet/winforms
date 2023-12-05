@@ -8,12 +8,10 @@ namespace System.Drawing.Design;
 public partial class ContentAlignmentEditor
 {
     /// <summary>
-    /// Control we use to provide the content alignment UI.
+    ///  Control we use to provide the content alignment UI.
     /// </summary>
     private sealed class ContentUI : SelectionPanelBase
     {
-        private double _pixelFactor;
-
         private readonly SelectionPanelRadioButton _topLeft = new();
         private readonly SelectionPanelRadioButton _topCenter = new();
         private readonly SelectionPanelRadioButton _topRight = new();
@@ -26,7 +24,6 @@ public partial class ContentAlignmentEditor
 
         public ContentUI()
         {
-            _pixelFactor = DpiHelper.LogicalToDeviceUnits(1);
             InitComponent();
         }
 
@@ -168,16 +165,14 @@ public partial class ContentAlignmentEditor
             _bottomRight.Appearance = Appearance.Button;
             _bottomRight.AccessibleName = SR.ContentAlignmentEditorBottomRightAccName;
 
-            SetDimensions();
+            SetDimensions(ScaleHelper.InitialSystemDpi);
             ConfigureButtons();
         }
 
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
-            var factor = (double)deviceDpiNew / deviceDpiOld;
-            _pixelFactor *= factor;
             ResetAnchorStyle(toNone: true);
-            SetDimensions();
+            SetDimensions(deviceDpiNew);
         }
 
         private void ResetAnchorStyle(bool toNone = false)
@@ -205,7 +200,7 @@ public partial class ContentAlignmentEditor
             }
         }
 
-        private void SetDimensions()
+        private void SetDimensions(int dpi)
         {
             SuspendLayout();
             try
@@ -214,14 +209,14 @@ public partial class ContentAlignmentEditor
                 Controls.Clear();
 
                 // Local cache.
-                var pixel_24 = DpiHelper.ConvertToGivenDpiPixel(24, _pixelFactor);
-                var pixel_25 = DpiHelper.ConvertToGivenDpiPixel(25, _pixelFactor);
-                var pixel_32 = DpiHelper.ConvertToGivenDpiPixel(32, _pixelFactor);
-                var pixel_59 = DpiHelper.ConvertToGivenDpiPixel(59, _pixelFactor);
-                var pixel_64 = DpiHelper.ConvertToGivenDpiPixel(64, _pixelFactor);
-                var pixel_89 = DpiHelper.ConvertToGivenDpiPixel(89, _pixelFactor);
-                var pixel_99 = DpiHelper.ConvertToGivenDpiPixel(99, _pixelFactor);
-                var pixel_125 = DpiHelper.ConvertToGivenDpiPixel(125, _pixelFactor);
+                int pixel_24 = ScaleHelper.ScaleToDpi(24, dpi);
+                int pixel_25 = ScaleHelper.ScaleToDpi(25, dpi);
+                int pixel_32 = ScaleHelper.ScaleToDpi(32, dpi);
+                int pixel_59 = ScaleHelper.ScaleToDpi(59, dpi);
+                int pixel_64 = ScaleHelper.ScaleToDpi(64, dpi);
+                int pixel_89 = ScaleHelper.ScaleToDpi(89, dpi);
+                int pixel_99 = ScaleHelper.ScaleToDpi(99, dpi);
+                int pixel_125 = ScaleHelper.ScaleToDpi(125, dpi);
 
                 Size = new Size(pixel_125, pixel_89);
 
@@ -252,8 +247,8 @@ public partial class ContentAlignmentEditor
                 _bottomRight.Size = new Size(pixel_24, pixel_25);
 
                 ResetAnchorStyle();
-                Controls.AddRange(new Control[]
-                {
+                Controls.AddRange(
+                [
                     _bottomRight,
                     _bottomCenter,
                     _bottomLeft,
@@ -263,7 +258,7 @@ public partial class ContentAlignmentEditor
                     _topRight,
                     _topCenter,
                     _topLeft
-                });
+                ]);
             }
             finally
             {

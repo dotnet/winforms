@@ -7,10 +7,10 @@ using System.Windows.Forms.Primitives.Resources;
 
 namespace System.Windows.Forms;
 
-internal static partial class DpiHelper
+internal static partial class ScaleHelper
 {
     /// <summary>
-    ///  Class that help setting <see cref="DPI_AWARENESS_CONTEXT"/> scope.
+    ///  Class that creates a temporary <see cref="DPI_AWARENESS_CONTEXT"/> scope.
     /// </summary>
     private class DpiAwarenessScope : IDisposable
     {
@@ -29,7 +29,7 @@ internal static partial class DpiHelper
             // Full support for DPI_AWARENESS_CONTEXT and mixed mode DPI_HOSTING_BEHAVIOR on the thread is only available after the RS4 OS release.
             if (!OsVersion.IsWindows10_18030rGreater())
             {
-                Debug.Assert(false, "Full support for DPI_AWARENESS_CONTEXT and mixed mode DPI_HOSTING_BEHAVIOR on the thread is only available after the RS4 OS release");
+                Debug.Fail("Full support for DPI_AWARENESS_CONTEXT and mixed mode DPI_HOSTING_BEHAVIOR on the thread is only available after the RS4 OS release");
                 return;
             }
 
@@ -44,7 +44,7 @@ internal static partial class DpiHelper
             // No-op when requested DPI_AWARENESS_CONTEXT and current thread's context is the same.
             if (!PInvoke.AreDpiAwarenessContextsEqual(_originalDpiAwarenessContext, context))
             {
-                if (PInvoke.SetThreadDpiAwarenessContext(context) == IntPtr.Zero)
+                if (PInvoke.SetThreadDpiAwarenessContext(context) == 0)
                 {
                     throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32GetThreadsDpiContextFailed);
                 }
@@ -73,20 +73,16 @@ internal static partial class DpiHelper
         public void Dispose()
         {
 #pragma warning disable CA1416 // OS version check should already be covered if the _originalDpiHostingBehavior or dpiAwarenessScopeIsSet is set with valid values.
-            if (_threadHostingBehaviorIsSet)
+            if (_threadHostingBehaviorIsSet
+                && PInvoke.SetThreadDpiHostingBehavior(_originalDpiHostingBehavior) == DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_INVALID)
             {
-                if (PInvoke.SetThreadDpiHostingBehavior(_originalDpiHostingBehavior) == DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_INVALID)
-                {
-                    throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format(SR.Win32SetThreadsDpiHostingBehaviorFailed, _originalDpiHostingBehavior));
-                }
+                throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format(SR.Win32SetThreadsDpiHostingBehaviorFailed, _originalDpiHostingBehavior));
             }
 
-            if (_dpiAwarenessScopeIsSet)
+            if (_dpiAwarenessScopeIsSet
+                && PInvoke.SetThreadDpiAwarenessContext(_originalDpiAwarenessContext) == IntPtr.Zero)
             {
-                if (PInvoke.SetThreadDpiAwarenessContext(_originalDpiAwarenessContext) == IntPtr.Zero)
-                {
-                    throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format(SR.Win32SetThreadsDpiContextFailed, _originalDpiAwarenessContext));
-                }
+                throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format(SR.Win32SetThreadsDpiContextFailed, _originalDpiAwarenessContext));
             }
 #pragma warning restore CA1416 // Validate platform compatibility
         }

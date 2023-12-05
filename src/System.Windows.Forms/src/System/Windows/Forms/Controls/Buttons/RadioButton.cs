@@ -32,24 +32,15 @@ public partial class RadioButton : ButtonBase
     private bool _autoCheck = true;
     private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
     private Appearance _appearance = Appearance.Normal;
-
-    private const int FlatSystemStylePaddingWidth = 24;
-    private const int FlatSystemStyleMinimumHeight = 13;
-
-    internal int _flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
-    internal int _flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
+    private int _flatSystemStylePaddingWidth;
+    private int _flatSystemStyleMinimumHeight;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="RadioButton"/>
-    ///  class.
+    ///  Initializes a new instance of the <see cref="RadioButton"/> class.
     /// </summary>
     public RadioButton() : base()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-            _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
-        }
+        ScaleConstants();
 
         // Radio buttons shouldn't respond to right clicks, so we need to do all our own click logic
         SetStyle(ControlStyles.StandardClick, false);
@@ -264,12 +255,15 @@ public partial class RadioButton : ButtonBase
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+        ScaleConstants();
+    }
 
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-            _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
-        }
+    private void ScaleConstants()
+    {
+        const int LogicalFlatSystemStylePaddingWidth = 24;
+        const int LogicalFlatSystemStyleMinimumHeight = 13;
+        _flatSystemStylePaddingWidth = LogicalToDeviceUnits(LogicalFlatSystemStylePaddingWidth);
+        _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(LogicalFlatSystemStyleMinimumHeight);
     }
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -282,7 +276,12 @@ public partial class RadioButton : ButtonBase
         Size textSize = TextRenderer.MeasureText(Text, Font);
         Size size = SizeFromClientSize(textSize);
         size.Width += _flatSystemStylePaddingWidth;
-        size.Height = DpiHelper.IsScalingRequirementMet ? Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight) : size.Height + 5; // ensure minimum height to avoid truncation of RadioButton circle or text
+
+        // Ensure minimum height to avoid truncation of RadioButton circle or text.
+        size.Height = ScaleHelper.IsScalingRequirementMet
+            ? Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight)
+            : size.Height + 5;
+
         return size;
     }
 

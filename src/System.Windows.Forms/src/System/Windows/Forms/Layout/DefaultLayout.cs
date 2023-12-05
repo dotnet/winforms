@@ -790,7 +790,7 @@ internal partial class DefaultLayout : LayoutEngine
         AnchorStyles anchor = GetAnchor(element);
         if (IsAnchored(anchor, AnchorStyles.Right))
         {
-            if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Right - parentWidth > 0) && (oldAnchorInfo.Right < 0))
+            if (ScaleHelper.IsScalingRequirementMet && (anchorInfo.Right - parentWidth > 0) && (oldAnchorInfo.Right < 0))
             {
                 // Parent was resized to fit its parent, or screen, we need to reuse old anchors info to prevent losing control beyond right edge.
                 anchorInfo.Right = oldAnchorInfo.Right;
@@ -818,7 +818,7 @@ internal partial class DefaultLayout : LayoutEngine
 
         if (IsAnchored(anchor, AnchorStyles.Bottom))
         {
-            if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Bottom - parentHeight > 0) && (oldAnchorInfo.Bottom < 0))
+            if (ScaleHelper.IsScalingRequirementMet && (anchorInfo.Bottom - parentHeight > 0) && (oldAnchorInfo.Bottom < 0))
             {
                 // The parent was resized to fit its parent or the screen, we need to reuse the old anchors info to prevent positioning the control beyond the bottom edge.
                 anchorInfo.Bottom = oldAnchorInfo.Bottom;

@@ -20,23 +20,10 @@ internal class InheritanceUI
     /// <summary>
     ///  The bitmap we use to show inheritance.
     /// </summary>
-    public static Bitmap InheritanceGlyph
-    {
-        get
-        {
-            if (s_inheritanceGlyph is null)
-            {
-                s_inheritanceGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph").ToBitmap();
-
-                if (DpiHelper.IsScalingRequired)
-                {
-                    DpiHelper.ScaleBitmapLogicalToDevice(ref s_inheritanceGlyph);
-                }
-            }
-
-            return s_inheritanceGlyph;
-        }
-    }
+    public static Bitmap InheritanceGlyph => s_inheritanceGlyph ??= ScaleHelper.GetIconResourceAsBitmap(
+        typeof(InheritanceUI),
+        "InheritedGlyph",
+        ScaleHelper.InitialSystemDpi);
 
     /// <summary>
     ///  The rectangle surrounding the glyph.
@@ -61,9 +48,9 @@ internal class InheritanceUI
     public void AddInheritedControl(Control c, InheritanceLevel level)
     {
         _tooltip ??= new ToolTip
-            {
-                ShowAlways = true
-            };
+        {
+            ShowAlways = true
+        };
 
         Debug.Assert(level != InheritanceLevel.NotInherited, "This should only be called for inherited components.");
         string text;

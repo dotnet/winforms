@@ -88,7 +88,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
     }
 
-    internal static Bitmap ErrorBitmap => s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
+    internal static Bitmap ErrorBitmap =>
+        s_errorBitmap ??= ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(DataGridView), "ImageInError");
 
     internal static Icon ErrorIcon => s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
 

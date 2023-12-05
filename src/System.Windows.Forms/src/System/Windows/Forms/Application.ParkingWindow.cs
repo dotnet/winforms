@@ -26,7 +26,6 @@ public sealed partial class Application
             SetState(States.TopLevel, true);
             Text = "WindowsFormsParkingWindow";
             Visible = false;
-            DpiHelper.FirstParkingWindowCreated = true;
         }
 
         protected override CreateParams CreateParams

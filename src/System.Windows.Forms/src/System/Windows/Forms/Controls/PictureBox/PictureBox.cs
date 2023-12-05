@@ -229,7 +229,7 @@ public partial class PictureBox : Control, ISupportInitialize
                 if (_defaultErrorImage is null)
                 {
                     // Can't share images across threads.
-                    t_defaultErrorImageForThread ??= DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
+                    t_defaultErrorImageForThread ??= ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(PictureBox), "ImageInError");
 
                     _defaultErrorImage = t_defaultErrorImageForThread;
                 }
@@ -388,8 +388,7 @@ public partial class PictureBox : Control, ISupportInitialize
                 if (_defaultInitialImage is null)
                 {
                     // Can't share images across threads.
-                    t_defaultInitialImageForThread ??= DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
-
+                    t_defaultInitialImageForThread ??= ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(PictureBox), "PictureBox.Loading");
                     _defaultInitialImage = t_defaultInitialImageForThread;
                 }
 

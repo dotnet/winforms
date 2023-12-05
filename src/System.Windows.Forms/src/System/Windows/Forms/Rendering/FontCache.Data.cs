@@ -70,7 +70,7 @@ internal sealed partial class FontCache
             // Strip vertical-font mark from the name if needed.
             if (familyName is not null && familyName.Length > 1 && familyName[0] == '@')
             {
-                familyName = familyName.Substring(1);
+                familyName = familyName[1..];
             }
 
             // Now, creating it using the Font.SizeInPoints makes it GraphicsUnit-independent.
@@ -80,7 +80,7 @@ internal sealed partial class FontCache
             // Get the font height from the specified size. The size is in point units and height in logical units
             // (pixels when using MM_TEXT) so we need to make the conversion using the number of pixels per logical
             // inch along the screen height. (1 point = 1/72 inch.)
-            int pixelsY = (int)Math.Ceiling(DpiHelper.DeviceDpi * font.SizeInPoints / 72);
+            int pixelsY = (int)Math.Ceiling(ScaleHelper.InitialSystemDpi * font.SizeInPoints / 72);
 
             // The lfHeight represents the font cell height (line spacing) which includes the internal leading; we
             // specify a negative size value (in pixels) for the height so the font mapper provides the closest match
@@ -90,13 +90,17 @@ internal sealed partial class FontCache
             {
                 lfHeight = -pixelsY,
                 lfCharSet = (FONT_CHARSET)font.GdiCharSet,
-                lfOutPrecision = FONT_OUTPUT_PRECISION.OUT_TT_PRECIS,
                 lfQuality = quality,
                 lfWeight = (int)((font.Style & FontStyle.Bold) == FontStyle.Bold ? FW.BOLD : FW.NORMAL),
                 lfItalic = (font.Style & FontStyle.Italic) == FontStyle.Italic ? True : False,
                 lfUnderline = (font.Style & FontStyle.Underline) == FontStyle.Underline ? True : False,
                 lfStrikeOut = (font.Style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False,
-                FaceName = familyName
+                FaceName = familyName,
+
+                // This is the only difference in what `Font.ToHfont()` ultimately does. GDI+ uses OUT_DEFAULT_PRECIS
+                // which appears to be the same thing as OUT_TT_PRECIS. GDI+ also applies the transforms from the
+                // screen device context
+                lfOutPrecision = FONT_OUTPUT_PRECISION.OUT_TT_PRECIS,
             };
 
             if (logFont.FaceName.IsEmpty)

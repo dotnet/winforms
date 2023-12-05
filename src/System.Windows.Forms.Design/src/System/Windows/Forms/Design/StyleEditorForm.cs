@@ -348,19 +348,11 @@ internal partial class StyleCollectionEditor
             resources.ApplyResources(_infoPictureBox1, "infoPictureBox1");
             _infoPictureBox1.Name = "infoPictureBox1";
             _infoPictureBox1.TabStop = false;
-            if (DpiHelper.IsScalingRequired)
-            {
-                Bitmap bitmap = _infoPictureBox1.Image as Bitmap;
-                DpiHelper.ScaleBitmapLogicalToDevice(ref bitmap);
-                _infoPictureBox1.Image = bitmap;
-                bitmap = _infoPictureBox2.Image as Bitmap;
-                DpiHelper.ScaleBitmapLogicalToDevice(ref bitmap);
-                _infoPictureBox2.Image = bitmap;
-
-                _scaledUpDownLeftMargin = DpiHelper.LogicalToDeviceUnitsX(UpDownLeftMargin);
-                _scaledUpDownTopMargin = DpiHelper.LogicalToDeviceUnitsY(UpDownTopMargin);
-                _scaledLabelRightMargin = DpiHelper.LogicalToDeviceUnitsX(LabelRightMargin);
-            }
+            _infoPictureBox1.Image = ScaleHelper.ScaleToDpi(_infoPictureBox1.Image as Bitmap, ScaleHelper.InitialSystemDpi);
+            _infoPictureBox2.Image = ScaleHelper.ScaleToDpi(_infoPictureBox2.Image as Bitmap, ScaleHelper.InitialSystemDpi);
+            _scaledUpDownLeftMargin = ScaleHelper.ScaleToInitialSystemDpi(UpDownLeftMargin);
+            _scaledUpDownTopMargin = ScaleHelper.ScaleToInitialSystemDpi(UpDownTopMargin);
+            _scaledLabelRightMargin = ScaleHelper.ScaleToInitialSystemDpi(LabelRightMargin);
 
             // helperLinkLabel1
             resources.ApplyResources(_helperLinkLabel1, "helperLinkLabel1");

@@ -460,7 +460,7 @@ public class FontDialog : CommonDialog
         // The native font dialog does not currently support PermonitorV2 mode. We are setting DpiAwareness
         // to SystemAware as a workaround. This action has no effect when the application is not running in PermonitorV2 mode.
         // https://microsoft.visualstudio.com/OS/_workitems/edit/42835582
-        using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
         {
             if (!Comdlg32.ChooseFontW(ref cf))
             {
