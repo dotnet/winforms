@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Configuration;
 using System.Drawing.Configuration;
 using System.Reflection;
@@ -10,70 +8,38 @@ using System.Reflection;
 namespace System.Drawing;
 
 /// <summary>
-/// Provides methods to select from multiple bitmaps depending on a "bitmapSuffix" config setting.
+///  Provides methods to select from multiple bitmaps depending on a "bitmapSuffix" config setting.
 /// </summary>
 internal static class BitmapSelector
 {
+    private static string? s_suffix;
+
     /// <summary>
-    /// Gets the bitmap ID suffix defined in the application configuration, or string.Empty if
-    /// the suffix is not specified.  Internal for unit tests
+    ///  Gets the bitmap ID suffix defined in the application configuration, or string.Empty if
+    ///  the suffix is not specified.
     /// </summary>
     /// <remarks>
-    /// For performance, the suffix is cached in a static variable so it only has to be read
-    /// once per appdomain.
+    ///  <para>
+    ///   For performance, the suffix is cached in a static variable so it only has to be read
+    ///   once per <see cref="AppDomain"/>.
+    ///  </para>
     /// </remarks>
-    private static string _suffix;
-    internal static string Suffix
-    {
-        get
-        {
-            if (_suffix is null)
-            {
-                _suffix = string.Empty;
-                var section = ConfigurationManager.GetSection("system.drawing") as SystemDrawingSection;
-                if (section is not null)
-                {
-                    var value = section.BitmapSuffix;
-                    if (value is not null && value is string)
-                    {
-                        _suffix = value;
-                    }
-                }
-            }
-
-            return _suffix;
-        }
-        set
-        {
-            // So unit tests can clear the cached suffix
-            _suffix = value;
-        }
-    }
+    private static string Suffix =>
+        s_suffix ??= ConfigurationManager.GetSection("system.drawing") is SystemDrawingSection section && section.BitmapSuffix is string suffix
+            ? suffix
+            : string.Empty;
 
     /// <summary>
-    /// Appends the current suffix to <paramref name="filePath"/>.  The suffix is appended
-    /// before the existing extension (if any).  Internal for unit tests.
+    ///  Appends the current suffix to <paramref name="filePath"/>. The suffix is appended
+    ///  before the existing extension (if any).
     /// </summary>
-    /// <returns>
-    /// The new path with the suffix included.  If there is no suffix defined or there are
-    /// invalid characters in the original path, the original path is returned.
-    /// </returns>
-    internal static string AppendSuffix(string filePath)
-    {
-        try
-        {
-            return Path.ChangeExtension(filePath, Suffix + Path.GetExtension(filePath));
-        }
-        catch (ArgumentException)
-        { // there are invalid characters in the path
-            return filePath;
-        }
-    }
+    private static string AppendSuffix(string filePath)
+        => string.IsNullOrEmpty(Suffix) ? filePath : Path.ChangeExtension(filePath, Suffix + Path.GetExtension(filePath));
 
     /// <summary>
-    /// Returns <paramref name="originalPath"/> with the current suffix appended (before the
-    /// existing extension) if the resulting file path exists; otherwise the original path is
-    /// returned.
+    ///  Returns <paramref name="originalPath"/> with the current suffix appended (before the
+    ///  existing extension) if the resulting file path exists; otherwise the original path is
+    ///  returned.
     /// </summary>
     public static string GetFileName(string originalPath)
     {
@@ -85,9 +51,9 @@ internal static class BitmapSelector
     }
 
     // Calls assembly.GetManifestResourceStream in a try/catch and returns null if not found
-    private static Stream GetResourceStreamHelper(Assembly assembly, Type type, string name)
+    private static Stream? GetResourceStreamHelper(Assembly assembly, Type type, string name)
     {
-        Stream stream = null;
+        Stream? stream = null;
         try
         {
             stream = assembly.GetManifestResourceStream(type, name);
@@ -99,27 +65,13 @@ internal static class BitmapSelector
         return stream;
     }
 
-    private static bool DoesAssemblyHaveCustomAttribute(Assembly assembly, string typeName)
-    {
-        return DoesAssemblyHaveCustomAttribute(assembly, assembly.GetType(typeName));
-    }
+    private static bool DoesAssemblyHaveCustomAttribute(Assembly assembly, string typeName) =>
+        assembly.GetType(typeName) is Type type && DoesAssemblyHaveCustomAttribute(assembly, type);
 
-    private static bool DoesAssemblyHaveCustomAttribute(Assembly assembly, Type attrType)
-    {
-        if (attrType is not null)
-        {
-            var attr = assembly.GetCustomAttributes(attrType, false);
-            if (attr.Length > 0)
-            {
-                return true;
-            }
-        }
+    private static bool DoesAssemblyHaveCustomAttribute(Assembly assembly, Type attributeType) =>
+        assembly.GetCustomAttributes(attributeType, inherit: false).Length > 0;
 
-        return false;
-    }
-
-    // internal for unit tests
-    internal static bool SatelliteAssemblyOptIn(Assembly assembly)
+    private static bool SatelliteAssemblyOptIn(Assembly assembly)
     {
         // Try 4.5 public attribute type first
         if (DoesAssemblyHaveCustomAttribute(assembly, typeof(BitmapSuffixInSatelliteAssemblyAttribute)))
@@ -131,8 +83,7 @@ internal static class BitmapSelector
         return DoesAssemblyHaveCustomAttribute(assembly, "System.Drawing.BitmapSuffixInSatelliteAssemblyAttribute");
     }
 
-    // internal for unit tests
-    internal static bool SameAssemblyOptIn(Assembly assembly)
+    private static bool SameAssemblyOptIn(Assembly assembly)
     {
         // Try 4.5 public attribute type first
         if (DoesAssemblyHaveCustomAttribute(assembly, typeof(BitmapSuffixInSameAssemblyAttribute)))
@@ -145,18 +96,18 @@ internal static class BitmapSelector
     }
 
     /// <summary>
-    /// Returns a resource stream loaded from the appropriate location according to the current
-    /// suffix.
+    ///  Returns a resource stream loaded from the appropriate location according to the current suffix.
     /// </summary>
-    /// <param name="assembly">The assembly from which the stream is loaded</param>
     /// <param name="type">The type whose namespace is used to scope the manifest resource name</param>
     /// <param name="originalName">The name of the manifest resource being requested</param>
     /// <returns>
-    /// The manifest resource stream corresponding to <paramref name="originalName"/> with the
-    /// current suffix applied; or if that is not found, the stream corresponding to <paramref name="originalName"/>.
+    ///  The manifest resource stream corresponding to <paramref name="originalName"/> with the
+    ///  current suffix applied; or if that is not found, the stream corresponding to <paramref name="originalName"/>.
     /// </returns>
-    public static Stream GetResourceStream(Assembly assembly, Type type, string originalName)
+    internal static Stream? GetResourceStream(Type type, string originalName)
     {
+        Assembly assembly = type.Module.Assembly;
+
         if (Suffix != string.Empty)
         {
             try
@@ -165,7 +116,7 @@ internal static class BitmapSelector
                 if (SameAssemblyOptIn(assembly))
                 {
                     string newName = AppendSuffix(originalName);
-                    Stream stream = GetResourceStreamHelper(assembly, type, newName);
+                    Stream? stream = GetResourceStreamHelper(assembly, type, newName);
                     if (stream is not null)
                     {
                         return stream;
@@ -186,11 +137,11 @@ internal static class BitmapSelector
                     assemblyName.Name += Suffix;
 #pragma warning disable SYSLIB0037 // Type or member is obsolete
                     assemblyName.ProcessorArchitecture = ProcessorArchitecture.None;
-#pragma warning restore SYSLIB0037 // Type or member is obsolete
-                    Assembly satellite = Assembly.Load(assemblyName);
-                    if (satellite is not null)
+#pragma warning restore SYSLIB0037
+
+                    if (Assembly.Load(assemblyName) is { } satellite)
                     {
-                        Stream stream = GetResourceStreamHelper(satellite, type, originalName);
+                        Stream? stream = GetResourceStreamHelper(satellite, type, originalName);
                         if (stream is not null)
                         {
                             return stream;
@@ -206,50 +157,5 @@ internal static class BitmapSelector
 
         // Otherwise fall back to specified assembly and original name requested
         return assembly.GetManifestResourceStream(type, originalName);
-    }
-
-    /// <summary>
-    /// Returns a resource stream loaded from the appropriate location according to the current
-    /// suffix.
-    /// </summary>
-    /// <param name="type">The type from whose assembly the stream is loaded and whose namespace is used to scope the resource name</param>
-    /// <param name="originalName">The name of the manifest resource being requested</param>
-    /// <returns>
-    /// The manifest resource stream corresponding to <paramref name="originalName"/> with the
-    /// current suffix applied; or if that is not found, the stream corresponding to <paramref name="originalName"/>.
-    /// </returns>
-    public static Stream GetResourceStream(Type type, string originalName)
-    {
-        return GetResourceStream(type.Module.Assembly, type, originalName);
-    }
-
-    /// <summary>
-    /// Returns an Icon created  from a resource stream loaded from the appropriate location according to the current
-    /// suffix.
-    /// </summary>
-    /// <param name="type">The type from whose assembly the stream is loaded and whose namespace is used to scope the resource name</param>
-    /// <param name="originalName">The name of the manifest resource being requested</param>
-    /// <returns>
-    /// The icon created from a manifest resource stream corresponding to <paramref name="originalName"/> with the
-    /// current suffix applied; or if that is not found, the stream corresponding to <paramref name="originalName"/>.
-    /// </returns>
-    public static Icon CreateIcon(Type type, string originalName)
-    {
-        return new Icon(GetResourceStream(type, originalName));
-    }
-
-    /// <summary>
-    /// Returns an Bitmap created  from a resource stream loaded from the appropriate location according to the current
-    /// suffix.
-    /// </summary>
-    /// <param name="type">The type from whose assembly the stream is loaded and whose namespace is used to scope the resource name</param>
-    /// <param name="originalName">The name of the manifest resource being requested</param>
-    /// <returns>
-    /// The bitmap created from a manifest resource stream corresponding to <paramref name="originalName"/> with the
-    /// current suffix applied; or if that is not found, the stream corresponding to <paramref name="originalName"/>.
-    /// </returns>
-    public static Bitmap CreateBitmap(Type type, string originalName)
-    {
-        return new Bitmap(GetResourceStream(type, originalName));
     }
 }

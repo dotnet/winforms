@@ -22,7 +22,7 @@ internal class DataGridViewCellStyleEditor : UITypeEditor
 
         IUIService? uiService = provider.GetService<IUIService>();
         IComponent? component = context?.Instance as IComponent;
-        using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
         {
             _builderDialog ??= new DataGridViewCellStyleBuilder(provider, component!);
             if (uiService is not null)

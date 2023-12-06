@@ -13,18 +13,19 @@ public class DpiHelperTests
     [IntegerData<int>]
     public void DpiHelper_LogicalToDeviceUnits(int value)
     {
-        var expected = Math.Round(value * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi));
+        int expected = (int)Math.Round(value * (ScaleHelper.InitialSystemDpi / (double)ScaleHelper.OneHundredPercentLogicalDpi));
 
-        Assert.Equal(expected, DpiHelper.LogicalToDeviceUnits(value));
+        Assert.Equal(expected, ScaleHelper.ScaleToDpi(value, ScaleHelper.InitialSystemDpi));
     }
 
     [Theory]
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData))]
     public void DpiHelper_LogicalToDeviceUnitsSize(Size value)
     {
-        var expected = new Size((int)Math.Round(value.Width * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)),
-                                 (int)Math.Round(value.Height * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)));
+        Size expected = new(
+            (int)Math.Round(value.Width * (ScaleHelper.InitialSystemDpi / (double)ScaleHelper.OneHundredPercentLogicalDpi)),
+            (int)Math.Round(value.Height * (ScaleHelper.InitialSystemDpi / (double)ScaleHelper.OneHundredPercentLogicalDpi)));
 
-        Assert.Equal(expected, DpiHelper.LogicalToDeviceUnits(value));
+        Assert.Equal(expected, ScaleHelper.ScaleToDpi(value, ScaleHelper.InitialSystemDpi));
     }
 }

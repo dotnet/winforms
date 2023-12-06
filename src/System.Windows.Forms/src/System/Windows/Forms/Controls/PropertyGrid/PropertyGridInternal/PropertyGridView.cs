@@ -28,16 +28,16 @@ internal sealed partial class PropertyGridView :
     // Constants
     private const int EditIndent = 0;
     private const int OutlineIndent = 10;
-    private const int OutlineSize = 9;
-    private int _outlineSize = OutlineSize;
+    private const int LogicalOutlineSize = 9;
+    private int _outlineSize = LogicalOutlineSize;
     private const int OutlineSizeExplorerTreeStyle = 16;
     private int _outlineSizeExplorerTreeStyle = OutlineSizeExplorerTreeStyle;
-    private const int PaintWidth = 20;
-    private int _paintWidth = PaintWidth;
-    private const int PaintIndent = 26;
-    private int _paintIndent = PaintIndent;
-    private const int MaxListBoxHeight = 200;
-    private int _maxListBoxHeight = MaxListBoxHeight;
+    private const int LogicalPaintWidth = 20;
+    private int _paintWidth = LogicalPaintWidth;
+    private const int LogicalPaintIndent = 26;
+    private int _paintIndent = LogicalPaintIndent;
+    private const int LogicalMaxListBoxHeight = 200;
+    private int _maxListBoxHeight = LogicalMaxListBoxHeight;
 
     private const int RowLabel = 1;
     private const int RowValue = 2;
@@ -119,15 +119,11 @@ internal sealed partial class PropertyGridView :
     public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
         : base()
     {
-        if (DpiHelper.IsScalingRequired)
-        {
-            _paintWidth = DpiHelper.LogicalToDeviceUnitsX(PaintWidth);
-            _paintIndent = DpiHelper.LogicalToDeviceUnitsX(PaintIndent);
-            _outlineSizeExplorerTreeStyle = DpiHelper.LogicalToDeviceUnitsX(OutlineSizeExplorerTreeStyle);
-            _outlineSize = DpiHelper.LogicalToDeviceUnitsX(OutlineSize);
-            _maxListBoxHeight = DpiHelper.LogicalToDeviceUnitsY(MaxListBoxHeight);
-        }
-
+        _paintWidth = ScaleHelper.ScaleToInitialSystemDpi(LogicalPaintWidth);
+        _paintIndent = ScaleHelper.ScaleToInitialSystemDpi(LogicalPaintIndent);
+        _outlineSizeExplorerTreeStyle = ScaleHelper.ScaleToInitialSystemDpi(OutlineSizeExplorerTreeStyle);
+        _outlineSize = ScaleHelper.ScaleToInitialSystemDpi(LogicalOutlineSize);
+        _maxListBoxHeight = ScaleHelper.ScaleToInitialSystemDpi(LogicalMaxListBoxHeight);
         _valueClick = OnGridEntryValueClick;
         _labelClick = OnGridEntryLabelClick;
         _outlineClick = OnGridEntryOutlineClick;
@@ -220,7 +216,7 @@ internal sealed partial class PropertyGridView :
                 _dropDownButton.TabIndex = 2;
 
                 CommonEditorSetup(_dropDownButton);
-                _dropDownButton.Size = DpiHelper.IsScalingRequirementMet
+                _dropDownButton.Size = ScaleHelper.IsScalingRequirementMet
                     ? new(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
                     : new(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
             }
@@ -258,7 +254,7 @@ internal sealed partial class PropertyGridView :
                 _dialogButton.KeyDown += OnButtonKeyDown;
                 _dialogButton.GotFocus += OnDropDownButtonGotFocus;
                 _dialogButton.LostFocus += OnChildLostFocus;
-                _dialogButton.Size = DpiHelper.IsScalingRequirementMet
+                _dialogButton.Size = ScaleHelper.IsScalingRequirementMet
                     ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
                     : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
 
@@ -953,61 +949,25 @@ internal sealed partial class PropertyGridView :
         return propertyCount;
     }
 
-    /// <summary>
-    ///  Constructs the new instance of the accessibility object for this control. Subclasses
-    ///  should not call base.CreateAccessibilityObject.
-    /// </summary>
     protected override AccessibleObject CreateAccessibilityInstance()
         => new PropertyGridViewAccessibleObject(this, OwnerGrid);
 
     private Bitmap CreateResizedBitmap(string icon, int width, int height)
     {
-        Bitmap bitmap;
-        int scaledIconWidth = width;
-        int scaledIconHeight = height;
+        Size size = new(width, height);
+        size = ScaleHelper.ScaleToDpi(size, ScaleHelper.IsThreadPerMonitorV2Aware ? DeviceDpi : ScaleHelper.InitialSystemDpi);
+
         try
         {
-            // Scale for per-monitor DPI.
-            if (DpiHelper.IsPerMonitorV2Awareness)
-            {
-                scaledIconWidth = LogicalToDeviceUnits(width);
-                scaledIconHeight = LogicalToDeviceUnits(height);
-            }
-            else if (DpiHelper.IsScalingRequired)
-            {
-                // Only primary monitor scaling.
-                scaledIconWidth = DpiHelper.LogicalToDeviceUnitsX(width);
-                scaledIconHeight = DpiHelper.LogicalToDeviceUnitsY(height);
-            }
-
-            bitmap = GetBitmapFromIcon(icon, scaledIconWidth, scaledIconHeight);
+            return ScaleHelper.GetIconResourceAsBitmap(
+                typeof(PropertyGrid),
+                icon,
+                size);
         }
         catch (Exception e)
         {
             Debug.Fail(e.ToString());
-            bitmap = new Bitmap(scaledIconWidth, scaledIconHeight);
-        }
-
-        return bitmap;
-
-        static Bitmap GetBitmapFromIcon(string iconName, int iconWidth, int iconHeight)
-        {
-            Size desiredSize = new(iconWidth, iconHeight);
-            using Stream stream = typeof(PropertyGrid).Module.Assembly.GetManifestResourceStream(typeof(PropertyGrid), iconName)!;
-            using Icon icon = new(stream, desiredSize);
-            Bitmap bitmap = icon.ToBitmap();
-
-            if (bitmap.Size != desiredSize)
-            {
-                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(bitmap, desiredSize);
-                if (scaledBitmap is not null)
-                {
-                    bitmap.Dispose();
-                    bitmap = scaledBitmap;
-                }
-            }
-
-            return bitmap;
+            return new Bitmap(size.Width, size.Height);
         }
     }
 
@@ -3705,7 +3665,7 @@ internal sealed partial class PropertyGridView :
         SetConstants();
         SetScrollOffset(scroll);
 
-        if (DpiHelper.IsScalingRequirementMet)
+        if (ScaleHelper.IsScalingRequirementMet)
         {
             SetFlag(Flags.NeedUpdateUIBasedOnFont, true);
             UpdateUIBasedOnFont(true);
@@ -4075,7 +4035,7 @@ internal sealed partial class PropertyGridView :
         // This is necessary especially when user changes sort and move to a secondary monitor with different
         // DPI and change view sort back to original.
 
-        if (TopLevelGridEntries is not null && DpiHelper.IsScalingRequirementMet)
+        if (TopLevelGridEntries is not null && ScaleHelper.IsScalingRequirementMet)
         {
             int outlineRectIconSize = OutlineIconSize;
             foreach (GridEntry entry in TopLevelGridEntries)
@@ -4448,7 +4408,7 @@ internal sealed partial class PropertyGridView :
         if ((needsCustomEditorButton || needsDropDownButton) && !gridEntry.ShouldRenderReadOnly && FocusInside)
         {
             Control button = needsDropDownButton ? DropDownButton : DialogButton;
-            Size sizeBtn = DpiHelper.IsScalingRequirementMet
+            Size sizeBtn = ScaleHelper.IsScalingRequirementMet
                 ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
                 : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
 
@@ -5315,7 +5275,7 @@ internal sealed partial class PropertyGridView :
 
             if (_dropDownButton is not null)
             {
-                bool isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
+                bool isScalingRequirementMet = ScaleHelper.IsScalingRequirementMet;
                 if (isScalingRequirementMet)
                 {
                     _dropDownButton.Size = new(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight);
@@ -5571,14 +5531,14 @@ internal sealed partial class PropertyGridView :
     /// </summary>
     private void RescaleConstants()
     {
-        if (DpiHelper.IsScalingRequirementMet)
+        if (ScaleHelper.IsScalingRequirementMet)
         {
             _cachedRowHeight = -1;
-            _paintWidth = LogicalToDeviceUnits(PaintWidth);
-            _paintIndent = LogicalToDeviceUnits(PaintIndent);
+            _paintWidth = LogicalToDeviceUnits(LogicalPaintWidth);
+            _paintIndent = LogicalToDeviceUnits(LogicalPaintIndent);
             _outlineSizeExplorerTreeStyle = LogicalToDeviceUnits(OutlineSizeExplorerTreeStyle);
-            _outlineSize = LogicalToDeviceUnits(OutlineSize);
-            _maxListBoxHeight = LogicalToDeviceUnits(MaxListBoxHeight);
+            _outlineSize = LogicalToDeviceUnits(LogicalOutlineSize);
+            _maxListBoxHeight = LogicalToDeviceUnits(LogicalMaxListBoxHeight);
             _offset2Units = LogicalToDeviceUnits(Offset2Pixels);
             if (TopLevelGridEntries is not null)
             {

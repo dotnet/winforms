@@ -50,9 +50,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     private static readonly Padding s_defaultPadding = new(4, 0, 4, 0);
     private static readonly Padding s_defaultDropDownPadding = new(0, 1, 0, 1);
     private static readonly Size s_checkMarkBitmapSize = new(16, 16);
-    private Padding _scaledDefaultPadding = s_defaultPadding;
-    private Padding _scaledDefaultDropDownPadding = s_defaultDropDownPadding;
-    private Size _scaledCheckMarkBitmapSize = s_checkMarkBitmapSize;
 
     private byte _openMouseId;
 
@@ -60,7 +57,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     private static readonly object s_eventCheckStateChanged = new();
 
     public ToolStripMenuItem()
-        : base()
     {
         Initialize(); // all additional work should be done in Initialize
     }
@@ -199,13 +195,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     private void Initialize()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding);
-            _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding);
-            _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize);
-        }
-
         Overflow = ToolStripItemOverflow.Never;
         MouseDownAndUpMustBeInSameItem = false;
         SupportsDisabledHotTracking = true;
@@ -215,38 +204,15 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return DpiHelper.IsPerMonitorV2Awareness ?
-                  DpiHelper.LogicalToDeviceUnits(new Size(32, 19), DeviceDpi) :
-                  new Size(32, 19);
-        }
-    }
+    protected override Size DefaultSize => ScaleHelper.IsThreadPerMonitorV2Aware
+        ? ScaleHelper.ScaleToDpi(new Size(32, 19), DeviceDpi)
+        : new Size(32, 19);
 
-    protected internal override Padding DefaultMargin
-    {
-        get
-        {
-            return Padding.Empty;
-        }
-    }
+    protected internal override Padding DefaultMargin => Padding.Empty;
 
-    protected override Padding DefaultPadding
-    {
-        get
-        {
-            if (IsOnDropDown)
-            {
-                return _scaledDefaultDropDownPadding;
-            }
-            else
-            {
-                return _scaledDefaultPadding;
-            }
-        }
-    }
+    protected override Padding DefaultPadding => IsOnDropDown
+        ? ScaleHelper.ScaleToDpi(s_defaultDropDownPadding, DeviceDpi)
+        : ScaleHelper.ScaleToDpi(s_defaultPadding, DeviceDpi);
 
     public override bool Enabled
     {
@@ -256,12 +222,10 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             {
                 // if we're based off a native menu item,
                 // we need to ask it if it's enabled.
-                if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && !_targetWindowHandle.IsNull)
-                {
-                    return GetNativeMenuItemEnabled();
-                }
-
-                return false;
+                return base.Enabled
+                    && !_nativeMenuHandle.IsNull
+                    && !_targetWindowHandle.IsNull
+                    && GetNativeMenuItemEnabled();
             }
             else
             {
@@ -296,96 +260,18 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     ///  Keeps a shared copy of the checked image between all menu items
     ///  Fishes out the appropriate one based on CheckState.
     /// </summary>
-    internal Image? CheckedImage
+    internal Image? CheckedImage => CheckState switch
     {
-        get
-        {
-            CheckState checkedState = CheckState;
-
-            if (checkedState == CheckState.Indeterminate)
-            {
-                if (t_indeterminateCheckedImage is null)
-                {
-                    if (DpiHelper.IsScalingRequirementMet)
-                    {
-                        t_indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked", _scaledCheckMarkBitmapSize);
-                    }
-                    else
-                    {
-                        Bitmap indeterminateCheckedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "IndeterminateChecked");
-                        if (indeterminateCheckedBmp is not null)
-                        {
-                            if (DpiHelper.IsScalingRequired)
-                            {
-                                DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp, DeviceDpi);
-                            }
-
-                            t_indeterminateCheckedImage = indeterminateCheckedBmp;
-                        }
-                    }
-                }
-
-                return t_indeterminateCheckedImage;
-            }
-            else if (checkedState == CheckState.Checked)
-            {
-                if (t_checkedImage is null)
-                {
-                    if (DpiHelper.IsScalingRequirementMet)
-                    {
-                        t_checkedImage = GetBitmapFromIcon("Checked", _scaledCheckMarkBitmapSize);
-                    }
-                    else
-                    {
-                        Bitmap checkedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "Checked");
-                        if (checkedBmp is not null)
-                        {
-                            if (DpiHelper.IsScalingRequired)
-                            {
-                                DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp, DeviceDpi);
-                            }
-
-                            t_checkedImage = checkedBmp;
-                        }
-                    }
-                }
-
-                return t_checkedImage;
-            }
-
-            return null;
-        }
-    }
-
-    private static Bitmap? GetBitmapFromIcon(string iconName, Size desiredIconSize)
-    {
-        Bitmap? b = null;
-
-        Icon icon = new Icon(typeof(ToolStripMenuItem), iconName);
-        Icon desiredIcon = new Icon(icon, desiredIconSize);
-
-        try
-        {
-            b = desiredIcon.ToBitmap();
-
-            if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
-            {
-                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
-                if (scaledBitmap is not null)
-                {
-                    b.Dispose();
-                    b = scaledBitmap;
-                }
-            }
-        }
-        finally
-        {
-            icon.Dispose();
-            desiredIcon.Dispose();
-        }
-
-        return b;
-    }
+        CheckState.Indeterminate => t_indeterminateCheckedImage ??= ScaleHelper.GetIconResourceAsBitmap(
+            typeof(ToolStripMenuItem),
+            "IndeterminateChecked",
+            ScaleHelper.ScaleToDpi(s_checkMarkBitmapSize, DeviceDpi)),
+        CheckState.Checked => t_checkedImage ??= ScaleHelper.GetIconResourceAsBitmap(
+            typeof(ToolStripMenuItem),
+            "Checked",
+            ScaleHelper.ScaleToDpi(s_checkMarkBitmapSize, DeviceDpi)),
+        _ => null,
+    };
 
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatBehavior))]
@@ -397,8 +283,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     }
 
     /// <summary>
-    ///  Gets
-    ///  or sets a value indicating whether the check box is checked.
+    ///  Gets or sets a value indicating whether the check box is checked.
     /// </summary>
     [Bindable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
@@ -414,7 +299,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
         set
         {
-            // valid values are 0x0 to 0x2
+            // Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != CheckState)
@@ -662,20 +547,19 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     internal override int DeviceDpi
     {
-        get => base.DeviceDpi;
-
-        // This gets called via ToolStripItem.RescaleConstantsForDpi.
-        // It's practically calling Initialize on DpiChanging with the new Dpi value.
         set
         {
-            base.DeviceDpi = value;
-            _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding, value);
-            _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding, value);
-            _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize, value);
-            t_indeterminateCheckedImage?.Dispose();
-            t_indeterminateCheckedImage = null;
-            t_checkedImage?.Dispose();
-            t_checkedImage = null;
+            // This gets called via ToolStripItem.RescaleConstantsForDpi.
+            // It's practically calling Initialize on DpiChanging with the new Dpi value.
+
+            if (DeviceDpi != value)
+            {
+                base.DeviceDpi = value;
+                t_indeterminateCheckedImage?.Dispose();
+                t_indeterminateCheckedImage = null;
+                t_checkedImage?.Dispose();
+                t_checkedImage = null;
+            }
         }
     }
 

@@ -95,44 +95,15 @@ internal sealed class DesignerActionGlyph : Glyph
         return null;
     }
 
-    /// <summary>
-    ///  Returns an image representing the
-    /// </summary>
-    private Image GlyphImageClosed
-    {
-        get
-        {
-            if (_glyphImageClosed is null)
-            {
-                _glyphImageClosed = new Icon(typeof(DesignerActionGlyph), "Close_left").ToBitmap();
+    private Image GlyphImageClosed => _glyphImageClosed ??= ScaleHelper.GetIconResourceAsBitmap(
+        typeof(DesignerActionGlyph),
+        "Close_left",
+        ScaleHelper.InitialSystemDpi);
 
-                if (DpiHelper.IsScalingRequired)
-                {
-                    DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageClosed);
-                }
-            }
-
-            return _glyphImageClosed;
-        }
-    }
-
-    private Image GlyphImageOpened
-    {
-        get
-        {
-            if (_glyphImageOpened is null)
-            {
-                _glyphImageOpened = new Icon(typeof(DesignerActionGlyph), "Open_left").ToBitmap();
-
-                if (DpiHelper.IsScalingRequired)
-                {
-                    DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageOpened);
-                }
-            }
-
-            return _glyphImageOpened;
-        }
-    }
+    private Image GlyphImageOpened => _glyphImageOpened ??= ScaleHelper.GetIconResourceAsBitmap(
+        typeof(DesignerActionGlyph),
+        "Open_left",
+        ScaleHelper.InitialSystemDpi);
 
     internal void InvalidateOwnerLocation()
     {

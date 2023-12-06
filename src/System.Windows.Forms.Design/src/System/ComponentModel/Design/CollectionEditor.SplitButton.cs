@@ -25,12 +25,8 @@ public partial class CollectionEditor
         {
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_offset2X = DpiHelper.LogicalToDeviceUnitsX(Offset2Pixels);
-                    s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(Offset2Pixels);
-                }
-
+                s_offset2X = ScaleHelper.ScaleToInitialSystemDpi(Offset2Pixels);
+                s_offset2Y = ScaleHelper.ScaleToInitialSystemDpi(Offset2Pixels);
                 s_isScalingInitialized = true;
             }
         }

@@ -442,7 +442,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
                     // Parking window dpi awareness context need to match with dpi awareness context of control being
                     // parented to this parking window. Otherwise, reparenting of control will fail.
-                    using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext, DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED))
+                    using (ScaleHelper.EnterDpiAwarenessScope(DpiAwarenessContext, DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED))
                     {
                         HINSTANCE modHandle = PInvoke.GetModuleHandle((PCWSTR)null);
                         // Older versions of Windows AV rather than returning E_OUTOFMEMORY.

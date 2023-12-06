@@ -12,8 +12,8 @@ public partial class ToolStripButton : ToolStripItem
 {
     private CheckState _checkState = CheckState.Unchecked;
     private CheckState _prevCheckState = CheckState.Unchecked;
-    private const int StandardButtonWidth = 23;
-    private int _standardButtonWidth = StandardButtonWidth;
+    private const int LogicalStandardButtonWidth = 23;
+    private int _standardButtonWidth = LogicalStandardButtonWidth;
 
     private static readonly object s_checkedChangedEvent = new();
     private static readonly object s_checkStateChangedEvent = new();
@@ -145,7 +145,7 @@ public partial class ToolStripButton : ToolStripItem
             if (base.DeviceDpi != value)
             {
                 base.DeviceDpi = value;
-                _standardButtonWidth = DpiHelper.LogicalToDeviceUnits(StandardButtonWidth, DeviceDpi);
+                _standardButtonWidth = ScaleHelper.ScaleToDpi(LogicalStandardButtonWidth, DeviceDpi);
             }
         }
     }
@@ -167,10 +167,7 @@ public partial class ToolStripButton : ToolStripItem
     private void Initialize()
     {
         SupportsSpaceKey = true;
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _standardButtonWidth = DpiHelper.LogicalToDeviceUnitsX(StandardButtonWidth);
-        }
+        _standardButtonWidth = ScaleHelper.ScaleToInitialSystemDpi(LogicalStandardButtonWidth);
     }
 
     /// <summary>

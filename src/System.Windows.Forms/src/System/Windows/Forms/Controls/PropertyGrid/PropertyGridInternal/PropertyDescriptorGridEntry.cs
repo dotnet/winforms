@@ -24,11 +24,10 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     private string? _helpKeyword;
     private string? _toolTipText;
     private readonly bool _hide;
-    private static int s_scaledImageSizeX = ImageSize;
-    private static int s_scaledImageSizeY = ImageSize;
-    private static bool s_isScalingInitialized;
 
-    private const int ImageSize = 8;
+    private const int LogicalImageSize = 8;
+    private static int s_imageSize = LogicalImageSize;
+    private static bool s_isScalingInitialized;
 
     private static IEventBindingService? s_targetBindingService;
     private static IComponent? s_targetComponent;
@@ -514,26 +513,21 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
         if (!s_isScalingInitialized)
         {
-            if (DpiHelper.IsScalingRequired)
-            {
-                s_scaledImageSizeX = DpiHelper.LogicalToDeviceUnitsX(ImageSize);
-                s_scaledImageSizeY = DpiHelper.LogicalToDeviceUnitsY(ImageSize);
-            }
-
+            s_imageSize = ScaleHelper.ScaleToInitialSystemDpi(LogicalImageSize);
             s_isScalingInitialized = true;
         }
 
         for (int i = 0; i < _propertyValueUIItems.Length; i++)
         {
             _uiItemRects[i] = new Rectangle(
-                rect.Right - ((s_scaledImageSizeX + 1) * (i + 1)),
-                (rect.Height - s_scaledImageSizeY) / 2,
-                s_scaledImageSizeX,
-                s_scaledImageSizeY);
+                rect.Right - ((s_imageSize + 1) * (i + 1)),
+                (rect.Height - s_imageSize) / 2,
+                s_imageSize,
+                s_imageSize);
             g.DrawImage(_propertyValueUIItems[i].Image, _uiItemRects[i]);
         }
 
-        OwnerGridView.LabelPaintMargin = (s_scaledImageSizeX + 1) * _propertyValueUIItems.Length;
+        OwnerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
     }
 
     private object SetPropertyValue(object owner, object value, bool reset, string undoText)
@@ -796,7 +790,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
         try
         {
-            // This check can cause exceptions if the event has unreferenced dependencies, which we want to cath.
+            // This check can cause exceptions if the event has unreferenced dependencies, which we want to catch.
             // This must be done before the transaction is started or the commit/cancel will also throw.
             if (eventDescriptor.EventType is null)
             {

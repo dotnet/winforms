@@ -2605,7 +2605,7 @@ public partial class DataGridView
         }
 
         _dataGridViewOper[OperationTrackColResize] = true;
-        this._mouseBarOffset = mouseBarOffset;
+        _mouseBarOffset = mouseBarOffset;
         _resizeClipRectangle = GetResizeClipRectangle(index);
         CaptureMouse(_resizeClipRectangle);
 
@@ -2622,7 +2622,7 @@ public partial class DataGridView
         _dataGridViewOper[OperationTrackKeyboardColResize] = true;
         _mouseBarOffset = 0;
         _resizeClipRectangle = GetResizeClipRectangle(columnIndex);
-        _keyboardResizeStep = ScaleToCurrentDpi(RightToLeftInternal ? -1 : 1);
+        _keyboardResizeStep = LogicalToDeviceUnits(RightToLeftInternal ? -1 : 1);
         int x = GetColumnXFromIndex(columnIndex);
         x += RightToLeftInternal ? -Columns[columnIndex].Width : Columns[columnIndex].Width;
 

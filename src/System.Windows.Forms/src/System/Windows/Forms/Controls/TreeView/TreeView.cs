@@ -79,22 +79,20 @@ public partial class TreeView : Control
     private Collections.Specialized.BitVector32 _treeViewState; // see TREEVIEWSTATE_ consts above
 
     private static bool s_isScalingInitialized;
-    private static Size? s_scaledStateImageSize;
-    private static Size? ScaledStateImageSize
+    private static Size? s_stateImageSize;
+    private static Size? StateImageSize
     {
         get
         {
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_scaledStateImageSize = DpiHelper.LogicalToDeviceUnits(new Size(16, 16));
-                }
-
+                const int LogicalStateImageSize = 16;
+                int imageSize = ScaleHelper.ScaleToInitialSystemDpi(LogicalStateImageSize);
+                s_stateImageSize = new(imageSize, imageSize);
                 s_isScalingInitialized = true;
             }
 
-            return s_scaledStateImageSize;
+            return s_stateImageSize;
         }
     }
 
@@ -103,7 +101,6 @@ public partial class TreeView : Control
         get
         {
             _imageIndexer ??= new ImageList.Indexer();
-
             _imageIndexer.ImageList = ImageList;
             return _imageIndexer;
         }
@@ -1805,9 +1802,9 @@ public partial class TreeView : Control
         Debug.Assert(_internalStateImageList is not null, "Why are changing images when the Imagelist is null?");
         if (_internalStateImageList is not null)
         {
-            if (ScaledStateImageSize is not null)
+            if (StateImageSize is not null)
             {
-                _internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
+                _internalStateImageList.ImageSize = (Size)StateImageSize;
             }
 
             SetStateImageList(_internalStateImageList.Handle);
@@ -1991,9 +1988,9 @@ public partial class TreeView : Control
         }
 
         ImageList newImageList = new();
-        if (ScaledStateImageSize is not null)
+        if (StateImageSize is not null)
         {
-            newImageList.ImageSize = (Size)ScaledStateImageSize;
+            newImageList.ImageSize = (Size)StateImageSize;
         }
 
         Image[] images = new Image[_stateImageList.Images.Count + 1];

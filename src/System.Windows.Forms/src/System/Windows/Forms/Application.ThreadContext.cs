@@ -276,9 +276,10 @@ public sealed partial class Application
                     }
 #endif
 
-                    using (DpiHelper.EnterDpiAwarenessScope(context))
+                    using (ScaleHelper.EnterDpiAwarenessScope(context))
                     {
                         parkingWindow = new ParkingWindow();
+                        s_parkingWindowCreated = true;
                     }
 
                     _parkingWindows.Add(parkingWindow);

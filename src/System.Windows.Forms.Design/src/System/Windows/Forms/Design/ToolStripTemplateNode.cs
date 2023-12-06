@@ -107,38 +107,36 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     public ToolStripTemplateNode(IComponent component, string text, Image image)
     {
         _component = component;
-        // In most of the cases this is true; except for ToolStripItems on DropDowns. the toolstripMenuItemDesigners sets the public property in those cases.
+
+        // In most of the cases this is true; except for ToolStripItems on DropDowns. the toolstripMenuItemDesigners
+        // sets the public property in those cases.
         _activeItem = component as ToolStripItem;
-        _designerHost = (IDesignerHost)component.Site.GetService(typeof(IDesignerHost));
+        _designerHost = component.Site.GetService<IDesignerHost>();
         _designer = _designerHost.GetDesigner(component);
-        _designSurface = (DesignSurface)component.Site.GetService(typeof(DesignSurface));
+        _designSurface = component.Site.GetService<DesignSurface>();
         if (_designSurface is not null)
         {
-            _designSurface.Flushed += new EventHandler(OnLoaderFlushed);
+            _designSurface.Flushed += OnLoaderFlushed;
         }
 
         if (!s_isScalingInitialized)
         {
-            if (DpiHelper.IsScalingRequired)
-            {
-                // dimensions of the "Type Here" text box
-                TOOLSTRIP_TEMPLATE_HEIGHT = DpiHelper.LogicalToDeviceUnitsY(TOOLSTRIP_TEMPLATE_HEIGHT_ORIGINAL);
-                TEMPLATE_HEIGHT = DpiHelper.LogicalToDeviceUnitsY(TEMPLATE_HEIGHT_ORIGINAL);
-                TOOLSTRIP_TEMPLATE_WIDTH = DpiHelper.LogicalToDeviceUnitsX(TOOLSTRIP_TEMPLATE_WIDTH_ORIGINAL);
-                TEMPLATE_WIDTH = DpiHelper.LogicalToDeviceUnitsX(TEMPLATE_WIDTH_ORIGINAL);
-                // hotregion is the arrow button next to "Type Here" box
-                TEMPLATE_HOTREGION_WIDTH = DpiHelper.LogicalToDeviceUnitsX(TEMPLATE_HOTREGION_WIDTH_ORIGINAL);
-
-                MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH = DpiHelper.LogicalToDeviceUnitsX(MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH_ORIGINAL);
-                MINITOOLSTRIP_TEXTBOX_WIDTH = DpiHelper.LogicalToDeviceUnitsX(MINITOOLSTRIP_TEXTBOX_WIDTH_ORIGINAL);
-            }
+            // Dimensions of the "Type Here" text box.
+            TOOLSTRIP_TEMPLATE_HEIGHT = ScaleHelper.ScaleToInitialSystemDpi(TOOLSTRIP_TEMPLATE_HEIGHT_ORIGINAL);
+            TEMPLATE_HEIGHT = ScaleHelper.ScaleToInitialSystemDpi(TEMPLATE_HEIGHT_ORIGINAL);
+            TOOLSTRIP_TEMPLATE_WIDTH = ScaleHelper.ScaleToInitialSystemDpi(TOOLSTRIP_TEMPLATE_WIDTH_ORIGINAL);
+            TEMPLATE_WIDTH = ScaleHelper.ScaleToInitialSystemDpi(TEMPLATE_WIDTH_ORIGINAL);
+            // The hot region is the arrow button next to "Type Here" box.
+            TEMPLATE_HOTREGION_WIDTH = ScaleHelper.ScaleToInitialSystemDpi(TEMPLATE_HOTREGION_WIDTH_ORIGINAL);
+            MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH = ScaleHelper.ScaleToInitialSystemDpi(MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH_ORIGINAL);
+            MINITOOLSTRIP_TEXTBOX_WIDTH = ScaleHelper.ScaleToInitialSystemDpi(MINITOOLSTRIP_TEXTBOX_WIDTH_ORIGINAL);
 
             s_isScalingInitialized = true;
         }
 
         SetupNewEditNode(this, text, image, component);
-        _commands = Array.Empty<MenuCommand>();
-        _addCommands = Array.Empty<MenuCommand>();
+        _commands = [];
+        _addCommands = [];
     }
 
     /// <summary>
@@ -1383,6 +1381,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         _addItemButton.DropDown = _contextMenu;
         _addItemButton.AccessibleName = SR.ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName;
         _addItemButton.AccessibleRole = AccessibleRole.ButtonDropDown;
+
         // Set up default item and image.
         try
         {
@@ -1390,13 +1389,11 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             {
                 ItemTypeToolStripMenuItem firstItem = (ItemTypeToolStripMenuItem)_addItemButton.DropDownItems[0];
                 _addItemButton.ImageTransparentColor = Color.Lime;
-                Bitmap bmp = new Icon(typeof(ToolStripTemplateNode), "ToolStripTemplateNode").ToBitmap();
-                if (DpiHelper.IsScalingRequired)
-                {
-                    DpiHelper.ScaleBitmapLogicalToDevice(ref bmp);
-                }
+                _addItemButton.Image = ScaleHelper.GetIconResourceAsBitmap(
+                    typeof(ToolStripTemplateNode),
+                    "ToolStripTemplateNode",
+                    ScaleHelper.InitialSystemDpi);
 
-                _addItemButton.Image = bmp;
                 _addItemButton.DefaultItem = firstItem;
             }
 

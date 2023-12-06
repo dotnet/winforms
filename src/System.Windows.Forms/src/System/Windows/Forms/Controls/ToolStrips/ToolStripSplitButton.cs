@@ -167,61 +167,27 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
         remove => Events.RemoveHandler(s_eventDefaultItemChanged, value);
     }
 
-    /// <summary>
-    ///  specifies the default behavior of these items on ToolStripDropDowns when clicked.
-    /// </summary>
-    protected internal override bool DismissWhenClicked
-    {
-        get
-        {
-            return DropDown.Visible != true;
-        }
-    }
+    protected internal override bool DismissWhenClicked => DropDown.Visible != true;
 
-    internal override Rectangle DropDownButtonArea
-    {
-        get { return DropDownButtonBounds; }
-    }
+    internal override Rectangle DropDownButtonArea => DropDownButtonBounds;
 
     /// <summary>
     ///  The bounds of the DropDown in ToolStrip coordinates.
     /// </summary>
     [Browsable(false)]
-    public Rectangle DropDownButtonBounds
-    {
-        get
-        {
-            return _dropDownButtonBounds;
-        }
-    }
+    public Rectangle DropDownButtonBounds => _dropDownButtonBounds;
 
     [Browsable(false)]
-    public bool DropDownButtonPressed
-    {
-        get
-        {
-            //
-            return DropDown.Visible;
-        }
-    }
+    public bool DropDownButtonPressed => DropDown.Visible;
 
     [Browsable(false)]
-    public bool DropDownButtonSelected
-    {
-        get
-        {
-            return Selected;
-        }
-    }
+    public bool DropDownButtonSelected => Selected;
 
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))]
     public int DropDownButtonWidth
     {
-        get
-        {
-            return _dropDownButtonWidth;
-        }
+        get => _dropDownButtonWidth;
         set
         {
             if (value < 0)
@@ -239,21 +205,14 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
         }
     }
 
-    /// <summary>
-    ///  This is here for serialization purposes.
-    /// </summary>
     private static int DefaultDropDownButtonWidth
     {
         get
         {
-            // lets start off with a size roughly equivalent to a combobox dropdown
+            // Start off with a size roughly equivalent to a ComboBox dropdown.
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_scaledDropDownButtonWidth = DpiHelper.LogicalToDeviceUnitsX(DefaultDropDownWidth);
-                }
-
+                s_scaledDropDownButtonWidth = ScaleHelper.ScaleToInitialSystemDpi(DefaultDropDownWidth);
                 s_isScalingInitialized = true;
             }
 
@@ -300,7 +259,7 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
     }
 
     /// <summary>
-    ///  the width of the separator between the default and drop down button
+    ///  The width of the separator between the default and drop down button
     /// </summary>
     [SRDescription(nameof(SR.ToolStripSplitButtonSplitterWidthDescr))]
     [SRCategory(nameof(SR.CatLayout))]
@@ -584,26 +543,14 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
         }
     }
 
-    /// <summary>
-    ///  Resets the RightToLeft to be the default.
-    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual void ResetDropDownButtonWidth()
-    {
-        DropDownButtonWidth = DefaultDropDownButtonWidth;
-    }
+    public virtual void ResetDropDownButtonWidth() => DropDownButtonWidth = DefaultDropDownButtonWidth;
 
-    private void SetDropDownButtonBounds(Rectangle rect)
-    {
-        _dropDownButtonBounds = rect;
-    }
+    private void SetDropDownButtonBounds(Rectangle rect) => _dropDownButtonBounds = rect;
 
     /// <summary>
     ///  Determines if the <see cref="ToolStripItem.Size"/> property needs to be persisted.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal virtual bool ShouldSerializeDropDownButtonWidth()
-    {
-        return (DropDownButtonWidth != DefaultDropDownButtonWidth);
-    }
+    internal virtual bool ShouldSerializeDropDownButtonWidth() => DropDownButtonWidth != DefaultDropDownButtonWidth;
 }

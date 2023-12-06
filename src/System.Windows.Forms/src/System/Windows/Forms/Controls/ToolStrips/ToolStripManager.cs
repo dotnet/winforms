@@ -54,7 +54,7 @@ public static partial class ToolStripManager
             Font? sysFont = null;
 
             // We need to cache the default fonts for the different DPIs.
-            if (DpiHelper.IsPerMonitorV2Awareness)
+            if (ScaleHelper.IsThreadPerMonitorV2Aware)
             {
                 int dpi = CurrentDpi;
 
@@ -122,7 +122,7 @@ public static partial class ToolStripManager
         }
     }
 
-    internal static int CurrentDpi { get; set; } = DpiHelper.DeviceDpi;
+    internal static int CurrentDpi { get; set; } = ScaleHelper.InitialSystemDpi;
 
     internal static WeakRefCollection ToolStrips
         => t_toolStripWeakArrayList ??= new WeakRefCollection();
@@ -272,7 +272,7 @@ public static partial class ToolStripManager
             return;
         }
 
-        if (DpiHelper.IsPerMonitorV2Awareness)
+        if (ScaleHelper.IsThreadPerMonitorV2Aware)
         {
             s_defaultFontCache.Clear();
         }

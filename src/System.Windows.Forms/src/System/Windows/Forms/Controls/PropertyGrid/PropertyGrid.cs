@@ -151,7 +151,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         // Static variables are problem in a child level mixed mode scenario. Changing static variables causes compatibility issues.
         // So, recalculate static variables every time property grid initialized.
-        if (DpiHelper.IsPerMonitorV2Awareness)
+        if (ScaleHelper.IsThreadPerMonitorV2Aware)
         {
             RescaleConstants();
         }
@@ -159,12 +159,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_normalButtonSize = LogicalToDeviceUnits(s_defaultNormalButtonSize);
-                    s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
-                }
-
+                s_normalButtonSize = LogicalToDeviceUnits(s_defaultNormalButtonSize);
+                s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
                 s_isScalingInitialized = true;
             }
         }
@@ -1323,13 +1319,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             image.MakeTransparent();
         }
 
-        // Resize bitmap only if resizing is needed in order to avoid image distortion.
-        if (DpiHelper.IsScalingRequired
-            && (image.Size.Width != s_normalButtonSize.Width || image.Size.Height != s_normalButtonSize.Height))
-        {
-            image = DpiHelper.CreateResizedBitmap(image, s_normalButtonSize);
-        }
-
+        image = ScaleHelper.CopyAndScaleToSize(image, s_normalButtonSize);
         int result = _normalButtonImages.Images.Count;
         _normalButtonImages.Images.Add(image);
         return result;
@@ -2070,7 +2060,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             ImageSize = s_largeButtonSize
         };
 
-        if (DpiHelper.IsScalingRequired)
+        if (ScaleHelper.IsScalingRequired)
         {
             AddLargeImage(_alphaBitmap);
             AddLargeImage(_categoryBitmap);
@@ -2106,10 +2096,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         try
         {
-            Bitmap transparentBitmap = new(originalBitmap);
-            Bitmap largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, s_largeButtonSize);
-            transparentBitmap.Dispose();
-
+            Bitmap largeBitmap = ScaleHelper.CopyAndScaleToSize(originalBitmap, s_largeButtonSize);
             _largeButtonImages.Images.Add(largeBitmap);
         }
         catch (Exception ex)
@@ -3794,7 +3781,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             _normalButtonImages?.Dispose();
             _normalButtonImages = new ImageList();
-            if (DpiHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequired)
             {
                 _normalButtonImages.ImageSize = s_normalButtonSize;
             }
@@ -3970,7 +3957,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    protected virtual Bitmap SortByPropertyImage => DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBAlpha");
+    protected virtual Bitmap SortByPropertyImage => ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(PropertyGrid), "PBAlpha");
 
     /// <summary>
     ///  This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
@@ -3978,7 +3965,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    protected virtual Bitmap SortByCategoryImage => DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBCategory");
+    protected virtual Bitmap SortByCategoryImage => ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(PropertyGrid), "PBCategory");
 
     /// <summary>
     ///  This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
@@ -3986,7 +3973,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    protected virtual Bitmap ShowPropertyPageImage => DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBPPage");
+    protected virtual Bitmap ShowPropertyPageImage => ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(PropertyGrid), "PBPPage");
 
     // "Should" methods are used by the designer via reflection.
 

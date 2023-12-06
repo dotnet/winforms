@@ -1905,7 +1905,7 @@ internal partial class CommandSet : IDisposable
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                             object serializationData = new BinaryFormatter().Deserialize(s);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                             {
                                 components = ds.Deserialize(serializationData);
                             }
@@ -1919,7 +1919,7 @@ internal partial class CommandSet : IDisposable
                         ToolboxItem? ti = ts.DeserializeToolboxItem(dataObj, host);
                         if (ti is not null)
                         {
-                            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                             {
                                 components = ti.CreateComponents(host);
                             }

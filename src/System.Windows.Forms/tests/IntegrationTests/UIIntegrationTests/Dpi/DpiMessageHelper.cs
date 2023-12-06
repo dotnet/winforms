@@ -7,7 +7,7 @@ internal static class DpiMessageHelper
 {
     public static void TriggerDpiMessage(MessageId message, Control control, int newDpi)
     {
-        double factor = newDpi / DpiHelper.LogicalDpi;
+        double factor = newDpi / (double)ScaleHelper.OneHundredPercentLogicalDpi;
         WPARAM wParam = WPARAM.MAKEWPARAM(newDpi, newDpi);
 
         _ = (uint)message switch

@@ -22,11 +22,6 @@ public partial class Control
         SetScrollPosition = 0x00000002,
 
         /// <summary>
-        ///  Set when the control is listening to SystemEvents.UserPreferenceChanged.
-        /// </summary>
-        ListeningToUserPreferenceChanged = 0x00000004,
-
-        /// <summary>
         ///  If set, the control will listen to SystemEvents.UserPreferenceChanged when TopLevel is true and handle is created.
         /// </summary>
         InterestedInUserPreferenceChanged = 0x00000008,

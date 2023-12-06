@@ -606,7 +606,7 @@ public static partial class ToolStripManager
 
             DPI_AWARENESS_CONTEXT context = GetDpiAwarenessContextForWindow(m.HWND);
 
-            using (DpiHelper.EnterDpiAwarenessScope(context))
+            using (ScaleHelper.EnterDpiAwarenessScope(context))
             {
                 switch (m.MsgInternal)
                 {

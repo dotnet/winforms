@@ -11,43 +11,47 @@ using Windows.Win32.UI.Accessibility;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  This control is an encapsulation of the Windows month calendar control.
-///  A month calendar control implements a calendar-like user interface, that
-///  provides the user with a very intuitive and recognizable method of entering
-///  or selecting a date.
-///  Users can also select which days bold. The most efficient way to add the
-///  bolded dates is via an array all at once. (The below descriptions can be applied
-///  equally to annually and monthly bolded dates as well)
-///  The following is an example of this:
-/// <code>
-///  MonthCalendar mc = new MonthCalendar();
-///  //     add specific dates to bold
-///  DateTime[] time = new DateTime[3];
-///  time[0] = DateTime.Now;
-///  time[1] = time[0].addDays(2);
-///  time[2] = time[1].addDays(2);
-///  mc.setBoldedDates(time);
-/// </code>
-///  Removal of all bolded dates is accomplished with:
-/// <code>
-///  mc.removeAllBoldedDates();
-/// </code>
-///  Although less efficient, the user may need to add or remove bolded dates one at
-///  a time. To improve the performance of this, neither addBoldedDate nor
-///  removeBoldedDate repaints the monthcalendar. The user must call UpdateBoldedDates
-///  to force the repaint of the bolded dates, otherwise the monthCalendar will not
-///  paint properly.
-///  The following is an example of this:
-/// <code>
-///  DateTime time1 = new DateTime("3/5/98");
-///  DateTime time2 = new DateTime("4/19/98");
-///  mc.addBoldedDate(time1);
-///  mc.addBoldedDate(time2);
-///  mc.removeBoldedDate(time1);
-///  mc.UpdateBoldedDates();
-/// </code>
-///  The same applies to addition and removal of annual and monthly bolded dates.
+///  This control is an encapsulation of the Windows month calendar control. A month calendar control implements a
+///  calendar-like user interface that provides the user with a intuitive and recognizable method of entering or
+///  selecting a date.
 /// </summary>
+/// <remarks>
+///  <para>
+///   Users can also select which days to bold. The most efficient way to add the bolded dates is via an array.
+///   The following is an example of this:
+///  </para>
+///  <code>
+///   MonthCalendar mc = new MonthCalendar();
+///   DateTime[] time = new DateTime[3];
+///   time[0] = DateTime.Now;
+///   time[1] = time[0].AddDays(2);
+///   time[2] = time[1].AddDays(2);
+///   mc.BoldedDates = time;
+///  </code>
+///  <para>
+///   Removal of all bolded dates is accomplished with:
+///  </para>
+///  <code>
+///   mc.RemoveAllBoldedDates();
+///  </code>
+///  <para>
+///   Although less efficient, the user may need to add or remove bolded dates one at a time. To improve the performance
+///   of this, neither <see cref="AddBoldedDate(DateTime)"/> nor <see cref="RemoveBoldedDate(DateTime)"/> repaints the
+///   <see cref="MonthCalendar"/>. The user must call <see cref="UpdateBoldedDates"/> to force the repaint of the bolded
+///   dates, otherwise the <see cref="MonthCalendar"/> will not paint properly. The following is an example of this:
+///  </para>
+///  <code>
+///   DateTime time1 = new DateTime("3/5/98");
+///   DateTime time2 = new DateTime("4/19/98");
+///   mc.AddBoldedDate(time1);
+///   mc.AddBoldedDate(time2);
+///   mc.RemoveBoldedDate(time1);
+///   mc.UpdateBoldedDates();
+///  </code>
+///  <para>
+///   The same applies to addition and removal of annual and monthly bolded dates.
+///  </para>
+/// </remarks>
 [DefaultProperty(nameof(SelectionRange))]
 [DefaultEvent(nameof(DateChanged))]
 [DefaultBindingProperty(nameof(SelectionRange))]
@@ -81,8 +85,7 @@ public partial class MonthCalendar : Control
 
     private const int MaxScrollChange = 20000;
 
-    private const int ExtraPadding = 2;
-    private int _scaledExtraPadding = ExtraPadding;
+    private int _extraPadding;
 
     private Color _titleBackColor = s_defaultTitleBackColor;
     private Color _titleForeColor = s_defaultTitleForeColor;
@@ -117,9 +120,9 @@ public partial class MonthCalendar : Control
     /// </summary>
     private int _datesToBoldMonthly;
 
-    private readonly List<DateTime> _boldDates = new();
-    private readonly List<DateTime> _annualBoldDates = new();
-    private readonly List<DateTime> _monthlyBoldDates = new();
+    private readonly List<DateTime> _boldDates = [];
+    private readonly List<DateTime> _annualBoldDates = [];
+    private readonly List<DateTime> _monthlyBoldDates = [];
 
     private DateRangeEventHandler? _onDateChanged;
     private DateRangeEventHandler? _onDateSelected;
@@ -127,14 +130,8 @@ public partial class MonthCalendar : Control
     private EventHandler? _onCalendarViewChanged;
     private EventHandler? _onDisplayRangeChanged;
 
-    /// <summary>
-    ///  Creates a new MonthCalendar object. Styles are the default for a regular
-    ///  month calendar control.
-    /// </summary>
     public MonthCalendar() : base()
     {
-        PrepareForDrawing();
-
         _selectionStart = _todaysDate;
         _selectionEnd = _todaysDate;
         _focusedDate = _todaysDate;
@@ -150,27 +147,25 @@ public partial class MonthCalendar : Control
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-        PrepareForDrawing();
+        ScaleConstants();
     }
 
-    private void PrepareForDrawing()
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
+
+    private void ScaleConstants()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledExtraPadding = LogicalToDeviceUnits(ExtraPadding);
-        }
+        const int LogicalExtraPadding = 2;
+        _extraPadding = LogicalToDeviceUnits(LogicalExtraPadding);
     }
 
     /// <summary>
-    ///  The array of DateTime objects that determines which annual days are shown
-    ///  in bold.
+    ///  The array of DateTime objects that determines which annual days are shown in bold.
     /// </summary>
     [Localizable(true)]
     [SRDescription(nameof(SR.MonthCalendarAnnuallyBoldedDatesDescr))]
     public DateTime[] AnnuallyBoldedDates
     {
         get => _annualBoldDates.ToArray();
-
         set
         {
             _annualBoldDates.Clear();
@@ -1310,7 +1305,7 @@ public partial class MonthCalendar : Control
             }
             else
             {
-                int nCols = (newDimensionLength - _scaledExtraPadding) / minSize.Width;
+                int nCols = (newDimensionLength - _extraPadding) / minSize.Width;
                 _dimensions.Width = (nCols < 1) ? 1 : nCols;
             }
         }
@@ -1329,8 +1324,8 @@ public partial class MonthCalendar : Control
         }
 
         // Fudge factor
-        minSize.Width += _scaledExtraPadding;
-        minSize.Height += _scaledExtraPadding;
+        minSize.Width += _extraPadding;
+        minSize.Height += _extraPadding;
         return minSize;
     }
 
@@ -1744,7 +1739,7 @@ public partial class MonthCalendar : Control
 
         // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying if we should update the number of rows/columns.
         // We only want to update the number of rows/columns if we are not currently being scaled.
-        bool updateRowsAndColumns = !DpiHelper.IsScalingRequirementMet || !ScalingInProgress;
+        bool updateRowsAndColumns = !ScaleHelper.IsScalingRequirementMet || !ScalingInProgress;
 
         if (width != oldBounds.Width)
         {

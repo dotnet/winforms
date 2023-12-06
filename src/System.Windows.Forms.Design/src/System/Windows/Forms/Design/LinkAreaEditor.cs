@@ -26,7 +26,7 @@ internal partial class LinkAreaEditor : UITypeEditor
             IHelpService? helpService = provider.GetService<IHelpService>();
 
             // Child modal dialog -launching in SystemAware mode.
-            _linkAreaUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new LinkAreaUI(helpService));
+            _linkAreaUI = ScaleHelper.InvokeInSystemAwareContext(() => new LinkAreaUI(helpService));
         }
 
         string? text = string.Empty;

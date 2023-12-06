@@ -1004,6 +1004,10 @@ public class ToolStripRendererTests
     [InlineData(96)]
     public void ToolStripRenderer_ScaleArrowOffsetsIfNeeded_InvokeInt_Success(int dpi)
     {
+        // As it is not normal to scale to less than 96 we now assert.
+        // (Windows UI doesn't let you scale to less than 100%, you have to mess with the registry)
+        using NoAssertContext context = dpi < 96 ? new() : default;
+
         SubToolStripRenderer.ScaleArrowOffsetsIfNeeded(dpi);
 
         // Call again.

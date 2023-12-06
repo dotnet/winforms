@@ -98,59 +98,53 @@ public partial class ListBox : ListControl
     /// <summary>
     ///  Default start position of items in the checked list box
     /// </summary>
-    private const int defaultListItemStartPos = 1;
+    private const int DefaultListItemStartPos = 1;
 
     /// <summary>
     ///  Borders are 1 pixel height.
     /// </summary>
-    private const int defaultListItemBorderHeight = 1;
+    private const int DefaultListItemBorderHeight = 1;
 
     /// <summary>
     ///  Borders are 1 pixel width and a pixel buffer
     /// </summary>
-    private const int defaultListItemPaddingBuffer = 3;
+    private const int DefaultListItemPaddingBuffer = 3;
 
-    internal int scaledListItemStartPosition = defaultListItemStartPos;
-    internal int scaledListItemBordersHeight = 2 * defaultListItemBorderHeight;
-    internal int scaledListItemPaddingBuffer = defaultListItemPaddingBuffer;
+    private protected int _listItemStartPosition = DefaultListItemStartPos;
+    private protected int _listItemBordersHeight = 2 * DefaultListItemBorderHeight;
+    private protected int _listItemPaddingBuffer = DefaultListItemPaddingBuffer;
 
     /// <summary>
     ///  Creates a basic win32 list box with default values for everything.
     /// </summary>
     public ListBox() : base()
     {
-        SetStyle(ControlStyles.UserPaint |
-                 ControlStyles.StandardClick |
-                 ControlStyles.UseTextForAccessibility, false);
+        SetStyle(ControlStyles.UserPaint | ControlStyles.StandardClick | ControlStyles.UseTextForAccessibility, false);
 
-        // this class overrides GetPreferredSizeCore, let Control automatically cache the result
+        // This class overrides GetPreferredSizeCore, let Control automatically cache the result.
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
         SetBounds(0, 0, 120, 96);
-
         _requestedHeight = Height;
-
-        PrepareForDrawing();
     }
 
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-        PrepareForDrawing();
+        ScaleConstants();
     }
 
-    private void PrepareForDrawing()
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
+
+    private void ScaleConstants()
     {
         // Scale paddings
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            scaledListItemStartPosition = LogicalToDeviceUnits(defaultListItemStartPos);
+        _listItemStartPosition = LogicalToDeviceUnits(DefaultListItemStartPos);
 
-            // height include 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
-            // that might helps us in positioning control in the center for list items.
-            scaledListItemBordersHeight = 2 * LogicalToDeviceUnits(defaultListItemBorderHeight);
-            scaledListItemPaddingBuffer = LogicalToDeviceUnits(defaultListItemPaddingBuffer);
-        }
+        // Height includes 2 borders (top and bottom). Multiplying by 2 instead of scaling twice guarantees an even
+        // number helps in positioning the control in the center for list items.
+        _listItemBordersHeight = 2 * LogicalToDeviceUnits(DefaultListItemBorderHeight);
+        _listItemPaddingBuffer = LogicalToDeviceUnits(DefaultListItemPaddingBuffer);
     }
 
     public override Color BackColor

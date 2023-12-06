@@ -64,12 +64,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         _flags = DataGridViewComboBoxCellFlags.CellAutoComplete;
         if (!s_isScalingInitialized)
         {
-            if (DpiHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequired)
             {
-                s_offset2X = DpiHelper.LogicalToDeviceUnitsX(Offset2Pixels);
-                s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(Offset2Pixels);
-                s_nonXPTriangleWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(NonXPTriangleWidth);
-                s_nonXPTriangleHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(NonXPTriangleHeight);
+                s_offset2X = ScaleHelper.ScaleToInitialSystemDpi(Offset2Pixels);
+                s_offset2Y = ScaleHelper.ScaleToInitialSystemDpi(Offset2Pixels);
+                s_nonXPTriangleWidth = (byte)ScaleHelper.ScaleToInitialSystemDpi(NonXPTriangleWidth);
+                s_nonXPTriangleHeight = (byte)ScaleHelper.ScaleToInitialSystemDpi(NonXPTriangleHeight);
             }
 
             s_isScalingInitialized = true;

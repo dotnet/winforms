@@ -65,7 +65,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     /// <param name="value"> initial value</param>
     /// <returns> scaled metric</returns>
     private static int ScaleToCurrentDpi(int value) =>
-        DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
+        ScaleHelper.IsScalingRequirementMet ? ScaleHelper.ScaleToDpi(value, ScaleHelper.InitialSystemDpi) : value;
 
     [SRCategory(nameof(SR.CatLayout))]
     [DefaultValue(DataGridViewAutoSizeColumnMode.NotSet)]

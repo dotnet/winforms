@@ -83,25 +83,8 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             ? LeftArrowStarBitmap
             : RightArrowStarBitmap;
 
-    private static Bitmap GetBitmapFromIcon(string iconName)
-    {
-        Size desiredSize = new Size(s_iconsWidth, s_iconsHeight);
-        Icon icon = new Icon(new Icon(typeof(DataGridViewHeaderCell), iconName), desiredSize);
-        Bitmap b = icon.ToBitmap();
-        icon.Dispose();
-
-        if (DpiHelper.IsScalingRequired && (b.Size.Width != s_iconsWidth || b.Size.Height != s_iconsHeight))
-        {
-            Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredSize);
-            if (scaledBitmap is not null)
-            {
-                b.Dispose();
-                b = scaledBitmap;
-            }
-        }
-
-        return b;
-    }
+    private static Bitmap GetBitmapFromIcon(string iconName) =>
+        ScaleHelper.GetIconResourceAsBitmap(typeof(DataGridViewHeaderCell), iconName, new Size(s_iconsWidth, s_iconsHeight));
 
     protected override object? GetClipboardContent(
         int rowIndex,
