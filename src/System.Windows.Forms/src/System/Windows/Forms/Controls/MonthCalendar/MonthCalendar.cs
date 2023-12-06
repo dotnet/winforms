@@ -132,8 +132,6 @@ public partial class MonthCalendar : Control
 
     public MonthCalendar() : base()
     {
-        ScaleConstants();
-
         _selectionStart = _todaysDate;
         _selectionEnd = _todaysDate;
         _focusedDate = _todaysDate;
@@ -151,6 +149,8 @@ public partial class MonthCalendar : Control
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
+
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

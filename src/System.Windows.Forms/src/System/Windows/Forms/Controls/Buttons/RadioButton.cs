@@ -258,6 +258,9 @@ public partial class RadioButton : ButtonBase
         ScaleConstants();
     }
 
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi)
+        => ScaleConstants();
+
     private void ScaleConstants()
     {
         const int LogicalFlatSystemStylePaddingWidth = 24;

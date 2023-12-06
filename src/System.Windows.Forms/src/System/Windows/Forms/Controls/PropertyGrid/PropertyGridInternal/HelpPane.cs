@@ -50,8 +50,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         Controls.Add(_titleLabel);
         Controls.Add(_descriptionLabel);
 
-        ScaleConstants();
-        Size = new(LogicalDefaultWidth, LogicalToDeviceUnits(LogicalDefaultHeight));
+        Size = new(LogicalToDeviceUnits(LogicalDefaultWidth), LogicalToDeviceUnits(LogicalDefaultHeight));
 
         Text = SR.PropertyGridHelpPaneTitle;
         SetStyle(ControlStyles.Selectable, false);
@@ -178,6 +177,8 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
+
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

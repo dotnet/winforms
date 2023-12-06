@@ -41,8 +41,6 @@ public partial class CheckBox : ButtonBase
     /// </summary>
     public CheckBox() : base()
     {
-        ScaleConstants();
-
         // Checkboxes shouldn't respond to right clicks, so we need to do all our own click logic
         SetStyle(ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, false);
         SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
@@ -278,6 +276,8 @@ public partial class CheckBox : ButtonBase
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
+
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

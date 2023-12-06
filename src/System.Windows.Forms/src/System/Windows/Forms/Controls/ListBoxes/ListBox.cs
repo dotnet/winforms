@@ -126,7 +126,6 @@ public partial class ListBox : ListControl
 
         SetBounds(0, 0, 120, 96);
         _requestedHeight = Height;
-        ScaleConstants();
     }
 
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
@@ -134,6 +133,8 @@ public partial class ListBox : ListControl
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
+
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

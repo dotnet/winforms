@@ -398,6 +398,11 @@ public unsafe partial class Control :
         // someone overrides these Default* methods, we need to write the default
         // value into the PropertyStore in the ctor.
 
+        // Changing the order of property accesses here can break existing code as these are all virtual properties.
+        // Try to keep observable state for Control unchanged in this constructor to avoid nasty subtle bugs.
+
+        InitializeConstantsForInitialDpi(_deviceDpi);
+
         if (DefaultMargin != CommonProperties.DefaultMargin)
         {
             Margin = DefaultMargin;
@@ -8527,6 +8532,15 @@ public unsafe partial class Control :
     {
         ((EventHandler?)Events[s_validatedEvent])?.Invoke(this, e);
     }
+
+    /// <summary>
+    ///  This is called in the <see cref="Control"/> constructor before calculating the initial <see cref="Size"/>.
+    ///  This gives a chance to initialize fields that will be used in calls to sizing related virtuals such as
+    ///  <see cref="DefaultSize"/>, etc. The real size cannot be calculated until the handle is created as Windows
+    ///  can have their own DPI setting. When the handle is created, <see cref="RescaleConstantsForDpi(int, int)"/>
+    ///  is called.
+    /// </summary>
+    private protected virtual void InitializeConstantsForInitialDpi(int initialDpi) { }
 
     /// <summary>
     ///  Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
