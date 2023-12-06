@@ -141,4 +141,7 @@
   <data name="FolderBrowserDialogNoRootFolder" xml:space="preserve">
     <value>Unable to retrieve the root folder.</value>
   </data>
+  <data name="ResourceNotFound" xml:space="preserve">
+    <value>Resource '{1}' cannot be found in class '{0}'.</value>
+  </data>
 </root>

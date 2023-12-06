@@ -19,8 +19,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     private int _suspendCount;
     private ToolStripPanelRowManager? _rowManager;
 
-    private const int MinAllowedWidth = 50;
-    private readonly int _minAllowedWidth = MinAllowedWidth;
+    private readonly int _minAllowedWidth;
 
     private static readonly int s_stateVisible = BitVector32.CreateMask();
     private static readonly int s_stateDisposing = BitVector32.CreateMask(s_stateVisible);
@@ -52,10 +51,9 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 #if DEBUG
         _thisRowID = ++s_rowCreationCount;
 #endif
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _minAllowedWidth = DpiHelper.LogicalToDeviceUnitsX(MinAllowedWidth);
-        }
+
+        const int LogicalMinAllowedWidth = 50;
+        _minAllowedWidth = ScaleHelper.ScaleToInitialSystemDpi(LogicalMinAllowedWidth);
 
         ToolStripPanel = parent;
         _state[s_stateVisible] = visible;

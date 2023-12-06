@@ -56,17 +56,16 @@ public partial class MenuStrip : ToolStrip
     protected override bool DefaultShowItemToolTips
         => false;
 
-    protected override Padding DefaultGripMargin
-        =>
-            // MenuStrip control is scaled by Control::ScaleControl()
-            // Ensure grip aligns properly when set visible.
-            DpiHelper.IsPerMonitorV2Awareness ?
-                   DpiHelper.LogicalToDeviceUnits(new Padding(2, 2, 0, 2), DeviceDpi) :
-                   new Padding(2, 2, 0, 2);
+    protected override Padding DefaultGripMargin =>
+        // MenuStrip control is scaled by Control::ScaleControl()
+        // Ensure grip aligns properly when set visible.
+        ScaleHelper.IsThreadPerMonitorV2Aware ?
+                ScaleHelper.ScaleToDpi(new Padding(2, 2, 0, 2), DeviceDpi) :
+                new Padding(2, 2, 0, 2);
 
-    protected override Size DefaultSize
-        => DpiHelper.IsPerMonitorV2Awareness ?
-           DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
+    protected override Size DefaultSize =>
+        ScaleHelper.IsThreadPerMonitorV2Aware ?
+           ScaleHelper.ScaleToDpi(new Size(200, 24), DeviceDpi) :
            new Size(200, 24);
 
     protected override Padding DefaultPadding
@@ -75,16 +74,13 @@ public partial class MenuStrip : ToolStrip
         {
             // MenuStrip control is scaled by Control::ScaleControl()
             // Scoot the grip over when present
-            if (GripStyle == ToolStripGripStyle.Visible)
-            {
-                return DpiHelper.IsPerMonitorV2Awareness ?
-                       DpiHelper.LogicalToDeviceUnits(new Padding(3, 2, 0, 2), DeviceDpi) :
-                       new Padding(3, 2, 0, 2);
-            }
-
-            return DpiHelper.IsPerMonitorV2Awareness ?
-                   DpiHelper.LogicalToDeviceUnits(new Padding(6, 2, 0, 2), DeviceDpi) :
-                   new Padding(6, 2, 0, 2);
+            return GripStyle == ToolStripGripStyle.Visible
+                ? ScaleHelper.IsThreadPerMonitorV2Aware
+                    ? ScaleHelper.ScaleToDpi(new Padding(3, 2, 0, 2), DeviceDpi)
+                    : new Padding(3, 2, 0, 2)
+                : ScaleHelper.IsThreadPerMonitorV2Aware
+                    ? ScaleHelper.ScaleToDpi(new Padding(6, 2, 0, 2), DeviceDpi)
+                    : new Padding(6, 2, 0, 2);
         }
     }
 

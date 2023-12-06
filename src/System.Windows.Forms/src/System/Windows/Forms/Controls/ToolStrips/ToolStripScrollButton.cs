@@ -45,58 +45,23 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
             Image = (up) ? UpImage : DownImage
         };
 
-    /// <summary>
-    ///  Deriving classes can override this to configure a default size for their control.
-    ///  This is more efficient than setting the size in the control's constructor.
-    /// </summary>
-    protected internal override Padding DefaultMargin
-    {
-        get
-        {
-            return Padding.Empty;
-        }
-    }
+    protected internal override Padding DefaultMargin => Padding.Empty;
 
-    protected override Padding DefaultPadding
-    {
-        get
-        {
-            return Padding.Empty;
-        }
-    }
+    protected override Padding DefaultPadding => Padding.Empty;
 
-    private static Image DownImage
-    {
-        get
-        {
-            t_downScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
+    private static Image DownImage => t_downScrollImage ??= ScaleHelper.GetIconResourceAsBestMatchBitmap(
+        typeof(ToolStripScrollButton),
+        "ScrollButtonDown",
+        ScaleHelper.ScaleToDpi(defaultBitmapSize, ScaleHelper.InitialSystemDpi));
 
-            return t_downScrollImage;
-        }
-    }
+    internal StickyLabel Label => (StickyLabel)Control;
 
-    internal StickyLabel Label
-        => (StickyLabel)Control;
+    private static Image UpImage => t_upScrollImage ??= ScaleHelper.GetIconResourceAsBestMatchBitmap(
+        typeof(ToolStripScrollButton),
+        "ScrollButtonUp",
+        ScaleHelper.ScaleToDpi(defaultBitmapSize, ScaleHelper.InitialSystemDpi));
 
-    private static Image UpImage
-    {
-        get
-        {
-            t_upScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
-
-            return t_upScrollImage;
-        }
-    }
-
-    private Timer MouseDownTimer
-    {
-        get
-        {
-            _mouseDownTimer ??= new Timer();
-
-            return _mouseDownTimer;
-        }
-    }
+    private Timer MouseDownTimer => _mouseDownTimer ??= new Timer();
 
     protected override void Dispose(bool disposing)
     {

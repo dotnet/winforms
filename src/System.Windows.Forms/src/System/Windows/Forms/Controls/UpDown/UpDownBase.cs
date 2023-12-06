@@ -44,10 +44,7 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     public UpDownBase()
     {
-        if (DpiHelper.IsScalingRequired)
-        {
-            _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
-        }
+        _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
 
         _upDownButtons = new UpDownButtons(this);
         _upDownEdit = new UpDownEdit(this)
@@ -55,16 +52,17 @@ public abstract partial class UpDownBase : ContainerControl
             BorderStyle = BorderStyle.None,
             AutoSize = false
         };
-        _upDownEdit.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
-        _upDownEdit.KeyPress += new KeyPressEventHandler(OnTextBoxKeyPress);
-        _upDownEdit.TextChanged += new EventHandler(OnTextBoxTextChanged);
-        _upDownEdit.LostFocus += new EventHandler(OnTextBoxLostFocus);
-        _upDownEdit.Resize += new EventHandler(OnTextBoxResize);
+
+        _upDownEdit.KeyDown += OnTextBoxKeyDown;
+        _upDownEdit.KeyPress += OnTextBoxKeyPress;
+        _upDownEdit.TextChanged += OnTextBoxTextChanged;
+        _upDownEdit.LostFocus += OnTextBoxLostFocus;
+        _upDownEdit.Resize += OnTextBoxResize;
         _upDownButtons.TabStop = false;
         _upDownButtons.Size = new Size(_defaultButtonsWidth, PreferredHeight);
-        _upDownButtons.UpDown += new UpDownEventHandler(OnUpDown);
+        _upDownButtons.UpDown += OnUpDown;
 
-        Controls.AddRange(new Control[] { _upDownButtons, _upDownEdit });
+        Controls.AddRange([_upDownButtons, _upDownEdit]);
 
         SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.ResizeRedraw, true);
         SetStyle(ControlStyles.StandardClick, false);

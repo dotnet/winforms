@@ -382,10 +382,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
             AutoSize = false,
             Dock = DockStyle.Top
         };
-        if (DpiHelper.IsScalingRequired)
-        {
-            designMenu.Height = DpiHelper.LogicalToDeviceUnitsY(designMenu.Height);
-        }
+
+        designMenu.Height = ScaleHelper.ScaleToInitialSystemDpi(designMenu.Height);
 
         // Add MenuItem
         if (host.RootComponent is Control form)

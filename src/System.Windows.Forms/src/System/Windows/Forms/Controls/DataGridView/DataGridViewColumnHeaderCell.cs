@@ -35,18 +35,18 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     {
         if (!s_isScalingInitialized)
         {
-            if (DpiHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequired)
             {
-                s_sortGlyphSeparatorWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(SortGlyphSeparatorWidth);
-                s_sortGlyphHorizontalMargin = (byte)DpiHelper.LogicalToDeviceUnitsX(SortGlyphHorizontalMargin);
-                s_sortGlyphWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(SortGlyphWidth);
+                s_sortGlyphSeparatorWidth = (byte)ScaleHelper.ScaleToInitialSystemDpi(SortGlyphSeparatorWidth);
+                s_sortGlyphHorizontalMargin = (byte)ScaleHelper.ScaleToInitialSystemDpi(SortGlyphHorizontalMargin);
+                s_sortGlyphWidth = (byte)ScaleHelper.ScaleToInitialSystemDpi(SortGlyphWidth);
                 // make sure that the width of the base of the arrow is odd, otherwise the tip of the arrow is one pixel off to the side
                 if ((s_sortGlyphWidth % 2) == 0)
                 {
                     s_sortGlyphWidth++;
                 }
 
-                s_sortGlyphHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(SortGlyphHeight);
+                s_sortGlyphHeight = (byte)ScaleHelper.ScaleToInitialSystemDpi(SortGlyphHeight);
             }
 
             s_isScalingInitialized = true;

@@ -167,7 +167,7 @@ internal static class DpiHelper
     /// </summary>
     /// <param name="value">The vertical value in logical units</param>
     /// <returns>The vertical value in device units</returns>
-    public static int LogicalToDeviceUnitsY(int value)
+    public static int ScaleToInitialSystemDpi(int value)
     {
         return (int)Math.Round(LogicalToDeviceUnitsScalingFactorY * (double)value);
     }
@@ -182,7 +182,7 @@ internal static class DpiHelper
     public static Size LogicalToDeviceUnits(Size logicalSize)
     {
         return new Size(LogicalToDeviceUnitsX(logicalSize.Width),
-                        LogicalToDeviceUnitsY(logicalSize.Height));
+                        ScaleToInitialSystemDpi(logicalSize.Height));
     }
 
     /// <summary>

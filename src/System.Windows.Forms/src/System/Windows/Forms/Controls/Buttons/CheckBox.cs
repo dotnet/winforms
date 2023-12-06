@@ -11,8 +11,7 @@ using Windows.Win32.UI.Accessibility;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Represents a Windows
-///  check box.
+///  Represents a Windows check box.
 /// </summary>
 [DefaultProperty(nameof(Checked))]
 [DefaultEvent(nameof(CheckedChanged))]
@@ -30,11 +29,8 @@ public partial class CheckBox : ButtonBase
     private CheckState _checkState;
     private Appearance _appearance;
 
-    private const int FlatSystemStylePaddingWidth = 25;
-    private const int FlatSystemStyleMinimumHeight = 13;
-
-    internal int _flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
-    internal int _flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
+    private int _flatSystemStylePaddingWidth;
+    private int _flatSystemStyleMinimumHeight;
 
     // A flag indicating if UIA StateChanged event needs to be triggered,
     // to avoid double-triggering when Checked value changes.
@@ -45,16 +41,8 @@ public partial class CheckBox : ButtonBase
     /// </summary>
     public CheckBox() : base()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-            _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
-        }
-
         // Checkboxes shouldn't respond to right clicks, so we need to do all our own click logic
-        SetStyle(ControlStyles.StandardClick |
-                 ControlStyles.StandardDoubleClick, false);
-
+        SetStyle(ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, false);
         SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
 
         AutoCheck = true;
@@ -64,9 +52,7 @@ public partial class CheckBox : ButtonBase
     private bool AccObjDoDefaultAction { get; set; }
 
     /// <summary>
-    ///  Gets
-    ///  or sets the value that determines the appearance of a
-    ///  check box control.
+    ///  Gets or sets the value that determines the appearance of a check box control.
     /// </summary>
     [DefaultValue(Appearance.Normal)]
     [Localizable(true)]
@@ -74,14 +60,10 @@ public partial class CheckBox : ButtonBase
     [SRDescription(nameof(SR.CheckBoxAppearanceDescr))]
     public Appearance Appearance
     {
-        get
-        {
-            return _appearance;
-        }
-
+        get => _appearance;
         set
         {
-            // valid values are 0x0 to 0x1
+            // Valid values are 0x0 to 0x1
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_appearance != value)
@@ -123,9 +105,7 @@ public partial class CheckBox : ButtonBase
     public bool AutoCheck { get; set; }
 
     /// <summary>
-    ///  Gets or sets
-    ///  the horizontal and vertical alignment of a check box on a check box
-    ///  control.
+    ///  Gets or sets the horizontal and vertical alignment of a check box on a check box control.
     /// </summary>
     [Bindable(true)]
     [Localizable(true)]
@@ -294,9 +274,18 @@ public partial class CheckBox : ButtonBase
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+        ScaleConstants();
+    }
 
-        _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-        _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
+
+    private void ScaleConstants()
+    {
+        const int LogicalFlatSystemStylePaddingWidth = 25;
+        const int LogicalFlatSystemStyleMinimumHeight = 13;
+
+        _flatSystemStylePaddingWidth = LogicalToDeviceUnits(LogicalFlatSystemStylePaddingWidth);
+        _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(LogicalFlatSystemStyleMinimumHeight);
     }
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -315,7 +304,9 @@ public partial class CheckBox : ButtonBase
         Size textSize = TextRenderer.MeasureText(Text, Font);
         Size size = SizeFromClientSize(textSize);
         size.Width += _flatSystemStylePaddingWidth;
-        size.Height = Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight); // ensure minimum height to avoid truncation of check-box or text
+
+        // Ensure minimum height to avoid truncation of check-box or text
+        size.Height = Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight);
         return size + Padding.Size;
     }
 

@@ -13,8 +13,7 @@ namespace System.Windows.Forms;
 public partial class ToolStripPanel : ContainerControl, IArrangedElement
 {
     private Orientation _orientation = Orientation.Horizontal;
-    private static readonly Padding s_rowMargin = new(3, 0, 0, 0);
-    private Padding _scaledRowMargin = s_rowMargin;
+    private Padding _rowMargin;
     private ToolStripRendererSwitcher? _rendererSwitcher;
     private BitVector32 _state;
     private readonly ToolStripContainer? _owner;
@@ -45,10 +44,8 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     public ToolStripPanel()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledRowMargin = DpiHelper.LogicalToDeviceUnits(s_rowMargin);
-        }
+        const int LogicalRowLeftMargin = 3;
+        _rowMargin = new(ScaleHelper.ScaleToDpi(LogicalRowLeftMargin, ScaleHelper.InitialSystemDpi), 0, 0, 0);
 
         SuspendLayout();
         AutoScaleMode = AutoScaleMode.None;
@@ -137,10 +134,10 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     public Padding RowMargin
     {
-        get { return _scaledRowMargin; }
+        get { return _rowMargin; }
         set
         {
-            _scaledRowMargin = value;
+            _rowMargin = value;
             LayoutTransaction.DoLayout(this, this, "RowMargin");
         }
     }
@@ -213,7 +210,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             if (_orientation != value)
             {
                 _orientation = value;
-                _scaledRowMargin = LayoutUtils.FlipPadding(_scaledRowMargin);
+                _rowMargin = LayoutUtils.FlipPadding(_rowMargin);
                 InitFlowLayout();
                 foreach (ToolStripPanelRow row in RowsInternal)
                 {

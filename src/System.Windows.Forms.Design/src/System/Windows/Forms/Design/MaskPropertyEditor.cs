@@ -30,7 +30,7 @@ internal class MaskPropertyEditor : UITypeEditor
         string? mask = null;
 
         // Launching modal dialog in System aware mode.
-        using MaskDesignerDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(
+        using MaskDesignerDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
             () => new MaskDesignerDialog(instance, helpService));
 
         dialog.DiscoverMaskDescriptors(discoveryService);  // fine if service is null.

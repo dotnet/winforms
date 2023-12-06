@@ -71,7 +71,7 @@ public class ParkingWindowTests
 
         try
         {
-            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
+            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
             {
                 using Control control = new();
                 ThreadContext ctx = GetContextForHandle(control);
@@ -106,7 +106,7 @@ public class ParkingWindowTests
 
         try
         {
-            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 using Control control = new();
                 ThreadContext ctx = GetContextForHandle(control);
@@ -183,7 +183,7 @@ public class ParkingWindowTests
             DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
             Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
 
-            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 using Control systemControl = new();
                 ctx = GetContextForHandle(systemControl);

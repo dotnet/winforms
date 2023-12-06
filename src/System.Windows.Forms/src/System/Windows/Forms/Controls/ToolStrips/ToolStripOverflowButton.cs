@@ -7,32 +7,23 @@ using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms;
 
-/// <summary>
-///  ToolStripOverflowButton
-/// </summary>
 [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.None)]
 public partial class ToolStripOverflowButton : ToolStripDropDownButton
 {
-    // we need to cache this away as the Parent property gets reset a lot.
+    // Cache this as the Parent property gets reset a lot.
     private readonly ToolStrip _parentToolStrip;
 
-    private static bool isScalingInitialized;
-    private const int MAX_WIDTH = 16;
-    private const int MAX_HEIGHT = 16;
-    private static int maxWidth = MAX_WIDTH;
-    private static int maxHeight = MAX_HEIGHT;
+    private static bool s_isScalingInitialized;
+    private static int s_maxSize;
 
     internal ToolStripOverflowButton(ToolStrip parentToolStrip)
     {
-        if (!isScalingInitialized)
-        {
-            if (DpiHelper.IsScalingRequired)
-            {
-                maxWidth = DpiHelper.LogicalToDeviceUnitsX(MAX_WIDTH);
-                maxHeight = DpiHelper.LogicalToDeviceUnitsY(MAX_HEIGHT);
-            }
+        const int LogicalMaxSize = 16;
 
-            isScalingInitialized = true;
+        if (!s_isScalingInitialized)
+        {
+            s_maxSize = ScaleHelper.ScaleToInitialSystemDpi(LogicalMaxSize);
+            s_isScalingInitialized = true;
         }
 
         SupportsItemClick = false;
@@ -49,31 +40,13 @@ public partial class ToolStripOverflowButton : ToolStripDropDownButton
         base.Dispose(disposing);
     }
 
-    protected internal override Padding DefaultMargin
-    {
-        get
-        {
-            return Padding.Empty;
-        }
-    }
+    protected internal override Padding DefaultMargin => Padding.Empty;
 
-    public override bool HasDropDownItems
-    {
-        get
-        {
-            return ParentInternal is not null && ParentInternal.OverflowItems.Count > 0;
-        }
-    }
+    public override bool HasDropDownItems => ParentInternal is not null && ParentInternal.OverflowItems.Count > 0;
 
-    internal override bool OppositeDropDownAlign
-    {
-        get { return true; }
-    }
+    internal override bool OppositeDropDownAlign => true;
 
-    internal ToolStrip ParentToolStrip
-    {
-        get { return _parentToolStrip; }
-    }
+    internal ToolStrip ParentToolStrip => _parentToolStrip;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -98,24 +71,24 @@ public partial class ToolStripOverflowButton : ToolStripDropDownButton
     public override Size GetPreferredSize(Size constrainingSize)
     {
         Size preferredSize = constrainingSize;
-        if (ParentInternal is not null)
+        if (ParentInternal is { } parent)
         {
-            if (ParentInternal.Orientation == Orientation.Horizontal)
+            if (parent.Orientation == Orientation.Horizontal)
             {
-                preferredSize.Width = Math.Min(constrainingSize.Width, maxWidth);
+                preferredSize.Width = Math.Min(constrainingSize.Width, s_maxSize);
             }
             else
             {
-                preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
+                preferredSize.Height = Math.Min(constrainingSize.Height, s_maxSize);
             }
         }
 
         return preferredSize + Padding.Size;
     }
 
-    // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
     protected internal override void SetBounds(Rectangle bounds)
     {
+        // Make sure the Overflow button extends from edge-edge (ignore Padding/Margin).
         if (ParentInternal is not null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
         {
             if (ParentInternal.Orientation == Orientation.Horizontal)

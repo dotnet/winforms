@@ -55,15 +55,17 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         _serviceProvider = provider;
 
-        //
         // Required for Windows Form Designer support
-        //
         InitializeComponent();
 
-        if (DpiHelper.IsScalingRequired)
+        if (_moveUp.Image is Bitmap moveUp)
         {
-            _moveUp.Image = DpiHelper.ScaleButtonImageLogicalToDevice(_moveUp.Image);
-            _moveDown.Image = DpiHelper.ScaleButtonImageLogicalToDevice(_moveDown.Image);
+            _moveUp.Image = ScaleHelper.ScaleToDpi(moveUp, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
+        }
+
+        if (_moveDown.Image is Bitmap moveDown)
+        {
+            _moveDown.Image = ScaleHelper.ScaleToDpi(moveDown, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
         }
 
         _dataGridViewPrivateCopy = new DataGridView();
@@ -77,7 +79,9 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             if (_selectedColumnsItemBitmap is null)
             {
-                _selectedColumnsItemBitmap = new Bitmap(BitmapSelector.GetResourceStream(typeof(DataGridViewColumnCollectionDialog), "DataGridViewColumnsDialog.selectedColumns.bmp"));
+                _selectedColumnsItemBitmap = new Bitmap(
+                    BitmapSelector.GetResourceStream(typeof(DataGridViewColumnCollectionDialog), "DataGridViewColumnsDialog.selectedColumns.bmp")
+                    ?? throw new InvalidOperationException());
                 _selectedColumnsItemBitmap.MakeTransparent(Color.Red);
             }
 
@@ -480,7 +484,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         _addRemoveTableLayoutPanel = new TableLayoutPanel();
         _selectedColumnsLabel = new Label();
         _propertyGridLabel = new Label();
-        _propertyGrid1 = new VsPropertyGrid(_serviceProvider);
+        _propertyGrid1 = new VsPropertyGrid();
         _okCancelTableLayoutPanel = new TableLayoutPanel();
         _cancelButton = new Button();
         _okButton = new Button();
@@ -850,7 +854,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         if (_addColumnDialog is null)
         {
             // child modal dialog -launching in System Aware mode
-            _addColumnDialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewAddColumnDialog(_columnsPrivateCopy, _liveDataGridView!));
+            _addColumnDialog = ScaleHelper.InvokeInSystemAwareContext(() => new DataGridViewAddColumnDialog(_columnsPrivateCopy, _liveDataGridView!));
             _addColumnDialog.StartPosition = FormStartPosition.CenterParent;
         }
 

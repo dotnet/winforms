@@ -78,19 +78,10 @@ internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
         return layout;
     }
 
-    internal double GetDpiScaleRatio()
-    {
-        return GetDpiScaleRatio(Control);
-    }
+    internal double GetDpiScaleRatio() => GetDpiScaleRatio(Control);
 
-    internal static double GetDpiScaleRatio(Control? control)
-    {
-        if (DpiHelper.IsPerMonitorV2Awareness
-            && control is not null && control.IsHandleCreated)
-        {
-            return control._deviceDpi / DpiHelper.LogicalDpi;
-        }
+    internal static double GetDpiScaleRatio(Control? control) =>
 
-        return DpiHelper.LogicalToDeviceUnitsScalingFactor;
-    }
+        (control is not null && control.IsHandleCreated ? control.DeviceDpi : ScaleHelper.InitialSystemDpi)
+            / (double)ScaleHelper.OneHundredPercentLogicalDpi;
 }

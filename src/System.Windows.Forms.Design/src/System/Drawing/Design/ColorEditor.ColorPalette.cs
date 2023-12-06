@@ -56,13 +56,10 @@ public partial class ColorEditor
         {
             if (!s_isScalingInitialized)
             {
-                if (DpiHelper.IsScalingRequired)
-                {
-                    s_cellSizeX = DpiHelper.LogicalToDeviceUnitsX(CellSize);
-                    s_cellSizeY = DpiHelper.LogicalToDeviceUnitsY(CellSize);
-                    s_marginX = DpiHelper.LogicalToDeviceUnitsX(MarginWidth);
-                    s_marginY = DpiHelper.LogicalToDeviceUnitsY(MarginWidth);
-                }
+                s_cellSizeX = ScaleHelper.ScaleToInitialSystemDpi(CellSize);
+                s_cellSizeY = ScaleHelper.ScaleToInitialSystemDpi(CellSize);
+                s_marginX = ScaleHelper.ScaleToInitialSystemDpi(MarginWidth);
+                s_marginY = ScaleHelper.ScaleToInitialSystemDpi(MarginWidth);
 
                 s_isScalingInitialized = true;
             }

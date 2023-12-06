@@ -79,18 +79,10 @@ public partial class PrintControllerWithStatusDialog
             MaximizeBox = false;
             ControlBox = false;
             MinimizeBox = false;
-            Size clientSize = new Size(256, 122);
-            if (DpiHelper.IsScalingRequired)
-            {
-                ClientSize = DpiHelper.LogicalToDeviceUnits(clientSize);
-            }
-            else
-            {
-                ClientSize = clientSize;
-            }
+            ClientSize = ScaleHelper.ScaleToDpi(new Size(256, 122), ScaleHelper.InitialSystemDpi);
 
             CancelButton = _button1;
-            SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            SizeGripStyle = SizeGripStyle.Hide;
             Controls.Add(_tableLayoutPanel1);
         }
 

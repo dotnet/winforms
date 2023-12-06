@@ -213,7 +213,7 @@ public partial class CollectionEditor : UITypeEditor
         Context = context;
 
         // Child modal dialog - launching in SystemAware mode.
-        CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(CreateCollectionForm);
+        CollectionForm localCollectionForm = ScaleHelper.InvokeInSystemAwareContext(CreateCollectionForm);
         ITypeDescriptorContext? lastContext = Context;
         localCollectionForm.EditValue = value;
         _ignoreChangingEvents = false;

@@ -43,7 +43,10 @@ public abstract class PropertyTab : IExtenderProvider
             {
                 try
                 {
-                    _bitmap = DpiHelper.GetBitmapFromIcon(GetType(), GetType().Name);
+                    _bitmap = ScaleHelper.GetIconResourceAsBestMatchBitmap(
+                        GetType(),
+                        GetType().Name,
+                        ScaleHelper.SystemIconSize);
                 }
                 catch (Exception)
                 {
