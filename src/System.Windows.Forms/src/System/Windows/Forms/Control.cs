@@ -4758,7 +4758,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Verifies if a control is a child of this control.
     /// </summary>
-    public bool Contains(Control? ctl)
+    public bool Contains([NotNullWhen(true)] Control? ctl)
     {
         while (ctl is not null)
         {
@@ -5896,7 +5896,7 @@ public unsafe partial class Control :
 
         if (forward)
         {
-            ControlCollection? controls = (ControlCollection?)ctl!.Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controls = (ControlCollection?)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
             if (controls is not null && controls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
             {
@@ -5972,7 +5972,7 @@ public unsafe partial class Control :
         {
             if (ctl != this)
             {
-                int targetIndex = ctl!._tabIndex;
+                int targetIndex = ctl._tabIndex;
                 bool hitCtl = false;
                 Control? found = null;
                 Control? parent = ctl._parent;
@@ -10542,7 +10542,7 @@ public unsafe partial class Control :
 
     private Control? GetNextSelectableControl(Control? ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
     {
-        if (!Contains(ctl) || (!nested && ctl?._parent != this))
+        if (!Contains(ctl) || (!nested && ctl._parent != this))
         {
             ctl = null;
         }

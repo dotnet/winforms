@@ -1018,7 +1018,13 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                     // There is enough horizontal room for the error icon
                     if (paint && DataGridView.ShowRowErrors && DataGridViewCell.PaintErrorIcon(paintParts))
                     {
-                        PaintErrorIcon(graphics, cellStyle, rowIndex, cellBounds, errorBounds, errorText);
+                        PaintErrorIcon(
+                            graphics,
+                            cellStyle,
+                            rowIndex,
+                            cellBounds,
+                            errorBounds,
+                            errorText);
                     }
                     else if (computeErrorIconBounds)
                     {

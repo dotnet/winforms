@@ -1606,7 +1606,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         return resultBounds;
     }
 
-    public override object ParseFormattedValue(
+    public override object? ParseFormattedValue(
         object? formattedValue,
         DataGridViewCellStyle cellStyle,
         TypeConverter? formattedValueTypeConverter,
@@ -1699,7 +1699,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             }
         }
 
-        return base.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter);
+        return base.ParseFormattedValue(
+            formattedValue,
+            cellStyle,
+            formattedValueTypeConverter,
+            valueTypeConverter);
     }
 
     private bool SwitchFormattedValue()

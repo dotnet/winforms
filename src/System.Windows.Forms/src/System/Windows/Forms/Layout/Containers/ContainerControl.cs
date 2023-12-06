@@ -653,13 +653,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
     internal void FocusActiveControlInternal()
     {
         s_focusTracing.TraceVerbose($"ContainerControl::FocusActiveControlInternal() - {Name}");
-#if DEBUG
+
         // Things really get ugly if you try to pop up an assert dialog here
-        if (_activeControl is not null && !Contains(_activeControl))
-        {
-            Debug.WriteLine("ActiveControl is not a child of this ContainerControl");
-        }
-#endif
+        Debug.WriteLineIf(_activeControl is not null && !Contains(_activeControl), "ActiveControl is not a child of this ContainerControl");
 
         if (_activeControl is not null && _activeControl.Visible)
         {
