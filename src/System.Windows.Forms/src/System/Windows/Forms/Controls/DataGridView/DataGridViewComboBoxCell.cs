@@ -777,7 +777,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
-    private void DataSource_Disposed(object sender, EventArgs e)
+    private void DataSource_Disposed(object? sender, EventArgs e)
     {
         Debug.Assert(sender == DataSource, "How can we get dispose notification from anything other than our DataSource?");
         DataSource = null;
@@ -1676,7 +1676,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     ///  We use the display value and DisplayMember to look up the item in the
     ///  ComboBox datasource. We then use ValueMember to get the value.
     /// </summary>
-    private bool LookupValue(object formattedValue, out object? value)
+    private bool LookupValue(object? formattedValue, out object? value)
     {
         if (formattedValue is null)
         {
@@ -1764,7 +1764,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         _flags &= ~DataGridViewComboBoxCellFlags.IgnoreNextMouseClick;
     }
-#nullable disable
+
     protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
     {
         if (DataGridView is null)
@@ -1782,7 +1782,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
             else if ((EditingComboBox is null || !EditingComboBox.DroppedDown) &&
                      DataGridView.EditMode != DataGridViewEditMode.EditProgrammatically &&
-                     DataGridView.BeginEdit(true /*selectAll*/))
+                     DataGridView.BeginEdit(selectAll: true))
             {
                 if (EditingComboBox is not null && DisplayStyle != DataGridViewComboBoxDisplayStyle.Nothing)
                 {
@@ -1843,6 +1843,11 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         if ((FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System) && DataGridView.ApplyVisualStylesToInnerCells)
         {
+            if (OwningColumn is null)
+            {
+                return;
+            }
+
             int rowIndex = e.RowIndex;
             DataGridViewCellStyle cellStyle = GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
 
@@ -1854,13 +1859,15 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             bool isFirstDisplayedScrollingColumn = OwningColumn.Index == DataGridView.FirstDisplayedScrollingColumnIndex;
             DataGridViewAdvancedBorderStyle dgvabsEffective, dgvabsPlaceholder;
             dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle();
-            dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle, dgvabsPlaceholder,
-                                                    singleVerticalBorderAdded,
-                                                    singleHorizontalBorderAdded,
-                                                    isFirstDisplayedRow,
-                                                    isFirstDisplayedColumn);
+            dgvabsEffective = AdjustCellBorderStyle(
+                DataGridView.AdvancedCellBorderStyle,
+                dgvabsPlaceholder,
+                singleVerticalBorderAdded,
+                singleHorizontalBorderAdded,
+                isFirstDisplayedRow,
+                isFirstDisplayedColumn);
 
-            Rectangle cellBounds = DataGridView.GetCellDisplayRectangle(OwningColumn.Index, rowIndex, false /*cutOverflow*/);
+            Rectangle cellBounds = DataGridView.GetCellDisplayRectangle(OwningColumn.Index, rowIndex, cutOverflow: false);
             if (isFirstDisplayedScrollingColumn)
             {
                 cellBounds.X -= DataGridView.FirstDisplayedScrollingColumnHiddenWidth;
@@ -1874,13 +1881,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             Rectangle dropDownButtonRect;
             using (var screen = GdiCache.GetScreenDCGraphics())
             {
-                PaintPrivate(screen,
+                PaintPrivate(
+                    screen,
                     cellBounds,
                     cellBounds,
                     rowIndex,
                     cellState,
-                    formattedValue: null,            // dropDownButtonRect is independent of formattedValue
-                    errorText: null,                 // dropDownButtonRect is independent of errorText
+                    formattedValue: null,   // dropDownButtonRect is independent of formattedValue
+                    errorText: null,        // dropDownButtonRect is independent of errorText
                     cellStyle,
                     dgvabsEffective,
                     out dropDownButtonRect,
@@ -1908,14 +1916,15 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         return rowIndex != -1 && EditingComboBox is not null && rowIndex == ((IDataGridViewEditingControl)EditingComboBox).EditingControlRowIndex;
     }
 
-    protected override void Paint(Graphics graphics,
+    protected override void Paint(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object value,
-        object formattedValue,
-        string errorText,
+        object? value,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)
@@ -1933,10 +1942,10 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             advancedBorderStyle,
             out _,     // not used
             paintParts,
-            false /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            false /*computeDropDownButtonRect*/,
-            true  /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: false,
+            computeDropDownButtonRect: false,
+            paint: true);
     }
 
     // PaintPrivate is used in four places that need to duplicate the paint code:
@@ -1950,13 +1959,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     // else it returns Rectangle.Empty;
     //
     // PaintPrivate uses the computeDropDownButtonRect to determine if it should compute the dropDownButtonRect
-    private Rectangle PaintPrivate(Graphics g,
+    private Rectangle PaintPrivate(
+        Graphics g,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object formattedValue,
-        string errorText,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         out Rectangle dropDownButtonRect,
@@ -1979,6 +1989,11 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         Rectangle resultBounds = Rectangle.Empty;
         dropDownButtonRect = Rectangle.Empty;
+
+        if (DataGridView is null)
+        {
+            return resultBounds;
+        }
 
         bool paintFlat = FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup;
         bool paintPopup = FlatStyle == FlatStyle.Popup &&
@@ -2023,7 +2038,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         if (paint && PaintBackground(paintParts) && !brushColor.HasTransparency() && valBounds.Width > 0 && valBounds.Height > 0)
         {
-            PaintPadding(g, valBounds, cellStyle, brush, DataGridView.RightToLeftInternal);
+            PaintPadding(g, valBounds, cellStyle, brush!, DataGridView.RightToLeftInternal);
         }
 
         if (cellStyle.Padding != Padding.Empty)
@@ -2047,7 +2062,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             {
                 if (paintPostXPThemes && PaintBackground(paintParts) && !brushColor.HasTransparency())
                 {
-                    g.FillRectangle(brush, valBounds.Left, valBounds.Top, valBounds.Width, valBounds.Height);
+                    g.FillRectangle(brush!, valBounds.Left, valBounds.Top, valBounds.Width, valBounds.Height);
                 }
 
                 if (PaintContentBackground(paintParts))
@@ -2065,7 +2080,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 if (!paintPostXPThemes &&
                     PaintBackground(paintParts) && !brushColor.HasTransparency() && valBounds.Width > 2 && valBounds.Height > 2)
                 {
-                    g.FillRectangle(brush, valBounds.Left + 1, valBounds.Top + 1, valBounds.Width - 2, valBounds.Height - 2);
+                    g.FillRectangle(brush!, valBounds.Left + 1, valBounds.Top + 1, valBounds.Width - 2, valBounds.Height - 2);
                 }
             }
             else if (PaintBackground(paintParts) && !brushColor.HasTransparency())
@@ -2076,7 +2091,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 }
                 else
                 {
-                    g.FillRectangle(brush, valBounds.Left, valBounds.Top, valBounds.Width, valBounds.Height);
+                    g.FillRectangle(brush!, valBounds.Left, valBounds.Top, valBounds.Width, valBounds.Height);
                 }
             }
         }
@@ -2463,11 +2478,11 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         return resultBounds;
     }
 
-    public override object ParseFormattedValue(
-        object formattedValue,
+    public override object? ParseFormattedValue(
+        object? formattedValue,
         DataGridViewCellStyle cellStyle,
-        TypeConverter formattedValueTypeConverter,
-        TypeConverter valueTypeConverter)
+        TypeConverter? formattedValueTypeConverter,
+        TypeConverter? valueTypeConverter)
     {
         if (valueTypeConverter is null)
         {
@@ -2486,9 +2501,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             (DisplayMemberProperty is not null || ValueMemberProperty is not null)) ||
             !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember))
         {
-            object value = ParseFormattedValueInternal(DisplayType, formattedValue, cellStyle,
-                                                       formattedValueTypeConverter, DisplayTypeConverter);
-            object originalValue = value;
+            object? value = ParseFormattedValueInternal(
+                DisplayType,
+                formattedValue,
+                cellStyle,
+                formattedValueTypeConverter,
+                DisplayTypeConverter);
+            object? originalValue = value;
             if (!LookupValue(originalValue, out value))
             {
                 if (originalValue == System.DBNull.Value)
@@ -2505,8 +2524,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         else
         {
-            return ParseFormattedValueInternal(ValueType, formattedValue, cellStyle,
-                                               formattedValueTypeConverter, valueTypeConverter);
+            return ParseFormattedValueInternal(
+                ValueType,
+                formattedValue,
+                cellStyle,
+                formattedValueTypeConverter,
+                valueTypeConverter);
         }
     }
 
@@ -2542,7 +2565,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
-    private void WireDataSource(object dataSource)
+    private void WireDataSource(object? dataSource)
     {
         // If the source is a component, then hook the Disposed event,
         // so we know when the component is deleted from the form
