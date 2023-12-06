@@ -138,14 +138,9 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
         }
         else
         {
-            if (DpiHelper.IsPerMonitorV2Awareness)
-            {
-                layout.CheckSize = Control.LogicalToDeviceUnits(layout.CheckSize);
-            }
-            else
-            {
-                layout.CheckSize = (int)(layout.CheckSize * GetDpiScaleRatio());
-            }
+            layout.CheckSize = ScaleHelper.IsThreadPerMonitorV2Aware
+                ? Control.LogicalToDeviceUnits(layout.CheckSize)
+                : (int)(layout.CheckSize * GetDpiScaleRatio());
         }
 
         return layout;

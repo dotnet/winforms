@@ -55,12 +55,10 @@ public partial class PrintPreviewDialog : Form
 
         _previewControl = new PrintPreviewControl();
         _imageList = new ImageList();
-        _imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
+        _imageList.Images.AddStrip(ScaleHelper.GetIconResourceAsDefaultSizeBitmap(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
         InitForm();
     }
 
-    // subhag addition
-    //-------------------------------------------------------------------------------------------------------------
     /// <summary>
     ///  Indicates the <see cref="Button"/> control on the form that is clicked when
     ///  the user presses the ENTER key.

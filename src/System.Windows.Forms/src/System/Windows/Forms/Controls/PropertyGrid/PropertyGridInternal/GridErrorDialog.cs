@@ -42,17 +42,8 @@ internal partial class GridErrorDialog : Form
     public GridErrorDialog(PropertyGrid owner)
     {
         _ownerGrid = owner;
-        _expandImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "down");
-        if (DpiHelper.IsScalingRequired)
-        {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref _expandImage);
-        }
-
-        _collapseImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "up");
-        if (DpiHelper.IsScalingRequired)
-        {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref _collapseImage);
-        }
+        _expandImage = ScaleHelper.GetIconResourceAsBitmap(typeof(ThreadExceptionDialog), "down", ScaleHelper.InitialSystemDpi);
+        _collapseImage = ScaleHelper.GetIconResourceAsBitmap(typeof(ThreadExceptionDialog), "up", ScaleHelper.InitialSystemDpi);
 
         InitializeComponent();
 

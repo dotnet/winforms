@@ -26,16 +26,16 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     private const byte FlagAreaNotSet = 0x00;
     private const byte FlagDataArea = 0x01;
     private const byte FlagErrorArea = 0x02;
-    internal const byte IconMarginWidth = 4;      // 4 pixels of margin on the left and right of icons
-    internal const byte IconMarginHeight = 4;     // 4 pixels of margin on the top and bottom of icons
+    private protected const byte IconMarginWidth = 4;      // 4 pixels of margin on the left and right of icons
+    private protected const byte IconMarginHeight = 4;     // 4 pixels of margin on the top and bottom of icons
     private const byte IconsWidth = 12;           // all icons are 12 pixels wide - make sure that it stays that way
     private const byte IconsHeight = 11;          // all icons are 11 pixels tall - make sure that it stays that way
 
     private static bool s_isScalingInitialized;
-    internal static byte s_iconsWidth = IconsWidth;
-    internal static byte s_iconsHeight = IconsHeight;
+    private protected static byte s_iconsWidth = IconsWidth;
+    private protected static byte s_iconsHeight = IconsHeight;
 
-    internal static readonly int s_propCellValue = PropertyStore.CreateKey();
+    private protected static readonly int s_propCellValue = PropertyStore.CreateKey();
     private static readonly int s_propCellContextMenuStrip = PropertyStore.CreateKey();
     private static readonly int s_propCellErrorText = PropertyStore.CreateKey();
     private static readonly int s_propCellStyle = PropertyStore.CreateKey();
@@ -65,27 +65,20 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         if (!s_isScalingInitialized)
         {
-            if (DpiHelper.IsScalingRequired)
-            {
-                s_iconsWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(IconsWidth);
-                s_iconsHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(IconsHeight);
-            }
-
+            s_iconsWidth = (byte)ScaleHelper.ScaleToInitialSystemDpi(IconsWidth);
+            s_iconsHeight = (byte)ScaleHelper.ScaleToInitialSystemDpi(IconsHeight);
             s_isScalingInitialized = true;
         }
 
         Properties = new PropertyStore();
         State = DataGridViewElementStates.None;
-        _nonEmptyNeighbors = new List<Rectangle>();
+        _nonEmptyNeighbors = [];
         _useDefaultToolTipText = true;
     }
 
     // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
     // All classes that are not need to be finalized must be checked in DataGridViewElement() constructor. Consider to modify it if needed.
-    ~DataGridViewCell()
-    {
-        Dispose(false);
-    }
+    ~DataGridViewCell() => Dispose(disposing: false);
 
     [Browsable(false)]
     public AccessibleObject AccessibilityObject
@@ -1327,21 +1320,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
-    private static Bitmap GetBitmap(string bitmapName)
-    {
-        Bitmap b = DpiHelper.GetBitmapFromIcon(typeof(DataGridViewCell), bitmapName);
-        if (DpiHelper.IsScalingRequired)
-        {
-            Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, new Size(s_iconsWidth, s_iconsHeight));
-            if (scaledBitmap is not null)
-            {
-                b.Dispose();
-                b = scaledBitmap;
-            }
-        }
-
-        return b;
-    }
+    private static Bitmap GetBitmap(string bitmapName) =>
+        ScaleHelper.GetIconResourceAsBitmap(typeof(DataGridViewCell), bitmapName, new Size(s_iconsWidth, s_iconsHeight));
 
     protected virtual object? GetClipboardContent(
         int rowIndex,

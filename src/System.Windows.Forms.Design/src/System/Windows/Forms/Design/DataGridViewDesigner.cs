@@ -805,7 +805,8 @@ internal class DataGridViewDesigner : ControlDesigner
         IDesignerHost? host = Component.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
         // child modal dialog -launching in System Aware mode
-        DataGridViewColumnCollectionDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewColumnCollectionDialog(((DataGridView)Component!).Site!));
+        DataGridViewColumnCollectionDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
+            () => new DataGridViewColumnCollectionDialog(((DataGridView)Component!).Site!));
         dialog.SetLiveDataGridView((DataGridView)Component);
         DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewEditColumnsTransactionString);
         DialogResult result = DialogResult.Cancel;
@@ -834,8 +835,9 @@ internal class DataGridViewDesigner : ControlDesigner
         DialogResult result = DialogResult.Cancel;
 
         // child modal dialog -launching in System Aware mode
-        DataGridViewAddColumnDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewAddColumnDialog(((DataGridView)Component).Columns, (DataGridView)Component));
-        dialog.Start(((DataGridView)Component).Columns.Count, true /*persistChangesToDesigner*/);
+        DataGridViewAddColumnDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
+            () => new DataGridViewAddColumnDialog(((DataGridView)Component).Columns, (DataGridView)Component));
+        dialog.Start(((DataGridView)Component).Columns.Count, persistChangesToDesigner: true);
 
         try
         {

@@ -1047,7 +1047,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
     private void RenderCheckBackground(ToolStripItemImageRenderEventArgs e)
     {
-        Rectangle bounds = DpiHelper.IsScalingRequired
+        Rectangle bounds = ScaleHelper.IsScalingRequired
             ? new Rectangle(
                 e.ImageRectangle.Left - 2,
                 (e.Item.Height - e.ImageRectangle.Height) / 2 - 1,
@@ -1606,19 +1606,19 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
     private void ScaleObjectSizesIfNeeded(int currentDeviceDpi)
     {
-        if (DpiHelper.IsPerMonitorV2Awareness)
+        if (ScaleHelper.IsThreadPerMonitorV2Aware)
         {
             if (previousDeviceDpi != currentDeviceDpi)
             {
                 ScaleArrowOffsetsIfNeeded(currentDeviceDpi);
-                overflowButtonWidth = DpiHelper.LogicalToDeviceUnits(OVERFLOW_BUTTON_WIDTH, currentDeviceDpi);
-                overflowArrowWidth = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_WIDTH, currentDeviceDpi);
-                overflowArrowHeight = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_HEIGHT, currentDeviceDpi);
-                overflowArrowOffsetY = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_OFFSETY, currentDeviceDpi);
+                overflowButtonWidth = ScaleHelper.ScaleToDpi(OVERFLOW_BUTTON_WIDTH, currentDeviceDpi);
+                overflowArrowWidth = ScaleHelper.ScaleToDpi(OVERFLOW_ARROW_WIDTH, currentDeviceDpi);
+                overflowArrowHeight = ScaleHelper.ScaleToDpi(OVERFLOW_ARROW_HEIGHT, currentDeviceDpi);
+                overflowArrowOffsetY = ScaleHelper.ScaleToDpi(OVERFLOW_ARROW_OFFSETY, currentDeviceDpi);
 
-                gripPadding = DpiHelper.LogicalToDeviceUnits(GRIP_PADDING, currentDeviceDpi);
-                iconWellGradientWidth = DpiHelper.LogicalToDeviceUnits(ICON_WELL_GRADIENT_WIDTH, currentDeviceDpi);
-                int scaledSize = DpiHelper.LogicalToDeviceUnits(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, currentDeviceDpi);
+                gripPadding = ScaleHelper.ScaleToDpi(GRIP_PADDING, currentDeviceDpi);
+                iconWellGradientWidth = ScaleHelper.ScaleToDpi(ICON_WELL_GRADIENT_WIDTH, currentDeviceDpi);
+                int scaledSize = ScaleHelper.ScaleToDpi(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, currentDeviceDpi);
                 scaledDropDownMenuItemPaintPadding = new Padding(scaledSize + 1, 0, scaledSize, 0);
                 previousDeviceDpi = currentDeviceDpi;
                 isScalingInitialized = true;
@@ -1631,17 +1631,17 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             return;
         }
 
-        if (DpiHelper.IsScalingRequired)
+        if (ScaleHelper.IsScalingRequired)
         {
             ScaleArrowOffsetsIfNeeded();
-            overflowButtonWidth = DpiHelper.LogicalToDeviceUnitsX(OVERFLOW_BUTTON_WIDTH);
-            overflowArrowWidth = DpiHelper.LogicalToDeviceUnitsX(OVERFLOW_ARROW_WIDTH);
-            overflowArrowHeight = DpiHelper.LogicalToDeviceUnitsY(OVERFLOW_ARROW_HEIGHT);
-            overflowArrowOffsetY = DpiHelper.LogicalToDeviceUnitsY(OVERFLOW_ARROW_OFFSETY);
+            overflowButtonWidth = ScaleHelper.ScaleToInitialSystemDpi(OVERFLOW_BUTTON_WIDTH);
+            overflowArrowWidth = ScaleHelper.ScaleToInitialSystemDpi(OVERFLOW_ARROW_WIDTH);
+            overflowArrowHeight = ScaleHelper.ScaleToInitialSystemDpi(OVERFLOW_ARROW_HEIGHT);
+            overflowArrowOffsetY = ScaleHelper.ScaleToInitialSystemDpi(OVERFLOW_ARROW_OFFSETY);
 
-            gripPadding = DpiHelper.LogicalToDeviceUnitsY(GRIP_PADDING);
-            iconWellGradientWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_WELL_GRADIENT_WIDTH);
-            int scaledSize = DpiHelper.LogicalToDeviceUnitsX(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE);
+            gripPadding = ScaleHelper.ScaleToInitialSystemDpi(GRIP_PADDING);
+            iconWellGradientWidth = ScaleHelper.ScaleToInitialSystemDpi(ICON_WELL_GRADIENT_WIDTH);
+            int scaledSize = ScaleHelper.ScaleToInitialSystemDpi(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE);
             scaledDropDownMenuItemPaintPadding = new Padding(scaledSize + 1, 0, scaledSize, 0);
         }
 

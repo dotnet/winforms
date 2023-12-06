@@ -114,12 +114,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
         }
     }
 
-    #region Layout
-
-    protected override ButtonBaseAdapter CreateButtonAdapter()
-    {
-        return new ButtonPopupAdapter(Control);
-    }
+    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonPopupAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
@@ -145,13 +140,15 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
         layout.ShadowedText = false;
+        checkSize = (int)(checkSize * GetDpiScaleRatio(control));
+
         if (show3D)
         {
-            layout.CheckSize = (int)(checkSize * GetDpiScaleRatio(control) + 1);
+            layout.CheckSize = checkSize + 1;
         }
         else
         {
-            layout.CheckSize = (int)(checkSize * GetDpiScaleRatio(control));
+            layout.CheckSize = checkSize;
             layout.CheckPaddingSize = 1;
         }
 
@@ -162,18 +159,18 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         LayoutOptions layout = CommonLayout();
         layout.ShadowedText = false;
+        int checkSize = (int)(FlatCheckSize * GetDpiScaleRatio());
+
         if (show3D)
         {
-            layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio() + 1);
+            layout.CheckSize = checkSize + 1;
         }
         else
         {
-            layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio());
+            layout.CheckSize = checkSize;
             layout.CheckPaddingSize = 1;
         }
 
         return layout;
     }
-
-    #endregion
 }

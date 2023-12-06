@@ -9,12 +9,10 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Value))]
 public partial class ToolStripProgressBar : ToolStripControlHost
 {
-    internal static readonly object EventRightToLeftLayoutChanged = new();
+    private static readonly object s_rightToLeftLayoutChangedEvent = new();
 
-    private static readonly Padding defaultMargin = new(1, 2, 1, 1);
-    private static readonly Padding defaultStatusStripMargin = new(1, 3, 1, 3);
-    private Padding scaledDefaultMargin = defaultMargin;
-    private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
+    private Padding _defaultMargin;
+    private Padding _defaultStatusStripMargin;
 
     public ToolStripProgressBar()
         : base(CreateControlInstance())
@@ -24,11 +22,8 @@ public partial class ToolStripProgressBar : ToolStripControlHost
             toolStripProgressBarControl.Owner = this;
         }
 
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
-            scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin);
-        }
+        _defaultMargin = ScaleHelper.ScaleToDpi(new Padding(1, 2, 1, 1), ScaleHelper.InitialSystemDpi);
+        _defaultStatusStripMargin = ScaleHelper.ScaleToDpi(new Padding(1, 3, 1, 3), ScaleHelper.InitialSystemDpi);
     }
 
     public ToolStripProgressBar(string? name)
@@ -91,11 +86,11 @@ public partial class ToolStripProgressBar : ToolStripControlHost
         {
             if (Owner is not null && Owner is StatusStrip)
             {
-                return scaledDefaultStatusStripMargin;
+                return _defaultStatusStripMargin;
             }
             else
             {
-                return scaledDefaultMargin;
+                return _defaultMargin;
             }
         }
     }
@@ -256,7 +251,7 @@ public partial class ToolStripProgressBar : ToolStripControlHost
 
     protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
     {
-        RaiseEvent(EventRightToLeftLayoutChanged, e);
+        RaiseEvent(s_rightToLeftLayoutChangedEvent, e);
     }
 
     protected override void OnSubscribeControlEvents(Control? control)
@@ -340,8 +335,8 @@ public partial class ToolStripProgressBar : ToolStripControlHost
     [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
     public event EventHandler? RightToLeftLayoutChanged
     {
-        add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
-        remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
+        add => Events.AddHandler(s_rightToLeftLayoutChangedEvent, value);
+        remove => Events.RemoveHandler(s_rightToLeftLayoutChangedEvent, value);
     }
 
     /// <summary>

@@ -107,7 +107,7 @@ public sealed partial class BinaryEditor : UITypeEditor
         }
 
         // Child modal dialog- launching in SystemAware mode.
-        _binaryUI ??= DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
+        _binaryUI ??= ScaleHelper.InvokeInSystemAwareContext(() => new BinaryUI(this));
 
         _binaryUI.Value = value;
         if (editorService.ShowDialog(_binaryUI) == DialogResult.OK)

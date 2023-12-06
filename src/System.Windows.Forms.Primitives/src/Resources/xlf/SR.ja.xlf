@@ -22,6 +22,11 @@
         <target state="translated">1 つ以上の有効ではないエントリが IDictionary パラメーターにあります。すべての値がオブジェクトのプロパティに一致していることを確認してください。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ResourceNotFound">
+        <source>Resource '{1}' cannot be found in class '{0}'.</source>
+        <target state="new">Resource '{1}' cannot be found in class '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">テキスト ("{0}") を解析することができませんでした。必要なテキストの形式は "{1}" です。</target>

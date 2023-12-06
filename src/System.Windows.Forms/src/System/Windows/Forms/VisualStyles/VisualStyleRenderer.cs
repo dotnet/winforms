@@ -581,7 +581,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         // Valid values are 0x0 to 0x2
         SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
-        if (!hwnd.IsNull && DpiHelper.IsPerMonitorV2Awareness)
+        if (!hwnd.IsNull && ScaleHelper.IsThreadPerMonitorV2Aware)
         {
             using var htheme = OpenThemeData(hwnd, Class);
             _lastHResult = PInvoke.GetThemePartSize(htheme, dc, Part, State, null, (THEMESIZE)type, out SIZE dpiSize);

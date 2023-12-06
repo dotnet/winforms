@@ -418,11 +418,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
             if (picture.Value->Type == PICTYPE.PICTYPE_ICON)
             {
                 HICON cursorHandle = (HICON)picture.Value->Handle;
-                Size picSize = GetIconSize(cursorHandle);
-                if (DpiHelper.IsScalingRequired)
-                {
-                    picSize = DpiHelper.LogicalToDeviceUnits(picSize);
-                }
+                Size picSize = ScaleHelper.ScaleToDpi(GetIconSize(cursorHandle), ScaleHelper.InitialSystemDpi);
 
                 _handle = (HCURSOR)PInvoke.CopyImage(
                     (HANDLE)cursorHandle.Value,

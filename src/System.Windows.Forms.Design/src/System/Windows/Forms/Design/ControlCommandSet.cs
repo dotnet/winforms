@@ -951,7 +951,7 @@ internal class ControlCommandSet : CommandSet
                 }
             }
 
-            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 tabOrder = new TabOrder((IDesignerHost)GetService(typeof(IDesignerHost)));
             }

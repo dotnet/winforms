@@ -22,12 +22,11 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
     private int _lineHeight;
     private bool _needUpdateUIWithFont = true;
 
-    protected const int BorderSize = 3;
-    protected const int DefaultWidth = 0;
-    protected const int DefaultHeight = 59;
-    protected const int MinimumLines = 2;
+    private const int LogicalDefaultWidth = 0;
+    private const int LogicalDefaultHeight = 59;
+    private const int MinimumLines = 2;
 
-    private int _borderSize = BorderSize;
+    private int _borderSize;
 
     private Rectangle _lastClientRectangle = Rectangle.Empty;
 
@@ -51,15 +50,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         Controls.Add(_titleLabel);
         Controls.Add(_descriptionLabel);
 
-        int defaultHeight = DefaultHeight;
-
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _borderSize = LogicalToDeviceUnits(BorderSize);
-            defaultHeight = LogicalToDeviceUnits(DefaultHeight);
-        }
-
-        Size = new(DefaultWidth, defaultHeight);
+        Size = new(LogicalToDeviceUnits(LogicalDefaultWidth), LogicalToDeviceUnits(LogicalDefaultHeight));
 
         Text = SR.PropertyGridHelpPaneTitle;
         SetStyle(ControlStyles.Selectable, false);
@@ -94,13 +85,13 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         }
 
         // Compute optimal text height.
-        bool isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
+        bool isScalingRequirementMet = ScaleHelper.IsScalingRequirementMet;
         using Graphics g = _descriptionLabel.CreateGraphicsInternal();
         SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(OwnerPropertyGrid, g, _titleLabel.Text, Font, width);
         Size size = Size.Ceiling(sizef);
         int padding = isScalingRequirementMet ? LogicalToDeviceUnits(2) : 2;
         height += (size.Height * 2) + padding;
-        return Math.Max(height + 2 * padding, isScalingRequirementMet ? LogicalToDeviceUnits(DefaultHeight) : DefaultHeight);
+        return Math.Max(height + 2 * padding, isScalingRequirementMet ? LogicalToDeviceUnits(LogicalDefaultHeight) : LogicalDefaultHeight);
     }
 
     internal virtual void LayoutWindow()
@@ -135,7 +126,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
                 _lastClientRectangle.Height));
         }
 
-        if (DpiHelper.IsScalingRequirementMet)
+        if (ScaleHelper.IsScalingRequirementMet)
         {
             int oldLineHeight = _lineHeight;
             _lineHeight = Font.Height + LogicalToDeviceUnits(2);
@@ -171,7 +162,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
             _descriptionLabel.Top,
             _descriptionLabel.Left,
             size.Width,
-            Math.Max(0, size.Height - _lineHeight - (DpiHelper.IsScalingRequirementMet ? LogicalToDeviceUnits(1) : 1)),
+            Math.Max(0, size.Height - _lineHeight - (ScaleHelper.IsScalingRequirementMet ? LogicalToDeviceUnits(1) : 1)),
             BoundsSpecified.Size);
     }
 
@@ -181,14 +172,18 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         UpdateUIWithFont();
     }
 
-    /// <inheritdoc />
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _borderSize = LogicalToDeviceUnits(BorderSize);
-        }
+        ScaleConstants();
+    }
+
+    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
+
+    private void ScaleConstants()
+    {
+        const int LogicalBorderSize = 3;
+        _borderSize = LogicalToDeviceUnits(LogicalBorderSize);
     }
 
     public virtual void SetDescription(string title, string description)

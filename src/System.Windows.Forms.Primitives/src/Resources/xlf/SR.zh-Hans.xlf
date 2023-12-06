@@ -22,6 +22,11 @@
         <target state="translated">在 IDictionary 参数中有一个或多个无效项。请验证所有值均与对象的属性匹配。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ResourceNotFound">
+        <source>Resource '{1}' cannot be found in class '{0}'.</source>
+        <target state="new">Resource '{1}' cannot be found in class '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">未能分析 Text("{0}")，文本格式应为“{1}”。</target>

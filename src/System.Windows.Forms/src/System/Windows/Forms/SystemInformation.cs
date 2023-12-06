@@ -78,7 +78,7 @@ public static class SystemInformation
     ///  Gets the width of the vertical scroll bar in pixels.
     /// </summary>
     public static int GetVerticalScrollBarWidthForDpi(int dpi)
-        => DpiHelper.IsPerMonitorV2Awareness
+        => ScaleHelper.IsThreadPerMonitorV2Aware
             ? PInvoke.GetCurrentSystemMetrics(SM_CXVSCROLL, (uint)dpi)
             : PInvoke.GetSystemMetrics(SM_CXVSCROLL);
 
@@ -91,7 +91,7 @@ public static class SystemInformation
     ///  Gets the height of the horizontal scroll bar in pixels.
     /// </summary>
     public static int GetHorizontalScrollBarHeightForDpi(int dpi)
-        => DpiHelper.IsPerMonitorV2Awareness
+        => ScaleHelper.IsThreadPerMonitorV2Aware
             ? PInvoke.GetCurrentSystemMetrics(SM_CYHSCROLL, (uint)dpi)
             : PInvoke.GetSystemMetrics(SM_CYHSCROLL);
 
@@ -110,7 +110,7 @@ public static class SystemInformation
     /// </summary>
     public static Size GetBorderSizeForDpi(int dpi)
     {
-        return DpiHelper.IsPerMonitorV2Awareness
+        return ScaleHelper.IsThreadPerMonitorV2Aware
             ? new(PInvoke.GetCurrentSystemMetrics(SM_CXBORDER, (uint)dpi),
                 PInvoke.GetCurrentSystemMetrics(SM_CYBORDER, (uint)dpi))
             : BorderSize;
@@ -150,7 +150,7 @@ public static class SystemInformation
     ///  Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
     /// </summary>
     public static Font GetMenuFontForDpi(int dpi)
-        => GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
+        => GetMenuFontHelper((uint)dpi, ScaleHelper.IsThreadPerMonitorV2Aware);
 
     private static unsafe Font GetMenuFontHelper(uint dpi, bool useDpi)
     {
@@ -233,7 +233,7 @@ public static class SystemInformation
     ///  Gets the width of the horizontal scroll bar arrow bitmap in pixels.
     /// </summary>
     public static int GetHorizontalScrollBarArrowWidthForDpi(int dpi)
-        => DpiHelper.IsPerMonitorV2Awareness
+        => ScaleHelper.IsThreadPerMonitorV2Aware
             ? PInvoke.GetCurrentSystemMetrics(SM_CXHSCROLL, (uint)dpi)
             : PInvoke.GetSystemMetrics(SM_CXHSCROLL);
 

@@ -21,10 +21,8 @@ public partial class ToolStripTextBox : ToolStripControlHost
     internal static readonly object s_eventMultilineChanged = new();
     internal static readonly object s_eventModifiedChanged = new();
 
-    private static readonly Padding s_defaultMargin = new(1, 0, 1, 0);
-    private static readonly Padding s_defaultDropDownMargin = new(1);
-    private Padding _scaledDefaultMargin = s_defaultMargin;
-    private Padding _scaledDefaultDropDownMargin = s_defaultDropDownMargin;
+    private Padding _defaultMargin;
+    private Padding _defaultDropDownMargin;
 
     public ToolStripTextBox()
         : base(CreateControlInstance())
@@ -32,11 +30,11 @@ public partial class ToolStripTextBox : ToolStripControlHost
         ToolStripTextBoxControl textBox = (ToolStripTextBoxControl)Control;
         textBox.Owner = this;
 
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(s_defaultMargin);
-            _scaledDefaultDropDownMargin = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownMargin);
-        }
+        const int LogicalDefaultMargin = 1;
+        int defaultMargin = ScaleHelper.ScaleToInitialSystemDpi(LogicalDefaultMargin);
+
+        _defaultMargin = new(defaultMargin, 0, defaultMargin, 0);
+        _defaultDropDownMargin = new(defaultMargin);
     }
 
     public ToolStripTextBox(string? name)
@@ -80,11 +78,11 @@ public partial class ToolStripTextBox : ToolStripControlHost
         {
             if (IsOnDropDown)
             {
-                return _scaledDefaultDropDownMargin;
+                return _defaultDropDownMargin;
             }
             else
             {
-                return _scaledDefaultMargin;
+                return _defaultMargin;
             }
         }
     }

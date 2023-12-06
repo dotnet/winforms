@@ -18,12 +18,13 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(Click))]
 [ToolboxItem(false)]
 [DefaultProperty(nameof(Text))]
-public abstract partial class ToolStripItem : BindableComponent,
-                          ICommandBindingTargetProvider,
-                          IDropTarget,
-                          ISupportOleDropSource,
-                          IArrangedElement,
-                          IKeyboardToolTip
+public abstract partial class ToolStripItem :
+    BindableComponent,
+    ICommandBindingTargetProvider,
+    IDropTarget,
+    ISupportOleDropSource,
+    IArrangedElement,
+    IKeyboardToolTip
 {
 #if DEBUG
     internal static readonly TraceSwitch s_mouseDebugging = new("MouseDebugging", "Debug ToolStripItem mouse debugging code");
@@ -49,10 +50,8 @@ public abstract partial class ToolStripItem : BindableComponent,
     private ToolStripItemImageScaling _imageScaling = ToolStripItemImageScaling.SizeToFit;
     private Size _cachedTextSize;
 
-    private static readonly Padding s_defaultMargin = new(0, 1, 0, 2);
-    private static readonly Padding s_defaultStatusStripMargin = new(0, 2, 0, 0);
-    private Padding _scaledDefaultMargin = s_defaultMargin;
-    private Padding _scaledDefaultStatusStripMargin = s_defaultStatusStripMargin;
+    private Padding _defaultMargin;
+    private Padding _defaultStatusStripMargin;
 
     private ToolStripItemDisplayStyle _displayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
@@ -147,16 +146,12 @@ public abstract partial class ToolStripItem : BindableComponent,
     private static readonly int s_stateDisposing = BitVector32.CreateMask(s_stateUseAmbientMargin);
 
     private long _lastClickTime;
-    private int _deviceDpi = DpiHelper.DeviceDpi;
+    private int _deviceDpi = ScaleHelper.InitialSystemDpi;
     internal Font _defaultFont = ToolStripManager.DefaultFont;
 
     protected ToolStripItem()
     {
-        if (DpiHelper.IsScalingRequirementMet)
-        {
-            _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(s_defaultMargin);
-            _scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(s_defaultStatusStripMargin);
-        }
+        ScaleConstants(ScaleHelper.InitialSystemDpi);
 
         _state[s_stateEnabled | s_stateAutoSize | s_stateVisible | s_stateConstructing | s_stateSupportsItemClick | s_stateInvalidMirroredImage | s_stateMouseDownAndUpMustBeInSameItem | s_stateUseAmbientMargin] = true;
         _state[s_stateAllowDrop | s_stateMouseDownAndNoDrag | s_stateSupportsRightClick | s_statePressed | s_stateSelected | s_stateDisposed | s_stateDoubleClickEnabled | s_stateRightToLeftAutoMirrorImage | s_stateSupportsSpaceKey] = false;
@@ -688,10 +683,10 @@ public abstract partial class ToolStripItem : BindableComponent,
         {
             if (Owner is not null && Owner is StatusStrip)
             {
-                return _scaledDefaultStatusStripMargin;
+                return _defaultStatusStripMargin;
             }
 
-            return _scaledDefaultMargin;
+            return _defaultMargin;
         }
     }
 
@@ -707,8 +702,8 @@ public abstract partial class ToolStripItem : BindableComponent,
     /// </summary>
     protected virtual Size DefaultSize
     {
-        get => DpiHelper.IsPerMonitorV2Awareness ?
-                DpiHelper.LogicalToDeviceUnits(new Size(23, 23), DeviceDpi) :
+        get => ScaleHelper.IsThreadPerMonitorV2Aware ?
+                ScaleHelper.ScaleToDpi(new Size(23, 23), DeviceDpi) :
                 new Size(23, 23);
     }
 
@@ -949,7 +944,7 @@ public abstract partial class ToolStripItem : BindableComponent,
                 return font;
             }
 
-            return DpiHelper.IsPerMonitorV2Awareness ? _defaultFont : ToolStripManager.DefaultFont;
+            return ScaleHelper.IsThreadPerMonitorV2Aware ? _defaultFont : ToolStripManager.DefaultFont;
         }
         set
         {
@@ -3177,14 +3172,16 @@ public abstract partial class ToolStripItem : BindableComponent,
     {
         ToolStripManager.CurrentDpi = newDpi;
         _defaultFont = ToolStripManager.DefaultFont;
-        _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(s_defaultMargin, _deviceDpi);
-        _scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(s_defaultStatusStripMargin, _deviceDpi);
+        ScaleConstants(newDpi);
     }
 
-    public void Select()
+    private void ScaleConstants(int dpi)
     {
-        Select(forceRaiseAccessibilityFocusChanged: false);
+        _defaultMargin = ScaleHelper.ScaleToDpi(new Padding(0, 1, 0, 2), dpi);
+        _defaultStatusStripMargin = ScaleHelper.ScaleToDpi(new Padding(0, 2, 0, 0), dpi);
     }
+
+    public void Select() => Select(forceRaiseAccessibilityFocusChanged: false);
 
     internal void Select(bool forceRaiseAccessibilityFocusChanged)
     {

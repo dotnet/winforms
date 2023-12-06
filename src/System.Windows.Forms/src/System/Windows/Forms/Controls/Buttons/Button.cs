@@ -303,7 +303,7 @@ public partial class Button : ButtonBase, IButtonControl
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-        if (DpiHelper.IsScalingRequirementMet)
+        if (ScaleHelper.IsScalingRequirementMet)
         {
             // reset cached boundary size - it needs to be recalculated for new DPI
             _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
@@ -311,8 +311,7 @@ public partial class Button : ButtonBase, IButtonControl
     }
 
     /// <summary>
-    ///  Generates a <see cref="Control.Click"/> event for a
-    ///  button.
+    ///  Generates a <see cref="Control.Click"/> event for a button.
     /// </summary>
     public void PerformClick()
     {
