@@ -87,10 +87,11 @@ public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridView
             throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
         }
 
+        // We check inside PaintInternal if some of the parameters are null.
         _dataGridView
             .GetCellInternal(ColumnIndex, RowIndex)
             .PaintInternal(
-                Graphics,
+                Graphics!,
                 clipBounds,
                 CellBounds,
                 RowIndex,
@@ -98,8 +99,8 @@ public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridView
                 Value,
                 FormattedValue,
                 ErrorText,
-                CellStyle,
-                AdvancedBorderStyle,
+                CellStyle!,
+                AdvancedBorderStyle!,
                 paintParts);
     }
 
@@ -121,10 +122,11 @@ public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridView
             paintParts |= DataGridViewPaintParts.SelectionBackground;
         }
 
+        // We check inside PaintInternal if some of the parameters are null.
         _dataGridView
             .GetCellInternal(ColumnIndex, RowIndex)
             .PaintInternal(
-                Graphics,
+                Graphics!,
                 clipBounds,
                 CellBounds,
                 RowIndex,
@@ -132,8 +134,8 @@ public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridView
                 Value,
                 FormattedValue,
                 ErrorText,
-                CellStyle,
-                AdvancedBorderStyle,
+                CellStyle!,
+                AdvancedBorderStyle!,
                 paintParts);
     }
 
@@ -149,10 +151,11 @@ public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridView
             throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
         }
 
+        // We check inside PaintInternal if some of the parameters are null.
         _dataGridView
             .GetCellInternal(ColumnIndex, RowIndex)
             .PaintInternal(
-                Graphics,
+                Graphics!,
                 clipBounds,
                 CellBounds,
                 RowIndex,
@@ -160,8 +163,8 @@ public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridView
                 Value,
                 FormattedValue,
                 ErrorText,
-                CellStyle,
-                AdvancedBorderStyle,
+                CellStyle!,
+                AdvancedBorderStyle!,
                 DataGridViewPaintParts.ContentBackground | DataGridViewPaintParts.ContentForeground | DataGridViewPaintParts.ErrorIcon);
     }
 

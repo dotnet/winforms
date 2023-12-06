@@ -13533,7 +13533,7 @@ public partial class DataGridView
         GetEvent<DataGridViewCellValueEventHandler>(s_cellValueNeededEvent)?.Invoke(this, e);
     }
 
-    internal void OnCellValuePushed(int columnIndex, int rowIndex, object value)
+    internal void OnCellValuePushed(int columnIndex, int rowIndex, object? value)
     {
         DataGridViewCellValueEventArgs dataGridViewCellValueEventArgs = CellValueEventArgs;
         dataGridViewCellValueEventArgs.SetProperties(columnIndex, rowIndex, value);

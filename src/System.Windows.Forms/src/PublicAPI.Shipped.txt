@@ -48,7 +48,7 @@ override System.Windows.Forms.DataGridViewButtonColumn.Clone() -> object!
 override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.set -> void
 override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string!
-~override System.Windows.Forms.DataGridViewCell.ToString() -> string
+override System.Windows.Forms.DataGridViewCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList!
 override System.Windows.Forms.DataGridViewCellStyle.Equals(object? o) -> bool
 override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
@@ -74,7 +74,7 @@ override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseDown(System.Window
 override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridViewCheckBoxCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-override System.Windows.Forms.DataGridViewCheckBoxCell.ParseFormattedValue(object? formattedValue, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.ComponentModel.TypeConverter? valueTypeConverter) -> object!
+override System.Windows.Forms.DataGridViewCheckBoxCell.ParseFormattedValue(object? formattedValue, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.ComponentModel.TypeConverter? valueTypeConverter) -> object?
 override System.Windows.Forms.DataGridViewCheckBoxCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.get -> System.Type?
 override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.set -> void
@@ -836,15 +836,15 @@ virtual System.Windows.Forms.DataGridViewCell.OnKeyUp(System.Windows.Forms.KeyEv
 virtual System.Windows.Forms.DataGridViewCell.OnMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridViewCell.OnMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridViewCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~virtual System.Windows.Forms.DataGridViewCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
-~virtual System.Windows.Forms.DataGridViewCell.PaintErrorIcon(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellValueBounds, string errorText) -> void
-~virtual System.Windows.Forms.DataGridViewCell.ParseFormattedValue(object formattedValue, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.ComponentModel.TypeConverter valueTypeConverter) -> object
-~virtual System.Windows.Forms.DataGridViewCell.PositionEditingControl(bool setLocation, bool setSize, System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> void
-~virtual System.Windows.Forms.DataGridViewCell.PositionEditingPanel(System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> System.Drawing.Rectangle
-~virtual System.Windows.Forms.DataGridViewCell.SetValue(int rowIndex, object value) -> bool
+virtual System.Windows.Forms.DataGridViewCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+virtual System.Windows.Forms.DataGridViewCell.PaintBorder(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle) -> void
+virtual System.Windows.Forms.DataGridViewCell.PaintErrorIcon(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellValueBounds, string? errorText) -> void
+virtual System.Windows.Forms.DataGridViewCell.ParseFormattedValue(object? formattedValue, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.ComponentModel.TypeConverter? valueTypeConverter) -> object?
+virtual System.Windows.Forms.DataGridViewCell.PositionEditingControl(bool setLocation, bool setSize, System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle! cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> void
+virtual System.Windows.Forms.DataGridViewCell.PositionEditingPanel(System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle! cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> System.Drawing.Rectangle
+virtual System.Windows.Forms.DataGridViewCell.SetValue(int rowIndex, object? value) -> bool
 virtual System.Windows.Forms.DataGridViewCell.ValueType.get -> System.Type?
 virtual System.Windows.Forms.DataGridViewCell.ValueType.set -> void
 virtual System.Windows.Forms.DataGridViewCellCollection.Add(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> int
