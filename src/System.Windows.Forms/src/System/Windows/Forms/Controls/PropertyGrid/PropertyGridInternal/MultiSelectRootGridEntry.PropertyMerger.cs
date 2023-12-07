@@ -84,15 +84,11 @@ internal partial class MultiSelectRootGridEntry
             GridEntry parentEntry)
         {
             var objectProperties = new PropertyDescriptorCollection[objects.Length];
-            Attribute[]? attributes;
+            Attribute[]? attributes = null;
             if (parentEntry.BrowsableAttributes is not null)
             {
                 attributes = new Attribute[parentEntry.BrowsableAttributes.Count];
                 parentEntry.BrowsableAttributes.CopyTo(attributes, 0);
-            }
-            else
-            {
-                attributes = null;
             }
 
             for (int i = 0; i < objects.Length; i++)
@@ -106,7 +102,7 @@ internal partial class MultiSelectRootGridEntry
                 objectProperties[i] = properties;
             }
 
-            List<PropertyDescriptor[]> mergedList = new();
+            List<PropertyDescriptor[]> mergedList = [];
             var matchArray = new PropertyDescriptor[objects.Length];
 
             //
