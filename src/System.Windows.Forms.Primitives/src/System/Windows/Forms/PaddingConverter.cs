@@ -49,7 +49,7 @@ public class PaddingConverter : TypeConverter
                 culture ??= CultureInfo.CurrentCulture;
                 return string.Join(
                     $"{culture.TextInfo.ListSeparator} ",
-                    new string[padding.Left, padding.Top, padding.Right, padding.Bottom]);
+                    new object[] { padding.Left, padding.Top, padding.Right, padding.Bottom });
             }
             else if (destinationType == typeof(InstanceDescriptor))
             {
