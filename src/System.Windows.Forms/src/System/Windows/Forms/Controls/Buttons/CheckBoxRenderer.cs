@@ -7,8 +7,7 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  This is a rendering class for the CheckBox control. It works downlevel too (obviously
-///  without visual styles applied.)
+///  Provides methods used to render a check box control with or without visual styles.
 /// </summary>
 public static class CheckBoxRenderer
 {
@@ -17,19 +16,12 @@ public static class CheckBoxRenderer
     private static VisualStyleRenderer? t_visualStyleRenderer;
     private static readonly VisualStyleElement s_checkBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
 
-    /// <summary>
-    ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
-    ///  determine how to render.
-    ///  If this property is false, the renderer will always render with visualstyles.
-    /// </summary>
+    /// <inheritdoc cref="ButtonRenderer.RenderMatchingApplicationState"/>
     public static bool RenderMatchingApplicationState { get; set; } = true;
 
-    private static bool RenderWithVisualStyles
-        => !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
+    private static bool RenderWithVisualStyles => !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
 
-    /// <summary>
-    ///  Returns true if the background corresponding to the given state is partially transparent, else false.
-    /// </summary>
+    /// <inheritdoc cref="ButtonRenderer.IsBackgroundPartiallyTransparent(PushButtonState)"/>
     public static bool IsBackgroundPartiallyTransparent(CheckBoxState state)
     {
         if (RenderWithVisualStyles)
@@ -43,10 +35,7 @@ public static class CheckBoxRenderer
         }
     }
 
-    /// <summary>
-    ///  This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
-    ///  this isn't required and does nothing.
-    /// </summary>
+    /// <inheritdoc cref="ButtonRenderer.DrawParentBackground(Graphics, Rectangle, Control)"/>
     public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
     {
         if (RenderWithVisualStyles)
@@ -57,9 +46,7 @@ public static class CheckBoxRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a CheckBox control.
-    /// </summary>
+    /// <inheritdoc cref="DrawCheckBox(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, CheckBoxState)"/>
     public static void DrawCheckBox(Graphics g, Point glyphLocation, CheckBoxState state)
     {
         if (RenderWithVisualStyles)
@@ -93,9 +80,7 @@ public static class CheckBoxRenderer
         t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
     }
 
-    /// <summary>
-    ///  Renders a CheckBox control.
-    /// </summary>
+    /// <inheritdoc cref="DrawCheckBox(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, CheckBoxState)"/>
     public static void DrawCheckBox(
         Graphics g,
         Point glyphLocation,
@@ -113,9 +98,7 @@ public static class CheckBoxRenderer
             focused,
             state);
 
-    /// <summary>
-    ///  Renders a CheckBox control.
-    /// </summary>
+    /// <inheritdoc cref="DrawCheckBox(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, CheckBoxState)"/>
     public static void DrawCheckBox(
         Graphics g,
         Point glyphLocation,
@@ -124,10 +107,7 @@ public static class CheckBoxRenderer
         Font? font,
         TextFormatFlags flags,
         bool focused,
-        CheckBoxState state)
-    {
-        DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font, flags, focused, state, HWND.Null);
-    }
+        CheckBoxState state) => DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font, flags, focused, state, HWND.Null);
 
     internal static void DrawCheckBox(
         Graphics g,
@@ -172,9 +152,7 @@ public static class CheckBoxRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a CheckBox control.
-    /// </summary>
+    /// <inheritdoc cref="DrawCheckBox(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, CheckBoxState)"/>
     public static void DrawCheckBox(
         Graphics g,
         Point glyphLocation,
@@ -249,8 +227,7 @@ public static class CheckBoxRenderer
     /// <summary>
     ///  Returns the size of the CheckBox glyph.
     /// </summary>
-    public static Size GetGlyphSize(Graphics g, CheckBoxState state)
-        => GetGlyphSize((IDeviceContext)g, state);
+    public static Size GetGlyphSize(Graphics g, CheckBoxState state) => GetGlyphSize((IDeviceContext)g, state);
 
     internal static Size GetGlyphSize(IDeviceContext deviceContext, CheckBoxState state, HWND hwnd = default)
     {
@@ -345,34 +322,20 @@ public static class CheckBoxRenderer
         }
     }
 
-    private static bool IsMixed(CheckBoxState state)
+    private static bool IsMixed(CheckBoxState state) => state switch
     {
-        switch (state)
-        {
-            case CheckBoxState.MixedNormal:
-            case CheckBoxState.MixedHot:
-            case CheckBoxState.MixedPressed:
-            case CheckBoxState.MixedDisabled:
-                return true;
+        CheckBoxState.MixedNormal
+            or CheckBoxState.MixedHot
+            or CheckBoxState.MixedPressed
+            or CheckBoxState.MixedDisabled => true,
+        _ => false,
+    };
 
-            default:
-                return false;
-        }
-    }
-
-    private static bool IsDisabled(CheckBoxState state)
+    private static bool IsDisabled(CheckBoxState state) => state switch
     {
-        switch (state)
-        {
-            case CheckBoxState.CheckedDisabled:
-            case CheckBoxState.UncheckedDisabled:
-            case CheckBoxState.MixedDisabled:
-                return true;
-
-            default:
-                return false;
-        }
-    }
+        CheckBoxState.CheckedDisabled or CheckBoxState.UncheckedDisabled or CheckBoxState.MixedDisabled => true,
+        _ => false,
+    };
 
     [MemberNotNull(nameof(t_visualStyleRenderer))]
     private static void InitializeRenderer(int state)
@@ -380,7 +343,9 @@ public static class CheckBoxRenderer
         int part = s_checkBoxElement.Part;
         if (SystemInformation.HighContrast
             && IsDisabled((CheckBoxState)state)
-            && VisualStyleRenderer.IsCombinationDefined(s_checkBoxElement.ClassName, VisualStyleElement.Button.CheckBox.HighContrastDisabledPart))
+            && VisualStyleRenderer.IsCombinationDefined(
+                s_checkBoxElement.ClassName,
+                VisualStyleElement.Button.CheckBox.HighContrastDisabledPart))
         {
             part = VisualStyleElement.Button.CheckBox.HighContrastDisabledPart;
         }

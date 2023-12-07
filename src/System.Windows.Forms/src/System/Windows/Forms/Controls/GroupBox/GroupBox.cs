@@ -270,8 +270,8 @@ public partial class GroupBox : Control
     [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
     public bool UseCompatibleTextRendering
     {
-        get => UseCompatibleTextRenderingInt;
-        set => UseCompatibleTextRenderingInt = value;
+        get => UseCompatibleTextRenderingInternal;
+        set => UseCompatibleTextRenderingInternal = value;
     }
 
     /// <summary>

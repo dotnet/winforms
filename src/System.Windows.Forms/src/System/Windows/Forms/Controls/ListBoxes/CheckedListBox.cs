@@ -243,8 +243,8 @@ public partial class CheckedListBox : ListBox
     [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
     public bool UseCompatibleTextRendering
     {
-        get => base.UseCompatibleTextRenderingInt;
-        set => base.UseCompatibleTextRenderingInt = value;
+        get => base.UseCompatibleTextRenderingInternal;
+        set => base.UseCompatibleTextRenderingInternal = value;
     }
 
     /// <summary>

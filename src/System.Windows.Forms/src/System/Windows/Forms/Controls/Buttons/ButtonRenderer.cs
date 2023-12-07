@@ -7,8 +7,7 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  This is a rendering class for the Button control. It works downlevel too (obviously
-///  without visual styles applied.)
+///  Provides methods used to render a button control with or without visual styles.
 /// </summary>
 public static class ButtonRenderer
 {
@@ -18,40 +17,38 @@ public static class ButtonRenderer
     private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
 
     /// <summary>
-    ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
-    ///  determine how to render.
-    ///  If this property is false, the renderer will always render with visualstyles.
+    ///  Gets or sets a value indicating whether the renderer uses the application state to determine rendering style.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   If the <see cref="RenderMatchingApplicationState"/> property is <see langword="true"/>, the renderer
+    ///   uses the setting from the <see cref="Application.RenderWithVisualStyles"/> property to determine the
+    ///   rendering style. If <see cref="RenderMatchingApplicationState"/> property is <see langword="false"/>,
+    ///   the renderer will always render using visual styles.
+    ///  </para>
+    /// </remarks>
     public static bool RenderMatchingApplicationState { get; set; } = true;
 
-    private static bool RenderWithVisualStyles
-    {
-        get
-        {
-            return (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
-        }
-    }
+    private static bool RenderWithVisualStyles => !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
 
     /// <summary>
-    ///  Returns true if the background corresponding to the given state is partially transparent, else false.
+    ///  Indicates whether the background has semitransparent or alpha-blended pieces.
     /// </summary>
     public static bool IsBackgroundPartiallyTransparent(PushButtonState state)
     {
         if (RenderWithVisualStyles)
         {
             InitializeRenderer((int)state);
-
             return t_visualStyleRenderer.IsBackgroundPartiallyTransparent();
         }
         else
         {
-            return false; // for downlevel, this is false
+            return false;
         }
     }
 
     /// <summary>
-    ///  This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
-    ///  this isn't required and does nothing.
+    ///  Draws the background of a control's parent in the specified area.
     /// </summary>
     public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
         => DrawParentBackground((IDeviceContext)g, bounds, childControl);
@@ -65,11 +62,9 @@ public static class ButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a Button control.
-    /// </summary>
-    public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state)
-        => DrawButton((IDeviceContext)g, bounds, state);
+    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
+    public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state) =>
+        DrawButton((IDeviceContext)g, bounds, state);
 
     internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state)
     {
@@ -88,10 +83,6 @@ public static class ButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Method to draw visualstyle themes in case of per-monitor scenarios where Hwnd is necessary
-    /// </summary>
-    /// <param name="hwnd">Handle to the control.</param>
     internal static void DrawButtonForHandle(
         IDeviceContext deviceContext,
         Rectangle bounds,
@@ -130,15 +121,11 @@ public static class ButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a Button control.
-    /// </summary>
-    public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state)
-        => DrawButtonForHandle(g, bounds, focused, state, HWND.Null);
+    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
+    public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state) =>
+        DrawButtonForHandle(g, bounds, focused, state, HWND.Null);
 
-    /// <summary>
-    ///  Renders a Button control.
-    /// </summary>
+    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
     public static void DrawButton(Graphics g, Rectangle bounds, string? buttonText, Font? font, bool focused, PushButtonState state)
     {
         DrawButton(
@@ -151,9 +138,7 @@ public static class ButtonRenderer
             state);
     }
 
-    /// <summary>
-    ///  Renders a Button control.
-    /// </summary>
+    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
     public static void DrawButton(Graphics g, Rectangle bounds, string? buttonText, Font? font, TextFormatFlags flags, bool focused, PushButtonState state)
     {
         Rectangle contentBounds;
@@ -182,9 +167,8 @@ public static class ButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a Button control.
-    /// </summary>
+    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
+
     public static void DrawButton(Graphics g, Rectangle bounds, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
     {
         Rectangle contentBounds;
@@ -210,9 +194,7 @@ public static class ButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a Button control.
-    /// </summary>
+    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
     public static void DrawButton(
         Graphics g,
         Rectangle bounds,
@@ -221,9 +203,7 @@ public static class ButtonRenderer
         Image image,
         Rectangle imageBounds,
         bool focused,
-        PushButtonState state)
-    {
-        DrawButton(
+        PushButtonState state) => DrawButton(
             g,
             bounds,
             buttonText,
@@ -233,10 +213,9 @@ public static class ButtonRenderer
             imageBounds,
             focused,
             state);
-    }
 
     /// <summary>
-    ///  Renders a Button control.
+    ///  Draws a button control.
     /// </summary>
     public static void DrawButton(
         Graphics g,

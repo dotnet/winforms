@@ -4140,10 +4140,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
     public bool UseCompatibleTextRendering
     {
-        get => UseCompatibleTextRenderingInt;
+        get => UseCompatibleTextRenderingInternal;
         set
         {
-            UseCompatibleTextRenderingInt = value;
+            UseCompatibleTextRenderingInternal = value;
             _helpPane.UpdateTextRenderingEngine();
             _gridView.Invalidate();
         }

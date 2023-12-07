@@ -11,8 +11,7 @@ public class NumericUpDownTests
     [WinFormsFact]
     public void NumericUpDown_Constructor()
     {
-        using var nud = new NumericUpDown();
-
+        using NumericUpDown nud = new();
         Assert.NotNull(nud);
         Assert.Equal("0", nud.Text);
     }
@@ -25,13 +24,13 @@ public class NumericUpDownTests
             return;
         }
 
-        using var form = new Form();
-        using var upDown = new NumericUpDown();
+        using Form form = new();
+        using NumericUpDown upDown = new();
 
         form.Controls.Add(upDown);
 
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
 
         Assert.Equal(new Rectangle(0, 0, 120, 23), upDown.Bounds);
 
@@ -46,7 +45,7 @@ public class NumericUpDownTests
 
         // Printing the main control doesn't get the redraw for the child controls on the first render,
         // directly hitting the up/down button subcontrol.
-        using var emfButtons = new EmfScope();
+        using EmfScope emfButtons = new();
         state = new DeviceContextState(emfButtons);
         upDown.Controls[0].PrintToMetafile(emfButtons);
 
@@ -68,16 +67,16 @@ public class NumericUpDownTests
             return;
         }
 
-        using var form = new Form();
-        using var upDown = new NumericUpDown();
+        using Form form = new();
+        using NumericUpDown upDown = new();
 
         form.Controls.Add(upDown);
 
         // Check the disabled state
         upDown.Enabled = false;
 
-        using var emfDisabled = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emfDisabled);
+        using EmfScope emfDisabled = new();
+        DeviceContextState state = new(emfDisabled);
         upDown.PrintToMetafile(emfDisabled);
 
         emfDisabled.Validate(
@@ -104,13 +103,13 @@ public class NumericUpDownTests
             return;
         }
 
-        using var form = new Form();
-        using var upDown = new NumericUpDown();
+        using Form form = new();
+        using NumericUpDown upDown = new();
 
         form.Controls.Add(upDown);
 
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
 
         Assert.Equal(new Rectangle(0, 0, 120, 23), upDown.Bounds);
 
@@ -188,7 +187,7 @@ public class NumericUpDownTests
         // Printing the main control doesn't get the redraw for the child controls on the first render,
         // directly hitting the up/down button subcontrol.
 
-        using var emfButtons = new EmfScope();
+        using EmfScope emfButtons = new();
         state = new DeviceContextState(emfButtons);
         upDown.Controls[0].PrintToMetafile(emfButtons);
 

@@ -5,6 +5,10 @@ using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms;
 
+/// <devdoc>
+///  This class is used in <see cref="RefCountedCache{TObject, TCacheEntryData, TKey}"/> which is performance
+///  sensitive. Do not make changes without validating performance impacts.
+/// </devdoc>
 internal class SinglyLinkedList<T>
 {
     public SinglyLinkedList() { }
@@ -15,7 +19,7 @@ internal class SinglyLinkedList<T>
 
     public Node AddFirst(T value)
     {
-        Node node = new Node(value);
+        Node node = new(value);
 
         if (Count == 0)
         {
@@ -35,7 +39,7 @@ internal class SinglyLinkedList<T>
 
     public Node AddLast(T value)
     {
-        Node node = new Node(value);
+        Node node = new(value);
 
         if (Count == 0)
         {
@@ -56,33 +60,23 @@ internal class SinglyLinkedList<T>
 
     public Enumerator GetEnumerator() => new(this);
 
-    public class Node
+    public class Node(T value)
     {
-        public Node(T value) => Value = value;
         public Node? Next { get; set; }
-        public T Value { get; set; }
+        public T Value { get; set; } = value;
 
         public static implicit operator T(Node? node) => node is null ? default! : node.Value;
     }
 
-    public struct Enumerator
+    public struct Enumerator(SinglyLinkedList<T> list)
     {
-        private readonly SinglyLinkedList<T> _list;
-        private bool _removed;
-        private bool _finished;
-        private Node? _current;
-        private Node? _previous;
+        private readonly SinglyLinkedList<T> _list = list;
+        private bool _removed = false;
+        private bool _finished = false;
+        private Node? _current = null;
+        private Node? _previous = null;
 
-        public Enumerator(SinglyLinkedList<T> list)
-        {
-            _list = list;
-            _current = null;
-            _previous = null;
-            _removed = false;
-            _finished = false;
-        }
-
-        public Node? Current => _current;
+        public readonly Node? Current => _current;
 
         /// <summary>
         ///  Resets the enumerator.

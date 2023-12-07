@@ -19,20 +19,11 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
     [ThreadStatic]
     private static Color t_checkImageIndeterminateBackColor;
 
-    internal CheckBoxBaseAdapter(ButtonBase control)
-        : base(control)
+    internal CheckBoxBaseAdapter(ButtonBase control) : base(control)
     {
     }
 
-    protected new CheckBox Control
-    {
-        get
-        {
-            return ((CheckBox)base.Control);
-        }
-    }
-
-    #region Drawing Helpers
+    protected new CheckBox Control => (CheckBox)base.Control;
 
     protected void DrawCheckFlat(
         PaintEventArgs e,
@@ -44,9 +35,8 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
     {
         Rectangle bounds = layout.CheckBounds;
 
-        // Removed subtracting one for Width and Height. In Everett we needed to do this,
-        // since we were using GDI+ to draw the border. Now that we are using GDI,
-        // we should not do before drawing the border.
+        // Removed subtracting one for Width and Height. In VS 2003 (Everett) we needed to do this, as we were using
+        // GDI+ to draw the border. Now that we are using GDI, this is unnecessary.
 
         if (!layout.Options.DotNetOneButtonCompat)
         {
@@ -80,7 +70,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             using DeviceContextHdcScope hdc = new(e);
             using PInvoke.CreateBrushScope hbrush = new(checkBackground);
 
-            // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
+            // Even though we are using GDI here as opposed to GDI+ in VS 2003 (Everett), we still need to add 1.
             bounds.Width++;
             bounds.Height++;
             hdc.FillRectangle(bounds, hbrush);
@@ -143,8 +133,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         }
     }
 
-    protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, ColorData colors, Color checkColor)
-    {
+    protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, ColorData colors, Color checkColor) =>
         DrawCheckOnly(
             FlatCheckSize,
             Control.Checked,
@@ -154,7 +143,6 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             layout,
             colors,
             checkColor);
-    }
 
     internal static void DrawCheckOnly(
         int checkSize,
@@ -192,6 +180,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
         fullSize.Height++;
         Bitmap checkImage;
+
         if (controlCheckState == CheckState.Checked)
         {
             checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageCheckedBackColor, ref t_checkImageChecked);
@@ -242,7 +231,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
     protected ButtonState GetState()
     {
-        ButtonState style = (ButtonState)0;
+        ButtonState style = 0;
 
         if (Control.CheckState == CheckState.Unchecked)
         {
@@ -277,7 +266,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
                 CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                     e,
                     new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
-                    CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
+                    CheckBoxRenderer.ConvertFromButtonState(style, isMixed: true, Control.MouseIsOver),
                     Control.HWNDInternal);
             }
             else
@@ -292,7 +281,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
                 CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                     e,
                     new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
-                    CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
+                    CheckBoxRenderer.ConvertFromButtonState(style, isMixed: false, Control.MouseIsOver),
                     Control.HWNDInternal);
             }
             else
@@ -301,8 +290,6 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             }
         }
     }
-
-    #endregion
 
     private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap? cacheCheckImage)
     {
@@ -318,7 +305,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
         // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
         RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
-        Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
+        Bitmap bitmap = new(fullSize.Width, fullSize.Height);
 
         using (Graphics offscreen = Graphics.FromImage(bitmap))
         {

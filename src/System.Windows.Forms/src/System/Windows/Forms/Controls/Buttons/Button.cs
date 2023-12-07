@@ -11,41 +11,36 @@ using Windows.Win32.UI.Accessibility;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Represents a
-///  Windows button.
+///  Represents a Windows button.
 /// </summary>
 [SRDescription(nameof(SR.DescriptionButton))]
 [Designer($"System.Windows.Forms.Design.ButtonBaseDesigner, {AssemblyRef.SystemDesign}")]
 public partial class Button : ButtonBase, IButtonControl
 {
     /// <summary>
-    ///  The dialog result that will be sent to the parent dialog form when
-    ///  we are clicked.
+    ///  The dialog result that will be sent to the parent dialog form when we are clicked.
     /// </summary>
     private DialogResult _dialogResult;
 
     private const int InvalidDimensionValue = int.MinValue;
 
     /// <summary>
-    ///  For buttons whose FlatStyle = FlatStyle.Flat, this property specifies the size, in pixels
+    ///  For buttons whose style is <see cref="FlatStyle.Flat"/>, this property specifies the size, in pixels
     ///  of the border around the button.
     /// </summary>
     private Size _systemSize = new(InvalidDimensionValue, InvalidDimensionValue);
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="Button"/>
-    ///  class.
+    ///  Initializes a new instance of the <see cref="Button"/> class.
     /// </summary>
     public Button() : base()
     {
         // Buttons shouldn't respond to right clicks, so we need to do all our own click logic
-        SetStyle(ControlStyles.StandardClick |
-                 ControlStyles.StandardDoubleClick,
-                 false);
+        SetStyle(ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, false);
     }
 
     /// <summary>
-    ///  Allows the control to optionally shrink when AutoSize is true.
+    ///  Allows the control to optionally shrink when <see cref="Control.AutoSize"/> is <see langword="true"/>.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
     [Browsable(true)]
@@ -54,10 +49,7 @@ public partial class Button : ButtonBase, IButtonControl
     [SRDescription(nameof(SR.ControlAutoSizeModeDescr))]
     public AutoSizeMode AutoSizeMode
     {
-        get
-        {
-            return GetAutoSizeMode();
-        }
+        get => GetAutoSizeMode();
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -81,30 +73,20 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-        => new ButtonAccessibleObject(this);
+    protected override AccessibleObject CreateAccessibilityInstance() => new ButtonAccessibleObject(this);
 
-    internal override ButtonBaseAdapter CreateFlatAdapter()
-    {
-        return new ButtonFlatAdapter(this);
-    }
+    internal override ButtonBaseAdapter CreateFlatAdapter() => new ButtonFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter()
-    {
-        return new ButtonPopupAdapter(this);
-    }
+    internal override ButtonBaseAdapter CreatePopupAdapter() => new ButtonPopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter()
-    {
-        return new ButtonStandardAdapter(this);
-    }
+    internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonStandardAdapter(this);
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
         if (FlatStyle != FlatStyle.System)
         {
-            Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
-            return AutoSizeMode == AutoSizeMode.GrowAndShrink ? prefSize : LayoutUtils.UnionSizes(prefSize, Size);
+            Size preferredSize = base.GetPreferredSizeCore(proposedConstraints);
+            return AutoSizeMode == AutoSizeMode.GrowAndShrink ? preferredSize : LayoutUtils.UnionSizes(preferredSize, Size);
         }
 
         if (_systemSize.Width == InvalidDimensionValue)
@@ -149,24 +131,17 @@ public partial class Button : ButtonBase, IButtonControl
     }
 
     /// <summary>
-    ///  Gets or sets a value that is returned to the
-    ///  parent form when the button
-    ///  is clicked.
+    ///  Gets or sets a value that is returned to the parent form when the button is clicked.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(DialogResult.None)]
     [SRDescription(nameof(SR.ButtonDialogResultDescr))]
     public virtual DialogResult DialogResult
     {
-        get
-        {
-            return _dialogResult;
-        }
-
+        get => _dialogResult;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-
             _dialogResult = value;
         }
     }
@@ -176,18 +151,12 @@ public partial class Button : ButtonBase, IButtonControl
     /// <summary>
     ///  Raises the <see cref="Control.OnMouseEnter"/> event.
     /// </summary>
-    protected override void OnMouseEnter(EventArgs e)
-    {
-        base.OnMouseEnter(e);
-    }
+    protected override void OnMouseEnter(EventArgs e) => base.OnMouseEnter(e);
 
     /// <summary>
     ///  Raises the <see cref="Control.OnMouseLeave"/> event.
     /// </summary>
-    protected override void OnMouseLeave(EventArgs e)
-    {
-        base.OnMouseLeave(e);
-    }
+    protected override void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
 
     /// <hideinheritance/>
     [Browsable(false)]
@@ -208,8 +177,7 @@ public partial class Button : ButtonBase, IButtonControl
     }
 
     /// <summary>
-    ///  Notifies the <see cref="Button"/>
-    ///  whether it is the default button so that it can adjust its appearance
+    ///  Notifies the <see cref="Button"/> whether it is the default button so that it can adjust its appearance
     ///  accordingly.
     /// </summary>
     public virtual void NotifyDefault(bool value)
@@ -220,22 +188,13 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
-    /// <summary>
-    ///  This method actually raises the Click event. Inheriting classes should
-    ///  override this if they wish to be notified of a Click event. (This is far
-    ///  preferable to actually adding an event handler.) They should not,
-    ///  however, forget to call base.onClick(e); before exiting, to ensure that
-    ///  other recipients do actually get the event.
-    /// </summary>
     protected override void OnClick(EventArgs e)
     {
-        Form? form = FindForm();
-        if (form is not null)
+        if (FindForm() is { } form)
         {
             form.DialogResult = _dialogResult;
         }
 
-        // accessibility stuff
         AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
         AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
@@ -260,7 +219,7 @@ public partial class Button : ButtonBase, IButtonControl
     {
         if (mevent.Button == MouseButtons.Left && MouseIsPressed)
         {
-            bool isMouseDown = base.MouseIsDown;
+            bool isMouseDown = MouseIsDown;
 
             if (GetStyle(ControlStyles.UserPaint))
             {
@@ -291,21 +250,13 @@ public partial class Button : ButtonBase, IButtonControl
         base.OnTextChanged(e);
     }
 
-    /// <summary>
-    ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
-    ///  Must call the base class method to get the current DPI values. This method is invoked only when
-    ///  Application opts-in into the Per-monitor V2 support, targets .NETFX 4.7 and has
-    ///  EnableDpiChangedMessageHandling and EnableDpiChangedHighDpiImprovements config switches turned on.
-    /// </summary>
-    /// <param name="deviceDpiOld">Old DPI value</param>
-    /// <param name="deviceDpiNew">New DPI value</param>
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
         if (ScaleHelper.IsScalingRequirementMet)
         {
-            // reset cached boundary size - it needs to be recalculated for new DPI
+            // Reset cached boundary size - it needs to be recalculated for new DPI
             _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
         }
     }
@@ -320,19 +271,13 @@ public partial class Button : ButtonBase, IButtonControl
             bool validate = ValidateActiveControl(out bool validatedControlAllowsFocusChange);
             if (!ValidationCancelled && (validate || validatedControlAllowsFocusChange))
             {
-                // Paint in raised state...
+                // Paint in raised state.
                 ResetFlagsandPaint();
                 OnClick(EventArgs.Empty);
             }
         }
     }
 
-    /// <summary>
-    ///  Lets a control process mnemonic characters. Inheriting classes can
-    ///  override this to add extra functionality, but should not forget to call
-    ///  base.ProcessMnemonic(charCode); to ensure basic functionality
-    ///  remains unchanged.
-    /// </summary>
     protected internal override bool ProcessMnemonic(char charCode)
     {
         if (UseMnemonic && CanProcessMnemonic() && IsMnemonic(charCode, Text))
@@ -344,16 +289,8 @@ public partial class Button : ButtonBase, IButtonControl
         return base.ProcessMnemonic(charCode);
     }
 
-    /// <summary>
-    ///  Provides some interesting information for the Button control in String form.
-    /// </summary>
     public override string ToString() => $"{base.ToString()}, Text: {Text}";
 
-    /// <summary>
-    ///  The button's window procedure.  Inheriting classes can override this
-    ///  to add extra functionality, but should not forget to call
-    ///  base.wndProc(m); to ensure the button continues to function properly.
-    /// </summary>
     protected override void WndProc(ref Message m)
     {
         switch (m.MsgInternal)

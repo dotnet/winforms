@@ -954,7 +954,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     ButtonBaseAdapter.DrawFlatFocus(
                         g,
                         layout.Focus,
-                        colors.Options.HighContrast ? colors.WindowText : colors.ConstrastButtonShadow);
+                        colors.Options.HighContrast ? colors.WindowText : colors.ContrastButtonShadow);
                 }
             }
             else

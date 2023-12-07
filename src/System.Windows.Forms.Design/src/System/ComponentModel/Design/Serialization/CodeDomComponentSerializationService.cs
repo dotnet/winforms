@@ -7,7 +7,10 @@ using System.Collections;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This class serializes a set of components or serializable objects into a  serialization store.  The store can then be deserialized at a later  date.  CodeDomComponentSerializationService differs from other serialization  schemes in that the serialization format is opaque, and it allows for  partial serialization of objects.  For example, you can choose to  serialize only selected properties for an object.
+///  This class serializes a set of components or serializable objects into a serialization store. The store can then
+///  be deserialized at a later date. CodeDomComponentSerializationService differs from other serialization schemes in
+///  that the serialization format is opaque, and it allows for partial serialization of objects. For example, you can
+///  choose to serialize only selected properties for an object.
 /// </summary>
 public sealed partial class CodeDomComponentSerializationService : ComponentSerializationService
 {
