@@ -87,21 +87,23 @@ public partial class GroupBox : Control
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            if (GetAutoSizeMode() != value)
+            if (GetAutoSizeMode() == value)
             {
-                SetAutoSizeMode(value);
-                if (ParentInternal is not null)
-                {
-                    // DefaultLayout does not keep anchor information until it needs to.  When
-                    // AutoSize became a common property, we could no longer blindly call into
-                    // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
-                    if (ParentInternal.LayoutEngine == DefaultLayout.Instance)
-                    {
-                        ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
-                    }
+                return;
+            }
 
-                    LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
+            SetAutoSizeMode(value);
+            if (ParentInternal is not null)
+            {
+                // DefaultLayout does not keep anchor information until it needs to.  When
+                // AutoSize became a common property, we could no longer blindly call into
+                // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
+                if (ParentInternal.LayoutEngine == DefaultLayout.Instance)
+                {
+                    ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                 }
+
+                LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
             }
         }
     }
@@ -180,30 +182,32 @@ public partial class GroupBox : Control
             // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
-            if (_flatStyle != value)
+            if (_flatStyle == value)
             {
-                bool originalOwnerDraw = OwnerDraw;
-                _flatStyle = value;
+                return;
+            }
 
-                // In CreateParams, we pick our class style based on OwnerDraw
-                // if this has changed we need to recreate
-                bool needRecreate = (OwnerDraw != originalOwnerDraw);
+            bool originalOwnerDraw = OwnerDraw;
+            _flatStyle = value;
 
-                SetStyle(ControlStyles.ContainerControl, true);
+            // In CreateParams, we pick our class style based on OwnerDraw
+            // if this has changed we need to recreate
+            bool needRecreate = (OwnerDraw != originalOwnerDraw);
 
-                SetStyle(ControlStyles.SupportsTransparentBackColor |
-                         ControlStyles.UserPaint |
-                         ControlStyles.ResizeRedraw |
-                         ControlStyles.UserMouse, OwnerDraw);
+            SetStyle(ControlStyles.ContainerControl, true);
 
-                if (needRecreate)
-                {
-                    RecreateHandle();
-                }
-                else
-                {
-                    Refresh();
-                }
+            SetStyle(ControlStyles.SupportsTransparentBackColor |
+                     ControlStyles.UserPaint |
+                     ControlStyles.ResizeRedraw |
+                     ControlStyles.UserMouse, OwnerDraw);
+
+            if (needRecreate)
+            {
+                RecreateHandle();
+            }
+            else
+            {
+                Refresh();
             }
         }
     }
