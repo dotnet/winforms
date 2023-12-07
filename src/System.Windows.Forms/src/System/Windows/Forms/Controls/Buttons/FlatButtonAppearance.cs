@@ -18,10 +18,7 @@ public class FlatButtonAppearance
     private Color _mouseDownBackColor = Color.Empty;
     private Color _mouseOverBackColor = Color.Empty;
 
-    internal FlatButtonAppearance(ButtonBase owner)
-    {
-        _owner = owner;
-    }
+    internal FlatButtonAppearance(ButtonBase owner) => _owner = owner;
 
     /// <summary>
     ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
@@ -35,15 +32,15 @@ public class FlatButtonAppearance
     [DefaultValue(1)]
     public int BorderSize
     {
-        get
-        {
-            return _borderSize;
-        }
+        get => _borderSize;
         set
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
+                throw new ArgumentOutOfRangeException(
+                    nameof(value),
+                    value,
+                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
             }
 
             if (_borderSize != value)
@@ -51,7 +48,11 @@ public class FlatButtonAppearance
                 _borderSize = value;
                 if (_owner.ParentInternal is not null)
                 {
-                    LayoutTransaction.DoLayoutIf(_owner.AutoSize, _owner.ParentInternal, _owner, PropertyNames.FlatAppearanceBorderSize);
+                    LayoutTransaction.DoLayoutIf(
+                        _owner.AutoSize,
+                        _owner.ParentInternal,
+                        _owner,
+                        PropertyNames.FlatAppearanceBorderSize);
                 }
 
                 _owner.Invalidate();
@@ -71,10 +72,7 @@ public class FlatButtonAppearance
     [DefaultValue(typeof(Color), "")]
     public Color BorderColor
     {
-        get
-        {
-            return _borderColor;
-        }
+        get => _borderColor;
         set
         {
             if (value.Equals(Color.Transparent))
@@ -102,10 +100,7 @@ public class FlatButtonAppearance
     [DefaultValue(typeof(Color), "")]
     public Color CheckedBackColor
     {
-        get
-        {
-            return _checkedBackColor;
-        }
+        get => _checkedBackColor;
         set
         {
             if (_checkedBackColor != value)
@@ -129,10 +124,7 @@ public class FlatButtonAppearance
     [DefaultValue(typeof(Color), "")]
     public Color MouseDownBackColor
     {
-        get
-        {
-            return _mouseDownBackColor;
-        }
+        get => _mouseDownBackColor;
         set
         {
             if (_mouseDownBackColor != value)
@@ -156,10 +148,7 @@ public class FlatButtonAppearance
     [DefaultValue(typeof(Color), "")]
     public Color MouseOverBackColor
     {
-        get
-        {
-            return _mouseOverBackColor;
-        }
+        get => _mouseOverBackColor;
         set
         {
             if (_mouseOverBackColor != value)

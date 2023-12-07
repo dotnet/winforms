@@ -14,8 +14,8 @@ public partial class ButtonBase
         {
         }
 
-        public override AccessibleStates State
-            => this.IsOwnerHandleCreated(out ButtonBase? owner) && owner.OwnerDraw && owner.MouseIsDown
+        public override AccessibleStates State =>
+            this.IsOwnerHandleCreated(out ButtonBase? owner) && owner.OwnerDraw && owner.MouseIsDown
                 ? base.State | AccessibleStates.Pressed
                 : base.State;
 

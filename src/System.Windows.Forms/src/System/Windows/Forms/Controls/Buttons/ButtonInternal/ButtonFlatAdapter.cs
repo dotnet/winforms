@@ -72,11 +72,11 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         }
 
         PaintImage(e, layout);
-        PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, false);
+        PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, drawFocus: false);
 
         if (Control.Focused && Control.ShowFocusCues)
         {
-            DrawFlatFocus(e, layout.Focus, colors.Options.HighContrast ? colors.WindowText : colors.ConstrastButtonShadow);
+            DrawFlatFocus(e, layout.Focus, colors.Options.HighContrast ? colors.WindowText : colors.ContrastButtonShadow);
         }
 
         if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
@@ -103,7 +103,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         }
         else if (state == CheckState.Indeterminate)
         {
-            Draw3DLiteBorder(e, r, colors, false);
+            Draw3DLiteBorder(e, r, colors, up: false);
         }
         else
         {
@@ -160,11 +160,11 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         }
 
         PaintImage(e, layout);
-        PaintField(e, layout, colors, colors.WindowText, false);
+        PaintField(e, layout, colors, colors.WindowText, drawFocus: false);
 
         if (Control.Focused && Control.ShowFocusCues)
         {
-            DrawFlatFocus(e, layout.Focus, colors.Options.HighContrast ? colors.WindowText : colors.ConstrastButtonShadow);
+            DrawFlatFocus(e, layout.Focus, colors.Options.HighContrast ? colors.WindowText : colors.ContrastButtonShadow);
         }
 
         if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
@@ -191,7 +191,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         }
         else if (state == CheckState.Indeterminate)
         {
-            Draw3DLiteBorder(e, r, colors, false);
+            Draw3DLiteBorder(e, r, colors, up: false);
         }
         else
         {
@@ -230,13 +230,13 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             }
             else if (!Control.FlatAppearance.CheckedBackColor.IsEmpty)
             {
-                backColor = state == CheckState.Checked || state == CheckState.Indeterminate
+                backColor = state is CheckState.Checked or CheckState.Indeterminate
                     ? Control.FlatAppearance.CheckedBackColor.MixColor(colors.LowButtonFace)
                     : colors.LowButtonFace;
             }
             else
             {
-                backColor = state == CheckState.Indeterminate
+                backColor = state is CheckState.Indeterminate
                     ? colors.ButtonFace.MixColor(colors.LowButtonFace)
                     : colors.LowButtonFace;
             }
@@ -249,11 +249,16 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             }
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, false);
+            PaintField(
+                e,
+                layout,
+                colors,
+                IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText,
+                drawFocus: false);
 
             if (Control.Focused && Control.ShowFocusCues)
             {
-                DrawFlatFocus(e, layout.Focus, colors.ConstrastButtonShadow);
+                DrawFlatFocus(e, layout.Focus, colors.ContrastButtonShadow);
             }
 
             if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
@@ -279,13 +284,13 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             }
             else
             {
-                Draw3DLiteBorder(e, r, colors, false);
+                Draw3DLiteBorder(e, r, colors, up: false);
             }
         }
     }
 
-    protected override LayoutOptions Layout(PaintEventArgs e)
-        => PaintFlatLayout(up: false, check: true, Control.FlatAppearance.BorderSize);
+    protected override LayoutOptions Layout(PaintEventArgs e) =>
+        PaintFlatLayout(up: false, check: true, Control.FlatAppearance.BorderSize);
 
     internal static LayoutOptions PaintFlatLayout(
         bool up,

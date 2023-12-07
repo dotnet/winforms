@@ -51,18 +51,27 @@ internal abstract partial class ButtonBaseAdapter
         public StringFormatFlags GdiPlusFormatFlags { get; set; }
         public StringTrimming GdiPlusTrimming { get; set; }
         public HotkeyPrefix GdiPlusHotkeyPrefix { get; set; }
-        public StringAlignment GdiPlusAlignment { get; set; } // horizontal alignment.
-        public StringAlignment GdiPlusLineAlignment { get; set; } // vertical alignment.
 
         /// <summary>
-        ///  We don't cache the StringFormat itself because we don't have a deterministic way of disposing it, instead
-        ///  we cache the flags that make it up and create it on demand so it can be disposed by calling code.
+        ///  Horizontal alignment.
+        /// </summary>
+        public StringAlignment GdiPlusAlignment { get; set; }
+
+        /// <summary>
+        ///  Vertical alignment.
+        /// </summary>
+        public StringAlignment GdiPlusLineAlignment { get; set; }
+
+        /// <summary>
+        ///  We don't cache the <see cref="StringFormat"/> itself because we don't have a deterministic way of
+        ///  disposing it, instead we cache the flags that make it up and create it on demand so it can be disposed
+        ///  by calling code.
         /// </summary>
         public StringFormat StringFormat
         {
             get
             {
-                StringFormat format = new StringFormat
+                StringFormat format = new()
                 {
                     FormatFlags = GdiPlusFormatFlags,
                     Trimming = GdiPlusTrimming,
@@ -88,18 +97,8 @@ internal abstract partial class ButtonBaseAdapter
             }
         }
 
-        public TextFormatFlags TextFormatFlags
-        {
-            get
-            {
-                if (_disableWordWrapping)
-                {
-                    return GdiTextFormatFlags & ~TextFormatFlags.WordBreak;
-                }
-
-                return GdiTextFormatFlags;
-            }
-        }
+        public TextFormatFlags TextFormatFlags =>
+            _disableWordWrapping ? GdiTextFormatFlags & ~TextFormatFlags.WordBreak : GdiTextFormatFlags;
 
         /// <summary>
         ///  TextImageInset compensates for two factors: 3d text when the button is disabled,
@@ -194,15 +193,15 @@ internal abstract partial class ButtonBaseAdapter
                 linearBorderAndPadding += 2;
             }
 
-            Size bordersAndPadding = new Size(linearBorderAndPadding, linearBorderAndPadding);
+            Size bordersAndPadding = new(linearBorderAndPadding, linearBorderAndPadding);
             proposedSize -= bordersAndPadding;
 
             // Get space required for check.
             int checkSizeLinear = FullCheckSize;
-            Size checkSize = checkSizeLinear > 0 ? new Size(checkSizeLinear + 1, checkSizeLinear) : Size.Empty;
+            Size checkSize = checkSizeLinear > 0 ? new(checkSizeLinear + 1, checkSizeLinear) : Size.Empty;
 
             // Get space required for Image - textImageInset compensated for by expanding image.
-            Size textImageInsetSize = new Size(TextImageInset * 2, TextImageInset * 2);
+            Size textImageInsetSize = new(TextImageInset * 2, TextImageInset * 2);
             Size requiredImageSize = (ImageSize != Size.Empty) ? ImageSize + textImageInsetSize : Size.Empty;
 
             // Pack Text into remaining space
@@ -252,7 +251,7 @@ internal abstract partial class ButtonBaseAdapter
 
         internal LayoutData Layout()
         {
-            LayoutData layout = new LayoutData(this)
+            LayoutData layout = new(this)
             {
                 Client = Client
             };
@@ -278,7 +277,7 @@ internal abstract partial class ButtonBaseAdapter
             }
             else
             {
-                Rectangle textAdjusted = new Rectangle(
+                Rectangle textAdjusted = new(
                     layout.TextBounds.X - 1,
                     layout.TextBounds.Y - 1,
                     layout.TextBounds.Width + 2,
@@ -328,10 +327,12 @@ internal abstract partial class ButtonBaseAdapter
         {
             if (LayoutRTL)
             {
-                ContentAlignment[][] mapping = new ContentAlignment[3][];
-                mapping[0] = new ContentAlignment[2] { ContentAlignment.TopLeft, ContentAlignment.TopRight };
-                mapping[1] = new ContentAlignment[2] { ContentAlignment.MiddleLeft, ContentAlignment.MiddleRight };
-                mapping[2] = new ContentAlignment[2] { ContentAlignment.BottomLeft, ContentAlignment.BottomRight };
+                ContentAlignment[][] mapping =
+                [
+                    [ContentAlignment.TopLeft, ContentAlignment.TopRight],
+                    [ContentAlignment.MiddleLeft, ContentAlignment.MiddleRight],
+                    [ContentAlignment.BottomLeft, ContentAlignment.BottomRight],
+                ];
 
                 for (int i = 0; i < 3; ++i)
                 {
@@ -445,33 +446,35 @@ internal abstract partial class ButtonBaseAdapter
             layout.CheckBounds.Height -= CheckPaddingSize;
         }
 
-        // Maps an image align to the set of TextImageRelations that represent the same edge.
-        // For example, imageAlign = TopLeft maps to TextImageRelations ImageAboveText (top)
-        // and ImageBeforeText (left).
-        private static readonly TextImageRelation[] _imageAlignToRelation = new TextImageRelation[]
-        {
-            /* TopLeft = */       TextImageRelation.ImageAboveText | TextImageRelation.ImageBeforeText,
-            /* TopCenter = */     TextImageRelation.ImageAboveText,
-            /* TopRight = */      TextImageRelation.ImageAboveText | TextImageRelation.TextBeforeImage,
-            /* Invalid */         0,
-            /* MiddleLeft = */    TextImageRelation.ImageBeforeText,
-            /* MiddleCenter = */  0,
-            /* MiddleRight = */   TextImageRelation.TextBeforeImage,
-            /* Invalid */         0,
-            /* BottomLeft = */    TextImageRelation.TextAboveImage | TextImageRelation.ImageBeforeText,
-            /* BottomCenter = */  TextImageRelation.TextAboveImage,
-            /* BottomRight = */   TextImageRelation.TextAboveImage | TextImageRelation.TextBeforeImage
-        };
+        /// <summary>
+        ///  Maps an image align to the set of <see cref="Forms.TextImageRelation"/>s that represent the same edge.
+        ///  For example, <see cref="ContentAlignment.TopLeft"/> maps to <see cref="TextImageRelation.ImageAboveText"/>
+        ///  and <see cref="TextImageRelation.ImageBeforeText"/>.
+        /// </summary>
+        private static readonly TextImageRelation[] s_imageAlignToRelation =
+        [
+            TextImageRelation.ImageAboveText | TextImageRelation.ImageBeforeText,     // TopLeft
+            TextImageRelation.ImageAboveText,                                         // TopCenter
+            TextImageRelation.ImageAboveText | TextImageRelation.TextBeforeImage,     // TopRight
+            0,                                                                        // Invalid
+            TextImageRelation.ImageBeforeText,                                        // MiddleLeft
+            0,                                                                        // MiddleCenter
+            TextImageRelation.TextBeforeImage,                                        // MiddleRight
+            0,                                                                        // Invalid
+            TextImageRelation.TextAboveImage | TextImageRelation.ImageBeforeText,     // BottomLeft
+            TextImageRelation.TextAboveImage,                                         // BottomCenter
+            TextImageRelation.TextAboveImage | TextImageRelation.TextBeforeImage      // BottomRight
+        ];
 
         private static TextImageRelation ImageAlignToRelation(ContentAlignment alignment)
-            => _imageAlignToRelation[LayoutUtils.ContentAlignmentToIndex(alignment)];
+            => s_imageAlignToRelation[LayoutUtils.ContentAlignmentToIndex(alignment)];
 
         private static TextImageRelation TextAlignToRelation(ContentAlignment alignment)
             => LayoutUtils.GetOppositeTextImageRelation(ImageAlignToRelation(alignment));
 
         internal void LayoutTextAndImage(LayoutData layout)
         {
-            // Translate for Rtl applications.  This intentially shadows the member variables.
+            // Translate for Rtl applications. This shadows the member variables.
             ContentAlignment imageAlign = RtlTranslateContent(ImageAlign);
             ContentAlignment textAlign = RtlTranslateContent(TextAlign);
             TextImageRelation textImageRelation = RtlTranslateRelation(TextImageRelation);
@@ -569,7 +572,7 @@ internal abstract partial class ButtonBaseAdapter
             // this is because there are some legacy code which squeezes the button so small that text will get clipped
             // if we intersect with maxBounds. Have to do this for backward compatibility.
 
-            if (textImageRelation == TextImageRelation.TextBeforeImage || textImageRelation == TextImageRelation.ImageBeforeText)
+            if (textImageRelation is TextImageRelation.TextBeforeImage or TextImageRelation.ImageBeforeText)
             {
                 // Adjust the vertical position of textBounds so that the text doesn't fall off the boundary of the button
                 int textBottom = Math.Min(layout.TextBounds.Bottom, layout.Field.Bottom);
@@ -579,7 +582,7 @@ internal abstract partial class ButtonBaseAdapter
                 layout.TextBounds.Height = textBottom - layout.TextBounds.Y;
             }
 
-            if (textImageRelation == TextImageRelation.TextAboveImage || textImageRelation == TextImageRelation.ImageAboveText)
+            if (textImageRelation is TextImageRelation.TextAboveImage or TextImageRelation.ImageAboveText)
             {
                 // Adjust the horizontal position of textBounds so that the text doesn't fall off the boundary of the button
                 int textRight = Math.Min(layout.TextBounds.Right, layout.Field.Right);
@@ -636,7 +639,7 @@ internal abstract partial class ButtonBaseAdapter
             int bottom;
 
             // If we are using GDI to measure text, then we can get into a situation, where
-            // the proposed height is ignore. In this case, we want to clip it against maxbounds.
+            // the proposed height is ignore. In this case, we want to clip it against maxBounds.
             if (!UseCompatibleTextRendering)
             {
                 bottom = Math.Min(layout.TextBounds.Bottom, maxBounds.Bottom);
@@ -663,10 +666,10 @@ internal abstract partial class ButtonBaseAdapter
             {
                 // GDI+ text rendering.
                 using var screen = GdiCache.GetScreenDCGraphics();
-                using StringFormat gdipStringFormat = StringFormat;
+                using StringFormat stringFormat = StringFormat;
                 textSize = Size.Ceiling(
                     screen.Graphics.MeasureString(Text, Font, new SizeF(proposedSize.Width, proposedSize.Height),
-                    gdipStringFormat));
+                    stringFormat));
             }
             else if (!string.IsNullOrEmpty(Text))
             {
@@ -680,29 +683,26 @@ internal abstract partial class ButtonBaseAdapter
         }
 
 #if DEBUG
-        public override string ToString()
-        {
-            return
-                $$"""
-                    { client = {{Client}}
-                    OnePixExtraBorder = {{OnePixExtraBorder}}
-                    borderSize = {{BorderSize}}
-                    paddingSize = {{PaddingSize}}
-                    maxFocus = {{MaxFocus}}
-                    font = {{Font}}
-                    text = {{Text}}
-                    imageSize = {{ImageSize}}
-                    checkSize = {{CheckSize}}
-                    checkPaddingSize = {{CheckPaddingSize}}
-                    checkAlign = {{CheckAlign}}
-                    imageAlign = {{ImageAlign}}
-                    textAlign = {{TextAlign}}
-                    textOffset = {{TextOffset}}
-                    shadowedText = {{ShadowedText}}
-                    textImageRelation = {{TextImageRelation}}
-                    layoutRTL = {{LayoutRTL}} }
-                    """;
-        }
+        public override string ToString() =>
+            $$"""
+                { client = {{Client}}
+                OnePixExtraBorder = {{OnePixExtraBorder}}
+                borderSize = {{BorderSize}}
+                paddingSize = {{PaddingSize}}
+                maxFocus = {{MaxFocus}}
+                font = {{Font}}
+                text = {{Text}}
+                imageSize = {{ImageSize}}
+                checkSize = {{CheckSize}}
+                checkPaddingSize = {{CheckPaddingSize}}
+                checkAlign = {{CheckAlign}}
+                imageAlign = {{ImageAlign}}
+                textAlign = {{TextAlign}}
+                textOffset = {{TextOffset}}
+                shadowedText = {{ShadowedText}}
+                textImageRelation = {{TextImageRelation}}
+                layoutRTL = {{LayoutRTL}} }
+                """;
 #endif
     }
 }

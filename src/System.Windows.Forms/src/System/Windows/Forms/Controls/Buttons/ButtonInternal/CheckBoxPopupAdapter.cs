@@ -8,8 +8,7 @@ namespace System.Windows.Forms.ButtonInternal;
 
 internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
 {
-    internal CheckBoxPopupAdapter(ButtonBase control)
-        : base(control)
+    internal CheckBoxPopupAdapter(ButtonBase control) : base(control)
     {
     }
 
@@ -17,7 +16,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
+            ButtonPopupAdapter adapter = new(Control);
             adapter.PaintUp(e, Control.CheckState);
         }
         else
@@ -25,7 +24,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
             ColorData colors = PaintPopupRender(e).Calculate();
             LayoutData layout = PaintPopupLayout(show3D: false).Layout();
 
-            PaintButtonBackground(e, Control.ClientRectangle, null);
+            PaintButtonBackground(e, Control.ClientRectangle, background: null);
 
             PaintImage(e, layout);
 
@@ -35,14 +34,16 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
                 colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                 disabledColors: true,
                 colors);
+
             ControlPaint.DrawBorderSimple(
                 e,
                 layout.CheckBounds,
                 (colors.Options.HighContrast && !Control.Enabled) ? colors.WindowFrame : colors.ButtonShadow);
+
             DrawCheckOnly(e, layout, colors, colors.WindowText);
 
             AdjustFocusRectangle(layout);
-            PaintField(e, layout, colors, colors.WindowText, true);
+            PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
         }
     }
 
@@ -50,7 +51,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
+            ButtonPopupAdapter adapter = new(Control);
             adapter.PaintOver(e, Control.CheckState);
         }
         else
@@ -93,7 +94,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
+            ButtonPopupAdapter adapter = new(Control);
             adapter.PaintDown(e, Control.CheckState);
         }
         else
@@ -101,16 +102,16 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
             ColorData colors = PaintPopupRender(e).Calculate();
             LayoutData layout = PaintPopupLayout(show3D: true).Layout();
 
-            PaintButtonBackground(e, Control.ClientRectangle, null);
+            PaintButtonBackground(e, Control.ClientRectangle, background: null);
 
             PaintImage(e, layout);
 
-            DrawCheckBackground(e, layout.CheckBounds, colors.ButtonFace, true, colors);
+            DrawCheckBackground(e, layout.CheckBounds, colors.ButtonFace, disabledColors: true, colors);
             DrawPopupBorder(e, layout.CheckBounds, colors);
             DrawCheckOnly(e, layout, colors, colors.WindowText);
 
             AdjustFocusRectangle(layout);
-            PaintField(e, layout, colors, colors.WindowText, true);
+            PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
         }
     }
 
@@ -119,8 +120,8 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
         LayoutOptions layout = PaintPopupLayout(show3D: true);
-        Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize)
-            == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.s_maxSize),
+        Debug.Assert(
+            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.s_maxSize),
             "The state of show3D should not effect PreferredSize");
         return layout;
     }

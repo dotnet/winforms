@@ -51,7 +51,7 @@ internal partial class GridErrorDialog : Form
         {
             if (control.SupportsUseCompatibleTextRendering)
             {
-                control.UseCompatibleTextRenderingInt = _ownerGrid.UseCompatibleTextRendering;
+                control.UseCompatibleTextRenderingInternal = _ownerGrid.UseCompatibleTextRendering;
             }
         }
 

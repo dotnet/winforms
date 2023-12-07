@@ -12,7 +12,7 @@ namespace System;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   Buffers are not cleared and as such their inital contents will be random.
+///   Buffers are not cleared and as such their initial contents will be random.
 ///  </para>
 /// </remarks>
 internal ref struct BufferScope<T>
@@ -103,13 +103,13 @@ internal ref struct BufferScope<T>
 
     public ref T this[int i] => ref _span[i];
 
-    public Span<T> this[Range range] => _span[range];
+    public readonly Span<T> this[Range range] => _span[range];
 
     public readonly Span<T> Slice(int start, int length) => _span.Slice(start, length);
 
     public readonly ref T GetPinnableReference() => ref MemoryMarshal.GetReference(_span);
 
-    public int Length => _span.Length;
+    public readonly int Length => _span.Length;
 
     public readonly Span<T> AsSpan() => _span;
 

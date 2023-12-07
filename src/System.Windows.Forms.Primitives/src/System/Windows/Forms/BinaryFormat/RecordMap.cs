@@ -8,7 +8,7 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal class RecordMap
 {
-    private readonly Dictionary<int, IRecord> _records = new();
+    private readonly Dictionary<int, IRecord> _records = [];
 
     public IRecord this[Id id]
     {
