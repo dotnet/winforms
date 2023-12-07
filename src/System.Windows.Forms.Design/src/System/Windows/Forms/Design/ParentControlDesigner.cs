@@ -295,7 +295,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     // We need to allocation new ArrayList and pass it to the caller..
     // So its ok to Suppress this.
     protected void AddPaddingSnapLines(ref ArrayList snapLines)
-        => AddPaddingSnapLinesCommon(ListAdapter<SnapLine>.AsList(snapLines ??= new(4)));
+        => AddPaddingSnapLinesCommon((snapLines ??= new(4)).Adapt<SnapLine>());
 
     internal void AddPaddingSnapLines(ref IList<SnapLine> snapLines)
         => AddPaddingSnapLinesCommon(snapLines ??= new List<SnapLine>(4));
