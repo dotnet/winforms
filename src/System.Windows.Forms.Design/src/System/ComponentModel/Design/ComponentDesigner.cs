@@ -368,6 +368,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// </summary>
     public virtual void Initialize(IComponent component)
     {
+        ArgumentNullException.ThrowIfNull(component);
         _component = component;
 
         // For inherited components, save off the current values so we can compute a delta.  We also do this for
