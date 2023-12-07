@@ -1214,7 +1214,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_NoControl_Set()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
 
         Assert.False(provider.HasErrors);
     }
@@ -1222,8 +1222,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_SomeControlsSet()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         provider.SetError(control1, "error");
 
@@ -1233,8 +1233,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_Cleared()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         provider.SetError(control1, "Some error");
         Assert.True(provider.HasErrors);
@@ -1246,8 +1246,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_After_ErrorSetNull()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         provider.SetError(control1, "Some error");
         Assert.True(provider.HasErrors);
@@ -1259,8 +1259,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_After_ErrorSetEmptyString()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         provider.SetError(control1, "Some error");
         Assert.True(provider.HasErrors);
@@ -1272,8 +1272,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_After_ErrorSetEmptyStringMultiple()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         provider.SetError(control1, "Some error");
         Assert.True(provider.HasErrors);
@@ -1288,8 +1288,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_SetErrorMultiple()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         provider.SetError(control1, "Some error");
         provider.SetError(control1, "Some error");
@@ -1301,8 +1301,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_HasErrors_After_GetError()
     {
-        using var provider = new ErrorProvider();
-        using var control1 = new Control();
+        using ErrorProvider provider = new();
+        using Control control1 = new();
 
         _ = provider.GetError(control1);
         Assert.False(provider.HasErrors);
