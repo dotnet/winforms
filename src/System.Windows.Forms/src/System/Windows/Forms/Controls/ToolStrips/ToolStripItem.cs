@@ -1821,6 +1821,9 @@ public abstract partial class ToolStripItem :
             (ParentInternal is not null && ParentInternal.IsSelectionSuspended &&
              ParentInternal.LastMouseDownedItem == this));
 
+    /// <summary>
+    ///  Occurs when selected item changed.
+    /// </summary>
     [SRDescription(nameof(SR.ToolStripItemSelectedChangedDescr))]
     public event EventHandler? SelectedChanged
     {
@@ -1828,10 +1831,7 @@ public abstract partial class ToolStripItem :
         remove => Events.RemoveHandler(s_selectedChangedEvent, value);
     }
 
-    protected virtual void OnSelectedChanged(EventArgs e)
-    {
-        RaiseEvent(s_selectedChangedEvent, e);
-    }
+    protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
 
     protected internal virtual bool ShowKeyboardCues
         => DesignMode || ToolStripManager.ShowMenuFocusCues;
