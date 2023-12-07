@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
@@ -140,6 +141,40 @@ public class ToolStripMenuItemTests
     {
         using var item = new SubToolStripMenuItem();
         Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(CultureInfo_Shortcut_TestData))]
+    public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo cultureInfo, CultureInfo cultureUIInfo, string shortCutText)
+    {
+        Thread.CurrentThread.CurrentUICulture = cultureUIInfo;
+        Thread.CurrentThread.CurrentCulture = cultureInfo;
+        using var item = new SubToolStripMenuItem();
+        item.ShortcutKeys = Keys.Control | Keys.Shift | Keys.K;
+        Assert.Equal(item.GetShortcutText(), shortCutText);
+    }
+
+    public static IEnumerable<object[]> CultureInfo_Shortcut_TestData()
+    {
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
     }
 
     private class SubToolStripMenuItem : ToolStripMenuItem
