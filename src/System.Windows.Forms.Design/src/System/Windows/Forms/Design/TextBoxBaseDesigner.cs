@@ -53,7 +53,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
 
             IList<SnapLine> snapLines = SnapLinesInternal;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
-            return (IList)snapLines;
+            return snapLines.Unwrap();
         }
     }
 

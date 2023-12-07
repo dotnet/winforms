@@ -53,7 +53,7 @@ internal class UpDownBaseDesigner : ControlDesigner
 
             baseline += borderStyle == BorderStyle.None ? -1 : 2;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
-            return (IList)snapLines;
+            return snapLines.Unwrap();
         }
     }
 }

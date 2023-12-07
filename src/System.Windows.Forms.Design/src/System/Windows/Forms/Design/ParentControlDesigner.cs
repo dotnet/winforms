@@ -341,7 +341,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             }
 
             AddPaddingSnapLines(ref snapLines);
-            return (IList)snapLines;
+            return snapLines.Unwrap();
         }
     }
 

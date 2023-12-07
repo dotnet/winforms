@@ -26,7 +26,7 @@ internal class FlowPanelDesigner : PanelDesigner
                 }
             }
 
-            return (IList)snapLines;
+            return snapLines.Unwrap();
         }
     }
 

@@ -30,7 +30,7 @@ internal class DateTimePickerDesigner : ControlDesigner
             baseline += 2;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
-            return (IList)snapLines;
+            return snapLines.Unwrap();
         }
     }
 

@@ -93,7 +93,7 @@ internal class LabelDesigner : ControlDesigner
                 }
             }
 
-            return (IList)snapLines;
+            return snapLines.Unwrap();
         }
     }
 

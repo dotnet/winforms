@@ -4,10 +4,10 @@
 using System.Collections;
 
 namespace System.Windows.Forms.Design;
-internal sealed class ListAdapter<T> : IList<T>
+internal sealed class ListAdapter<T> : IList<T>, IWrapper<IList>
 {
     private readonly IList _list;
-    private ListAdapter(IList list) => _list = list.OrThrowIfNull();
+    internal ListAdapter(IList list) => _list = list.OrThrowIfNull();
 
     T IList<T>.this[int index]
     {
@@ -51,5 +51,16 @@ internal sealed class ListAdapter<T> : IList<T>
         void IEnumerator.Reset() => _enumerator.Reset();
     }
 
-    public static IList<T> AsList(IList list) => list as IList<T> ?? new ListAdapter<T>(list);
+    public IList Unwrap() => _list;
+}
+
+internal interface IWrapper<T>
+{
+    T Unwrap();
+}
+
+internal static class AdapterHelpers
+{
+    internal static IList Unwrap<T>(this IList<T> list) => list is IWrapper<IList> wrapper ? wrapper.Unwrap() : (IList)list;
+    internal static IList<T> Adapt<T>(this IList list) => list is IList<T> iList ? iList : new ListAdapter<T>(list);
 }
