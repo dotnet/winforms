@@ -82,7 +82,7 @@ public class TextBoxBaseAccessibleObjectTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
         AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
-        Assert.Null(accessibleObject.Name);
+        Assert.Empty(accessibleObject.Name);
         Assert.True(textBoxBase.IsHandleCreated);
     }
 

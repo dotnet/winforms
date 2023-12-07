@@ -1324,7 +1324,9 @@ public class Control_ControlAccessibleObjectTests
         {
             { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName },
             { typeof(DateTimePicker), string.Empty },
-            { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview }
+            { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview },
+            { typeof(TextBox), string.Empty},
+            { typeof(MaskedTextBox), string.Empty}
         };
 
         foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
