@@ -8,7 +8,7 @@ This has been a major `Visual Studio 2022` adoption blocker for customers who ha
 To address this problem, we have been adding support for .NET Framework projects in Windows Forms **out-of-process** designer in last few `Visual Studio 2022` releases. 
 Although we are not there yet, the latest `Visual Studio 17.9 Preview 2` release is worth a try. This release contains improved `Type Resolution` support for .NET Framework projects and `ActiveX/COM` support for both .NET Framework and .NET projects. This release also adds **Designer Selection Feature** which tracks 32-bit assembly load failures in Windows Forms .NET Framework projects and if a failure is detected, it presents following dialog to the user to select appropriate designer for the project.
 
-<img src="https://github.com/dotnet/winforms/blob/main/docs/images/designer-selection-feature-flag.png" alt="designerSelectionDialog" width="200" />
+![Designer Selection Feature dialog](../images/designer-selection-feature-dialog.png)
 
 On selecting `Yes`, the project will be reloaded and Windows Forms out-of-process designer will be used for the project. The out-of-process designer will spawn appropriate 32-bit or 64-bit process `FxDesignToolsServer.exe` depending upon project target platform and will load control assemblies in that process.
 On selecting `No`, the project will continue to use in-process designer.
