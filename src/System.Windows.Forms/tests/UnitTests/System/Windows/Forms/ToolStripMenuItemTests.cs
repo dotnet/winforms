@@ -12,7 +12,7 @@ public class ToolStripMenuItemTests
     [WinFormsFact]
     public void ToolStripMenuItem_Ctor_Default()
     {
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -127,7 +127,7 @@ public class ToolStripMenuItemTests
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.F1)]
     public void ToolStripMenuItem_SetShortcutKeys(Keys keys)
     {
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         item.ShortcutKeys = keys;
         Assert.Equal(keys, item.ShortcutKeys);
     }
@@ -139,7 +139,7 @@ public class ToolStripMenuItemTests
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift)]
     public void ToolStripMenuItem_SetShortcutKeys_ThrowsInvalidEnumArgumentException(Keys keys)
     {
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
     }
 
@@ -149,7 +149,7 @@ public class ToolStripMenuItemTests
     {
         Thread.CurrentThread.CurrentUICulture = cultureUIInfo;
         Thread.CurrentThread.CurrentCulture = cultureInfo;
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         item.ShortcutKeys = Keys.Control | Keys.Shift | Keys.K;
         Assert.Equal(item.GetShortcutText(), shortCutText);
     }
