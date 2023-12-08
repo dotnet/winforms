@@ -54,6 +54,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     private EventHandler? _onRightToLeftChanged;
 
     private bool _rightToLeft;
+    private int _errorCount;
 
     /// <summary>
     ///  Default constructor.
@@ -190,13 +191,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// <summary>
     /// Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
     /// </summary>
-    public bool HasErrors
-    {
-        get
-        {
-            return _items.Count > 0;
-        }
-    }
+    public bool HasErrors => _errorCount > 0;
 
     /// <summary>
     ///  This is used for international applications where the language is written from RightToLeft.
@@ -670,6 +665,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
 
         _items.Clear();
+        _errorCount = 0;
     }
 
     /// <summary>
@@ -783,8 +779,16 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     public void SetError(Control control, string? value)
     {
+        ControlItem controlItem = EnsureControlItem(control);
+        bool errorChanged = controlItem.Error != value
+            && (string.IsNullOrEmpty(controlItem.Error) != string.IsNullOrEmpty(value));
         EnsureControlItem(control).Error = value;
+        if (errorChanged)
+        {
+            _errorCount += string.IsNullOrEmpty(value) ? -1 : 1;
+        }
 
+        Debug.Assert(_errorCount >= 0, "Error count should not be less than zero");
         if (PInvoke.UiaClientsAreListening())
         {
             control.AccessibilityObject.RaiseAutomationNotification(

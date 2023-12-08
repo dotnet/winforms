@@ -17,7 +17,9 @@ internal abstract partial class ButtonBaseAdapter
         public Rectangle Field;
         public Rectangle Focus;
         public Rectangle ImageBounds;
-        public Point ImageStart;            // For .NET Framework 1.1 compatibility
+
+        // For .NET Framework 1.1 compatibility
+        public Point ImageStart;
         public LayoutOptions Options;
 
         internal LayoutData(LayoutOptions options)

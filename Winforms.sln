@@ -57,6 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 	ProjectSection(SolutionItems) = preProject
 		docs\building.md = docs\building.md
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		docs\coding-style.md = docs\coding-style.md
 		CONTRIBUTING.md = CONTRIBUTING.md
 		docs\debugging.md = docs\debugging.md
 		docs\developer-guide.md = docs\developer-guide.md

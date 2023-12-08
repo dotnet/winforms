@@ -17,12 +17,12 @@ internal class RadioButtonStandardAdapter : RadioButtonBaseAdapter
         {
             ColorData colors = PaintRender(e).Calculate();
             LayoutData layout = Layout(e).Layout();
-            PaintButtonBackground(e, Control.ClientRectangle, null);
+            PaintButtonBackground(e, Control.ClientRectangle, background: null);
 
             PaintImage(e, layout);
             DrawCheckBox(e, layout);
             AdjustFocusRectangle(layout);
-            PaintField(e, layout, colors, colors.WindowText, true);
+            PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
         }
     }
 
@@ -50,18 +50,9 @@ internal class RadioButtonStandardAdapter : RadioButtonBaseAdapter
         }
     }
 
-    private new ButtonStandardAdapter ButtonAdapter
-    {
-        get
-        {
-            return ((ButtonStandardAdapter)base.ButtonAdapter);
-        }
-    }
+    private new ButtonStandardAdapter ButtonAdapter => (ButtonStandardAdapter)base.ButtonAdapter;
 
-    protected override ButtonBaseAdapter CreateButtonAdapter()
-    {
-        return new ButtonStandardAdapter(Control);
-    }
+    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonStandardAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {

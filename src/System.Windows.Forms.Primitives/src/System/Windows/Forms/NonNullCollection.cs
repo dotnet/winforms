@@ -13,15 +13,11 @@ internal abstract class NonNullCollection<T>
     : IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable, IList, ICollection, IReadOnlyList<T>, IReadOnlyCollection<T>
     where T : class
 {
-    private readonly List<T> _list;
+    private readonly List<T> _list = [];
 
-    public NonNullCollection() => _list = new();
+    public NonNullCollection() { }
 
-    public NonNullCollection(IEnumerable<T> items)
-    {
-        _list = new();
-        AddRange(items);
-    }
+    public NonNullCollection(IEnumerable<T> items) => AddRange(items);
 
     public T this[int index]
     {

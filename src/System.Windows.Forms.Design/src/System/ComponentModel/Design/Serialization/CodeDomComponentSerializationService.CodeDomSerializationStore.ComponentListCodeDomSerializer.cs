@@ -472,7 +472,7 @@ public sealed partial class CodeDomComponentSerializationService
             /// </summary>
             internal void Serialize(IDesignerSerializationManager manager, Dictionary<object, ObjectData> objectData, Dictionary<string, CodeDomComponentSerializationState> objectState, IList shimObjectNames)
             {
-                if (manager.GetService<IContainer>() is {} container)
+                if (manager.GetService<IContainer>() is { } container)
                 {
                     SetupVariableReferences(manager, container, objectData, shimObjectNames);
                 }

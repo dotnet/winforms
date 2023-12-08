@@ -7,8 +7,7 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  This is a rendering class for the RadioButton control. It works downlevel too (obviously
-///  without visual styles applied.)
+///  Provides methods used to render a radio button control with or without visual styles.
 /// </summary>
 public static class RadioButtonRenderer
 {
@@ -18,59 +17,38 @@ public static class RadioButtonRenderer
 
     private static readonly VisualStyleElement s_radioElement = VisualStyleElement.Button.RadioButton.UncheckedNormal;
 
-    /// <summary>
-    ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
-    ///  determine how to render.
-    ///  If this property is false, the renderer will always render with visualstyles.
-    /// </summary>
+    /// <inheritdoc cref="ButtonRenderer.RenderMatchingApplicationState"/>
     public static bool RenderMatchingApplicationState { get; set; } = true;
 
-    private static bool RenderWithVisualStyles
-    {
-        get
-        {
-            return !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
-        }
-    }
+    private static bool RenderWithVisualStyles => !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
 
-    /// <summary>
-    ///  Returns true if the background corresponding to the given state is partially transparent, else false.
-    /// </summary>
+    /// <inheritdoc cref="ButtonRenderer.IsBackgroundPartiallyTransparent(PushButtonState)"/>
     public static bool IsBackgroundPartiallyTransparent(RadioButtonState state)
     {
         if (RenderWithVisualStyles)
         {
             InitializeRenderer((int)state);
-
             return t_visualStyleRenderer.IsBackgroundPartiallyTransparent();
         }
         else
         {
-            return false; // for downlevel, this is false
+            return false;
         }
     }
 
-    /// <summary>
-    ///  This is just a convenience wrapper for VisualStyleRenderer.DrawThemeParentBackground. For downlevel,
-    ///  this isn't required and does nothing.
-    /// </summary>
+    /// <inheritdoc cref="ButtonRenderer.DrawParentBackground(Graphics, Rectangle, Control)"/>
     public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
     {
         if (RenderWithVisualStyles)
         {
             InitializeRenderer(0);
-
             t_visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
         }
     }
 
-    /// <summary>
-    ///  Renders a RadioButton control.
-    /// </summary>
-    public static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state)
-    {
+    /// <inheritdoc cref="DrawRadioButton(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, RadioButtonState)" />
+    public static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state) =>
         DrawRadioButton(g, glyphLocation, state, HWND.Null);
-    }
 
     internal static void DrawRadioButtonWithVisualStyles(
         HDC hdc,
@@ -106,9 +84,7 @@ public static class RadioButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a RadioButton control.
-    /// </summary>
+    /// <inheritdoc cref="DrawRadioButton(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, RadioButtonState)" />
     public static void DrawRadioButton(
         Graphics g,
         Point glyphLocation,
@@ -123,9 +99,7 @@ public static class RadioButtonRenderer
                    focused, state);
     }
 
-    /// <summary>
-    ///  Renders a RadioButton control.
-    /// </summary>
+    /// <inheritdoc cref="DrawRadioButton(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, RadioButtonState)" />
     public static void DrawRadioButton(
         Graphics g,
         Point glyphLocation,
@@ -161,7 +135,6 @@ public static class RadioButtonRenderer
         if (RenderWithVisualStyles)
         {
             InitializeRenderer((int)state);
-
             t_visualStyleRenderer.DrawBackground(g, glyphBounds);
             textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
         }
@@ -179,9 +152,7 @@ public static class RadioButtonRenderer
         }
     }
 
-    /// <summary>
-    ///  Renders a RadioButton control.
-    /// </summary>
+    /// <inheritdoc cref="DrawRadioButton(Graphics, Point, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, RadioButtonState)" />
     public static void DrawRadioButton(
         Graphics g,
         Point glyphLocation,
@@ -288,7 +259,6 @@ public static class RadioButtonRenderer
         if (RenderWithVisualStyles)
         {
             InitializeRenderer((int)state);
-
             return t_visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hwnd);
         }
 

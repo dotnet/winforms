@@ -19,8 +19,8 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
 
         if (state == CheckState.Indeterminate)
         {
-            using Brush backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
-            PaintButtonBackground(e, r, backbrush);
+            using Brush backgroundBrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
+            PaintButtonBackground(e, r, backgroundBrush);
         }
         else
         {
@@ -52,7 +52,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         }
         else
         {
-            Draw3DLiteBorder(e, r, colors, false);
+            Draw3DLiteBorder(e, r, colors, up: false);
         }
     }
 
@@ -65,8 +65,8 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
 
         if (state == CheckState.Indeterminate)
         {
-            using Brush backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
-            PaintButtonBackground(e, r, backbrush);
+            using Brush backgroundBrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
+            PaintButtonBackground(e, r, backgroundBrush);
         }
         else
         {
@@ -79,7 +79,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         }
 
         PaintImage(e, layout);
-        PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, true);
+        PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, drawFocus: true);
 
         DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow, Control.IsDefault);
 
@@ -117,10 +117,10 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
     internal override void PaintDown(PaintEventArgs e, CheckState state)
     {
         ColorData colors = PaintPopupRender(e).Calculate();
-        LayoutData layout = PaintPopupLayout(e, false, SystemInformation.HighContrast ? 2 : 1).Layout();
+        LayoutData layout = PaintPopupLayout(e, up: false, SystemInformation.HighContrast ? 2 : 1).Layout();
 
         Rectangle r = Control.ClientRectangle;
-        PaintButtonBackground(e, r, null);
+        PaintButtonBackground(e, r, background: null);
         if (Control.IsDefault)
         {
             r.Inflate(-1, -1);
@@ -129,25 +129,22 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         r.Inflate(-1, -1);
 
         PaintImage(e, layout);
-        PaintField(e, layout, colors, colors.WindowText, true);
+        PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
 
         r.Inflate(1, 1);
         DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame, Control.IsDefault);
         ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : GetContrastingBorderColor(colors.ButtonShadow));
     }
 
-    #region Layout
-
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
         LayoutOptions layout = PaintPopupLayout(e, up: false, 0);
-        Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize)
-            == PaintPopupLayout(e, up: true, 2).GetPreferredSizeCore(LayoutUtils.s_maxSize),
+        Debug.Assert(
+            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintPopupLayout(e, up: true, 2).GetPreferredSizeCore(LayoutUtils.s_maxSize),
             "The state of up should not effect PreferredSize");
         return layout;
     }
 
-    // used by the DataGridViewButtonCell
     internal static LayoutOptions PaintPopupLayout(
         bool up,
         int paintedBorder,
@@ -167,7 +164,8 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         layout.TextOffset = !up;
         layout.ShadowedText = SystemInformation.HighContrast;
 
-        Debug.Assert(layout.BorderSize + layout.PaddingSize == 2,
+        Debug.Assert(
+            layout.BorderSize + layout.PaddingSize == 2,
             "It is assumed borderSize + paddingSize will always be 2. Bad value for paintedBorder?");
 
         return layout;
@@ -182,11 +180,10 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         layout.TextOffset = !up;
         layout.ShadowedText = SystemInformation.HighContrast;
 
-        Debug.Assert(layout.BorderSize + layout.PaddingSize == 2,
+        Debug.Assert(
+            layout.BorderSize + layout.PaddingSize == 2,
             "borderSize + paddingSize will always be 2. Bad value for paintedBorder?");
 
         return layout;
     }
-
-    #endregion
 }

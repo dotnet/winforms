@@ -9,7 +9,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
 {
     internal RadioButtonBaseAdapter(ButtonBase control) : base(control) { }
 
-    protected new RadioButton Control => ((RadioButton)base.Control);
+    protected new RadioButton Control => (RadioButton)base.Control;
 
     protected void DrawCheckFlat(
         PaintEventArgs e,
@@ -19,7 +19,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
         Color checkBorder)
     {
         DrawCheckBackgroundFlat(e, layout.CheckBounds, checkBorder, checkBackground);
-        DrawCheckOnly(e, layout, checkColor, true);
+        DrawCheckOnly(e, layout, checkColor, disabledColors: true);
     }
 
     protected void DrawCheckBackground3DLite(
@@ -40,7 +40,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
         using var fieldBrush = field.GetCachedSolidBrushScope();
         using var dark = colors.ButtonShadow.GetCachedPenScope();
         using var light = colors.ButtonFace.GetCachedPenScope();
-        using var lightlight = colors.Highlight.GetCachedPenScope();
+        using var lightLight = colors.Highlight.GetCachedPenScope();
 
         bounds.Width--;
         bounds.Height--;
@@ -48,8 +48,8 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
         // Fall a little short of SW, NW, NE, SE because corners come out nasty
         g.DrawPie(dark, bounds, 135 + 1, 90 - 2);
         g.DrawPie(dark, bounds, 225 + 1, 90 - 2);
-        g.DrawPie(lightlight, bounds, 315 + 1, 90 - 2);
-        g.DrawPie(lightlight, bounds, 45 + 1, 90 - 2);
+        g.DrawPie(lightLight, bounds, 315 + 1, 90 - 2);
+        g.DrawPie(lightLight, bounds, 45 + 1, 90 - 2);
         bounds.Inflate(-1, -1);
         g.FillEllipse(fieldBrush, bounds);
         g.DrawEllipse(light, bounds);
@@ -102,27 +102,27 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
             return;
         }
 
-        hdc.FillRectangle(fieldBrush, new Rectangle(bounds.X + 2, bounds.Y + 2, 8, 8));
-        hdc.FillRectangle(fieldBrush, new Rectangle(bounds.X + 4, bounds.Y + 1, 4, 10));
-        hdc.FillRectangle(fieldBrush, new Rectangle(bounds.X + 1, bounds.Y + 4, 10, 4));
+        hdc.FillRectangle(fieldBrush, new(bounds.X + 2, bounds.Y + 2, 8, 8));
+        hdc.FillRectangle(fieldBrush, new(bounds.X + 4, bounds.Y + 1, 4, 10));
+        hdc.FillRectangle(fieldBrush, new(bounds.X + 1, bounds.Y + 4, 10, 4));
 
-        hdc.DrawLine(borderPen, new Point(bounds.X + 4, bounds.Y + 0), new Point(bounds.X + 8, bounds.Y + 0));
-        hdc.DrawLine(borderPen, new Point(bounds.X + 4, bounds.Y + 11), new Point(bounds.X + 8, bounds.Y + 11));
+        hdc.DrawLine(borderPen, new(bounds.X + 4, bounds.Y + 0), new(bounds.X + 8, bounds.Y + 0));
+        hdc.DrawLine(borderPen, new(bounds.X + 4, bounds.Y + 11), new(bounds.X + 8, bounds.Y + 11));
 
-        hdc.DrawLine(borderPen, new Point(bounds.X + 2, bounds.Y + 1), new Point(bounds.X + 4, bounds.Y + 1));
-        hdc.DrawLine(borderPen, new Point(bounds.X + 8, bounds.Y + 1), new Point(bounds.X + 10, bounds.Y + 1));
+        hdc.DrawLine(borderPen, new(bounds.X + 2, bounds.Y + 1), new(bounds.X + 4, bounds.Y + 1));
+        hdc.DrawLine(borderPen, new(bounds.X + 8, bounds.Y + 1), new(bounds.X + 10, bounds.Y + 1));
 
-        hdc.DrawLine(borderPen, new Point(bounds.X + 2, bounds.Y + 10), new Point(bounds.X + 4, bounds.Y + 10));
-        hdc.DrawLine(borderPen, new Point(bounds.X + 8, bounds.Y + 10), new Point(bounds.X + 10, bounds.Y + 10));
+        hdc.DrawLine(borderPen, new(bounds.X + 2, bounds.Y + 10), new(bounds.X + 4, bounds.Y + 10));
+        hdc.DrawLine(borderPen, new(bounds.X + 8, bounds.Y + 10), new(bounds.X + 10, bounds.Y + 10));
 
-        hdc.DrawLine(borderPen, new Point(bounds.X + 0, bounds.Y + 4), new Point(bounds.X + 0, bounds.Y + 8));
-        hdc.DrawLine(borderPen, new Point(bounds.X + 11, bounds.Y + 4), new Point(bounds.X + 11, bounds.Y + 8));
+        hdc.DrawLine(borderPen, new(bounds.X + 0, bounds.Y + 4), new(bounds.X + 0, bounds.Y + 8));
+        hdc.DrawLine(borderPen, new(bounds.X + 11, bounds.Y + 4), new(bounds.X + 11, bounds.Y + 8));
 
-        hdc.DrawLine(borderPen, new Point(bounds.X + 1, bounds.Y + 2), new Point(bounds.X + 1, bounds.Y + 4));
-        hdc.DrawLine(borderPen, new Point(bounds.X + 1, bounds.Y + 8), new Point(bounds.X + 1, bounds.Y + 10));
+        hdc.DrawLine(borderPen, new(bounds.X + 1, bounds.Y + 2), new(bounds.X + 1, bounds.Y + 4));
+        hdc.DrawLine(borderPen, new(bounds.X + 1, bounds.Y + 8), new(bounds.X + 1, bounds.Y + 10));
 
-        hdc.DrawLine(borderPen, new Point(bounds.X + 10, bounds.Y + 2), new Point(bounds.X + 10, bounds.Y + 4));
-        hdc.DrawLine(borderPen, new Point(bounds.X + 10, bounds.Y + 8), new Point(bounds.X + 10, bounds.Y + 10));
+        hdc.DrawLine(borderPen, new(bounds.X + 10, bounds.Y + 2), new(bounds.X + 10, bounds.Y + 4));
+        hdc.DrawLine(borderPen, new(bounds.X + 10, bounds.Y + 8), new(bounds.X + 10, bounds.Y + 10));
     }
 
     private static int GetScaledNumber(int n, double scale)
@@ -149,17 +149,19 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
         // Circle drawing doesn't work at this size
         int offset = 5;
 
-        Rectangle vCross = new Rectangle(
+        Rectangle vCross = new(
             layout.CheckBounds.X + GetScaledNumber(offset, scale),
             layout.CheckBounds.Y + GetScaledNumber(offset - 1, scale),
             GetScaledNumber(2, scale),
             GetScaledNumber(4, scale));
+
         hdc.FillRectangle(vCross, brush);
 
-        Rectangle hCross = new Rectangle(
+        Rectangle hCross = new(
             layout.CheckBounds.X + GetScaledNumber(offset - 1, scale),
             layout.CheckBounds.Y + GetScaledNumber(offset, scale),
             GetScaledNumber(4, scale), GetScaledNumber(2, scale));
+
         hdc.FillRectangle(hCross, brush);
     }
 
