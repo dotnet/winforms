@@ -3724,12 +3724,21 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-    ///  This property overwrites the UseCompatibleTextRenderingDefault switch when set programmatically.
-    ///  Exposed publicly only by controls that support GDI text rendering (Label, LinkLabel and some others).
-    ///  Observe that this property is NOT virtual (to allow for caching the property value - see LinkLabel)
-    ///  and should be used by controls that support it only (see SupportsUseCompatibleTextRendering).
     /// </summary>
-    internal bool UseCompatibleTextRenderingInt
+    /// <remarks>
+    ///  <para>
+    ///   This property overrides <see cref="UseCompatibleTextRenderingDefault"/>.
+    ///  </para>
+    ///  <para>
+    ///   Exposed publicly only by controls that support GDI text rendering (<see cref="Label"/>, <see cref="LinkLabel"/>
+    ///   and some others).
+    ///  </para>
+    ///  <para>
+    ///   Observe that this property is NOT virtual (to allow for caching the property value - see <see cref="LinkLabel"/>)
+    ///   and should be used by controls that support it only (see <see cref="SupportsUseCompatibleTextRendering"/>).
+    ///  </para>
+    /// </remarks>
+    internal bool UseCompatibleTextRenderingInternal
     {
         get
         {
@@ -3746,9 +3755,10 @@ public unsafe partial class Control :
         }
         set
         {
-            if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInt != value)
+            if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInternal != value)
             {
                 Properties.SetInteger(s_useCompatibleTextRenderingProperty, value ? 1 : 0);
+
                 // Update the preferred size cache since we will be rendering text using a different engine.
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.UseCompatibleTextRendering);
                 Invalidate();
@@ -3758,9 +3768,13 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Determines whether the control supports rendering text using GDI+ and GDI.
-    ///  This is provided for container controls (PropertyGrid) to iterate through its children to set
-    ///  UseCompatibleTextRendering to the same value if the child control supports it.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is provided for container controls (PropertyGrid) to iterate through its children to set
+    ///   <see cref="UseCompatibleTextRenderingInternal"/> to the same value if the child control supports it.
+    ///  </para>
+    /// </remarks>
     internal virtual bool SupportsUseCompatibleTextRendering => false;
 
     private ControlVersionInfo VersionInfo
@@ -8543,10 +8557,16 @@ public unsafe partial class Control :
     private protected virtual void InitializeConstantsForInitialDpi(int initialDpi) { }
 
     /// <summary>
-    ///  Is invoked when the control handle is created or right before the top level parent receives WM_DPICHANGED message.
-    ///  This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
-    ///  The derived class can choose to not call the base class implementation.
+    ///  Invoked when the control handle is created and right before the top level parent control receives a
+    ///  WM_DPICHANGED message.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
+    ///  </para>
+    /// </remarks>
+    /// <param name="deviceDpiOld">The DPI value prior to the change.</param>
+    /// <param name="deviceDpiNew">The DPI value after the change.</param>
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
@@ -12856,10 +12876,23 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Base wndProc. All messages are sent to wndProc after getting filtered
-    ///  through the preProcessMessage function. Inheriting controls should
-    ///  call base.wndProc for any messages that they don't handle.
+    ///  Processes Windows messages.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   All messages are sent to the <see cref="WndProc(ref Message)"/> method after getting filtered through the
+    ///   <see cref="PreProcessMessage(ref Message)"/> method.
+    ///  </para>
+    ///  <para>
+    ///   The <see cref="WndProc(ref Message)"/> method corresponds exactly to the Windows <c>WindowProc</c>
+    ///   function. For more information about processing Windows messages see the
+    ///   <see href="https://go.microsoft.com/fwlink/?LinkId=181565">WindowProc function</see>.
+    ///  </para>
+    /// </remarks>
+    /// <notesToInheritors>
+    ///  Inheriting controls should call the base class's <see cref="WndProc(ref Message)"/> method to process any
+    ///  messages that they do not handle.
+    /// </notesToInheritors>
     protected virtual void WndProc(ref Message m)
     {
         // Inlined code from GetStyle(...) to ensure no perf hit for a method call.

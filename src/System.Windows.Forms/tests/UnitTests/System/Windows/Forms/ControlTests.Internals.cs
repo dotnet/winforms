@@ -150,10 +150,10 @@ public partial class ControlTests
     {
         using var control = new Control
         {
-            UseCompatibleTextRenderingInt = given
+            UseCompatibleTextRenderingInternal = given
         };
 
-        Assert.Equal(expected, control.UseCompatibleTextRenderingInt);
+        Assert.Equal(expected, control.UseCompatibleTextRenderingInternal);
     }
 
     [WinFormsTheory]

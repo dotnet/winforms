@@ -756,7 +756,7 @@ public partial class Label : Control, IAutomationLiveRegion
         {
             if (CanUseTextRenderer)
             {
-                return UseCompatibleTextRenderingInt;
+                return UseCompatibleTextRenderingInternal;
             }
 
             // Use compat text rendering (GDI+).
@@ -764,9 +764,9 @@ public partial class Label : Control, IAutomationLiveRegion
         }
         set
         {
-            if (UseCompatibleTextRenderingInt != value)
+            if (UseCompatibleTextRenderingInternal != value)
             {
-                UseCompatibleTextRenderingInt = value;
+                UseCompatibleTextRenderingInternal = value;
                 AdjustSize();
             }
         }

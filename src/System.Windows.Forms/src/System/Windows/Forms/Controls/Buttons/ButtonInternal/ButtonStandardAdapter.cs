@@ -37,20 +37,11 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         return state;
     }
 
-    internal override void PaintUp(PaintEventArgs e, CheckState state)
-    {
-        PaintWorker(e, true, state);
-    }
+    internal override void PaintUp(PaintEventArgs e, CheckState state) => PaintWorker(e, up: true, state);
 
-    internal override void PaintDown(PaintEventArgs e, CheckState state)
-    {
-        PaintWorker(e, false, state);
-    }
+    internal override void PaintDown(PaintEventArgs e, CheckState state) => PaintWorker(e, up: false, state);
 
-    internal override void PaintOver(PaintEventArgs e, CheckState state)
-    {
-        PaintUp(e, state);
-    }
+    internal override void PaintOver(PaintEventArgs e, CheckState state) => PaintUp(e, state);
 
     private void PaintThemedButtonBackground(PaintEventArgs e, Rectangle bounds, bool up)
     {
@@ -65,17 +56,17 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         ButtonRenderer.DrawButtonForHandle(
             e,
             Control.ClientRectangle,
-            false,
+            focused: false,
             pbState,
             ScaleHelper.IsScalingRequirementMet ? Control.HWNDInternal : HWND.Null);
 
-        // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.
+        // Now overlay the background image or color (the former overrides the latter), leaving a margin.
         // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
         //
         // Changing this because GetThemeMargins simply does not work in some cases.
         bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
 
-        // Only paint if the user said not to use the themed backcolor.
+        // Only paint if the user said not to use the themed background color.
         if (!Control.UseVisualStyleBackColor)
         {
             bool isHighContrastHighlighted = up && IsHighContrastHighlighted();
@@ -121,7 +112,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         if (Application.RenderWithVisualStyles)
         {
             // Don't have the text-pressed-down effect when we use themed painting to be consistent with Win32.
-            layout = PaintLayout(e, true).Layout();
+            layout = PaintLayout(e, up: true).Layout();
         }
         else
         {
@@ -135,10 +126,10 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         }
         else
         {
-            Brush? backbrush = null;
+            Brush? backgroundBrush = null;
             if (state == CheckState.Indeterminate)
             {
-                backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
+                backgroundBrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
             }
 
             try
@@ -155,11 +146,11 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
                     bounds.Inflate(-1, -1);
                 }
 
-                PaintButtonBackground(e, bounds, backbrush);
+                PaintButtonBackground(e, bounds, backgroundBrush);
             }
             finally
             {
-                backbrush?.Dispose();
+                backgroundBrush?.Dispose();
             }
         }
 
@@ -174,7 +165,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         if (up & IsHighContrastHighlighted())
         {
             Color highlightTextColor = SystemColors.HighlightText;
-            PaintField(e, layout, colors, highlightTextColor, false);
+            PaintField(e, layout, colors, highlightTextColor, drawFocus: false);
 
             if (Control.Focused && Control.ShowFocusCues)
             {
@@ -184,11 +175,11 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         }
         else if (up & IsHighContrastHighlighted())
         {
-            PaintField(e, layout, colors, SystemColors.HighlightText, true);
+            PaintField(e, layout, colors, SystemColors.HighlightText, drawFocus: true);
         }
         else
         {
-            PaintField(e, layout, colors, colors.WindowText, true);
+            PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
         }
 
         if (!Application.RenderWithVisualStyles)
@@ -213,12 +204,11 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         }
     }
 
-    #region Layout
-
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
         LayoutOptions layout = PaintLayout(e, up: false);
-        Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintLayout(e, /* up = */ true).GetPreferredSizeCore(LayoutUtils.s_maxSize),
+        Debug.Assert(
+            layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintLayout(e, up: true).GetPreferredSizeCore(LayoutUtils.s_maxSize),
             "The state of up should not effect PreferredSize");
         return layout;
     }
@@ -231,6 +221,4 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
 
         return layout;
     }
-
-    #endregion
 }

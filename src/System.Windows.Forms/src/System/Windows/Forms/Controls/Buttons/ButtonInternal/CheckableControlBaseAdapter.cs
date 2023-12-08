@@ -6,27 +6,18 @@ using System.Drawing;
 namespace System.Windows.Forms.ButtonInternal;
 
 /// <summary>
-///  Common class for RadioButtonBaseAdapter and CheckBoxBaseAdapter
+///  Common class for <see cref="RadioButtonBaseAdapter"/> and <see cref="CheckBoxBaseAdapter"/>.
 /// </summary>
 internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
 {
     private const int StandardCheckSize = 13;
     private ButtonBaseAdapter? _buttonAdapter;
 
-    internal CheckableControlBaseAdapter(ButtonBase control)
-        : base(control)
+    internal CheckableControlBaseAdapter(ButtonBase control) : base(control)
     {
     }
 
-    protected ButtonBaseAdapter ButtonAdapter
-    {
-        get
-        {
-            _buttonAdapter ??= CreateButtonAdapter();
-
-            return _buttonAdapter;
-        }
-    }
+    protected ButtonBaseAdapter ButtonAdapter => _buttonAdapter ??= CreateButtonAdapter();
 
     internal override Size GetPreferredSizeCore(Size proposedSize)
     {
@@ -37,7 +28,7 @@ internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
 
         LayoutOptions? options = default;
         using (var screen = GdiCache.GetScreenHdc())
-        using (PaintEventArgs pe = new PaintEventArgs(screen, default))
+        using (PaintEventArgs pe = new PaintEventArgs(screen, clipRect: default))
         {
             options = Layout(pe);
         }

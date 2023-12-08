@@ -15,7 +15,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonFlatAdapter adapter = new ButtonFlatAdapter(Control);
+            ButtonFlatAdapter adapter = new(Control);
             adapter.PaintDown(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
             return;
         }
@@ -35,7 +35,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonFlatAdapter adapter = new ButtonFlatAdapter(Control);
+            ButtonFlatAdapter adapter = new(Control);
             adapter.PaintOver(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
             return;
         }
@@ -55,7 +55,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonFlatAdapter adapter = new ButtonFlatAdapter(Control);
+            ButtonFlatAdapter adapter = new(Control);
             adapter.PaintUp(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
             return;
         }
@@ -74,18 +74,15 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     private void PaintFlatWorker(PaintEventArgs e, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
     {
         LayoutData layout = Layout(e).Layout();
-        PaintButtonBackground(e, Control.ClientRectangle, null);
+        PaintButtonBackground(e, Control.ClientRectangle, background: null);
 
         PaintImage(e, layout);
         DrawCheckFlat(e, layout, checkColor, colors.Options.HighContrast ? colors.ButtonFace : checkBackground, checkBorder);
         AdjustFocusRectangle(layout);
-        PaintField(e, layout, colors, checkColor, true);
+        PaintField(e, layout, colors, checkColor, drawFocus: true);
     }
 
-    protected override ButtonBaseAdapter CreateButtonAdapter()
-    {
-        return new ButtonFlatAdapter(Control);
-    }
+    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonFlatAdapter(Control);
 
     // RadioButtonPopupLayout also uses this layout for down and over
     protected override LayoutOptions Layout(PaintEventArgs e)

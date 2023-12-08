@@ -8,8 +8,7 @@ namespace System.Windows.Forms.ButtonInternal;
 
 internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
 {
-    internal CheckBoxStandardAdapter(ButtonBase control)
-        : base(control)
+    internal CheckBoxStandardAdapter(ButtonBase control) : base(control)
     {
     }
 
@@ -36,7 +35,7 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
 
             if (!string.IsNullOrEmpty(Control.Text))
             {
-                // minor adjustment to make sure the appearance is exactly the same as Win32 app.
+                // Minor adjustment to make sure the appearance is exactly the same as Win32 app.
                 int focusRectFixup = layout.Focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
                 if (!Application.RenderWithVisualStyles)
                 {
@@ -47,16 +46,18 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
                 layout.Focus.Width = layout.TextBounds.Width + layout.ImageBounds.Width - 1;
                 layout.Focus.Intersect(layout.TextBounds);
 
-                if (layout.Options.TextAlign != LayoutUtils.AnyLeft && layout.Options.UseCompatibleTextRendering && layout.Options.Font.Italic)
+                if (layout.Options.TextAlign != LayoutUtils.AnyLeft
+                    && layout.Options.UseCompatibleTextRendering
+                    && layout.Options.Font.Italic)
                 {
-                    // fixup for GDI+ text rendering.
+                    // Fixup for GDI+ text rendering.
                     layout.Focus.Width += 2;
                 }
             }
 
             PaintImage(e, layout);
             DrawCheckBox(e, layout);
-            PaintField(e, layout, colors, colors.WindowText, true);
+            PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
         }
     }
 
@@ -95,7 +96,7 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
         {
             LayoutOptions? options = default;
             using (var screen = GdiCache.GetScreenHdc())
-            using (PaintEventArgs pe = new PaintEventArgs(screen, default))
+            using (PaintEventArgs pe = new PaintEventArgs(screen, clipRect: default))
             {
                 options = Layout(pe);
             }
@@ -104,20 +105,9 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
         }
     }
 
-    #region Layout
+    private new ButtonStandardAdapter ButtonAdapter => (ButtonStandardAdapter)base.ButtonAdapter;
 
-    private new ButtonStandardAdapter ButtonAdapter
-    {
-        get
-        {
-            return ((ButtonStandardAdapter)base.ButtonAdapter);
-        }
-    }
-
-    protected override ButtonBaseAdapter CreateButtonAdapter()
-    {
-        return new ButtonStandardAdapter(Control);
-    }
+    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonStandardAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
@@ -132,7 +122,7 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
                 screen,
                 CheckBoxRenderer.ConvertFromButtonState(
                     GetState(),
-                    true,
+                    isMixed: true,
                     Control.MouseIsOver),
                 Control.HWNDInternal).Width;
         }
@@ -145,6 +135,4 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
 
         return layout;
     }
-
-    #endregion
 }

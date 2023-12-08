@@ -11,57 +11,33 @@ namespace System.Windows.Forms;
 
 public class PaddingConverter : TypeConverter
 {
-    /// <summary>
-    ///  Determines if this converter can convert an object in the given source type to
-    ///  the native type of the converter.
-    /// </summary>
-    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-    {
-        if (sourceType == typeof(string))
-        {
-            return true;
-        }
+    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
+        sourceType == typeof(string) ? true : base.CanConvertFrom(context, sourceType);
 
-        return base.CanConvertFrom(context, sourceType);
-    }
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType) =>
+        destinationType == typeof(InstanceDescriptor) ? true : base.CanConvertTo(context, destinationType);
 
-    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-    {
-        if (destinationType == typeof(InstanceDescriptor))
-        {
-            return true;
-        }
-
-        return base.CanConvertTo(context, destinationType);
-    }
-
-    /// <summary>
-    ///  Converts the given object to the converter's native type.
-    /// </summary>
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        if (value is string stringValue)
+        if (value is not string stringValue)
         {
-            ReadOnlySpan<char> text = stringValue.AsSpan().Trim();
-
-            if (text.IsEmpty)
-            {
-                return null;
-            }
-
-            // Parse 4 integer values.
-            culture ??= CultureInfo.CurrentCulture;
-            Span<int> values = stackalloc int[4];
-
-            if (!TypeConverterHelper.TryParseAsSpan(context, culture, text, values))
-            {
-                throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "left, top, right, bottom"), nameof(value));
-            }
-
-            return new Padding(values[0], values[1], values[2], values[3]);
+            return base.ConvertFrom(context, culture, value);
         }
 
-        return base.ConvertFrom(context, culture, value);
+        ReadOnlySpan<char> text = stringValue.AsSpan().Trim();
+
+        if (text.IsEmpty)
+        {
+            return null;
+        }
+
+        // Parse 4 integer values.
+        culture ??= CultureInfo.CurrentCulture;
+        Span<int> values = stackalloc int[4];
+
+        return TypeConverterHelper.TryParseAsSpan(context, culture, text, values)
+            ? (object)new Padding(values[0], values[1], values[2], values[3])
+            : throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "left, top, right, bottom"), nameof(value));
     }
 
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
@@ -71,33 +47,19 @@ public class PaddingConverter : TypeConverter
             if (destinationType == typeof(string))
             {
                 culture ??= CultureInfo.CurrentCulture;
-
-                string sep = culture.TextInfo.ListSeparator + " ";
-                TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-                // Note: ConvertToString will raise exception if value cannot be converted.
-                string[] args = new string[]
-                {
-                    intConverter.ConvertToString(context, culture, padding.Left)!,
-                    intConverter.ConvertToString(context, culture, padding.Top)!,
-                    intConverter.ConvertToString(context, culture, padding.Right)!,
-                    intConverter.ConvertToString(context, culture, padding.Bottom)!
-                };
-                return string.Join(sep, args);
+                return string.Join(
+                    $"{culture.TextInfo.ListSeparator} ",
+                    new object[] { padding.Left, padding.Top, padding.Right, padding.Bottom });
             }
             else if (destinationType == typeof(InstanceDescriptor))
             {
-                if (padding.ShouldSerializeAll())
-                {
-                    return new InstanceDescriptor(
-                        typeof(Padding).GetConstructor(new Type[] { typeof(int) }),
-                        new object[] { padding.All });
-                }
-                else
-                {
-                    return new InstanceDescriptor(
-                        typeof(Padding).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(int) }),
+                return padding.ShouldSerializeAll()
+                    ? new InstanceDescriptor(
+                        typeof(Padding).GetConstructor([typeof(int)]),
+                        new object[] { padding.All })
+                    : new InstanceDescriptor(
+                        typeof(Padding).GetConstructor([typeof(int), typeof(int), typeof(int), typeof(int)]),
                         new object[] { padding.Left, padding.Top, padding.Right, padding.Bottom });
-                }
             }
         }
 
@@ -108,7 +70,7 @@ public class PaddingConverter : TypeConverter
     {
         ArgumentNullException.ThrowIfNull(propertyValues);
 
-        var original = context?.PropertyDescriptor?.GetValue(context.Instance);
+        object? original = context?.PropertyDescriptor?.GetValue(context.Instance);
         try
         {
             // When incrementally changing an existing Padding instance e.g. through a PropertyGrid
@@ -149,8 +111,8 @@ public class PaddingConverter : TypeConverter
     [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
     public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
     {
-        PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(Padding), attributes);
-        return props.Sort(new string[] { nameof(Padding.All), nameof(Padding.Left), nameof(Padding.Top), nameof(Padding.Right), nameof(Padding.Bottom) });
+        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(Padding), attributes);
+        return properties.Sort([nameof(Padding.All), nameof(Padding.Left), nameof(Padding.Top), nameof(Padding.Right), nameof(Padding.Bottom)]);
     }
 
     public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;
