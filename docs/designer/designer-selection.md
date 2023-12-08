@@ -1,0 +1,33 @@
+# Designer Selection Feature for .NET Framework Projects
+
+## Problem
+`Visual Studio 2022` is a 64-bit process and it cannot load 32-bit assemblies. Due to this technical limitation, `Windows Forms in-process designer`, which runs inside `Visual Studio`, cannot load controls present in 32-bit assemblies.
+This has been a major `Visual Studio 2022` adoption blocker for customers who have Windows Forms .NET Framework projects which utilize `ActiveX/COM` controls or other custom controls contained in 32-bit assemblies and which cannot be updated to `AnyCPU` or to `.NET`. Till now, such projects could only use Windows Forms designer in `Visual Studio 2019` because it is a 32-bit process.
+
+## Solution
+To address this problem, we have been adding support for .NET Framework projects in Windows Forms **out-of-process** designer in last few `Visual Studio 2022` releases. 
+Although we are not there yet, the latest `Visual Studio 17.9 Preview 2` release is worth a try. This release contains improved `Type Resolution` support for .NET Framework projects and `ActiveX/COM` support for both .NET Framework and .NET projects. This release also adds **Designer Selection Feature** which tracks 32-bit assembly load failures in Windows Forms .NET Framework projects and if a failure is detected, it presents following dialog to the user to select appropriate designer for the project.
+
+![Designer Selection Feature dialog](../images/designer-selection-feature-dialog.png)
+
+On selecting `Yes`, the project will be reloaded and Windows Forms out-of-process designer will be used for the project. The out-of-process designer will spawn appropriate 32-bit or 64-bit process `FxDesignToolsServer.exe` depending upon project target platform and will load control assemblies in that process.
+On selecting `No`, the project will continue to use in-process designer.
+
+With `Yes/No` buttons, the designer selection will be remembered for current Visual Studio instance only. To add the designer selection as a project configuration property automatically, enable option `Remember for current project`. It will add `UseWinFormsOutOfProcDesigner` property to each project configuration. Windows Forms designer will read this property value to select desired designer automatically the next time project is open in Visual Studio.
+
+Hopefully this feature will help resolve this problem to some extent and we will continue to improve upon .NET Framework support in out-of-process designer. But in spite of this effort, this problem cannot be solved completely because the out-of-process designer uses new [SDK](https://www.nuget.org/packages/Microsoft.WinForms.Designer.SDK) for third-party controls and hence it won't be able to support all legacy third-party controls unless they are upgraded to use the new SDK.
+
+Note that the `Designer Selection` feature is currently under following preview feature flag which is enabled by default:
+
+![Designer Selection Feature flag](../images/designer-selection-feature-flag.png)
+
+## :warning: Warning
+Since the out-of-process designer for .NET Framework projects, cannot handle all third-party controls, there is a possibility of data loss on using this feature. Hence we recommend that you create a backup of your project beforehand.
+Also, there is a difference in the way CodeDom parsing is handled between in-process and out-of-process designers. The out-of-process designer will likely make significant updates to the code behind file which might make it incompatible with in-process designer. This issue will be addressed in an upcoming release.
+
+## Next Steps
+Following are the list of features which we plan to add support for in upcoming Visual Studio releases:
+
+1. Disable code style and formatting changes due to RoslynCodeDomService for .NET Framework projects utilizing out-of-process designer.
+2. Add Toolbox support for third-party and custom controls.
+3. Add setting for `UseWinFormsOutOfProcDesigner` property in project property pages.
