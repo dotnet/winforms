@@ -13,14 +13,15 @@ This feature is still in the early preview state, and we are collecting develope
 
 When a failure is detected, `Designer Selection Feature` presents following dialog to the user to select appropriate designer for the project:
 
-![Designer Selection Feature dialog](../images/designer-selection-feature-dialog.png)
+![Dialog presented by Designer Selection Feature when 32-bit assembly load failure is detected](../images/designer-selection-feature-dialog.png)
 
-On selecting `Yes`, the project will be reloaded and Windows Forms out-of-process designer will be used for the project. The out-of-process designer will spawn appropriate 32-bit or 64-bit process `FxDesignToolsServer.exe` depending upon project target platform and will load control assemblies in that process.
+On selecting `Yes`, the project will be reloaded and Windows Forms out-of-process designer will be used for the project. When project is targeting 32-bit platform, the designer will spawn a 32-bit process. When project is targeting AnyCPU or 64-bit platform, the designer will spawn a 64-bit process. Control assemblies will be loaded in that process.
+
 On selecting `No`, the project will continue to use in-process designer.
 
 With `Yes/No` buttons, the designer selection will be remembered for current `Visual Studio` instance only. To add the designer selection as a project configuration property automatically, enable option `Remember for current project`. It will add `UseWinFormsOutOfProcDesigner` property to each project configuration. Windows Forms designer will read this property value to select desired designer automatically the next time project is open in `Visual Studio`. Here is a sample project configuration after adding this property:
 
-![Designer Selection Project Configuration](../images/designer-selection-project-configuration.png)
+![Sample Project Configuration with the newly added property UseWinFormsOutOfProcDesigner](../images/designer-selection-project-configuration.png)
 
 This feature will solve the cases of forms having controls that have modern designers, i.e., the ones referencing the new out-of-process designer [SDK](https://www.nuget.org/packages/Microsoft.WinForms.Designer.SDK) or some simple controls which do not use complex designer features. However, this feature will not work for forms with controls that use complex designer features and as a result they must be updated to use [out-of-process designer extensibility](https://github.com/microsoft/winforms-designer-extensibility) model.
 
@@ -32,7 +33,7 @@ This feature flag is present in `Visual Studio` under `Tools -> Options -> Previ
 
 Following InfoBar will show up when out-of-process designer is used for .NET Framework projects:
 
-![Designer Selection Feature flag](../images/netfx-oop-designer-infobar.png)
+![InfoBar shown when out-of-process designer is used for .NET Framework projects](../images/netfx-oop-designer-infobar.png)
 
 ## :warning: Warning
 Since the out-of-process designer for .NET Framework projects, cannot handle all third-party controls, there is a possibility of data loss on using this feature. Hence we recommend that you create a backup of your project beforehand.
