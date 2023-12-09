@@ -15,7 +15,7 @@ When a failure is detected, `Designer Selection Feature` presents following dial
 
 ![Dialog presented by Designer Selection Feature when 32-bit assembly load failure is detected](../images/designer-selection-feature-dialog.png)
 
-On selecting `Yes`, the project will be reloaded and Windows Forms out-of-process designer will be used for the project. When project is targeting 32-bit platform, the designer will spawn a 32-bit process. When project is targeting AnyCPU or 64-bit platform, the designer will spawn a 64-bit process. Control assemblies will be loaded in that process.
+On selecting `Yes`, the project will be reloaded and Windows Forms out-of-process designer will be used for the project. When project is targeting x86 platform, the designer will spawn a 32-bit process. When project is targeting AnyCPU or x64 platform, the designer will spawn a 64-bit process. Control assemblies will be loaded in that process.
 
 On selecting `No`, the project will continue to use in-process designer.
 
