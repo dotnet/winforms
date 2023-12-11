@@ -36,7 +36,7 @@ This feature flag is present in `Visual Studio` under `Tools -> Options -> Previ
 Following InfoBar will show up when out-of-process designer is used for .NET Framework projects:
 
 ![InfoBar shown when out-of-process designer is used for .NET Framework projects](../images/netfx-oop-designer-infobar.png)
-
+Since the out-of-process designer for .NET Framework projects, cannot handle all third-party controls because the extensibility model has changed by moving out of process, there is a possibility of data loss on using this feature. Hence, we recommend that you create a backup of your project beforehand.
 ## :warning: Warning
 Since the out-of-process designer for .NET Framework projects, cannot handle all third-party controls, there is a possibility of data loss on using this feature. Hence we recommend that you create a backup of your project beforehand.
 Also, there is a difference in the way CodeDom parsing is handled between in-process and out-of-process designers. The out-of-process designer will likely make significant updates to the code behind file which might make it incompatible with in-process designer. This issue will be addressed in an upcoming release.
