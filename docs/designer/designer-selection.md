@@ -23,6 +23,8 @@ With `Yes/No` buttons, the designer selection will be remembered for current `Vi
 
 ![Sample Project Configuration with the newly added property UseWinFormsOutOfProcDesigner](../images/designer-selection-project-configuration.png)
 
+The newly added property is: ```<UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>```
+
 This feature will solve the cases of forms having controls that have modern designers, i.e., the ones referencing the new [out-of-process designer SDK](https://www.nuget.org/packages/Microsoft.WinForms.Designer.SDK) or some simple controls which do not use complex designer features. However, this feature will not work for forms with controls that use complex designer features and as a result they must be updated to use [out-of-process designer extensibility](https://github.com/microsoft/winforms-designer-extensibility) model.
 
 Note that the `Designer Selection` feature is currently under following preview feature flag which is enabled by default:
