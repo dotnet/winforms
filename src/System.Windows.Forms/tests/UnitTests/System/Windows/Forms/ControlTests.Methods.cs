@@ -4177,6 +4177,115 @@ public partial class ControlTests
         Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, Array.Empty<object>()));
     }
 
+#if DEBUG
+    // Here we will test for ThreadMethodEntry destructor will not be called.
+    // If we use AsyncWaitHandle and not close it, then we will crash to xUnit runner:
+    // The active test run was aborted. Reason: Test host process crashed : Unhandled exception. DebugAssertException: Method Debug.Fail failed with 'ThreadMethodEntry finalization hit!'
+    [WinFormsFact]
+    public void Control_Invoke_SameThread_ThreadMethodEntry_Finalizeation_Success()
+    {
+        using var control = new Control();
+        control.CreateControl();
+        Action method = () => { };
+        control.Invoke(method);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    [WinFormsFact]
+    public async Task Control_Invoke_OtherThread_ThreadMethodEntry_Finalizeation_Success()
+    {
+        using var control = new Control();
+        control.CreateControl();
+        await Task.Run(() =>
+            {
+                Action method = () => { };
+                control.Invoke(method);
+            }).ConfigureAwait(true);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    [WinFormsFact]
+    public void Control_BeginInvoke_SameThread_ThreadMethodEntry_Finalizeation_Success()
+    {
+        using var control = new Control();
+        control.CreateControl();
+        Action method = () => { };
+        control.BeginInvoke(method);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    [WinFormsFact]
+    public void Control_BeginInvoke_WH_SameThread_ThreadMethodEntry_Finalizeation_Success()
+    {
+        using var control = new Control();
+        control.CreateControl();
+        Action method = () => { };
+        var res = control.BeginInvoke(method);
+        var w = res.AsyncWaitHandle;
+        while (!w.WaitOne(1))
+        {
+            Application.DoEvents();
+        }
+
+        w.Close();
+        w = null;
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    [WinFormsFact]
+    public async Task Control_BeginInvoke_OtherThread_ThreadMethodEntry_Finalizeation_Success()
+    {
+        using var control = new Control();
+        control.CreateControl();
+        await Task.Run(
+            () =>
+            {
+                Action method = () => { };
+                var res = control.BeginInvoke(method);
+                while (!res.IsCompleted)
+                {
+                    Thread.Sleep(1);
+                }
+            }).ConfigureAwait(true);
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    [WinFormsFact]
+    public async Task Control_BeginInvoke_WH_OtherThread_ThreadMethodEntry_Finalizeation_Success()
+    {
+        using var control = new Control();
+        control.CreateControl();
+        await Task.Run(() =>
+            {
+                Action method = () => { };
+                var res = control.BeginInvoke(method);
+                res.AsyncWaitHandle.WaitOne();
+                res.AsyncWaitHandle.Close();
+            }).ConfigureAwait(true);
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+#endif
+
     [WinFormsTheory]
     [NewAndDefaultData<EventArgs>]
     public void Control_InvokeGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
