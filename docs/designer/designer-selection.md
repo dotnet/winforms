@@ -6,7 +6,7 @@ This has been a major `Visual Studio 2022` adoption blocker for customers who ha
 
 ## Solution
 To address this problem, we have been adding support for .NET Framework projects in Windows Forms **out-of-process** designer in last few `Visual Studio 2022` releases.
-This feature is still in the early preview state, and we are collecting developers' feedback on it. The `Visual Studio 17.9 Preview 2` release had added the following enhancements:
+This feature is still in an early preview state, and we are collecting developers' feedback on it. The **Visual Studio 17.9 Preview 2** release had added the following enhancements:
 1. Improved **Type Resolution** for .NET Framework projects.
 2. **ActiveX/COM** support for both .NET Framework and .NET projects.
 3. **Designer Selection Feature** to track 32-bit assembly load failures in .NET Framework projects.
