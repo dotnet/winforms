@@ -7,7 +7,7 @@ This has been a major Visual Studio 2022 adoption blocker for customers who have
 This has been a major `Visual Studio 2022` adoption blocker for customers who have Windows Forms .NET Framework projects which utilize `ActiveX/COM` controls or other custom controls contained in 32-bit assemblies and which cannot be updated to `AnyCPU` or to `.NET`. Till now, such projects could only use Windows Forms designer in `Visual Studio 2019` because it is a 32-bit process.
 
 ## Solution
-To address this problem, we have been adding support for .NET Framework projects in Windows Forms **out-of-process** designer in last few `Visual Studio 2022` releases.
+To address this problem, we have been adding support for .NET Framework projects in Windows Forms **out-of-process** designer in last few Visual Studio 2022 releases.
 This feature is still in an early preview state, and we are collecting developers' feedback on it. The **Visual Studio 17.9 Preview 2** release had added the following enhancements:
 1. Improved **Type Resolution** for .NET Framework projects.
 2. **ActiveX/COM** support for both .NET Framework and .NET projects.
