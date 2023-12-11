@@ -31,7 +31,7 @@ Note that the `Designer Selection` feature is currently under following preview 
 
 ![Detect 32-bit assembly load failures for Windows Forms .NET Framework projects feature flag](../images/designer-selection-feature-flag.png)
 
-This feature flag is present in `Visual Studio` under `Tools -> Options -> Preview Features`.
+This feature flag is present in Visual Studio under **Tools -> Options -> Preview Features**.
 
 Following InfoBar will show up when out-of-process designer is used for .NET Framework projects:
 
