@@ -3936,6 +3936,20 @@ public partial class PropertyGridTests
         propertyGrid.Enabled = true;
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_NotifyParentChange()
+    {
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.Site = new MySite(null, null);
+        ErroredCombo combo = new();
+        propertyGrid.SelectedObject = combo;
+        PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
+        GridEntry entry = propertyGridView.SelectedGridEntry;
+        PropertyDescriptorGridEntry descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
+        descriptor.SetPropertyTextValue("123");
+        propertyGrid.Refresh();
+    }
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
@@ -4063,5 +4077,71 @@ public partial class PropertyGridTests
         public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
+
+    private class ErroredCombo
+    {
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public virtual ComboPath Path { get; set; } = new ComboPath() { };
+
+        public class ComboPath
+        {
+            [NotifyParentProperty(true)]
+            [TypeConverter(typeof(StringConverter))]
+            public string ComboName { get; set; }
+
+            public override string ToString() => $"{{ComboName='{ComboName}'}}";
+        }
+    }
+
+    private class MySite : ISite
+    {
+        private IComponentChangeService _componentChangeService = new ComponentChangeService();
+        public MySite(IComponent component, IContainer container)
+        {
+            Component = component;
+            Container = container;
+        }
+
+        public IComponent Component { get; private set; }
+
+        public IContainer Container { get; private set; }
+
+        public bool DesignMode => true;
+
+        public string Name { get; set; }
+
+        public object GetService(Type serviceType)
+            => serviceType == typeof(IComponentChangeService) ? _componentChangeService : null;
+
+        public class ComponentChangeService : IComponentChangeService
+        {
+#pragma warning disable CS0067 // Required by Interface
+            public event ComponentEventHandler ComponentAdded;
+            public event ComponentEventHandler ComponentAdding;
+            public event ComponentChangedEventHandler ComponentChanged;
+            public event ComponentChangingEventHandler ComponentChanging;
+            public event ComponentEventHandler ComponentRemoved;
+            public event ComponentEventHandler ComponentRemoving;
+            public event ComponentRenameEventHandler ComponentRename;
+#pragma warning restore
+
+            public void OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
+            {
+            }
+
+            public void OnComponentChanging(object component, MemberDescriptor member)
+            {
+                if (member is null)
+                    return;
+                var props = component.GetType().GetMembers();
+                var name = member.Name;
+                // here exception in RemoteDesignerHost
+                if (props.All(p => p.Name != name))
+                {
+                    Debug.Fail("Property not found!");
+                }
+            }
+        }
     }
 }
