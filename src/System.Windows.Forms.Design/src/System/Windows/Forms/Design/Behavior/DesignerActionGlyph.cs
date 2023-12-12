@@ -15,9 +15,8 @@ internal sealed class DesignerActionGlyph : Glyph
 {
     internal const int CONTROLOVERLAP_X = 5;                    // number of pixels the anchor should be offset to the left of the control's upper-right
     internal const int CONTROLOVERLAP_Y = 2;                    // number of pixels the anchor overlaps the control in the y-direction
-    private const byte IconsWidth = 10;
-    private const byte IconsHeight = 10;
 
+    private const byte IconSize = 10;
     private Rectangle _alternativeBounds = Rectangle.Empty;     // if !empty, this represents the bounds of the tray control this glyph is related to
     private Rectangle _bounds;                                  // the bounds of our glyph
     private readonly Adorner? _adorner;                         // A ptr back to our adorner - so when we decide to change state, we can invalidate
@@ -27,6 +26,8 @@ internal sealed class DesignerActionGlyph : Glyph
     private DockStyle _dockStyle;
     private Bitmap? _glyphImageClosed;
     private Bitmap? _glyphImageOpened;
+    private readonly byte _iconsWidth = IconSize;
+    private readonly byte _iconsHeight = IconSize;
 
     /// <summary>
     ///  Constructor that passes empty alternative bounds and parents.
@@ -49,6 +50,7 @@ internal sealed class DesignerActionGlyph : Glyph
     private DesignerActionGlyph(DesignerActionBehavior? behavior, Adorner? adorner, Rectangle alternativeBounds, Control? alternativeParent)
         : base(behavior)
     {
+        _iconsWidth = _iconsHeight = (byte)ScaleHelper.ScaleToInitialSystemDpi(IconSize);
         _adorner = adorner;
         _alternativeBounds = alternativeBounds;
         _alternativeParent = alternativeParent;
@@ -100,12 +102,12 @@ internal sealed class DesignerActionGlyph : Glyph
     private Image GlyphImageClosed => _glyphImageClosed ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(DesignerActionGlyph),
         "Close_left",
-        new Size(IconsWidth, IconsHeight));
+        new Size(_iconsWidth, _iconsHeight));
 
     private Image GlyphImageOpened => _glyphImageOpened ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(DesignerActionGlyph),
         "Open_left",
-        new Size(IconsWidth, IconsHeight));
+        new Size(_iconsWidth, _iconsHeight));
 
     internal void InvalidateOwnerLocation()
     {
