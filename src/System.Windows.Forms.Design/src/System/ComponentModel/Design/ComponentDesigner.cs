@@ -172,6 +172,12 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     public IComponent Component => _component ?? throw new InvalidOperationException("Designer is not initialized");
 
     /// <summary>
+    /// Internal utility used primarily to dispose instances
+    /// </summary>
+    [MemberNotNullWhen(true, nameof(_component))]
+    private protected bool HasComponent => _component is not null;
+
+    /// <summary>
     ///  Gets the design-time verbs supported by the component associated with the designer.
     /// </summary>
     public virtual DesignerVerbCollection Verbs => _verbs ??= new DesignerVerbCollection();

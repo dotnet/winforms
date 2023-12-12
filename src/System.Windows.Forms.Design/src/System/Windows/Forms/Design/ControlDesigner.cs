@@ -464,7 +464,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         if (disposing)
         {
-            if (_statusCommandUI is not null)
+            if (HasComponent)
             {
                 if (_dataBindingsCollectionChanged is not null)
                 {
@@ -494,7 +494,7 @@ public partial class ControlDesigner : ComponentDesigner
 
             _downPos = Point.Empty;
 
-            if (_statusCommandUI is not null)
+            if (HasComponent)
             {
                 Control.ControlAdded -= new ControlEventHandler(OnControlAdded);
                 Control.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
@@ -506,7 +506,6 @@ public partial class ControlDesigner : ComponentDesigner
         }
 
         base.Dispose(disposing);
-        _statusCommandUI = null;
     }
 
     private void OnControlAdded(object sender, ControlEventArgs e)
