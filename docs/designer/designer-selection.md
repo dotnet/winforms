@@ -1,7 +1,7 @@
 # Designer Selection Feature for .NET Framework Projects
 
 ## Problem
-Visual Studio 2022 is a 64-bit process and it cannot load 32-bit assemblies. Due to this technical limitation, Windows Forms in-process designer, which runs in the Visual Studio process, cannot load controls present in 32-bit assemblies.
+Visual Studio 2022 is a 64-bit process and it cannot load 32-bit assemblies. Due to this technical limitation, Windows Forms .NET Framework in-process designer, which runs in the Visual Studio process, cannot load controls present in 32-bit assemblies.
 This has been a major Visual Studio 2022 adoption blocker for customers who have Windows Forms .NET Framework projects which utilize ActiveX/COM controls or other custom controls contained in 32-bit assemblies and which cannot be updated to `AnyCPU` or to .NET. Until now, such projects could only use Windows Forms designer in Visual Studio 2019 because it is a 32-bit process.
 
 ## Solution
