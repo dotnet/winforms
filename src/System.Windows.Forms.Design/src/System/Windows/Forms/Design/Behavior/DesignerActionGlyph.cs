@@ -15,6 +15,8 @@ internal sealed class DesignerActionGlyph : Glyph
 {
     internal const int CONTROLOVERLAP_X = 5;                    // number of pixels the anchor should be offset to the left of the control's upper-right
     internal const int CONTROLOVERLAP_Y = 2;                    // number of pixels the anchor overlaps the control in the y-direction
+    private const byte IconsWidth = 10;
+    private const byte IconsHeight = 10;
 
     private Rectangle _alternativeBounds = Rectangle.Empty;     // if !empty, this represents the bounds of the tray control this glyph is related to
     private Rectangle _bounds;                                  // the bounds of our glyph
@@ -98,12 +100,12 @@ internal sealed class DesignerActionGlyph : Glyph
     private Image GlyphImageClosed => _glyphImageClosed ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(DesignerActionGlyph),
         "Close_left",
-        ScaleHelper.InitialSystemDpi);
+        new Size(IconsWidth, IconsHeight));
 
     private Image GlyphImageOpened => _glyphImageOpened ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(DesignerActionGlyph),
         "Open_left",
-        ScaleHelper.InitialSystemDpi);
+        new Size(IconsWidth, IconsHeight));
 
     internal void InvalidateOwnerLocation()
     {
