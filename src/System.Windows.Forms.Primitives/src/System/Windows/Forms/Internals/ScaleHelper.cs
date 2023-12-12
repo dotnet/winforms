@@ -332,12 +332,7 @@ internal static partial class ScaleHelper
     ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
     internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
-    {
-        Size size = ScaleToDpi(SystemIconSize, dpi);
-        return dpi == OneHundredPercentLogicalDpi
-            ? GetIconResourceAsBestMatchBitmap(type, resource, size)
-            : GetIconResourceAsBitmap(type, resource, size);
-    }
+        => GetIconResourceAsBestMatchBitmap(type, resource, ScaleToDpi(SystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.
