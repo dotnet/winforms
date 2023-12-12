@@ -15398,13 +15398,14 @@ public class ToolStripItemTests
         Assert.Equal(1, callCount);
     }
 
+    // Unit test for https://github.com/dotnet/winforms/issues/8548
     [WinFormsFact]
     public void ToolStripItem_OnItemSelected()
     {
-        using var menuStrip1 = new MyMenuStrip();
-        using var toolStripMenuItem1 = new ToolStripMenuItem();
-        using var toolStripMenuItem2 = new ToolStripMenuItem();
-        using var toolStripMenuItem3 = new ToolStripMenuItem();
+        using MyMenuStrip menuStrip1 = new();
+        using ToolStripMenuItem toolStripMenuItem1 = new();
+        using ToolStripMenuItem toolStripMenuItem2 = new();
+        using ToolStripMenuItem toolStripMenuItem3 = new();
 
         menuStrip1.Size = new Size(50, 100);
         toolStripMenuItem1.Size = new Size(15, 30);
@@ -15422,6 +15423,7 @@ public class ToolStripItemTests
 
         menuStrip1.CreateControl();
 
+        // try to emulate mouse move event.
         for (int i = 0; i < 10; i++)
         {
             menuStrip1.MoveMouse(new MouseEventArgs(MouseButtons.None, 0, new Point(i, 5)));
