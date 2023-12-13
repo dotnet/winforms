@@ -35,14 +35,21 @@ public partial class ScrollBar
             }
         }
 
-        public override string? DefaultAction
-            => ParentInternal.SystemIAccessible.TryGetDefaultAction(GetChildId());
+        public override string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
 
-        public override string? Description
-            => ParentInternal.SystemIAccessible.TryGetDescription(GetChildId());
+        private protected override bool IsInternal => true;
 
-        public override string? Name
-            => ParentInternal.SystemIAccessible.TryGetName(GetChildId());
+        internal override BSTR GetDefaultActionInternal() =>
+            ParentInternal.SystemIAccessible.TryGetDefaultAction(GetChildId());
+
+        public override string? Description => GetDescriptionInternal().ToNullableStringAndFree();
+
+        internal override unsafe BSTR GetDescriptionInternal() =>
+            ParentInternal.SystemIAccessible.TryGetDescription(GetChildId());
+
+        public override string? Name => GetNameInternal().ToNullableStringAndFree();
+
+        internal override BSTR GetNameInternal() => ParentInternal.SystemIAccessible.TryGetName(GetChildId());
 
         public override AccessibleRole Role
             => ParentInternal.SystemIAccessible.TryGetRole(GetChildId());

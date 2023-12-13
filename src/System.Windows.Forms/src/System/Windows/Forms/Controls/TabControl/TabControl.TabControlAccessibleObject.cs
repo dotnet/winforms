@@ -56,6 +56,8 @@ public partial class TabControl
                 : owner.TabPages[index - 1].TabAccessibilityObject;
         }
 
+        private protected override bool IsInternal => true;
+
         public override int GetChildCount()
         {
             if (!this.IsOwnerHandleCreated(out TabControl? owner))
@@ -102,6 +104,8 @@ public partial class TabControl
 
             return this;
         }
+
+        internal override bool CanHitTestDirectly(int x, int y) => false;
 
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);

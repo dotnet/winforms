@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -12,7 +13,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a calendar body in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarBodyAccessibleObject : MonthCalendarChildAccessibleObject
+    internal sealed class CalendarBodyAccessibleObject : MonthCalendarChildAccessibleObject
     {
         // A calendar body is the second in the calendar accessibility tree.
         // Indices start at 1.
@@ -197,7 +198,15 @@ public partial class MonthCalendar
 
         public override string Name => _initName;
 
+        internal override bool CanGetNameDirectly => false;
+
         public override AccessibleObject Parent => _calendarAccessibleObject;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetParentDirectly => _calendarAccessibleObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _calendarAccessibleObject.GetParentInternal();
 
         public override AccessibleRole Role => AccessibleRole.Table;
 

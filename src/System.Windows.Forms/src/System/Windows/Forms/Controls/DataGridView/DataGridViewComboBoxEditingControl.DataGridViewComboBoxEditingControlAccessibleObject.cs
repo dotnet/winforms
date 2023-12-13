@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -10,7 +11,7 @@ public partial class DataGridViewComboBoxEditingControl
     /// <summary>
     ///  Defines the DataGridView ComboBox EditingControl accessible object.
     /// </summary>
-    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
+    internal sealed class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
     {
         /// <summary>
         ///  The parent is changed when the editing control is attached to another editing cell.
@@ -25,6 +26,13 @@ public partial class DataGridViewComboBoxEditingControl
         internal void ClearParent() => _parentAccessibleObject = null;
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
+
+        internal override bool CanGetParentDirectly => _parentAccessibleObject?.CanGetParentDirectly ?? true;
+
+        internal override unsafe IDispatch* GetParentInternal() =>
+            _parentAccessibleObject is { } parent ? parent.GetParentInternal() : null;
+
+        private protected override bool IsInternal => true;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

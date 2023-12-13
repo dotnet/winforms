@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
+
 namespace System.Windows.Forms;
 
 public partial class ButtonBase
@@ -46,6 +48,10 @@ public partial class ButtonBase
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out ButtonBase? owner)
             ? GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
             : null;
+
+        internal override bool CanGetKeyboardShortcutDirectly => IsInternal && !this.TryGetOwnerAs(out ButtonBase? owner);
+
+        internal override BSTR GetKeyboardShortcutInternal(VARIANT childID) => default;
 
         public override string? Name
         {

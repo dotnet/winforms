@@ -73,6 +73,8 @@ public partial class ScrollBar
             };
         }
 
+        private protected override bool IsInternal => true;
+
         public override int GetChildCount()
             => this.IsOwnerHandleCreated(out ScrollBar? _)
                 ? ArePageButtonsDisplayed
@@ -116,6 +118,8 @@ public partial class ScrollBar
 
             return null;
         }
+
+        internal override bool CanHitTestDirectly(int x, int y) => false;
 
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {

@@ -43,6 +43,18 @@ public partial class ToolStripDropDown
             }
         }
 
+        internal override bool CanGetNameDirectly =>
+            IsInternal
+            && this.TryGetOwnerAs(out ToolStripDropDown? owner)
+            && owner.AccessibleName is null
+            && (owner?.OwnerItem?.AccessibilityObject.CanGetNameDirectly ?? true);
+
+        internal override BSTR GetNameInternal()
+        {
+            this.TryGetOwnerAs(out ToolStripDropDown? owner);
+            return owner?.OwnerItem?.AccessibilityObject.GetNameInternal() ?? default;
+        }
+
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.MenuPopup);
     }
 }

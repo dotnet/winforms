@@ -8,18 +8,16 @@ namespace System.Windows.Forms;
 
 internal partial class ToolStripGrip
 {
-    internal class ToolStripGripAccessibleObject : ToolStripButtonAccessibleObject
+    internal sealed class ToolStripGripAccessibleObject : ToolStripButtonAccessibleObject
     {
         public ToolStripGripAccessibleObject(ToolStripGrip owner) : base(owner)
         {
         }
 
         [AllowNull]
-        public override string Name
-        {
-            get => Owner.AccessibleName ?? SR.ToolStripGripAccessibleName;
-            set => base.Name = value;
-        }
+        public override string Name => Owner.AccessibleName ?? SR.ToolStripGripAccessibleName;
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role
         {

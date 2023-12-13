@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -42,13 +43,9 @@ public partial class DataGridView
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return SR.DataGridView_AccTopRow;
-            }
-        }
+        public override string Name => SR.DataGridView_AccTopRow;
+
+        internal override bool CanGetNameDirectly => false;
 
         public DataGridView? Owner
         {
@@ -80,6 +77,11 @@ public partial class DataGridView
             }
         }
 
+        internal override bool CanGetParentDirectly =>
+            IsInternal && _ownerDataGridView is not null && _ownerDataGridView.AccessibilityObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _ownerDataGridView!.AccessibilityObject.GetParentInternal();
+
         public override AccessibleRole Role
         {
             get
@@ -96,13 +98,9 @@ public partial class DataGridView
                 GetHashCode()
             };
 
-        public override string Value
-        {
-            get
-            {
-                return Name;
-            }
-        }
+        public override string Value => Name;
+
+        internal override bool CanGetValueDirectly => false;
 
         public override AccessibleObject? GetChild(int index)
         {

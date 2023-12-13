@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -11,7 +12,7 @@ public partial class ListViewItem
 {
     public partial class ListViewSubItem
     {
-        internal class ListViewSubItemAccessibleObject : AccessibleObject
+        internal sealed class ListViewSubItemAccessibleObject : AccessibleObject
         {
             private readonly ListView _owningListView;
             private readonly ListViewItem _owningItem;
@@ -89,13 +90,17 @@ public partial class ListViewItem
             /// <summary>
             ///  Gets or sets the accessible name.
             /// </summary>
-            public override string? Name
-            {
-                get => base.Name ?? OwningSubItem?.Text ?? string.Empty;
-                set => base.Name = value;
-            }
+            public override string? Name => base.Name ?? OwningSubItem?.Text ?? string.Empty;
+
+            internal override bool CanGetNameDirectly => false;
 
             public override AccessibleObject Parent => ParentInternal;
+
+            private protected override bool IsInternal => true;
+
+            internal override bool CanGetParentDirectly => ParentInternal.CanGetParentDirectly;
+
+            internal override unsafe IDispatch* GetParentInternal() => ParentInternal.GetParentInternal();
 
             private ListViewItemBaseAccessibleObject ParentInternal
                 => (ListViewItemBaseAccessibleObject)_owningItem.AccessibilityObject;

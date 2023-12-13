@@ -1,13 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 
 namespace System.Windows.Forms;
 
-internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
+internal sealed unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
 {
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
@@ -45,6 +46,12 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
                 ? OwningListViewItemAccessibleObject
                 : OwningSubItemAccessibleObject
         : null;
+
+    private protected override bool IsInternal => true;
+
+    internal override bool CanGetParentDirectly => Parent?.CanGetParentDirectly ?? true;
+
+    internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
 
     internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch

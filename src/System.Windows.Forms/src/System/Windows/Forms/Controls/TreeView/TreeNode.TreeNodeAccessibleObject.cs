@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
@@ -10,7 +11,7 @@ namespace System.Windows.Forms;
 
 public partial class TreeNode
 {
-    internal class TreeNodeAccessibleObject : AccessibleObject
+    internal sealed class TreeNodeAccessibleObject : AccessibleObject
     {
         private readonly TreeNode _owningTreeNode;
         private readonly TreeView _owningTreeView;
@@ -56,6 +57,8 @@ public partial class TreeNode
                     : SR.AccessibleActionExpand;
             }
         }
+
+        internal override bool CanGetDefaultActionDirectly => false;
 
         public override void DoDefaultAction()
         {
@@ -115,8 +118,13 @@ public partial class TreeNode
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override AccessibleObject? HitTest(int x, int y)
-            => _owningTreeView.AccessibilityObject.HitTest(x, y);
+        public override AccessibleObject? HitTest(int x, int y) => _owningTreeView.AccessibilityObject.HitTest(x, y);
+
+        internal override bool CanHitTestDirectly(int x, int y) =>
+            _owningTreeView.AccessibilityObject.CanHitTestDirectly(x, y);
+
+        internal override VARIANT HitTestInternal(int x, int y) =>
+            _owningTreeView.AccessibilityObject.HitTestInternal(x, y);
 
         internal int Index => _owningTreeView.Nodes.IndexOf(_owningTreeNode);
 
@@ -134,7 +142,17 @@ public partial class TreeNode
 
         public override string? Name => _owningTreeNode.Text;
 
+        internal override bool CanGetNameDirectly => false;
+
         public override AccessibleObject? Parent => _owningTreeNode.Parent?.AccessibilityObject;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetParentDirectly =>
+            _owningTreeNode.Parent?.AccessibilityObject.CanGetParentDirectly ?? true;
+
+        internal override unsafe IDispatch* GetParentInternal() =>
+            _owningTreeNode.Parent?.AccessibilityObject is { } parent ? parent.GetParentInternal() : null;
 
         public override AccessibleRole Role
             => _owningTreeView.CheckBoxes
@@ -263,6 +281,8 @@ public partial class TreeNode
         #region Value Pattern
 
         public override string? Value => _owningTreeNode.Text;
+
+        internal override bool CanGetValueDirectly => false;
 
         #endregion
     }

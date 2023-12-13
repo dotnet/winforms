@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -24,41 +25,25 @@ public partial class DomainUpDown
 
         public override string? Name
         {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
+            get => _name;
+            set => _name = value;
         }
+
+        internal override bool CanGetNameDirectly => false;
+
+        internal override bool CanSetNameDirectly => false;
 
         public override AccessibleObject? Parent => null;
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                return AccessibleRole.ListItem;
-            }
-        }
+        internal override unsafe IDispatch* GetParentInternal() => null;
 
-        public override AccessibleStates State
-        {
-            get
-            {
-                return AccessibleStates.Selectable;
-            }
-        }
+        public override AccessibleRole Role => AccessibleRole.ListItem;
 
-        public override string? Value
-        {
-            get
-            {
-                return _name;
-            }
-        }
+        public override AccessibleStates State => AccessibleStates.Selectable;
+
+        public override string? Value => _name;
+
+        internal override bool CanGetValueDirectly => false;
 
         internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
     }

@@ -1,13 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
+
 namespace System.Windows.Forms;
 
 public abstract partial class UpDownBase
 {
     internal partial class UpDownEdit
     {
-        internal class UpDownEditAccessibleObject : TextBoxBaseAccessibleObject
+        internal sealed class UpDownEditAccessibleObject : TextBoxBaseAccessibleObject
         {
             private readonly UpDownBase _parent;
 
@@ -27,7 +29,19 @@ public abstract partial class UpDownBase
                 set => _parent.AccessibilityObject.Name = value;
             }
 
+            internal override bool CanGetNameDirectly => false;
+
+            internal override bool CanSetNameDirectly => _parent.AccessibilityObject.CanSetNameDirectly;
+
+            internal override void SetNameInternal(BSTR value) => _parent.AccessibilityObject.SetNameInternal(value);
+
             public override string? KeyboardShortcut => _parent.AccessibilityObject.KeyboardShortcut;
+
+            internal override bool CanGetKeyboardShortcutDirectly => _parent.AccessibilityObject.CanGetKeyboardShortcutDirectly;
+
+            internal override BSTR GetKeyboardShortcutInternal(VARIANT childID) => _parent.AccessibilityObject.GetKeyboardShortcutInternal(childID);
+
+            private protected override bool IsInternal => true;
         }
     }
 }

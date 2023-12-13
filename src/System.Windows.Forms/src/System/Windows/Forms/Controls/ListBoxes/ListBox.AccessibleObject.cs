@@ -26,6 +26,8 @@ public partial class ListBox
             _itemAccessibleObjects = new Dictionary<ItemArray.Entry, ListBoxItemAccessibleObject>();
         }
 
+        private protected override bool IsInternal => true;
+
         internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
             owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
@@ -236,6 +238,8 @@ public partial class ListBox
             return null;
         }
 
+        internal override bool CanGetFocusedDirectly => false;
+
         public override AccessibleObject? GetSelected()
         {
             if (this.TryGetOwnerAs(out ListBox? owner))
@@ -250,6 +254,8 @@ public partial class ListBox
 
             return null;
         }
+
+        internal override bool CanGetSelectedDirectly => false;
 
         public override AccessibleObject? HitTest(int x, int y)
         {
@@ -278,5 +284,7 @@ public partial class ListBox
 
             return null;
         }
+
+        internal override bool CanHitTestDirectly(int x, int y) => false;
     }
 }

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -93,6 +94,8 @@ public partial class MonthCalendar
             }
         }
 
+        internal override bool CanGetDescriptionDirectly => false;
+
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
@@ -179,7 +182,13 @@ public partial class MonthCalendar
             }
         }
 
+        internal override bool CanGetNameDirectly => false;
+
         public override AccessibleObject Parent => _calendarRowAccessibleObject;
+
+        internal override bool CanGetParentDirectly => _calendarBodyAccessibleObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _calendarBodyAccessibleObject.GetParentInternal();
 
         public override AccessibleRole Role => AccessibleRole.Cell;
 

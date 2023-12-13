@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -35,6 +36,12 @@ public partial class ListBox
             => _owningAccessibleObject;
 
         public override AccessibleObject Parent => _owningAccessibleObject;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetParentDirectly => Parent.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => Parent.GetParentInternal();
 
         internal override int[] RuntimeId
         {
@@ -84,16 +91,18 @@ public partial class ListBox
             }
         }
 
-        public override string? DefaultAction
-            => _owningAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
+        public override string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
 
-        public override string? Help => _owningAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
+        internal override BSTR GetDefaultActionInternal() =>
+            _owningAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
 
-        public override string? Name
-        {
-            get => _owningListBox.GetItemText(_itemEntry.Item);
-            set => base.Name = value;
-        }
+        public override string? Help => GetHelpInternal().ToNullableStringAndFree();
+
+        internal override BSTR GetHelpInternal() => _owningAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
+
+        public override string? Name => _owningListBox.GetItemText(_itemEntry.Item);
+
+        internal override bool CanGetNameDirectly => false;
 
         public override AccessibleRole Role => _owningAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());
 

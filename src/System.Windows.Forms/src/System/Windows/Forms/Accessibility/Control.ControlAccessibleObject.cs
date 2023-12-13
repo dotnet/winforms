@@ -199,6 +199,8 @@ public partial class Control
 
         public override string? DefaultAction => Owner?.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
+        internal override bool CanGetDefaultActionDirectly => IsInternal && Owner?.AccessibleDefaultActionDescription is null;
+
         // This is used only if control supports IAccessibleEx. We need to provide a unique ID. Others are implementing this in the same manner.
         // First item is static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
         internal override int[] RuntimeId => new int[]
@@ -209,6 +211,8 @@ public partial class Control
         };
 
         public override string? Description => Owner?.AccessibleDescription ?? base.Description;
+
+        internal override bool CanGetDescriptionDirectly => IsInternal && Owner?.AccessibleDescription is null;
 
         /// <summary>
         ///  Gets or sets the handle of the accessible object's associated <see cref="Owner"/> control.
@@ -274,6 +278,11 @@ public partial class Control
             }
         }
 
+        internal override bool CanGetHelpDirectly =>
+            IsInternal
+            && (!this.TryGetOwnerAs(out Control? owner)
+                || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler);
+
         public override string? KeyboardShortcut
         {
             get
@@ -284,6 +293,8 @@ public partial class Control
                 return (mnemonic == (char)0) ? null : $"Alt+{mnemonic}";
             }
         }
+
+        internal override bool CanGetKeyboardShortcutDirectly => false;
 
         public override string? Name
         {
@@ -311,6 +322,10 @@ public partial class Control
                 }
             }
         }
+
+        internal override bool CanGetNameDirectly => false;
+
+        internal override bool CanSetNameDirectly => false;
 
         public override AccessibleObject? Parent => base.Parent;
 
@@ -430,6 +445,11 @@ public partial class Control
 
             return topic;
         }
+
+        internal override bool CanGetHelpTopicDirectly =>
+            IsInternal
+            && (!this.TryGetOwnerAs(out Control? owner)
+                || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler handler);
 
         public void NotifyClients(AccessibleEvents accEvent)
             => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, 0);

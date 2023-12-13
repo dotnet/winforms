@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
@@ -12,7 +13,7 @@ public partial class LinkLabel
 {
     public partial class Link
     {
-        internal class LinkAccessibleObject : AccessibleObject
+        internal sealed class LinkAccessibleObject : AccessibleObject
         {
             private readonly LinkLabelAccessibleObject _linkLabelAccessibleObject;
             private readonly Link _owningLink;
@@ -60,7 +61,11 @@ public partial class LinkLabel
 
             public override string DefaultAction => SR.AccessibleActionClick;
 
+            internal override bool CanGetDefaultActionDirectly => false;
+
             public override string? Description => _owningLink.Description;
+
+            internal override bool CanGetDescriptionDirectly => false;
 
             public override void DoDefaultAction()
             {
@@ -115,12 +120,19 @@ public partial class LinkLabel
                     int end = LinkLabel.ConvertToCharIndex(_owningLink.Start + _owningLink.Length, text);
                     string? name = text.Substring(start, end - start);
 
-                     return _owningLinkLabel.UseMnemonic ? name = WindowsFormsUtils.TextWithoutMnemonics(name) : name;
+                    return _owningLinkLabel.UseMnemonic ? name = WindowsFormsUtils.TextWithoutMnemonics(name) : name;
                 }
-                set => base.Name = value;
             }
 
+            internal override bool CanGetNameDirectly => false;
+
             public override AccessibleObject Parent => _linkLabelAccessibleObject;
+
+            private protected override bool IsInternal => true;
+
+            internal override bool CanGetParentDirectly => _linkLabelAccessibleObject.CanGetParentDirectly;
+
+            internal override unsafe IDispatch* GetParentInternal() => _linkLabelAccessibleObject.GetParentInternal();
 
             public override AccessibleRole Role => AccessibleRole.Link;
 
@@ -152,6 +164,8 @@ public partial class LinkLabel
             // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
             // Value is optional for this role (Link).
             public override string Value => string.Empty;
+
+            internal override bool CanGetValueDirectly => false;
         }
     }
 }

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -13,7 +14,7 @@ public abstract partial class UpDownBase
     {
         internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
         {
-            internal class DirectionButtonAccessibleObject : AccessibleObject
+            internal sealed class DirectionButtonAccessibleObject : AccessibleObject
             {
                 private readonly bool _up;
                 private readonly UpDownButtonsAccessibleObject _parent;
@@ -48,6 +49,8 @@ public abstract partial class UpDownBase
                 }
 
                 public override string DefaultAction => SR.AccessibleActionPress;
+
+                internal override bool CanGetDefaultActionDirectly => false;
 
                 public override void DoDefaultAction()
                 {
@@ -91,7 +94,17 @@ public abstract partial class UpDownBase
                     set { }
                 }
 
+                internal override bool CanGetNameDirectly => false;
+
+                internal override void SetNameInternal(BSTR value) { }
+
                 public override AccessibleObject Parent => _parent;
+
+                private protected override bool IsInternal => true;
+
+                internal override bool CanGetParentDirectly => _parent.CanGetParentDirectly;
+
+                internal override unsafe IDispatch* GetParentInternal() => _parent.GetParentInternal();
 
                 public override AccessibleRole Role => AccessibleRole.PushButton;
 

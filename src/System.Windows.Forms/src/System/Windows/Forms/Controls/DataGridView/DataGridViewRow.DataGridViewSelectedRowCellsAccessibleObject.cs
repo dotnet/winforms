@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Com;
+
 namespace System.Windows.Forms;
 
 public partial class DataGridViewRow
@@ -17,7 +19,16 @@ public partial class DataGridViewRow
 
         public override string Name => SR.DataGridView_AccSelectedRowCellsName;
 
+        internal override bool CanGetNameDirectly => false;
+
         public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
+
+        internal override bool CanGetParentDirectly => _owningDataGridViewRow.AccessibilityObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() =>
+            _owningDataGridViewRow.AccessibilityObject.GetParentInternal();
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role => AccessibleRole.Grouping;
 
@@ -28,35 +39,35 @@ public partial class DataGridViewRow
 
         public override string Value => Name;
 
+        internal override bool CanGetValueDirectly => false;
+
         internal override int[] RuntimeId
             => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (index < GetChildCount())
+            if (index >= GetChildCount())
             {
-                int selectedCellsCount = -1;
-                for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
-                {
-                    AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
-                    if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
-                    {
-                        selectedCellsCount++;
-                    }
+                return null;
+            }
 
-                    if (selectedCellsCount == index)
-                    {
-                        return child;
-                    }
+            int selectedCellsCount = -1;
+            for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
+            {
+                AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
+                if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                {
+                    selectedCellsCount++;
                 }
 
-                Debug.Assert(false, "we should have found already the selected cell");
-                return null;
+                if (selectedCellsCount == index)
+                {
+                    return child;
+                }
             }
-            else
-            {
-                return null;
-            }
+
+            Debug.Assert(false, "we should have found already the selected cell");
+            return null;
         }
 
         public override int GetChildCount()
@@ -78,6 +89,8 @@ public partial class DataGridViewRow
 
         public override AccessibleObject GetSelected() => this;
 
+        internal override bool CanGetSelectedDirectly => false;
+
         public override AccessibleObject? GetFocused()
         {
             DataGridViewCell? currentCell = _owningDataGridViewRow.DataGridView?.CurrentCell;
@@ -90,6 +103,8 @@ public partial class DataGridViewRow
                 return null;
             }
         }
+
+        internal override bool CanGetFocusedDirectly => false;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
@@ -119,5 +134,7 @@ public partial class DataGridViewRow
                     return null;
             }
         }
+
+        internal override bool CanNavigateDirectly => false;
     }
 }

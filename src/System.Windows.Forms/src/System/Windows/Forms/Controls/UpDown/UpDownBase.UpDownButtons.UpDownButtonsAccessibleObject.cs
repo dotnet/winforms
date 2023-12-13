@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -9,7 +10,7 @@ public abstract partial class UpDownBase
 {
     internal partial class UpDownButtons
     {
-        internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
+        internal sealed partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
         {
             private int[]? _runtimeId;
 
@@ -72,6 +73,8 @@ public abstract partial class UpDownBase
                 return null;
             }
 
+            internal override bool CanHitTestDirectly(int x, int y) => false;
+
             internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
                 get
@@ -94,11 +97,17 @@ public abstract partial class UpDownBase
                     string? baseName = base.Name;
                     return string.IsNullOrEmpty(baseName) ? SR.DefaultUpDownButtonsAccessibleName : baseName;
                 }
-                set => base.Name = value;
             }
 
             public override AccessibleObject? Parent
                 => this.TryGetOwnerAs(out UpDownButtons? owner) ? owner.AccessibilityObject : null;
+
+            private protected override bool IsInternal => true;
+
+            internal override bool CanGetParentDirectly => Parent?.CanGetParentDirectly ?? true;
+
+            internal override unsafe IDispatch* GetParentInternal() =>
+                Parent is { } parent ? parent.GetParentInternal() : null;
 
             internal void ReleaseChildUiaProviders()
             {

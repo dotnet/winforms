@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -9,7 +10,7 @@ namespace System.Windows.Forms;
 
 public partial class ListViewItem
 {
-    internal class ListViewItemImageAccessibleObject : AccessibleObject
+    internal sealed class ListViewItemImageAccessibleObject : AccessibleObject
     {
         private readonly ListViewItem _owningItem;
 
@@ -29,9 +30,17 @@ public partial class ListViewItem
 
         public override string DefaultAction => string.Empty;
 
+        internal override bool CanGetDefaultActionDirectly => false;
+
         internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningItem.ListView?.AccessibilityObject;
 
         public override AccessibleObject Parent => _owningItem.AccessibilityObject;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetParentDirectly => _owningItem.AccessibilityObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _owningItem.AccessibilityObject.GetParentInternal();
 
         internal override int[] RuntimeId
         {

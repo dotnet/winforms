@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -106,13 +107,18 @@ public partial class ErrorProvider
             internal override bool IsReadOnly => true;
 
             [AllowNull]
-            public override string Name
-            {
-                get => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
-                set => base.Name = value;
-            }
+            public override string Name => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
+
+            internal override bool CanGetNameDirectly => false;
 
             public override AccessibleObject? Parent => _window?.AccessibilityObject;
+
+            internal override bool CanGetParentDirectly => _window?.AccessibilityObject.CanGetParentDirectly ?? true;
+
+            internal override unsafe IDispatch* GetParentInternal() =>
+                _window?.AccessibilityObject is { } parent ? parent.GetParentInternal() : null;
+
+            private protected override bool IsInternal => true;
 
             public override AccessibleRole Role => AccessibleRole.Alert;
 

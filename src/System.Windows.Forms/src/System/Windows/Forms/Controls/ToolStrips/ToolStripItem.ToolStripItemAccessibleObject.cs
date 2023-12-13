@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -40,19 +41,12 @@ public abstract partial class ToolStripItem
             }
         }
 
-        public override string? Description
-        {
-            get
-            {
-                string? description = _ownerItem.AccessibleDescription;
-                if (description is not null)
-                {
-                    return description;
-                }
+        internal override bool CanGetDefaultActionDirectly => false;
 
-                return base.Description;
-            }
-        }
+        public override string? Description =>
+            _ownerItem.AccessibleDescription is { } description ? description : base.Description;
+
+        internal override bool CanGetDescriptionDirectly => IsInternal && _ownerItem.AccessibleDescription is null;
 
         public override string? Help
         {
@@ -70,6 +64,9 @@ public abstract partial class ToolStripItem
             }
         }
 
+        internal override bool CanGetHelpDirectly
+            => IsInternal && (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent] is null;
+
         public override string KeyboardShortcut
         {
             get
@@ -86,6 +83,8 @@ public abstract partial class ToolStripItem
                 return mnemonic == '\0' ? string.Empty : $"Alt+{mnemonic}";
             }
         }
+
+        internal override bool CanGetKeyboardShortcutDirectly => false;
 
         // We need to provide a unique ID. Others are implementing this in the same manner. First item should be UiaAppendRuntimeId
         // since this is not a top-level element of the fragment. Second item can be anything, but here it is a hash.
@@ -132,6 +131,10 @@ public abstract partial class ToolStripItem
             }
             set => _ownerItem.AccessibleName = value;
         }
+
+        internal override bool CanGetNameDirectly => false;
+
+        internal override bool CanSetNameDirectly => false;
 
         internal ToolStripItem Owner => _ownerItem;
 
@@ -216,6 +219,8 @@ public abstract partial class ToolStripItem
             return base.GetHelpTopic(out fileName);
         }
 
+        internal override bool CanGetHelpTopicDirectly => IsInternal && Owner.Events[s_queryAccessibilityHelpEvent] is null;
+
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
             ToolStripItem? nextItem = null;
@@ -257,6 +262,8 @@ public abstract partial class ToolStripItem
 
             return nextItem?.AccessibilityObject;
         }
+
+        internal override bool CanNavigateDirectly => false;
 
         public void AddState(AccessibleStates state)
         {
@@ -314,6 +321,36 @@ public abstract partial class ToolStripItem
 
                 return (Owner.Parent is not null) ? Owner.Parent.AccessibilityObject : base.Parent;
             }
+        }
+
+        internal override bool CanGetParentDirectly
+        {
+            get
+            {
+                if (!IsInternal)
+                {
+                    return false;
+                }
+
+                if (Owner.IsOnDropDown)
+                {
+                    ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
+                    return dropDown.AccessibilityObject.CanGetParentDirectly;
+                }
+
+                return Owner.Parent?.AccessibilityObject.CanGetParentDirectly ?? true;
+            }
+        }
+
+        internal override unsafe IDispatch* GetParentInternal()
+        {
+            if (Owner.IsOnDropDown)
+            {
+                ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
+                return dropDown.AccessibilityObject.GetParentInternal();
+            }
+
+            return Owner.Parent is { } parent ? parent.AccessibilityObject.GetParentInternal() : base.GetParentInternal();
         }
 
         internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>

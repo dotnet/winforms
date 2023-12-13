@@ -11,7 +11,7 @@ internal partial class CommandsPane
     /// <summary>
     ///  Represents the <see cref="CommandsPane"/> accessible object.
     /// </summary>
-    internal class CommandsPaneAccessibleObject : ControlAccessibleObject
+    internal sealed class CommandsPaneAccessibleObject : ControlAccessibleObject
     {
         private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
@@ -53,5 +53,20 @@ internal partial class CommandsPane
                     ? target.AccessibilityObject.Name
                     : null)
                 : null;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameDirectly =>
+            this.TryGetOwnerAs(out CommandsPane? owner)
+            && owner.AccessibleName is null
+            && _parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+            && target.AccessibilityObject.CanGetNameDirectly;
+
+        internal override BSTR GetNameInternal()
+        {
+            _parentPropertyGrid.TryGetTarget(out PropertyGrid? target);
+            // target should never be null since we check for it in CanGetNameDirectly.
+            return target!.AccessibilityObject.GetNameInternal();
+        }
     }
 }

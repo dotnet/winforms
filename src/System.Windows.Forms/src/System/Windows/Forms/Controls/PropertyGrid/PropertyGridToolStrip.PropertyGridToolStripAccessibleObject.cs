@@ -11,7 +11,7 @@ internal partial class PropertyGridToolStrip
     /// <summary>
     ///  Represents the PropertyGridToolStrip control accessibility object.
     /// </summary>
-    internal class PropertyGridToolStripAccessibleObject : ToolStripAccessibleObject
+    internal sealed class PropertyGridToolStripAccessibleObject : ToolStripAccessibleObject
     {
         private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
@@ -60,6 +60,20 @@ internal partial class PropertyGridToolStrip
                 _parentPropertyGrid.TryGetTarget(out PropertyGrid? target);
                 return target?.AccessibilityObject.Name;
             }
+        }
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameDirectly =>
+            (!this.TryGetOwnerAs(out PropertyGridToolStrip? owner) || owner.AccessibleName is null)
+            && _parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+            && target.AccessibilityObject.CanGetNameDirectly;
+
+        internal override BSTR GetNameInternal()
+        {
+            _parentPropertyGrid.TryGetTarget(out PropertyGrid? target);
+            // target cannot be null here since we checked it in CanGetNameDirectly.
+            return target!.AccessibilityObject.GetNameInternal();
         }
     }
 }

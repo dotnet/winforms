@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -64,6 +65,10 @@ public partial class DataGridViewRowHeaderCell
 
         public override string? Name => ParentPrivate?.Name ?? string.Empty;
 
+        internal override bool CanGetNameDirectly => ParentPrivate?.Name is not null;
+
+        internal override BSTR GetNameInternal() => ParentPrivate!.GetNameInternal();
+
         public override AccessibleObject? Parent => ParentPrivate;
 
         private AccessibleObject? ParentPrivate
@@ -78,6 +83,12 @@ public partial class DataGridViewRowHeaderCell
                 return Owner.OwningRow?.AccessibilityObject;
             }
         }
+
+        internal override bool CanGetParentDirectly =>
+            IsInternal && Owner is not null && (Owner.OwningRow?.AccessibilityObject.CanGetParentDirectly ?? true);
+
+        internal override unsafe IDispatch* GetParentInternal() =>
+            Owner!.OwningRow is { } owningRow ? owningRow.AccessibilityObject.GetParentInternal() : null;
 
         public override AccessibleRole Role => AccessibleRole.RowHeader;
 

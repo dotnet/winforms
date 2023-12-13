@@ -38,6 +38,10 @@ public partial class TrackBar
             ? owner.AccessibleDefaultActionDescription
             : null;
 
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionDirectly => !this.TryGetOwnerAs(out TrackBar? owner);
+
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Slider);
 
         public override AccessibleStates State
@@ -118,6 +122,8 @@ public partial class TrackBar
 
             return null;
         }
+
+        internal override bool CanHitTestDirectly(int x, int y) => false;
 
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {

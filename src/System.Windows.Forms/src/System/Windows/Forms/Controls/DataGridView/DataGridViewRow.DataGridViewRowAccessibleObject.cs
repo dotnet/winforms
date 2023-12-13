@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms.Primitives;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -103,6 +104,8 @@ public partial class DataGridViewRow
             }
         }
 
+        internal override bool CanGetNameDirectly => false;
+
         public DataGridViewRow? Owner
         {
             get => _owningDataGridViewRow;
@@ -131,6 +134,16 @@ public partial class DataGridViewRow
                 return _owningDataGridViewRow.DataGridView?.AccessibilityObject;
             }
         }
+
+        internal override bool CanGetParentDirectly =>
+            IsInternal
+            && _owningDataGridViewRow is not null
+            && (_owningDataGridViewRow.DataGridView?.AccessibilityObject.CanGetParentDirectly ?? true);
+
+        internal override unsafe IDispatch* GetParentInternal() =>
+            _owningDataGridViewRow!.DataGridView is { } dataGridView
+            ? dataGridView.AccessibilityObject.GetParentInternal()
+            : null;
 
         public override AccessibleRole Role => AccessibleRole.Row;
 
@@ -244,6 +257,8 @@ public partial class DataGridViewRow
             }
         }
 
+        internal override bool CanGetValueDirectly => false;
+
         public override AccessibleObject? GetChild(int index)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(index);
@@ -319,6 +334,8 @@ public partial class DataGridViewRow
                 return null;
             }
         }
+
+        internal override bool CanGetFocusedDirectly => false;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {

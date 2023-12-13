@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -23,6 +22,7 @@ namespace System.Windows.Forms;
 public unsafe partial class AccessibleObject :
     StandardOleMarshalObject,
     IReflect,
+    UIA.IAccessible.Interface,
     IAccessible,
     IAccessibleEx.Interface,
     ComIServiceProvider.Interface,
@@ -48,8 +48,6 @@ public unsafe partial class AccessibleObject :
     IMultipleViewProvider.Interface,
     ITextProvider.Interface,
     ITextProvider2.Interface,
-    // This IAccessible needs moved first once IManagedWrapper is implemented so it gets chosen by built-in COM interop.
-    UIA.IAccessible.Interface,
     IDispatch.Interface,
     IDispatchEx.Interface
 {
@@ -135,33 +133,98 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  Gets a description of the default action for an object.
     /// </summary>
-    public virtual string? DefaultAction => SystemIAccessible.TryGetDefaultAction(CHILDID_SELF);
+    public virtual string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
+
+    /// <summary>
+    ///  Determines whether the default action can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetDefaultActionDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps the System IAccessible default action.
+    /// </summary>
+    internal virtual BSTR GetDefaultActionInternal() => SystemIAccessible.TryGetDefaultAction(CHILDID_SELF);
 
     /// <summary>
     ///  Gets a description of the object's visual appearance to the user.
     /// </summary>
-    public virtual string? Description => SystemIAccessible.TryGetDescription(CHILDID_SELF);
+    public virtual string? Description => GetDescriptionInternal().ToNullableStringAndFree();
+
+    /// <summary>
+    ///  Determines whether the description can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetDescriptionDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps the System IAccessible description.
+    /// </summary>
+    internal virtual BSTR GetDescriptionInternal() => SystemIAccessible.TryGetDescription(CHILDID_SELF);
 
     private IEnumVARIANT.Interface EnumVariant => _enumVariant ??= new EnumVariantObject(this);
 
     /// <summary>
     ///  Gets a description of what the object does or how the object is used.
     /// </summary>
-    public virtual string? Help => SystemIAccessible.TryGetHelp(CHILDID_SELF);
+    public virtual string? Help => GetHelpInternal().ToNullableStringAndFree();
+
+    /// <summary>
+    ///  Determines whether help can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetHelpDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps the System IAccessible help.
+    /// </summary>
+    internal virtual BSTR GetHelpInternal() => SystemIAccessible.TryGetHelp(CHILDID_SELF);
 
     /// <summary>
     ///  Gets the object shortcut key or access key for an accessible object.
     /// </summary>
-    public virtual string? KeyboardShortcut => SystemIAccessible.TryGetKeyboardShortcut(CHILDID_SELF);
+    public virtual string? KeyboardShortcut => GetKeyboardShortcutInternal(CHILDID_SELF).ToNullableStringAndFree();
+
+    /// <summary>
+    ///  Determines whether the keyboard shortcut can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetKeyboardShortcutDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps the System IAccessible keyboard shortcut of the <paramref name="childID"/>
+    /// </summary>
+    internal virtual BSTR GetKeyboardShortcutInternal(VARIANT childID) => SystemIAccessible.TryGetKeyboardShortcut(childID);
 
     /// <summary>
     ///  Gets or sets the object name.
     /// </summary>
     public virtual string? Name
     {
-        get => SystemIAccessible.TryGetName(CHILDID_SELF);
-        set => SystemIAccessible.TrySetName(CHILDID_SELF, value);
+        get => GetNameInternal().ToNullableStringAndFree();
+
+        set
+        {
+            using BSTR set = new(value);
+            SetNameInternal(set);
+        }
     }
+
+    /// <summary>
+    ///  Determines whether the name can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetNameDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps the System IAccessible name.
+    /// </summary>
+    internal virtual BSTR GetNameInternal() => SystemIAccessible.TryGetName(CHILDID_SELF);
+
+    /// <summary>
+    ///  Determines whether the name can be set without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanSetNameDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps and sets the System IAccessible name to <paramref name="value"/>.
+    /// </summary>
+    internal virtual void SetNameInternal(BSTR value) => SystemIAccessible.TrySetName(CHILDID_SELF, value);
 
     /// <summary>
     ///  When overridden in a derived class, gets or sets the parent of an accessible object.
@@ -180,22 +243,43 @@ public unsafe partial class AccessibleObject :
     ///
     ///  What this means, effectively, is that the non-client area is the parent of the client area, and the parent
     ///  window's client area is the parent of the non-client area of the current window (at least from an
-    ///  accessiblity object standpoint).
+    ///  accessibility object standpoint).
     /// </devdoc>
-    public virtual AccessibleObject? Parent
+    public virtual AccessibleObject? Parent => TryGetAccessibleObject(GetParentInternal());
+
+    /// <summary>
+    ///  Unwraps and returns the system IAccessible.
+    /// </summary>
+    internal virtual IDispatch* GetParentInternal()
     {
-        get
-        {
-            using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
+        using ComScope<UIA.IAccessible> accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
             if (result.Succeeded)
             {
                 IDispatch* dispatch;
                 result = accessible.Value->get_accParent(&dispatch);
-                return TryGetAccessibleObject(dispatch);
+            return dispatch;
             }
 
             return null;
         }
+
+    /// <summary>
+    ///  Determines whether the parent can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetParentDirectly => IsInternal;
+
+    /// <summary>
+    ///  Determines whether or not this object is internal.
+    /// </summary>
+    private protected virtual bool IsInternal
+    {
+        get
+        {
+            RuntimeTypeHandle type = GetType().TypeHandle;
+            return type.Equals(typeof(AccessibleObject).TypeHandle)
+                || type.GetModuleHandle().Equals(typeof(AccessibleObject).TypeHandle.GetModuleHandle());
+    }
+    }
     }
 
     /// <summary>
@@ -214,9 +298,27 @@ public unsafe partial class AccessibleObject :
     public virtual string? Value
     {
         // This might be better to never return null or return null instead of string.Empty?
-        get => SystemIAccessible is null ? string.Empty : SystemIAccessible.TryGetValue(CHILDID_SELF);
-        set => SystemIAccessible.TrySetValue(CHILDID_SELF, value);
+        get => GetValueInternal().ToNullableStringAndFree();
+        set
+        {
+            using BSTR set = new(value);
+            SetValueInternal(set);
     }
+    }
+
+    internal virtual bool CanGetValueDirectly => IsInternal;
+
+    internal virtual BSTR GetValueInternal() => SystemIAccessible is null ? new(string.Empty) : SystemIAccessible.TryGetValue(CHILDID_SELF);
+
+    /// <summary>
+    ///  Determines whether the value can be set without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanSetValueDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps and sets the System IAccessible value to <paramref name="value"/>.
+    /// </summary>
+    internal virtual void SetValueInternal(BSTR value) => SystemIAccessible.TrySetValue(CHILDID_SELF, value);
 
     /// <summary>
     ///  When overridden in a derived class, gets the accessible child
@@ -271,7 +373,18 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  When overridden in a derived class, gets the object that has the keyboard focus.
     /// </summary>
-    public virtual AccessibleObject? GetFocused()
+    public virtual AccessibleObject? GetFocused() => TryGetAccessibleObject(GetFocusedInternal());
+
+    /// <summary>
+    ///  Determines whether the focus can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetFocusedDirectly => IsInternal;
+
+    /// <summary>
+    ///  If there are children, retrieves the child ID of the focused child. If this object is focused. Otherwise
+    ///  returns self if this has focus or the System IAccessible focus.
+    /// </summary>
+    internal virtual VARIANT GetFocusedInternal()
     {
         // Default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -281,45 +394,74 @@ public unsafe partial class AccessibleObject :
             {
                 AccessibleObject? child = GetChild(index);
                 Debug.Assert(child is not null, $"GetChild({index}) returned null!");
-                if (child is not null && ((child.State & AccessibleStates.Focused) != 0))
+                if (child is not null && child.State.HasFlag(AccessibleStates.Focused))
                 {
-                    return child;
+                    return AsChildIdVariant(child);
                 }
             }
 
-            return State.HasFlag(AccessibleStates.Focused) ? this : null;
+            return State.HasFlag(AccessibleStates.Focused)
+                ? AsChildIdVariant(this)
+                : VARIANT.Empty;
         }
 
-        return TryGetFocus();
+        return TryGetSystemIAccessibleFocus();
     }
 
-    private AccessibleObject? TryGetFocus()
+    private VARIANT TryGetSystemIAccessibleFocus()
     {
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return VARIANT.Empty;
         }
 
         result = accessible.Value->get_accFocus(out VARIANT focus);
         if (result.Failed)
         {
-            Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(TryGetFocus)} failed with {result}");
-            return null;
+            Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(TryGetSystemIAccessibleFocus)} failed with {result}");
+            return VARIANT.Empty;
         }
 
-        return TryGetAccessibleObject(focus);
+        return focus;
     }
 
     /// <summary>
     ///  Gets an identifier for a Help topic and the path to the Help file associated with this accessible object.
     /// </summary>
-    public virtual int GetHelpTopic(out string? fileName) => SystemIAccessible.TryGetHelpTopic(CHILDID_SELF, out fileName);
+    public virtual int GetHelpTopic(out string? fileName)
+    {
+        (int topic, BSTR file) = SystemIAccessible.TryGetHelpTopic(CHILDID_SELF);
+        fileName = file.ToNullableStringAndFree();
+        return topic;
+    }
+
+    /// <summary>
+    ///  Determines whether the help topic can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetHelpTopicDirectly => IsInternal;
+
+    /// <summary>
+    ///  Unwraps the System IAccessible help topic string and ID.
+    /// </summary>
+    internal virtual (int topic, BSTR helpFile) GetHelpTopicInternal() => SystemIAccessible.TryGetHelpTopic(CHILDID_SELF);
 
     /// <summary>
     ///  When overridden in a derived class, gets the currently selected child.
     /// </summary>
-    public virtual AccessibleObject? GetSelected()
+    public virtual AccessibleObject? GetSelected() => TryGetAccessibleObject(GetSelectedInternal());
+
+    /// <summary>
+    ///  Determines whether selected can be retrieved without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanGetSelectedDirectly => IsInternal;
+
+    /// <summary>
+    ///  If there are children, retrieves the child ID of the selected child. If this object is focused. Otherwise
+    ///  returns self if this is selected or the System IAccessible selected.
+    /// </summary>
+    /// <returns></returns>
+    internal virtual VARIANT GetSelectedInternal()
     {
         // Default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -331,38 +473,50 @@ public unsafe partial class AccessibleObject :
                 Debug.Assert(child is not null, $"GetChild({index}) returned null!");
                 if (child is not null && child.State.HasFlag(AccessibleStates.Selected))
                 {
-                    return child;
+                    return AsChildIdVariant(child);
                 }
             }
 
-            return State.HasFlag(AccessibleStates.Selected) ? this : null;
+            return State.HasFlag(AccessibleStates.Selected) ? AsChildIdVariant(this) : default;
         }
 
-        return TryGetSelection();
+        return TryGetSystemIAccessibleSelection();
     }
 
-    private AccessibleObject? TryGetSelection()
+    private VARIANT TryGetSystemIAccessibleSelection()
     {
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
         result = accessible.Value->get_accSelection(out VARIANT selection);
         if (result.Failed)
         {
-            Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(TryGetSelection)} failed with {result}");
-            return null;
+            Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(TryGetSystemIAccessibleSelection)} failed with {result}");
+            return default;
         }
 
-        return TryGetAccessibleObject(selection);
+        return selection;
     }
 
     /// <summary>
     ///  Return the child object at the given screen coordinates.
     /// </summary>
-    public virtual AccessibleObject? HitTest(int x, int y)
+    public virtual AccessibleObject? HitTest(int x, int y) => TryGetAccessibleObject(HitTestInternal(x, y));
+
+    /// <summary>
+    ///  Determines whether hit test can be done at (<paramref name="x"/>, <paramref name="y"/>)
+    ///  without creating excessive managed objects.
+    /// </summary>
+    internal virtual bool CanHitTestDirectly(int x, int y) => IsInternal;
+
+    /// <summary>
+    ///  If there are children, retrieves the child ID at (<paramref name="x"/>, <paramref name="y"/>).
+    ///  Otherwise returns self or the System IAccessible hit test result.
+    /// </summary>
+    internal virtual VARIANT HitTestInternal(int x, int y)
     {
         // Default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -374,21 +528,21 @@ public unsafe partial class AccessibleObject :
                 Debug.Assert(child is not null, $"GetChild({index}) returned null!");
                 if (child is not null && child.Bounds.Contains(x, y))
                 {
-                    return child;
+                    return AsChildIdVariant(child);
                 }
             }
 
-            return this;
+            return AsChildIdVariant(this);
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Succeeded)
         {
             result = accessible.Value->accHitTest(x, y, out VARIANT child);
-            return result.Failed || result == HRESULT.S_FALSE ? null : TryGetAccessibleObject(child);
+            return result.Failed || result == HRESULT.S_FALSE ? VARIANT.Empty : child;
         }
 
-        return Bounds.Contains(x, y) ? this : null;
+        return Bounds.Contains(x, y) ? AsChildIdVariant(this) : VARIANT.Empty;
     }
 
     internal virtual bool IsIAccessibleExSupported()
@@ -1011,7 +1165,9 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszName = Name is null ? default : new(Name);
+        *pszName = CanGetNameDirectly
+            ? GetNameInternal()
+            : Name is { } name ? new(name) : default;
         return HRESULT.S_OK;
     }
 
@@ -1023,7 +1179,9 @@ public unsafe partial class AccessibleObject :
                 return HRESULT.E_POINTER;
             }
 
-            *pszValue = Value is null ? default : new(Value);
+            *pszValue = CanGetValueDirectly
+                ? GetValueInternal()
+                : Value is { } value ? new(value) : default;
             return HRESULT.S_OK;
         }
     }
@@ -1035,7 +1193,9 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszDescription = Description is null ? default : new(Description);
+        *pszDescription = CanGetDescriptionDirectly
+            ? GetDescriptionInternal()
+            : Description is { } description ? new(description) : default;
         return HRESULT.S_OK;
     }
 
@@ -1068,7 +1228,9 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszHelp = Help is null ? default : new(Help);
+        *pszHelp = CanGetHelpDirectly
+            ? GetHelpInternal()
+            : Help is { } help ? new(help) : default;
         return HRESULT.S_OK;
     }
 
@@ -1381,39 +1543,36 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    void IAccessible.accDoDefaultAction(object childID)
+    void IAccessible.accDoDefaultAction(object childID) =>
+        ((UIA.IAccessible.Interface)this).accDoDefaultAction(ChildIdToVARIANT(childID));
+
+    HRESULT UIA.IAccessible.Interface.accDoDefaultAction(VARIANT varChild)
     {
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.AccDoDefaultAction: this = {ToString()}, childID = {childID}");
-
             // If the default action is to be performed on self, do it.
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
                 DoDefaultAction();
-                return;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
                 child.DoDefaultAction();
-                return;
+                return HRESULT.S_OK;
             }
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return;
+            return result;
         }
 
-        result = accessible.Value->accDoDefaultAction(ChildIdToVARIANT(childID));
+        return accessible.Value->accDoDefaultAction(varChild);
     }
 
     private VARIANT ChildIdToVARIANT(object childId)
@@ -1444,6 +1603,18 @@ public unsafe partial class AccessibleObject :
 
     object? IAccessible.accHitTest(int xLeft, int yTop)
     {
+        VARIANT result = default;
+        ((UIA.IAccessible.Interface)this).accHitTest(xLeft, yTop, &result).AssertSuccess();
+        return result.ToObject();
+    }
+
+    HRESULT UIA.IAccessible.Interface.accHitTest(int xLeft, int yTop, VARIANT* pvarChild)
+    {
+        if (pvarChild is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         // When the AccessibleObjectFromPoint() is called it calls WindowFromPhysicalPoint() to find the window
         // under the given point. It then walks up parent windows with GetAncestor(hwnd, GA_PARENT) until it can't
         // find a parent, or the parent is the desktop. This "root" window is used to get the initial OBJID_WINDOW
@@ -1462,23 +1633,28 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.AccHitTest: this = {ToString()}");
+            if (CanHitTestDirectly(xLeft, yTop))
+            {
+                *pvarChild = HitTestInternal(xLeft, yTop);
+                return HRESULT.S_OK;
+            }
 
             AccessibleObject? obj = HitTest(xLeft, yTop);
             if (obj is not null)
             {
-                return AsChildId(obj);
+                *pvarChild = AsChildIdVariant(obj);
+                return HRESULT.S_OK;
             }
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            *pvarChild = VARIANT.Empty;
+            return result;
         }
 
-        result = accessible.Value->accHitTest(xLeft, yTop, out VARIANT child);
-        return result.Failed ? null : child.ToObject();
+        return accessible.Value->accHitTest(xLeft, yTop, pvarChild);
     }
 
     void IAccessible.accLocation(
@@ -1486,135 +1662,146 @@ public unsafe partial class AccessibleObject :
         out int pyTop,
         out int pcxWidth,
         out int pcyHeight,
-        object childID)
+        object childID) => this.accLocation(out pxLeft, out pyTop, out pcxWidth, out pcyHeight, ChildIdToVARIANT(childID));
+
+    HRESULT UIA.IAccessible.Interface.accLocation(int* pxLeft, int* pyTop, int* pcxWidth, int* pcyHeight, VARIANT varChild)
     {
+        if (pxLeft is null || pyTop is null || pcxWidth is null || pcyHeight is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.AccLocation: this = {ToString()}, childID = {childID}");
-
             // Use the Location function's return value if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
                 Rectangle bounds = Bounds;
-                pxLeft = bounds.X;
-                pyTop = bounds.Y;
-                pcxWidth = bounds.Width;
-                pcyHeight = bounds.Height;
+                *pxLeft = bounds.X;
+                *pyTop = bounds.Y;
+                *pcxWidth = bounds.Width;
+                *pcyHeight = bounds.Height;
 
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.AccLocation: Returning {bounds}");
-
-                return;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
                 Rectangle bounds = child.Bounds;
-                pxLeft = bounds.X;
-                pyTop = bounds.Y;
-                pcxWidth = bounds.Width;
-                pcyHeight = bounds.Height;
+                *pxLeft = bounds.X;
+                *pyTop = bounds.Y;
+                *pcxWidth = bounds.Width;
+                *pcyHeight = bounds.Height;
 
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.AccLocation: Returning {bounds}");
-
-                return;
+                return HRESULT.S_OK;
             }
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            pxLeft = pyTop = pcxWidth = pcyHeight = 0;
-            return;
+            *pxLeft = *pyTop = *pcxWidth = *pcyHeight = 0;
+            return result;
         }
 
-        result = accessible.Value->accLocation(out pxLeft, out pyTop, out pcxWidth, out pcyHeight, ChildIdToVARIANT(childID));
+        return accessible.Value->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varChild);
     }
 
     object? IAccessible.accNavigate(int navDir, object childID)
     {
+        using VARIANT result = default;
+        ((UIA.IAccessible.Interface)this).accNavigate(navDir, ChildIdToVARIANT(childID), &result).AssertSuccess();
+        return result.ToObject();
+    }
+
+    HRESULT UIA.IAccessible.Interface.accNavigate(int navDir, VARIANT varStart, VARIANT* pvarEndUpAt)
+        {
+        if (pvarEndUpAt is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.AccNavigate: this = {ToString()}, navdir = {navDir}, childID = {childID}");
-
             // Use the Navigate function's return value if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varStart))
             {
+                if (CanNavigateDirectly)
+                {
+                    *pvarEndUpAt = NavigateInternal((AccessibleNavigation)navDir);
+                    return HRESULT.S_OK;
+                }
+
                 AccessibleObject? newObject = Navigate((AccessibleNavigation)navDir);
                 if (newObject is not null)
                 {
-                    return AsChildId(newObject);
+                    *pvarEndUpAt = AsChildIdVariant(newObject);
+                    return HRESULT.S_OK;
                 }
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varStart);
             if (child is not null)
             {
-                return AsChildId(child.Navigate((AccessibleNavigation)navDir));
+                *pvarEndUpAt = CanNavigateDirectly
+                    ? child.NavigateInternal((AccessibleNavigation)navDir)
+                    : AsChildIdVariant(child.Navigate((AccessibleNavigation)navDir));
+                return HRESULT.S_OK;
             }
         }
 
-        if (SysNavigate((AccessibleNavigation)navDir, childID, out AccessibleObject? accessibleObject))
+        if (SysNavigate((AccessibleNavigation)navDir, varStart, out AccessibleObject? accessibleObject))
         {
-            return AsChildId(accessibleObject);
+            *pvarEndUpAt = AsChildIdVariant(accessibleObject);
+            return HRESULT.S_OK;
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            *pvarEndUpAt = VARIANT.Empty;
+            return HRESULT.S_OK;
         }
 
-        result = accessible.Value->accNavigate(navDir, ChildIdToVARIANT(childID), out VARIANT endUpAt);
-        return endUpAt.ToObject();
+        return accessible.Value->accNavigate(navDir, varStart, pvarEndUpAt);
     }
 
     /// <summary>
     ///  Select an accessible object.
     /// </summary>
-    void IAccessible.accSelect(int flagsSelect, object childID)
+    void IAccessible.accSelect(int flagsSelect, object childID) =>
+        ((UIA.IAccessible.Interface)this).accSelect(flagsSelect, ChildIdToVARIANT(childID));
+
+    HRESULT UIA.IAccessible.Interface.accSelect(int flagsSelect, VARIANT varChild)
     {
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.AccSelect: this = {ToString()}, flagsSelect = {flagsSelect}, childID = {childID}");
-
             // If the selection is self, do it.
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
                 Select((AccessibleSelection)flagsSelect);    // Uses an Enum which matches SELFLAG
-                return;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
                 child.Select((AccessibleSelection)flagsSelect);
-                return;
+                return HRESULT.S_OK;
             }
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return;
+            return result;
         }
 
-        result = accessible.Value->accSelect(flagsSelect, ChildIdToVARIANT(childID));
+        return accessible.Value->accSelect(flagsSelect, varChild);
     }
 
     /// <summary>
@@ -1634,56 +1821,62 @@ public unsafe partial class AccessibleObject :
 
     object? IAccessible.get_accChild(object childID)
     {
-        if (IsClientObject)
+        ComScope<IDispatch> child = new(null);
+        ((UIA.IAccessible.Interface)this).get_accChild(ChildIdToVARIANT(childID), child);
+        return child.IsNull ? null : ComHelpers.GetObjectForIUnknown(child.AsUnknown);
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accChild(VARIANT varChild, IDispatch** ppdispChild)
         {
-            ValidateChildID(ref childID);
+        if (ppdispChild is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.GetAccChild: this = {ToString()}, childID = {childID}");
-
-            // Return self for CHILDID_SELF.
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+        if (IsClientObject)
             {
-                return AsIAccessible(this);
+            if (IsValidSelfChildID(varChild))
+            {
+                // Return self for invalid child ID
+                *ppdispChild = GetIDispatch(this);
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
                 // Make sure we're not returning ourselves as our own child
                 Debug.Assert(
                     child != this,
                     "An accessible object is returning itself as its own child. This can cause Accessibility client applications to stop responding.");
+                if (child == this)
+                {
+                    *ppdispChild = null;
+                    return HRESULT.S_OK;
+                }
 
-                return child == this ? null : AsIAccessible(child);
+                *ppdispChild = GetIDispatch(child);
+                return HRESULT.S_OK;
             }
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            *ppdispChild = null;
+            return result;
         }
 
         result = accessible.Value->get_accChildCount(out int count);
 
         if (result.Failed || count == 0)
         {
-            return null;
+            *ppdispChild = null;
+            return result;
         }
 
-        IDispatch* dispatch;
-        result = accessible.Value->get_accChild(ChildIdToVARIANT(childID), &dispatch);
-
-        return result.Failed || dispatch is null
-            ? null
-            : new VARIANT()
-            {
-                vt = VARENUM.VT_DISPATCH,
-                data = new() { pdispVal = dispatch }
-            }.ToObject();
+        return accessible.Value->get_accChild(varChild, ppdispChild);
     }
 
     int IAccessible.accChildCount
@@ -1691,77 +1884,117 @@ public unsafe partial class AccessibleObject :
         get
         {
             int childCount = -1;
-
-            if (IsClientObject)
-            {
-                childCount = GetChildCount();
-            }
-
-            if (childCount == -1)
-            {
-                using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
-                if (result.Failed)
-                {
-                    childCount = 0;
-                }
-                else
-                {
-                    result = accessible.Value->get_accChildCount(out childCount);
-                }
-            }
-
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.accChildCount: this = {ToString()}, returning {childCount}");
-
+            ((UIA.IAccessible.Interface)this).get_accChildCount(&childCount);
             return childCount;
         }
     }
 
+    HRESULT UIA.IAccessible.Interface.get_accChildCount(int* pcountChildren)
+    {
+        if (pcountChildren is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+            if (IsClientObject)
+            {
+            *pcountChildren = GetChildCount();
+            }
+
+        if (*pcountChildren == -1)
+            {
+            using ComScope<UIA.IAccessible> accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
+                if (result.Failed)
+                {
+                *pcountChildren = 0;
+                }
+                else
+                {
+                result = accessible.Value->get_accChildCount(pcountChildren);
+                }
+            }
+
+        return HRESULT.S_OK;
+        }
+
     string? IAccessible.get_accDefaultAction(object childID)
     {
-        if (IsClientObject)
-        {
-            ValidateChildID(ref childID);
+        using BSTR result = default;
+        ((UIA.IAccessible.Interface)this).get_accDefaultAction(ChildIdToVARIANT(childID), &result);
+        return result.ToString();
+    }
 
-            // Return the default action property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+    HRESULT UIA.IAccessible.Interface.get_accDefaultAction(VARIANT varChild, BSTR* pszDefaultAction)
+        {
+        if (pszDefaultAction is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (IsClientObject)
             {
-                return DefaultAction;
+            if (IsValidSelfChildID(varChild))
+            {
+                // Return the default action property on this.
+                *pszDefaultAction = CanGetDefaultActionDirectly
+                    ? GetDefaultActionInternal()
+                    : DefaultAction is { } action ? new(action) : default;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.DefaultAction;
+                *pszDefaultAction = child.CanGetDefaultActionDirectly
+                    ? child.GetDefaultActionInternal()
+                    : child.DefaultAction is { } action ? new(action) : default;
+                return HRESULT.S_OK;
             }
         }
 
-        return SystemIAccessible.TryGetDefaultAction(ChildIdToVARIANT(childID));
+        *pszDefaultAction = SystemIAccessible.TryGetDefaultAction(varChild);
+        return HRESULT.S_OK;
     }
 
     string? IAccessible.get_accDescription(object childID)
     {
-        if (IsClientObject)
-        {
-            ValidateChildID(ref childID);
+        using BSTR description = default;
+        ((UIA.IAccessible.Interface)this).get_accDescription(ChildIdToVARIANT(childID), &description);
+        return description.ToString();
+    }
 
-            // Return the description property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+    HRESULT UIA.IAccessible.Interface.get_accDescription(VARIANT varChild, BSTR* pszDescription)
+        {
+        if (pszDescription is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (IsClientObject)
             {
-                return Description;
+            if (IsValidSelfChildID(varChild))
+            {
+                // Return self description property
+                *pszDescription = CanGetDescriptionDirectly
+                    ? GetDescriptionInternal()
+                    : Description is { } description ? new(description) : default;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.Description;
+                *pszDescription = child.CanGetDescriptionDirectly
+                    ? child.GetDescriptionInternal()
+                    : child.Description is { } description ? new(description) : default;
+                return HRESULT.S_OK;
             }
         }
 
-        return SystemIAccessible.TryGetDescription(ChildIdToVARIANT(childID))?.ToString();
+        *pszDescription = SystemIAccessible.TryGetDescription(varChild);
+        return HRESULT.S_OK;
     }
 
     /// <summary>
@@ -1782,138 +2015,253 @@ public unsafe partial class AccessibleObject :
         return null;
     }
 
+    /// <summary>
+    ///  Returns the appropriate child from the Accessible Child Collection, if available.
+    /// </summary>
+    private AccessibleObject? GetAccessibleChild(VARIANT childID)
+    {
+        if (childID.vt is not VARENUM.VT_INT and not VARENUM.VT_I4)
+        {
+            return null;
+        }
+
+        int index = childID.data.intVal - 1;
+        return index >= 0 && index < GetChildCount() ? GetChild(index) : null;
+    }
+
     object? IAccessible.accFocus
     {
         get
         {
+            VARIANT result = default;
+            ((UIA.IAccessible.Interface)this).get_accFocus(&result).AssertSuccess();
+            return result.vt is VARENUM.VT_INT or VARENUM.VT_I4 ? (int)result : TryGetAccessibleObject(result);
+        }
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accFocus(VARIANT* pvarChild)
+    {
+        if (pvarChild is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
             if (IsClientObject)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.GetAccFocus: this = {ToString()}");
+            if (CanGetFocusedDirectly)
+            {
+                *pvarChild = GetFocusedInternal();
+                return HRESULT.S_OK;
+            }
 
                 AccessibleObject? obj = GetFocused();
                 if (obj is not null)
                 {
-                    return AsChildId(obj);
+                *pvarChild = AsChildIdVariant(obj);
+                return HRESULT.S_OK;
                 }
             }
 
-            return TryGetFocus();
+        *pvarChild = TryGetSystemIAccessibleFocus();
+        return HRESULT.S_OK;
         }
-    }
 
     string? IAccessible.get_accHelp(object childID)
     {
-        if (IsClientObject)
-        {
-            ValidateChildID(ref childID);
+        using BSTR result = default;
+        ((UIA.IAccessible.Interface)this).get_accHelp(ChildIdToVARIANT(childID), &result);
+        return result.ToString();
+    }
 
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+    HRESULT UIA.IAccessible.Interface.get_accHelp(VARIANT varChild, BSTR* pszHelp)
+        {
+        if (pszHelp is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (IsClientObject)
             {
-                return Help;
+            if (IsValidSelfChildID(varChild))
+            {
+                *pszHelp = CanGetHelpDirectly
+                    ? GetHelpInternal()
+                    : Help is { } help ? new(help) : default;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.Help;
+                *pszHelp = child.CanGetHelpDirectly
+                    ? child.GetHelpInternal()
+                    : child.Help is { } help ? new(help) : default;
+                return HRESULT.S_OK;
             }
         }
 
-        return SystemIAccessible.TryGetHelp(ChildIdToVARIANT(childID));
+        *pszHelp = SystemIAccessible.TryGetHelp(varChild);
+        return HRESULT.S_OK;
     }
 
     int IAccessible.get_accHelpTopic(out string? pszHelpFile, object childID)
     {
-        if (IsClientObject)
-        {
-            ValidateChildID(ref childID);
+        using BSTR helpFile = default;
+        int topic = -1;
+        ((UIA.IAccessible.Interface)this).get_accHelpTopic(&helpFile, ChildIdToVARIANT(childID), &topic).AssertSuccess();
+        pszHelpFile = helpFile.IsNull ? null : helpFile.ToString();
+        return topic;
+    }
 
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+    HRESULT UIA.IAccessible.Interface.get_accHelpTopic(BSTR* pszHelpFile, VARIANT varChild, int* pidTopic)
+        {
+        if (pidTopic is null || pszHelpFile is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (IsClientObject)
             {
-                return GetHelpTopic(out pszHelpFile);
+            if (IsValidSelfChildID(varChild))
+            {
+                if (CanGetHelpTopicDirectly)
+                {
+                    (*pidTopic, *pszHelpFile) = GetHelpTopicInternal();
+                    return HRESULT.S_OK;
+            }
+
+                *pidTopic = GetHelpTopic(out string? helpFile);
+                *pszHelpFile = helpFile is null ? default : new(helpFile);
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.GetHelpTopic(out pszHelpFile);
+                if (child.CanGetHelpTopicDirectly)
+                {
+                    (*pidTopic, *pszHelpFile) = child.GetHelpTopicInternal();
+                    return HRESULT.S_OK;
             }
+
+                *pidTopic = child.GetHelpTopic(out string? helpFile);
+                *pszHelpFile = helpFile is null ? default : new(helpFile);
+                return HRESULT.S_OK;
+        }
         }
 
-        return SystemIAccessible.TryGetHelpTopic(ChildIdToVARIANT(childID), out pszHelpFile);
+        (*pidTopic, *pszHelpFile) = SystemIAccessible.TryGetHelpTopic(varChild);
+        return HRESULT.S_OK;
     }
 
-    string? IAccessible.get_accKeyboardShortcut(object childID) => get_accKeyboardShortcutInternal(childID);
+    string? IAccessible.get_accKeyboardShortcut(object childID)
+    {
+        using BSTR shortcut = default;
+        ((UIA.IAccessible.Interface)this).get_accKeyboardShortcut(ChildIdToVARIANT(childID), &shortcut).AssertSuccess();
+        return shortcut.ToString();
+    }
 
-    internal virtual string? get_accKeyboardShortcutInternal(object childID)
+    HRESULT UIA.IAccessible.Interface.get_accKeyboardShortcut(VARIANT varChild, BSTR* pszKeyboardShortcut)
     {
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
-                return KeyboardShortcut;
+                *pszKeyboardShortcut = CanGetKeyboardShortcutDirectly
+                    ? GetKeyboardShortcutInternal(varChild)
+                    : KeyboardShortcut is { } shortcut ? new(shortcut) : default;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.KeyboardShortcut;
+                *pszKeyboardShortcut = child.CanGetKeyboardShortcutDirectly
+                    ? child.GetKeyboardShortcutInternal(varChild)
+                    : child.KeyboardShortcut is { } shortcut ? new(shortcut) : default;
+                return HRESULT.S_OK;
             }
         }
 
-        return SystemIAccessible.TryGetKeyboardShortcut(ChildIdToVARIANT(childID));
+        *pszKeyboardShortcut = SystemIAccessible.TryGetKeyboardShortcut(varChild);
+        return HRESULT.S_OK;
     }
 
-    string? IAccessible.get_accName(object childID) => get_accNameInternal(childID);
-
-    internal virtual string? get_accNameInternal(object childID)
+    string? IAccessible.get_accName(object childID)
     {
-        if (IsClientObject)
+        using BSTR name = default;
+        ((UIA.IAccessible.Interface)this).get_accName(ChildIdToVARIANT(childID), &name).AssertSuccess();
+        return name.ToString();
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accName(VARIANT varChild, BSTR* pszName)
+    {
+        if (pszName is null)
         {
-            ValidateChildID(ref childID);
+            return HRESULT.E_POINTER;
+        }
 
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.get_accName: this = {ToString()}, childID = {childID}");
-
-            // Return the name property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+        if (IsClientObject)
             {
-                return Name;
+            if (IsValidSelfChildID(varChild))
+            {
+                *pszName = CanGetNameDirectly
+                    ? GetNameInternal()
+                    : Name is { } name ? new(name) : default;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.Name;
+                *pszName = child.CanGetNameDirectly
+                    ? child.GetNameInternal()
+                    : child.Name is { } name ? new(name) : default;
+                return HRESULT.S_OK;
             }
         }
 
-        string? retval = SystemIAccessible.TryGetName(ChildIdToVARIANT(childID));
+        BSTR systemName = SystemIAccessible.TryGetName(varChild);
 
-        if (IsClientObject)
+        if (IsClientObject && systemName.IsNullOrEmpty)
         {
-            if (string.IsNullOrEmpty(retval))
-            {
                 // Name the child after its parent
-                retval = Name;
+            systemName = CanGetNameDirectly
+                ? GetNameInternal()
+                : Name is { } name ? new(name) : default;
             }
-        }
 
-        return retval;
+        *pszName = systemName;
+        return HRESULT.S_OK;
     }
 
     object? IAccessible.accParent
     {
         get
         {
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.accParent: this = {ToString()}");
+            ComScope<IDispatch> dispatch = new(null);
+            ((UIA.IAccessible.Interface)this).get_accParent(dispatch).AssertSuccess();
+            return dispatch.IsNull ? null : ComHelpers.GetObjectForIUnknown(dispatch.AsUnknown);
+        }
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accParent(IDispatch** ppdispParent)
+    {
+        if (ppdispParent is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (CanGetParentDirectly)
+        {
+            *ppdispParent = GetParentInternal();
+            return HRESULT.S_OK;
+        }
+
             AccessibleObject? parent = Parent;
             if (parent is not null)
             {
@@ -1928,163 +2276,247 @@ public unsafe partial class AccessibleObject :
                 }
             }
 
-            return AsIAccessible(parent);
+        *ppdispParent = GetIDispatch(parent);
+        return HRESULT.S_OK;
         }
-    }
 
     object? IAccessible.get_accRole(object childID)
     {
+        using VARIANT result = default;
+        ((UIA.IAccessible.Interface)this).get_accRole(ChildIdToVARIANT(childID), &result);
+        return result.ToObject();
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accRole(VARIANT varChild, VARIANT* pvarRole)
+        {
+        if (pvarRole is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
             // Return the role property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
-                return (int)Role;
+                *pvarRole = (VARIANT)(int)Role;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return (int)child.Role;
+                *pvarRole = (VARIANT)(int)child.Role;
+                return HRESULT.S_OK;
             }
         }
 
         int count = SystemIAccessible.TryGetChildCount();
 
         // Unclear why this returns null for no children.
-        return count == 0 ? null : SystemIAccessible.TryGetRole(ChildIdToVARIANT(childID));
+        *pvarRole = count == 0 ? VARIANT.Empty : (VARIANT)(int)SystemIAccessible.TryGetRole(varChild);
+        return HRESULT.S_OK;
     }
 
     object? IAccessible.accSelection
     {
         get
         {
+            VARIANT result = default;
+            ((UIA.IAccessible.Interface)this).get_accSelection(&result);
+            return result.ToObject();
+        }
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accSelection(VARIANT* pvarChildren)
+    {
+        if (pvarChildren is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
             if (IsClientObject)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"AccessibleObject.GetAccSelection: this = {ToString()}");
+            if (CanGetSelectedDirectly)
+            {
+                *pvarChildren = GetSelectedInternal();
+                return HRESULT.S_OK;
+            }
 
                 AccessibleObject? obj = GetSelected();
                 if (obj is not null)
                 {
-                    return AsChildId(obj);
+                *pvarChildren = AsChildIdVariant(obj);
+                return HRESULT.S_OK;
                 }
             }
 
             using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
             if (result.Failed)
             {
-                return null;
+            *pvarChildren = default;
+            return HRESULT.S_OK;
             }
 
-            result = accessible.Value->get_accSelection(out VARIANT selection);
-            return selection.ToObject();
+        return accessible.Value->get_accSelection(pvarChildren);
         }
-    }
 
     object? IAccessible.get_accState(object childID)
     {
+        using VARIANT result = default;
+        ((UIA.IAccessible.Interface)this).get_accState(ChildIdToVARIANT(childID), &result).AssertSuccess();
+        return result.ToObject();
+    }
+
+    HRESULT UIA.IAccessible.Interface.get_accState(VARIANT varChild, VARIANT* pvarState)
+        {
+        if (pvarState is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
-            Debug.WriteLineIf(
-                CompModSwitches.MSAA.TraceInfo,
-                $"AccessibleObject.GetAccState: this = {ToString()}, childID = {childID}");
-
             // Return the state property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
-                return (int)State;
+                *pvarState = (VARIANT)(int)State;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return (int)child.State;
+                *pvarState = (VARIANT)(int)child.State;
+                return HRESULT.S_OK;
             }
         }
 
         // Perhaps would be better to return AccessibleStates.None instead of null here.
-        return SystemIAccessible?.TryGetState(ChildIdToVARIANT(childID));
+        *pvarState = SystemIAccessible?.TryGetState(ChildIdToVARIANT(varChild)) is { } state ? (VARIANT)(int)state : VARIANT.Empty;
+        return HRESULT.S_OK;
     }
 
     string? IAccessible.get_accValue(object childID)
     {
-        if (IsClientObject)
-        {
-            ValidateChildID(ref childID);
+        using BSTR value = default;
+        ((UIA.IAccessible.Interface)this).get_accValue(ChildIdToVARIANT(childID), &value);
+        return value.ToString();
+    }
 
-            // Return the value property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+    HRESULT UIA.IAccessible.Interface.get_accValue(VARIANT varChild, BSTR* pszValue)
+        {
+        if (pszValue is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (IsClientObject)
             {
-                return Value;
+            if (IsValidSelfChildID(varChild))
+            {
+                // Return self value property.
+                *pszValue = CanGetValueDirectly
+                    ? GetValueInternal()
+                    : Value is { } value ? new(value) : default;
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                return child.Value;
+                *pszValue = child.CanGetValueDirectly
+                    ? child.GetValueInternal()
+                    : child.Value is { } value ? new(value) : default;
+                return HRESULT.S_OK;
             }
         }
 
-        return SystemIAccessible.TryGetValue(ChildIdToVARIANT(childID));
+        *pszValue = SystemIAccessible.TryGetValue(varChild);
+        return HRESULT.S_OK;
     }
 
-    void IAccessible.set_accName(object childID, string newName)
+    void IAccessible.set_accName(object childID, string newName) =>
+        ((UIA.IAccessible.Interface)this).put_accName(ChildIdToVARIANT(childID), new(newName));
+
+    HRESULT UIA.IAccessible.Interface.put_accName(VARIANT varChild, BSTR szName)
     {
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
             // Set the name property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
+                if (CanSetNameDirectly)
+                {
+                    SetNameInternal(szName);
+                    return HRESULT.S_OK;
+                }
+
                 // Attempt to set the name property
-                Name = newName;
-                return;
+                Name = szName.ToString();
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                child.Name = newName;
-                return;
+                if (CanSetNameDirectly)
+                {
+                    child.SetNameInternal(szName);
+                    return HRESULT.S_OK;
             }
+
+                child.Name = szName.ToString();
+                return HRESULT.S_OK;
+        }
         }
 
-        SystemIAccessible.TrySetName(ChildIdToVARIANT(childID), newName);
+        SystemIAccessible.TrySetName(varChild, szName);
+        return HRESULT.S_OK;
     }
 
-    void IAccessible.set_accValue(object childID, string newValue)
+    void IAccessible.set_accValue(object childID, string newValue) =>
+        ((UIA.IAccessible.Interface)this).put_accValue(ChildIdToVARIANT(childID), new(newValue));
+
+    HRESULT UIA.IAccessible.Interface.put_accValue(VARIANT varChild, BSTR szValue)
     {
         if (IsClientObject)
         {
-            ValidateChildID(ref childID);
-
             // Set the value property if available
-            if (childID.Equals((int)PInvoke.CHILDID_SELF))
+            if (IsValidSelfChildID(varChild))
             {
                 // Attempt to set the value property
-                Value = newValue;
-                return;
+                if (CanSetValueDirectly)
+                {
+                    SetValueInternal(szValue);
+                    return HRESULT.S_OK;
+                }
+
+                Value = szValue.ToString();
+                return HRESULT.S_OK;
             }
 
             // If we have an accessible object collection, get the appropriate child
-            AccessibleObject? child = GetAccessibleChild(childID);
+            AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                child.Value = newValue;
-                return;
+                if (child.CanSetValueDirectly)
+                {
+                    child.SetValueInternal(szValue);
+                    return HRESULT.S_OK;
             }
+
+                child.Value = szValue.ToString();
+                return HRESULT.S_OK;
+        }
         }
 
-        SystemIAccessible.TrySetValue(ChildIdToVARIANT(childID), newValue);
+        SystemIAccessible.TrySetValue(varChild, szValue);
+        return HRESULT.S_OK;
     }
 
     /// <inheritdoc cref="IOleWindow.GetWindow(HWND*)"/>
@@ -2169,7 +2601,12 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  When overridden in a derived class, navigates to another object.
     /// </summary>
-    public virtual AccessibleObject? Navigate(AccessibleNavigation navdir)
+    public virtual AccessibleObject? Navigate(AccessibleNavigation navdir) =>
+        TryGetAccessibleObject(NavigateInternal(navdir));
+
+    internal virtual bool CanNavigateDirectly => IsInternal;
+
+    internal virtual VARIANT NavigateInternal(AccessibleNavigation navdir)
     {
         // Some default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -2177,15 +2614,15 @@ public unsafe partial class AccessibleObject :
             switch (navdir)
             {
                 case AccessibleNavigation.FirstChild:
-                    return GetChild(0);
+                    return AsChildIdVariant(GetChild(0));
                 case AccessibleNavigation.LastChild:
-                    return GetChild(GetChildCount() - 1);
+                    return AsChildIdVariant(GetChild(GetChildCount() - 1));
                 case AccessibleNavigation.Previous:
                 case AccessibleNavigation.Up:
                 case AccessibleNavigation.Left:
                     if (Parent?.GetChildCount() > 0)
                     {
-                        return null;
+                        return VARIANT.Empty;
                     }
 
                     break;
@@ -2194,7 +2631,7 @@ public unsafe partial class AccessibleObject :
                 case AccessibleNavigation.Right:
                     if (Parent?.GetChildCount() > 0)
                     {
-                        return null;
+                        return VARIANT.Empty;
                     }
 
                     break;
@@ -2204,17 +2641,17 @@ public unsafe partial class AccessibleObject :
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return VARIANT.Empty;
         }
 
-        if (SysNavigate(navdir, (int)PInvoke.CHILDID_SELF, out AccessibleObject? accessibleObject))
+        if (SysNavigate(navdir, (VARIANT)(int)PInvoke.CHILDID_SELF, out AccessibleObject? accessibleObject))
         {
-            return accessibleObject;
+            return AsChildIdVariant(accessibleObject);
         }
         else
         {
             result = accessible.Value->accNavigate((int)navdir, CHILDID_SELF, out VARIANT endUpAt);
-            return TryGetAccessibleObject(endUpAt);
+            return endUpAt;
         }
     }
 
@@ -2230,30 +2667,40 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    private object? AsChildId(AccessibleObject? obj)
+    private VARIANT AsChildIdVariant(AccessibleObject? obj)
     {
         // https://learn.microsoft.com/windows/win32/winauto/how-child-ids-are-used-in-parameters
         if (obj == this)
         {
-            return (int)PInvoke.CHILDID_SELF;
+            return (VARIANT)(int)PInvoke.CHILDID_SELF;
         }
 
-        return AsIAccessible(obj);
+        if (obj is null)
+        {
+            return VARIANT.Empty;
     }
 
-    private static object? AsIAccessible(AccessibleObject? obj)
+        return new VARIANT()
     {
+            vt = VARENUM.VT_DISPATCH,
+            data = new() { pdispVal = GetIDispatch(obj) }
+        };
+    }
+
+    /// <summary>
+    ///  Returns the IDispatch pointer to the system IAccessible if <paramref name="obj"/> is a system wrapper.
+    ///  Otherwise just returns the IDispatch pointer of <paramref name="obj"/>.
+    /// </summary>
+    private static IDispatch* GetIDispatch(AccessibleObject? obj)
+    {
+        // we are always wrapping system iaccessible..
         if (obj is not null && obj._isSystemWrapper && obj.SystemIAccessible is { } accessible)
         {
             // We're just a simple system wrapper, return the pointer.
-            return new VARIANT()
-            {
-                vt = VARENUM.VT_DISPATCH,
-                data = new() { pdispVal = accessible.GetInterface<IDispatch>().Value }
-            }.ToObject();
+            return accessible.GetInterface<IDispatch>().Value;
         }
 
-        return obj;
+        return ComHelpers.TryGetComPointer<IDispatch>(obj);
     }
 
     /// <summary>
@@ -2350,12 +2797,12 @@ public unsafe partial class AccessibleObject :
     ///   accessible object.
     ///  </para>
     /// </remarks>
-    private bool SysNavigate(AccessibleNavigation direction, object childID, out AccessibleObject? accessibleObject)
+    private bool SysNavigate(AccessibleNavigation direction, VARIANT childID, out AccessibleObject? accessibleObject)
     {
         accessibleObject = null;
 
         // Only override system navigation relative to ourselves (since we can't interpret OLEACC child ids)
-        if (!childID.Equals((int)PInvoke.CHILDID_SELF))
+        if ((int)childID != (int)PInvoke.CHILDID_SELF)
         {
             return false;
         }
@@ -2365,28 +2812,22 @@ public unsafe partial class AccessibleObject :
     }
 
     /// <summary>
-    ///  Make sure that the childID is valid.
+    ///  Checks if the <paramref name="childID"/> is representative of self.
     /// </summary>
-    internal static void ValidateChildID(ref object childID)
-    {
-        // An empty childID is considered to be the same as CHILDID_SELF.
-        // Some accessibility programs pass null into our functions, so we
-        // need to convert them here.
-        if (childID is null)
-        {
-            childID = (int)PInvoke.CHILDID_SELF;
-        }
-        else if (childID.Equals((int)HRESULT.DISP_E_PARAMNOTFOUND))
-        {
-            childID = 0;
-        }
-        else if (childID is not int)
-        {
-            // AccExplorer seems to occasionally pass in objects instead of an int ChildID.
-            childID = 0;
-        }
-    }
+    internal virtual bool IsValidSelfChildID(VARIANT childID) =>
+        childID.IsEmpty
+        || childID.vt is not VARENUM.VT_I4 and not VARENUM.VT_INT
+        || childID.data.intVal == (int)HRESULT.DISP_E_PARAMNOTFOUND
+        || childID.data.intVal == (int)PInvoke.CHILDID_SELF;
 
+    /// <summary>
+    ///  Tries to get corresponding AccessibleObject that is represented by <paramref name="variant"/>.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Calling this will dispose <paramref name="variant"/> when finished.
+    ///  </para>
+    /// </remarks>
     private AccessibleObject? TryGetAccessibleObject(VARIANT variant)
     {
         switch (variant.vt)
@@ -2867,28 +3308,6 @@ public unsafe partial class AccessibleObject :
         result = HRESULT.E_NOINTERFACE;
         return default;
     }
-
-    HRESULT UIA.IAccessible.Interface.get_accParent(IDispatch** ppdispParent) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accChildCount(int* pcountChildren) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accChild(VARIANT varChild, IDispatch** ppdispChild) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accName(VARIANT varChild, BSTR* pszName) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accValue(VARIANT varChild, BSTR* pszValue) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accDescription(VARIANT varChild, BSTR* pszDescription) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accRole(VARIANT varChild, VARIANT* pvarRole) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accState(VARIANT varChild, VARIANT* pvarState) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accHelp(VARIANT varChild, BSTR* pszHelp) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accHelpTopic(BSTR* pszHelpFile, VARIANT varChild, int* pidTopic) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accKeyboardShortcut(VARIANT varChild, BSTR* pszKeyboardShortcut) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accFocus(VARIANT* pvarChild) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accSelection(VARIANT* pvarChildren) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.get_accDefaultAction(VARIANT varChild, BSTR* pszDefaultAction) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.accSelect(int flagsSelect, VARIANT varChild) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.accLocation(int* pxLeft, int* pyTop, int* pcxWidth, int* pcyHeight, VARIANT varChild) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.accNavigate(int navDir, VARIANT varStart, VARIANT* pvarEndUpAt) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.accHitTest(int xLeft, int yTop, VARIANT* pvarChild) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.accDoDefaultAction(VARIANT varChild) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.put_accName(VARIANT varChild, BSTR szName) => HRESULT.E_NOTIMPL;
-    HRESULT UIA.IAccessible.Interface.put_accValue(VARIANT varChild, BSTR szValue) => HRESULT.E_NOTIMPL;
 
     HRESULT IDispatch.Interface.GetTypeInfoCount(uint* pctinfo)
         => ((IDispatch.Interface)_dispatchAdapter).GetTypeInfoCount(pctinfo);

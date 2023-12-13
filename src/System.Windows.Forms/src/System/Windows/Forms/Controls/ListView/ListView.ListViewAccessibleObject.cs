@@ -17,6 +17,8 @@ public partial class ListView
         {
         }
 
+        private protected override bool IsInternal => true;
+
         internal override Rectangle BoundingRectangle
         {
             get
@@ -356,6 +358,8 @@ public partial class ListView
 
             return null;
         }
+
+        internal override bool CanHitTestDirectly(int x, int y) => false;
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -26,6 +27,8 @@ public partial class MonthCalendar
 
         public override string DefaultAction => SR.AccessibleActionClick;
 
+        internal override bool CanGetDefaultActionDirectly => false;
+
         public override void DoDefaultAction() => Invoke();
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
@@ -45,6 +48,12 @@ public partial class MonthCalendar
             };
 
         public override AccessibleObject Parent => _monthCalendarAccessibleObject;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetParentDirectly => _monthCalendarAccessibleObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _monthCalendarAccessibleObject.GetParentInternal();
 
         private void RaiseMouseClick()
         {

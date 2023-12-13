@@ -82,8 +82,13 @@ public abstract partial class TextBoxBase
                 return name is not null ? name : string.Empty;
             }
 
-            set => base.Name = value;
         }
+
+        internal override bool CanGetNameDirectly => false;
+
+        internal override bool CanSetNameDirectly => false;
+
+        internal override bool CanGetValueDirectly => false;
 
         public override string? Value => this.TryGetOwnerAs(out TextBoxBase? owner) && !owner.PasswordProtect ? ValueInternal : SR.AccessDenied;
 
@@ -139,5 +144,9 @@ public abstract partial class TextBoxBase
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out TextBoxBase? owner)
             ? ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, useMnemonic: false, PreviousLabel)
             : null;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetKeyboardShortcutDirectly => !this.TryGetOwnerAs(out TextBoxBase? owner);
     }
 }

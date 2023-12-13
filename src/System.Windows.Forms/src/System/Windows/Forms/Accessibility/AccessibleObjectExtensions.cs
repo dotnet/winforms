@@ -45,24 +45,24 @@ internal static unsafe class AccessibleObjectExtensions
         return new Rectangle(pxLeft, pyTop, pcxWidth, pcyHeight);
     }
 
-    public static string? TryGetDefaultAction(this AgileComPointer<IAccessible>? agile, int child)
+    public static BSTR TryGetDefaultAction(this AgileComPointer<IAccessible>? agile, int child)
         => agile.TryGetDefaultAction((VARIANT)child);
 
-    public static string? TryGetDefaultAction(this AgileComPointer<IAccessible>? agile, VARIANT child)
+    public static BSTR TryGetDefaultAction(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
-        using BSTR bstr = default;
+        BSTR bstr = default;
         result = accessible.Value->get_accDefaultAction(child, &bstr);
 
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetDefaultAction)}: get_accDefaultAction call for id {(int)child} failed with {result}");
-        return bstr.ToString();
+        return bstr;
     }
 
     public static void TryDoDefaultAction(this AgileComPointer<IAccessible>? agile, int child)
@@ -79,90 +79,90 @@ internal static unsafe class AccessibleObjectExtensions
         result = accessible.Value->accDoDefaultAction(child);
     }
 
-    public static string? TryGetDescription(this AgileComPointer<IAccessible>? agile, int child)
-        => agile.TryGetDescription((VARIANT)child);
+    public static BSTR TryGetDescription(this AgileComPointer<IAccessible>? agile, int child) =>
+        agile.TryGetDescription((VARIANT)child);
 
-    public static string? TryGetDescription(this AgileComPointer<IAccessible>? agile, VARIANT child)
+    public static BSTR TryGetDescription(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
-        using BSTR bstr = default;
-        result = accessible.Value->get_accDescription(child, &bstr);
+        BSTR description = default;
+        accessible.Value->get_accDescription(child, &description);
 
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetDescription)}: get_accDescription call for {(int)child} failed with {result}");
-        return bstr.ToString();
+        return description;
     }
 
-    public static string? TryGetHelp(this AgileComPointer<IAccessible>? agile, int child)
+    public static BSTR TryGetHelp(this AgileComPointer<IAccessible>? agile, int child)
         => agile.TryGetHelp((VARIANT)child);
 
-    public static string? TryGetHelp(this AgileComPointer<IAccessible>? agile, VARIANT child)
+    public static BSTR TryGetHelp(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
-        using BSTR bstr = default;
+        BSTR bstr = default;
         result = accessible.Value->get_accHelp(child, &bstr);
 
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetHelp)}: get_accHelp call for id {(int)child} failed with {result}");
-        return bstr.ToString();
+        return bstr;
     }
 
-    public static string? TryGetKeyboardShortcut(this AgileComPointer<IAccessible>? agile, int child)
+    public static BSTR TryGetKeyboardShortcut(this AgileComPointer<IAccessible>? agile, int child)
         => agile.TryGetKeyboardShortcut((VARIANT)child);
 
-    public static string? TryGetKeyboardShortcut(this AgileComPointer<IAccessible>? agile, VARIANT child)
+    public static BSTR TryGetKeyboardShortcut(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
-        using BSTR bstr = default;
+        BSTR bstr = default;
         result = accessible.Value->get_accKeyboardShortcut(child, &bstr);
 
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetKeyboardShortcut)}: get_accKeyboardShortcut call for id {(int)child} failed with {result}");
-        return bstr.ToString();
+        return bstr;
     }
 
-    public static string? TryGetName(this AgileComPointer<IAccessible>? agile, int child)
+    public static BSTR TryGetName(this AgileComPointer<IAccessible>? agile, int child)
         => agile.TryGetName((VARIANT)child);
 
-    public static string? TryGetName(this AgileComPointer<IAccessible>? agile, VARIANT child)
+    public static BSTR TryGetName(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
-        using BSTR bstr = default;
+        BSTR bstr = default;
         result = accessible.Value->get_accName(child, &bstr);
 
         Debug.Assert(result.Succeeded, $"{nameof(TryGetName)}: get_accName call failed with {result}");
-        return bstr.ToString();
+        return bstr;
     }
 
-    public static void TrySetName(this AgileComPointer<IAccessible>? agile, VARIANT child, string? name)
+    public static void TrySetName(this AgileComPointer<IAccessible>? agile, VARIANT child, BSTR name)
     {
         // This is not technically supported any more, unclear if this ever actually does anything.
         // https://learn.microsoft.com/windows/win32/api/oleacc/nf-oleacc-iaccessible-put_accname
 
-        if (name is null)
+        if (name.IsNull)
         {
             return;
         }
@@ -173,7 +173,7 @@ internal static unsafe class AccessibleObjectExtensions
             return;
         }
 
-        result = accessible.Value->put_accName(child, new(name));
+        result = accessible.Value->put_accName(child, name);
 
         Debug.WriteLineIf(result.Failed, $"{nameof(TrySetName)}: put_accName call failed with {result}");
     }
@@ -218,24 +218,24 @@ internal static unsafe class AccessibleObjectExtensions
         return state.vt is VARENUM.VT_I4 or VARENUM.VT_INT ? (AccessibleStates)(int)state : AccessibleStates.None;
     }
 
-    public static string? TryGetValue(this AgileComPointer<IAccessible>? agile, VARIANT child)
+    public static BSTR TryGetValue(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return null;
+            return default;
         }
 
-        using BSTR bstr = default;
+        BSTR bstr = default;
         result = accessible.Value->get_accValue(child, &bstr);
 
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetValue)}: get_accValue call failed with {result}");
-        return bstr.ToString();
+        return bstr;
     }
 
-    public static void TrySetValue(this AgileComPointer<IAccessible>? agile, VARIANT child, string? value)
+    public static void TrySetValue(this AgileComPointer<IAccessible>? agile, VARIANT child, BSTR value)
     {
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
@@ -243,7 +243,7 @@ internal static unsafe class AccessibleObjectExtensions
             return;
         }
 
-        result = accessible.Value->put_accValue(child, value is null ? default : new(value));
+        result = accessible.Value->put_accValue(child, value);
 
         if (result.Failed && result != HRESULT.DISP_E_MEMBERNOTFOUND)
         {
@@ -255,23 +255,21 @@ internal static unsafe class AccessibleObjectExtensions
             $"{nameof(TrySetValue)}: put_accValue call failed with {result}");
     }
 
-    public static int TryGetHelpTopic(this AgileComPointer<IAccessible>? agile, VARIANT child, out string? fileName)
+    public static (int topic, BSTR helpFile) TryGetHelpTopic(this AgileComPointer<IAccessible>? agile, VARIANT child)
     {
-        fileName = null;
         using var accessible = agile.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return -1;
+            return (-1, default);
         }
 
-        using BSTR file = default;
+        BSTR file = default;
         result = accessible.Value->get_accHelpTopic(&file, child, out int topicId);
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetHelpTopic)}: put_accValue call failed with {result}");
 
-        fileName = file.ToString();
-        return result.Failed ? -1 : topicId;
+        return result.Failed ? (-1, file) : (topicId, file);
     }
 
     public static void TrySelect(this AgileComPointer<IAccessible>? agile, AccessibleSelection flags, int child)

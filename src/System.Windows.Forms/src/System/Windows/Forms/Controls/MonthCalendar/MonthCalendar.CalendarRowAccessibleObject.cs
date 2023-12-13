@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -13,7 +14,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a row in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarRowAccessibleObject : MonthCalendarChildAccessibleObject
+    internal sealed class CalendarRowAccessibleObject : MonthCalendarChildAccessibleObject
     {
         // This const is used to get ChildId.
         // It should take into account previous rows in a calendar body.
@@ -142,6 +143,15 @@ public partial class MonthCalendar
             }
         }
 
+        internal override bool CanGetDescriptionDirectly =>
+            _rowIndex == -1
+            || _monthCalendarAccessibleObject.IsHandleCreated
+            || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
+            || CellsAccessibleObjects?.First?.Value is not { } cell
+            || cell.DateRange is null;
+
+        internal override BSTR GetDescriptionInternal() => default;
+
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
@@ -187,7 +197,15 @@ public partial class MonthCalendar
 
         public override string? Name => null; // Rows don't have names like in a native calendar
 
+        internal override bool CanGetNameDirectly => false;
+
         public override AccessibleObject Parent => _calendarBodyAccessibleObject;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetParentDirectly => _calendarBodyAccessibleObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _calendarBodyAccessibleObject.GetParentInternal();
 
         public override AccessibleRole Role => AccessibleRole.Row;
 

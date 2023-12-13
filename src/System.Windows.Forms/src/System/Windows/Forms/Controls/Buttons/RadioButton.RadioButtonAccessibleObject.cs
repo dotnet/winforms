@@ -15,6 +15,8 @@ public partial class RadioButton
                 ? description
                 : SR.AccessibleActionCheck;
 
+        internal override bool CanGetDefaultActionDirectly => false;
+
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.RadioButton);
 
         public override AccessibleStates State =>
@@ -51,6 +53,8 @@ public partial class RadioButton
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out RadioButton? owner)
             ? ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
             : null;
+
+        internal override bool CanGetKeyboardShortcutDirectly => IsInternal && !this.TryGetOwnerAs(out RadioButton? owner);
 
         public override string? Name
         {

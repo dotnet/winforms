@@ -42,6 +42,8 @@ public abstract partial class DataGridViewCell
             }
         }
 
+        internal override bool CanGetDefaultActionDirectly => false;
+
         public override string? Name
         {
             get
@@ -85,6 +87,8 @@ public abstract partial class DataGridViewCell
             }
         }
 
+        internal override bool CanGetNameDirectly => false;
+
         public DataGridViewCell? Owner
         {
             get => _owner;
@@ -113,6 +117,11 @@ public abstract partial class DataGridViewCell
                 return _owner.OwningRow?.AccessibilityObject;
             }
         }
+
+        internal override bool CanGetParentDirectly =>
+            IsInternal && _owner?.OwningRow is { } owningRow && owningRow.AccessibilityObject.CanGetParentDirectly;
+
+        internal override unsafe IDispatch* GetParentInternal() => _owner!.OwningRow!.AccessibilityObject.GetParentInternal();
 
         public override AccessibleRole Role => AccessibleRole.Cell;
 
@@ -249,6 +258,10 @@ public abstract partial class DataGridViewCell
                     valueTypeConverter: null);
             }
         }
+
+        internal override bool CanGetValueDirectly => false;
+
+        internal override bool CanSetValueDirectly => false;
 
         public override void DoDefaultAction()
         {
@@ -422,6 +435,8 @@ public abstract partial class DataGridViewCell
         }
 
         public override AccessibleObject? GetFocused() => null;
+
+        internal override bool CanGetFocusedDirectly => false;
 
         public override AccessibleObject? GetSelected() => null;
 

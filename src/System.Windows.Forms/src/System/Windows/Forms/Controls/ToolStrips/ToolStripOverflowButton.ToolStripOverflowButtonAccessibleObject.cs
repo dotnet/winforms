@@ -7,7 +7,7 @@ namespace System.Windows.Forms;
 
 public partial class ToolStripOverflowButton
 {
-    internal class ToolStripOverflowButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
+    internal sealed class ToolStripOverflowButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
     {
         private readonly ToolStripOverflowButton _owningToolStripOverflowButton;
 
@@ -17,11 +17,9 @@ public partial class ToolStripOverflowButton
         }
 
         [AllowNull]
-        public override string Name
-        {
-            get => Owner.AccessibleName ?? SR.ToolStripOptions;
-            set => base.Name = value;
-        }
+        public override string Name => Owner.AccessibleName ?? SR.ToolStripOptions;
+
+        private protected override bool IsInternal => true;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
