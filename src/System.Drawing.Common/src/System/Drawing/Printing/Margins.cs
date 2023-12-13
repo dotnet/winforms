@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// Specifies the margins of a printed page.
+///  Specifies the margins of a printed page.
 /// </summary>
 [TypeConverter(typeof(MarginsConverter))]
 public partial class Margins : ICloneable
@@ -30,14 +30,14 @@ public partial class Margins : ICloneable
     private double _doubleBottom;
 
     /// <summary>
-    /// Initializes a new instance of a the <see cref='Margins'/> class with one-inch margins.
+    ///  Initializes a new instance of a the <see cref='Margins'/> class with one-inch margins.
     /// </summary>
     public Margins() : this(100, 100, 100, 100)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of a the <see cref='Margins'/> class with the specified left, right, top, and bottom margins.
+    ///  Initializes a new instance of a the <see cref='Margins'/> class with the specified left, right, top, and bottom margins.
     /// </summary>
     public Margins(int left, int right, int top, int bottom)
     {
@@ -51,14 +51,14 @@ public partial class Margins : ICloneable
         _top = top;
         _bottom = bottom;
 
-        _doubleLeft = (double)left;
-        _doubleRight = (double)right;
-        _doubleTop = (double)top;
-        _doubleBottom = (double)bottom;
+        _doubleLeft = left;
+        _doubleRight = right;
+        _doubleTop = top;
+        _doubleBottom = bottom;
     }
 
     /// <summary>
-    /// Gets or sets the left margin, in hundredths of an inch.
+    ///  Gets or sets the left margin, in hundredths of an inch.
     /// </summary>
     public int Left
     {
@@ -67,12 +67,12 @@ public partial class Margins : ICloneable
         {
             CheckMargin(value, nameof(value));
             _left = value;
-            _doubleLeft = (double)value;
+            _doubleLeft = value;
         }
     }
 
     /// <summary>
-    /// Gets or sets the right margin, in hundredths of an inch.
+    ///  Gets or sets the right margin, in hundredths of an inch.
     /// </summary>
     public int Right
     {
@@ -81,12 +81,12 @@ public partial class Margins : ICloneable
         {
             CheckMargin(value, nameof(value));
             _right = value;
-            _doubleRight = (double)value;
+            _doubleRight = value;
         }
     }
 
     /// <summary>
-    /// Gets or sets the top margin, in hundredths of an inch.
+    ///  Gets or sets the top margin, in hundredths of an inch.
     /// </summary>
     public int Top
     {
@@ -95,12 +95,12 @@ public partial class Margins : ICloneable
         {
             CheckMargin(value, nameof(value));
             _top = value;
-            _doubleTop = (double)value;
+            _doubleTop = value;
         }
     }
 
     /// <summary>
-    /// Gets or sets the bottom margin, in hundredths of an inch.
+    ///  Gets or sets the bottom margin, in hundredths of an inch.
     /// </summary>
     public int Bottom
     {
@@ -109,14 +109,12 @@ public partial class Margins : ICloneable
         {
             CheckMargin(value, nameof(value));
             _bottom = value;
-            _doubleBottom = (double)value;
+            _doubleBottom = value;
         }
     }
 
     /// <summary>
-    /// Gets or sets the left margin with double value, in hundredths of an inch.
-    /// When use the setter, the ranger of setting double value should between
-    /// 0 to Int.MaxValue;
+    ///  Gets or sets the left margin with a double value, in hundredths of an inch.
     /// </summary>
     internal double DoubleLeft
     {
@@ -129,9 +127,7 @@ public partial class Margins : ICloneable
     }
 
     /// <summary>
-    /// Gets or sets the right margin with double value, in hundredths of an inch.
-    /// When use the setter, the ranger of setting double value should between
-    /// 0 to Int.MaxValue;
+    ///  Gets or sets the right margin with a double value, in hundredths of an inch.
     /// </summary>
     internal double DoubleRight
     {
@@ -144,9 +140,7 @@ public partial class Margins : ICloneable
     }
 
     /// <summary>
-    /// Gets or sets the top margin with double value, in hundredths of an inch.
-    /// When use the setter, the ranger of setting double value should between
-    /// 0 to Int.MaxValue;
+    ///  Gets or sets the top margin with a double value, in hundredths of an inch.
     /// </summary>
     internal double DoubleTop
     {
@@ -159,9 +153,7 @@ public partial class Margins : ICloneable
     }
 
     /// <summary>
-    /// Gets or sets the bottom margin with double value, in hundredths of an inch.
-    /// When use the setter, the ranger of setting double value should between
-    /// 0 to Int.MaxValue;
+    ///  Gets or sets the bottom margin with double value, in hundredths of an inch.
     /// </summary>
     internal double DoubleBottom
     {
@@ -181,35 +173,21 @@ public partial class Margins : ICloneable
         }
     }
 
-    /// <summary>
-    /// Retrieves a duplicate of this object, member by member.
-    /// </summary>
     public object Clone() => MemberwiseClone();
-
-    /// <summary>
-    /// Compares this <see cref='Margins'/> to a specified <see cref='Margins'/> to see whether they
-    /// are equal.
-    /// </summary>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        if (!(obj is Margins margins))
-        {
-            return false;
-        }
-
-        return margins.Left == Left
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is Margins margins
+            && margins.Left == Left
             && margins.Right == Right
             && margins.Top == Top
             && margins.Bottom == Bottom;
-    }
 
     /// <summary>
-    /// Calculates and retrieves a hash code based on the left, right, top, and bottom margins.
+    ///  Calculates and retrieves a hash code based on the left, right, top, and bottom margins.
     /// </summary>
     public override int GetHashCode() => HashCode.Combine(Left, Right, Top, Bottom);
 
     /// <summary>
-    /// Tests whether two <see cref='Margins'/> objects are identical.
+    ///  Tests whether two <see cref='Margins'/> objects are identical.
     /// </summary>
     public static bool operator ==(Margins? m1, Margins? m2)
     {
@@ -227,12 +205,12 @@ public partial class Margins : ICloneable
     }
 
     /// <summary>
-    /// Tests whether two <see cref='Margins'/> objects are different.
+    ///  Tests whether two <see cref='Margins'/> objects are different.
     /// </summary>
     public static bool operator !=(Margins? m1, Margins? m2) => !(m1 == m2);
 
     /// <summary>
-    /// Provides some interesting information for the Margins in String form.
+    ///  Provides some interesting information for the Margins in String form.
     /// </summary>
     public override string ToString() => $"[Margins Left={Left} Right={Right} Top={Top} Bottom={Bottom}]";
 }

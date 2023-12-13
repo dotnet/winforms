@@ -4,56 +4,40 @@
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
-using static Interop.Comdlg32;
 using Windows.Win32.UI.Controls.Dialogs;
-using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Allows users to select a printer and choose which
-///  portions of the document to print.
+///  Allows users to select a printer and choose which portions of the document to print.
 /// </summary>
 [DefaultProperty(nameof(Document))]
 [SRDescription(nameof(SR.DescriptionPrintDialog))]
 [Designer($"System.Windows.Forms.Design.PrintDialogDesigner, {AssemblyRef.SystemDesign}")]
-// The only event this dialog has is HelpRequested, which isn't very useful
 public sealed class PrintDialog : CommonDialog
 {
-    private const PRINTDLGEX_FLAGS printRangeMask = PRINTDLGEX_FLAGS.PD_ALLPAGES | PRINTDLGEX_FLAGS.PD_PAGENUMS | PRINTDLGEX_FLAGS.PD_SELECTION | PRINTDLGEX_FLAGS.PD_CURRENTPAGE;
+    // The only event this dialog has is HelpRequested, which isn't very useful
+
+    private const PRINTDLGEX_FLAGS PrintRangeMask = PRINTDLGEX_FLAGS.PD_ALLPAGES
+        | PRINTDLGEX_FLAGS.PD_PAGENUMS
+        | PRINTDLGEX_FLAGS.PD_SELECTION
+        | PRINTDLGEX_FLAGS.PD_CURRENTPAGE;
 
     // If PrintDocument is not null, settings == printDocument.PrinterSettings
     private PrinterSettings? _printerSettings;
     private PrintDocument? _printDocument;
 
-    // Implementing "current page" would require switching to PrintDlgEx, which is windows 2000 and later only
-    private bool _allowCurrentPage;
-
-    private bool _allowPages;
-    private bool _allowPrintToFile;
-    private bool _allowSelection;
-    private bool _printToFile;
-    private bool _showHelp;
-    private bool _showNetwork;
-
     /// <summary>
     ///  Initializes a new instance of the <see cref="PrintDialog"/> class.
     /// </summary>
-    public PrintDialog()
-    {
-        Reset();
-    }
+    public PrintDialog() => Reset();
 
     /// <summary>
     ///  Gets or sets a value indicating whether the Current Page option button is enabled.
     /// </summary>
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PDallowCurrentPageDescr))]
-    public bool AllowCurrentPage
-    {
-        get { return _allowCurrentPage; }
-        set { _allowCurrentPage = value; }
-    }
+    public bool AllowCurrentPage { get; set; }
 
     /// <summary>
     ///  Gets or sets a value indicating whether the Pages option button is enabled.
@@ -61,11 +45,7 @@ public sealed class PrintDialog : CommonDialog
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PDallowPagesDescr))]
-    public bool AllowSomePages
-    {
-        get { return _allowPages; }
-        set { _allowPages = value; }
-    }
+    public bool AllowSomePages { get; set; }
 
     /// <summary>
     ///  Gets or sets a value indicating whether the Print to file check box is enabled.
@@ -73,65 +53,39 @@ public sealed class PrintDialog : CommonDialog
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
     [SRDescription(nameof(SR.PDallowPrintToFileDescr))]
-    public bool AllowPrintToFile
-    {
-        get { return _allowPrintToFile; }
-        set { _allowPrintToFile = value; }
-    }
+    public bool AllowPrintToFile { get; set; }
 
     /// <summary>
-    ///  Gets or sets a value indicating whether the From... To... Page option button is enabled.
+    ///  Gets or sets a value indicating whether the <b>Selection</b> option button is enabled.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PDallowSelectionDescr))]
-    public bool AllowSelection
-    {
-        get { return _allowSelection; }
-        set { _allowSelection = value; }
-    }
+    public bool AllowSelection { get; set; }
 
     /// <summary>
-    ///  Gets or sets a value indicating the <see cref="PrintDocument"/> used to obtain <see cref="Drawing.Printing.PrinterSettings"/>.
+    ///  Gets or sets a value indicating the <see cref="PrintDocument"/> used to obtain
+    ///  <see cref="Drawing.Printing.PrinterSettings"/>.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue(null)]
     [SRDescription(nameof(SR.PDdocumentDescr))]
     public PrintDocument? Document
     {
-        get { return _printDocument; }
+        get => _printDocument;
         set
         {
             _printDocument = value;
-            if (_printDocument is null)
-            {
-                _printerSettings = new PrinterSettings();
-            }
-            else
-            {
-                _printerSettings = _printDocument.PrinterSettings;
-            }
+            _printerSettings = _printDocument is null ? new PrinterSettings() : _printDocument.PrinterSettings;
         }
     }
 
-    private PageSettings PageSettings
-    {
-        get
-        {
-            if (Document is null)
-            {
-                return PrinterSettings.DefaultPageSettings;
-            }
-            else
-            {
-                return Document.DefaultPageSettings;
-            }
-        }
-    }
+    private PageSettings PageSettings => Document is null
+        ? PrinterSettings.DefaultPageSettings
+        : Document.DefaultPageSettings;
 
     /// <summary>
-    ///  Gets or sets the <see cref="Drawing.Printing.PrinterSettings"/> the
-    ///  dialog box will be modifying.
+    ///  Gets or sets the <see cref="Drawing.Printing.PrinterSettings"/> the dialog box will be modifying.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue(null)]
@@ -141,12 +95,7 @@ public sealed class PrintDialog : CommonDialog
     [AllowNull]
     public PrinterSettings PrinterSettings
     {
-        get
-        {
-            _printerSettings ??= new PrinterSettings();
-
-            return _printerSettings;
-        }
+        get => _printerSettings ??= new PrinterSettings();
         set
         {
             if (value != PrinterSettings)
@@ -163,11 +112,7 @@ public sealed class PrintDialog : CommonDialog
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PDprintToFileDescr))]
-    public bool PrintToFile
-    {
-        get { return _printToFile; }
-        set { _printToFile = value; }
-    }
+    public bool PrintToFile { get; set; }
 
     /// <summary>
     ///  Gets or sets a value indicating whether the Help button is displayed.
@@ -175,11 +120,7 @@ public sealed class PrintDialog : CommonDialog
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PDshowHelpDescr))]
-    public bool ShowHelp
-    {
-        get { return _showHelp; }
-        set { _showHelp = value; }
-    }
+    public bool ShowHelp { get; set; }
 
     /// <summary>
     ///  Gets or sets a value indicating whether the Network button is displayed.
@@ -187,18 +128,18 @@ public sealed class PrintDialog : CommonDialog
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
     [SRDescription(nameof(SR.PDshowNetworkDescr))]
-    public bool ShowNetwork
-    {
-        get { return _showNetwork; }
-        set { _showNetwork = value; }
-    }
+    public bool ShowNetwork { get; set; }
 
     /// <summary>
-    ///  UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
-    ///  ShowHelp &amp; ShowNetwork properties.
-    ///  UseEXDialog = false means to never use the EX versions of the dialog.
-    ///  ShowHelp &amp; ShowNetwork will work in this case.
+    ///  Gets or sets a value indicating whether the dialog should be shown in the Windows XP style for systems
+    ///  running Windows XP Home Edition, Windows XP Professional, Windows Server 2003 or later.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   When this property is set to true, <see cref="ShowHelp"/> and <see cref="ShowNetwork"/> will be ignored as
+    ///   these properties were made obsolete for Windows 2000 and later versions of Windows.
+    ///  </para>
+    /// </remarks>
     [DefaultValue(false)]
     [SRDescription(nameof(SR.PDuseEXDialog))]
     public bool UseEXDialog { get; set; }
@@ -214,39 +155,39 @@ public sealed class PrintDialog : CommonDialog
             flags |= PRINTDLGEX_FLAGS.PD_ENABLEPRINTHOOK;
         }
 
-        if (!_allowCurrentPage)
+        if (!AllowCurrentPage)
         {
             flags |= PRINTDLGEX_FLAGS.PD_NOCURRENTPAGE;
         }
 
-        if (!_allowPages)
+        if (!AllowSomePages)
         {
             flags |= PRINTDLGEX_FLAGS.PD_NOPAGENUMS;
         }
 
-        if (!_allowPrintToFile)
+        if (!AllowPrintToFile)
         {
             flags |= PRINTDLGEX_FLAGS.PD_DISABLEPRINTTOFILE;
         }
 
-        if (!_allowSelection)
+        if (!AllowSelection)
         {
             flags |= PRINTDLGEX_FLAGS.PD_NOSELECTION;
         }
 
         flags |= (PRINTDLGEX_FLAGS)PrinterSettings.PrintRange;
 
-        if (_printToFile)
+        if (PrintToFile)
         {
             flags |= PRINTDLGEX_FLAGS.PD_PRINTTOFILE;
         }
 
-        if (_showHelp)
+        if (ShowHelp)
         {
             flags |= PRINTDLGEX_FLAGS.PD_SHOWHELP;
         }
 
-        if (!_showNetwork)
+        if (!ShowNetwork)
         {
             flags |= PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON;
         }
@@ -260,106 +201,67 @@ public sealed class PrintDialog : CommonDialog
     }
 
     /// <summary>
-    ///  Resets all options, the last selected printer, and the page
-    ///  settings to their default values.
+    ///  Resets all options, the last selected printer, and the page settings to their default values.
     /// </summary>
     public override void Reset()
     {
-        _allowCurrentPage = false;
-        _allowPages = false;
-        _allowPrintToFile = true;
-        _allowSelection = false;
+        AllowCurrentPage = false;
+        AllowSomePages = false;
+        AllowPrintToFile = true;
+        AllowSelection = false;
         _printDocument = null;
-        _printToFile = false;
+        PrintToFile = false;
         _printerSettings = null;
-        _showHelp = false;
-        _showNetwork = true;
+        ShowHelp = false;
+        ShowNetwork = true;
     }
 
-    internal static unsafe NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
+    protected override bool RunDialog(IntPtr hwndOwner) =>
+        UseEXDialog ? ShowPrintDialogEx((HWND)hwndOwner) : ShowPrintDialog((HWND)hwndOwner);
+
+    private unsafe bool ShowPrintDialog(HWND hwndOwner)
     {
-        NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
-        data.lStructSize = Marshal.SizeOf(data);
-        data.hwndOwner = IntPtr.Zero;
-        data.hDevMode = IntPtr.Zero;
-        data.hDevNames = IntPtr.Zero;
-        data.hDC = IntPtr.Zero;
-        data.Flags = 0;
-        data.Flags2 = 0;
-        data.ExclusionFlags = 0;
-        data.nPageRanges = 0;
-        data.nMaxPageRanges = 1;
-        data.pageRanges = PInvoke.GlobalAlloc(GPTR, (uint)(data.nMaxPageRanges * sizeof(PRINTPAGERANGE)));
-        data.nMinPage = 0;
-        data.nMaxPage = 9999;
-        data.nCopies = 1;
-        data.hInstance = IntPtr.Zero;
-        data.lpPrintTemplateName = null;
-        data.nPropertyPages = 0;
-        data.lphPropertyPages = IntPtr.Zero;
-        data.nStartPage = unchecked((int)PInvoke.START_PAGE_GENERAL);
-        data.dwResultAction = 0;
-        return data;
-    }
+        // Because of the packing any field after nCopies can't be accessed equivalently on both 32 and 64 bit.
+        // This isn't pretty, but it avoids a lot of duplication.
 
-    protected override bool RunDialog(IntPtr hwndOwner)
-    {
-        if (!UseEXDialog)
+        PRINTDLGW_32 dialogSettings32 = new PRINTDLGW_32()
         {
-            return ShowPrintDialog(hwndOwner);
-        }
+            lStructSize = (uint)sizeof(PRINTDLGW_32),
+            lpfnPrintHook = HookProcFunctionPointer
+        };
 
-        NativeMethods.PRINTDLGEX data = CreatePRINTDLGEX();
-        return ShowPrintDialog(hwndOwner, data);
-    }
-
-    private unsafe bool ShowPrintDialog(IntPtr hwndOwner)
-    {
-        PRINTDLGW data;
-        if (IntPtr.Size == 4)
+        PRINTDLGW_64 dialogSettings64 = new PRINTDLGW_64()
         {
-            data = new PRINTDLGW_32
-            {
-                lStructSize = (uint)sizeof(PRINTDLGW_32)
-            };
-        }
-        else
-        {
-            data = new PRINTDLGW_64
-            {
-                lStructSize = (uint)sizeof(PRINTDLGW_64)
-            };
-        }
+            lStructSize = (uint)sizeof(PRINTDLGW_64),
+            lpfnPrintHook = HookProcFunctionPointer
+        };
 
-        data.nFromPage = 1;
-        data.nToPage = 1;
-        data.nMinPage = 0;
-        data.nMaxPage = 9999;
-        data.Flags = GetFlags();
-        data.nCopies = (ushort)PrinterSettings.Copies;
-        data.hwndOwner = hwndOwner;
+        PRINTDLGW_64* dialogSettings = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            ? (PRINTDLGW_64*)&dialogSettings32
+            : &dialogSettings64;
 
-        WNDPROC wndproc = HookProcInternal;
-        data.lpfnPrintHook = Marshal.GetFunctionPointerForDelegate(wndproc);
+        dialogSettings->nFromPage = 1;
+        dialogSettings->nToPage = 1;
+        dialogSettings->nMaxPage = 9999;
+        dialogSettings->Flags = GetFlags();
+        dialogSettings->nCopies = (ushort)PrinterSettings.Copies;
+        dialogSettings->hwndOwner = hwndOwner;
 
         try
         {
-            if (PageSettings is null)
-            {
-                data.hDevMode = PrinterSettings.GetHdevmode();
-            }
-            else
-            {
-                data.hDevMode = PrinterSettings.GetHdevmode(PageSettings);
-            }
+            dialogSettings->hDevMode = PageSettings is null
+                ? (HGLOBAL)PrinterSettings.GetHdevmode()
+                : (HGLOBAL)PrinterSettings.GetHdevmode(PageSettings);
 
-            data.hDevNames = PrinterSettings.GetHdevnames();
+            dialogSettings->hDevNames = (HGLOBAL)PrinterSettings.GetHdevnames();
         }
         catch (InvalidPrinterException)
         {
-            // Leave those fields null; Windows will fill them in
-            data.hDevMode = IntPtr.Zero;
-            data.hDevNames = IntPtr.Zero;
+            Debug.Assert(dialogSettings->hDevMode.IsNull && dialogSettings->hDevNames.IsNull);
+
+            // Leave these fields null; Windows will fill them in.
+            dialogSettings->hDevMode = HGLOBAL.Null;
+            dialogSettings->hDevNames = HGLOBAL.Null;
         }
 
         try
@@ -384,78 +286,93 @@ public sealed class PrintDialog : CommonDialog
                     throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
                 }
 
-                data.nFromPage = (ushort)PrinterSettings.FromPage;
-                data.nToPage = (ushort)PrinterSettings.ToPage;
-                data.nMinPage = (ushort)PrinterSettings.MinimumPage;
-                data.nMaxPage = (ushort)PrinterSettings.MaximumPage;
+                dialogSettings->nFromPage = (ushort)PrinterSettings.FromPage;
+                dialogSettings->nToPage = (ushort)PrinterSettings.ToPage;
+                dialogSettings->nMinPage = (ushort)PrinterSettings.MinimumPage;
+                dialogSettings->nMaxPage = (ushort)PrinterSettings.MaximumPage;
             }
 
-            if (!PrintDlg(ref data))
+            HRESULT result = RuntimeInformation.ProcessArchitecture == Architecture.X86
+                ? PInvoke.PrintDlg(&dialogSettings32)
+                : PInvoke.PrintDlg(&dialogSettings64);
+
+            if (result.Failed)
             {
 #if DEBUG
-                var result = PInvoke.CommDlgExtendedError();
-                Diagnostics.Debug.Assert(result == 0, $"PrintDlg returned non zero error code: {result}");
+                var extendedResult = PInvoke.CommDlgExtendedError();
+                Debug.Fail($"PrintDlg returned non zero error code: {extendedResult}");
 #endif
                 return false;
             }
 
-            UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, _printerSettings!, PageSettings);
+            UpdatePrinterSettings(
+                dialogSettings->hDevMode,
+                dialogSettings->hDevNames,
+                (short)dialogSettings->nCopies,
+                dialogSettings->Flags,
+                PrinterSettings,
+                PageSettings);
 
-            PrintToFile = (data.Flags & PRINTDLGEX_FLAGS.PD_PRINTTOFILE) != 0;
+            PrintToFile = (dialogSettings->Flags & PRINTDLGEX_FLAGS.PD_PRINTTOFILE) != 0;
             PrinterSettings.PrintToFile = PrintToFile;
 
             if (AllowSomePages)
             {
-                PrinterSettings.FromPage = data.nFromPage;
-                PrinterSettings.ToPage = data.nToPage;
+                PrinterSettings.FromPage = dialogSettings->nFromPage;
+                PrinterSettings.ToPage = dialogSettings->nToPage;
             }
 
-            // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
-            // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
-            // to print, and the PD_COLLATE flag in the Flags member indicates
-            // whether the user wants to print them collated.
-            if ((data.Flags & PRINTDLGEX_FLAGS.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
+            // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set, nCopies indicates the number of copies the user
+            // wants to print, and the PD_COLLATE flag in the Flags member indicates whether the user wants to print
+            // them collated.
+            if (!dialogSettings->Flags.HasFlag(PRINTDLGEX_FLAGS.PD_USEDEVMODECOPIESANDCOLLATE))
             {
-                PrinterSettings.Copies = (short)data.nCopies;
-                PrinterSettings.Collate = (data.Flags & PRINTDLGEX_FLAGS.PD_COLLATE) == PRINTDLGEX_FLAGS.PD_COLLATE;
+                PrinterSettings.Copies = (short)dialogSettings->nCopies;
+                PrinterSettings.Collate = dialogSettings->Flags.HasFlag(PRINTDLGEX_FLAGS.PD_COLLATE);
             }
 
             return true;
         }
         finally
         {
-            GC.KeepAlive(wndproc);
-            PInvoke.GlobalFree((HGLOBAL)data.hDevMode);
-            PInvoke.GlobalFree((HGLOBAL)data.hDevNames);
+            PInvoke.GlobalFree(dialogSettings->hDevMode);
+            PInvoke.GlobalFree(dialogSettings->hDevNames);
         }
     }
 
     // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
     // are required for showing the print dialog on Win2k and newer OS'.
-    private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.PRINTDLGEX data)
+    private unsafe bool ShowPrintDialogEx(HWND hwndOwner)
     {
-        data.Flags = GetFlags();
-        data.nCopies = PrinterSettings.Copies;
-        data.hwndOwner = hwndOwner;
+        PRINTPAGERANGE pageRange = default;
+
+        PRINTDLGEXW dialogSettings = new()
+        {
+            lStructSize = (uint)sizeof(PRINTDLGEXW),
+            nMaxPageRanges = 1,
+            lpPageRanges = &pageRange,
+            nMaxPage = 9999,
+            nStartPage = PInvoke.START_PAGE_GENERAL,
+            Flags = GetFlags(),
+            nCopies = (uint)PrinterSettings.Copies,
+            hwndOwner = hwndOwner
+        };
 
         try
         {
-            if (PageSettings is null)
-            {
-                data.hDevMode = PrinterSettings.GetHdevmode();
-            }
-            else
-            {
-                data.hDevMode = PrinterSettings.GetHdevmode(PageSettings);
-            }
+            dialogSettings.hDevMode = PageSettings is null
+                ? (HGLOBAL)PrinterSettings.GetHdevmode()
+                : (HGLOBAL)PrinterSettings.GetHdevmode(PageSettings);
 
-            data.hDevNames = PrinterSettings.GetHdevnames();
+            dialogSettings.hDevNames = (HGLOBAL)PrinterSettings.GetHdevnames();
         }
         catch (InvalidPrinterException)
         {
-            data.hDevMode = IntPtr.Zero;
-            data.hDevNames = IntPtr.Zero;
-            // Leave those fields null; Windows will fill them in
+            Debug.Assert(dialogSettings.hDevMode.IsNull && dialogSettings.hDevNames.IsNull);
+
+            // Leave these fields null; Windows will fill them in
+            dialogSettings.hDevMode = HGLOBAL.Null;
+            dialogSettings.hDevNames = HGLOBAL.Null;
         }
 
         try
@@ -480,73 +397,62 @@ public sealed class PrintDialog : CommonDialog
                     throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
                 }
 
-                unsafe
-                {
-                    int* pageRangeField = (int*)data.pageRanges;
-                    *pageRangeField = PrinterSettings.FromPage;
-                    pageRangeField += 1;
-                    *pageRangeField = PrinterSettings.ToPage;
-                }
+                pageRange.nFromPage = (uint)PrinterSettings.FromPage;
+                pageRange.nToPage = (uint)PrinterSettings.ToPage;
+                dialogSettings.nPageRanges = 1;
 
-                data.nPageRanges = 1;
-
-                data.nMinPage = PrinterSettings.MinimumPage;
-                data.nMaxPage = PrinterSettings.MaximumPage;
+                dialogSettings.nMinPage = (uint)PrinterSettings.MinimumPage;
+                dialogSettings.nMaxPage = (uint)PrinterSettings.MaximumPage;
             }
 
             // The flags NativeMethods.PD_SHOWHELP and NativeMethods.PD_NONETWORKBUTTON don't work with
             // PrintDlgEx. So we have to strip them out.
-            data.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
+            dialogSettings.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
 
-            HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
-            if (hr.Failed || data.dwResultAction == PInvoke.PD_RESULT_CANCEL)
+            HRESULT hr = PInvoke.PrintDlgEx(&dialogSettings);
+            if (hr.Failed || dialogSettings.dwResultAction == PInvoke.PD_RESULT_CANCEL)
             {
                 return false;
             }
 
-            UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, PrinterSettings, PageSettings);
+            UpdatePrinterSettings(
+                dialogSettings.hDevMode,
+                dialogSettings.hDevNames,
+                (short)dialogSettings.nCopies,
+                dialogSettings.Flags,
+                PrinterSettings,
+                PageSettings);
 
-            PrintToFile = (data.Flags & PRINTDLGEX_FLAGS.PD_PRINTTOFILE) != 0;
+            PrintToFile = dialogSettings.Flags.HasFlag(PRINTDLGEX_FLAGS.PD_PRINTTOFILE);
             PrinterSettings.PrintToFile = PrintToFile;
             if (AllowSomePages)
             {
-                unsafe
-                {
-                    int* pageRangeField = (int*)data.pageRanges;
-                    PrinterSettings.FromPage = *pageRangeField;
-                    pageRangeField += 1;
-                    PrinterSettings.ToPage = *pageRangeField;
-                }
+                PrinterSettings.FromPage = (int)pageRange.nFromPage;
+                PrinterSettings.ToPage = (int)pageRange.nToPage;
             }
 
-            // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set,
-            // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
-            // to print, and the PD_COLLATE flag in the Flags member indicates
-            // whether the user wants to print them collated.
-            if ((data.Flags & PRINTDLGEX_FLAGS.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
+            // When the flag PD_USEDEVMODECOPIESANDCOLLATE is not set, nCopies indicates the number of copies the user
+            // wants to print, and the PD_COLLATE flag in the Flags member indicates whether the user wants to print
+            // them collated.
+            if (!dialogSettings.Flags.HasFlag(PRINTDLGEX_FLAGS.PD_USEDEVMODECOPIESANDCOLLATE))
             {
-                PrinterSettings.Copies = (short)(data.nCopies);
-                PrinterSettings.Collate = (data.Flags & PRINTDLGEX_FLAGS.PD_COLLATE) == PRINTDLGEX_FLAGS.PD_COLLATE;
+                PrinterSettings.Copies = (short)dialogSettings.nCopies;
+                PrinterSettings.Collate = dialogSettings.Flags.HasFlag(PRINTDLGEX_FLAGS.PD_COLLATE);
             }
 
             // We should return true only if the user pressed the "Print" button while dismissing the dialog.
-            return data.dwResultAction == PInvoke.PD_RESULT_PRINT;
+            return dialogSettings.dwResultAction == PInvoke.PD_RESULT_PRINT;
         }
         finally
         {
-            if (data.hDevMode != IntPtr.Zero)
+            if (!dialogSettings.hDevMode.IsNull)
             {
-                PInvoke.GlobalFree((HGLOBAL)data.hDevMode);
+                PInvoke.GlobalFree(dialogSettings.hDevMode);
             }
 
-            if (data.hDevNames != IntPtr.Zero)
+            if (dialogSettings.hDevNames.IsNull)
             {
-                PInvoke.GlobalFree((HGLOBAL)data.hDevNames);
-            }
-
-            if (data.pageRanges != IntPtr.Zero)
-            {
-                PInvoke.GlobalFree((HGLOBAL)data.pageRanges);
+                PInvoke.GlobalFree(dialogSettings.hDevNames);
             }
         }
     }
@@ -554,7 +460,13 @@ public sealed class PrintDialog : CommonDialog
     // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
     // are required for updating the settings from the structure utilized by the dialog.
     // Take information from print dialog and put in PrinterSettings
-    private static void UpdatePrinterSettings(IntPtr hDevMode, IntPtr hDevNames, short copies, PRINTDLGEX_FLAGS flags, PrinterSettings settings, PageSettings? pageSettings)
+    private static void UpdatePrinterSettings(
+        IntPtr hDevMode,
+        IntPtr hDevNames,
+        short copies,
+        PRINTDLGEX_FLAGS flags,
+        PrinterSettings settings,
+        PageSettings? pageSettings)
     {
         // Mode
         settings.SetHdevmode(hDevMode);
@@ -562,12 +474,12 @@ public sealed class PrintDialog : CommonDialog
 
         pageSettings?.SetHdevmode(hDevMode);
 
-        // Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
+        // Check for Copies == 1 since we might get the Right number of Copies from dmCopies.
         if (settings.Copies == 1)
         {
             settings.Copies = copies;
         }
 
-        settings.PrintRange = (PrintRange)(flags & printRangeMask);
+        settings.PrintRange = (PrintRange)(flags & PrintRangeMask);
     }
 }

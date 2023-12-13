@@ -12,7 +12,7 @@ using static Interop;
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// A PrintController which "prints" to a series of images.
+///  A PrintController which "prints" to a series of images.
 /// </summary>
 public class PreviewPrintController : PrintController
 {
@@ -27,7 +27,7 @@ public class PreviewPrintController : PrintController
     public PreviewPageInfo[] GetPreviewPageInfo() => _list.ToArray();
 
     /// <summary>
-    /// Implements StartPrint for generating print preview information.
+    ///  Implements StartPrint for generating print preview information.
     /// </summary>
     public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
@@ -44,7 +44,7 @@ public class PreviewPrintController : PrintController
     }
 
     /// <summary>
-    /// Implements StartEnd for generating print preview information.
+    ///  Implements StartEnd for generating print preview information.
     /// </summary>
     public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
     {
@@ -61,16 +61,16 @@ public class PreviewPrintController : PrintController
         // instead of the GDI+ standard hundredth of an inch.
         Size metafileSize = PrinterUnitConvert.Convert(size, PrinterUnit.Display, PrinterUnit.HundredthsOfAMillimeter);
 
-        // Create a Metafile which accepts only GDI+ commands since we are the ones creating
-        // and using this ...
-        // Framework creates a dual-mode EMF for each page in the preview.
-        // When these images are displayed in preview,
-        // they are added to the dual-mode EMF. However,
-        // GDI+ breaks during this process if the image
-        // is sufficiently large and has more than 254 colors.
-        // This code path can easily be avoided by requesting
-        // an EmfPlusOnly EMF..
-        Metafile metafile = new Metafile(_dc!.Hdc, new Rectangle(0, 0, metafileSize.Width, metafileSize.Height), MetafileFrameUnit.GdiCompatible, EmfType.EmfPlusOnly);
+        // Create a Metafile which accepts only GDI+ commands since we are the ones creating and using this.
+        // Framework creates a dual-mode EMF for each page in the preview. When these images are displayed in preview,
+        // they are added to the dual-mode EMF. However, GDI+ breaks during this process if the image
+        // is sufficiently large and has more than 254 colors. This code path can easily be avoided by requesting
+        // an EmfPlusOnly EMF.
+        Metafile metafile = new Metafile(
+            _dc!.Hdc,
+            new Rectangle(0, 0, metafileSize.Width, metafileSize.Height),
+            MetafileFrameUnit.GdiCompatible,
+            EmfType.EmfPlusOnly);
 
         PreviewPageInfo info = new PreviewPageInfo(metafile, size);
         _list.Add(info);
@@ -103,31 +103,17 @@ public class PreviewPrintController : PrintController
         return _graphics;
     }
 
-    /// <summary>
-    /// Implements EndPage for generating print preview information.
-    /// </summary>
     public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
-        if (_graphics is not null)
-        {
-            _graphics.Dispose();
-            _graphics = null;
-        }
-
+        _graphics?.Dispose();
+        _graphics = null;
         base.OnEndPage(document, e);
     }
 
-    /// <summary>
-    /// Implements EndPrint for generating print preview information.
-    /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {
-        if (_dc is not null)
-        {
-            _dc.Dispose();
-            _dc = null;
-        }
-
+        _dc?.Dispose();
+        _dc = null;
         base.OnEndPrint(document, e);
     }
 }
