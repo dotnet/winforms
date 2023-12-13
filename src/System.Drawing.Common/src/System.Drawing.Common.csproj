@@ -82,6 +82,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Printing\PrintEventHandler.cs" />
     <Compile Include="System\Drawing\Printing\PrintAction.cs" />
     <Compile Include="System\Drawing\Printing\PrintController.cs" />
+    <Compile Include="System\Drawing\Printing\PrintController.SafeDeviceModeHandle.cs" />
     <Compile Include="System\Drawing\Printing\PrintPageEventHandler.cs" />
     <Compile Include="System\Drawing\Printing\QueryPageSettingsEventArgs.cs" />
     <Compile Include="System\Drawing\Printing\QueryPageSettingsEventHandler.cs" />
@@ -221,6 +222,11 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Printing\PageSettings.cs" />
     <Compile Include="System\Drawing\Printing\PrintDocument.cs" />
     <Compile Include="System\Drawing\Printing\PrinterSettings.cs" />
+    <Compile Include="System\Drawing\Printing\PrinterSettings.ArrayEnumerator.cs" />
+    <Compile Include="System\Drawing\Printing\PrinterSettings.PaperSizeCollection.cs" />
+    <Compile Include="System\Drawing\Printing\PrinterSettings.PaperSourceCollection.cs" />
+    <Compile Include="System\Drawing\Printing\PrinterSettings.PrinterResolutionCollection.cs" />
+    <Compile Include="System\Drawing\Printing\PrinterSettings.StringCollection.cs" />
     <Compile Include="System\Drawing\Printing\PrintEventArgs.cs" />
     <Compile Include="System\Drawing\Printing\PrintPageEventArgs.cs" />
     <Compile Include="System\Drawing\Printing\PrintPreviewGraphics.cs" />

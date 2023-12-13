@@ -3,11 +3,6 @@
 
 using System.Runtime.Serialization;
 
-/*
- * This file is not intended to be used by Mono.
- * Instead InvalidPrinterException.Serializable.cs should be used.
- */
-
 namespace System.Drawing.Printing;
 
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
@@ -18,7 +13,7 @@ public partial class InvalidPrinterException
 #endif
     protected InvalidPrinterException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
-        // Ignoring not deserializable input
+        // Ignoring not serializable input
     }
 
 #if NET8_0_OR_GREATER
