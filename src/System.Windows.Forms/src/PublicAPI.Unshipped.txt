@@ -13,6 +13,8 @@
 *REMOVED*virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
 *REMOVED*virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
 *REMOVED*virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode![]! nodes) -> void
+*REMOVED*override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
+*REMOVED*override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void
 System.Windows.Forms.ImageList.ImageCollection.AddRange(params System.Drawing.Image![]! images) -> void
