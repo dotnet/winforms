@@ -331,11 +331,11 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         base.Initialize(component);
 
         Padding = _panel.Padding;
-        _designerHost = component?.Site?.GetService<IDesignerHost>();
+        _designerHost = component.Site?.GetService<IDesignerHost>();
 
         if (_selectionService is null)
         {
-            _selectionService = GetService<ISelectionService>()!;
+            _selectionService = GetRequiredService<ISelectionService>();
             _selectionService.SelectionChanging += OnSelectionChanging;
             _selectionService.SelectionChanged += OnSelectionChanged;
         }

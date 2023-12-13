@@ -382,7 +382,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         // presence of a default value attribute over the current code value.
         bool isRoot = TryGetService(out IDesignerHost? host) && component == host.RootComponent;
 
-        if (component?.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) is null)
+        if (component.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) is null)
         {
             sc.AddService<DesignerCommandSet>(new CDDesignerCommandSet(this));
         }
