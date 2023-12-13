@@ -49,7 +49,35 @@ public unsafe partial class AccessibleObject :
     ITextProvider.Interface,
     ITextProvider2.Interface,
     IDispatch.Interface,
-    IDispatchEx.Interface
+    IDispatchEx.Interface,
+    IManagedWrapper<
+        IDispatch,
+        IDispatchEx,
+        UIA.IAccessible,
+        IAccessibleEx,
+        ComIServiceProvider,
+        IRawElementProviderSimple,
+        IRawElementProviderFragment,
+        IRawElementProviderFragmentRoot,
+        IInvokeProvider,
+        IValueProvider,
+        IRangeValueProvider,
+        IExpandCollapseProvider,
+        IToggleProvider,
+        ITableProvider,
+        ITableItemProvider,
+        IGridProvider,
+        IGridItemProvider,
+        IEnumVARIANT,
+        IOleWindow,
+        ILegacyIAccessibleProvider,
+        ISelectionProvider,
+        ISelectionItemProvider,
+        IRawElementProviderHwndOverride,
+        IScrollItemProvider,
+        IMultipleViewProvider,
+        ITextProvider,
+        ITextProvider2>
 {
     private static readonly string[] s_propertiesWithArguments =
     [
