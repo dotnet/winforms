@@ -12,59 +12,73 @@ internal partial class MultiSelectRootGridEntry
     internal static class PropertyMerger
     {
         public static MultiPropertyDescriptorGridEntry[]? GetMergedProperties(
-            object[] objects,
+            object?[] objects,
             GridEntry parentEntry,
             PropertySort sort,
-            PropertyTab tab)
+            PropertyTab? tab)
         {
+            if (tab is null)
+            {
+                return null;
+            }
+
             MultiPropertyDescriptorGridEntry[]? result = null;
             try
             {
                 if ((sort & PropertySort.Alphabetical) != 0)
                 {
-                    var commonProperties = GetCommonProperties(objects, presort: true, tab, parentEntry);
-
-                    var entries = new MultiPropertyDescriptorGridEntry[commonProperties.Count];
-                    for (int i = 0; i < entries.Length; i++)
+                    List<PropertyDescriptor[]>? commonProperties = GetCommonProperties(objects, presort: true, tab, parentEntry);
+                    if (commonProperties is not null)
                     {
-                        entries[i] = new MultiPropertyDescriptorGridEntry(
-                            parentEntry.OwnerGrid,
-                            parentEntry,
-                            objects,
-                            commonProperties[i],
-                            hide: false);
-                    }
+                        var entries = new MultiPropertyDescriptorGridEntry[commonProperties.Count];
+                        for (int i = 0; i < entries.Length; i++)
+                        {
+                            entries[i] = new MultiPropertyDescriptorGridEntry(
+                                parentEntry.OwnerGrid,
+                                parentEntry,
+                                objects!, // all elements are not null if commonProperties is not null
+                                commonProperties[i],
+                                hide: false);
+                        }
 
-                    result = SortParenEntries(entries);
+                        result = SortParenEntries(entries);
+                    }
                 }
                 else
                 {
-                    var properties = GetCommonProperties(objects.AsSpan(1), presort: true, tab, parentEntry);
+                    List<PropertyDescriptor[]>? properties = GetCommonProperties(objects.AsSpan(1), presort: true, tab, parentEntry);
 
                     // This will work for just one as well.
-                    var firstProperties = GetCommonProperties(objects.AsSpan(0, 1), presort: false, tab, parentEntry);
+                    List<PropertyDescriptor[]>? firstProperties = GetCommonProperties(objects.AsSpan(0, 1), presort: false, tab, parentEntry);
 
-                    var firstPropertyDescriptors = new PropertyDescriptor[firstProperties.Count];
-                    for (int i = 0; i < firstProperties.Count; i++)
+                    if (properties is not null && firstProperties is not null)
                     {
-                        firstPropertyDescriptors[i] = firstProperties[i][0];
+                        var firstPropertyDescriptors = new PropertyDescriptor[firstProperties.Count];
+                        for (int i = 0; i < firstProperties.Count; i++)
+                        {
+                            firstPropertyDescriptors[i] = firstProperties[i][0];
+                        }
+
+                        properties = UnsortedMerge(firstPropertyDescriptors, properties);
+
+                        var entries = new MultiPropertyDescriptorGridEntry[properties.Count];
+
+                        for (int i = 0; i < entries.Length; i++)
+                        {
+                            entries[i] = new MultiPropertyDescriptorGridEntry(
+                                parentEntry.OwnerGrid,
+                                parentEntry,
+                                objects!, // all elements are not null if properties and firstProperties are not null
+                                properties[i],
+                                hide: false);
+                        }
+
+                        result = SortParenEntries(entries);
                     }
-
-                    properties = UnsortedMerge(firstPropertyDescriptors, properties);
-
-                    var entries = new MultiPropertyDescriptorGridEntry[properties.Count];
-
-                    for (int i = 0; i < entries.Length; i++)
+                    else
                     {
-                        entries[i] = new MultiPropertyDescriptorGridEntry(
-                            parentEntry.OwnerGrid,
-                            parentEntry,
-                            objects,
-                            properties[i],
-                            hide: false);
+                        return null;
                     }
-
-                    result = SortParenEntries(entries);
                 }
             }
             catch
@@ -77,8 +91,8 @@ internal partial class MultiSelectRootGridEntry
         /// <summary>
         ///  Returns a list of <see cref="PropertyDescriptor"/> arrays, one for each component.
         /// </summary>
-        private static List<PropertyDescriptor[]> GetCommonProperties(
-            ReadOnlySpan<object> objects,
+        private static List<PropertyDescriptor[]>? GetCommonProperties(
+            ReadOnlySpan<object?> objects,
             bool presort,
             PropertyTab tab,
             GridEntry parentEntry)
@@ -93,7 +107,18 @@ internal partial class MultiSelectRootGridEntry
 
             for (int i = 0; i < objects.Length; i++)
             {
-                var properties = tab.GetProperties(parentEntry, objects[i], attributes)!;
+                object? obj = objects[i];
+                if (obj is null)
+                {
+                    return null;
+                }
+
+                PropertyDescriptorCollection? properties = tab.GetProperties(parentEntry, obj, attributes);
+                if (properties is null)
+                {
+                    return null;
+                }
+
                 if (presort)
                 {
                     properties = properties.Sort(s_propertyComparer);
@@ -211,7 +236,7 @@ internal partial class MultiSelectRootGridEntry
                     newEntries ??= new MultiPropertyDescriptorGridEntry[entries.Length];
 
                     newEntries[newPosition++] = entries[i];
-                    entries[i] = null!;
+                    entries[i] = null!; // we're using this for the second pass below
                 }
             }
 
