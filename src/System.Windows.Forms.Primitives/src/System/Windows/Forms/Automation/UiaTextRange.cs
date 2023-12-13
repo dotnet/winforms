@@ -608,7 +608,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             {
                 if (Start > visibleStart || Start < visibleEnd)
                 {
-                    _provider.SendKeyboardInputVK(key, true);
+                    UiaTextProvider.SendKeyboardInputVK(key, true);
                     _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
                 }
 
@@ -617,7 +617,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
             if (Start < visibleStart || Start > visibleEnd)
             {
-                _provider.SendKeyboardInputVK(key, true);
+                UiaTextProvider.SendKeyboardInputVK(key, true);
                 _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
             }
         }
