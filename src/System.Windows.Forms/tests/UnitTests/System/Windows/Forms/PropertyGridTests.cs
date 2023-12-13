@@ -4097,16 +4097,9 @@ public partial class PropertyGridTests
     private class MySite : ISite
     {
         private IComponentChangeService _componentChangeService = new ComponentChangeService();
-        public MySite()
-        {
-        }
-
         public IComponent Component => null;
-
         public IContainer Container => null;
-
         public bool DesignMode => false;
-
         public string Name { get; set; }
 
         public object GetService(Type serviceType)
