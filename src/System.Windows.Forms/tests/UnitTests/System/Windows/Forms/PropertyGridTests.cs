@@ -3939,15 +3939,17 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_NotifyParentChange()
     {
+        // Regression test for https://github.com/dotnet/winforms/issues/10427
         using PropertyGrid propertyGrid = new();
-        propertyGrid.Site = new MySite(null, null);
-        ErroredCombo combo = new();
-        propertyGrid.SelectedObject = combo;
+        propertyGrid.Site = new MySite();
+        MyClass myClass = new();
+        propertyGrid.SelectedObject = myClass;
         PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
         GridEntry entry = propertyGridView.SelectedGridEntry;
-        PropertyDescriptorGridEntry descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
+        var descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
+
         descriptor.SetPropertyTextValue("123");
-        propertyGrid.Refresh();
+        Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
     }
 
     private class SubToolStripRenderer : ToolStripRenderer
@@ -4079,35 +4081,31 @@ public partial class PropertyGridTests
         public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
 
-    private class ErroredCombo
+    private class MyClass
     {
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public virtual ComboPath Path { get; set; } = new ComboPath() { };
+        public virtual MyExpandableClass ParentGridEntry { get; set; } = new() { };
 
-        public class ComboPath
+        public class MyExpandableClass
         {
             [NotifyParentProperty(true)]
             [TypeConverter(typeof(StringConverter))]
-            public string ComboName { get; set; }
-
-            public override string ToString() => $"{{ComboName='{ComboName}'}}";
+            public string NestedGridEntry { get; set; }
         }
     }
 
     private class MySite : ISite
     {
         private IComponentChangeService _componentChangeService = new ComponentChangeService();
-        public MySite(IComponent component, IContainer container)
+        public MySite()
         {
-            Component = component;
-            Container = container;
         }
 
-        public IComponent Component { get; private set; }
+        public IComponent Component => null;
 
-        public IContainer Container { get; private set; }
+        public IContainer Container => null;
 
-        public bool DesignMode => true;
+        public bool DesignMode => false;
 
         public string Name { get; set; }
 
@@ -4134,13 +4132,8 @@ public partial class PropertyGridTests
             {
                 if (member is null)
                     return;
-                var props = component.GetType().GetMembers();
-                var name = member.Name;
-                // here exception in RemoteDesignerHost
-                if (props.All(p => p.Name != name))
-                {
-                    Debug.Fail("Property not found!");
-                }
+                Reflection.MemberInfo[] properties = component.GetType().GetMembers();
+                Assert.False(properties.All(p => p.Name != member.Name), "Property not found!");
             }
         }
     }
