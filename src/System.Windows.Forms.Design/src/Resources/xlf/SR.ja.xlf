@@ -2234,7 +2234,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Top">
         <source>Top</source>
-        <target state="translated">- </target>
+        <target state="translated">上</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_TopDesc">
