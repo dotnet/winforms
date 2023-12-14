@@ -180,7 +180,7 @@ public partial class RichTextBox
                 e.Effect = keyState.HasFlag(MODIFIERKEYS_FLAGS.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                 _owner.OnDragEnter(e);
 
-                if ((e.DropImageType > DropImageType.Invalid) && _owner.IsHandleCreated)
+                if ((e.Effect != DragDropEffects.None && e.DropImageType > DropImageType.Invalid) && _owner.IsHandleCreated)
                 {
                     UpdateDropDescription(e);
                     DragDropHelper.DragEnter(_owner.Handle, e);
@@ -295,7 +295,7 @@ public partial class RichTextBox
                     _owner.OnDragOver(e);
                     _lastEffect = e.Effect;
 
-                    if (e.DropImageType > DropImageType.Invalid)
+                    if (e.Effect != DragDropEffects.None && e.DropImageType > DropImageType.Invalid)
                     {
                         UpdateDropDescription(e);
                         DragDropHelper.DragOver(e);
