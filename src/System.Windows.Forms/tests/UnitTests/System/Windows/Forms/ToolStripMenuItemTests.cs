@@ -147,11 +147,17 @@ public class ToolStripMenuItemTests
     [MemberData(nameof(CultureInfo_Shortcut_TestData))]
     public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo cultureInfo, CultureInfo cultureUIInfo, string shortCutText)
     {
+        CultureInfo _uiCulture = Thread.CurrentThread.CurrentUICulture;
+        CultureInfo _curCulture = Thread.CurrentThread.CurrentCulture;
+
         Thread.CurrentThread.CurrentUICulture = cultureUIInfo;
         Thread.CurrentThread.CurrentCulture = cultureInfo;
         using SubToolStripMenuItem item = new();
         item.ShortcutKeys = Keys.Control | Keys.Shift | Keys.K;
         Assert.Equal(item.GetShortcutText(), shortCutText);
+
+        Thread.CurrentThread.CurrentUICulture = _uiCulture;
+        Thread.CurrentThread.CurrentCulture = _curCulture;
     }
 
     public static IEnumerable<object[]> CultureInfo_Shortcut_TestData()
