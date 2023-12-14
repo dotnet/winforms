@@ -143,7 +143,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetDescriptionDirectly =>
+        internal override bool CanGetDescriptionInternal =>
             _rowIndex == -1
             || _monthCalendarAccessibleObject.IsHandleCreated
             || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
@@ -197,13 +197,13 @@ public partial class MonthCalendar
 
         public override string? Name => null; // Rows don't have names like in a native calendar
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _calendarBodyAccessibleObject;
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => _calendarBodyAccessibleObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _calendarBodyAccessibleObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _calendarBodyAccessibleObject.GetParentInternal();
 

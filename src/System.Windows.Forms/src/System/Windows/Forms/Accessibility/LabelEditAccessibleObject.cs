@@ -71,7 +71,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
 
     private protected override bool IsInternal => true;
 
-    internal override bool CanGetNameDirectly => false;
+    internal override bool CanGetNameInternal => false;
 
     internal override int[] RuntimeId => _runtimeId ??=
         [

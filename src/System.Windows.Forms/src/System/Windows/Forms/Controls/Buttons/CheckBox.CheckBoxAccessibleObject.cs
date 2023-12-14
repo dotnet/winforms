@@ -16,7 +16,7 @@ public partial class CheckBox
             ? owner.AccessibleDefaultActionDescription ?? (owner.Checked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck)
             : string.Empty;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.CheckButton);
 

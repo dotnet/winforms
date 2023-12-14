@@ -77,7 +77,7 @@ public partial class ErrorProvider
                 return null;
             }
 
-            internal override bool CanHitTestDirectly(int x, int y) => false;
+            internal override bool CanHitTestInternal(int x, int y) => false;
 
             internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
@@ -112,7 +112,7 @@ public partial class ErrorProvider
                 }
             }
 
-            internal override bool CanGetNameDirectly => false;
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleRole Role => AccessibleRole.Grouping;
 

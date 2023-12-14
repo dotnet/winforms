@@ -89,7 +89,7 @@ public partial class ListViewGroup
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         internal override ExpandCollapseState ExpandCollapseState =>
             _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
@@ -103,7 +103,7 @@ public partial class ListViewGroup
                 ? $"{_owningGroup.Header}. {_owningGroup.Subtitle}"
                 : _owningGroup.Header;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleRole Role => AccessibleRole.Grouping;
 

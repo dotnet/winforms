@@ -27,7 +27,7 @@ public partial class MonthCalendar
 
         public override string DefaultAction => SR.AccessibleActionClick;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction() => Invoke();
 
@@ -51,7 +51,7 @@ public partial class MonthCalendar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => _monthCalendarAccessibleObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _monthCalendarAccessibleObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _monthCalendarAccessibleObject.GetParentInternal();
 

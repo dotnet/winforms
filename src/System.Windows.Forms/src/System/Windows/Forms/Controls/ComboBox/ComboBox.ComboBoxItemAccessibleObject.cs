@@ -143,7 +143,7 @@ public partial class ComboBox
 
         public override string? Name => _owningComboBox is null ? base.Name : _owningComboBox.GetItemText(_owningItem.Item);
 
-        internal override bool CanGetNameDirectly => _owningComboBox is null;
+        internal override bool CanGetNameInternal => _owningComboBox is null;
 
         public override AccessibleRole Role
             => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());

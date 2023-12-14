@@ -49,7 +49,7 @@ internal partial class PropertyGridView
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         internal override IRawElementProviderFragmentRoot.Interface FragmentRoot =>
             this.TryGetOwnerAs(out GridViewListBox? owner)

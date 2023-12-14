@@ -36,7 +36,7 @@ internal sealed unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccess
 
     private protected override bool IsInternal => true;
 
-    internal override bool CanGetParentDirectly => Parent is { } parent ? parent.CanGetParentDirectly : true;
+    internal override bool CanGetParentInternal => Parent is { } parent ? parent.CanGetParentInternal : true;
 
     internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
 

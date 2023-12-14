@@ -16,7 +16,7 @@ public partial class TrackBar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override string? Name => !this.TryGetOwnerAs(out TrackBar? owner) || ParentInternal is not { } parent
             ? null
@@ -24,7 +24,7 @@ public partial class TrackBar
                 ? SR.TrackBarLargeIncreaseButtonName
                 : SR.TrackBarLargeDecreaseButtonName;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleStates State
             => !this.IsOwnerHandleCreated(out TrackBar? _) || IsDisplayed

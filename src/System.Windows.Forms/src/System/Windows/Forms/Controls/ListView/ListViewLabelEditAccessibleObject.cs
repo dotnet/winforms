@@ -49,7 +49,7 @@ internal sealed unsafe class ListViewLabelEditAccessibleObject : LabelEditAccess
 
     private protected override bool IsInternal => true;
 
-    internal override bool CanGetParentDirectly => Parent?.CanGetParentDirectly ?? true;
+    internal override bool CanGetParentInternal => Parent?.CanGetParentInternal ?? true;
 
     internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
 

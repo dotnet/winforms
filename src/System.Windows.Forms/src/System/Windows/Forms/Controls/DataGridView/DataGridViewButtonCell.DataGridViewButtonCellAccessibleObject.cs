@@ -16,7 +16,7 @@ public partial class DataGridViewButtonCell
 
         public override string DefaultAction => SR.DataGridView_AccButtonCellDefaultAction;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {

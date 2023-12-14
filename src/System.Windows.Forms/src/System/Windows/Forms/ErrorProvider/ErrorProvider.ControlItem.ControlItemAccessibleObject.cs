@@ -109,11 +109,11 @@ public partial class ErrorProvider
             [AllowNull]
             public override string Name => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
 
-            internal override bool CanGetNameDirectly => false;
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleObject? Parent => _window?.AccessibilityObject;
 
-            internal override bool CanGetParentDirectly => _window?.AccessibilityObject.CanGetParentDirectly ?? true;
+            internal override bool CanGetParentInternal => _window?.AccessibilityObject.CanGetParentInternal ?? true;
 
             internal override unsafe IDispatch* GetParentInternal() =>
                 _window?.AccessibilityObject is { } parent ? parent.GetParentInternal() : null;

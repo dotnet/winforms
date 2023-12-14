@@ -384,7 +384,7 @@ public partial class MonthCalendar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         private unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
         {
@@ -454,7 +454,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetHelpDirectly => false;
+        internal override bool CanGetHelpInternal => false;
 
         internal bool IsEnabled => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.Enabled;
 
@@ -613,7 +613,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetNameDirectly =>
+        internal override bool CanGetNameInternal =>
             CalendarView is not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
                 and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR
                 and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE

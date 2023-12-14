@@ -202,13 +202,13 @@ public partial class MonthCalendar
 
         public override string Name => _initName;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _monthCalendarAccessibleObject;
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => _monthCalendarAccessibleObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _monthCalendarAccessibleObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _monthCalendarAccessibleObject.GetParentInternal();
 

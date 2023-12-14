@@ -51,7 +51,7 @@ public partial class TabPage
 
         public override string? Name => _owningTabPage.Text;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         private TabControl? OwningTabControl => _owningTabPage.ParentInternal as TabControl;
 

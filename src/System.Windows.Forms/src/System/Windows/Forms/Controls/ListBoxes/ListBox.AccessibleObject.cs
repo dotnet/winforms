@@ -238,7 +238,7 @@ public partial class ListBox
             return null;
         }
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject? GetSelected()
         {
@@ -255,7 +255,7 @@ public partial class ListBox
             return null;
         }
 
-        internal override bool CanGetSelectedDirectly => false;
+        internal override bool CanGetSelectedInternal => false;
 
         public override AccessibleObject? HitTest(int x, int y)
         {
@@ -285,6 +285,6 @@ public partial class ListBox
             return null;
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) => false;
+        internal override bool CanHitTestInternal(int x, int y) => false;
     }
 }

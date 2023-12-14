@@ -83,11 +83,11 @@ public abstract partial class TextBoxBase
             }
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
-        internal override bool CanSetNameDirectly => false;
+        internal override bool CanSetNameInternal => false;
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         public override string? Value => this.TryGetOwnerAs(out TextBoxBase? owner) && !owner.PasswordProtect ? ValueInternal : SR.AccessDenied;
 
@@ -146,6 +146,6 @@ public abstract partial class TextBoxBase
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetKeyboardShortcutDirectly => !this.TryGetOwnerAs(out TextBoxBase? owner);
+        internal override bool CanGetKeyboardShortcutInternal => !this.TryGetOwnerAs(out TextBoxBase? owner);
     }
 }

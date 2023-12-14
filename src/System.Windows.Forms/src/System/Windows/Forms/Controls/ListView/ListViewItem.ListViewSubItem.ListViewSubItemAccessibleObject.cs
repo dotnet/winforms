@@ -92,13 +92,13 @@ public partial class ListViewItem
             /// </summary>
             public override string? Name => base.Name ?? OwningSubItem?.Text ?? string.Empty;
 
-            internal override bool CanGetNameDirectly => false;
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleObject Parent => ParentInternal;
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetParentDirectly => ParentInternal.CanGetParentDirectly;
+            internal override bool CanGetParentInternal => ParentInternal.CanGetParentInternal;
 
             internal override unsafe IDispatch* GetParentInternal() => ParentInternal.GetParentInternal();
 

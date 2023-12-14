@@ -43,11 +43,11 @@ public partial class ToolStripDropDown
             }
         }
 
-        internal override bool CanGetNameDirectly =>
+        internal override bool CanGetNameInternal =>
             IsInternal
             && this.TryGetOwnerAs(out ToolStripDropDown? owner)
             && owner.AccessibleName is null
-            && (owner?.OwnerItem?.AccessibilityObject.CanGetNameDirectly ?? true);
+            && (owner?.OwnerItem?.AccessibilityObject.CanGetNameInternal ?? true);
 
         internal override BSTR GetNameInternal()
         {

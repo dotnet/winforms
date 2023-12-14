@@ -45,7 +45,7 @@ public partial class DataGridView
 
         public override string Name => SR.DataGridView_AccTopRow;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public DataGridView? Owner
         {
@@ -77,8 +77,8 @@ public partial class DataGridView
             }
         }
 
-        internal override bool CanGetParentDirectly =>
-            IsInternal && _ownerDataGridView is not null && _ownerDataGridView.AccessibilityObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal =>
+            IsInternal && _ownerDataGridView is not null && _ownerDataGridView.AccessibilityObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _ownerDataGridView!.AccessibilityObject.GetParentInternal();
 
@@ -100,7 +100,7 @@ public partial class DataGridView
 
         public override string Value => Name;
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         public override AccessibleObject? GetChild(int index)
         {

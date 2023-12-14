@@ -66,7 +66,7 @@ public partial class ComboBox
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch

@@ -19,11 +19,11 @@ public partial class DataGridViewRow
 
         public override string Name => SR.DataGridView_AccSelectedRowCellsName;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
 
-        internal override bool CanGetParentDirectly => _owningDataGridViewRow.AccessibilityObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _owningDataGridViewRow.AccessibilityObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() =>
             _owningDataGridViewRow.AccessibilityObject.GetParentInternal();
@@ -39,7 +39,7 @@ public partial class DataGridViewRow
 
         public override string Value => Name;
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         internal override int[] RuntimeId
             => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
@@ -89,7 +89,7 @@ public partial class DataGridViewRow
 
         public override AccessibleObject GetSelected() => this;
 
-        internal override bool CanGetSelectedDirectly => false;
+        internal override bool CanGetSelectedInternal => false;
 
         public override AccessibleObject? GetFocused()
         {
@@ -104,7 +104,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {

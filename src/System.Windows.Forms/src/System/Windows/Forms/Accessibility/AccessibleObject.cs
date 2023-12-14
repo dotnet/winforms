@@ -164,9 +164,14 @@ public unsafe partial class AccessibleObject :
     public virtual string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
 
     /// <summary>
-    ///  Determines whether the default action can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetDefaultActionInternal"/> can be called without calling <see cref="DefaultAction"/>
     /// </summary>
-    internal virtual bool CanGetDefaultActionDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetDefaultActionInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps the System IAccessible default action.
@@ -179,9 +184,14 @@ public unsafe partial class AccessibleObject :
     public virtual string? Description => GetDescriptionInternal().ToNullableStringAndFree();
 
     /// <summary>
-    ///  Determines whether the description can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetDescriptionInternal"/> can be called without calling <see cref="Description"/>
     /// </summary>
-    internal virtual bool CanGetDescriptionDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetDescriptionInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps the System IAccessible description.
@@ -196,9 +206,14 @@ public unsafe partial class AccessibleObject :
     public virtual string? Help => GetHelpInternal().ToNullableStringAndFree();
 
     /// <summary>
-    ///  Determines whether help can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetHelpInternal"/> can be called without calling <see cref="Help"/>
     /// </summary>
-    internal virtual bool CanGetHelpDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetHelpInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps the System IAccessible help.
@@ -211,9 +226,14 @@ public unsafe partial class AccessibleObject :
     public virtual string? KeyboardShortcut => GetKeyboardShortcutInternal(CHILDID_SELF).ToNullableStringAndFree();
 
     /// <summary>
-    ///  Determines whether the keyboard shortcut can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetKeyboardShortcutInternal(VARIANT)"/> can be called without calling <see cref="KeyboardShortcut"/>
     /// </summary>
-    internal virtual bool CanGetKeyboardShortcutDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetKeyboardShortcutInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps the System IAccessible keyboard shortcut of the <paramref name="childID"/>
@@ -226,7 +246,6 @@ public unsafe partial class AccessibleObject :
     public virtual string? Name
     {
         get => GetNameInternal().ToNullableStringAndFree();
-
         set
         {
             using BSTR set = new(value);
@@ -235,9 +254,14 @@ public unsafe partial class AccessibleObject :
     }
 
     /// <summary>
-    ///  Determines whether the name can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetNameInternal"/> can be called without calling <see cref="Name"/>
     /// </summary>
-    internal virtual bool CanGetNameDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetNameInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps the System IAccessible name.
@@ -245,9 +269,14 @@ public unsafe partial class AccessibleObject :
     internal virtual BSTR GetNameInternal() => SystemIAccessible.TryGetName(CHILDID_SELF);
 
     /// <summary>
-    ///  Determines whether the name can be set without creating excessive managed objects.
+    ///  Determines if <see cref="SetNameInternal(BSTR)"/> can be called without calling <see cref="Name"/>
     /// </summary>
-    internal virtual bool CanSetNameDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanSetNameInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps and sets the System IAccessible name to <paramref name="value"/>.
@@ -292,9 +321,14 @@ public unsafe partial class AccessibleObject :
     }
 
     /// <summary>
-    ///  Determines whether the parent can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetParentInternal"/> can be called without calling <see cref="Parent"/>
     /// </summary>
-    internal virtual bool CanGetParentDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetParentInternal => IsInternal;
 
     /// <summary>
     ///  Determines whether or not this object is internal.
@@ -333,14 +367,27 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    internal virtual bool CanGetValueDirectly => IsInternal;
+    /// <summary>
+    ///  Determines if <see cref="GetValueInternal"/> can be called without calling <see cref="Value"/>
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetValueInternal => IsInternal;
 
     internal virtual BSTR GetValueInternal() => SystemIAccessible is null ? new(string.Empty) : SystemIAccessible.TryGetValue(CHILDID_SELF);
 
     /// <summary>
-    ///  Determines whether the value can be set without creating excessive managed objects.
+    ///  Determines if <see cref="SetValueInternal(BSTR)"/> can be called without calling <see cref="Value"/>
     /// </summary>
-    internal virtual bool CanSetValueDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanSetValueInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps and sets the System IAccessible value to <paramref name="value"/>.
@@ -403,9 +450,14 @@ public unsafe partial class AccessibleObject :
     public virtual AccessibleObject? GetFocused() => TryGetAccessibleObject(GetFocusedInternal());
 
     /// <summary>
-    ///  Determines whether the focus can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetFocusedInternal"/> can be called without calling <see cref="GetFocus"/>
     /// </summary>
-    internal virtual bool CanGetFocusedDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetFocusedInternal => IsInternal;
 
     /// <summary>
     ///  If there are children, retrieves the child ID of the focused child. If this object is focused. Otherwise
@@ -464,9 +516,14 @@ public unsafe partial class AccessibleObject :
     }
 
     /// <summary>
-    ///  Determines whether the help topic can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetHelpTopicInternal"/> can be called without calling <see cref="GetHelpTopic(out string?)"/>
     /// </summary>
-    internal virtual bool CanGetHelpTopicDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetHelpTopicInternal => IsInternal;
 
     /// <summary>
     ///  Unwraps the System IAccessible help topic string and ID.
@@ -479,9 +536,14 @@ public unsafe partial class AccessibleObject :
     public virtual AccessibleObject? GetSelected() => TryGetAccessibleObject(GetSelectedInternal());
 
     /// <summary>
-    ///  Determines whether selected can be retrieved without creating excessive managed objects.
+    ///  Determines if <see cref="GetSelectedInternal"/> can be called without calling <see cref="GetSelected"/>
     /// </summary>
-    internal virtual bool CanGetSelectedDirectly => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanGetSelectedInternal => IsInternal;
 
     /// <summary>
     ///  If there are children, retrieves the child ID of the selected child. If this object is focused. Otherwise
@@ -534,10 +596,14 @@ public unsafe partial class AccessibleObject :
     public virtual AccessibleObject? HitTest(int x, int y) => TryGetAccessibleObject(HitTestInternal(x, y));
 
     /// <summary>
-    ///  Determines whether hit test can be done at (<paramref name="x"/>, <paramref name="y"/>)
-    ///  without creating excessive managed objects.
+    ///  Determines if <see cref="HitTestInternal(int, int)"/> can be called without calling <see cref="HitTest(int, int)"/>
     /// </summary>
-    internal virtual bool CanHitTestDirectly(int x, int y) => IsInternal;
+    /// <remarks>
+    ///  <para>
+    ///   This is an optimization to avoid unnecessary allocations when being called from native code
+    ///  </para>
+    /// </remarks>
+    internal virtual bool CanHitTestInternal(int x, int y) => IsInternal;
 
     /// <summary>
     ///  If there are children, retrieves the child ID at (<paramref name="x"/>, <paramref name="y"/>).
@@ -1192,7 +1258,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszName = CanGetNameDirectly
+        *pszName = CanGetNameInternal
             ? GetNameInternal()
             : Name is { } name ? new(name) : default;
         return HRESULT.S_OK;
@@ -1206,7 +1272,7 @@ public unsafe partial class AccessibleObject :
                 return HRESULT.E_POINTER;
             }
 
-            *pszValue = CanGetValueDirectly
+            *pszValue = CanGetValueInternal
                 ? GetValueInternal()
                 : Value is { } value ? new(value) : default;
             return HRESULT.S_OK;
@@ -1220,7 +1286,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszDescription = CanGetDescriptionDirectly
+        *pszDescription = CanGetDescriptionInternal
             ? GetDescriptionInternal()
             : Description is { } description ? new(description) : default;
         return HRESULT.S_OK;
@@ -1255,7 +1321,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszHelp = CanGetHelpDirectly
+        *pszHelp = CanGetHelpInternal
             ? GetHelpInternal()
             : Help is { } help ? new(help) : default;
         return HRESULT.S_OK;
@@ -1660,7 +1726,7 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (CanHitTestDirectly(xLeft, yTop))
+            if (CanHitTestInternal(xLeft, yTop))
             {
                 *pvarChild = HitTestInternal(xLeft, yTop);
                 return HRESULT.S_OK;
@@ -1963,7 +2029,7 @@ public unsafe partial class AccessibleObject :
             if (IsValidSelfChildID(varChild))
             {
                 // Return the default action property on this.
-                *pszDefaultAction = CanGetDefaultActionDirectly
+                *pszDefaultAction = CanGetDefaultActionInternal
                     ? GetDefaultActionInternal()
                     : DefaultAction is { } action ? new(action) : default;
                 return HRESULT.S_OK;
@@ -1973,7 +2039,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                *pszDefaultAction = child.CanGetDefaultActionDirectly
+                *pszDefaultAction = child.CanGetDefaultActionInternal
                     ? child.GetDefaultActionInternal()
                     : child.DefaultAction is { } action ? new(action) : default;
                 return HRESULT.S_OK;
@@ -2003,7 +2069,7 @@ public unsafe partial class AccessibleObject :
             if (IsValidSelfChildID(varChild))
             {
                 // Return self description property
-                *pszDescription = CanGetDescriptionDirectly
+                *pszDescription = CanGetDescriptionInternal
                     ? GetDescriptionInternal()
                     : Description is { } description ? new(description) : default;
                 return HRESULT.S_OK;
@@ -2013,7 +2079,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                *pszDescription = child.CanGetDescriptionDirectly
+                *pszDescription = child.CanGetDescriptionInternal
                     ? child.GetDescriptionInternal()
                     : child.Description is { } description ? new(description) : default;
                 return HRESULT.S_OK;
@@ -2075,7 +2141,7 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (CanGetFocusedDirectly)
+            if (CanGetFocusedInternal)
             {
                 *pvarChild = GetFocusedInternal();
                 return HRESULT.S_OK;
@@ -2111,7 +2177,7 @@ public unsafe partial class AccessibleObject :
         {
             if (IsValidSelfChildID(varChild))
             {
-                *pszHelp = CanGetHelpDirectly
+                *pszHelp = CanGetHelpInternal
                     ? GetHelpInternal()
                     : Help is { } help ? new(help) : default;
                 return HRESULT.S_OK;
@@ -2121,7 +2187,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                *pszHelp = child.CanGetHelpDirectly
+                *pszHelp = child.CanGetHelpInternal
                     ? child.GetHelpInternal()
                     : child.Help is { } help ? new(help) : default;
                 return HRESULT.S_OK;
@@ -2152,7 +2218,7 @@ public unsafe partial class AccessibleObject :
         {
             if (IsValidSelfChildID(varChild))
             {
-                if (CanGetHelpTopicDirectly)
+                if (CanGetHelpTopicInternal)
                 {
                     (*pidTopic, *pszHelpFile) = GetHelpTopicInternal();
                     return HRESULT.S_OK;
@@ -2167,7 +2233,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                if (child.CanGetHelpTopicDirectly)
+                if (child.CanGetHelpTopicInternal)
                 {
                     (*pidTopic, *pszHelpFile) = child.GetHelpTopicInternal();
                     return HRESULT.S_OK;
@@ -2196,7 +2262,7 @@ public unsafe partial class AccessibleObject :
         {
             if (IsValidSelfChildID(varChild))
             {
-                *pszKeyboardShortcut = CanGetKeyboardShortcutDirectly
+                *pszKeyboardShortcut = CanGetKeyboardShortcutInternal
                     ? GetKeyboardShortcutInternal(varChild)
                     : KeyboardShortcut is { } shortcut ? new(shortcut) : default;
                 return HRESULT.S_OK;
@@ -2206,7 +2272,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                *pszKeyboardShortcut = child.CanGetKeyboardShortcutDirectly
+                *pszKeyboardShortcut = child.CanGetKeyboardShortcutInternal
                     ? child.GetKeyboardShortcutInternal(varChild)
                     : child.KeyboardShortcut is { } shortcut ? new(shortcut) : default;
                 return HRESULT.S_OK;
@@ -2235,7 +2301,7 @@ public unsafe partial class AccessibleObject :
         {
             if (IsValidSelfChildID(varChild))
             {
-                *pszName = CanGetNameDirectly
+                *pszName = CanGetNameInternal
                     ? GetNameInternal()
                     : Name is { } name ? new(name) : default;
                 return HRESULT.S_OK;
@@ -2245,7 +2311,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                *pszName = child.CanGetNameDirectly
+                *pszName = child.CanGetNameInternal
                     ? child.GetNameInternal()
                     : child.Name is { } name ? new(name) : default;
                 return HRESULT.S_OK;
@@ -2257,7 +2323,7 @@ public unsafe partial class AccessibleObject :
         if (IsClientObject && systemName.IsNullOrEmpty)
         {
             // Name the child after its parent
-            systemName = CanGetNameDirectly
+            systemName = CanGetNameInternal
                 ? GetNameInternal()
                 : Name is { } name ? new(name) : default;
         }
@@ -2283,7 +2349,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        if (CanGetParentDirectly)
+        if (CanGetParentInternal)
         {
             *ppdispParent = GetParentInternal();
             return HRESULT.S_OK;
@@ -2365,7 +2431,7 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (CanGetSelectedDirectly)
+            if (CanGetSelectedInternal)
             {
                 *pvarChildren = GetSelectedInternal();
                 return HRESULT.S_OK;
@@ -2445,7 +2511,7 @@ public unsafe partial class AccessibleObject :
             if (IsValidSelfChildID(varChild))
             {
                 // Return self value property.
-                *pszValue = CanGetValueDirectly
+                *pszValue = CanGetValueInternal
                     ? GetValueInternal()
                     : Value is { } value ? new(value) : default;
                 return HRESULT.S_OK;
@@ -2455,7 +2521,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                *pszValue = child.CanGetValueDirectly
+                *pszValue = child.CanGetValueInternal
                     ? child.GetValueInternal()
                     : child.Value is { } value ? new(value) : default;
                 return HRESULT.S_OK;
@@ -2476,7 +2542,7 @@ public unsafe partial class AccessibleObject :
             // Set the name property if available
             if (IsValidSelfChildID(varChild))
             {
-                if (CanSetNameDirectly)
+                if (CanSetNameInternal)
                 {
                     SetNameInternal(szName);
                     return HRESULT.S_OK;
@@ -2491,7 +2557,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                if (CanSetNameDirectly)
+                if (CanSetNameInternal)
                 {
                     child.SetNameInternal(szName);
                     return HRESULT.S_OK;
@@ -2517,7 +2583,7 @@ public unsafe partial class AccessibleObject :
             if (IsValidSelfChildID(varChild))
             {
                 // Attempt to set the value property
-                if (CanSetValueDirectly)
+                if (CanSetValueInternal)
                 {
                     SetValueInternal(szValue);
                     return HRESULT.S_OK;
@@ -2531,7 +2597,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varChild);
             if (child is not null)
             {
-                if (child.CanSetValueDirectly)
+                if (child.CanSetValueInternal)
                 {
                     child.SetValueInternal(szValue);
                     return HRESULT.S_OK;

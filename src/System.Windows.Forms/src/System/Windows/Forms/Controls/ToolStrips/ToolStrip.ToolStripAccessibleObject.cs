@@ -34,7 +34,7 @@ public partial class ToolStrip
                 : base.HitTest(x, y);
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) =>
+        internal override bool CanHitTestInternal(int x, int y) =>
             this.IsOwnerHandleCreated(out ToolStrip? owner)
             && (owner.GetItemAt(owner.PointToClient(new Point(x, y))) is not { } item || item.AccessibilityObject is null);
 

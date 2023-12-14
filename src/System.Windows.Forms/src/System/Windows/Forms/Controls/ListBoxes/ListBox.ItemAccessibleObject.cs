@@ -39,7 +39,7 @@ public partial class ListBox
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => Parent.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => Parent.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => Parent.GetParentInternal();
 
@@ -102,7 +102,7 @@ public partial class ListBox
 
         public override string? Name => _owningListBox.GetItemText(_itemEntry.Item);
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleRole Role => _owningAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());
 

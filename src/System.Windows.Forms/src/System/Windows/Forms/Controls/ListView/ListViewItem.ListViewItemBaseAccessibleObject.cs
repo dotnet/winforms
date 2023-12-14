@@ -60,7 +60,7 @@ public partial class ListViewItem
 
         public override string? Name => _owningItem.Text;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         private bool OwningListItemFocused
         {
@@ -113,7 +113,7 @@ public partial class ListViewItem
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {

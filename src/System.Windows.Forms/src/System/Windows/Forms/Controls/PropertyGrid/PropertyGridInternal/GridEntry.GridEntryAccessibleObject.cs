@@ -50,12 +50,12 @@ internal abstract partial class GridEntry
             }
         }
 
-        internal override bool CanGetDefaultActionDirectly => !this.TryGetOwnerAs(out GridEntry? owner) || !owner.Expandable;
+        internal override bool CanGetDefaultActionInternal => !this.TryGetOwnerAs(out GridEntry? owner) || !owner.Expandable;
 
         public override string Description
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
-        internal override bool CanGetDescriptionDirectly => false;
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override ExpandCollapseState ExpandCollapseState
             => !this.TryGetOwnerAs(out GridEntry? owner) ? ExpandCollapseState.ExpandCollapseState_Collapsed : owner.Expandable
@@ -64,18 +64,18 @@ internal abstract partial class GridEntry
 
         public override string Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
-        internal override bool CanGetHelpDirectly => false;
+        internal override bool CanGetHelpInternal => false;
 
         public override string? Name => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyLabel : null;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject? Parent =>
             this.TryGetOwnerAs(out GridEntry? owner) ? owner.OwnerGridView?.AccessibilityObject : null;
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => Parent?.CanGetParentDirectly ?? true;
+        internal override bool CanGetParentInternal => Parent?.CanGetParentInternal ?? true;
 
         internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
 
@@ -155,9 +155,9 @@ internal abstract partial class GridEntry
             }
         }
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
-        internal override bool CanSetValueDirectly => false;
+        internal override bool CanSetValueInternal => false;
 
         internal override int Column => 0;
 
@@ -246,7 +246,7 @@ internal abstract partial class GridEntry
         public override AccessibleObject? GetFocused()
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.HasFocus ? this : null : null;
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         /// <summary>
         ///  Navigate to the next or previous grid entry.

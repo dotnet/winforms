@@ -42,7 +42,7 @@ public abstract partial class DataGridViewCell
             }
         }
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override string? Name
         {
@@ -87,7 +87,7 @@ public abstract partial class DataGridViewCell
             }
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public DataGridViewCell? Owner
         {
@@ -118,8 +118,8 @@ public abstract partial class DataGridViewCell
             }
         }
 
-        internal override bool CanGetParentDirectly =>
-            IsInternal && _owner?.OwningRow is { } owningRow && owningRow.AccessibilityObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal =>
+            IsInternal && _owner?.OwningRow is { } owningRow && owningRow.AccessibilityObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _owner!.OwningRow!.AccessibilityObject.GetParentInternal();
 
@@ -259,9 +259,9 @@ public abstract partial class DataGridViewCell
             }
         }
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
-        internal override bool CanSetValueDirectly => false;
+        internal override bool CanSetValueInternal => false;
 
         public override void DoDefaultAction()
         {
@@ -436,7 +436,7 @@ public abstract partial class DataGridViewCell
 
         public override AccessibleObject? GetFocused() => null;
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject? GetSelected() => null;
 

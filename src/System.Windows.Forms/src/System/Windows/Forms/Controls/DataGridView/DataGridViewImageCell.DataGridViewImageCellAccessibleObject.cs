@@ -18,7 +18,7 @@ public partial class DataGridViewImageCell
 
         public override string? Description => Owner is DataGridViewImageCell imageCell ? imageCell.Description : null;
 
-        internal override bool CanGetDefaultActionDirectly => IsInternal && Owner is not DataGridViewImageCell;
+        internal override bool CanGetDefaultActionInternal => IsInternal && Owner is not DataGridViewImageCell;
 
         public override string? Value
         {
@@ -29,7 +29,7 @@ public partial class DataGridViewImageCell
             }
         }
 
-        internal override bool CanSetValueDirectly => true;
+        internal override bool CanSetValueInternal => true;
 
         internal override void SetValueInternal(BSTR value) { }
 

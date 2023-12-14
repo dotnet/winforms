@@ -65,7 +65,7 @@ public partial class DataGridViewRowHeaderCell
 
         public override string? Name => ParentPrivate?.Name ?? string.Empty;
 
-        internal override bool CanGetNameDirectly => ParentPrivate?.Name is not null;
+        internal override bool CanGetNameInternal => ParentPrivate?.Name is not null;
 
         internal override BSTR GetNameInternal() => ParentPrivate!.GetNameInternal();
 
@@ -84,8 +84,8 @@ public partial class DataGridViewRowHeaderCell
             }
         }
 
-        internal override bool CanGetParentDirectly =>
-            IsInternal && Owner is not null && (Owner.OwningRow?.AccessibilityObject.CanGetParentDirectly ?? true);
+        internal override bool CanGetParentInternal =>
+            IsInternal && Owner is not null && (Owner.OwningRow?.AccessibilityObject.CanGetParentInternal ?? true);
 
         internal override unsafe IDispatch* GetParentInternal() =>
             Owner!.OwningRow is { } owningRow ? owningRow.AccessibilityObject.GetParentInternal() : null;

@@ -164,7 +164,7 @@ public partial class DataGridView
             }
         }
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject GetSelected()
         {

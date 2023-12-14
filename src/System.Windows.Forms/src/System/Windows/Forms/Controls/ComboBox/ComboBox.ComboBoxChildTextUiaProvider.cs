@@ -61,7 +61,7 @@ public partial class ComboBox
             }
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         internal override void SetNameInternal(BSTR value) { }
 

@@ -199,7 +199,7 @@ public partial class Control
 
         public override string? DefaultAction => Owner?.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
-        internal override bool CanGetDefaultActionDirectly => IsInternal && Owner?.AccessibleDefaultActionDescription is null;
+        internal override bool CanGetDefaultActionInternal => IsInternal && Owner?.AccessibleDefaultActionDescription is null;
 
         // This is used only if control supports IAccessibleEx. We need to provide a unique ID. Others are implementing this in the same manner.
         // First item is static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
@@ -212,7 +212,7 @@ public partial class Control
 
         public override string? Description => Owner?.AccessibleDescription ?? base.Description;
 
-        internal override bool CanGetDescriptionDirectly => IsInternal && Owner?.AccessibleDescription is null;
+        internal override bool CanGetDescriptionInternal => IsInternal && Owner?.AccessibleDescription is null;
 
         /// <summary>
         ///  Gets or sets the handle of the accessible object's associated <see cref="Owner"/> control.
@@ -278,7 +278,7 @@ public partial class Control
             }
         }
 
-        internal override bool CanGetHelpDirectly =>
+        internal override bool CanGetHelpInternal =>
             IsInternal
             && (!this.TryGetOwnerAs(out Control? owner)
                 || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler);
@@ -294,7 +294,7 @@ public partial class Control
             }
         }
 
-        internal override bool CanGetKeyboardShortcutDirectly => false;
+        internal override bool CanGetKeyboardShortcutInternal => false;
 
         public override string? Name
         {
@@ -323,9 +323,9 @@ public partial class Control
             }
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
-        internal override bool CanSetNameDirectly => false;
+        internal override bool CanSetNameInternal => false;
 
         public override AccessibleObject? Parent => base.Parent;
 
@@ -446,7 +446,7 @@ public partial class Control
             return topic;
         }
 
-        internal override bool CanGetHelpTopicDirectly =>
+        internal override bool CanGetHelpTopicInternal =>
             IsInternal
             && (!this.TryGetOwnerAs(out Control? owner)
                 || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler handler);

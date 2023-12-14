@@ -41,12 +41,12 @@ public abstract partial class ToolStripItem
             }
         }
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override string? Description =>
             _ownerItem.AccessibleDescription is { } description ? description : base.Description;
 
-        internal override bool CanGetDescriptionDirectly => IsInternal && _ownerItem.AccessibleDescription is null;
+        internal override bool CanGetDescriptionInternal => IsInternal && _ownerItem.AccessibleDescription is null;
 
         public override string? Help
         {
@@ -64,7 +64,7 @@ public abstract partial class ToolStripItem
             }
         }
 
-        internal override bool CanGetHelpDirectly
+        internal override bool CanGetHelpInternal
             => IsInternal && (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent] is null;
 
         public override string KeyboardShortcut
@@ -84,7 +84,7 @@ public abstract partial class ToolStripItem
             }
         }
 
-        internal override bool CanGetKeyboardShortcutDirectly => false;
+        internal override bool CanGetKeyboardShortcutInternal => false;
 
         // We need to provide a unique ID. Others are implementing this in the same manner. First item should be UiaAppendRuntimeId
         // since this is not a top-level element of the fragment. Second item can be anything, but here it is a hash.
@@ -132,9 +132,9 @@ public abstract partial class ToolStripItem
             set => _ownerItem.AccessibleName = value;
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
-        internal override bool CanSetNameDirectly => false;
+        internal override bool CanSetNameInternal => false;
 
         internal ToolStripItem Owner => _ownerItem;
 
@@ -219,7 +219,7 @@ public abstract partial class ToolStripItem
             return base.GetHelpTopic(out fileName);
         }
 
-        internal override bool CanGetHelpTopicDirectly => IsInternal && Owner.Events[s_queryAccessibilityHelpEvent] is null;
+        internal override bool CanGetHelpTopicInternal => IsInternal && Owner.Events[s_queryAccessibilityHelpEvent] is null;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
@@ -323,7 +323,7 @@ public abstract partial class ToolStripItem
             }
         }
 
-        internal override bool CanGetParentDirectly
+        internal override bool CanGetParentInternal
         {
             get
             {
@@ -335,10 +335,10 @@ public abstract partial class ToolStripItem
                 if (Owner.IsOnDropDown)
                 {
                     ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
-                    return dropDown.AccessibilityObject.CanGetParentDirectly;
+                    return dropDown.AccessibilityObject.CanGetParentInternal;
                 }
 
-                return Owner.Parent?.AccessibilityObject.CanGetParentDirectly ?? true;
+                return Owner.Parent?.AccessibilityObject.CanGetParentInternal ?? true;
             }
         }
 

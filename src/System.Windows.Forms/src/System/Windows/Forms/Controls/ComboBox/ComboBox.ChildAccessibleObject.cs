@@ -25,6 +25,6 @@ public partial class ComboBox
 
         internal override BSTR GetNameInternal() => _owner.AccessibilityObject.GetNameInternal();
 
-        internal override bool CanGetNameDirectly => _owner.AccessibilityObject.CanGetNameDirectly;
+        internal override bool CanGetNameInternal => _owner.AccessibilityObject.CanGetNameInternal;
     }
 }

@@ -94,7 +94,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetDescriptionDirectly => false;
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
@@ -182,11 +182,11 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _calendarRowAccessibleObject;
 
-        internal override bool CanGetParentDirectly => _calendarBodyAccessibleObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _calendarBodyAccessibleObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _calendarBodyAccessibleObject.GetParentInternal();
 

@@ -359,7 +359,7 @@ public partial class ListView
             return null;
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) => false;
+        internal override bool CanHitTestInternal(int x, int y) => false;
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {

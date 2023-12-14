@@ -29,9 +29,9 @@ public partial class DomainUpDown
             set => _name = value;
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
-        internal override bool CanSetNameDirectly => false;
+        internal override bool CanSetNameInternal => false;
 
         public override AccessibleObject? Parent => null;
 
@@ -43,7 +43,7 @@ public partial class DomainUpDown
 
         public override string? Value => _name;
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
     }

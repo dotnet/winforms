@@ -39,7 +39,7 @@ public partial class ToolStripControlHost
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         /// <summary>
         ///  Performs the default action associated with this accessible object.

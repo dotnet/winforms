@@ -61,11 +61,11 @@ public partial class LinkLabel
 
             public override string DefaultAction => SR.AccessibleActionClick;
 
-            internal override bool CanGetDefaultActionDirectly => false;
+            internal override bool CanGetDefaultActionInternal => false;
 
             public override string? Description => _owningLink.Description;
 
-            internal override bool CanGetDescriptionDirectly => false;
+            internal override bool CanGetDescriptionInternal => false;
 
             public override void DoDefaultAction()
             {
@@ -124,13 +124,13 @@ public partial class LinkLabel
                 }
             }
 
-            internal override bool CanGetNameDirectly => false;
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleObject Parent => _linkLabelAccessibleObject;
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetParentDirectly => _linkLabelAccessibleObject.CanGetParentDirectly;
+            internal override bool CanGetParentInternal => _linkLabelAccessibleObject.CanGetParentInternal;
 
             internal override unsafe IDispatch* GetParentInternal() => _linkLabelAccessibleObject.GetParentInternal();
 
@@ -165,7 +165,7 @@ public partial class LinkLabel
             // Value is optional for this role (Link).
             public override string Value => string.Empty;
 
-            internal override bool CanGetValueDirectly => false;
+            internal override bool CanGetValueInternal => false;
         }
     }
 }

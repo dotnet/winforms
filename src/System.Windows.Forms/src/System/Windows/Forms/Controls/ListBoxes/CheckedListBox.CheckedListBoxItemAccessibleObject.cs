@@ -30,7 +30,7 @@ public partial class CheckedListBox
             }
         }
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {
@@ -130,6 +130,6 @@ public partial class CheckedListBox
 
         public override string Value => IsItemChecked.ToString();
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
     }
 }

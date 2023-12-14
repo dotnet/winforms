@@ -119,7 +119,7 @@ public partial class ScrollBar
             return null;
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) => false;
+        internal override bool CanHitTestInternal(int x, int y) => false;
 
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {

@@ -40,7 +40,7 @@ public partial class TrackBar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionDirectly => !this.TryGetOwnerAs(out TrackBar? owner);
+        internal override bool CanGetDefaultActionInternal => !this.TryGetOwnerAs(out TrackBar? owner);
 
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Slider);
 
@@ -123,7 +123,7 @@ public partial class TrackBar
             return null;
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) => false;
+        internal override bool CanHitTestInternal(int x, int y) => false;
 
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {

@@ -21,9 +21,9 @@ public partial class PrintPreviewControl
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly =>
+        internal override bool CanGetParentInternal =>
             this.TryGetOwnerAs(out ScrollBar? scrollBar) && scrollBar.Parent is PrintPreviewControl printPreviewControlParent
-            ? printPreviewControlParent.AccessibilityObject.CanGetParentDirectly
+            ? printPreviewControlParent.AccessibilityObject.CanGetParentInternal
             : true;
 
         internal override unsafe IDispatch* GetParentInternal() =>

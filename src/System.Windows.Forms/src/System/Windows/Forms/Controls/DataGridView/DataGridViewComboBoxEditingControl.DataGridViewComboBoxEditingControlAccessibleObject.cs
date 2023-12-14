@@ -27,7 +27,7 @@ public partial class DataGridViewComboBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
-        internal override bool CanGetParentDirectly => _parentAccessibleObject?.CanGetParentDirectly ?? true;
+        internal override bool CanGetParentInternal => _parentAccessibleObject?.CanGetParentInternal ?? true;
 
         internal override unsafe IDispatch* GetParentInternal() =>
             _parentAccessibleObject is { } parent ? parent.GetParentInternal() : null;

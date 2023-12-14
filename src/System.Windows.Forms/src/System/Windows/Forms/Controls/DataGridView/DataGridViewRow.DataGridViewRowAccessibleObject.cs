@@ -104,7 +104,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public DataGridViewRow? Owner
         {
@@ -135,10 +135,10 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetParentDirectly =>
+        internal override bool CanGetParentInternal =>
             IsInternal
             && _owningDataGridViewRow is not null
-            && (_owningDataGridViewRow.DataGridView?.AccessibilityObject.CanGetParentDirectly ?? true);
+            && (_owningDataGridViewRow.DataGridView?.AccessibilityObject.CanGetParentInternal ?? true);
 
         internal override unsafe IDispatch* GetParentInternal() =>
             _owningDataGridViewRow!.DataGridView is { } dataGridView
@@ -257,7 +257,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         public override AccessibleObject? GetChild(int index)
         {
@@ -335,7 +335,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetFocusedDirectly => false;
+        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {

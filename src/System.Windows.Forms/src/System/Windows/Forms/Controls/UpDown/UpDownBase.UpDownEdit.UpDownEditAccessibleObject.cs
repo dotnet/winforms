@@ -29,15 +29,15 @@ public abstract partial class UpDownBase
                 set => _parent.AccessibilityObject.Name = value;
             }
 
-            internal override bool CanGetNameDirectly => false;
+            internal override bool CanGetNameInternal => false;
 
-            internal override bool CanSetNameDirectly => _parent.AccessibilityObject.CanSetNameDirectly;
+            internal override bool CanSetNameInternal => _parent.AccessibilityObject.CanSetNameInternal;
 
             internal override void SetNameInternal(BSTR value) => _parent.AccessibilityObject.SetNameInternal(value);
 
             public override string? KeyboardShortcut => _parent.AccessibilityObject.KeyboardShortcut;
 
-            internal override bool CanGetKeyboardShortcutDirectly => _parent.AccessibilityObject.CanGetKeyboardShortcutDirectly;
+            internal override bool CanGetKeyboardShortcutInternal => _parent.AccessibilityObject.CanGetKeyboardShortcutInternal;
 
             internal override BSTR GetKeyboardShortcutInternal(VARIANT childID) => _parent.AccessibilityObject.GetKeyboardShortcutInternal(childID);
 

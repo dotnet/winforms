@@ -58,7 +58,7 @@ public partial class TreeNode
             }
         }
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {
@@ -120,8 +120,8 @@ public partial class TreeNode
 
         public override AccessibleObject? HitTest(int x, int y) => _owningTreeView.AccessibilityObject.HitTest(x, y);
 
-        internal override bool CanHitTestDirectly(int x, int y) =>
-            _owningTreeView.AccessibilityObject.CanHitTestDirectly(x, y);
+        internal override bool CanHitTestInternal(int x, int y) =>
+            _owningTreeView.AccessibilityObject.CanHitTestInternal(x, y);
 
         internal override VARIANT HitTestInternal(int x, int y) =>
             _owningTreeView.AccessibilityObject.HitTestInternal(x, y);
@@ -142,14 +142,14 @@ public partial class TreeNode
 
         public override string? Name => _owningTreeNode.Text;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject? Parent => _owningTreeNode.Parent?.AccessibilityObject;
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly =>
-            _owningTreeNode.Parent?.AccessibilityObject.CanGetParentDirectly ?? true;
+        internal override bool CanGetParentInternal =>
+            _owningTreeNode.Parent?.AccessibilityObject.CanGetParentInternal ?? true;
 
         internal override unsafe IDispatch* GetParentInternal() =>
             _owningTreeNode.Parent?.AccessibilityObject is { } parent ? parent.GetParentInternal() : null;
@@ -282,7 +282,7 @@ public partial class TreeNode
 
         public override string? Value => _owningTreeNode.Text;
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         #endregion
     }

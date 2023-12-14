@@ -64,10 +64,10 @@ internal partial class PropertyGridToolStrip
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetNameDirectly =>
+        internal override bool CanGetNameInternal =>
             (!this.TryGetOwnerAs(out PropertyGridToolStrip? owner) || owner.AccessibleName is null)
             && _parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
-            && target.AccessibilityObject.CanGetNameDirectly;
+            && target.AccessibilityObject.CanGetNameInternal;
 
         internal override BSTR GetNameInternal()
         {

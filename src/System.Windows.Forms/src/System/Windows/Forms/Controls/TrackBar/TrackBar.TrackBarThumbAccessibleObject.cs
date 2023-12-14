@@ -17,7 +17,7 @@ public partial class TrackBar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

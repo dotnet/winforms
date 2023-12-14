@@ -69,7 +69,7 @@ public partial class TreeView
             return Bounds.Contains(x, y) ? this : null;
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) => false;
+        internal override bool CanHitTestInternal(int x, int y) => false;
 
         public override AccessibleStates State
         {

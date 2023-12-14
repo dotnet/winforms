@@ -73,7 +73,7 @@ public partial class LinkLabel
             return Bounds.Contains(x, y) ? this : null;
         }
 
-        internal override bool CanHitTestDirectly(int x, int y) => false;
+        internal override bool CanHitTestInternal(int x, int y) => false;
 
         internal override bool IsIAccessibleExSupported() => true;
 

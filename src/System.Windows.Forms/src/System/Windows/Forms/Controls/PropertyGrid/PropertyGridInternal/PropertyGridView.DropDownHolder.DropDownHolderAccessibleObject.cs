@@ -52,7 +52,7 @@ internal partial class PropertyGridView
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetNameDirectly => false;
+            internal override bool CanGetNameInternal => false;
 
             private bool ExistsInAccessibleTree => _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;
         }

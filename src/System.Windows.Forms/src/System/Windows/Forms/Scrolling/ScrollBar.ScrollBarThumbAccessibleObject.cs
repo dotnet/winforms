@@ -18,7 +18,7 @@ public partial class ScrollBar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

@@ -49,7 +49,7 @@ public partial class ButtonBase
             ? GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
             : null;
 
-        internal override bool CanGetKeyboardShortcutDirectly => IsInternal && !this.TryGetOwnerAs(out ButtonBase? owner);
+        internal override bool CanGetKeyboardShortcutInternal => IsInternal && !this.TryGetOwnerAs(out ButtonBase? owner);
 
         internal override BSTR GetKeyboardShortcutInternal(VARIANT childID) => default;
 

@@ -50,7 +50,7 @@ public abstract partial class UpDownBase
 
                 public override string DefaultAction => SR.AccessibleActionPress;
 
-                internal override bool CanGetDefaultActionDirectly => false;
+                internal override bool CanGetDefaultActionInternal => false;
 
                 public override void DoDefaultAction()
                 {
@@ -94,7 +94,7 @@ public abstract partial class UpDownBase
                     set { }
                 }
 
-                internal override bool CanGetNameDirectly => false;
+                internal override bool CanGetNameInternal => false;
 
                 internal override void SetNameInternal(BSTR value) { }
 
@@ -102,7 +102,7 @@ public abstract partial class UpDownBase
 
                 private protected override bool IsInternal => true;
 
-                internal override bool CanGetParentDirectly => _parent.CanGetParentDirectly;
+                internal override bool CanGetParentInternal => _parent.CanGetParentInternal;
 
                 internal override unsafe IDispatch* GetParentInternal() => _parent.GetParentInternal();
 

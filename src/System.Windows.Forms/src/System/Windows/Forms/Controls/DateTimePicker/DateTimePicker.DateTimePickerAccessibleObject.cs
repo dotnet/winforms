@@ -37,13 +37,13 @@ public partial class DateTimePicker
             }
         }
 
-        internal override bool CanGetKeyboardShortcutDirectly => IsInternal && PreviousLabel is null;
+        internal override bool CanGetKeyboardShortcutInternal => IsInternal && PreviousLabel is null;
 
         // Note: returns empty string instead of null, because the date value replaces null,
         // so name is not empty in this case even if AccessibleName is not set.
         public override string Name => this.GetOwnerAccessibleName(string.Empty);
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override string Value
         {
@@ -54,7 +54,7 @@ public partial class DateTimePicker
             }
         }
 
-        internal override bool CanGetValueDirectly => false;
+        internal override bool CanGetValueInternal => false;
 
         public override AccessibleStates State
         {
@@ -104,7 +104,7 @@ public partial class DateTimePicker
                 _ => string.Empty
             };
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {

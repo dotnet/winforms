@@ -30,7 +30,7 @@ public partial class ListViewItem
 
         public override string DefaultAction => string.Empty;
 
-        internal override bool CanGetDefaultActionDirectly => false;
+        internal override bool CanGetDefaultActionInternal => false;
 
         internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningItem.ListView?.AccessibilityObject;
 
@@ -38,7 +38,7 @@ public partial class ListViewItem
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => _owningItem.AccessibilityObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _owningItem.AccessibilityObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _owningItem.AccessibilityObject.GetParentInternal();
 

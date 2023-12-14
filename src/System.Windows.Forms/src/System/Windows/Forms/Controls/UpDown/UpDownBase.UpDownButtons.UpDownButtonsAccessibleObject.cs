@@ -73,7 +73,7 @@ public abstract partial class UpDownBase
                 return null;
             }
 
-            internal override bool CanHitTestDirectly(int x, int y) => false;
+            internal override bool CanHitTestInternal(int x, int y) => false;
 
             internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
@@ -104,7 +104,7 @@ public abstract partial class UpDownBase
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetParentDirectly => Parent?.CanGetParentDirectly ?? true;
+            internal override bool CanGetParentInternal => Parent?.CanGetParentInternal ?? true;
 
             internal override unsafe IDispatch* GetParentInternal() =>
                 Parent is { } parent ? parent.GetParentInternal() : null;

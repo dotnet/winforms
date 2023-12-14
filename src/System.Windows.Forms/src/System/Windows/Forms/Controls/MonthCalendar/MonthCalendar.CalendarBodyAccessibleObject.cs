@@ -198,13 +198,13 @@ public partial class MonthCalendar
 
         public override string Name => _initName;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _calendarAccessibleObject;
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => _calendarAccessibleObject.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => _calendarAccessibleObject.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => _calendarAccessibleObject.GetParentInternal();
 

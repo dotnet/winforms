@@ -67,6 +67,6 @@ internal partial class HelpPane
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
     }
 }

@@ -40,7 +40,7 @@ public partial class ComboBox
         /// </remarks>
         public override string Name => _owner.DroppedDown ? SR.ComboboxDropDownButtonCloseName : SR.ComboboxDropDownButtonOpenName;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
 
         public override unsafe Rectangle Bounds => SystemIAccessible.TryGetLocation(GetChildId());
 

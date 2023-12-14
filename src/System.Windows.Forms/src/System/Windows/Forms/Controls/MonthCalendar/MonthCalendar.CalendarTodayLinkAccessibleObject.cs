@@ -31,7 +31,7 @@ public partial class MonthCalendar
 
         public override string Description => SR.CalendarTodayLinkAccessibleObjectDescription;
 
-        internal override bool CanGetDescriptionDirectly => false;
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
@@ -48,6 +48,6 @@ public partial class MonthCalendar
             => string.Format(SR.MonthCalendarTodayButtonAccessibleName,
             _monthCalendarAccessibleObject.TodayDate.ToShortDateString());
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
     }
 }

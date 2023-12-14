@@ -30,7 +30,7 @@ public partial class MonthCalendar
 
         public override string Description => SR.CalendarPreviousButtonAccessibleObjectDescription;
 
-        internal override bool CanGetDescriptionDirectly => false;
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override void Invoke()
         {
@@ -75,6 +75,6 @@ public partial class MonthCalendar
 
         public override string Name => SR.MonthCalendarPreviousButtonAccessibleName;
 
-        internal override bool CanGetNameDirectly => false;
+        internal override bool CanGetNameInternal => false;
     }
 }

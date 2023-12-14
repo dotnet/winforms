@@ -773,7 +773,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentDirectly => ParentResult.CanGetParentDirectly;
+        internal override bool CanGetParentInternal => ParentResult.CanGetParentInternal;
 
         internal override unsafe IDispatch* GetParentInternal() => ParentResult.GetParentInternal();
     }
