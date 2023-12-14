@@ -145,19 +145,19 @@ public class ToolStripMenuItemTests
 
     [WinFormsTheory]
     [MemberData(nameof(CultureInfo_Shortcut_TestData))]
-    public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo cultureInfo, CultureInfo cultureUIInfo, string shortCutText)
+    public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo threadCulture, CultureInfo threadUICulture, string expectedShortcutText)
     {
-        CultureInfo _uiCulture = Thread.CurrentThread.CurrentUICulture;
-        CultureInfo _curCulture = Thread.CurrentThread.CurrentCulture;
+        CultureInfo uiCulture = Thread.CurrentThread.CurrentUICulture;
+        CultureInfo curCulture = Thread.CurrentThread.CurrentCulture;
 
-        Thread.CurrentThread.CurrentUICulture = cultureUIInfo;
-        Thread.CurrentThread.CurrentCulture = cultureInfo;
+        Thread.CurrentThread.CurrentUICulture = threadUICulture;
+        Thread.CurrentThread.CurrentCulture = threadCulture;
         using SubToolStripMenuItem item = new();
         item.ShortcutKeys = Keys.Control | Keys.Shift | Keys.K;
-        Assert.Equal(item.GetShortcutText(), shortCutText);
+        Assert.Equal(expectedShortcutText, item.GetShortcutText());
 
-        Thread.CurrentThread.CurrentUICulture = _uiCulture;
-        Thread.CurrentThread.CurrentCulture = _curCulture;
+        Thread.CurrentThread.CurrentUICulture = uiCulture;
+        Thread.CurrentThread.CurrentCulture = curCulture;
     }
 
     public static IEnumerable<object[]> CultureInfo_Shortcut_TestData()
