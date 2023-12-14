@@ -81,7 +81,6 @@ public abstract partial class TextBoxBase
                 string? name = base.Name;
                 return name is not null ? name : string.Empty;
             }
-
         }
 
         internal override bool CanGetNameDirectly => false;
