@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using UIA = Windows.Win32.UI.Accessibility;
 using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
@@ -104,6 +105,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetFocused())
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.GetFocusedInternal())
+            .CallBase();
         Assert.Null(mockAccessibleObject.Object.GetFocused());
     }
 
@@ -119,6 +123,9 @@ public partial class AccessibleObjectTests
             .Returns(AccessibleStates.Focused);
         mockAccessibleObject
             .Setup(a => a.GetFocused())
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.GetFocusedInternal())
             .CallBase();
         Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.GetFocused());
     }
@@ -143,6 +150,9 @@ public partial class AccessibleObjectTests
                 .CallBase();
             mockAccessibleObject
                 .Setup(a => a.GetFocused())
+                .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.GetFocusedInternal())
                 .CallBase();
             Assert.Null(mockAccessibleObject.Object.GetFocused());
         }
@@ -181,6 +191,9 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.GetFocused())
                 .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.GetFocusedInternal())
+                .CallBase();
             Assert.Same(mockAccessibleObjectChild1.Object, mockAccessibleObject.Object.GetFocused());
         }
     }
@@ -213,6 +226,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetSelected())
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.GetSelectedInternal())
+            .CallBase();
         Assert.Null(mockAccessibleObject.Object.GetSelected());
     }
 
@@ -228,6 +244,9 @@ public partial class AccessibleObjectTests
             .Returns(AccessibleStates.Selected);
         mockAccessibleObject
             .Setup(a => a.GetSelected())
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.GetSelectedInternal())
             .CallBase();
         Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.GetSelected());
     }
@@ -252,6 +271,9 @@ public partial class AccessibleObjectTests
                 .CallBase();
             mockAccessibleObject
                 .Setup(a => a.GetSelected())
+                .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.GetSelectedInternal())
                 .CallBase();
             Assert.Null(mockAccessibleObject.Object.GetSelected());
         }
@@ -290,6 +312,9 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.GetSelected())
                 .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.GetSelectedInternal())
+                .CallBase();
             Assert.Same(mockAccessibleObjectChild1.Object, mockAccessibleObject.Object.GetSelected());
         }
     }
@@ -320,6 +345,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.HitTestInternal(x, y))
+            .CallBase();
         Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.HitTest(x, y));
     }
 
@@ -340,6 +368,9 @@ public partial class AccessibleObjectTests
             .CallBase();
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.HitTestInternal(x, y))
             .CallBase();
         Assert.Null(mockAccessibleObject.Object.HitTest(x, y));
     }
@@ -364,6 +395,9 @@ public partial class AccessibleObjectTests
                 .Returns(2);
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
+                .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.HitTestInternal(x, y))
                 .CallBase();
             Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.HitTest(x, y));
         }
@@ -401,6 +435,9 @@ public partial class AccessibleObjectTests
                 .Returns(3);
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
+                .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.HitTestInternal(x, y))
                 .CallBase();
             Assert.Same(mockAccessibleObjectChild1.Object, mockAccessibleObject.Object.HitTest(x, y));
         }
@@ -440,6 +477,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.Navigate(AccessibleNavigation.FirstChild))
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.NavigateInternal(AccessibleNavigation.FirstChild))
+            .CallBase();
         Assert.Same(result, mockAccessibleObject.Object.Navigate(AccessibleNavigation.FirstChild));
         mockAccessibleObject.Verify(a => a.GetChild(0), Times.Once());
     }
@@ -458,6 +498,9 @@ public partial class AccessibleObjectTests
             .Verifiable();
         mockAccessibleObject
             .Setup(a => a.Navigate(AccessibleNavigation.LastChild))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.NavigateInternal(AccessibleNavigation.LastChild))
             .CallBase();
         Assert.Same(result, mockAccessibleObject.Object.Navigate(AccessibleNavigation.LastChild));
         mockAccessibleObject.Verify(a => a.GetChild(childCount - 1), Times.Once());
@@ -500,6 +543,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.Navigate(navdir))
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.NavigateInternal(navdir))
+            .CallBase();
         Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
         mockAccessibleObject.Verify(a => a.Parent, Times.Once());
         mockParentAccessibleObject.Verify(a => a.GetChildCount(), Times.Once());
@@ -523,6 +569,9 @@ public partial class AccessibleObjectTests
             .Returns((AccessibleObject)null);
         mockAccessibleObject
             .Setup(a => a.Navigate(navdir))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.NavigateInternal(navdir))
             .CallBase();
 
         Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
@@ -844,6 +893,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.DoDefaultAction())
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accDoDefaultAction(varChild);
         mockAccessibleObject.Verify(a => a.DoDefaultAction(), Times.Once());
@@ -876,6 +928,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accDoDefaultAction(varChild);
@@ -904,6 +959,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accDoDefaultAction(varChild);
@@ -924,6 +982,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetFocused())
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetFocusedDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Same(result, iAccessible.accFocus);
         mockAccessibleObject.Verify(a => a.GetFocused(), Times.Once());
@@ -937,6 +998,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetFocused())
             .Returns(mockAccessibleObject.Object)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetFocusedDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accFocus);
         mockAccessibleObject.Verify(a => a.GetFocused(), Times.Once());
@@ -969,6 +1033,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.HitTestInternal(x, y))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanHitTestDirectly(x, y))
+            .Returns(true);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accHitTest(x, y));
     }
@@ -991,6 +1061,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
             .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.HitTestInternal(x, y))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanHitTestDirectly(x, y))
+            .Returns(true);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.accHitTest(x, y));
     }
@@ -1016,6 +1092,12 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
                 .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.HitTestInternal(x, y))
+                .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.CanHitTestDirectly(x, y))
+                .Returns(true);
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Equal(0, iAccessible.accHitTest(x, y));
         }
@@ -1054,6 +1136,12 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
                 .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.HitTestInternal(x, y))
+                .CallBase();
+            mockAccessibleObject
+                .Setup(a => a.CanHitTestDirectly(x, y))
+                .Returns(true);
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Same(mockAccessibleObjectChild1.Object, iAccessible.accHitTest(x, y));
         }
@@ -1068,6 +1156,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Bounds)
             .Returns(new Rectangle(1, 2, 3, 4))
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accLocation(out int pxLeft, out int pyTop, out int pcxWidth, out int pcyHeight, varChild);
         Assert.Equal(1, pxLeft);
@@ -1106,6 +1197,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accLocation(out int pxLeft, out int pyTop, out int pcxWidth, out int pcyHeight, varChild);
@@ -1138,6 +1232,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accLocation(out int pxLeft, out int pyTop, out int pcxWidth, out int pcyHeight, varChild);
@@ -1159,6 +1256,12 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Navigate((AccessibleNavigation)navDir))
             .Returns(mockAccessibleObject.Object)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanNavigateDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accNavigate(navDir, varChild));
         mockAccessibleObject.Verify(a => a.Navigate((AccessibleNavigation)navDir), Times.Once());
@@ -1193,6 +1296,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanNavigateDirectly)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.NotEqual(0, iAccessible.accNavigate(navDir, varChild));
@@ -1229,6 +1338,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
+        mockAccessibleObject
+            .Setup(a => a.CanNavigateDirectly)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accNavigate(navDir, varChild));
@@ -1257,6 +1372,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.accNavigate(navDir, varChild));
@@ -1277,6 +1395,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Parent)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetParentDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Same(result, iAccessible.accParent);
         mockAccessibleObject.Verify(a => a.Parent, Times.Once());
@@ -1292,6 +1413,9 @@ public partial class AccessibleObjectTests
                 .Setup(a => a.Parent)
                 .Returns(mockAccessibleObject.Object)
                 .Verifiable();
+            mockAccessibleObject
+                .Setup(a => a.CanGetParentDirectly)
+                .Returns(false);
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Null(iAccessible.accParent);
             mockAccessibleObject.Verify(a => a.Parent, Times.Once());
@@ -1309,6 +1433,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.Select((AccessibleSelection)flagsSelect))
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accSelect(flagsSelect, varChild);
         mockAccessibleObject.Verify(a => a.Select((AccessibleSelection)flagsSelect), Times.Once());
@@ -1341,6 +1468,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accSelect(flagsSelect, varChild);
@@ -1369,6 +1499,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.accSelect(flagsSelect, varChild);
@@ -1389,6 +1522,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetSelected())
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetSelectedDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Same(result, iAccessible.accSelection);
         mockAccessibleObject.Verify(a => a.GetSelected(), Times.Once());
@@ -1402,6 +1538,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetSelected())
             .Returns(mockAccessibleObject.Object)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetSelectedDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accSelection);
         mockAccessibleObject.Verify(a => a.GetSelected(), Times.Once());
@@ -1435,6 +1574,15 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)1))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)2))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)3))
+            .CallBase();
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accChild(1));
@@ -1465,6 +1613,9 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
+            mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Null(iAccessible.get_accChild(varChild));
@@ -1492,6 +1643,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accChild(varChild));
@@ -1517,6 +1671,12 @@ public partial class AccessibleObjectTests
             .Setup(a => a.DefaultAction)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetDefaultActionDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDefaultAction(varChild));
         mockAccessibleObject.Verify(a => a.DefaultAction, Times.Once());
@@ -1536,11 +1696,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.DefaultAction)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetDefaultActionDirectly)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.DefaultAction)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetDefaultActionDirectly)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1555,6 +1721,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDefaultAction(varChild));
@@ -1583,6 +1752,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accDefaultAction(varChild));
@@ -1608,6 +1780,12 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Description)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetDescriptionDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDescription(varChild));
         mockAccessibleObject.Verify(a => a.Description, Times.Once());
@@ -1627,11 +1805,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Description)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetDescriptionDirectly)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.Description)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetDescriptionDirectly)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1646,6 +1830,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetDescriptionDirectly)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDescription(varChild));
@@ -1674,6 +1864,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accDescription(varChild));
@@ -1699,6 +1892,12 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Help)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelp(varChild));
         mockAccessibleObject.Verify(a => a.Help, Times.Once());
@@ -1718,11 +1917,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Help)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetHelpDirectly)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.Help)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetHelpDirectly)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1737,6 +1942,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpDirectly)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelp(varChild));
@@ -1765,6 +1976,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accHelp(varChild));
@@ -1797,6 +2011,12 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetHelpTopic(out dummy))
             .Callback(handler)
             .Returns(result);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpTopicDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelpTopic(out string pszHelpFile, varChild));
         Assert.Equal(stringResult, pszHelpFile);
@@ -1821,11 +2041,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetHelpTopic(out dummy))
             .Callback(handler)
             .Returns(result);
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetHelpTopicDirectly)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.GetHelpTopic(out dummy))
             .Callback(handler)
             .Returns(result);
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetHelpTopicDirectly)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1840,6 +2066,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpTopicDirectly)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelpTopic(out string pszHelpFile, varChild));
@@ -1867,6 +2099,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(-1, iAccessible.get_accHelpTopic(out string pszHelpFile, varChild));
@@ -2105,6 +2340,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Role)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal((int)result, iAccessible.get_accRole(varChild));
         mockAccessibleObject.Verify(a => a.Role, Times.Once());
@@ -2119,7 +2357,7 @@ public partial class AccessibleObjectTests
         AccessibleObject accessibleObject = control.TestAccessor().Dynamic.NcAccessibilityObject;
 
         IAccessible iAccessible = accessibleObject;
-        Assert.Equal(AccessibleRole.Window, iAccessible.get_accRole((int)PInvoke.CHILDID_SELF));
+        Assert.Equal((int)AccessibleRole.Window, iAccessible.get_accRole((int)PInvoke.CHILDID_SELF));
         Assert.True(control.IsHandleCreated);
     }
 
@@ -2156,6 +2394,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal((int)result, iAccessible.get_accRole(varChild));
@@ -2184,6 +2425,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accRole(varChild));
@@ -2205,6 +2449,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.State)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal((int)result, iAccessible.get_accState(varChild));
         mockAccessibleObject.Verify(a => a.State, Times.Once());
@@ -2241,6 +2488,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal((int)result, iAccessible.get_accState(varChild));
@@ -2269,6 +2519,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accState(varChild));
@@ -2294,6 +2547,12 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Value)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetValueDirectly)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accValue(varChild));
         mockAccessibleObject.Verify(a => a.Value, Times.Once());
@@ -2313,11 +2572,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Value)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetValueDirectly)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.Value)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetValueDirectly)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -2332,6 +2597,12 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(VARIANT.FromObject(varChild)))
+            .CallBase();
+        mockAccessibleObject
+            .Setup(a => a.CanGetValueDirectly)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accValue(varChild));
@@ -2360,6 +2631,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID(VARIANT.FromObject(varChild)))
+            .CallBase();
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.get_accValue(varChild));
@@ -2506,6 +2780,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.set_accValue(varChild, value);
@@ -2539,6 +2816,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
+            .CallBase();
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         iAccessible.set_accValue(varChild, value);
@@ -2673,7 +2953,7 @@ public partial class AccessibleObjectTests
 
         using ComScope<UIA.IAccessible> accessible = new(null);
         HRESULT result = ((UIA.IAccessibleEx.Interface)accessibleObject).GetIAccessiblePair(accessible, &idChild);
-        using ComScope<UIA.IAccessible> expected = new((UIA.IAccessible*)Marshal.GetComInterfaceForObject<AccessibleObject, IAccessible>(accessibleObject));
+        using ComScope<UIA.IAccessible> expected = new(ComHelpers.TryGetComPointer<UIA.IAccessible>(accessibleObject));
 
         Assert.Equal(HRESULT.S_OK, result);
         Assert.Equal((nint)expected.Value, (nint)accessible.Value);
@@ -2699,6 +2979,36 @@ public partial class AccessibleObjectTests
             (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
 
         Assert.NotEmpty(accessibleObject.TestAccessor().Dynamic.RuntimeId);
+    }
+
+    [WinFormsFact]
+    public unsafe void AccessibleObject_InterfaceOrderAndAllocationValidation()
+    {
+        AccessibleObject parent = new();
+        AccessibleObjectNativeParent native = new(parent);
+        using ComScope<IUnknown> unknown = new((IUnknown*)Marshal.GetIUnknownForObject(native));
+        using ComScope<UIA.IAccessible> accessible = unknown.TryQuery<UIA.IAccessible>(out HRESULT hr);
+        using ComScope<IDispatch> dispatch = new(null);
+        using ComScope<IDispatch> dispatch2 = new(null);
+
+        // JIT can causes allocations. Call once to prep path.
+        accessible.Value->get_accParent(dispatch);
+        long allocatedBytes = GC.GetTotalAllocatedBytes();
+
+        // Failure means that either:
+        // - interface order of UIA.IAccessible and IAccessible on AccessibleObject has changed to IAccessible being first
+        // - Some re-jitting occurred
+        accessible.Value->get_accParent(dispatch2);
+        Assert.Equal(allocatedBytes, GC.GetTotalAllocatedBytes());
+    }
+
+    private class AccessibleObjectNativeParent(AccessibleObject parent) : AccessibleObject
+    {
+        private AccessibleObject _parent = parent;
+
+        internal override bool CanGetParentDirectly => true;
+
+        internal override unsafe IDispatch* GetParentInternal() => ComHelpers.TryGetComPointer<IDispatch>(_parent);
     }
 
     private class SubAccessibleObject : AccessibleObject

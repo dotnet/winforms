@@ -281,15 +281,15 @@ public unsafe partial class AccessibleObject :
     internal virtual IDispatch* GetParentInternal()
     {
         using ComScope<UIA.IAccessible> accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
-            if (result.Succeeded)
-            {
-                IDispatch* dispatch;
-                result = accessible.Value->get_accParent(&dispatch);
+        if (result.Succeeded)
+        {
+            IDispatch* dispatch;
+            result = accessible.Value->get_accParent(&dispatch);
             return dispatch;
-            }
-
-            return null;
         }
+
+        return null;
+    }
 
     /// <summary>
     ///  Determines whether the parent can be retrieved without creating excessive managed objects.
@@ -306,8 +306,7 @@ public unsafe partial class AccessibleObject :
             RuntimeTypeHandle type = GetType().TypeHandle;
             return type.Equals(typeof(AccessibleObject).TypeHandle)
                 || type.GetModuleHandle().Equals(typeof(AccessibleObject).TypeHandle.GetModuleHandle());
-    }
-    }
+        }
     }
 
     /// <summary>
@@ -331,7 +330,7 @@ public unsafe partial class AccessibleObject :
         {
             using BSTR set = new(value);
             SetValueInternal(set);
-    }
+        }
     }
 
     internal virtual bool CanGetValueDirectly => IsInternal;
@@ -1603,7 +1602,8 @@ public unsafe partial class AccessibleObject :
         return accessible.Value->accDoDefaultAction(varChild);
     }
 
-    private VARIANT ChildIdToVARIANT(object childId)
+    // internal for testing.
+    internal static VARIANT ChildIdToVARIANT(object childId)
     {
         if (childId is int integer)
         {
@@ -1625,7 +1625,6 @@ public unsafe partial class AccessibleObject :
             };
         }
 
-        Debug.Fail($"{nameof(ChildIdToVARIANT)} got {childId.GetType().Name}");
         return default;
     }
 
@@ -1745,7 +1744,7 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.accNavigate(int navDir, VARIANT varStart, VARIANT* pvarEndUpAt)
-        {
+    {
         if (pvarEndUpAt is null)
         {
             return HRESULT.E_POINTER;
@@ -1855,14 +1854,14 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accChild(VARIANT varChild, IDispatch** ppdispChild)
-        {
+    {
         if (ppdispChild is null)
         {
             return HRESULT.E_POINTER;
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 // Return self for invalid child ID
@@ -1924,26 +1923,26 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-            if (IsClientObject)
-            {
+        if (IsClientObject)
+        {
             *pcountChildren = GetChildCount();
-            }
+        }
 
         if (*pcountChildren == -1)
-            {
+        {
             using ComScope<UIA.IAccessible> accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
-                if (result.Failed)
-                {
+            if (result.Failed)
+            {
                 *pcountChildren = 0;
-                }
-                else
-                {
-                result = accessible.Value->get_accChildCount(pcountChildren);
-                }
             }
+            else
+            {
+                result = accessible.Value->get_accChildCount(pcountChildren);
+            }
+        }
 
         return HRESULT.S_OK;
-        }
+    }
 
     string? IAccessible.get_accDefaultAction(object childID)
     {
@@ -1953,14 +1952,14 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accDefaultAction(VARIANT varChild, BSTR* pszDefaultAction)
-        {
+    {
         if (pszDefaultAction is null)
         {
             return HRESULT.E_POINTER;
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 // Return the default action property on this.
@@ -1993,14 +1992,14 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accDescription(VARIANT varChild, BSTR* pszDescription)
-        {
+    {
         if (pszDescription is null)
         {
             return HRESULT.E_POINTER;
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 // Return self description property
@@ -2074,25 +2073,25 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-            if (IsClientObject)
-            {
+        if (IsClientObject)
+        {
             if (CanGetFocusedDirectly)
             {
                 *pvarChild = GetFocusedInternal();
                 return HRESULT.S_OK;
             }
 
-                AccessibleObject? obj = GetFocused();
-                if (obj is not null)
-                {
+            AccessibleObject? obj = GetFocused();
+            if (obj is not null)
+            {
                 *pvarChild = AsChildIdVariant(obj);
                 return HRESULT.S_OK;
-                }
             }
+        }
 
         *pvarChild = TryGetSystemIAccessibleFocus();
         return HRESULT.S_OK;
-        }
+    }
 
     string? IAccessible.get_accHelp(object childID)
     {
@@ -2102,14 +2101,14 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accHelp(VARIANT varChild, BSTR* pszHelp)
-        {
+    {
         if (pszHelp is null)
         {
             return HRESULT.E_POINTER;
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 *pszHelp = CanGetHelpDirectly
@@ -2143,21 +2142,21 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accHelpTopic(BSTR* pszHelpFile, VARIANT varChild, int* pidTopic)
-        {
+    {
         if (pidTopic is null || pszHelpFile is null)
         {
             return HRESULT.E_POINTER;
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 if (CanGetHelpTopicDirectly)
                 {
                     (*pidTopic, *pszHelpFile) = GetHelpTopicInternal();
                     return HRESULT.S_OK;
-            }
+                }
 
                 *pidTopic = GetHelpTopic(out string? helpFile);
                 *pszHelpFile = helpFile is null ? default : new(helpFile);
@@ -2172,12 +2171,12 @@ public unsafe partial class AccessibleObject :
                 {
                     (*pidTopic, *pszHelpFile) = child.GetHelpTopicInternal();
                     return HRESULT.S_OK;
-            }
+                }
 
                 *pidTopic = child.GetHelpTopic(out string? helpFile);
                 *pszHelpFile = helpFile is null ? default : new(helpFile);
                 return HRESULT.S_OK;
-        }
+            }
         }
 
         (*pidTopic, *pszHelpFile) = SystemIAccessible.TryGetHelpTopic(varChild);
@@ -2233,7 +2232,7 @@ public unsafe partial class AccessibleObject :
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 *pszName = CanGetNameDirectly
@@ -2257,11 +2256,11 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject && systemName.IsNullOrEmpty)
         {
-                // Name the child after its parent
+            // Name the child after its parent
             systemName = CanGetNameDirectly
                 ? GetNameInternal()
                 : Name is { } name ? new(name) : default;
-            }
+        }
 
         *pszName = systemName;
         return HRESULT.S_OK;
@@ -2290,23 +2289,23 @@ public unsafe partial class AccessibleObject :
             return HRESULT.S_OK;
         }
 
-            AccessibleObject? parent = Parent;
-            if (parent is not null)
+        AccessibleObject? parent = Parent;
+        if (parent is not null)
+        {
+            // Some debugging related tests
+            Debug.Assert(
+                parent != this,
+                "An accessible object is returning itself as its own parent. This can cause accessibility clients to stop responding.");
+            if (parent == this)
             {
-                // Some debugging related tests
-                Debug.Assert(
-                    parent != this,
-                    "An accessible object is returning itself as its own parent. This can cause accessibility clients to stop responding.");
-                if (parent == this)
-                {
-                    // This should prevent accessibility clients from stop responding
-                    parent = null;
-                }
+                // This should prevent accessibility clients from stop responding
+                parent = null;
             }
+        }
 
         *ppdispParent = GetIDispatch(parent);
         return HRESULT.S_OK;
-        }
+    }
 
     object? IAccessible.get_accRole(object childID)
     {
@@ -2316,7 +2315,7 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accRole(VARIANT varChild, VARIANT* pvarRole)
-        {
+    {
         if (pvarRole is null)
         {
             return HRESULT.E_POINTER;
@@ -2364,31 +2363,31 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-            if (IsClientObject)
-            {
+        if (IsClientObject)
+        {
             if (CanGetSelectedDirectly)
             {
                 *pvarChildren = GetSelectedInternal();
                 return HRESULT.S_OK;
             }
 
-                AccessibleObject? obj = GetSelected();
-                if (obj is not null)
-                {
+            AccessibleObject? obj = GetSelected();
+            if (obj is not null)
+            {
                 *pvarChildren = AsChildIdVariant(obj);
                 return HRESULT.S_OK;
-                }
             }
+        }
 
-            using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
-            if (result.Failed)
-            {
+        using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
+        if (result.Failed)
+        {
             *pvarChildren = default;
             return HRESULT.S_OK;
-            }
+        }
 
         return accessible.Value->get_accSelection(pvarChildren);
-        }
+    }
 
     object? IAccessible.get_accState(object childID)
     {
@@ -2398,7 +2397,7 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accState(VARIANT varChild, VARIANT* pvarState)
-        {
+    {
         if (pvarState is null)
         {
             return HRESULT.E_POINTER;
@@ -2435,14 +2434,14 @@ public unsafe partial class AccessibleObject :
     }
 
     HRESULT UIA.IAccessible.Interface.get_accValue(VARIANT varChild, BSTR* pszValue)
-        {
+    {
         if (pszValue is null)
         {
             return HRESULT.E_POINTER;
         }
 
         if (IsClientObject)
-            {
+        {
             if (IsValidSelfChildID(varChild))
             {
                 // Return self value property.
@@ -2496,11 +2495,11 @@ public unsafe partial class AccessibleObject :
                 {
                     child.SetNameInternal(szName);
                     return HRESULT.S_OK;
-            }
+                }
 
                 child.Name = szName.ToString();
                 return HRESULT.S_OK;
-        }
+            }
         }
 
         SystemIAccessible.TrySetName(varChild, szName);
@@ -2536,11 +2535,11 @@ public unsafe partial class AccessibleObject :
                 {
                     child.SetValueInternal(szValue);
                     return HRESULT.S_OK;
-            }
+                }
 
                 child.Value = szValue.ToString();
                 return HRESULT.S_OK;
-        }
+            }
         }
 
         SystemIAccessible.TrySetValue(varChild, szValue);
@@ -2706,10 +2705,10 @@ public unsafe partial class AccessibleObject :
         if (obj is null)
         {
             return VARIANT.Empty;
-    }
+        }
 
         return new VARIANT()
-    {
+        {
             vt = VARENUM.VT_DISPATCH,
             data = new() { pdispVal = GetIDispatch(obj) }
         };
