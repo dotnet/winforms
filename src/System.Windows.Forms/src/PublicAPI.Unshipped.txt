@@ -25,8 +25,10 @@ System.Windows.Forms.ListViewGroupCollection.AddRange(params System.Windows.Form
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(params string![]! items) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(params System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
 System.Windows.Forms.TabControl.TabPageCollection.AddRange(params System.Windows.Forms.TabPage![]! pages) -> void
+System.Windows.Forms.ToolStripItem.SelectedChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItemCollection.AddRange(params System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(params System.Windows.Forms.ToolStripPanelRow![]! value) -> void
 virtual System.Windows.Forms.Control.ControlCollection.AddRange(params System.Windows.Forms.Control![]! controls) -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(params System.Windows.Forms.ColumnHeader![]! values) -> void
+virtual System.Windows.Forms.ToolStripItem.OnSelectedChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.TreeNodeCollection.AddRange(params System.Windows.Forms.TreeNode![]! nodes) -> void
