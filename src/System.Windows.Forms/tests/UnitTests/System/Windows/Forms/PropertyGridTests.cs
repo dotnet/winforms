@@ -3936,6 +3936,22 @@ public partial class PropertyGridTests
         propertyGrid.Enabled = true;
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_NotifyParentChange()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/10427
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.Site = new MySite();
+        MyClass myClass = new();
+        propertyGrid.SelectedObject = myClass;
+        PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
+        GridEntry entry = propertyGridView.SelectedGridEntry;
+        var descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
+
+        descriptor.SetPropertyTextValue("123");
+        Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
+    }
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
@@ -4063,5 +4079,55 @@ public partial class PropertyGridTests
         public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
+
+    private class MyClass
+    {
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public virtual MyExpandableClass ParentGridEntry { get; set; } = new() { };
+
+        public class MyExpandableClass
+        {
+            [NotifyParentProperty(true)]
+            [TypeConverter(typeof(StringConverter))]
+            public string NestedGridEntry { get; set; }
+        }
+    }
+
+    private class MySite : ISite
+    {
+        private IComponentChangeService _componentChangeService = new ComponentChangeService();
+        public IComponent Component => null;
+        public IContainer Container => null;
+        public bool DesignMode => false;
+        public string Name { get; set; }
+
+        public object GetService(Type serviceType)
+            => serviceType == typeof(IComponentChangeService) ? _componentChangeService : null;
+
+        public class ComponentChangeService : IComponentChangeService
+        {
+#pragma warning disable CS0067 // Required by Interface
+            public event ComponentEventHandler ComponentAdded;
+            public event ComponentEventHandler ComponentAdding;
+            public event ComponentChangedEventHandler ComponentChanged;
+            public event ComponentChangingEventHandler ComponentChanging;
+            public event ComponentEventHandler ComponentRemoved;
+            public event ComponentEventHandler ComponentRemoving;
+            public event ComponentRenameEventHandler ComponentRename;
+#pragma warning restore
+
+            public void OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
+            {
+            }
+
+            public void OnComponentChanging(object component, MemberDescriptor member)
+            {
+                if (member is null)
+                    return;
+                Reflection.MemberInfo[] properties = component.GetType().GetMembers();
+                Assert.False(properties.All(p => p.Name != member.Name), "Property not found!");
+            }
+        }
     }
 }
