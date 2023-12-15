@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
 using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
@@ -18,9 +17,9 @@ namespace System.Windows.Forms;
 public abstract partial class FileDialog : CommonDialog
 {
     private const int FileBufferSize = 8192;
-    private static readonly char[] s_wildcards = new char[] { '*', '?' };
+    private static readonly char[] s_wildcards = ['*', '?'];
 
-    protected static readonly object EventFileOk = new(); // Don't rename (public API)
+    protected static readonly object EventFileOk = new();
 
     private protected OPEN_FILENAME_FLAGS _fileNameFlags;
     private protected FILEOPENDIALOGOPTIONS _dialogOptions;
@@ -164,7 +163,7 @@ public abstract partial class FileDialog : CommonDialog
     public string FileName
     {
         get => _fileNames is { } names && names.Length > 0 ? names[0] : string.Empty;
-        set => _fileNames = value is not null ? new string[] { value } : null;
+        set => _fileNames = value is not null ? [value] : null;
     }
 
     /// <summary>
@@ -176,7 +175,7 @@ public abstract partial class FileDialog : CommonDialog
     [AllowNull]
     public string[] FileNames
     {
-        get => _fileNames is not null ? (string[])_fileNames.Clone() : Array.Empty<string>();
+        get => _fileNames is not null ? (string[])_fileNames.Clone() : [];
     }
 
     /// <summary>
@@ -225,7 +224,7 @@ public abstract partial class FileDialog : CommonDialog
         get
         {
             string? filter = _filter;
-            List<string> extensions = new List<string>();
+            List<string> extensions = [];
 
             // First extension is the default one. It's not expected that DefaultExt
             // is not in the filters list, but this is legal.
@@ -257,7 +256,7 @@ public abstract partial class FileDialog : CommonDialog
                 }
             }
 
-            return extensions.ToArray();
+            return [.. extensions];
         }
     }
 
@@ -398,7 +397,7 @@ public abstract partial class FileDialog : CommonDialog
 
             _fileNames = _fileNameFlags.HasFlag(OFN_ALLOWMULTISELECT)
                 ? GetMultiselectFiles(new((char*)lpOFN->lpstrFile, (int)lpOFN->nMaxFile))
-                : new string[] { lpOFN->lpstrFile.ToString() };
+                : [lpOFN->lpstrFile.ToString()];
 
             if (!ProcessFileNames(_fileNames))
             {
@@ -460,7 +459,7 @@ public abstract partial class FileDialog : CommonDialog
         var fileNames = fileBuffer[directory.Length..];
         if (fileNames.Length == 0)
         {
-            return new string[] { directory.ToString() };
+            return [directory.ToString()];
         }
 
         List<string> names = new List<string>();
@@ -475,7 +474,7 @@ public abstract partial class FileDialog : CommonDialog
             fileName = fileNames.SliceAtFirstNull();
         }
 
-        return names.ToArray();
+        return [.. names];
     }
 
     /// <summary>
@@ -739,7 +738,6 @@ public abstract partial class FileDialog : CommonDialog
 
     private unsafe bool RunDialogOld(HWND owner)
     {
-        WNDPROC hookProc = HookProcInternal;
         _charBuffer = GC.AllocateArray<char>(FileBufferSize, pinned: true);
         FileName.CopyTo(_charBuffer);
 
@@ -765,7 +763,7 @@ public abstract partial class FileDialog : CommonDialog
                 Flags = (OPEN_FILENAME_FLAGS)Options | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING,
                 FlagsEx = OPEN_FILENAME_FLAGS_EX.OFN_EX_NONE,
                 lpstrDefExt = AddExtension ? extension : null,
-                lpfnHook = (void*)Marshal.GetFunctionPointerForDelegate(hookProc)
+                lpfnHook = HookProcFunctionPointer
             };
 
             try
@@ -775,7 +773,6 @@ public abstract partial class FileDialog : CommonDialog
             finally
             {
                 _charBuffer = null;
-                GC.KeepAlive(hookProc);
             }
         }
     }
@@ -800,8 +797,5 @@ public abstract partial class FileDialog : CommonDialog
         }
     }
 
-    /// <summary>
-    ///  Provides a string version of this Object.
-    /// </summary>
     public override string ToString() => $"{base.ToString()}: Title: {Title}, FileName: {FileName}";
 }

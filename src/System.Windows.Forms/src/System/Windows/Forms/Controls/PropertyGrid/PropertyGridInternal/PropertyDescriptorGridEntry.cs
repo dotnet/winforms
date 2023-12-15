@@ -380,8 +380,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 owner = entry.GetValueOwner();
 
-                ComponentChangeService?.OnComponentChanging(owner, propertyEntry.PropertyDescriptor);
-                ComponentChangeService?.OnComponentChanged(owner, propertyEntry.PropertyDescriptor);
+                ComponentChangeService?.OnComponentChanging(owner, entry.PropertyDescriptor);
+                ComponentChangeService?.OnComponentChanged(owner, entry.PropertyDescriptor);
 
                 // Clear the value so it paints correctly next time.
                 entry.ClearCachedValues(clearChildren: false);

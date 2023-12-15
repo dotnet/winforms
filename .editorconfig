@@ -175,7 +175,7 @@ csharp_prefer_braces = true:silent
 csharp_style_namespace_declarations = file_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_top_level_statements = true:silent
-csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_prefer_primary_constructors = true:silent
 csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_allow_embedded_statements_on_same_line_experimental = true:silent
@@ -188,6 +188,9 @@ dotnet_diagnostic.IDE0090.severity = error
 csharp_style_deconstructed_variable_declaration = true:suggestion
 
 # Visual Basic files
+
+# SYSLIB1054: Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+dotnet_diagnostic.SYSLIB1054.severity = none
 
 [*.vb]
 # Modifier preferences

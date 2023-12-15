@@ -19,12 +19,17 @@ public abstract class CommonDialog : Component
 
     private nint _priorWindowProcedure;
     private HWND _defaultControlHwnd;
+    private readonly WNDPROC _hookProc;
+    private readonly unsafe delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, nuint> _functionPointer;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="CommonDialog"/> class.
     /// </summary>
-    public CommonDialog()
+    public unsafe CommonDialog()
     {
+        // Keep the delegate in a field to avoid having it collected prematurely.
+        _hookProc = HookProcInternal;
+        _functionPointer = (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, nuint>)(void*)Marshal.GetFunctionPointerForDelegate(_hookProc);
     }
 
     [SRCategory(nameof(SR.CatData))]
@@ -36,8 +41,7 @@ public abstract class CommonDialog : Component
     public object? Tag { get; set; }
 
     /// <summary>
-    ///  Occurs when the user clicks the Help button on a common
-    ///  dialog box.
+    ///  Occurs when the user clicks the Help button on a common dialog box.
     /// </summary>
     [SRDescription(nameof(SR.CommonDialogHelpRequested))]
     public event EventHandler? HelpRequest
@@ -48,6 +52,9 @@ public abstract class CommonDialog : Component
 
     internal LRESULT HookProcInternal(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
         => (LRESULT)HookProc(hWnd, (int)msg, (nint)wparam, lparam);
+
+    private protected unsafe delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, nuint> HookProcFunctionPointer
+        => _functionPointer;
 
     /// <summary>
     ///  Defines the common dialog box hook procedure that is overridden to add specific

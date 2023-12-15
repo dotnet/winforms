@@ -106,19 +106,16 @@ public unsafe class UiaTextProviderTests
     [StaFact]
     public unsafe void UiaTextProvider_SendInput_SendsOneInput()
     {
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
         INPUT keyboardInput = new INPUT();
 
-        int actual = providerMock.Object.SendInput(1, ref keyboardInput, sizeof(INPUT));
+        int actual = UiaTextProvider.SendInput(1, ref keyboardInput, sizeof(INPUT));
         Assert.Equal(1, actual);
     }
 
     [StaFact]
     public void UiaTextProvider_SendKeyboardInputVK_SendsOneInput()
     {
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
-
-        int actual = providerMock.Object.SendKeyboardInputVK(VIRTUAL_KEY.VK_LEFT, true);
+        int actual = UiaTextProvider.SendKeyboardInputVK(VIRTUAL_KEY.VK_LEFT, true);
         Assert.Equal(1, actual);
     }
 }

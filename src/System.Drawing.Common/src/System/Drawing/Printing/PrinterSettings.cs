@@ -1,11 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
-using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -13,9 +11,9 @@ using static Interop;
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// Information about how a document should be printed, including which printer to print it on.
+///  Information about how a document should be printed, including which printer to print it on.
 /// </summary>
-public class PrinterSettings : ICloneable
+public partial class PrinterSettings : ICloneable
 {
     // All read/write data is stored in managed code, and whenever we need to call Win32,
     // we create new DEVMODE and DEVNAMES structures.  We don't store device capabilities,
@@ -26,17 +24,11 @@ public class PrinterSettings : ICloneable
 
     private string? _printerName; // default printer.
     private string _driverName = "";
-    private string _outputPort = "";
-    private bool _printToFile;
-
-    // Whether the PrintDialog has been shown (not whether it's currently shown).  This is how we enforce SafePrinting.
-    private bool _printDialogDisplayed;
-
-    private short _extrabytes;
-    private byte[]? _extrainfo;
+    private short _extraBytes;
+    private byte[]? _extraInfo;
 
     private short _copies = -1;
-    private Duplex _duplex = System.Drawing.Printing.Duplex.Default;
+    private Duplex _duplex = Duplex.Default;
     private TriState _collate = TriState.Default;
     private readonly PageSettings _defaultPageSettings;
     private int _fromPage;
@@ -45,11 +37,11 @@ public class PrinterSettings : ICloneable
     private int _minPage;
     private PrintRange _printRange;
 
-    private short _devmodebytes;
+    private short _devmodeBytes;
     private byte[]? _cachedDevmode;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='PrinterSettings'/> class.
+    ///  Initializes a new instance of the <see cref='PrinterSettings'/> class.
     /// </summary>
     public PrinterSettings()
     {
@@ -57,91 +49,58 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Gets a value indicating whether the printer supports duplex (double-sided) printing.
+    ///  Gets a value indicating whether the printer supports duplex (double-sided) printing.
     /// </summary>
-    public bool CanDuplex
-    {
-        get { return DeviceCapabilities(SafeNativeMethods.DC_DUPLEX, IntPtr.Zero, 0) == 1; }
-    }
+    public bool CanDuplex => DeviceCapabilities(SafeNativeMethods.DC_DUPLEX, IntPtr.Zero, 0) == 1;
 
     /// <summary>
-    /// Gets or sets the number of copies to print.
+    ///  Gets or sets the number of copies to print.
     /// </summary>
     public short Copies
     {
-        get
-        {
-            if (_copies != -1)
-                return _copies;
-            else
-                return GetModeField(ModeField.Copies, 1);
-        }
+        get => _copies != -1 ? _copies : GetModeField(ModeField.Copies, 1);
         set
         {
             if (value < 0)
-                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx,
-                                                         nameof(value), value.ToString(CultureInfo.CurrentCulture),
-                                                         (0).ToString(CultureInfo.CurrentCulture)));
-            /*
-                We shouldnt allow copies to be set since the copies can be a large number
-                and can be reflected in PrintDialog. So for the Copies property,
-                we prefer that for SafePrinting, copied cannot be set programmatically
-                but through the print dialog.
-                Any lower security could set copies to anything.
-            */
+            {
+                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
+            }
+
             _copies = value;
         }
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the print out is collated.
+    ///  Gets or sets a value indicating whether the print out is collated.
     /// </summary>
     public bool Collate
     {
-        get
-        {
-            if (!_collate.IsDefault)
-                return (bool)_collate;
-            else
-                return GetModeField(ModeField.Collate, SafeNativeMethods.DMCOLLATE_FALSE) == SafeNativeMethods.DMCOLLATE_TRUE;
-        }
-        set { _collate = value; }
+        get => _collate.IsDefault
+            ? GetModeField(ModeField.Collate, SafeNativeMethods.DMCOLLATE_FALSE) == SafeNativeMethods.DMCOLLATE_TRUE
+            : (bool)_collate;
+        set => _collate = value;
     }
 
     /// <summary>
-    /// Gets the default page settings for this printer.
+    ///  Gets the default page settings for this printer.
     /// </summary>
-    public PageSettings DefaultPageSettings
-    {
-        get { return _defaultPageSettings; }
-    }
+    public PageSettings DefaultPageSettings => _defaultPageSettings;
 
     // As far as I can tell, Windows no longer pays attention to driver names and output ports.
     // But I'm leaving this code in place in case I'm wrong.
-    internal string DriverName
-    {
-        get { return _driverName; }
-    }
+    internal string DriverName => _driverName;
 
     /// <summary>
-    /// Gets or sets the printer's duplex setting.
+    ///  Gets or sets the printer's duplex setting.
     /// </summary>
     public Duplex Duplex
     {
-        get
-        {
-            if (_duplex != Duplex.Default)
-            {
-                return _duplex;
-            }
-
-            return (Duplex)GetModeField(ModeField.Duplex, SafeNativeMethods.DMDUP_SIMPLEX);
-        }
+        get => _duplex != Duplex.Default ? _duplex : (Duplex)GetModeField(ModeField.Duplex, SafeNativeMethods.DMDUP_SIMPLEX);
         set
         {
-            if (value < Duplex.Default || value > Duplex.Horizontal)
+            if (value is < Duplex.Default or > Duplex.Horizontal)
             {
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(Duplex));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Duplex));
             }
 
             _duplex = value;
@@ -149,50 +108,59 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Gets or sets the first page to print.
+    ///  Gets or sets the first page to print.
     /// </summary>
     public int FromPage
     {
-        get { return _fromPage; }
+        get => _fromPage;
         set
         {
             if (value < 0)
-                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx,
-                                                         nameof(value), value.ToString(CultureInfo.CurrentCulture),
-                                                         (0).ToString(CultureInfo.CurrentCulture)));
+            {
+                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
+            }
+
             _fromPage = value;
         }
     }
 
     /// <summary>
-    /// Gets the names of all printers installed on the machine.
+    ///  Gets the names of all printers installed on the machine.
     /// </summary>
     public static unsafe StringCollection InstalledPrinters
     {
         get
         {
-            int sizeofstruct;
+            int sizeOfStruct;
+
             // Note: The call to get the size of the buffer required for level 5 does not work properly on NT platforms.
             const int Level = 4;
-            // PRINTER_INFO_4 is 12 or 24 bytes in size depending on the architecture.
-            if (IntPtr.Size == 8)
-            {
-                sizeofstruct = (IntPtr.Size * 2) + (sizeof(int) * 1) + Padding64Bit;
-            }
-            else
-            {
-                sizeofstruct = (IntPtr.Size * 2) + (sizeof(int) * 1);
-            }
 
-            int bufferSize;
-            int count;
-            Winspool.EnumPrinters(SafeNativeMethods.PRINTER_ENUM_LOCAL | SafeNativeMethods.PRINTER_ENUM_CONNECTIONS, null, Level, IntPtr.Zero, 0, out bufferSize, out _);
+            // PRINTER_INFO_4 is 12 or 24 bytes in size depending on the architecture.
+            sizeOfStruct = IntPtr.Size == 8
+                ? (IntPtr.Size * 2) + (sizeof(int) * 1) + Padding64Bit
+                : (IntPtr.Size * 2) + (sizeof(int) * 1);
+
+            Winspool.EnumPrinters(
+                SafeNativeMethods.PRINTER_ENUM_LOCAL | SafeNativeMethods.PRINTER_ENUM_CONNECTIONS,
+                null,
+                Level,
+                IntPtr.Zero,
+                0,
+                out int bufferSize,
+                out _);
 
             IntPtr buffer = Marshal.AllocCoTaskMem(bufferSize);
-            int returnCode = Winspool.EnumPrinters(SafeNativeMethods.PRINTER_ENUM_LOCAL | SafeNativeMethods.PRINTER_ENUM_CONNECTIONS,
-                                                    null, Level, buffer,
-                                                    bufferSize, out _, out count);
-            var array = new string[count];
+            int returnCode = Winspool.EnumPrinters(
+                SafeNativeMethods.PRINTER_ENUM_LOCAL | SafeNativeMethods.PRINTER_ENUM_CONNECTIONS,
+                null,
+                Level,
+                buffer,
+                bufferSize,
+                out _,
+                out int count);
+
+            string[] array = new string[count];
 
             if (returnCode == 0)
             {
@@ -204,7 +172,7 @@ public class PrinterSettings : ICloneable
             for (int i = 0; i < count; i++)
             {
                 // The printer name is at offset 0
-                IntPtr namePointer = *(IntPtr*)(pBuffer + (nint)i * sizeofstruct);
+                IntPtr namePointer = *(IntPtr*)(pBuffer + (nint)i * sizeOfStruct);
                 array[i] = Marshal.PtrToStringAuto(namePointer)!;
             }
 
@@ -215,66 +183,43 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Gets a value indicating whether the <see cref='PrinterName'/> property designates the default printer.
+    ///  Gets a value indicating whether the <see cref='PrinterName'/> property designates the default printer.
     /// </summary>
-    public bool IsDefaultPrinter
-    {
-        get
-        {
-            return (_printerName is null || _printerName == GetDefaultPrinterName());
-        }
-    }
+    public bool IsDefaultPrinter => _printerName is null || _printerName == GetDefaultPrinterName();
 
     /// <summary>
-    /// Gets a value indicating whether the printer is a plotter, as opposed to a raster printer.
+    ///  Gets a value indicating whether the printer is a plotter, as opposed to a raster printer.
     /// </summary>
-    public bool IsPlotter
-    {
-        get
-        {
-            return GetDeviceCaps(Gdi32.DeviceCapability.TECHNOLOGY) == Gdi32.DeviceTechnology.DT_PLOTTER;
-        }
-    }
+    public bool IsPlotter => GetDeviceCaps(Gdi32.DeviceCapability.TECHNOLOGY) == Gdi32.DeviceTechnology.DT_PLOTTER;
 
     /// <summary>
-    /// Gets a value indicating whether the <see cref='PrinterName'/> property designates a valid printer.
+    ///  Gets a value indicating whether the <see cref='PrinterName'/> property designates a valid printer.
     /// </summary>
-    public bool IsValid
-    {
-        get
-        {
-            return DeviceCapabilities(SafeNativeMethods.DC_COPIES, IntPtr.Zero, -1) != -1;
-        }
-    }
+    public bool IsValid => DeviceCapabilities(SafeNativeMethods.DC_COPIES, IntPtr.Zero, -1) != -1;
 
     /// <summary>
-    /// Gets the angle, in degrees, which the portrait orientation is rotated to produce the landscape orientation.
+    ///  Gets the angle, in degrees, which the portrait orientation is rotated to produce the landscape orientation.
     /// </summary>
-    public int LandscapeAngle
-    {
-        get { return DeviceCapabilities(SafeNativeMethods.DC_ORIENTATION, IntPtr.Zero, 0); }
-    }
+    public int LandscapeAngle => DeviceCapabilities(SafeNativeMethods.DC_ORIENTATION, IntPtr.Zero, 0);
 
     /// <summary>
-    /// Gets the maximum number of copies allowed by the printer.
+    ///  Gets the maximum number of copies allowed by the printer.
     /// </summary>
-    public int MaximumCopies
-    {
-        get { return DeviceCapabilities(SafeNativeMethods.DC_COPIES, IntPtr.Zero, 1); }
-    }
+    public int MaximumCopies => DeviceCapabilities(SafeNativeMethods.DC_COPIES, IntPtr.Zero, 1);
 
     /// <summary>
-    /// Gets or sets the highest <see cref='FromPage'/> or <see cref='ToPage'/> which may be selected in a print dialog box.
+    ///  Gets or sets the highest <see cref='FromPage'/> or <see cref='ToPage'/> which may be selected in a print dialog box.
     /// </summary>
     public int MaximumPage
     {
-        get { return _maxPage; }
+        get => _maxPage;
         set
         {
             if (value < 0)
-                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx,
-                                                         nameof(value), value.ToString(CultureInfo.CurrentCulture),
-                                                         (0).ToString(CultureInfo.CurrentCulture)));
+            {
+                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
+            }
+
             _maxPage = value;
         }
     }
@@ -284,39 +229,26 @@ public class PrinterSettings : ICloneable
     /// </summary>
     public int MinimumPage
     {
-        get { return _minPage; }
+        get => _minPage;
         set
         {
             if (value < 0)
-                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx,
-                                                         nameof(value), value.ToString(CultureInfo.CurrentCulture),
-                                                         (0).ToString(CultureInfo.CurrentCulture)));
+            {
+                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
+            }
+
             _minPage = value;
         }
     }
 
-    internal string OutputPort
-    {
-        get
-        {
-            return _outputPort;
-        }
-        set
-        {
-            _outputPort = value;
-        }
-    }
+    internal string OutputPort { get; set; } = "";
 
     /// <summary>
-    /// Indicates the name of the printerfile.
+    ///  Indicates the name of the printer file.
     /// </summary>
     public string PrintFileName
     {
-        get
-        {
-            string printFileName = OutputPort;
-            return printFileName;
-        }
+        get => OutputPort;
         set
         {
             if (string.IsNullOrEmpty(value))
@@ -329,181 +261,115 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Gets the paper sizes supported by this printer.
+    ///  Gets the paper sizes supported by this printer.
     /// </summary>
-    public PaperSizeCollection PaperSizes
-    {
-        get { return new PaperSizeCollection(Get_PaperSizes()); }
-    }
+    public PaperSizeCollection PaperSizes => new(Get_PaperSizes());
 
     /// <summary>
-    /// Gets the paper sources available on this printer.
+    ///  Gets the paper sources available on this printer.
     /// </summary>
-    public PaperSourceCollection PaperSources
-    {
-        get { return new PaperSourceCollection(Get_PaperSources()); }
-    }
+    public PaperSourceCollection PaperSources => new(Get_PaperSources());
 
     /// <summary>
-    /// Whether the print dialog has been displayed.  In SafePrinting mode, a print dialog is required to print.
-    /// After printing, this property is set to false if the program does not have AllPrinting; this guarantees
-    /// a document is only printed once each time the print dialog is shown.
+    ///  Whether the print dialog has been displayed.  In SafePrinting mode, a print dialog is required to print.
+    ///  After printing, this property is set to false if the program does not have AllPrinting; this guarantees
+    ///  a document is only printed once each time the print dialog is shown.
     /// </summary>
-    internal bool PrintDialogDisplayed
-    {
-        get
-        {
-            return _printDialogDisplayed;
-        }
-
-        set
-        {
-            _printDialogDisplayed = value;
-        }
-    }
+    internal bool PrintDialogDisplayed { get; set; }
 
     /// <summary>
-    /// Gets or sets the pages the user has asked to print.
+    ///  Gets or sets the pages the user has asked to print.
     /// </summary>
     public PrintRange PrintRange
     {
-        get { return _printRange; }
+        get => _printRange;
         set
         {
             if (!Enum.IsDefined(value))
+            {
                 throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(PrintRange));
+            }
 
             _printRange = value;
         }
     }
 
     /// <summary>
-    /// Indicates whether to print to a file instead of a port.
+    ///  Indicates whether to print to a file instead of a port.
     /// </summary>
-    public bool PrintToFile
-    {
-        get
-        {
-            return _printToFile;
-        }
-        set
-        {
-            _printToFile = value;
-        }
-    }
+    public bool PrintToFile { get; set; }
 
     /// <summary>
-    /// Gets or sets the name of the printer.
+    ///  Gets or sets the name of the printer.
     /// </summary>
     public string PrinterName
     {
-        get
-        {
-            return PrinterNameInternal;
-        }
-
-        set
-        {
-            PrinterNameInternal = value;
-        }
+        get => PrinterNameInternal;
+        set => PrinterNameInternal = value;
     }
 
     private string PrinterNameInternal
     {
-        get
-        {
-            if (_printerName is null)
-                return GetDefaultPrinterName();
-            else
-                return _printerName;
-        }
+        get => _printerName ?? GetDefaultPrinterName();
         set
         {
-            // Reset the DevMode and Extrabytes...
+            // Reset the DevMode and extra bytes.
             _cachedDevmode = null;
-            _extrainfo = null;
+            _extraInfo = null;
             _printerName = value;
-            // PrinterName can be set through a fulltrusted assembly without using  the PrintDialog.
-            // So dont set this variable here.
-            // PrintDialogDisplayed = true;
         }
     }
 
     /// <summary>
-    /// Gets the resolutions supported by this printer.
+    ///  Gets the resolutions supported by this printer.
     /// </summary>
-    public PrinterResolutionCollection PrinterResolutions
-    {
-        get { return new PrinterResolutionCollection(Get_PrinterResolutions()); }
-    }
+    public PrinterResolutionCollection PrinterResolutions => new(Get_PrinterResolutions());
 
     /// <summary>
-    /// If the image is a JPEG or a PNG (Image.RawFormat) and the printer returns true from
-    /// ExtEscape(CHECKJPEGFORMAT) or ExtEscape(CHECKPNGFORMAT) then this function returns true.
+    ///  If the image is a JPEG or a PNG (Image.RawFormat) and the printer returns true from
+    ///  ExtEscape(CHECKJPEGFORMAT) or ExtEscape(CHECKPNGFORMAT) then this function returns true.
     /// </summary>
     public bool IsDirectPrintingSupported(ImageFormat imageFormat)
     {
-        bool isDirectPrintingSupported = false;
         if (imageFormat.Equals(ImageFormat.Jpeg) || imageFormat.Equals(ImageFormat.Png))
         {
             int nEscape = imageFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
-            int outData;
-            DeviceContext dc = CreateInformationContext(DefaultPageSettings);
+
+            using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
             HandleRef hdc = new HandleRef(dc, dc.Hdc);
-            try
-            {
-                isDirectPrintingSupported = Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out outData) > 0;
-            }
-            finally
-            {
-                dc.Dispose();
-            }
+            return Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out int outData) > 0;
         }
 
-        return isDirectPrintingSupported;
+        return false;
     }
 
     /// <summary>
-    /// This method utilizes the CHECKJPEGFORMAT/CHECKPNGFORMAT printer escape functions
-    /// to determine whether the printer can handle a JPEG image.
+    ///  This method utilizes the CHECKJPEGFORMAT/CHECKPNGFORMAT printer escape functions
+    ///  to determine whether the printer can handle a JPEG image.
     ///
-    /// If the image is a JPEG or a PNG (Image.RawFormat) and the printer returns true
-    /// from ExtEscape(CHECKJPEGFORMAT) or ExtEscape(CHECKPNGFORMAT) then this function returns true.
+    ///  If the image is a JPEG or a PNG (Image.RawFormat) and the printer returns true
+    ///  from ExtEscape(CHECKJPEGFORMAT) or ExtEscape(CHECKPNGFORMAT) then this function returns true.
     /// </summary>
     public bool IsDirectPrintingSupported(Image image)
     {
         bool isDirectPrintingSupported = false;
         if (image.RawFormat.Equals(ImageFormat.Jpeg) || image.RawFormat.Equals(ImageFormat.Png))
         {
-            MemoryStream stream = new MemoryStream();
-            try
+            using MemoryStream stream = new();
+            image.Save(stream, image.RawFormat);
+
+            byte[] pvImage = stream.ToArray();
+
+            int nEscape = image.RawFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
+
+            using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
+            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            bool querySupported = Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out int outData) > 0;
+            if (querySupported)
             {
-                image.Save(stream, image.RawFormat);
-
-                byte[] pvImage = stream.ToArray();
-
-                int nEscape = image.RawFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
-                int outData = 0;
-
-                DeviceContext dc = CreateInformationContext(DefaultPageSettings);
-                HandleRef hdc = new HandleRef(dc, dc.Hdc);
-                try
-                {
-                    bool querySupported = Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out outData) > 0;
-                    if (querySupported)
-                    {
-                        isDirectPrintingSupported = (Gdi32.ExtEscape(hdc, nEscape, pvImage.Length, pvImage, sizeof(int), out outData) > 0)
-                                                    && (outData == 1);
-                    }
-                }
-                finally
-                {
-                    dc.Dispose();
-                }
-            }
-            finally
-            {
-                stream.Close();
+                isDirectPrintingSupported =
+                    Gdi32.ExtEscape(hdc, nEscape, pvImage.Length, pvImage, sizeof(int), out outData) > 0
+                    && (outData == 1);
             }
         }
 
@@ -511,48 +377,40 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Gets a value indicating whether the printer supports color printing.
+    ///  Gets a value indicating whether the printer supports color printing.
     /// </summary>
-    public bool SupportsColor
-    {
-        get
-        {
-            // If the printer supports color printing, the return value is 1; otherwise, the return value is zero.
-            // The pointerToBuffer parameter is not used.
-            return DeviceCapabilities(
-                capability: SafeNativeMethods.DC_COLORDEVICE,
-                pointerToBuffer: IntPtr.Zero,
-                defaultValue: 0) == 1;
-        }
-    }
+    public bool SupportsColor => DeviceCapabilities(
+        capability: SafeNativeMethods.DC_COLORDEVICE,
+        pointerToBuffer: IntPtr.Zero,
+        defaultValue: 0) == 1;
 
     /// <summary>
-    /// Gets or sets the last page to print.
+    ///  Gets or sets the last page to print.
     /// </summary>
     public int ToPage
     {
-        get { return _toPage; }
+        get => _toPage;
         set
         {
             if (value < 0)
-                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx,
-                                                         nameof(value), value.ToString(CultureInfo.CurrentCulture),
-                                                         (0).ToString(CultureInfo.CurrentCulture)));
+            {
+                throw new ArgumentException(SR.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
+            }
+
             _toPage = value;
         }
     }
 
     /// <summary>
-    /// Creates an identical copy of this object.
+    ///  Creates an identical copy of this object.
     /// </summary>
     public object Clone()
     {
         PrinterSettings clone = (PrinterSettings)MemberwiseClone();
-        clone._printDialogDisplayed = false;
+        clone.PrintDialogDisplayed = false;
         return clone;
     }
 
-    // what is done in copytohdevmode cannot give unwanted access AllPrinting permission
     internal DeviceContext CreateDeviceContext(PageSettings pageSettings)
     {
         IntPtr modeHandle = GetHdevmodeInternal();
@@ -560,7 +418,7 @@ public class PrinterSettings : ICloneable
 
         try
         {
-            // Copy the PageSettings to the DEVMODE...
+            // Copy the PageSettings to the DEVMODE.
             pageSettings.CopyToHdevmode(modeHandle);
             dc = CreateDeviceContext(modeHandle);
         }
@@ -575,13 +433,12 @@ public class PrinterSettings : ICloneable
     internal DeviceContext CreateDeviceContext(IntPtr hdevmode)
     {
         IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        DeviceContext dc = DeviceContext.CreateDC(DriverName, PrinterNameInternal, fileName:null, modePointer);
+        DeviceContext dc = DeviceContext.CreateDC(DriverName, PrinterNameInternal, fileName: null, modePointer);
         Kernel32.GlobalUnlock(hdevmode);
         return dc;
     }
 
     // A read-only DC, which is faster than CreateHdc
-    // what is done in copytohdevmode cannot give unwanted access AllPrinting permission
     internal DeviceContext CreateInformationContext(PageSettings pageSettings)
     {
         IntPtr modeHandle = GetHdevmodeInternal();
@@ -589,7 +446,7 @@ public class PrinterSettings : ICloneable
 
         try
         {
-            // Copy the PageSettings to the DEVMODE...
+            // Copy the PageSettings to the DEVMODE.
             pageSettings.CopyToHdevmode(modeHandle);
             dc = CreateInformationContext(modeHandle);
         }
@@ -605,15 +462,12 @@ public class PrinterSettings : ICloneable
     internal DeviceContext CreateInformationContext(IntPtr hdevmode)
     {
         IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        DeviceContext dc = DeviceContext.CreateIC(DriverName, PrinterNameInternal, fileName:null, modePointer);
+        DeviceContext dc = DeviceContext.CreateIC(DriverName, PrinterNameInternal, fileName: null, modePointer);
         Kernel32.GlobalUnlock(hdevmode);
         return dc;
     }
 
-    public Graphics CreateMeasurementGraphics()
-    {
-        return CreateMeasurementGraphics(DefaultPageSettings);
-    }
+    public Graphics CreateMeasurementGraphics() => CreateMeasurementGraphics(DefaultPageSettings);
 
     // whatever the call stack calling HardMarginX and HardMarginY here is safe
     public Graphics CreateMeasurementGraphics(bool honorOriginAtMargins)
@@ -687,11 +541,14 @@ public class PrinterSettings : ICloneable
     // We need to pass IntPtr.Zero since passing HDevMode is non-performant.
     private static int FastDeviceCapabilities(short capability, IntPtr pointerToBuffer, int defaultValue, string printerName)
     {
-        int result = Winspool.DeviceCapabilities(printerName, GetOutputPort(),
-                                                      capability, pointerToBuffer, IntPtr.Zero);
-        if (result == -1)
-            return defaultValue;
-        return result;
+        int result = Winspool.DeviceCapabilities(
+            printerName,
+            GetOutputPort(),
+            capability,
+            pointerToBuffer,
+            IntPtr.Zero);
+
+        return result == -1 ? defaultValue : result;
     }
 
     // Called by get_PrinterName
@@ -704,12 +561,16 @@ public class PrinterSettings : ICloneable
             bool status = Comdlg32.PrintDlg(ref data);
 
             if (!status)
+            {
                 return SR.NoDefaultPrinter;
+            }
 
             IntPtr handle = data.hDevNames;
             IntPtr names = Kernel32.GlobalLock(handle);
             if (names == IntPtr.Zero)
+            {
                 throw new Win32Exception();
+            }
 
             string name = ReadOneDEVNAME(names, 1);
             Kernel32.GlobalUnlock(handle);
@@ -727,12 +588,16 @@ public class PrinterSettings : ICloneable
             bool status = Comdlg32.PrintDlg(ref data);
 
             if (!status)
+            {
                 return SR.NoDefaultPrinter;
+            }
 
             IntPtr handle = data.hDevNames;
             IntPtr names = Kernel32.GlobalLock(handle);
             if (names == IntPtr.Zero)
+            {
                 throw new Win32Exception();
+            }
 
             string name = ReadOneDEVNAME(names, 1);
             Kernel32.GlobalUnlock(handle);
@@ -778,12 +643,16 @@ public class PrinterSettings : ICloneable
             bool status = Comdlg32.PrintDlg(ref data);
 
             if (!status)
+            {
                 return SR.NoDefaultPrinter;
+            }
 
             IntPtr handle = data.hDevNames;
             IntPtr names = Kernel32.GlobalLock(handle);
             if (names == IntPtr.Zero)
+            {
                 throw new Win32Exception();
+            }
 
             string name = ReadOneDEVNAME(names, 2);
 
@@ -804,10 +673,10 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Creates a handle to a DEVMODE structure which correspond too the printer settings.When you are done with the
-    /// handle, you must deallocate it yourself:
-    ///   Kernel32.GlobalFree(handle);
-    ///   Where "handle" is the return value from this method.
+    ///  Creates a handle to a DEVMODE structure which correspond too the printer settings.When you are done with the
+    ///  handle, you must deallocate it yourself:
+    ///    Kernel32.GlobalFree(handle);
+    ///    Where "handle" is the return value from this method.
     /// </summary>
     public IntPtr GetHdevmode()
     {
@@ -826,7 +695,14 @@ public class PrinterSettings : ICloneable
     private unsafe IntPtr GetHdevmodeInternal(string printer)
     {
         // Create DEVMODE
-        int modeSize = Winspool.DocumentProperties(NativeMethods.NullHandleRef, NativeMethods.NullHandleRef, printer, IntPtr.Zero, NativeMethods.NullHandleRef, 0);
+        int modeSize = Winspool.DocumentProperties(
+            NativeMethods.NullHandleRef,
+            NativeMethods.NullHandleRef,
+            printer,
+            IntPtr.Zero,
+            NativeMethods.NullHandleRef,
+            0);
+
         if (modeSize < 1)
         {
             throw new InvalidPrinterException(this);
@@ -835,14 +711,21 @@ public class PrinterSettings : ICloneable
         IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
         IntPtr pointer = Kernel32.GlobalLock(handle);
 
-        // Get the DevMode only if its not cached....
+        // Get the DevMode only if its not cached.
         if (_cachedDevmode is not null)
         {
-            Marshal.Copy(_cachedDevmode, 0, pointer, _devmodebytes);
+            Marshal.Copy(_cachedDevmode, 0, pointer, _devmodeBytes);
         }
         else
         {
-            int returnCode = Winspool.DocumentProperties(NativeMethods.NullHandleRef, NativeMethods.NullHandleRef, printer, pointer, NativeMethods.NullHandleRef, SafeNativeMethods.DM_OUT_BUFFER);
+            int returnCode = Winspool.DocumentProperties(
+                NativeMethods.NullHandleRef,
+                NativeMethods.NullHandleRef,
+                printer,
+                pointer,
+                NativeMethods.NullHandleRef,
+                SafeNativeMethods.DM_OUT_BUFFER);
+
             if (returnCode < 0)
             {
                 throw new Win32Exception();
@@ -851,38 +734,42 @@ public class PrinterSettings : ICloneable
 
         Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
 
-        if (_extrainfo is not null)
+        if (_extraInfo is not null)
         {
-            // guard against buffer overrun attacks (since design allows client to set a new printer name without updating the devmode)
-            // by checking for a large enough buffer size before copying the extrainfo buffer
-            if (_extrabytes <= mode.dmDriverExtra)
+            // Guard against buffer overrun attacks (since design allows client to set a new printer name without
+            // updating the devmode)/ by checking for a large enough buffer size before copying the extra info buffer.
+            if (_extraBytes <= mode.dmDriverExtra)
             {
-                IntPtr pointeroffset = (IntPtr)((byte*)pointer + mode.dmSize);
-                Marshal.Copy(_extrainfo, 0, pointeroffset, _extrabytes);
+                IntPtr pointerOffset = (IntPtr)((byte*)pointer + mode.dmSize);
+                Marshal.Copy(_extraInfo, 0, pointerOffset, _extraBytes);
             }
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES)
+        if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES && _copies != -1)
         {
-            if (_copies != -1)
-                mode.dmCopies = _copies;
+            mode.dmCopies = _copies;
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_DUPLEX) == SafeNativeMethods.DM_DUPLEX)
+        if ((mode.dmFields & SafeNativeMethods.DM_DUPLEX) == SafeNativeMethods.DM_DUPLEX && unchecked((int)_duplex) != -1)
         {
-            if (unchecked((int)_duplex) != -1)
-                mode.dmDuplex = unchecked((short)_duplex);
+            mode.dmDuplex = unchecked((short)_duplex);
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COLLATE) == SafeNativeMethods.DM_COLLATE)
+        if ((mode.dmFields & SafeNativeMethods.DM_COLLATE) == SafeNativeMethods.DM_COLLATE && _collate.IsNotDefault)
         {
-            if (_collate.IsNotDefault)
-                mode.dmCollate = (short)(((bool)_collate) ? SafeNativeMethods.DMCOLLATE_TRUE : SafeNativeMethods.DMCOLLATE_FALSE);
+            mode.dmCollate = (short)(((bool)_collate) ? SafeNativeMethods.DMCOLLATE_TRUE : SafeNativeMethods.DMCOLLATE_FALSE);
         }
 
         Marshal.StructureToPtr(mode, pointer, false);
 
-        int retCode = Winspool.DocumentProperties(NativeMethods.NullHandleRef, NativeMethods.NullHandleRef, printer, pointer, pointer, SafeNativeMethods.DM_IN_BUFFER | SafeNativeMethods.DM_OUT_BUFFER);
+        int retCode = Winspool.DocumentProperties(
+            NativeMethods.NullHandleRef,
+            NativeMethods.NullHandleRef,
+            printer,
+            pointer,
+            pointer,
+            SafeNativeMethods.DM_IN_BUFFER | SafeNativeMethods.DM_OUT_BUFFER);
+
         if (retCode < 0)
         {
             Kernel32.GlobalFree(handle);
@@ -895,10 +782,10 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Creates a handle to a DEVMODE structure which correspond to the printer and page settings.
-    /// When you are done with the handle, you must deallocate it yourself:
-    ///   Kernel32.GlobalFree(handle);
-    ///   Where "handle" is the return value from this method.
+    ///  Creates a handle to a DEVMODE structure which correspond to the printer and page settings.
+    ///  When you are done with the handle, you must deallocate it yourself:
+    ///    Kernel32.GlobalFree(handle);
+    ///    Where "handle" is the return value from this method.
     /// </summary>
     public IntPtr GetHdevmode(PageSettings pageSettings)
     {
@@ -909,10 +796,10 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Creates a handle to a DEVNAMES structure which correspond to the printer settings.
-    /// When you are done with the handle, you must deallocate it yourself:
-    ///   Kernel32.GlobalFree(handle);
-    ///   Where "handle" is the return value from this method.
+    ///  Creates a handle to a DEVNAMES structure which correspond to the printer settings.
+    ///  When you are done with the handle, you must deallocate it yourself:
+    ///    Kernel32.GlobalFree(handle);
+    ///    Where "handle" is the return value from this method.
     /// </summary>
     public unsafe IntPtr GetHdevnames()
     {
@@ -944,10 +831,7 @@ public class PrinterSettings : ICloneable
     }
 
     // Handles creating then disposing a default DEVMODE
-    internal short GetModeField(ModeField field, short defaultValue)
-    {
-        return GetModeField(field, defaultValue, IntPtr.Zero);
-    }
+    internal short GetModeField(ModeField field, short defaultValue) => GetModeField(field, defaultValue, IntPtr.Zero);
 
     internal short GetModeField(ModeField field, short defaultValue, IntPtr modeHandle)
     {
@@ -1033,18 +917,25 @@ public class PrinterSettings : ICloneable
 
         int count = FastDeviceCapabilities(SafeNativeMethods.DC_PAPERNAMES, IntPtr.Zero, -1, printerName);
         if (count == -1)
-            return Array.Empty<PaperSize>();
+        {
+            return [];
+        }
+
         int stringSize = Marshal.SystemDefaultCharSize * 64;
         IntPtr namesBuffer = Marshal.AllocCoTaskMem(checked(stringSize * count));
         FastDeviceCapabilities(SafeNativeMethods.DC_PAPERNAMES, namesBuffer, -1, printerName);
 
-        Debug.Assert(FastDeviceCapabilities(SafeNativeMethods.DC_PAPERS, IntPtr.Zero, -1, printerName) == count,
-                     "Not the same number of paper kinds as paper names?");
+        Debug.Assert(
+            FastDeviceCapabilities(SafeNativeMethods.DC_PAPERS, IntPtr.Zero, -1, printerName) == count,
+            "Not the same number of paper kinds as paper names?");
+
         IntPtr kindsBuffer = Marshal.AllocCoTaskMem(2 * count);
         FastDeviceCapabilities(SafeNativeMethods.DC_PAPERS, kindsBuffer, -1, printerName);
 
-        Debug.Assert(FastDeviceCapabilities(SafeNativeMethods.DC_PAPERSIZE, IntPtr.Zero, -1, printerName) == count,
-                     "Not the same number of paper kinds as paper names?");
+        Debug.Assert(
+            FastDeviceCapabilities(SafeNativeMethods.DC_PAPERSIZE, IntPtr.Zero, -1, printerName) == count,
+            "Not the same number of paper kinds as paper names?");
+
         IntPtr dimensionsBuffer = Marshal.AllocCoTaskMem(8 * count);
         FastDeviceCapabilities(SafeNativeMethods.DC_PAPERSIZE, dimensionsBuffer, -1, printerName);
 
@@ -1058,15 +949,17 @@ public class PrinterSettings : ICloneable
             int index = name.IndexOf('\0');
             if (index > -1)
             {
-                name = name.Substring(0, index);
+                name = name[..index];
             }
 
             short kind = pKindsBuffer[i];
             int width = pDimensionsBuffer[i * 2];
             int height = pDimensionsBuffer[i * 2 + 1];
-            result[i] = new PaperSize((PaperKind)kind, name,
-                                      PrinterUnitConvert.Convert(width, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
-                                      PrinterUnitConvert.Convert(height, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
+            result[i] = new PaperSize(
+                (PaperKind)kind,
+                name,
+                PrinterUnitConvert.Convert(width, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
+                PrinterUnitConvert.Convert(height, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
         }
 
         Marshal.FreeCoTaskMem(namesBuffer);
@@ -1081,7 +974,9 @@ public class PrinterSettings : ICloneable
 
         int count = FastDeviceCapabilities(SafeNativeMethods.DC_BINNAMES, IntPtr.Zero, -1, printerName);
         if (count == -1)
-            return Array.Empty<PaperSource>();
+        {
+            return [];
+        }
 
         // Contrary to documentation, DeviceCapabilities returns char[count, 24],
         // not char[count][24]
@@ -1089,8 +984,10 @@ public class PrinterSettings : ICloneable
         IntPtr namesBuffer = Marshal.AllocCoTaskMem(checked(stringSize * count));
         FastDeviceCapabilities(SafeNativeMethods.DC_BINNAMES, namesBuffer, -1, printerName);
 
-        Debug.Assert(FastDeviceCapabilities(SafeNativeMethods.DC_BINS, IntPtr.Zero, -1, printerName) == count,
-                     "Not the same number of bin kinds as bin names?");
+        Debug.Assert(
+            FastDeviceCapabilities(SafeNativeMethods.DC_BINS, IntPtr.Zero, -1, printerName) == count,
+            "Not the same number of bin kinds as bin names?");
+
         IntPtr kindsBuffer = Marshal.AllocCoTaskMem(2 * count);
         FastDeviceCapabilities(SafeNativeMethods.DC_BINS, kindsBuffer, -1, printerName);
 
@@ -1103,7 +1000,7 @@ public class PrinterSettings : ICloneable
             int index = name.IndexOf('\0');
             if (index > -1)
             {
-                name = name.Substring(0, index);
+                name = name[..index];
             }
 
             short kind = pKindsBuffer[i];
@@ -1123,21 +1020,23 @@ public class PrinterSettings : ICloneable
         int count = FastDeviceCapabilities(SafeNativeMethods.DC_ENUMRESOLUTIONS, IntPtr.Zero, -1, printerName);
         if (count == -1)
         {
-            // Just return the standard values if custom resolutions are absent ....
-            result = new PrinterResolution[4];
-            result[0] = new PrinterResolution(PrinterResolutionKind.High, -4, -1);
-            result[1] = new PrinterResolution(PrinterResolutionKind.Medium, -3, -1);
-            result[2] = new PrinterResolution(PrinterResolutionKind.Low, -2, -1);
-            result[3] = new PrinterResolution(PrinterResolutionKind.Draft, -1, -1);
+            // Just return the standard values if custom resolutions are absent.
+            result =
+            [
+                new(PrinterResolutionKind.High, -4, -1),
+                new(PrinterResolutionKind.Medium, -3, -1),
+                new(PrinterResolutionKind.Low, -2, -1),
+                new(PrinterResolutionKind.Draft, -1, -1),
+            ];
 
             return result;
         }
 
         result = new PrinterResolution[count + 4];
-        result[0] = new PrinterResolution(PrinterResolutionKind.High, -4, -1);
-        result[1] = new PrinterResolution(PrinterResolutionKind.Medium, -3, -1);
-        result[2] = new PrinterResolution(PrinterResolutionKind.Low, -2, -1);
-        result[3] = new PrinterResolution(PrinterResolutionKind.Draft, -1, -1);
+        result[0] = new(PrinterResolutionKind.High, -4, -1);
+        result[1] = new(PrinterResolutionKind.Medium, -3, -1);
+        result[2] = new(PrinterResolutionKind.Low, -2, -1);
+        result[3] = new(PrinterResolutionKind.Draft, -1, -1);
 
         IntPtr buffer = Marshal.AllocCoTaskMem(checked(8 * count));
         FastDeviceCapabilities(SafeNativeMethods.DC_ENUMRESOLUTIONS, buffer, -1, printerName);
@@ -1164,7 +1063,7 @@ public class PrinterSettings : ICloneable
     }
 
     /// <summary>
-    /// Copies the relevant information out of the handle and into the PrinterSettings.
+    ///  Copies the relevant information out of the handle and into the PrinterSettings.
     /// </summary>
     public unsafe void SetHdevmode(IntPtr hdevmode)
     {
@@ -1175,19 +1074,19 @@ public class PrinterSettings : ICloneable
         Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
 
         // Copy entire public devmode as a byte array...
-        _devmodebytes = mode.dmSize;
-        if (_devmodebytes > 0)
+        _devmodeBytes = mode.dmSize;
+        if (_devmodeBytes > 0)
         {
-            _cachedDevmode = new byte[_devmodebytes];
-            Marshal.Copy(pointer, _cachedDevmode, 0, _devmodebytes);
+            _cachedDevmode = new byte[_devmodeBytes];
+            Marshal.Copy(pointer, _cachedDevmode, 0, _devmodeBytes);
         }
 
         // Copy private devmode as a byte array..
-        _extrabytes = mode.dmDriverExtra;
-        if (_extrabytes > 0)
+        _extraBytes = mode.dmDriverExtra;
+        if (_extraBytes > 0)
         {
-            _extrainfo = new byte[_extrabytes];
-            Marshal.Copy((nint)((byte*)pointer + mode.dmSize), _extrainfo, 0, _extrabytes);
+            _extraInfo = new byte[_extraBytes];
+            Marshal.Copy((nint)((byte*)pointer + mode.dmSize), _extraInfo, 0, _extraBytes);
         }
 
         if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES)
@@ -1222,21 +1121,15 @@ public class PrinterSettings : ICloneable
 
         _driverName = ReadOneDEVNAME(namesPointer, 0);
         _printerName = ReadOneDEVNAME(namesPointer, 1);
-        _outputPort = ReadOneDEVNAME(namesPointer, 2);
+        OutputPort = ReadOneDEVNAME(namesPointer, 2);
 
         PrintDialogDisplayed = true;
 
         Kernel32.GlobalUnlock(hdevnames);
     }
 
-    /// <summary>
-    /// Provides some interesting information about the PrinterSettings in String form.
-    /// </summary>
-    public override string ToString()
-    {
-        string printerName = PrinterName;
-        return $"[PrinterSettings {printerName} Copies={Copies} Collate={Collate} Duplex={Duplex} FromPage={FromPage} LandscapeAngle={LandscapeAngle} MaximumCopies={MaximumCopies} OutputPort={OutputPort} ToPage={ToPage}]";
-    }
+    public override string ToString() =>
+        $"[PrinterSettings {PrinterName} Copies={Copies} Collate={Collate} Duplex={Duplex} FromPage={FromPage} LandscapeAngle={LandscapeAngle} MaximumCopies={MaximumCopies} OutputPort={OutputPort} ToPage={ToPage}]";
 
     // Write null terminated string, return length of string in characters (including null)
     private static unsafe short WriteOneDEVNAME(string str, IntPtr bufferStart, int index)
@@ -1249,399 +1142,5 @@ public class PrinterSettings : ICloneable
         *(short*)(address + data.Length * 2) = 0;
 
         return checked((short)(str.Length + 1));
-    }
-
-    /// <summary>
-    /// Collection of PaperSize's...
-    /// </summary>
-    public class PaperSizeCollection : ICollection
-    {
-        private PaperSize[] _array;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref='System.Drawing.Printing.PrinterSettings.PaperSizeCollection'/> class.
-        /// </summary>
-        public PaperSizeCollection(PaperSize[] array)
-        {
-            _array = array;
-        }
-
-        /// <summary>
-        /// Gets a value indicating the number of paper sizes.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _array.Length;
-            }
-        }
-
-        /// <summary>
-        /// Retrieves the PaperSize with the specified index.
-        /// </summary>
-        public virtual PaperSize this[int index]
-        {
-            get
-            {
-                return _array[index];
-            }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return new ArrayEnumerator(_array, Count);
-        }
-
-        int ICollection.Count
-        {
-            get
-            {
-                return Count;
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            Array.Copy(_array, index, array, 0, _array.Length);
-        }
-
-        public void CopyTo(PaperSize[] paperSizes, int index)
-        {
-            Array.Copy(_array, index, paperSizes, 0, _array.Length);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        [
-            EditorBrowsable(EditorBrowsableState.Never)
-        ]
-        public int Add(PaperSize paperSize)
-        {
-            PaperSize[] newArray = new PaperSize[Count + 1];
-            ((ICollection)this).CopyTo(newArray, 0);
-            newArray[Count] = paperSize;
-            _array = newArray;
-            return Count;
-        }
-    }
-
-    public class PaperSourceCollection : ICollection
-    {
-        private PaperSource[] _array;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref='PaperSourceCollection'/> class.
-        /// </summary>
-        public PaperSourceCollection(PaperSource[] array)
-        {
-            _array = array;
-        }
-
-        /// <summary>
-        /// Gets a value indicating the number of paper sources.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _array.Length;
-            }
-        }
-
-        /// <summary>
-        /// Gets the PaperSource with the specified index.
-        /// </summary>
-        public virtual PaperSource this[int index]
-        {
-            get
-            {
-                return _array[index];
-            }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return new ArrayEnumerator(_array, Count);
-        }
-
-        int ICollection.Count
-        {
-            get
-            {
-                return Count;
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            Array.Copy(_array, index, array, 0, _array.Length);
-        }
-
-        public void CopyTo(PaperSource[] paperSources, int index)
-        {
-            Array.Copy(_array, index, paperSources, 0, _array.Length);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Add(PaperSource paperSource)
-        {
-            PaperSource[] newArray = new PaperSource[Count + 1];
-            ((ICollection)this).CopyTo(newArray, 0);
-            newArray[Count] = paperSource;
-            _array = newArray;
-            return Count;
-        }
-    }
-
-    public class PrinterResolutionCollection : ICollection
-    {
-        private PrinterResolution[] _array;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref='PrinterResolutionCollection'/> class.
-        /// </summary>
-        public PrinterResolutionCollection(PrinterResolution[] array)
-        {
-            _array = array;
-        }
-
-        /// <summary>
-        /// Gets a value indicating the number of available printer resolutions.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _array.Length;
-            }
-        }
-
-        /// <summary>
-        /// Retrieves the PrinterResolution with the specified index.
-        /// </summary>
-        public virtual PrinterResolution this[int index]
-        {
-            get
-            {
-                return _array[index];
-            }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return new ArrayEnumerator(_array, Count);
-        }
-
-        int ICollection.Count
-        {
-            get
-            {
-                return Count;
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            Array.Copy(_array, index, array, 0, _array.Length);
-        }
-
-        public void CopyTo(PrinterResolution[] printerResolutions, int index)
-        {
-            Array.Copy(_array, index, printerResolutions, 0, _array.Length);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Add(PrinterResolution printerResolution)
-        {
-            PrinterResolution[] newArray = new PrinterResolution[Count + 1];
-            ((ICollection)this).CopyTo(newArray, 0);
-            newArray[Count] = printerResolution;
-            _array = newArray;
-            return Count;
-        }
-    }
-
-    public class StringCollection : ICollection
-    {
-        private string[] _array;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref='StringCollection'/> class.
-        /// </summary>
-        public StringCollection(string[] array)
-        {
-            _array = array;
-        }
-
-        /// <summary>
-        /// Gets a value indicating the number of strings.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _array.Length;
-            }
-        }
-
-        /// <summary>
-        /// Gets the string with the specified index.
-        /// </summary>
-        public virtual string this[int index]
-        {
-            get
-            {
-                return _array[index];
-            }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return new ArrayEnumerator(_array, Count);
-        }
-
-        int ICollection.Count
-        {
-            get
-            {
-                return Count;
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            Array.Copy(_array, index, array, 0, _array.Length);
-        }
-
-        public void CopyTo(string[] strings, int index)
-        {
-            Array.Copy(_array, index, strings, 0, _array.Length);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        [
-            EditorBrowsable(EditorBrowsableState.Never)
-        ]
-        public int Add(string value)
-        {
-            string[] newArray = new string[Count + 1];
-            ((ICollection)this).CopyTo(newArray, 0);
-            newArray[Count] = value;
-            _array = newArray;
-            return Count;
-        }
-    }
-
-    private sealed class ArrayEnumerator : IEnumerator
-    {
-        private readonly object[] _array;
-        private readonly int _endIndex;
-        private int _index;
-        private object? _item;
-
-        public ArrayEnumerator(object[] array, int count)
-        {
-            _array = array;
-            _endIndex = count;
-        }
-
-        public object? Current => _item;
-
-        public bool MoveNext()
-        {
-            if (_index >= _endIndex)
-                return false;
-            _item = _array[_index++];
-            return true;
-        }
-
-        public void Reset()
-        {
-            // Position enumerator before first item
-            _index = 0;
-            _item = null;
-        }
     }
 }

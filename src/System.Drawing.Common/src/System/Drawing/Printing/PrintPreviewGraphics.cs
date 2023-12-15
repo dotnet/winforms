@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Drawing;
 
 /// <summary>
-/// Retrieves the printer graphics during preview.
+///  Retrieves the printer graphics during preview.
 /// </summary>
 internal sealed class PrintPreviewGraphics
 {
@@ -23,15 +23,15 @@ internal sealed class PrintPreviewGraphics
     }
 
     /// <summary>
-    /// Gets the Visible bounds of this graphics object. Used during print preview.
+    ///  Gets the Visible bounds of this graphics object. Used during print preview.
     /// </summary>
     public RectangleF VisibleClipBounds
     {
         get
         {
-            IntPtr hdevMode = _printPageEventArgs.PageSettings.PrinterSettings.GetHdevmodeInternal();
+            IntPtr hdevmode = _printPageEventArgs.PageSettings.PrinterSettings.GetHdevmodeInternal();
 
-            using DeviceContext dc = _printPageEventArgs.PageSettings.PrinterSettings.CreateDeviceContext(hdevMode);
+            using DeviceContext dc = _printPageEventArgs.PageSettings.PrinterSettings.CreateDeviceContext(hdevmode);
             using Graphics graphics = Graphics.FromHdcInternal(dc.Hdc);
 
             if (_printDocument.OriginAtMargins)

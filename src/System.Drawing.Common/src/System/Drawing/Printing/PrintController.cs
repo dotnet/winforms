@@ -1,106 +1,51 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
-using static Interop;
-
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// Controls how a document is printed.
+///  Controls how a document is printed.
 /// </summary>
-public abstract class PrintController
+public abstract partial class PrintController
 {
-    /// <summary>
-    /// Represents a SafeHandle for a Printer's Device Mode struct handle (DEVMODE)
-    /// </summary>
-    /// <remarks>
-    /// DEVMODEs are pretty expensive, so we cache one here and share it
-    /// with the Standard and Preview print controllers.
-    /// </remarks>
-    internal sealed class SafeDeviceModeHandle : SafeHandle
-    {
-        public SafeDeviceModeHandle() : base(IntPtr.Zero, ownsHandle: true)
-        {
-        }
-
-        internal SafeDeviceModeHandle(IntPtr handle) : base(IntPtr.Zero, ownsHandle: true)
-        {
-            SetHandle(handle);
-        }
-
-        public override bool IsInvalid => handle == IntPtr.Zero;
-
-        /// <summary>
-        /// Specifies how to free the handle.
-        /// The boolean returned should be true for success and false if the runtime
-        /// should fire a SafeHandleCriticalFailure MDA (CustomerDebugProbe) if that
-        /// MDA is enabled.
-        /// </summary>
-        protected override bool ReleaseHandle()
-        {
-            if (!IsInvalid)
-            {
-                Kernel32.GlobalFree(new HandleRef(this, handle));
-            }
-
-            handle = IntPtr.Zero;
-            return true;
-        }
-
-        public static implicit operator IntPtr(SafeDeviceModeHandle handle)
-        {
-            return (handle is null) ? IntPtr.Zero : handle.handle;
-        }
-
-        public static explicit operator SafeDeviceModeHandle(IntPtr handle)
-        {
-            return new SafeDeviceModeHandle(handle);
-        }
-    }
-
     private protected SafeDeviceModeHandle? _modeHandle;
 
     protected PrintController()
     {
     }
 
+    /// <summary>
+    ///  Gets a value indicating whether the <see cref="PrintController"/> is used for print preview.
+    /// </summary>
     public virtual bool IsPreview => false;
 
     /// <summary>
-    /// When overridden in a derived class, begins the control sequence of when and how to print a page in a document.
+    ///  When overridden in a derived class, begins the control sequence of when and how to print a page in a document.
     /// </summary>
-    public virtual Graphics? OnStartPage(PrintDocument document, PrintPageEventArgs e)
-    {
-        return null;
-    }
+    public virtual Graphics? OnStartPage(PrintDocument document, PrintPageEventArgs e) => null;
 
     /// <summary>
-    /// When overridden in a derived class, completes the control sequence of when and how to print a page in a document.
+    ///  When overridden in a derived class, completes the control sequence of when and how to print a page in a document.
     /// </summary>
     public virtual void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
     }
 
     /// <remarks>
-    /// If you have nested PrintControllers, this method won't get called on the inner one.
-    /// Add initialization code to StartPrint or StartPage instead.
+    ///  <para>
+    ///   If you have nested PrintControllers, this method won't get called on the inner one.
+    ///   Add initialization code to StartPrint or StartPage instead.
+    ///  </para>
     /// </remarks>
     internal void Print(PrintDocument document)
     {
         // Get the PrintAction for this event
-        PrintAction printAction;
-        if (IsPreview)
-        {
-            printAction = PrintAction.PrintToPreview;
-        }
-        else
-        {
-            printAction = document.PrinterSettings.PrintToFile ? PrintAction.PrintToFile : PrintAction.PrintToPrinter;
-        }
+        PrintAction printAction = IsPreview
+            ? PrintAction.PrintToPreview
+            : document.PrinterSettings.PrintToFile ? PrintAction.PrintToFile : PrintAction.PrintToPrinter;
 
         // Check that user has permission to print to this particular printer
-        PrintEventArgs printEvent = new PrintEventArgs(printAction);
+        PrintEventArgs printEvent = new(printAction);
         document.OnBeginPrint(printEvent);
         if (printEvent.Cancel)
         {
@@ -142,15 +87,18 @@ public abstract class PrintController
     }
 
     /// <summary>
-    /// Returns true if print was aborted.
+    ///  Returns true if print was aborted.
     /// </summary>
     /// <remarks>
-    /// If you have nested PrintControllers, this method won't get called on the inner one
-    /// Add initialization code to StartPrint or StartPage instead.
+    ///  <para>
+    ///   If you have nested <see cref="PrintController"/> objects, this method won't get called on the inner one.
+    ///   Add initialization code to <see cref="OnStartPrint(PrintDocument, PrintEventArgs)"/> or
+    ///   <see cref="OnStartPage(PrintDocument, PrintPageEventArgs)"/> instead.
+    ///  </para>
     /// </remarks>
     private bool PrintLoop(PrintDocument document)
     {
-        QueryPageSettingsEventArgs queryEvent = new QueryPageSettingsEventArgs((PageSettings)document.DefaultPageSettings.Clone());
+        QueryPageSettingsEventArgs queryEvent = new((PageSettings)document.DefaultPageSettings.Clone());
         while (true)
         {
             document.OnQueryPageSettings(queryEvent);
@@ -188,7 +136,8 @@ public abstract class PrintController
     {
         PrintPageEventArgs? pageEvent = null;
         PageSettings documentPageSettings = (PageSettings)document.DefaultPageSettings.Clone();
-        QueryPageSettingsEventArgs queryEvent = new QueryPageSettingsEventArgs(documentPageSettings);
+        QueryPageSettingsEventArgs queryEvent = new(documentPageSettings);
+
         while (true)
         {
             queryEvent.PageSettingsChanged = false;
@@ -231,7 +180,7 @@ public abstract class PrintController
             }
             finally
             {
-                pageEvent.Graphics!.Dispose();
+                pageEvent.Graphics?.Dispose();
                 pageEvent.SetGraphics(null);
             }
 
@@ -248,20 +197,21 @@ public abstract class PrintController
 
     private PrintPageEventArgs CreatePrintPageEvent(PageSettings pageSettings)
     {
-        Debug.Assert((_modeHandle is not null), "modeHandle is null.  Someone must have forgot to call base.StartPrint");
+        Debug.Assert(_modeHandle is not null, "modeHandle is null.  Someone must have forgot to call base.StartPrint");
 
         Rectangle pageBounds = pageSettings.GetBounds(_modeHandle);
-        Rectangle marginBounds = new Rectangle(pageSettings.Margins.Left,
-                                               pageSettings.Margins.Top,
-                                               pageBounds.Width - (pageSettings.Margins.Left + pageSettings.Margins.Right),
-                                               pageBounds.Height - (pageSettings.Margins.Top + pageSettings.Margins.Bottom));
+        Rectangle marginBounds = new(
+            pageSettings.Margins.Left,
+            pageSettings.Margins.Top,
+            pageBounds.Width - (pageSettings.Margins.Left + pageSettings.Margins.Right),
+            pageBounds.Height - (pageSettings.Margins.Top + pageSettings.Margins.Bottom));
 
         PrintPageEventArgs pageEvent = new PrintPageEventArgs(null, marginBounds, pageBounds, pageSettings);
         return pageEvent;
     }
 
     /// <summary>
-    /// When overridden in a derived class, begins the control sequence of when and how to print a document.
+    ///  When overridden in a derived class, begins the control sequence of when and how to print a document.
     /// </summary>
     public virtual void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
@@ -269,10 +219,7 @@ public abstract class PrintController
     }
 
     /// <summary>
-    /// When overridden in a derived class, completes the control sequence of when and how to print a document.
+    ///  When overridden in a derived class, completes the control sequence of when and how to print a document.
     /// </summary>
-    public virtual void OnEndPrint(PrintDocument document, PrintEventArgs e)
-    {
-        _modeHandle?.Close();
-    }
+    public virtual void OnEndPrint(PrintDocument document, PrintEventArgs e) => _modeHandle?.Close();
 }
