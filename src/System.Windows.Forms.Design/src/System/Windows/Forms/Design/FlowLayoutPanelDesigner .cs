@@ -637,7 +637,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             else
             {
                 // We are doing a copy, so let's copy the controls.
-                ArrayList tempList = new ArrayList();
+                List<Control> tempList = new();
                 tempList.AddRange(_dragControls);
 
                 DesignerUtils.CopyDragObjects(tempList, Component.Site);
