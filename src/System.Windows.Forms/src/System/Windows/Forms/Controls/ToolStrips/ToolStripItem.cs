@@ -89,6 +89,7 @@ public abstract partial class ToolStripItem :
     internal static readonly object s_ownerChangedEvent = new();
     internal static readonly object s_paintEvent = new();
     internal static readonly object s_textChangedEvent = new();
+    internal static readonly object s_selectedChangedEvent = new();
 
     internal static readonly object s_commandChangedEvent = new();
     internal static readonly object s_commandParameterChangedEvent = new();
@@ -314,7 +315,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Determines if this item can be dragged.
     ///  This is EXACTLY like Control.AllowDrop - setting this to true WILL call
-    ///  the droptarget handlers. The ToolStripDropTargetManager is the one that
+    ///  the dropTarget handlers. The ToolStripDropTargetManager is the one that
     ///  handles the routing of DropTarget events to the ToolStripItem's IDropTarget
     ///  methods.
     /// </summary>
@@ -845,6 +846,7 @@ public abstract partial class ToolStripItem :
                     if (wasSelected)
                     {
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                        OnSelectedChanged(EventArgs.Empty);
                     }
                 }
 
@@ -1429,7 +1431,7 @@ public abstract partial class ToolStripItem :
 
     /// <summary>
     ///  Name of this control. The designer will set this to the same
-    ///  as the programatic Id "(name)" of the control. The name can be
+    ///  as the programmatic Id "(name)" of the control. The name can be
     ///  used as a key into the ControlCollection.
     /// </summary>
     [Browsable(false)]
@@ -1449,7 +1451,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  The owner of this ToolStripItem. The owner is essentially a backpointer to
+    ///  The owner of this ToolStripItem. The owner is essentially a backPointer to
     ///  the ToolStrip who contains this item in it's item collection. Handy for getting
     ///  to things such as the ImageList, which would be defined on the ToolStrip.
     /// </summary>
@@ -1470,7 +1472,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Returns the "parent" item on the preceeding menu which has spawned this item.
+    ///  Returns the "parent" item on the preceding menu which has spawned this item.
     ///  e.g. File->Open  the OwnerItem of Open is File.
     /// </summary>
     [Browsable(false)]
@@ -1818,6 +1820,18 @@ public abstract partial class ToolStripItem :
         => CanSelect && !DesignMode && (_state[s_stateSelected] ||
             (ParentInternal is not null && ParentInternal.IsSelectionSuspended &&
              ParentInternal.LastMouseDownedItem == this));
+
+    /// <summary>
+    ///  Occurs when selected item changed.
+    /// </summary>
+    [SRDescription(nameof(SR.ToolStripItemSelectedChangedDescr))]
+    public event EventHandler? SelectedChanged
+    {
+        add => Events.AddHandler(s_selectedChangedEvent, value);
+        remove => Events.RemoveHandler(s_selectedChangedEvent, value);
+    }
+
+    protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
 
     protected internal virtual bool ShowKeyboardCues
         => DesignMode || ToolStripManager.ShowMenuFocusCues;
@@ -2222,7 +2236,7 @@ public abstract partial class ToolStripItem :
                 iwdata.SetData(data);
             }
 
-            dataObject = (IComDataObject)iwdata;
+            dataObject = iwdata;
         }
 
         DROPEFFECT finalEffect;
@@ -2565,9 +2579,15 @@ public abstract partial class ToolStripItem :
     {
         if (_state[s_stateMouseDownAndNoDrag] || _state[s_statePressed] || _state[s_stateSelected])
         {
+            bool wasSelected = _state[s_stateSelected];
             _state[s_stateMouseDownAndNoDrag | s_statePressed | s_stateSelected] = false;
 
             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
+            if (wasSelected)
+            {
+                OnSelectedChanged(EventArgs.Empty);
+            }
 
             Invalidate();
         }
@@ -3229,6 +3249,8 @@ public abstract partial class ToolStripItem :
 
             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
 
+            OnSelectedChanged(EventArgs.Empty);
+
             forceRaiseAccessibilityFocusChanged = true;
         }
 
@@ -3621,6 +3643,8 @@ public abstract partial class ToolStripItem :
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             }
+
+            OnSelectedChanged(EventArgs.Empty);
         }
     }
 

@@ -5889,6 +5889,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripItemsDescr" xml:space="preserve">
     <value>Collection of items to display on the ToolStrip.</value>
   </data>
+  <data name="ToolStripItemSelectedChangedDescr" xml:space="preserve">
+    <value>Occurs when the Selected property value changes.</value>
+  </data>
   <data name="ToolStripItemSize" xml:space="preserve">
     <value>The size of the item.</value>
   </data>

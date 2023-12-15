@@ -5,9 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Interop;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.Dialogs;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -21,24 +19,20 @@ public class FontDialog : CommonDialog
 {
     protected static readonly object EventApply = new();
 
-    private const int defaultMinSize = 0;
-    private const int defaultMaxSize = 0;
+    private const int DefaultMinSize = 0;
+    private const int DefaultMaxSize = 0;
 
-    private CHOOSEFONT_FLAGS options;
-    private Font? font;
-    private Color color;
-    private int minSize = defaultMinSize;
-    private int maxSize = defaultMaxSize;
-    private bool showColor;
-    private bool usingDefaultIndirectColor;
+    private CHOOSEFONT_FLAGS _options;
+    private Font? _font;
+    private Color _color;
+    private int _minSize = DefaultMinSize;
+    private int _maxSize = DefaultMaxSize;
+    private bool _usingDefaultIndirectColor;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="FontDialog"/> class.
     /// </summary>
-    public FontDialog()
-    {
-        Reset();
-    }
+    public FontDialog() => Reset();
 
     /// <summary>
     ///  Gets or sets a value indicating whether the dialog box allows graphics device interface
@@ -80,10 +74,8 @@ public class FontDialog : CommonDialog
     }
 
     /// <summary>
-    ///  Gets
-    ///  or sets a value indicating whether the user can change the character set specified
-    ///  in the Script combo box to display a character set other than the one
-    ///  currently displayed.
+    ///  Gets or sets a value indicating whether the user can change the character set specified in the Script combo
+    ///  box to display a character set other than the one currently displayed.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
@@ -106,31 +98,25 @@ public class FontDialog : CommonDialog
         {
             // Convert to RGB and back to resolve indirect colors like SystemColors.ControlText
             // to real color values like Color.Lime
-            if (usingDefaultIndirectColor)
-            {
-                return ColorTranslator.FromWin32(ColorTranslator.ToWin32(color));
-            }
-
-            return color;
+            return !_usingDefaultIndirectColor ? _color : ColorTranslator.FromWin32(ColorTranslator.ToWin32(_color));
         }
         set
         {
             if (!value.IsEmpty)
             {
-                color = value;
-                usingDefaultIndirectColor = false;
+                _color = value;
+                _usingDefaultIndirectColor = false;
             }
             else
             {
-                color = SystemColors.ControlText;
-                usingDefaultIndirectColor = true;
+                _color = SystemColors.ControlText;
+                _usingDefaultIndirectColor = true;
             }
         }
     }
 
     /// <summary>
-    ///  Gets or sets
-    ///  a value indicating whether the dialog box allows only the selection of fixed-pitch fonts.
+    ///  Gets or sets a value indicating whether the dialog box allows only the selection of fixed-pitch fonts.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
@@ -150,25 +136,22 @@ public class FontDialog : CommonDialog
     {
         get
         {
-            Font? result = font ?? Control.DefaultFont;
+            Font? result = _font ?? Control.DefaultFont;
 
             float actualSize = result.SizeInPoints;
-            if (minSize != defaultMinSize && actualSize < MinSize)
+            if (_minSize != DefaultMinSize && actualSize < MinSize)
             {
                 result = new Font(result.FontFamily, MinSize, result.Style, GraphicsUnit.Point);
             }
 
-            if (maxSize != defaultMaxSize && actualSize > MaxSize)
+            if (_maxSize != DefaultMaxSize && actualSize > MaxSize)
             {
                 result = new Font(result.FontFamily, MaxSize, result.Style, GraphicsUnit.Point);
             }
 
             return result;
         }
-        set
-        {
-            font = value;
-        }
+        set => _font = value;
     }
 
     /// <summary>
@@ -181,25 +164,18 @@ public class FontDialog : CommonDialog
     public bool FontMustExist
     {
         get => GetOption(CHOOSEFONT_FLAGS.CF_FORCEFONTEXIST);
-        set
-        {
-            SetOption(CHOOSEFONT_FLAGS.CF_FORCEFONTEXIST, value);
-        }
+        set => SetOption(CHOOSEFONT_FLAGS.CF_FORCEFONTEXIST, value);
     }
 
     /// <summary>
-    ///  Gets or sets the maximum
-    ///  point size a user can select.
+    ///  Gets or sets the maximum point size a user can select.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
-    [DefaultValue(defaultMaxSize)]
+    [DefaultValue(DefaultMaxSize)]
     [SRDescription(nameof(SR.FnDmaxSizeDescr))]
     public int MaxSize
     {
-        get
-        {
-            return maxSize;
-        }
+        get => _maxSize;
         set
         {
             if (value < 0)
@@ -207,11 +183,11 @@ public class FontDialog : CommonDialog
                 value = 0;
             }
 
-            maxSize = value;
+            _maxSize = value;
 
-            if (maxSize > 0 && maxSize < minSize)
+            if (_maxSize > 0 && _maxSize < _minSize)
             {
-                minSize = maxSize;
+                _minSize = _maxSize;
             }
         }
     }
@@ -220,14 +196,11 @@ public class FontDialog : CommonDialog
     ///  Gets or sets a value indicating the minimum point size a user can select.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
-    [DefaultValue(defaultMinSize)]
+    [DefaultValue(DefaultMinSize)]
     [SRDescription(nameof(SR.FnDminSizeDescr))]
     public int MinSize
     {
-        get
-        {
-            return minSize;
-        }
+        get => _minSize;
         set
         {
             if (value < 0)
@@ -235,11 +208,11 @@ public class FontDialog : CommonDialog
                 value = 0;
             }
 
-            minSize = value;
+            _minSize = value;
 
-            if (maxSize > 0 && maxSize < minSize)
+            if (_maxSize > 0 && _maxSize < _minSize)
             {
-                maxSize = minSize;
+                _maxSize = _minSize;
             }
         }
     }
@@ -247,12 +220,11 @@ public class FontDialog : CommonDialog
     /// <summary>
     ///  Gets the value passed to CHOOSEFONT.Flags.
     /// </summary>
-    protected int Options => (int)options;
+    protected int Options => (int)_options;
 
     /// <summary>
-    ///  Gets or sets a
-    ///  value indicating whether the dialog box allows selection of fonts for all non-OEM and Symbol character
-    ///  sets, as well as the ----n National Standards Institute (ANSI) character set.
+    ///  Gets or sets a value indicating whether the dialog box allows selection of fonts for all non-OEM and Symbol
+    ///  character sets, as well as the ANSI character set.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
@@ -281,17 +253,7 @@ public class FontDialog : CommonDialog
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
     [SRDescription(nameof(SR.FnDshowColorDescr))]
-    public bool ShowColor
-    {
-        get
-        {
-            return showColor;
-        }
-        set
-        {
-            showColor = value;
-        }
-    }
+    public bool ShowColor { get; set; }
 
     /// <summary>
     ///  Gets or sets a value indicating whether the dialog box contains controls that allow the
@@ -331,10 +293,7 @@ public class FontDialog : CommonDialog
     /// <summary>
     ///  Returns the state of the given option flag.
     /// </summary>
-    internal bool GetOption(CHOOSEFONT_FLAGS option)
-    {
-        return (options & option) != 0;
-    }
+    internal bool GetOption(CHOOSEFONT_FLAGS option) => (_options & option) != 0;
 
     /// <summary>
     ///  Specifies the common dialog box hook procedure that is overridden to add
@@ -345,37 +304,44 @@ public class FontDialog : CommonDialog
         switch ((uint)msg)
         {
             case PInvoke.WM_COMMAND:
-                if (PARAM.ToInt(wparam) == 0x402)
+                if (wparam != 0x402)
                 {
-                    LOGFONT logFont = default;
-                    PInvoke.SendMessage((HWND)hWnd, PInvoke.WM_CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
-                    UpdateFont(ref logFont);
-                    int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
-                    if (index != PInvoke.CB_ERR)
-                    {
-                        UpdateColor((int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETITEMDATA, (WPARAM)index, 0));
-                    }
+                    break;
+                }
 
-                    if (NativeWindow.WndProcShouldBeDebuggable)
+                LOGFONT logFont = default;
+                PInvoke.SendMessage((HWND)hWnd, PInvoke.WM_CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
+                UpdateFont(ref logFont);
+                int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
+                if (index != PInvoke.CB_ERR)
+                {
+                    UpdateColor((COLORREF)(int)PInvoke.SendDlgItemMessage(
+                        (HWND)hWnd,
+                        (int)PInvoke.cmb4,
+                        PInvoke.CB_GETITEMDATA,
+                        (WPARAM)index,
+                        0));
+                }
+
+                if (NativeWindow.WndProcShouldBeDebuggable)
+                {
+                    OnApply(EventArgs.Empty);
+                }
+                else
+                {
+                    try
                     {
                         OnApply(EventArgs.Empty);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        try
-                        {
-                            OnApply(EventArgs.Empty);
-                        }
-                        catch (Exception e)
-                        {
-                            Application.OnThreadException(e);
-                        }
+                        Application.OnThreadException(e);
                     }
                 }
 
                 break;
             case PInvoke.WM_INITDIALOG:
-                if (!showColor)
+                if (!ShowColor)
                 {
                     HWND hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.cmb4);
                     PInvoke.ShowWindow(hWndCtl, SHOW_WINDOW_CMD.SW_HIDE);
@@ -392,61 +358,45 @@ public class FontDialog : CommonDialog
     /// <summary>
     ///  Raises the <see cref="Apply"/> event.
     /// </summary>
-    protected virtual void OnApply(EventArgs e)
-    {
-        ((EventHandler?)Events[EventApply])?.Invoke(this, e);
-    }
+    protected virtual void OnApply(EventArgs e) => (Events[EventApply] as EventHandler)?.Invoke(this, e);
 
     /// <summary>
     ///  Resets all dialog box options to their default values.
     /// </summary>
     public override void Reset()
     {
-        options = CHOOSEFONT_FLAGS.CF_SCREENFONTS | CHOOSEFONT_FLAGS.CF_EFFECTS;
-        font = null;
-        color = SystemColors.ControlText;
-        usingDefaultIndirectColor = true;
-        showColor = false;
-        minSize = defaultMinSize;
-        maxSize = defaultMaxSize;
+        _options = CHOOSEFONT_FLAGS.CF_SCREENFONTS | CHOOSEFONT_FLAGS.CF_EFFECTS;
+        _font = null;
+        _color = SystemColors.ControlText;
+        _usingDefaultIndirectColor = true;
+        ShowColor = false;
+        _minSize = DefaultMinSize;
+        _maxSize = DefaultMaxSize;
         SetOption(CHOOSEFONT_FLAGS.CF_TTONLY, true);
     }
 
-    private void ResetFont()
-    {
-        font = null;
-    }
+    private void ResetFont() => _font = null;
 
-    /// <summary>
-    ///  The actual implementation of running the dialog. Inheriting classes
-    ///  should override this if they want to add more functionality, and call
-    ///  base.runDialog() if necessary
-    /// </summary>
     protected override unsafe bool RunDialog(IntPtr hWndOwner)
     {
-        WNDPROC hookProc = HookProcInternal;
-        void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
         using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
 
-        Comdlg32.CHOOSEFONTW cf = new()
+        CHOOSEFONTW cf = new()
         {
-            lStructSize = (uint)sizeof(Comdlg32.CHOOSEFONTW),
-            hwndOwner = hWndOwner,
-            hDC = IntPtr.Zero,
+            lStructSize = (uint)sizeof(CHOOSEFONTW),
+            hwndOwner = (HWND)hWndOwner,
             lpLogFont = &logFont,
             Flags = (CHOOSEFONT_FLAGS)Options | CHOOSEFONT_FLAGS.CF_INITTOLOGFONTSTRUCT | CHOOSEFONT_FLAGS.CF_ENABLEHOOK,
-            lpfnHook = hookProcPtr,
+            lpfnHook = HookProcFunctionPointer,
             hInstance = PInvoke.GetModuleHandle((PCWSTR)null),
-            nSizeMin = minSize,
-            nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
-            rgbColors = ShowColor || ShowEffects
-                ? ColorTranslator.ToWin32(color)
-                : ColorTranslator.ToWin32(SystemColors.ControlText)
+            nSizeMin = _minSize,
+            nSizeMax = _maxSize == 0 ? int.MaxValue : _maxSize,
+            rgbColors = ShowColor || ShowEffects ? _color : SystemColors.ControlText
         };
 
-        if (minSize > 0 || maxSize > 0)
+        if (_minSize > 0 || _maxSize > 0)
         {
             cf.Flags |= CHOOSEFONT_FLAGS.CF_LIMITSIZE;
         }
@@ -457,12 +407,14 @@ public class FontDialog : CommonDialog
 
         Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
 
-        // The native font dialog does not currently support PermonitorV2 mode. We are setting DpiAwareness
-        // to SystemAware as a workaround. This action has no effect when the application is not running in PermonitorV2 mode.
+        // The native font dialog does not currently support Per Monitor V2 mode. We are setting DpiAwareness
+        // to SystemAware as a workaround. This action has no effect when the application is not running in
+        // Per Monitor V2 mode.
+        //
         // https://microsoft.visualstudio.com/OS/_workitems/edit/42835582
         using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
         {
-            if (!Comdlg32.ChooseFontW(ref cf))
+            if (!PInvoke.ChooseFont(&cf))
             {
                 return false;
             }
@@ -474,8 +426,6 @@ public class FontDialog : CommonDialog
             UpdateColor(cf.rgbColors);
         }
 
-        GC.KeepAlive(hookProc);
-
         return true;
     }
 
@@ -486,38 +436,27 @@ public class FontDialog : CommonDialog
     {
         if (value)
         {
-            options |= option;
+            _options |= option;
         }
         else
         {
-            options &= ~option;
+            _options &= ~option;
         }
     }
 
     /// <summary>
-    ///  Indicates whether the <see cref="Font"/> property should be
-    ///  persisted.
+    ///  Indicates whether the <see cref="Font"/> property should be persisted.
     /// </summary>
-    private bool ShouldSerializeFont()
-    {
-        return !Font.Equals(Control.DefaultFont);
-    }
+    private bool ShouldSerializeFont() => !Font.Equals(Control.DefaultFont);
 
-    /// <summary>
-    ///  Retrieves a string that includes the name of the current font selected in
-    ///  the dialog box.
-    /// </summary>
-    public override string ToString()
-    {
-        return $"{base.ToString()},  Font: {Font}";
-    }
+    public override string ToString() => $"{base.ToString()},  Font: {Font}";
 
-    private void UpdateColor(int rgb)
+    private void UpdateColor(Color color)
     {
-        if (ColorTranslator.ToWin32(color) != rgb)
+        if (_color != color)
         {
-            color = ColorTranslator.FromOle(rgb);
-            usingDefaultIndirectColor = false;
+            _color = color;
+            _usingDefaultIndirectColor = false;
         }
     }
 
@@ -528,6 +467,6 @@ public class FontDialog : CommonDialog
 
         // The dialog claims its working in points (a device-independent unit),
         // but actually gives us something in world units (device-dependent).
-        font = ControlPaint.FontInPoints(fontInWorldUnits);
+        _font = ControlPaint.FontInPoints(fontInWorldUnits);
     }
 }

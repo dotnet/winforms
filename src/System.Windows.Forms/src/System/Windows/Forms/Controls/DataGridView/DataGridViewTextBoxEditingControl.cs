@@ -22,7 +22,11 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
     }
 
     protected override AccessibleObject CreateAccessibilityInstance()
-        => new DataGridViewTextBoxEditingControlAccessibleObject(this);
+    {
+        var controlAccessibleObject = new DataGridViewTextBoxEditingControlAccessibleObject(this);
+        _dataGridView?.SetAccessibleObjectParent(controlAccessibleObject);
+        return controlAccessibleObject;
+    }
 
     public virtual DataGridView? EditingControlDataGridView
     {
@@ -307,17 +311,6 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
         else
         {
             return HorizontalAlignment.Left;
-        }
-    }
-
-    protected override void OnHandleCreated(EventArgs e)
-    {
-        base.OnHandleCreated(e);
-
-        // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
-        if (IsHandleCreated && _dataGridView?.IsAccessibilityObjectCreated == true)
-        {
-            _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
         }
     }
 }

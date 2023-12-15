@@ -5,31 +5,26 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.Dialogs;
-using static Interop;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Represents a common dialog box that displays available colors along with
-///  controls that allow the user to define custom colors.
+///  Represents a common dialog box that displays available colors along with controls
+///  that allow the user to define custom colors.
 /// </summary>
 [DefaultProperty(nameof(Color))]
 [SRDescription(nameof(SR.DescriptionColorDialog))]
 public class ColorDialog : CommonDialog
 {
     private int _options;
-    private readonly int[] _customColors;
+    private readonly COLORREF[] _customColors = new COLORREF[16];
 
     private Color _color;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="ColorDialog"/> class.
     /// </summary>
-    public ColorDialog()
-    {
-        _customColors = new int[16];
-        Reset();
-    }
+    public ColorDialog() => Reset();
 
     /// <summary>
     ///  Gets or sets a value indicating whether the user can use the dialog box
@@ -77,18 +72,20 @@ public class ColorDialog : CommonDialog
     [AllowNull]
     public int[] CustomColors
     {
-        get => (int[])_customColors.Clone();
+        get
+        {
+            int[] result = new int[_customColors.Length];
+            MemoryMarshal.Cast<COLORREF, int>(_customColors).CopyTo(result);
+            return result;
+        }
         set
         {
-            int length = value is null ? 0 : Math.Min(value.Length, 16);
-            if (length > 0)
-            {
-                Array.Copy(value!, 0, _customColors, 0, length);
-            }
+            Span<COLORREF> customColors = _customColors;
+            customColors.Fill(0x00FFFFFF);
 
-            for (int i = length; i < 16; i++)
+            if (value is not null && value.Length > 0)
             {
-                _customColors[i] = 0x00FFFFFF;
+                MemoryMarshal.Cast<int, COLORREF>(value)[..Math.Min(customColors.Length, value.Length)].CopyTo(customColors);
             }
         }
     }
@@ -160,43 +157,34 @@ public class ColorDialog : CommonDialog
 
     protected override unsafe bool RunDialog(IntPtr hwndOwner)
     {
-        WNDPROC hookProc = HookProcInternal;
-        void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
-        Comdlg32.CHOOSECOLORW cc = new()
+        CHOOSECOLOR_FLAGS flags = (CHOOSECOLOR_FLAGS)Options | CHOOSECOLOR_FLAGS.CC_RGBINIT | CHOOSECOLOR_FLAGS.CC_ENABLEHOOK;
+
+        // Our docs say AllowFullOpen takes precedence over FullOpen; ChooseColor implements the opposite
+        if (!AllowFullOpen)
         {
-            lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSECOLORW>()
+            flags &= ~CHOOSECOLOR_FLAGS.CC_FULLOPEN;
+        }
+
+        CHOOSECOLORW cc = new()
+        {
+            lStructSize = (uint)sizeof(CHOOSECOLORW),
+            hwndOwner = (HWND)hwndOwner,
+            hInstance = (HWND)Instance,
+            rgbResult = (COLORREF)_color,
+            Flags = flags,
+            lpfnHook = HookProcFunctionPointer
         };
 
-        fixed (int* customColors = _customColors)
+        fixed (COLORREF* customColors = _customColors)
         {
-            cc.hwndOwner = (HWND)hwndOwner;
-            cc.hInstance = (HINSTANCE)Instance;
-            cc.rgbResult = _color.ToWin32();
-            cc.lpCustColors = (IntPtr)customColors;
+            cc.lpCustColors = customColors;
 
-            CHOOSECOLOR_FLAGS flags = (CHOOSECOLOR_FLAGS)Options | CHOOSECOLOR_FLAGS.CC_RGBINIT | CHOOSECOLOR_FLAGS.CC_ENABLEHOOK;
-
-            // Our docs say AllowFullOpen takes precedence over FullOpen; ChooseColor implements the opposite
-            if (!AllowFullOpen)
-            {
-                flags &= ~CHOOSECOLOR_FLAGS.CC_FULLOPEN;
-            }
-
-            cc.Flags = flags;
-
-            cc.lpfnHook = hookProcPtr;
-            if (!Comdlg32.ChooseColorW(ref cc))
+            if (!PInvoke.ChooseColor(&cc))
             {
                 return false;
             }
 
-            if (cc.rgbResult != ColorTranslator.ToWin32(_color))
-            {
-                _color = ColorTranslator.FromOle(cc.rgbResult);
-            }
-
-            GC.KeepAlive(hookProc);
-
+            _color = cc.rgbResult;
             return true;
         }
     }
@@ -221,8 +209,5 @@ public class ColorDialog : CommonDialog
     /// </summary>
     private bool ShouldSerializeColor() => !Color.Equals(Color.Black);
 
-    /// <summary>
-    ///  Provides a string version of this object.
-    /// </summary>
     public override string ToString() => $"{base.ToString()},  Color: {Color}";
 }

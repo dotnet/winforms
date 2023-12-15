@@ -66,7 +66,7 @@ public unsafe partial class DataObject :
         // Get the RCW for the pointer and continue.
         bool success = ComHelpers.TryGetObjectForIUnknown(
             (Com.IUnknown*)data,
-            takeOwnership: true,
+            takeOwnership: false,
             out ComTypes.IDataObject? comTypesData);
 
         Debug.Assert(success && comTypesData is not null);

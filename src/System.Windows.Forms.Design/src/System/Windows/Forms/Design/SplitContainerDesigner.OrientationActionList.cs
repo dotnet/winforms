@@ -53,7 +53,7 @@ internal partial class SplitContainerDesigner
                 orientationProp.SetValue(_ownerComponent, orientation);
             }
 
-            var actionUIService = (DesignerActionUIService)_owner.GetService(typeof(DesignerActionUIService));
+            DesignerActionUIService actionUIService = _owner.GetRequiredService<DesignerActionUIService>();
             actionUIService.Refresh(_ownerComponent);
         }
 

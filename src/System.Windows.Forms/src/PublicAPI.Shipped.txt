@@ -9146,7 +9146,7 @@ System.Windows.Forms.PropertyManager.PropertyManager() -> void
 System.Windows.Forms.PropertySort
 System.Windows.Forms.PropertySort.Alphabetical = 1 -> System.Windows.Forms.PropertySort
 System.Windows.Forms.PropertySort.Categorized = 2 -> System.Windows.Forms.PropertySort
-System.Windows.Forms.PropertySort.CategorizedAlphabetical = 3 -> System.Windows.Forms.PropertySort
+System.Windows.Forms.PropertySort.CategorizedAlphabetical = System.Windows.Forms.PropertySort.Alphabetical | System.Windows.Forms.PropertySort.Categorized -> System.Windows.Forms.PropertySort
 System.Windows.Forms.PropertySort.NoSort = 0 -> System.Windows.Forms.PropertySort
 System.Windows.Forms.PropertyTabChangedEventArgs
 System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab?

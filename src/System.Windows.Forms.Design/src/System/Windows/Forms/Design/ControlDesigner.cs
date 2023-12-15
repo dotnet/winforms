@@ -464,7 +464,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         if (disposing)
         {
-            if (Control is not null)
+            if (HasComponent)
             {
                 if (_dataBindingsCollectionChanged is not null)
                 {
@@ -494,7 +494,7 @@ public partial class ControlDesigner : ComponentDesigner
 
             _downPos = Point.Empty;
 
-            if (Control is not null)
+            if (HasComponent)
             {
                 Control.ControlAdded -= new ControlEventHandler(OnControlAdded);
                 Control.ControlRemoved -= new ControlEventHandler(OnControlRemoved);

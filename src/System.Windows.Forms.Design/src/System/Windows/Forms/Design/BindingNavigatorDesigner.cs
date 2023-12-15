@@ -25,8 +25,7 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
     {
         base.Initialize(component);
 
-        IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
-        if (componentChangeService is not null)
+        if (TryGetService(out IComponentChangeService? componentChangeService))
         {
             componentChangeService.ComponentRemoved += ComponentChangeService_ComponentRemoved;
             componentChangeService.ComponentChanged += ComponentChangeService_ComponentChanged;
@@ -37,8 +36,7 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
     {
         if (disposing)
         {
-            IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
-            if (componentChangeService is not null)
+            if (TryGetService(out IComponentChangeService? componentChangeService))
             {
                 componentChangeService.ComponentRemoved -= ComponentChangeService_ComponentRemoved;
                 componentChangeService.ComponentChanged -= ComponentChangeService_ComponentChanged;
@@ -74,9 +72,8 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
     private void RaiseItemsChanged()
     {
         BindingNavigator navigator = (BindingNavigator)Component;
-        IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
 
-        if (componentChangeService is not null)
+        if (TryGetService(out IComponentChangeService? componentChangeService))
         {
             MemberDescriptor? memberDescriptor = TypeDescriptor.GetProperties(navigator)["Items"];
             componentChangeService.OnComponentChanging(component: navigator, member: memberDescriptor);
