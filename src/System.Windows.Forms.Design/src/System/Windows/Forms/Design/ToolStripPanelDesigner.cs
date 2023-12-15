@@ -96,7 +96,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
     private Padding Padding
     {
-        get => (Padding)ShadowProperties[nameof(Padding)];
+        get => (Padding)ShadowProperties[nameof(Padding)]!;
         set
         {
             ShadowProperties[nameof(Padding)] = value;
@@ -129,7 +129,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     private bool Visible
     {
-        get => (bool)ShadowProperties[nameof(Visible)];
+        get => (bool)ShadowProperties[nameof(Visible)]!;
         set
         {
             ShadowProperties[nameof(Visible)] = value;
@@ -313,7 +313,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
 
         ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
-        return parent is not null ? parent.ContentPanel : (Control?)null;
+        return parent?.ContentPanel;
     }
 
     /// <summary>
@@ -326,16 +326,16 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             return;
         }
 
-        _panel = component as ToolStripPanel;
+        _panel = (ToolStripPanel)component;
 
         base.Initialize(component);
 
-        Padding = _panel!.Padding;
-        _designerHost = component?.Site?.GetService<IDesignerHost>();
+        Padding = _panel.Padding;
+        _designerHost = component.Site?.GetService<IDesignerHost>();
 
         if (_selectionService is null)
         {
-            _selectionService = GetService<ISelectionService>();
+            _selectionService = GetRequiredService<ISelectionService>();
             _selectionService.SelectionChanging += OnSelectionChanging;
             _selectionService.SelectionChanged += OnSelectionChanged;
         }
@@ -413,7 +413,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     {
         if (_designerHost is not null && !_designerHost.Loading)
         {
-            SelectionManager selectionManager = GetService<SelectionManager>();
+            SelectionManager? selectionManager = GetService<SelectionManager>();
             selectionManager?.Refresh();
         }
     }
@@ -441,8 +441,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
 
         // Remove our DesignerShortCutHandler
-        IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-        if (menuCommandService is not null)
+        if (TryGetService(out IMenuCommandService? menuCommandService))
         {
             menuCommandService.RemoveCommand(_designerShortCutCommand);
             if (_oldShortCutCommand is not null)
@@ -459,8 +458,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         if (_selectionService?.PrimarySelection == _panel)
         {
             _designerShortCutCommand = new MenuCommand(OnKeyShowDesignerActions, MenuCommands.KeyInvokeSmartTag);
-            IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (menuCommandService is not null)
+            if (TryGetService(out IMenuCommandService? menuCommandService))
             {
                 _oldShortCutCommand = menuCommandService.FindCommand(MenuCommands.KeyInvokeSmartTag);
                 if (_oldShortCutCommand is not null)
@@ -598,7 +596,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     private bool ShouldSerializePadding()
     {
-        Padding padding = (Padding)ShadowProperties[nameof(Padding)];
+        Padding padding = (Padding)ShadowProperties[nameof(Padding)]!;
         return !padding.Equals(s_defaultPadding);
     }
 
