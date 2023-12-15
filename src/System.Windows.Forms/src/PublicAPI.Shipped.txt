@@ -1347,7 +1347,6 @@ override System.Windows.Forms.DataGridViewComboBoxCell.OnLeave(int rowIndex, boo
 override System.Windows.Forms.DataGridViewComboBoxCell.OnMouseEnter(int rowIndex) -> void
 override System.Windows.Forms.DataGridViewComboBoxCell.OnMouseLeave(int rowIndex) -> void
 override System.Windows.Forms.DataGridViewComboBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewHeaderCell.Displayed.get -> bool
 override System.Windows.Forms.DataGridViewHeaderCell.Dispose(bool disposing) -> void
@@ -1416,7 +1415,6 @@ override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> Syst
 override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.set -> void
 override System.Windows.Forms.DataGridViewTextBoxColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.ProcessKeyEventArgs(ref System.Windows.Forms.Message m) -> bool
