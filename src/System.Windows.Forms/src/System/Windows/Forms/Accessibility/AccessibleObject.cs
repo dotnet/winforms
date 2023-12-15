@@ -2061,17 +2061,36 @@ public unsafe partial class AccessibleObject :
     {
         get
         {
-            if (IsClientObject)
-            {
-                AccessibleObject? obj = GetFocused();
-                if (obj is not null)
-                {
-                    return obj == this ? (int)PInvoke.CHILDID_SELF : obj;
-                }
-            }
-
-            return TryGetAccessibleObject(TryGetSystemIAccessibleFocus());
+            VARIANT focus = default;
+            return AccFocusHelper(&focus) ? TryGetAccessibleObject(focus) : focus.ToObject();
         }
+    }
+
+    /// <summary>
+    ///  Helper method to attain accFocus and places result via <paramref name="result"/>.
+    ///  This method returns <see langword="true"/> if System IAccessible focus was
+    ///  attempted to be attained. Otherwise <see langword="false"/>.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   If the managed type of <paramref name="result"/> is needed, use <see cref="TryGetAccessibleObject(VARIANT)"/>
+    ///   if this method returns <see langword="true"/>, otherwise use <see cref="VARIANT.ToObject"/>.
+    ///  </para>
+    /// </remarks>
+    private bool AccFocusHelper(VARIANT* result)
+    {
+        if (IsClientObject)
+        {
+            AccessibleObject? obj = GetFocused();
+            if (obj is not null)
+            {
+                *result = AsChildIdVariant(obj);
+                return false;
+            }
+        }
+
+        *result = TryGetSystemIAccessibleFocus();
+        return true;
     }
 
     HRESULT UIA.IAccessible.Interface.get_accFocus(VARIANT* pvarChild)
@@ -2081,17 +2100,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        if (IsClientObject)
-        {
-            AccessibleObject? obj = GetFocused();
-            if (obj is not null)
-            {
-                *pvarChild = AsChildIdVariant(obj);
-                return HRESULT.S_OK;
-            }
-        }
-
-        *pvarChild = TryGetSystemIAccessibleFocus();
+        AccFocusHelper(pvarChild);
         return HRESULT.S_OK;
     }
 
