@@ -6,6 +6,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Possible values for property grid sorting mode
 /// </summary>
+[Flags]
 public enum PropertySort
 {
     /// <summary>

@@ -15398,6 +15398,55 @@ public class ToolStripItemTests
         Assert.Equal(1, callCount);
     }
 
+    // Unit test for https://github.com/dotnet/winforms/issues/8548
+    [WinFormsFact]
+    public void ToolStripItem_OnItemSelected()
+    {
+        using MyMenuStrip menuStrip1 = new();
+        using ToolStripMenuItem toolStripMenuItem1 = new();
+        using ToolStripMenuItem toolStripMenuItem2 = new();
+        using ToolStripMenuItem toolStripMenuItem3 = new();
+
+        menuStrip1.Size = new Size(50, 100);
+        toolStripMenuItem1.Size = new Size(15, 30);
+        toolStripMenuItem2.Size = new Size(15, 30);
+        toolStripMenuItem3.Size = new Size(15, 30);
+
+        bool callBackInvoked = false;
+
+        toolStripMenuItem2.SelectedChanged += (e, s) =>
+        {
+            callBackInvoked = true;
+        };
+
+        menuStrip1.Items.AddRange(new ToolStripMenuItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
+
+        menuStrip1.CreateControl();
+
+        // try to emulate mouse move event.
+        for (int i = 0; i < 10; i++)
+        {
+            menuStrip1.MoveMouse(new MouseEventArgs(MouseButtons.None, 0, new Point(i, 5)));
+        }
+
+        Assert.False(callBackInvoked);
+
+        for (int i = 10; i < 50; i++)
+        {
+            menuStrip1.MoveMouse(new MouseEventArgs(MouseButtons.None, 0, new Point(i, 5)));
+        }
+
+        Assert.True(callBackInvoked);
+    }
+
+    private class MyMenuStrip: MenuStrip
+    {
+        public void MoveMouse(MouseEventArgs mea)
+        {
+            OnMouseMove(mea);
+        }
+    }
+
     private class SubToolStrip : ToolStrip
     {
         public new void OnBeginDrag(EventArgs e) => base.OnBeginDrag(e);

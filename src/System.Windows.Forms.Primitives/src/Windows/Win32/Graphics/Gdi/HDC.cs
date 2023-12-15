@@ -8,5 +8,6 @@ internal readonly partial struct HDC : IHandle<HDC>
     HDC IHandle<HDC>.Handle => this;
     object? IHandle<HDC>.Wrapper => null;
 
+    public static HDC Null => default;
     public bool IsNull => Value == 0;
 }

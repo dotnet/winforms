@@ -227,6 +227,6 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
             }
 
             SetVirtualSizeNoInvalidate(new Size(200, 200));
-        }        
+        }
     }
 }

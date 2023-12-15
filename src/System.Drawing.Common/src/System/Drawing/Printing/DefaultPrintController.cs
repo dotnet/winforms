@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Drawing.Printing;
 
 /// <summary>
-/// Specifies a print controller that sends information to a printer.
+///  Specifies a print controller that sends information to a printer.
 /// </summary>
 public class StandardPrintController : PrintController
 {
@@ -17,45 +17,39 @@ public class StandardPrintController : PrintController
     private Graphics? _graphics;
 
     /// <summary>
-    /// Implements StartPrint for printing to a physical printer.
+    ///  Implements StartPrint for printing to a physical printer.
     /// </summary>
     public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
         Debug.Assert(_dc is null && _graphics is null, "PrintController methods called in the wrong order?");
 
         base.OnStartPrint(document, e);
-        // the win32 methods below SuppressUnmanagedCodeAttributes so assertin on UnmanagedCodePermission is redundant
+
         if (!document.PrinterSettings.IsValid)
             throw new InvalidPrinterException(document.PrinterSettings);
 
         Debug.Assert(_modeHandle is not null, "_modeHandle should have been set by PrintController.OnStartPrint");
         _dc = document.PrinterSettings.CreateDeviceContext(_modeHandle);
-        Gdi32.DOCINFO info = new Gdi32.DOCINFO();
-        info.lpszDocName = document.DocumentName;
-        if (document.PrinterSettings.PrintToFile)
-            info.lpszOutput = document.PrinterSettings.OutputPort; // This will be "FILE:"
-        else
-            info.lpszOutput = null;
-        info.lpszDatatype = null;
-        info.fwType = 0;
+
+        Gdi32.DOCINFO info = new()
+        {
+            lpszDocName = document.DocumentName,
+            lpszDatatype = null,
+            fwType = 0,
+            // Print to file is "FILE:"
+            lpszOutput = document.PrinterSettings.PrintToFile ? document.PrinterSettings.OutputPort : null
+        };
 
         int result = Gdi32.StartDoc(new HandleRef(_dc, _dc.Hdc), info);
         if (result <= 0)
         {
             int error = Marshal.GetLastPInvokeError();
-            if (error == SafeNativeMethods.ERROR_CANCELLED)
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                throw new Win32Exception(error);
-            }
+            e.Cancel = error == SafeNativeMethods.ERROR_CANCELLED ? true : throw new Win32Exception(error);
         }
     }
 
     /// <summary>
-    /// Implements StartPage for printing to a physical printer.
+    ///  Implements StartPage for printing to a physical printer.
     /// </summary>
     public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
     {
@@ -79,9 +73,7 @@ public class StandardPrintController : PrintController
 
         if (document.OriginAtMargins)
         {
-            // Adjust the origin of the graphics object to be at the
-            // user-specified margin location
-            //
+            // Adjust the origin of the graphics object to be at the user-specified margin location.
             int dpiX = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
             int dpiY = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
             int hardMarginX_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETX);
@@ -94,13 +86,11 @@ public class StandardPrintController : PrintController
         }
 
         int result2 = Gdi32.StartPage(new HandleRef(_dc, _dc.Hdc));
-        if (result2 <= 0)
-            throw new Win32Exception();
-        return _graphics;
+        return result2 <= 0 ? throw new Win32Exception() : _graphics;
     }
 
     /// <summary>
-    /// Implements EndPage for printing to a physical printer.
+    ///  Implements EndPage for printing to a physical printer.
     /// </summary>
     public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
@@ -110,7 +100,9 @@ public class StandardPrintController : PrintController
         {
             int result = Gdi32.EndPage(new HandleRef(_dc, _dc.Hdc));
             if (result <= 0)
+            {
                 throw new Win32Exception();
+            }
         }
         finally
         {
@@ -122,7 +114,7 @@ public class StandardPrintController : PrintController
     }
 
     /// <summary>
-    /// Implements EndPrint for printing to a physical printer.
+    ///  Implements EndPrint for printing to a physical printer.
     /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {
