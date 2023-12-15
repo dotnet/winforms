@@ -11,8 +11,10 @@ internal static partial class PInvoke
     ///  Helper to scope creating regions. Deletes the region when disposed.
     /// </summary>
     /// <remarks>
-    ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-    ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double deletion.
+    ///  <para>
+    ///   Use in a <see langword="using" /> statement. If you must pass this around, always pass
+    ///   by <see langword="ref" /> to avoid duplicating the handle and risking a double deletion.
+    ///  </para>
     /// </remarks>
 #if DEBUG
     internal class RegionScope : DisposalTracking.Tracker, IDisposable

@@ -197,8 +197,7 @@ internal static class LinkUtilities
 
         Font f = baseFont;
 
-        // We optimize for the "same" value (never & always) to avoid creating an
-        // extra font object.
+        // We optimize for the "same" value (never & always) to avoid creating an extra font object.
         if (underlineHover == underlineLink)
         {
             FontStyle style = f.Style;
