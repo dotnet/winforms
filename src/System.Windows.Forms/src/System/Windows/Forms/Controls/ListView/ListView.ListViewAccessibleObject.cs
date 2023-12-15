@@ -359,8 +359,6 @@ public partial class ListView
             return null;
         }
 
-        internal override bool CanHitTestInternal(int x, int y) => false;
-
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
             if (!this.TryGetOwnerAs(out ListView? owningListView))

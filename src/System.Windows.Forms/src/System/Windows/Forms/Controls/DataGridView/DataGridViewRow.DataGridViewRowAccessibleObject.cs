@@ -335,8 +335,6 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetFocusedInternal => false;
-
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
             if (_owningDataGridViewRow is null)

@@ -238,8 +238,6 @@ public partial class ListBox
             return null;
         }
 
-        internal override bool CanGetFocusedInternal => false;
-
         public override AccessibleObject? GetSelected()
         {
             if (this.TryGetOwnerAs(out ListBox? owner))
@@ -254,8 +252,6 @@ public partial class ListBox
 
             return null;
         }
-
-        internal override bool CanGetSelectedInternal => false;
 
         public override AccessibleObject? HitTest(int x, int y)
         {
@@ -284,7 +280,5 @@ public partial class ListBox
 
             return null;
         }
-
-        internal override bool CanHitTestInternal(int x, int y) => false;
     }
 }

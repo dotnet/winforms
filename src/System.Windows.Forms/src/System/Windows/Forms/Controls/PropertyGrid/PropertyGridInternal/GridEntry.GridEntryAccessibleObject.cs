@@ -246,8 +246,6 @@ internal abstract partial class GridEntry
         public override AccessibleObject? GetFocused()
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.HasFocus ? this : null : null;
 
-        internal override bool CanGetFocusedInternal => false;
-
         /// <summary>
         ///  Navigate to the next or previous grid entry.
         /// </summary>
@@ -280,8 +278,6 @@ internal abstract partial class GridEntry
 
             return null;
         }
-
-        internal override bool CanNavigateDirectly => false;
 
         public override void Select(AccessibleSelection flags)
         {

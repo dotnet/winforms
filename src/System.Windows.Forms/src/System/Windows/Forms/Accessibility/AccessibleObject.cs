@@ -447,23 +447,7 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  When overridden in a derived class, gets the object that has the keyboard focus.
     /// </summary>
-    public virtual AccessibleObject? GetFocused() => TryGetAccessibleObject(GetFocusedInternal());
-
-    /// <summary>
-    ///  Determines if <see cref="GetFocusedInternal"/> can be called without calling <see cref="GetFocus"/>
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This is an optimization to avoid unnecessary allocations when being called from native code
-    ///  </para>
-    /// </remarks>
-    internal virtual bool CanGetFocusedInternal => IsInternal;
-
-    /// <summary>
-    ///  If there are children, retrieves the child ID of the focused child. If this object is focused. Otherwise
-    ///  returns self if this has focus or the System IAccessible focus.
-    /// </summary>
-    internal virtual VARIANT GetFocusedInternal()
+    public virtual AccessibleObject? GetFocused()
     {
         // Default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -475,16 +459,14 @@ public unsafe partial class AccessibleObject :
                 Debug.Assert(child is not null, $"GetChild({index}) returned null!");
                 if (child is not null && child.State.HasFlag(AccessibleStates.Focused))
                 {
-                    return AsChildIdVariant(child);
+                    return child;
                 }
             }
 
-            return State.HasFlag(AccessibleStates.Focused)
-                ? AsChildIdVariant(this)
-                : VARIANT.Empty;
+            return State.HasFlag(AccessibleStates.Focused) ? this : null;
         }
 
-        return TryGetSystemIAccessibleFocus();
+        return TryGetAccessibleObject(TryGetSystemIAccessibleFocus());
     }
 
     private VARIANT TryGetSystemIAccessibleFocus()
@@ -533,24 +515,7 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  When overridden in a derived class, gets the currently selected child.
     /// </summary>
-    public virtual AccessibleObject? GetSelected() => TryGetAccessibleObject(GetSelectedInternal());
-
-    /// <summary>
-    ///  Determines if <see cref="GetSelectedInternal"/> can be called without calling <see cref="GetSelected"/>
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This is an optimization to avoid unnecessary allocations when being called from native code
-    ///  </para>
-    /// </remarks>
-    internal virtual bool CanGetSelectedInternal => IsInternal;
-
-    /// <summary>
-    ///  If there are children, retrieves the child ID of the selected child. If this object is focused. Otherwise
-    ///  returns self if this is selected or the System IAccessible selected.
-    /// </summary>
-    /// <returns></returns>
-    internal virtual VARIANT GetSelectedInternal()
+    public virtual AccessibleObject? GetSelected()
     {
         // Default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -562,14 +527,14 @@ public unsafe partial class AccessibleObject :
                 Debug.Assert(child is not null, $"GetChild({index}) returned null!");
                 if (child is not null && child.State.HasFlag(AccessibleStates.Selected))
                 {
-                    return AsChildIdVariant(child);
+                    return child;
                 }
             }
 
-            return State.HasFlag(AccessibleStates.Selected) ? AsChildIdVariant(this) : default;
+            return State.HasFlag(AccessibleStates.Selected) ? this : null;
         }
 
-        return TryGetSystemIAccessibleSelection();
+        return TryGetAccessibleObject(TryGetSystemIAccessibleSelection());
     }
 
     private VARIANT TryGetSystemIAccessibleSelection()
@@ -577,14 +542,14 @@ public unsafe partial class AccessibleObject :
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return default;
+            return VARIANT.Empty;
         }
 
         result = accessible.Value->get_accSelection(out VARIANT selection);
         if (result.Failed)
         {
             Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(TryGetSystemIAccessibleSelection)} failed with {result}");
-            return default;
+            return VARIANT.Empty;
         }
 
         return selection;
@@ -593,23 +558,7 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  Return the child object at the given screen coordinates.
     /// </summary>
-    public virtual AccessibleObject? HitTest(int x, int y) => TryGetAccessibleObject(HitTestInternal(x, y));
-
-    /// <summary>
-    ///  Determines if <see cref="HitTestInternal(int, int)"/> can be called without calling <see cref="HitTest(int, int)"/>
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This is an optimization to avoid unnecessary allocations when being called from native code
-    ///  </para>
-    /// </remarks>
-    internal virtual bool CanHitTestInternal(int x, int y) => IsInternal;
-
-    /// <summary>
-    ///  If there are children, retrieves the child ID at (<paramref name="x"/>, <paramref name="y"/>).
-    ///  Otherwise returns self or the System IAccessible hit test result.
-    /// </summary>
-    internal virtual VARIANT HitTestInternal(int x, int y)
+    public virtual AccessibleObject? HitTest(int x, int y)
     {
         // Default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -621,21 +570,21 @@ public unsafe partial class AccessibleObject :
                 Debug.Assert(child is not null, $"GetChild({index}) returned null!");
                 if (child is not null && child.Bounds.Contains(x, y))
                 {
-                    return AsChildIdVariant(child);
+                    return child;
                 }
             }
 
-            return AsChildIdVariant(this);
+            return this;
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Succeeded)
         {
             result = accessible.Value->accHitTest(x, y, out VARIANT child);
-            return result.Failed || result == HRESULT.S_FALSE ? VARIANT.Empty : child;
+            return result.Failed || result == HRESULT.S_FALSE ? null : TryGetAccessibleObject(child);
         }
 
-        return Bounds.Contains(x, y) ? AsChildIdVariant(this) : VARIANT.Empty;
+        return Bounds.Contains(x, y) ? this : null;
     }
 
     internal virtual bool IsIAccessibleExSupported()
@@ -1678,7 +1627,7 @@ public unsafe partial class AccessibleObject :
 
         if (childId is null)
         {
-            return default;
+            return VARIANT.Empty;
         }
 
         IDispatch* dispatch = ComHelpers.TryGetComPointer<IDispatch>(childId);
@@ -1691,13 +1640,13 @@ public unsafe partial class AccessibleObject :
             };
         }
 
-        return default;
+        return VARIANT.Empty;
     }
 
     object? IAccessible.accHitTest(int xLeft, int yTop)
     {
         VARIANT result = default;
-        ((UIA.IAccessible.Interface)this).accHitTest(xLeft, yTop, &result).AssertSuccess();
+        ((UIA.IAccessible.Interface)this).accHitTest(xLeft, yTop, &result);
         return result.ToObject();
     }
 
@@ -1726,12 +1675,6 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (CanHitTestInternal(xLeft, yTop))
-            {
-                *pvarChild = HitTestInternal(xLeft, yTop);
-                return HRESULT.S_OK;
-            }
-
             AccessibleObject? obj = HitTest(xLeft, yTop);
             if (obj is not null)
             {
@@ -1821,12 +1764,6 @@ public unsafe partial class AccessibleObject :
             // Use the Navigate function's return value if available
             if (IsValidSelfChildID(varStart))
             {
-                if (CanNavigateDirectly)
-                {
-                    *pvarEndUpAt = NavigateInternal((AccessibleNavigation)navDir);
-                    return HRESULT.S_OK;
-                }
-
                 AccessibleObject? newObject = Navigate((AccessibleNavigation)navDir);
                 if (newObject is not null)
                 {
@@ -1839,9 +1776,7 @@ public unsafe partial class AccessibleObject :
             AccessibleObject? child = GetAccessibleChild(varStart);
             if (child is not null)
             {
-                *pvarEndUpAt = CanNavigateDirectly
-                    ? child.NavigateInternal((AccessibleNavigation)navDir)
-                    : AsChildIdVariant(child.Navigate((AccessibleNavigation)navDir));
+                *pvarEndUpAt = AsChildIdVariant(child.Navigate((AccessibleNavigation)navDir));
                 return HRESULT.S_OK;
             }
         }
@@ -2126,9 +2061,16 @@ public unsafe partial class AccessibleObject :
     {
         get
         {
-            VARIANT result = default;
-            ((UIA.IAccessible.Interface)this).get_accFocus(&result).AssertSuccess();
-            return result.vt is VARENUM.VT_INT or VARENUM.VT_I4 ? (int)result : TryGetAccessibleObject(result);
+            if (IsClientObject)
+            {
+                AccessibleObject? obj = GetFocused();
+                if (obj is not null)
+                {
+                    return obj == this ? (int)PInvoke.CHILDID_SELF : obj;
+                }
+            }
+
+            return TryGetAccessibleObject(TryGetSystemIAccessibleFocus());
         }
     }
 
@@ -2141,12 +2083,6 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (CanGetFocusedInternal)
-            {
-                *pvarChild = GetFocusedInternal();
-                return HRESULT.S_OK;
-            }
-
             AccessibleObject? obj = GetFocused();
             if (obj is not null)
             {
@@ -2431,12 +2367,6 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (CanGetSelectedInternal)
-            {
-                *pvarChildren = GetSelectedInternal();
-                return HRESULT.S_OK;
-            }
-
             AccessibleObject? obj = GetSelected();
             if (obj is not null)
             {
@@ -2694,12 +2624,7 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  When overridden in a derived class, navigates to another object.
     /// </summary>
-    public virtual AccessibleObject? Navigate(AccessibleNavigation navdir) =>
-        TryGetAccessibleObject(NavigateInternal(navdir));
-
-    internal virtual bool CanNavigateDirectly => IsInternal;
-
-    internal virtual VARIANT NavigateInternal(AccessibleNavigation navdir)
+    public virtual AccessibleObject? Navigate(AccessibleNavigation navdir)
     {
         // Some default behavior for objects with AccessibleObject children
         if (GetChildCount() >= 0)
@@ -2707,15 +2632,15 @@ public unsafe partial class AccessibleObject :
             switch (navdir)
             {
                 case AccessibleNavigation.FirstChild:
-                    return AsChildIdVariant(GetChild(0));
+                    return GetChild(0);
                 case AccessibleNavigation.LastChild:
-                    return AsChildIdVariant(GetChild(GetChildCount() - 1));
+                    return GetChild(GetChildCount() - 1);
                 case AccessibleNavigation.Previous:
                 case AccessibleNavigation.Up:
                 case AccessibleNavigation.Left:
                     if (Parent?.GetChildCount() > 0)
                     {
-                        return VARIANT.Empty;
+                        return null;
                     }
 
                     break;
@@ -2724,7 +2649,7 @@ public unsafe partial class AccessibleObject :
                 case AccessibleNavigation.Right:
                     if (Parent?.GetChildCount() > 0)
                     {
-                        return VARIANT.Empty;
+                        return null;
                     }
 
                     break;
@@ -2734,17 +2659,17 @@ public unsafe partial class AccessibleObject :
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            return VARIANT.Empty;
+            return null;
         }
 
         if (SysNavigate(navdir, (VARIANT)(int)PInvoke.CHILDID_SELF, out AccessibleObject? accessibleObject))
         {
-            return AsChildIdVariant(accessibleObject);
+            return accessibleObject;
         }
         else
         {
             result = accessible.Value->accNavigate((int)navdir, CHILDID_SELF, out VARIANT endUpAt);
-            return endUpAt;
+            return TryGetAccessibleObject(endUpAt);
         }
     }
 

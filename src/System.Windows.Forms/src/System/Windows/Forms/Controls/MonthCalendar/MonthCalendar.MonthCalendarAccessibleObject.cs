@@ -384,8 +384,6 @@ public partial class MonthCalendar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetFocusedInternal => false;
-
         private unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
         {
             if (!this.IsOwnerHandleCreated(out MonthCalendar? owner))

@@ -105,9 +105,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetFocused())
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.GetFocusedInternal())
-            .CallBase();
         Assert.Null(mockAccessibleObject.Object.GetFocused());
     }
 
@@ -123,9 +120,6 @@ public partial class AccessibleObjectTests
             .Returns(AccessibleStates.Focused);
         mockAccessibleObject
             .Setup(a => a.GetFocused())
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.GetFocusedInternal())
             .CallBase();
         Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.GetFocused());
     }
@@ -150,9 +144,6 @@ public partial class AccessibleObjectTests
                 .CallBase();
             mockAccessibleObject
                 .Setup(a => a.GetFocused())
-                .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.GetFocusedInternal())
                 .CallBase();
             Assert.Null(mockAccessibleObject.Object.GetFocused());
         }
@@ -191,9 +182,6 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.GetFocused())
                 .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.GetFocusedInternal())
-                .CallBase();
             Assert.Same(mockAccessibleObjectChild1.Object, mockAccessibleObject.Object.GetFocused());
         }
     }
@@ -226,9 +214,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetSelected())
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.GetSelectedInternal())
-            .CallBase();
         Assert.Null(mockAccessibleObject.Object.GetSelected());
     }
 
@@ -244,9 +229,6 @@ public partial class AccessibleObjectTests
             .Returns(AccessibleStates.Selected);
         mockAccessibleObject
             .Setup(a => a.GetSelected())
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.GetSelectedInternal())
             .CallBase();
         Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.GetSelected());
     }
@@ -271,9 +253,6 @@ public partial class AccessibleObjectTests
                 .CallBase();
             mockAccessibleObject
                 .Setup(a => a.GetSelected())
-                .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.GetSelectedInternal())
                 .CallBase();
             Assert.Null(mockAccessibleObject.Object.GetSelected());
         }
@@ -312,9 +291,6 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.GetSelected())
                 .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.GetSelectedInternal())
-                .CallBase();
             Assert.Same(mockAccessibleObjectChild1.Object, mockAccessibleObject.Object.GetSelected());
         }
     }
@@ -345,9 +321,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.HitTestInternal(x, y))
-            .CallBase();
         Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.HitTest(x, y));
     }
 
@@ -368,9 +341,6 @@ public partial class AccessibleObjectTests
             .CallBase();
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.HitTestInternal(x, y))
             .CallBase();
         Assert.Null(mockAccessibleObject.Object.HitTest(x, y));
     }
@@ -395,9 +365,6 @@ public partial class AccessibleObjectTests
                 .Returns(2);
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
-                .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.HitTestInternal(x, y))
                 .CallBase();
             Assert.Same(mockAccessibleObject.Object, mockAccessibleObject.Object.HitTest(x, y));
         }
@@ -435,9 +402,6 @@ public partial class AccessibleObjectTests
                 .Returns(3);
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
-                .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.HitTestInternal(x, y))
                 .CallBase();
             Assert.Same(mockAccessibleObjectChild1.Object, mockAccessibleObject.Object.HitTest(x, y));
         }
@@ -477,9 +441,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.Navigate(AccessibleNavigation.FirstChild))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.NavigateInternal(AccessibleNavigation.FirstChild))
-            .CallBase();
         Assert.Same(result, mockAccessibleObject.Object.Navigate(AccessibleNavigation.FirstChild));
         mockAccessibleObject.Verify(a => a.GetChild(0), Times.Once());
     }
@@ -498,9 +459,6 @@ public partial class AccessibleObjectTests
             .Verifiable();
         mockAccessibleObject
             .Setup(a => a.Navigate(AccessibleNavigation.LastChild))
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.NavigateInternal(AccessibleNavigation.LastChild))
             .CallBase();
         Assert.Same(result, mockAccessibleObject.Object.Navigate(AccessibleNavigation.LastChild));
         mockAccessibleObject.Verify(a => a.GetChild(childCount - 1), Times.Once());
@@ -543,9 +501,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.Navigate(navdir))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.NavigateInternal(navdir))
-            .CallBase();
         Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
         mockAccessibleObject.Verify(a => a.Parent, Times.Once());
         mockParentAccessibleObject.Verify(a => a.GetChildCount(), Times.Once());
@@ -569,9 +524,6 @@ public partial class AccessibleObjectTests
             .Returns((AccessibleObject)null);
         mockAccessibleObject
             .Setup(a => a.Navigate(navdir))
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.NavigateInternal(navdir))
             .CallBase();
 
         Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
@@ -982,9 +934,6 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetFocused())
             .Returns(result)
             .Verifiable();
-        mockAccessibleObject
-            .Setup(a => a.CanGetFocusedInternal)
-            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Same(result, iAccessible.accFocus);
         mockAccessibleObject.Verify(a => a.GetFocused(), Times.Once());
@@ -998,9 +947,6 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetFocused())
             .Returns(mockAccessibleObject.Object)
             .Verifiable();
-        mockAccessibleObject
-            .Setup(a => a.CanGetFocusedInternal)
-            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accFocus);
         mockAccessibleObject.Verify(a => a.GetFocused(), Times.Once());
@@ -1033,12 +979,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.HitTestInternal(x, y))
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.CanHitTestInternal(x, y))
-            .Returns(true);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accHitTest(x, y));
     }
@@ -1061,12 +1001,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.HitTest(x, y))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.HitTestInternal(x, y))
-            .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.CanHitTestInternal(x, y))
-            .Returns(true);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Null(iAccessible.accHitTest(x, y));
     }
@@ -1092,12 +1026,6 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
                 .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.HitTestInternal(x, y))
-                .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.CanHitTestInternal(x, y))
-                .Returns(true);
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Equal(0, iAccessible.accHitTest(x, y));
         }
@@ -1136,12 +1064,6 @@ public partial class AccessibleObjectTests
             mockAccessibleObject
                 .Setup(a => a.HitTest(x, y))
                 .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.HitTestInternal(x, y))
-                .CallBase();
-            mockAccessibleObject
-                .Setup(a => a.CanHitTestInternal(x, y))
-                .Returns(true);
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Same(mockAccessibleObjectChild1.Object, iAccessible.accHitTest(x, y));
         }
@@ -1259,9 +1181,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.IsValidSelfChildID(AccessibleObject.ChildIdToVARIANT(varChild)))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.CanNavigateDirectly)
-            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accNavigate(navDir, varChild));
         mockAccessibleObject.Verify(a => a.Navigate((AccessibleNavigation)navDir), Times.Once());
@@ -1299,9 +1218,6 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
             .CallBase();
-        mockAccessibleObject
-            .Setup(a => a.CanNavigateDirectly)
-            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.NotEqual(0, iAccessible.accNavigate(navDir, varChild));
@@ -1340,9 +1256,6 @@ public partial class AccessibleObjectTests
             .Returns(3);
         mockAccessibleObject
             .Setup(a => a.IsValidSelfChildID((VARIANT)(int)varChild))
-            .Returns(false);
-        mockAccessibleObject
-            .Setup(a => a.CanNavigateDirectly)
             .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
@@ -1522,9 +1435,6 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetSelected())
             .Returns(result)
             .Verifiable();
-        mockAccessibleObject
-            .Setup(a => a.CanGetSelectedInternal)
-            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Same(result, iAccessible.accSelection);
         mockAccessibleObject.Verify(a => a.GetSelected(), Times.Once());
@@ -1538,9 +1448,6 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetSelected())
             .Returns(mockAccessibleObject.Object)
             .Verifiable();
-        mockAccessibleObject
-            .Setup(a => a.CanGetSelectedInternal)
-            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(0, iAccessible.accSelection);
         mockAccessibleObject.Verify(a => a.GetSelected(), Times.Once());

@@ -73,8 +73,6 @@ public partial class LinkLabel
             return Bounds.Contains(x, y) ? this : null;
         }
 
-        internal override bool CanHitTestInternal(int x, int y) => false;
-
         internal override bool IsIAccessibleExSupported() => true;
 
         internal override int[] RuntimeId => _runtimeId ??= base.RuntimeId;

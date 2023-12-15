@@ -418,12 +418,8 @@ internal partial class PropertyGridView
             return null;
         }
 
-        internal override bool CanGetFocusedInternal => false;
-
         public override AccessibleObject? GetSelected()
             => !this.TryGetOwnerAs(out PropertyGridView? owner) ? null : owner.SelectedGridEntry?.AccessibilityObject;
-
-        internal override bool CanGetSelectedInternal => false;
 
         public override AccessibleObject? HitTest(int x, int y)
         {
@@ -452,8 +448,6 @@ internal partial class PropertyGridView
             return null;
         }
 
-        internal override bool CanHitTestInternal(int x, int y) => false;
-
         public override AccessibleObject? Navigate(AccessibleNavigation navdir)
         {
             if (GetChildCount() > 0)
@@ -471,8 +465,6 @@ internal partial class PropertyGridView
             // Perform default behavior
             return null;
         }
-
-        internal override bool CanNavigateDirectly => false;
 
         internal override IRawElementProviderSimple.Interface? GetItem(int row, int column) => GetChild(row);
 

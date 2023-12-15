@@ -89,8 +89,6 @@ public partial class DataGridViewRow
 
         public override AccessibleObject GetSelected() => this;
 
-        internal override bool CanGetSelectedInternal => false;
-
         public override AccessibleObject? GetFocused()
         {
             DataGridViewCell? currentCell = _owningDataGridViewRow.DataGridView?.CurrentCell;
@@ -103,8 +101,6 @@ public partial class DataGridViewRow
                 return null;
             }
         }
-
-        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
@@ -134,7 +130,5 @@ public partial class DataGridViewRow
                     return null;
             }
         }
-
-        internal override bool CanNavigateDirectly => false;
     }
 }

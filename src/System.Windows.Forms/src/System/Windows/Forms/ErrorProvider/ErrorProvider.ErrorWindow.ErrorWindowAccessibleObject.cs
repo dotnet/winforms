@@ -77,8 +77,6 @@ public partial class ErrorProvider
                 return null;
             }
 
-            internal override bool CanHitTestInternal(int x, int y) => false;
-
             internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
                 get

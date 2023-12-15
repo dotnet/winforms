@@ -120,12 +120,6 @@ public partial class TreeNode
 
         public override AccessibleObject? HitTest(int x, int y) => _owningTreeView.AccessibilityObject.HitTest(x, y);
 
-        internal override bool CanHitTestInternal(int x, int y) =>
-            _owningTreeView.AccessibilityObject.CanHitTestInternal(x, y);
-
-        internal override VARIANT HitTestInternal(int x, int y) =>
-            _owningTreeView.AccessibilityObject.HitTestInternal(x, y);
-
         internal int Index => _owningTreeView.Nodes.IndexOf(_owningTreeNode);
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)

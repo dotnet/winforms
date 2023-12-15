@@ -50,14 +50,10 @@ public partial class DataGridView
 
         public override AccessibleObject GetSelected() => this;
 
-        internal override bool CanGetSelectedInternal => false;
-
         public override AccessibleObject? GetFocused() =>
             _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && owner.CurrentCell is not null && owner.CurrentCell.Selected
                 ? owner.CurrentCell.AccessibilityObject
                 : null;
-
-        internal override bool CanGetFocusedInternal => false;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
@@ -81,7 +77,5 @@ public partial class DataGridView
                     }
             }
         }
-
-        internal override bool CanNavigateDirectly => false;
     }
 }

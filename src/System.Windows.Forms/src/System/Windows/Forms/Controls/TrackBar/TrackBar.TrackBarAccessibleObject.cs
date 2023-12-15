@@ -123,8 +123,6 @@ public partial class TrackBar
             return null;
         }
 
-        internal override bool CanHitTestInternal(int x, int y) => false;
-
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {
             AccessibleObject? element = HitTest((int)x, (int)y);

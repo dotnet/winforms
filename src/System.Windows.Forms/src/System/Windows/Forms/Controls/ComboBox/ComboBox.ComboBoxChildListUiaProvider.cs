@@ -150,11 +150,6 @@ public partial class ComboBox
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetFocusedInternal => false;
-
-        internal override VARIANT GetFocusedInternal() =>
-            !_owningComboBox.IsHandleCreated ? VARIANT.Empty : base.GetFocusedInternal();
-
         internal override IRawElementProviderSimple.Interface[] GetSelection()
         {
             if (!_owningComboBox.IsHandleCreated)

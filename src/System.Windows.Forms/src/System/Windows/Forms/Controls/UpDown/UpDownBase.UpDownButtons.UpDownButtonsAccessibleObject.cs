@@ -73,8 +73,6 @@ public abstract partial class UpDownBase
                 return null;
             }
 
-            internal override bool CanHitTestInternal(int x, int y) => false;
-
             internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
                 get

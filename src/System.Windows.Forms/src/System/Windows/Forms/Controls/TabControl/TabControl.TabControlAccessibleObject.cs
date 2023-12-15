@@ -105,8 +105,6 @@ public partial class TabControl
             return this;
         }
 
-        internal override bool CanHitTestInternal(int x, int y) => false;
-
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 

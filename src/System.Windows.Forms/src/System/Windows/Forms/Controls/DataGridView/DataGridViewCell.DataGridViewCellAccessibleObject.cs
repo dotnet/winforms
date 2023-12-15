@@ -436,8 +436,6 @@ public abstract partial class DataGridViewCell
 
         public override AccessibleObject? GetFocused() => null;
 
-        internal override bool CanGetFocusedInternal => false;
-
         public override AccessibleObject? GetSelected() => null;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)

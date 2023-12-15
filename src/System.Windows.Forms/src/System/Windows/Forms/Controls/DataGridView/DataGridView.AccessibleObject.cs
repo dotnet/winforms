@@ -164,12 +164,7 @@ public partial class DataGridView
             }
         }
 
-        internal override bool CanGetFocusedInternal => false;
-
-        public override AccessibleObject GetSelected()
-        {
-            return SelectedCellsAccessibilityObject;
-        }
+        public override AccessibleObject GetSelected() => SelectedCellsAccessibilityObject;
 
         public override AccessibleObject? HitTest(int x, int y)
         {

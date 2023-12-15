@@ -263,8 +263,6 @@ public abstract partial class ToolStripItem
             return nextItem?.AccessibilityObject;
         }
 
-        internal override bool CanNavigateDirectly => false;
-
         public void AddState(AccessibleStates state)
         {
             if (state == AccessibleStates.None)
