@@ -90,7 +90,7 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown, int*
 
         SAFEARRAY *result;
         hr = pAccessibleEx->GetRuntimeId(&result);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(COR_E_NOTSUPPORTED, hr);
         SafeArrayDestroy(result);
 
         // Negative tests.

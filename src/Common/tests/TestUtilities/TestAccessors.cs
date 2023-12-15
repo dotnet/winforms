@@ -33,6 +33,12 @@ public static partial class TestAccessors
     ///
     ///  dynamic accessor = version.TestAccessor().Dynamic;
     ///  Assert.Equal(4, accessor._Major));
+    ///
+    /// // Or
+    ///
+    ///  Version version2 = new Version("4.1");
+    ///  dynamic accessor = typeof(Version).TestAccessor().Dynamic;
+    ///  Assert.Equal(version2, accessor.Parse("4.1")));
     /// ]]>
     /// </example>
     public static ITestAccessor TestAccessor(this object instanceOrType)

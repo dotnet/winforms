@@ -968,7 +968,16 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pRetVal = new SafeArrayScope<int>(RuntimeId);
+        try
+        {
+            *pRetVal = new SafeArrayScope<int>(RuntimeId);
+        }
+        catch (NotSupportedException)
+        {
+            *pRetVal = default;
+            return HRESULT.COR_E_NOTSUPPORTED;
+        }
+
         return HRESULT.S_OK;
     }
 
@@ -1617,8 +1626,7 @@ public unsafe partial class AccessibleObject :
         return accessible.Value->accDoDefaultAction(varChild);
     }
 
-    // internal for testing.
-    internal static VARIANT ChildIdToVARIANT(object childId)
+    private static VARIANT ChildIdToVARIANT(object childId)
     {
         if (childId is int integer)
         {
