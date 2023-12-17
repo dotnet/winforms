@@ -231,15 +231,15 @@ public static class TestHelpers
             throw new ArgumentNullException(nameof(seek));
         }
 
-        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
-        var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-        var currentDirectory = Path.GetDirectoryName(codeBasePath);
-        var root = Directory.GetDirectoryRoot(currentDirectory);
+        Uri codeBaseUrl = new(Assembly.GetExecutingAssembly().Location);
+        string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+        string currentDirectory = Path.GetDirectoryName(codeBasePath);
+        string root = Directory.GetDirectoryRoot(currentDirectory);
         while (!currentDirectory.Equals(root, StringComparison.CurrentCultureIgnoreCase))
         {
             if (Directory.GetDirectories(currentDirectory, seek, SearchOption.TopDirectoryOnly).Length == 1)
             {
-                var ret = Path.Combine(currentDirectory, seek);
+                string ret = Path.Combine(currentDirectory, seek);
                 return ret;
             }
 

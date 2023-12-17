@@ -8,7 +8,7 @@ namespace ScratchProject;
 internal static class Program
 {
     [STAThread]
-    static void Main()
+    public static void Main()
     {
         Application.EnableVisualStyles();
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);

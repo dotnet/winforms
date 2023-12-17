@@ -488,7 +488,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
     private static void ThrowIfDirectoryDoesntExist(string filename)
     {
-        var directoryPart = Path.GetDirectoryName(filename);
+        string? directoryPart = Path.GetDirectoryName(filename);
         if (!string.IsNullOrEmpty(directoryPart) && !Directory.Exists(directoryPart))
         {
             throw new DirectoryNotFoundException(SR.Format(SR.TargetDirectoryDoesNotExist, directoryPart, filename));
@@ -644,7 +644,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
             if (count == 0)
                 return Array.Empty<int>();
 
-            var propid = new int[count];
+            int[] propid = new int[count];
             fixed (int* pPropid = propid)
             {
                 Gdip.CheckStatus(Gdip.GdipGetPropertyIdList(new HandleRef(this, _nativeImage), count, pPropid));

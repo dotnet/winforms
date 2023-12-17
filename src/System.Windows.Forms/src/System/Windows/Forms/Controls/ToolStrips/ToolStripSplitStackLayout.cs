@@ -388,7 +388,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         Size toolStripPreferredSize = displayRectangle.Size;
         DockStyle dock = toolStrip.Dock;
-        var IsNotInToolStripPanelWithLeftDockstyle = !toolStrip.IsInToolStripPanel && dock == DockStyle.Left;
+        bool IsNotInToolStripPanelWithLeftDockstyle = !toolStrip.IsInToolStripPanel && dock == DockStyle.Left;
         if (toolStrip.AutoSize && (IsNotInToolStripPanelWithLeftDockstyle || dock == DockStyle.Right))
         {
             // if we're autosizing, make sure we pad out items to the preferred width, not the

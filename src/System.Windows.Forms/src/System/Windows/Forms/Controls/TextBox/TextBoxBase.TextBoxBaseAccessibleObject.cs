@@ -78,7 +78,7 @@ public abstract partial class TextBoxBase
         {
             get
             {
-                var name = base.Name;
+                string? name = base.Name;
                 return name is not null ? name : string.Empty;
             }
 

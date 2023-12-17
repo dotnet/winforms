@@ -10,7 +10,7 @@ internal static class RegistryKeyExtensions
     public static string? GetMUIString(this RegistryKey? key, string keyName, string fallbackKeyName)
     {
         return key is not null
-            ? PInvoke.RegLoadMUIString(key, keyName, out var localizedValue)
+            ? PInvoke.RegLoadMUIString(key, keyName, out string localizedValue)
                 ? localizedValue
                 : key.GetValue(fallbackKeyName) is string value
                     ? value

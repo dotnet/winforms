@@ -83,7 +83,7 @@ public class TestAccessor<T> : ITestAccessor
     /// <inheritdoc/>
     public dynamic Dynamic => _dynamicWrapper;
 
-    private class DynamicWrapper : DynamicObject
+    private sealed class DynamicWrapper : DynamicObject
     {
         private readonly object? _instance;
 

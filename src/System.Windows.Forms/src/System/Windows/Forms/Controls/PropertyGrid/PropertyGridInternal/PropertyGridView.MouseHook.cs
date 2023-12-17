@@ -91,7 +91,7 @@ internal partial class PropertyGridView
                 }
 
                 _callBack = MouseHookProc;
-                var hook = Marshal.GetFunctionPointerForDelegate(_callBack);
+                IntPtr hook = Marshal.GetFunctionPointerForDelegate(_callBack);
                 _mouseHookHandle = PInvoke.SetWindowsHookEx(
                     WINDOWS_HOOK_ID.WH_MOUSE,
                     (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,

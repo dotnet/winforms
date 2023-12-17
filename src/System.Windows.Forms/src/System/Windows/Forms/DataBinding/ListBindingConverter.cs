@@ -131,7 +131,7 @@ public class ListBindingConverter : TypeConverter
             }
 
             // get the property and see if it needs to be serialized.
-            var constructorParameterProperty = ConstructorParameterProperties[lastItem];
+            string? constructorParameterProperty = ConstructorParameterProperties[lastItem];
             if (constructorParameterProperty is null)
             {
                 break;
@@ -180,7 +180,7 @@ public class ListBindingConverter : TypeConverter
                     val = b.BindingMemberInfo.BindingMember;
                     break;
                 default:
-                    var constructorParameterProperty = ConstructorParameterProperties[i];
+                    string? constructorParameterProperty = ConstructorParameterProperties[i];
                     if (constructorParameterProperty is not null)
                     {
                         val = TypeDescriptor.GetProperties(b)[constructorParameterProperty]?.GetValue(b);

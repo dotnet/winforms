@@ -87,8 +87,8 @@ public class KeysConverter : TypeConverter, IComparer
 
         void AddLocalizedKey(string keyName, Keys value)
         {
-            var key = SR.ResourceManager.GetString(keyName, cultureInfo)
-                      ?? throw new InvalidOperationException(string.Format(SR.ResourceValueNotFound, keyName));
+            string key = SR.ResourceManager.GetString(keyName, cultureInfo) ??
+                throw new InvalidOperationException(string.Format(SR.ResourceValueNotFound, keyName));
             AddKey(key, value);
         }
     }
@@ -291,7 +291,7 @@ public class KeysConverter : TypeConverter, IComparer
             {
                 // First, iterate through and do the modifiers. These are
                 // additive, so we support things like Ctrl + Alt
-                foreach (var keyString in displayOrder)
+                foreach (string keyString in displayOrder)
                 {
                     Keys keyValue = keyNames[keyString];
                     if (keyValue != Keys.None && modifiers.HasFlag(keyValue))
@@ -306,7 +306,7 @@ public class KeysConverter : TypeConverter, IComparer
             Keys keyOnly = key & Keys.KeyCode;
             bool foundKey = false;
 
-            foreach (var keyString in displayOrder)
+            foreach (string keyString in displayOrder)
             {
                 Keys keyValue = keyNames[keyString];
                 if (keyValue.Equals(keyOnly))

@@ -196,7 +196,7 @@ public partial class ListViewItem
         {
             get
             {
-                var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
+                int[] owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
 
                 Debug.Assert(owningListViewRuntimeId.Length >= 2);
 

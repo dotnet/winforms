@@ -53,7 +53,7 @@ public static class BinarySerialization
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
     public static T EnsureDeserialize<T>(string blob)
     {
-        var @object = FromBase64String(blob);
+        object @object = FromBase64String(blob);
         Assert.NotNull(@object);
         return Assert.IsType<T>(@object);
 

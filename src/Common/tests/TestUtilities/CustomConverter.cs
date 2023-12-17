@@ -51,7 +51,7 @@ public static class CustomConverter
             [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
             object? instance) => new TypeConverterProvider(base.GetTypeDescriptor(objectType, instance), _converter);
 
-        private class TypeConverterProvider : CustomTypeDescriptor
+        private sealed class TypeConverterProvider : CustomTypeDescriptor
         {
             private TypeConverter _converter;
 

@@ -3936,7 +3936,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 // ToolStripItems are components and have Font property. Components do not receive WM_DPICHANGED messages, nor they have
                 // parent-child relationship with owners and, thus, do not get scaled by parent/Container. For these reasons, they need the font
                 // to be explicitly updated when Dpi changes (only if the font was set explicitly).
-                var factor = (float)deviceDpiNew / deviceDpiOld;
+                float factor = (float)deviceDpiNew / deviceDpiOld;
                 foreach (ToolStripItem item in Items)
                 {
                     if (item.TryGetExplicitlySetFont(out Font? local))

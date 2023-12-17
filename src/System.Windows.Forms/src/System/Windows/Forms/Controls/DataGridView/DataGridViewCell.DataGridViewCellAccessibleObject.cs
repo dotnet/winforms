@@ -320,8 +320,8 @@ public abstract partial class DataGridViewCell
             Rectangle columnRect = _owner.DataGridView.RectangleToScreen(
                 _owner.DataGridView.GetColumnDisplayRectangle(_owner.ColumnIndex, cutOverflow: false));
 
-            var cellRight = columnRect.Left + columnRect.Width;
-            var cellLeft = columnRect.Left;
+            int cellRight = columnRect.Left + columnRect.Width;
+            int cellLeft = columnRect.Left;
 
             int rightToLeftRowHeadersWidth = 0;
             int leftToRightRowHeadersWidth = 0;

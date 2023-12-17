@@ -162,7 +162,7 @@ public class ImageKeyConverter : StringConverter
                     StringCollection imageKeys = imageList.Images.Keys;
                     for (int i = 0; i < imageKeys.Count; i++)
                     {
-                        var key = imageKeys[i];
+                        string? key = imageKeys[i];
                         if (!string.IsNullOrEmpty(key))
                         {
                             values[i] = key;

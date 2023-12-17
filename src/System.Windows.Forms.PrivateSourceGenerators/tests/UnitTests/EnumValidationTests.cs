@@ -336,7 +336,7 @@ namespace Paint
         {
             Assert.True(lines.Count > 0);
 
-            var line = lines[0].Trim();
+            string line = lines[0].Trim();
             lines.RemoveAt(0);
             Assert.Equal(expected, line);
         }
