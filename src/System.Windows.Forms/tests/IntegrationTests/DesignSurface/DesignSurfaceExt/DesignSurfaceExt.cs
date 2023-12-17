@@ -370,7 +370,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
         try
         {
-            CommandID commandId = command.ToUpper() switch
+            CommandID commandId = command.ToUpperInvariant() switch
             {
                 "CUT" => StandardCommands.Cut,
                 "COPY" => StandardCommands.Copy,

@@ -13,8 +13,8 @@ public partial class PrintingControls : Form
         InitializeComponent();
     }
 
-    int totalNumber;// this is for total number of items of the list or array
-    int itemPerpage;// this is for no of item per page
+    private int totalNumber;// this is for total number of items of the list or array
+    private int itemPerpage;// this is for no of item per page
     private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
     {
         float currentY = 50;// declare  one variable for height measurement
