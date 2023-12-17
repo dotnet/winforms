@@ -97,7 +97,7 @@ public static partial class PlatformDetection
     {
         try
         {
-            var tmp = new byte[int.MaxValue];
+            byte[] tmp = new byte[int.MaxValue];
             return tmp is null;
         }
         catch (OutOfMemoryException)
