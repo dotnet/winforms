@@ -312,4 +312,9 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
             return HorizontalAlignment.Left;
         }
     }
+
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+    }
 }

@@ -125,6 +125,11 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         }
     }
 
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+    }
+
     internal override void ReleaseUiaProvider(HWND handle)
     {
         if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
