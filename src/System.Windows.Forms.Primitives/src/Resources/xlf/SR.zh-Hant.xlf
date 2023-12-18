@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="ResourceNotFound">
         <source>Resource '{1}' cannot be found in class '{0}'.</source>
-        <target state="new">Resource '{1}' cannot be found in class '{0}'.</target>
+        <target state="translated">在類別 '{1}' 中找不到資源 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

@@ -10231,7 +10231,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Seçilen özellik değeri değiştiğinde gerçekleşir.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">
