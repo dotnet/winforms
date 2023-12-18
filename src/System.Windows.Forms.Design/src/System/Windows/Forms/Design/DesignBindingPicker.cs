@@ -2013,12 +2013,12 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private static int GetMaxItemWidth(TreeNodeCollection nodes)
             {
-                var maxWidth = 0;
+                int maxWidth = 0;
 
                 foreach (TreeNode node in nodes)
                 {
                     Rectangle bounds = node.Bounds;
-                    var w = bounds.Left + bounds.Width;
+                    int w = bounds.Left + bounds.Width;
                     maxWidth = Math.Max(w, maxWidth);
 
                     if (node.IsExpanded)

@@ -243,7 +243,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
 
                     if (propertyInfo is not null)
                     {
-                        var component = ownerArray.GetValue(i)!;
+                        object component = ownerArray.GetValue(i)!;
                         changeService.OnComponentChanging(component, propertyInfo);
                         changeService.OnComponentChanged(component, propertyInfo);
                     }

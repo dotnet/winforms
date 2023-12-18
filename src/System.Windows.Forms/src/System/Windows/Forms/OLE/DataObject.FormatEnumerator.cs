@@ -126,8 +126,8 @@ public partial class DataObject
 
             // Eliminate null bang after https://github.com/dotnet/runtime/pull/68537 lands, or
             // IEnumFORMATETC annotations would be corrected.
-            var result = Next((int)celt, elt, pceltFetched is null ? null! : celtFetched);
-            for (var i = 0; i < celt; i++)
+            int result = Next((int)celt, elt, pceltFetched is null ? null! : celtFetched);
+            for (int i = 0; i < celt; i++)
             {
                 rgelt[i] = elt[i];
             }

@@ -872,14 +872,14 @@ public partial class PrintPreviewControl : Control
 
         void AdjustScroll(ScrollBar scrollBar, int virtualDimension, int displayDimension, int offset)
         {
-            var oldLargeChange = scrollBar.LargeChange;
+            int oldLargeChange = scrollBar.LargeChange;
 
             scrollBar.Maximum = virtualDimension;
             scrollBar.LargeChange = displayDimension - offset;
 
             if (scrollBar.Value > 0)
             {
-                var diff = scrollBar.LargeChange - oldLargeChange;
+                int diff = scrollBar.LargeChange - oldLargeChange;
 
                 if (scrollBar.Value >= diff)
                 {

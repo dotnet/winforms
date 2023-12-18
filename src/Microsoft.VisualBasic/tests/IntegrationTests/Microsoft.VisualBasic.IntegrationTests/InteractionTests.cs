@@ -104,7 +104,7 @@ public class InteractionTests
     [Fact]
     public void Shell_FileNotFoundException()
     {
-        var path = Path.Combine(Path.GetTempPath(), GetUniqueName());
+        string path = Path.Combine(Path.GetTempPath(), GetUniqueName());
         // Exception.ToString() called to verify message is constructed successfully.
         _ = Assert.Throws<FileNotFoundException>(() => Interaction.Shell(path)).ToString();
     }

@@ -105,7 +105,7 @@ public partial class ListViewGroup
         {
             get
             {
-                var owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
+                int[] owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
 
                 Debug.Assert(owningListViewRuntimeId.Length >= 2);
 

@@ -51,7 +51,7 @@ public class EventHandlerServiceTests
         A a = new A();
         service.PushHandler(a);
 
-        var foundHandler = service.GetHandler(typeof(A));
+        object foundHandler = service.GetHandler(typeof(A));
         Assert.Same(a, foundHandler);
         foundHandler = service.GetHandler(typeof(A));
         Assert.Same(a, foundHandler);
@@ -66,7 +66,7 @@ public class EventHandlerServiceTests
         B b = new B();
         service.PushHandler(b);
 
-        var foundHandler = service.GetHandler(typeof(A));
+        object foundHandler = service.GetHandler(typeof(A));
 
         Assert.Same(b, foundHandler);
     }

@@ -75,7 +75,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         // If the FLP is InheritedReadOnly, so should be all of the children.
         if (IsInheritedReadOnly)
         {
-            foreach (var child in Control.Controls)
+            foreach (object child in Control.Controls)
             {
                 TypeDescriptor.AddAttributes(child, InheritanceAttribute.InheritedReadOnly);
             }
@@ -185,7 +185,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         _childInfo = new ChildInfo[children.Count];
 
         FlowDirection flowDirection = RTLTranslateFlowDirection(FlowLayoutPanel.FlowDirection);
-        var horizontalFlow = HorizontalFlow;
+        bool horizontalFlow = HorizontalFlow;
 
         int currentMinTopLeft = int.MaxValue;
         int currentMaxBottomRight = -1;
@@ -317,7 +317,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         }
 
         // Pass2 - adjust all controls to max width/height according to their row/column.
-        var controlIndex = 0;
+        int controlIndex = 0;
         foreach (var size in _commonSizes)
         {
             while (controlIndex < size.LastIndex)
@@ -344,7 +344,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         if (_dragControls.Count == 1)
         {
-            var name = TypeDescriptor.GetComponentName(_dragControls[0]);
+            string name = TypeDescriptor.GetComponentName(_dragControls[0]);
             if (string.IsNullOrEmpty(name))
             {
                 name = _dragControls[0].GetType().Name;
@@ -571,7 +571,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
     private void ReorderControls(DragEventArgs de)
     {
-        var performCopy = de.Effect == DragDropEffects.Copy;
+        bool performCopy = de.Effect == DragDropEffects.Copy;
 
         // create our transaction
         DesignerTransaction designerTransaction = TryGetService(out IDesignerHost host)
@@ -648,7 +648,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
                 }
 
                 // And stick the copied controls back into the dragControls array.
-                for (var j = 0; j < tempList.Count; j++)
+                for (int j = 0; j < tempList.Count; j++)
                 {
                     // Save off the old controls first.
                     originalControls.Add(_dragControls[j]);
@@ -681,7 +681,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
             // Note _dragControls are in opposite order than what FLP uses,
             // so add from the end.
-            for (var i = _dragControls.Count - 1; i >= 0; i--)
+            for (int i = _dragControls.Count - 1; i >= 0; i--)
             {
                 if (_primaryDragControl.Equals(_dragControls[i]))
                 {
@@ -703,7 +703,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             // If we did a Copy, then restore the old controls to make sure we set state correctly.
             if (originalControls is not null)
             {
-                for (var i = 0; i < originalControls.Count; i++)
+                for (int i = 0; i < originalControls.Count; i++)
                 {
                     _dragControls[i] = (Control)originalControls[i];
                 }
@@ -859,7 +859,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         {
             // Here, we're in a dead area - see what row / column we're in for a
             // best-guess at the insertion index.
-            var offset = HorizontalFlow ? controlOffset.Y : controlOffset.X;
+            int offset = HorizontalFlow ? controlOffset.Y : controlOffset.X;
             foreach (var size in _commonSizes)
             {
                 bool match;

@@ -104,7 +104,7 @@ public partial class ListViewItem
             {
                 get
                 {
-                    var owningItemRuntimeId = Parent.RuntimeId;
+                    int[] owningItemRuntimeId = Parent.RuntimeId;
 
                     Debug.Assert(owningItemRuntimeId.Length >= 4);
 

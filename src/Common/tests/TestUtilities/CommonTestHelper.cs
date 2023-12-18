@@ -78,7 +78,7 @@ public static class CommonTestHelper
         TheoryData<Point> data = new();
         if (!includeType.HasFlag(TestIncludeType.NoPositives))
         {
-            data.Add(new Point());
+            data.Add(default(Point));
             data.Add(new Point(10));
             data.Add(new Point(1, 2));
         }
@@ -99,7 +99,7 @@ public static class CommonTestHelper
         TheoryData<Size> data = new();
         if (!includeType.HasFlag(TestIncludeType.NoPositives))
         {
-            data.Add(new Size());
+            data.Add(default(Size));
             data.Add(new Size(new Point(1, 1)));
             data.Add(new Size(1, 2));
         }

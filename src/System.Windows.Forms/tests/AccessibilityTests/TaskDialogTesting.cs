@@ -89,4 +89,3 @@ public partial class TaskDialogTesting
         Console.WriteLine($"---> Dialog Result: {dialogResult}");
     }
 }
-

@@ -158,8 +158,8 @@ public sealed class PathGradientBrush : Brush
 
             int count = retval;
 
-            var factors = new float[count];
-            var positions = new float[count];
+            float[] factors = new float[count];
+            float[] positions = new float[count];
 
             // Retrieve horizontal blend factors
 

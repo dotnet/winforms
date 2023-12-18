@@ -2462,7 +2462,7 @@ public partial class ListView : Control
         FileInfo fi;
         for (int i = 0; i <= _bkImgFileNamesCount; i++)
         {
-            var bkImgFileName = _bkImgFileNames[i];
+            string? bkImgFileName = _bkImgFileNames[i];
             if (bkImgFileName is null)
             {
                 continue;
@@ -3172,7 +3172,7 @@ public partial class ListView : Control
                 {
                     if (_bkImgFileNames is not null)
                     {
-                        var bkImgFileName = _bkImgFileNames[i];
+                        string? bkImgFileName = _bkImgFileNames[i];
                         if (bkImgFileName is null)
                         {
                             continue;

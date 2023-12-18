@@ -79,7 +79,7 @@ internal class EmfScope :
         GCHandle enumeratorHandle = GCHandle.Alloc(enumerator);
         try
         {
-            var callback = Marshal.GetFunctionPointerForDelegate(CallBack);
+            IntPtr callback = Marshal.GetFunctionPointerForDelegate(CallBack);
             PInvoke.EnumEnhMetaFile(
                 default,
                 HENHMETAFILE,

@@ -456,7 +456,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
             var result = enumVariant.Next(1, &variantObject, &retreivedCount);
             Assert.Equal(HRESULT.S_OK, result);
 
-        var retreivedItem = variantObject.ToObject();
+        object retreivedItem = variantObject.ToObject();
 
         Assert.Equal(1, Assert.IsType<int>(retreivedItem));
     }

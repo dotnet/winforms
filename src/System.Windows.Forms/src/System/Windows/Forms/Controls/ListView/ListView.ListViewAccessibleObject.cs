@@ -382,7 +382,7 @@ public partial class ListView
                 return;
             }
 
-            foreach (var view in s_enumViewValues)
+            foreach (int view in s_enumViewValues)
             {
                 if (view == viewId)
                 {

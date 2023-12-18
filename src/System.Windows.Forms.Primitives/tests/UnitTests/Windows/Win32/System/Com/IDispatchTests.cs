@@ -22,7 +22,7 @@ public partial class IDispatchTests
         fixed (char* other = "Other")
         {
             var rgszNames = new PWSTR[] { width, other };
-            var rgDispId = new int[rgszNames.Length];
+            int[] rgDispId = new int[rgszNames.Length];
             fixed (int* pRgDispId = rgDispId)
             fixed (PWSTR* pRgszNames = rgszNames)
             {

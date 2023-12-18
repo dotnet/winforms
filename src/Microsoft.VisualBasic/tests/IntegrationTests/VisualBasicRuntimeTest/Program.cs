@@ -11,10 +11,10 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace VisualBasicRuntimeTest;
 
-internal class Program
+internal static class Program
 {
     [STAThread]
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
         try
         {
