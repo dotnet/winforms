@@ -36,6 +36,17 @@ public unsafe class ComSafeArrayScopeTests
     }
 
     [Fact]
+    public void ComSafeArrayScope_IndexSet_AddsRef()
+    {
+        MyStream stream = new();
+        using ComScope<IStream> streamScope = ComHelpers.GetComScope<IStream>(stream);
+        using ComSafeArrayScope<IStream> scope = new(1);
+        scope[0] = streamScope;
+        streamScope.Value->AddRef();
+        Assert.Equal((uint)2, streamScope.Value->Release());
+    }
+
+    [Fact]
     public void ComSafeArrayScope_CreateFromInterfaceArray_ThrowsArgumentException()
     {
         IStream.Interface[] streams = [new MyStream()];
