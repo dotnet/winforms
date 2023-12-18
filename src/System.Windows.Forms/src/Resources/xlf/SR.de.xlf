@@ -10231,7 +10231,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Tritt ein, wenn sich der ausgewählte Eigenschaftswert ändert.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">
