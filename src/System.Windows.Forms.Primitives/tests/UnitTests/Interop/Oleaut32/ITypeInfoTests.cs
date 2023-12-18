@@ -170,7 +170,7 @@ public class ITypeInfoTests
         fixed (char* other = "Other")
         {
             var rgszNames = new PWSTR[] { width, other };
-            var rgDispId = new int[rgszNames.Length];
+            int[] rgDispId = new int[rgszNames.Length];
             fixed (PWSTR* pRgszNames = rgszNames)
             fixed (int* pRgDispId = rgDispId)
             {

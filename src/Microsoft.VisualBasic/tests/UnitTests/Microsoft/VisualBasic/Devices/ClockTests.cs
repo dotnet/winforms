@@ -44,10 +44,10 @@ public class ClockTests
     {
         var clock = new Clock();
 
-        var before = clock.TickCount;
+        int before = clock.TickCount;
         System.Threading.Thread.Sleep(10);
 
-        var after = clock.TickCount;
+        int after = clock.TickCount;
         Assert.True(before <= after);
     }
 }

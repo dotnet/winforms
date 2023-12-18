@@ -68,7 +68,7 @@ public class EnsureEditorsTests
     // [InlineData(typeof(TreeNodeCollection), typeof(TreeNodeCollectionEditor))]
     public void EnsureUITypeEditorForType(Type type, Type expectedEditorType)
     {
-        var editor = TypeDescriptor.GetEditor(type, typeof(UITypeEditor));
+        object editor = TypeDescriptor.GetEditor(type, typeof(UITypeEditor));
 
         Assert.NotNull(editor);
         Assert.Equal(expectedEditorType, editor.GetType());
@@ -153,7 +153,7 @@ public class EnsureEditorsTests
         PropertyDescriptor propertyDescriptor = properties.Find(propertyName, true);
         Assert.NotNull(propertyDescriptor);
 
-        var editor = propertyDescriptor.GetEditor(typeof(UITypeEditor));
+        object editor = propertyDescriptor.GetEditor(typeof(UITypeEditor));
         Assert.NotNull(editor);
         Assert.Equal(expectedEditorType, editor.GetType());
     }

@@ -33,7 +33,7 @@ public class LVITEMWTests
 
             lvi.UpdateText(newText);
 
-            var text = new string(lvi.pszText);
+            string text = new(lvi.pszText);
             Assert.Equal(expected, text);
             Assert.Equal(maxLength - 1, text.Length);
             Assert.Equal(text.Length + 1, lvi.cchTextMax);
@@ -64,7 +64,7 @@ public class LVITEMWTests
 
             var sText = new ReadOnlySpan<char>(lvi.pszText, lvi.cchTextMax);
 
-            var text = new string(lvi.pszText);
+            string text = new(lvi.pszText);
             Assert.Equal("012345", text);
             Assert.Equal(lvi.cchTextMax, text.Length + 1);
         }

@@ -8,7 +8,7 @@ public class AudioTests
     [Fact]
     public void Play()
     {
-        var location = Path.Combine(Path.GetTempPath(), GetUniqueName());
+        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
         var audio = new Audio();
         Assert.Throws<FileNotFoundException>(() => audio.Play(location));
     }

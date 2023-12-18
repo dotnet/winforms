@@ -83,8 +83,8 @@ internal static class DataCollectionService
     internal static string GetTestName(ITestCase testCase)
     {
         var testMethod = testCase.TestMethod.Method;
-        var testClass = testCase.TestMethod.TestClass.Class.Name;
-        var lastDot = testClass.LastIndexOf('.');
+        string testClass = testCase.TestMethod.TestClass.Class.Name;
+        int lastDot = testClass.LastIndexOf('.');
         testClass = testClass.Substring(lastDot + 1);
         return $"{testClass}.{testMethod.Name}";
     }
@@ -157,10 +157,10 @@ internal static class DataCollectionService
         {
             _inHandler = true;
 
-            var logDir = GetLogDirectory();
+            string logDir = GetLogDirectory();
             var timestamp = DateTimeOffset.UtcNow;
             testName ??= "Unknown";
-            var errorId = ex.GetType().Name;
+            string errorId = ex.GetType().Name;
 
             Directory.CreateDirectory(logDir);
 
@@ -206,7 +206,7 @@ internal static class DataCollectionService
     {
         const int MaxPath = 260;
 
-        var path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
+        string path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
         if (path.Length > MaxPath)
         {
             testName = testName.Substring(0, Math.Max(0, testName.Length - (path.Length - MaxPath)));
@@ -222,8 +222,8 @@ internal static class DataCollectionService
                 logId = $".{logId}";
             }
 
-            var sanitizedTestName = new string(testName.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
-            var sanitizedErrorId = new string(errorId.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
+            string sanitizedTestName = new(testName.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
+            string sanitizedErrorId = new(errorId.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
 
             return Path.Combine(Path.GetFullPath(logDirectory), $"{timestamp:HH.mm.ss}-{testName}-{errorId}{logId}.{extension}");
         }
@@ -243,12 +243,12 @@ internal static class DataCollectionService
 
         // Output assembly is located in a directory similar to:
         //   C:\dev\winforms\artifacts\bin\System.Windows.Forms.UI.IntegrationTests\Debug\net8.0
-        var assemblyDirectory = GetAssemblyDirectory();
+        string assemblyDirectory = GetAssemblyDirectory();
 
-        var binPathSeparator = assemblyDirectory.IndexOf(@"\bin\", StringComparison.Ordinal);
+        int binPathSeparator = assemblyDirectory.IndexOf(@"\bin\", StringComparison.Ordinal);
         if (binPathSeparator > 0)
         {
-            var configuration = Path.GetFileName(Path.GetDirectoryName(assemblyDirectory))!;
+            string configuration = Path.GetFileName(Path.GetDirectoryName(assemblyDirectory))!;
             return Path.Combine(assemblyDirectory[..binPathSeparator], "log", configuration);
         }
 
@@ -257,7 +257,7 @@ internal static class DataCollectionService
 
     private static string GetAssemblyDirectory()
     {
-        var assemblyPath = typeof(DataCollectionService).Assembly.Location;
+        string assemblyPath = typeof(DataCollectionService).Assembly.Location;
         return Path.GetDirectoryName(assemblyPath)!;
     }
 

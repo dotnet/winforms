@@ -28,7 +28,7 @@ public partial class ListViewTest : Form
 
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
-            index index = listView1.InsertionMark.NearestIndex(pos);
+            int index = listView1.InsertionMark.NearestIndex(pos);
             Console.WriteLine($"nearest index: {index}");
         };
 
