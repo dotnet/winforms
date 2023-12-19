@@ -61,7 +61,10 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T : unmanaged, IC
         ComSafeArrayScope<T> scope = new(length);
         for (int i = 0; i < length; i++)
         {
-            scope[i] = ComHelpers.GetComPointer<T>(array[i]);
+            // SAFEARRAY will add ref, a using is needed to
+            // release to maintain the correct ref count.
+            using var pointer = ComHelpers.GetComScope<T>(array[i]);
+            scope[i] = pointer;
         }
 
         return scope;
