@@ -1932,6 +1932,8 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
+        *pcountChildren = -1;
+
         if (IsClientObject)
         {
             *pcountChildren = GetChildCount();

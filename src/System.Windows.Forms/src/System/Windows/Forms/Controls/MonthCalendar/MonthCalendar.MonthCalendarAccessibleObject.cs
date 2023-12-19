@@ -611,7 +611,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetNameInternal =>
+        internal override bool CanGetValueInternal =>
             CalendarView is not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
                 and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR
                 and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE
