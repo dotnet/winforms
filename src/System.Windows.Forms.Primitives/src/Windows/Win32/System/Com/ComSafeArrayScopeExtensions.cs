@@ -22,7 +22,7 @@ internal static class ComSafeArrayScopeExtensions
         {
             // SAFEARRAY will add ref, a using is needed to
             // release to maintain the correct ref count.
-            using var pointer = ComHelpers.GetComPointer<TComStruct>(interfaces[i]);
+            using var pointer = ComHelpers.GetComScope<TComStruct>(interfaces[i]);
             scope[i] = pointer;
         }
 
