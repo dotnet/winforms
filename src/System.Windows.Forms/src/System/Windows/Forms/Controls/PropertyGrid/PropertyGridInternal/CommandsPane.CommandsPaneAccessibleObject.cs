@@ -55,18 +55,5 @@ internal partial class CommandsPane
                 : null;
 
         private protected override bool IsInternal => true;
-
-        internal override bool CanGetNameInternal =>
-            this.TryGetOwnerAs(out CommandsPane? owner)
-            && owner.AccessibleName is null
-            && _parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
-            && target.AccessibilityObject.CanGetNameInternal;
-
-        internal override BSTR GetNameInternal()
-        {
-            _parentPropertyGrid.TryGetTarget(out PropertyGrid? target);
-            // target should never be null since we check for it in CanGetNameDirectly.
-            return target!.AccessibilityObject.GetNameInternal();
-        }
     }
 }

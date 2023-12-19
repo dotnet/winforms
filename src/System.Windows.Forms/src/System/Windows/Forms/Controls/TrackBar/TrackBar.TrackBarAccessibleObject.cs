@@ -40,7 +40,7 @@ public partial class TrackBar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetDefaultActionInternal => !this.TryGetOwnerAs(out TrackBar? owner);
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Slider);
 

@@ -96,7 +96,7 @@ public abstract partial class UpDownBase
 
                 internal override bool CanGetNameInternal => false;
 
-                internal override void SetNameInternal(BSTR value) { }
+                internal override bool CanSetNameInternal => false;
 
                 public override AccessibleObject Parent => _parent;
 

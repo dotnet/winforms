@@ -140,10 +140,13 @@ public partial class DataGridViewRow
             && _owningDataGridViewRow is not null
             && (_owningDataGridViewRow.DataGridView?.AccessibilityObject.CanGetParentInternal ?? true);
 
-        internal override unsafe IDispatch* GetParentInternal() =>
-            _owningDataGridViewRow!.DataGridView is { } dataGridView
+        internal override unsafe IDispatch* GetParentInternal()
+        {
+            Debug.Assert(_owningDataGridViewRow is not null);
+            return _owningDataGridViewRow?.DataGridView is { } dataGridView
             ? dataGridView.AccessibilityObject.GetParentInternal()
             : null;
+        }
 
         public override AccessibleRole Role => AccessibleRole.Row;
 

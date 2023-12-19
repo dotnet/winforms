@@ -54,8 +54,6 @@ public partial class RadioButton
             ? ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
             : null;
 
-        internal override bool CanGetKeyboardShortcutInternal => IsInternal && !this.TryGetOwnerAs(out RadioButton? owner);
-
         public override string? Name
         {
             get

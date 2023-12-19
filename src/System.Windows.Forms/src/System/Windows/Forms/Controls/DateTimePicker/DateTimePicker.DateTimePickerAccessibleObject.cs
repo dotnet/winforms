@@ -37,8 +37,6 @@ public partial class DateTimePicker
             }
         }
 
-        internal override bool CanGetKeyboardShortcutInternal => IsInternal && PreviousLabel is null;
-
         // Note: returns empty string instead of null, because the date value replaces null,
         // so name is not empty in this case even if AccessibleName is not set.
         public override string Name => this.GetOwnerAccessibleName(string.Empty);

@@ -466,10 +466,10 @@ public unsafe partial class AccessibleObject :
             return State.HasFlag(AccessibleStates.Focused) ? this : null;
         }
 
-        return TryGetAccessibleObject(TryGetSystemIAccessibleFocus());
+        return TryGetAccessibleObject(GetSystemIAccessibleFocus());
     }
 
-    private VARIANT TryGetSystemIAccessibleFocus()
+    private VARIANT GetSystemIAccessibleFocus()
     {
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
@@ -480,7 +480,7 @@ public unsafe partial class AccessibleObject :
         result = accessible.Value->get_accFocus(out VARIANT focus);
         if (result.Failed)
         {
-            Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(TryGetSystemIAccessibleFocus)} failed with {result}");
+            Debug.Assert(result == HRESULT.DISP_E_MEMBERNOTFOUND, $"{nameof(GetSystemIAccessibleFocus)} failed with {result}");
             return VARIANT.Empty;
         }
 
@@ -2067,41 +2067,14 @@ public unsafe partial class AccessibleObject :
         return index >= 0 && index < GetChildCount() ? GetChild(index) : null;
     }
 
-    object? IAccessible.accFocus
-    {
-        get
-        {
-            VARIANT focus = default;
-            return AccFocusHelper(&focus) ? TryGetAccessibleObject(focus) : focus.ToObject();
-        }
-    }
+    object? IAccessible.accFocus =>
+        GetFocusedObject() is { } focused
+        ? focused == this
+            ? (int)PInvoke.CHILDID_SELF
+            : focused
+        : TryGetAccessibleObject(GetSystemIAccessibleFocus());
 
-    /// <summary>
-    ///  Helper method to attain accFocus and places result via <paramref name="result"/>.
-    ///  This method returns <see langword="true"/> if System IAccessible focus was
-    ///  attempted to be attained. Otherwise <see langword="false"/>.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   If the managed type of <paramref name="result"/> is needed, use <see cref="TryGetAccessibleObject(VARIANT)"/>
-    ///   if this method returns <see langword="true"/>, otherwise use <see cref="VARIANT.ToObject"/>.
-    ///  </para>
-    /// </remarks>
-    private bool AccFocusHelper(VARIANT* result)
-    {
-        if (IsClientObject)
-        {
-            AccessibleObject? obj = GetFocused();
-            if (obj is not null)
-            {
-                *result = AsChildIdVariant(obj);
-                return false;
-            }
-        }
-
-        *result = TryGetSystemIAccessibleFocus();
-        return true;
-    }
+    private AccessibleObject? GetFocusedObject() => IsClientObject ? GetFocused() : null;
 
     HRESULT UIA.IAccessible.Interface.get_accFocus(VARIANT* pvarChild)
     {
@@ -2110,7 +2083,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        AccFocusHelper(pvarChild);
+        *pvarChild = GetFocusedObject() is { } focused ? AsChildIdVariant(focused) : GetSystemIAccessibleFocus();
         return HRESULT.S_OK;
     }
 

@@ -121,7 +121,12 @@ public abstract partial class DataGridViewCell
         internal override bool CanGetParentInternal =>
             IsInternal && _owner?.OwningRow is { } owningRow && owningRow.AccessibilityObject.CanGetParentInternal;
 
-        internal override unsafe IDispatch* GetParentInternal() => _owner!.OwningRow!.AccessibilityObject.GetParentInternal();
+        internal override unsafe IDispatch* GetParentInternal()
+        {
+            DataGridViewRow? owningRow = _owner?.OwningRow;
+            Debug.Assert(owningRow is not null);
+            return owningRow is not null ? owningRow.AccessibilityObject.GetParentInternal() : null;
+        }
 
         public override AccessibleRole Role => AccessibleRole.Cell;
 

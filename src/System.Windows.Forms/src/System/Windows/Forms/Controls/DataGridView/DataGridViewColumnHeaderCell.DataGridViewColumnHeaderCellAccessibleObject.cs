@@ -66,13 +66,17 @@ public partial class DataGridViewColumnHeaderCell
         // return the top header row accessible object
         public override AccessibleObject? Parent => Owner is null
             ? throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet)
-            : Owner.DataGridView?.AccessibilityObject?.GetChild(0);
+            : Owner.DataGridView?.AccessibilityObject.GetChild(0);
 
         internal override bool CanGetParentInternal =>
-            IsInternal && Owner?.DataGridView?.AccessibilityObject is { } child && child.CanGetParentInternal;
+            IsInternal && Owner?.DataGridView?.AccessibilityObject.GetChild(0) is { } child && child.CanGetParentInternal;
 
-        internal override unsafe IDispatch* GetParentInternal() =>
-            Owner!.DataGridView!.AccessibilityObject!.GetChild(0)!.GetParentInternal();
+        internal override unsafe IDispatch* GetParentInternal()
+        {
+            AccessibleObject? child = Owner?.DataGridView?.AccessibilityObject.GetChild(0);
+            Debug.Assert(child is not null);
+            return child is not null ? child.GetParentInternal() : null;
+        }
 
         public override AccessibleRole Role => AccessibleRole.ColumnHeader;
 

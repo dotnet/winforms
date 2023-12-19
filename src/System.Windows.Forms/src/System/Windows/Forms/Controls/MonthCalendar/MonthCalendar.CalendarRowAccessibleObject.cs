@@ -143,14 +143,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override bool CanGetDescriptionInternal =>
-            _rowIndex == -1
-            || _monthCalendarAccessibleObject.IsHandleCreated
-            || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
-            || CellsAccessibleObjects?.First?.Value is not { } cell
-            || cell.DateRange is null;
-
-        internal override BSTR GetDescriptionInternal() => default;
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch

@@ -72,8 +72,8 @@ internal partial class PropertyGridToolStrip
         internal override BSTR GetNameInternal()
         {
             _parentPropertyGrid.TryGetTarget(out PropertyGrid? target);
-            // target cannot be null here since we checked it in CanGetNameDirectly.
-            return target!.AccessibilityObject.GetNameInternal();
+            Debug.Assert(target is not null);
+            return target is not null ? target.AccessibilityObject.GetNameInternal() : default;
         }
     }
 }
