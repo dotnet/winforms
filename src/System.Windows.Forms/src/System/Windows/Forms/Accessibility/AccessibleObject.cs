@@ -1218,7 +1218,7 @@ public unsafe partial class AccessibleObject :
 
         *pszName = CanGetNameInternal
             ? GetNameInternal()
-            : Name is { } name ? new(name) : default;
+            : new(Name);
         return HRESULT.S_OK;
     }
 
@@ -1232,7 +1232,7 @@ public unsafe partial class AccessibleObject :
 
             *pszValue = CanGetValueInternal
                 ? GetValueInternal()
-                : Value is { } value ? new(value) : default;
+                : new(Value);
             return HRESULT.S_OK;
         }
     }
@@ -1246,7 +1246,7 @@ public unsafe partial class AccessibleObject :
 
         *pszDescription = CanGetDescriptionInternal
             ? GetDescriptionInternal()
-            : Description is { } description ? new(description) : default;
+            : new(Description);
         return HRESULT.S_OK;
     }
 
@@ -1281,7 +1281,7 @@ public unsafe partial class AccessibleObject :
 
         *pszHelp = CanGetHelpInternal
             ? GetHelpInternal()
-            : Help is { } help ? new(help) : default;
+            : new(Help);
         return HRESULT.S_OK;
     }
 
@@ -1292,7 +1292,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszKeyboardShortcut = KeyboardShortcut is null ? default : new(KeyboardShortcut);
+        *pszKeyboardShortcut = new(KeyboardShortcut);
         return HRESULT.S_OK;
     }
 
@@ -1310,7 +1310,9 @@ public unsafe partial class AccessibleObject :
         else
         {
             ComSafeArrayScope<IRawElementProviderSimple> scope = new(1);
-            scope[0] = ComHelpers.GetComPointer<IRawElementProviderSimple>(selected);
+            // Adding to the SAFEARRAY adds a reference
+            using var selection = ComHelpers.GetComScope<IRawElementProviderSimple>(selected);
+            scope[0] = selection;
             *pvarSelectedChildren = scope;
         }
 
@@ -1324,7 +1326,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pszDefaultAction = DefaultAction is null ? default : new(DefaultAction);
+        *pszDefaultAction = new(DefaultAction);
         return HRESULT.S_OK;
     }
 
@@ -2410,7 +2412,7 @@ public unsafe partial class AccessibleObject :
         }
 
         // Perhaps would be better to return AccessibleStates.None instead of null here.
-        *pvarState = SystemIAccessible?.TryGetState(ChildIdToVARIANT(varChild)) is { } state ? (VARIANT)(int)state : VARIANT.Empty;
+        *pvarState = SystemIAccessible?.TryGetState(varChild) is { } state ? (VARIANT)(int)state : VARIANT.Empty;
         return HRESULT.S_OK;
     }
 
