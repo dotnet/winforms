@@ -1976,7 +1976,7 @@ public unsafe partial class AccessibleObject :
                 // Return the default action property on this.
                 *pszDefaultAction = CanGetDefaultActionInternal
                     ? GetDefaultActionInternal()
-                    : DefaultAction is { } action ? new(action) : default;
+                    : new(DefaultAction);
                 return HRESULT.S_OK;
             }
 
@@ -1986,7 +1986,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszDefaultAction = child.CanGetDefaultActionInternal
                     ? child.GetDefaultActionInternal()
-                    : child.DefaultAction is { } action ? new(action) : default;
+                    : new(child.DefaultAction);
                 return HRESULT.S_OK;
             }
         }
@@ -2016,7 +2016,7 @@ public unsafe partial class AccessibleObject :
                 // Return self description property
                 *pszDescription = CanGetDescriptionInternal
                     ? GetDescriptionInternal()
-                    : Description is { } description ? new(description) : default;
+                    : new(Description);
                 return HRESULT.S_OK;
             }
 
@@ -2026,7 +2026,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszDescription = child.CanGetDescriptionInternal
                     ? child.GetDescriptionInternal()
-                    : child.Description is { } description ? new(description) : default;
+                    : new(child.Description);
                 return HRESULT.S_OK;
             }
         }
@@ -2134,7 +2134,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszHelp = CanGetHelpInternal
                     ? GetHelpInternal()
-                    : Help is { } help ? new(help) : default;
+                    : new(Help);
                 return HRESULT.S_OK;
             }
 
@@ -2144,7 +2144,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszHelp = child.CanGetHelpInternal
                     ? child.GetHelpInternal()
-                    : child.Help is { } help ? new(help) : default;
+                    : new(child.Help);
                 return HRESULT.S_OK;
             }
         }
@@ -2158,7 +2158,7 @@ public unsafe partial class AccessibleObject :
         using BSTR helpFile = default;
         int topic = -1;
         ((UIA.IAccessible.Interface)this).get_accHelpTopic(&helpFile, ChildIdToVARIANT(childID), &topic).AssertSuccess();
-        pszHelpFile = helpFile.IsNull ? null : helpFile.ToString();
+        pszHelpFile = helpFile.ToString();
         return topic;
     }
 
@@ -2180,7 +2180,7 @@ public unsafe partial class AccessibleObject :
                 }
 
                 *pidTopic = GetHelpTopic(out string? helpFile);
-                *pszHelpFile = helpFile is null ? default : new(helpFile);
+                *pszHelpFile = new(helpFile);
                 return HRESULT.S_OK;
             }
 
@@ -2195,7 +2195,7 @@ public unsafe partial class AccessibleObject :
                 }
 
                 *pidTopic = child.GetHelpTopic(out string? helpFile);
-                *pszHelpFile = helpFile is null ? default : new(helpFile);
+                *pszHelpFile = new(helpFile);
                 return HRESULT.S_OK;
             }
         }
@@ -2219,7 +2219,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszKeyboardShortcut = CanGetKeyboardShortcutInternal
                     ? GetKeyboardShortcutInternal(varChild)
-                    : KeyboardShortcut is { } shortcut ? new(shortcut) : default;
+                    : new(KeyboardShortcut);
                 return HRESULT.S_OK;
             }
 
@@ -2229,7 +2229,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszKeyboardShortcut = child.CanGetKeyboardShortcutInternal
                     ? child.GetKeyboardShortcutInternal(varChild)
-                    : child.KeyboardShortcut is { } shortcut ? new(shortcut) : default;
+                    : new(child.KeyboardShortcut);
                 return HRESULT.S_OK;
             }
         }
@@ -2258,7 +2258,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszName = CanGetNameInternal
                     ? GetNameInternal()
-                    : Name is { } name ? new(name) : default;
+                    : new(Name);
                 return HRESULT.S_OK;
             }
 
@@ -2268,7 +2268,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszName = child.CanGetNameInternal
                     ? child.GetNameInternal()
-                    : child.Name is { } name ? new(name) : default;
+                    : new(child.Name);
                 return HRESULT.S_OK;
             }
         }
@@ -2280,7 +2280,7 @@ public unsafe partial class AccessibleObject :
             // Name the child after its parent
             systemName = CanGetNameInternal
                 ? GetNameInternal()
-                : Name is { } name ? new(name) : default;
+                : new(Name);
         }
 
         *pszName = systemName;
@@ -2462,7 +2462,7 @@ public unsafe partial class AccessibleObject :
                 // Return self value property.
                 *pszValue = CanGetValueInternal
                     ? GetValueInternal()
-                    : Value is { } value ? new(value) : default;
+                    : new(Value);
                 return HRESULT.S_OK;
             }
 
@@ -2472,7 +2472,7 @@ public unsafe partial class AccessibleObject :
             {
                 *pszValue = child.CanGetValueInternal
                     ? child.GetValueInternal()
-                    : child.Value is { } value ? new(value) : default;
+                    : new(child.Value);
                 return HRESULT.S_OK;
             }
         }
