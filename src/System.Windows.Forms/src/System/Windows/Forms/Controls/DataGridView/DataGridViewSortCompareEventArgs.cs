@@ -7,9 +7,10 @@ namespace System.Windows.Forms;
 
 public class DataGridViewSortCompareEventArgs : HandledEventArgs
 {
-    public DataGridViewSortCompareEventArgs(DataGridViewColumn dataGridViewColumn,
-        object cellValue1,
-        object cellValue2,
+    public DataGridViewSortCompareEventArgs(
+        DataGridViewColumn dataGridViewColumn,
+        object? cellValue1,
+        object? cellValue2,
         int rowIndex1,
         int rowIndex2)
     {
@@ -22,9 +23,9 @@ public class DataGridViewSortCompareEventArgs : HandledEventArgs
         RowIndex2 = rowIndex2;
     }
 
-    public object CellValue1 { get; }
+    public object? CellValue1 { get; }
 
-    public object CellValue2 { get; }
+    public object? CellValue2 { get; }
 
     public DataGridViewColumn Column { get; }
 
