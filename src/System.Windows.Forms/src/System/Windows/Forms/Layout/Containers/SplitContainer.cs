@@ -1252,10 +1252,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplyPanel1MinSize(int value)
     {
-        if (value < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel1MinSize), value));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         if (Orientation == Orientation.Vertical)
         {
@@ -1284,10 +1281,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplyPanel2MinSize(int value)
     {
-        if (value < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         if (Orientation == Orientation.Vertical)
         {

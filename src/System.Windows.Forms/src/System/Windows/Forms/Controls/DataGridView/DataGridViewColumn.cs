@@ -335,10 +335,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         get => _fillWeight;
         set
         {
-            if (value <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(FillWeight), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             if (value > (float)ushort.MaxValue)
             {

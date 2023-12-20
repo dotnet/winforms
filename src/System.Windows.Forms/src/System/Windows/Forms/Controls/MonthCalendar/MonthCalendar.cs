@@ -885,13 +885,7 @@ public partial class MonthCalendar : Control
                 }
 
                 // Throw if trying to set the TodayDate to a value less than MinDate.
-                if (DateTime.Compare(value, _minDate) < 0)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(value),
-                        value,
-                        string.Format(SR.InvalidLowBoundArgument, nameof(TodayDate), FormatDate(value), FormatDate(_minDate)));
-                }
+                ArgumentOutOfRangeException.ThrowIfLessThan(value, _minDate);
 
                 _todaysDate = value.Date;
                 _todayDateSet = true;
