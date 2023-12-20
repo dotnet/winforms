@@ -308,6 +308,9 @@ public unsafe partial class AccessibleObject :
     public virtual AccessibleObject? Parent =>
         _inCallback && IsInternal ? s_parentFlag : TryGetAccessibleObject(GetSystemAccessibleParent());
 
+    /// <summary>
+    ///  Unwraps and returns the system IAccessible.
+    /// </summary>
     private IDispatch* GetSystemAccessibleParent()
     {
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);

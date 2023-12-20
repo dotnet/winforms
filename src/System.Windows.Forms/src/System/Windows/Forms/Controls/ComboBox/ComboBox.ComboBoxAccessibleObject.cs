@@ -132,6 +132,7 @@ public partial class ComboBox
 
             IReadOnlyList<Entry> entries = owner.Items.InnerList;
             Debug.Assert(index < entries.Count);
+
             Entry item = entries[index];
             if (!ItemAccessibleObjects.TryGetValue(item, out ComboBoxItemAccessibleObject? value))
             {
