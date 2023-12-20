@@ -26,8 +26,6 @@ internal sealed class DesignerActionGlyph : Glyph
     private DockStyle _dockStyle;
     private Bitmap? _glyphImageClosed;
     private Bitmap? _glyphImageOpened;
-    private readonly byte _iconsWidth = IconSize;
-    private readonly byte _iconsHeight = IconSize;
 
     /// <summary>
     ///  Constructor that passes empty alternative bounds and parents.
@@ -50,7 +48,6 @@ internal sealed class DesignerActionGlyph : Glyph
     private DesignerActionGlyph(DesignerActionBehavior? behavior, Adorner? adorner, Rectangle alternativeBounds, Control? alternativeParent)
         : base(behavior)
     {
-        _iconsWidth = _iconsHeight = (byte)ScaleHelper.ScaleToInitialSystemDpi(IconSize);
         _adorner = adorner;
         _alternativeBounds = alternativeBounds;
         _alternativeParent = alternativeParent;
@@ -102,12 +99,12 @@ internal sealed class DesignerActionGlyph : Glyph
     private Image GlyphImageClosed => _glyphImageClosed ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(DesignerActionGlyph),
         "Close_left",
-        new Size(_iconsWidth, _iconsHeight));
+        ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
 
     private Image GlyphImageOpened => _glyphImageOpened ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(DesignerActionGlyph),
         "Open_left",
-        new Size(_iconsWidth, _iconsHeight));
+        ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
 
     internal void InvalidateOwnerLocation()
     {
