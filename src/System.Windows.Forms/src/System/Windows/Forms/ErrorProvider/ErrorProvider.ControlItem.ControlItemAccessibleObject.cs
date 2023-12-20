@@ -113,11 +113,6 @@ public partial class ErrorProvider
 
             public override AccessibleObject? Parent => _window?.AccessibilityObject;
 
-            internal override bool CanGetParentInternal => _window?.AccessibilityObject.CanGetParentInternal ?? true;
-
-            internal override unsafe IDispatch* GetParentInternal() =>
-                _window?.AccessibilityObject is { } parent ? parent.GetParentInternal() : null;
-
             private protected override bool IsInternal => true;
 
             public override AccessibleRole Role => AccessibleRole.Alert;

@@ -21,16 +21,6 @@ public partial class PrintPreviewControl
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal =>
-            this.TryGetOwnerAs(out ScrollBar? scrollBar) && scrollBar.Parent is PrintPreviewControl printPreviewControlParent
-            ? printPreviewControlParent.AccessibilityObject.CanGetParentInternal
-            : true;
-
-        internal override unsafe IDispatch* GetParentInternal() =>
-            this.TryGetOwnerAs(out ScrollBar? scrollBar) && scrollBar.Parent is PrintPreviewControl printPreviewControlParent
-            ? printPreviewControlParent.AccessibilityObject.GetParentInternal()
-            : base.GetParentInternal();
-
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out ScrollBar? scrollBar) || scrollBar.Parent is not PrintPreviewControl printPreviewControl)

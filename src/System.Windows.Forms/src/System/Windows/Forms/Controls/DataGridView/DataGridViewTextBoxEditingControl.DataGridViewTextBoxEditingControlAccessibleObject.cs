@@ -31,11 +31,6 @@ public partial class DataGridViewTextBoxEditingControl
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal => _parentAccessibleObject?.CanGetParentInternal ?? true;
-
-        internal override unsafe IDispatch* GetParentInternal() =>
-            _parentAccessibleObject is { } parent ? parent.GetParentInternal() : null;
-
         public override string Name => this.GetOwnerAccessibleName(SR.DataGridView_AccEditingControlAccName);
 
         internal override bool CanGetNameInternal => false;

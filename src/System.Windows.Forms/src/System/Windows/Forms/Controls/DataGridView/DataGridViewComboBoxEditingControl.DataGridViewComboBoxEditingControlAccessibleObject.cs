@@ -27,11 +27,6 @@ public partial class DataGridViewComboBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
-        internal override bool CanGetParentInternal => _parentAccessibleObject?.CanGetParentInternal ?? true;
-
-        internal override unsafe IDispatch* GetParentInternal() =>
-            _parentAccessibleObject is { } parent ? parent.GetParentInternal() : null;
-
         private protected override bool IsInternal => true;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)

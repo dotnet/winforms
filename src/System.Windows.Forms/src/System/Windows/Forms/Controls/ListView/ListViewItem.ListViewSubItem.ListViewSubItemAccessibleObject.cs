@@ -98,10 +98,6 @@ public partial class ListViewItem
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetParentInternal => ParentInternal.CanGetParentInternal;
-
-            internal override unsafe IDispatch* GetParentInternal() => ParentInternal.GetParentInternal();
-
             private ListViewItemBaseAccessibleObject ParentInternal
                 => (ListViewItemBaseAccessibleObject)_owningItem.AccessibilityObject;
 

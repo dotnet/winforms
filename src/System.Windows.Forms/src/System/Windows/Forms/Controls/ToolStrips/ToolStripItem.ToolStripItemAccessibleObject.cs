@@ -321,36 +321,6 @@ public abstract partial class ToolStripItem
             }
         }
 
-        internal override bool CanGetParentInternal
-        {
-            get
-            {
-                if (!IsInternal)
-                {
-                    return false;
-                }
-
-                if (Owner.IsOnDropDown)
-                {
-                    ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
-                    return dropDown.AccessibilityObject.CanGetParentInternal;
-                }
-
-                return Owner.Parent?.AccessibilityObject.CanGetParentInternal ?? true;
-            }
-        }
-
-        internal override unsafe IDispatch* GetParentInternal()
-        {
-            if (Owner.IsOnDropDown)
-            {
-                ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
-                return dropDown.AccessibilityObject.GetParentInternal();
-            }
-
-            return Owner.Parent is { } parent ? parent.AccessibilityObject.GetParentInternal() : base.GetParentInternal();
-        }
-
         internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
             _ownerItem.RootToolStrip?.AccessibilityObject;
 

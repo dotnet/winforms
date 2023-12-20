@@ -35,8 +35,6 @@ public partial class DomainUpDown
 
         public override AccessibleObject? Parent => null;
 
-        internal override unsafe IDispatch* GetParentInternal() => null;
-
         public override AccessibleRole Role => AccessibleRole.ListItem;
 
         public override AccessibleStates State => AccessibleStates.Selectable;

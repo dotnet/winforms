@@ -92,6 +92,9 @@ public unsafe partial class AccessibleObject :
         "accDefaultAction"
     ];
 
+    private static readonly AccessibleObject s_parentFlag = new();
+    private bool _inCallback;
+
     private readonly AccessibleDispatchAdapter _dispatchAdapter;
 
     /// <summary>
@@ -302,14 +305,12 @@ public unsafe partial class AccessibleObject :
     ///  window's client area is the parent of the non-client area of the current window (at least from an
     ///  accessibility object standpoint).
     /// </devdoc>
-    public virtual AccessibleObject? Parent => TryGetAccessibleObject(GetParentInternal());
+    public virtual AccessibleObject? Parent =>
+        _inCallback && IsInternal ? s_parentFlag : TryGetAccessibleObject(GetSystemAccessibleParent());
 
-    /// <summary>
-    ///  Unwraps and returns the system IAccessible.
-    /// </summary>
-    internal virtual IDispatch* GetParentInternal()
+    private IDispatch* GetSystemAccessibleParent()
     {
-        using ComScope<UIA.IAccessible> accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
+        using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Succeeded)
         {
             IDispatch* dispatch;
@@ -319,16 +320,6 @@ public unsafe partial class AccessibleObject :
 
         return null;
     }
-
-    /// <summary>
-    ///  Determines if <see cref="GetParentInternal"/> can be called without calling <see cref="Parent"/>
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This is an optimization to avoid unnecessary allocations when being called from native code
-    ///  </para>
-    /// </remarks>
-    internal virtual bool CanGetParentInternal => IsInternal;
 
     /// <summary>
     ///  Determines whether or not this object is internal.
@@ -2279,27 +2270,28 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        if (CanGetParentInternal)
+        using BoolScope scope = new(ref _inCallback);
+        AccessibleObject? accessibleObject = Parent;
+        if (ReferenceEquals(accessibleObject, s_parentFlag))
         {
-            *ppdispParent = GetParentInternal();
+            *ppdispParent = GetSystemAccessibleParent();
             return HRESULT.S_OK;
         }
 
-        AccessibleObject? parent = Parent;
-        if (parent is not null)
+        if (accessibleObject is not null)
         {
             // Some debugging related tests
             Debug.Assert(
-                parent != this,
+                accessibleObject != this,
                 "An accessible object is returning itself as its own parent. This can cause accessibility clients to stop responding.");
-            if (parent == this)
+            if (accessibleObject == this)
             {
                 // This should prevent accessibility clients from stop responding
-                parent = null;
+                accessibleObject = null;
             }
         }
 
-        *ppdispParent = GetIDispatch(parent);
+        *ppdispParent = GetIDispatch(accessibleObject);
         return HRESULT.S_OK;
     }
 

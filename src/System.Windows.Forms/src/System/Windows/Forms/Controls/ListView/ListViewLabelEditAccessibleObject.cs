@@ -49,10 +49,6 @@ internal sealed unsafe class ListViewLabelEditAccessibleObject : LabelEditAccess
 
     private protected override bool IsInternal => true;
 
-    internal override bool CanGetParentInternal => Parent?.CanGetParentInternal ?? true;
-
-    internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
-
     internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch
         {

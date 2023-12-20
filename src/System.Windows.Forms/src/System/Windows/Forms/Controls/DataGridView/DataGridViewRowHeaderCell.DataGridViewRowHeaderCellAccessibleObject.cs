@@ -80,16 +80,6 @@ public partial class DataGridViewRowHeaderCell
             }
         }
 
-        internal override bool CanGetParentInternal =>
-            IsInternal && Owner is not null && (Owner.OwningRow?.AccessibilityObject.CanGetParentInternal ?? true);
-
-        internal override unsafe IDispatch* GetParentInternal()
-        {
-            DataGridViewRow? owningRow = Owner?.OwningRow;
-            Debug.Assert(owningRow is not null);
-            return owningRow is not null ? owningRow.AccessibilityObject.GetParentInternal() : null;
-        }
-
         public override AccessibleRole Role => AccessibleRole.RowHeader;
 
         public override AccessibleStates State

@@ -204,10 +204,6 @@ public partial class MonthCalendar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal => _calendarAccessibleObject.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal() => _calendarAccessibleObject.GetParentInternal();
-
         public override AccessibleRole Role => AccessibleRole.Table;
 
         internal override int RowCount => RowsAccessibleObjects?.Count ?? -1;

@@ -51,10 +51,6 @@ public partial class MonthCalendar
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal => _monthCalendarAccessibleObject.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal() => _monthCalendarAccessibleObject.GetParentInternal();
-
         private void RaiseMouseClick()
         {
             // Make sure that the control is enabled.

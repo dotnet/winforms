@@ -75,10 +75,6 @@ internal abstract partial class GridEntry
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal => Parent?.CanGetParentInternal ?? true;
-
-        internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
-
         public override AccessibleRole Role => AccessibleRole.Cell;
 
         public override AccessibleStates State

@@ -135,19 +135,6 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool CanGetParentInternal =>
-            IsInternal
-            && _owningDataGridViewRow is not null
-            && (_owningDataGridViewRow.DataGridView?.AccessibilityObject.CanGetParentInternal ?? true);
-
-        internal override unsafe IDispatch* GetParentInternal()
-        {
-            Debug.Assert(_owningDataGridViewRow is not null);
-            return _owningDataGridViewRow?.DataGridView is { } dataGridView
-            ? dataGridView.AccessibilityObject.GetParentInternal()
-            : null;
-        }
-
         public override AccessibleRole Role => AccessibleRole.Row;
 
         private static int RowStartIndex => LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1;

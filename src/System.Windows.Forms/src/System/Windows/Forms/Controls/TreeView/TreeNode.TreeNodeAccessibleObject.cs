@@ -142,12 +142,6 @@ public partial class TreeNode
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal =>
-            _owningTreeNode.Parent?.AccessibilityObject.CanGetParentInternal ?? true;
-
-        internal override unsafe IDispatch* GetParentInternal() =>
-            _owningTreeNode.Parent?.AccessibilityObject is { } parent ? parent.GetParentInternal() : null;
-
         public override AccessibleRole Role
             => _owningTreeView.CheckBoxes
                 ? AccessibleRole.CheckButton

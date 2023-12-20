@@ -102,11 +102,6 @@ public abstract partial class UpDownBase
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetParentInternal => Parent?.CanGetParentInternal ?? true;
-
-            internal override unsafe IDispatch* GetParentInternal() =>
-                Parent is { } parent ? parent.GetParentInternal() : null;
-
             internal void ReleaseChildUiaProviders()
             {
                 PInvoke.UiaDisconnectProvider(_upButton, skipOSCheck: true);

@@ -39,10 +39,6 @@ public partial class ListBox
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal => Parent.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal() => Parent.GetParentInternal();
-
         internal override int[] RuntimeId
         {
             get

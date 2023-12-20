@@ -77,15 +77,6 @@ public partial class DataGridView
             }
         }
 
-        internal override bool CanGetParentInternal =>
-            IsInternal && _ownerDataGridView is not null && _ownerDataGridView.AccessibilityObject.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal()
-        {
-            Debug.Assert(_ownerDataGridView is not null);
-            return _ownerDataGridView is not null ? _ownerDataGridView.AccessibilityObject.GetParentInternal() : null;
-        }
-
         public override AccessibleRole Role
         {
             get

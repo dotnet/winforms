@@ -36,10 +36,6 @@ internal sealed unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccess
 
     private protected override bool IsInternal => true;
 
-    internal override bool CanGetParentInternal => Parent is { } parent ? parent.CanGetParentInternal : true;
-
-    internal override unsafe IDispatch* GetParentInternal() => Parent is { } parent ? parent.GetParentInternal() : null;
-
     internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch
         {

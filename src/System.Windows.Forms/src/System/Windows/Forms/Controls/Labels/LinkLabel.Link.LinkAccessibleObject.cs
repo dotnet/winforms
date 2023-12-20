@@ -130,10 +130,6 @@ public partial class LinkLabel
 
             private protected override bool IsInternal => true;
 
-            internal override bool CanGetParentInternal => _linkLabelAccessibleObject.CanGetParentInternal;
-
-            internal override unsafe IDispatch* GetParentInternal() => _linkLabelAccessibleObject.GetParentInternal();
-
             public override AccessibleRole Role => AccessibleRole.Link;
 
             internal override int[] RuntimeId

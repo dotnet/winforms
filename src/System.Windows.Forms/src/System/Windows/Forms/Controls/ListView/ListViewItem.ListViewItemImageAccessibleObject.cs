@@ -38,10 +38,6 @@ public partial class ListViewItem
 
         private protected override bool IsInternal => true;
 
-        internal override bool CanGetParentInternal => _owningItem.AccessibilityObject.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal() => _owningItem.AccessibilityObject.GetParentInternal();
-
         internal override int[] RuntimeId
         {
             get

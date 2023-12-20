@@ -1315,9 +1315,6 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Parent)
             .Returns(result)
             .Verifiable();
-        mockAccessibleObject
-            .Setup(a => a.CanGetParentInternal)
-            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Same(result, iAccessible.accParent);
         mockAccessibleObject.Verify(a => a.Parent, Times.Once());
@@ -1333,9 +1330,6 @@ public partial class AccessibleObjectTests
                 .Setup(a => a.Parent)
                 .Returns(mockAccessibleObject.Object)
                 .Verifiable();
-            mockAccessibleObject
-                .Setup(a => a.CanGetParentInternal)
-                .Returns(false);
             IAccessible iAccessible = mockAccessibleObject.Object;
             Assert.Null(iAccessible.accParent);
             mockAccessibleObject.Verify(a => a.Parent, Times.Once());
@@ -2893,36 +2887,6 @@ public partial class AccessibleObjectTests
             (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
 
         Assert.NotEmpty(accessibleObject.TestAccessor().Dynamic.RuntimeId);
-    }
-
-    [WinFormsFact]
-    public unsafe void AccessibleObject_InterfaceOrderAndAllocationValidation()
-    {
-        AccessibleObject parent = new();
-        AccessibleObjectNativeParent native = new(parent);
-        using ComScope<IUnknown> unknown = new((IUnknown*)Marshal.GetIUnknownForObject(native));
-        using ComScope<UIA.IAccessible> accessible = unknown.TryQuery<UIA.IAccessible>(out HRESULT hr);
-        using ComScope<IDispatch> dispatch = new(null);
-        using ComScope<IDispatch> dispatch2 = new(null);
-
-        // JIT can causes allocations. Call once to prep path.
-        accessible.Value->get_accParent(dispatch);
-        long allocatedBytes = GC.GetTotalAllocatedBytes();
-
-        // Failure means that either:
-        // - interface order of UIA.IAccessible and IAccessible on AccessibleObject has changed to IAccessible being first
-        // - Some re-jitting occurred
-        accessible.Value->get_accParent(dispatch2);
-        Assert.Equal(allocatedBytes, GC.GetTotalAllocatedBytes());
-    }
-
-    private class AccessibleObjectNativeParent(AccessibleObject parent) : AccessibleObject
-    {
-        private AccessibleObject _parent = parent;
-
-        internal override bool CanGetParentInternal => true;
-
-        internal override unsafe IDispatch* GetParentInternal() => ComHelpers.TryGetComPointer<IDispatch>(_parent);
     }
 
     private class SubAccessibleObject : AccessibleObject

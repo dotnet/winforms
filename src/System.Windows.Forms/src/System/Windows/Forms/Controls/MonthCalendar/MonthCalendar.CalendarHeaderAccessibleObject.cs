@@ -64,10 +64,6 @@ public partial class MonthCalendar
 
         public override AccessibleObject Parent => _calendarAccessibleObject;
 
-        internal override bool CanGetParentInternal => _calendarAccessibleObject.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal() => _calendarAccessibleObject.GetParentInternal();
-
         internal override int[] RuntimeId => _initRuntimeId;
     }
 }

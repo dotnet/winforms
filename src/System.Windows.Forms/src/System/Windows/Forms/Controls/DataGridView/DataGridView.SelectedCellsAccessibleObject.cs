@@ -22,10 +22,6 @@ public partial class DataGridView
 
         public override AccessibleObject Parent => _parentAccessibleObject;
 
-        internal override bool CanGetParentInternal => _parentAccessibleObject.CanGetParentInternal;
-
-        internal override unsafe IDispatch* GetParentInternal() => _parentAccessibleObject.GetParentInternal();
-
         private protected override bool IsInternal => true;
 
         public override AccessibleRole Role => AccessibleRole.Grouping;
