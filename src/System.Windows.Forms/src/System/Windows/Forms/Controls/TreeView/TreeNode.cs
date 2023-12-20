@@ -513,10 +513,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         set
         {
-            if (value < ImageList.Indexer.NoneIndex)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.NoneIndex);
 
             if (ImageIndexer.Index == value
                 && value != ImageList.Indexer.NoneIndex
@@ -900,10 +897,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         set
         {
-            if (value < ImageList.Indexer.NoneIndex)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.NoneIndex);
 
             if (SelectedImageIndexer.Index == value
                 && value != ImageList.Indexer.NoneIndex

@@ -556,10 +556,7 @@ public partial class TreeView : Control
                 value = 0;
             }
 
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (ImageIndexer.Index != value)
             {
@@ -750,15 +747,8 @@ public partial class TreeView : Control
         {
             if (_indent != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Indent), value, 0));
-                }
-
-                if (value > MaxIndent)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(Indent), value, MaxIndent));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxIndent);
 
                 _indent = value;
                 if (IsHandleCreated)
@@ -802,15 +792,8 @@ public partial class TreeView : Control
         {
             if (_itemHeight != value)
             {
-                if (value < 1)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ItemHeight), value, 1));
-                }
-
-                if (value >= short.MaxValue)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(ItemHeight), value, short.MaxValue));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, short.MaxValue);
 
                 _itemHeight = value;
                 if (IsHandleCreated)
@@ -1044,10 +1027,7 @@ public partial class TreeView : Control
                 value = 0;
             }
 
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (SelectedImageIndexer.Index != value)
             {

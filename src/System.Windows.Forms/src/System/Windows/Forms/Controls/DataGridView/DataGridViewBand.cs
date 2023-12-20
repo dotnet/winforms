@@ -188,29 +188,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (value < 0)
-            {
-                if (IsRow)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(DataGridViewRow.DividerHeight), value, 0));
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(DataGridViewColumn.DividerWidth), value, 0));
-                }
-            }
-
-            if (value > MaxBandThickness)
-            {
-                if (IsRow)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewRow.DividerHeight), value, MaxBandThickness));
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewColumn.DividerWidth), value, MaxBandThickness));
-                }
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxBandThickness);
 
             if (value != DividerThickness)
             {

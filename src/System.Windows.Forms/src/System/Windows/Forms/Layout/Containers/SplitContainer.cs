@@ -747,10 +747,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterIncrement), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _splitterInc = value;
         }
@@ -1319,10 +1316,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplySplitterWidth(int value)
     {
-        if (value < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterWidth), value, 1));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
         if (Orientation == Orientation.Vertical)
         {

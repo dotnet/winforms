@@ -3382,10 +3382,7 @@ public unsafe partial class Control :
         get => _tabIndex == -1 ? 0 : _tabIndex;
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(TabIndex), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (_tabIndex != value)
             {

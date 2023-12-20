@@ -656,10 +656,7 @@ public partial class TabControl : Control
         get => IsHandleCreated ? (int)PInvoke.SendMessage(this, PInvoke.TCM_GETCURSEL) : _selectedIndex;
         set
         {
-            if (value < -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedIndex), value, -1));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
 
             if (SelectedIndex != value)
             {

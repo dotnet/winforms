@@ -480,11 +480,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
 
             ImageIndexer.Index = value;
 

@@ -215,10 +215,7 @@ public abstract partial class ScrollBar : Control
         {
             if (_largeChange != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _largeChange = value;
                 UpdateScrollInfo();
@@ -306,10 +303,7 @@ public abstract partial class ScrollBar : Control
         {
             if (_smallChange != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(SmallChange), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _smallChange = value;
                 UpdateScrollInfo();

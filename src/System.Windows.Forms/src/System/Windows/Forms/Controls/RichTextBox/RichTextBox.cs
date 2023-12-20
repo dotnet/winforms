@@ -580,10 +580,7 @@ public partial class RichTextBox : TextBoxBase
         {
             if (_rightMargin != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RightMargin), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _rightMargin = value;
 
@@ -1171,13 +1168,7 @@ public partial class RichTextBox : TextBoxBase
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionRightIndent), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             ForceHandleCreate();
             PARAFORMAT pf = new()
@@ -1988,9 +1979,9 @@ public partial class RichTextBox : TextBoxBase
         ArgumentOutOfRangeException.ThrowIfNegative(start);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLength);
 
-        if (end < start && end != -1)
+        if (end != -1)
         {
-            throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.InvalidLowBoundArgumentEx, nameof(end), end, nameof(start)));
+            ArgumentOutOfRangeException.ThrowIfLessThan(end, start);
         }
 
         // Don't do anything if we get nothing to look for

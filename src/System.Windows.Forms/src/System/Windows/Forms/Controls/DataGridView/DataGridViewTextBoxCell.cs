@@ -82,10 +82,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxInputLength), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             Properties.SetInteger(PropTextBoxCellMaxInputLength, value);
             if (OwnsEditingTextBox(RowIndex))

@@ -428,10 +428,7 @@ public partial class Label : Control, IAutomationLiveRegion
         }
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
 
             if (ImageIndex == value && value != ImageList.Indexer.DefaultIndex)
             {
