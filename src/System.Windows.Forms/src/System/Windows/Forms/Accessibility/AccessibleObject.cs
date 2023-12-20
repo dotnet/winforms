@@ -1688,7 +1688,7 @@ public unsafe partial class AccessibleObject :
         if (result.Failed)
         {
             *pvarChild = VARIANT.Empty;
-            return result;
+            return HRESULT.S_OK;
         }
 
         return accessible.Value->accHitTest(xLeft, yTop, pvarChild);
@@ -1740,7 +1740,7 @@ public unsafe partial class AccessibleObject :
         if (result.Failed)
         {
             *pxLeft = *pyTop = *pcxWidth = *pcyHeight = 0;
-            return result;
+            return HRESULT.S_OK;
         }
 
         return accessible.Value->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varChild);
@@ -1894,7 +1894,7 @@ public unsafe partial class AccessibleObject :
         if (result.Failed)
         {
             *ppdispChild = null;
-            return result;
+            return HRESULT.S_OK;
         }
 
         result = accessible.Value->get_accChildCount(out int count);
@@ -1902,7 +1902,7 @@ public unsafe partial class AccessibleObject :
         if (result.Failed || count == 0)
         {
             *ppdispChild = null;
-            return result;
+            return HRESULT.S_OK;
         }
 
         return accessible.Value->get_accChild(varChild, ppdispChild);
@@ -2181,7 +2181,7 @@ public unsafe partial class AccessibleObject :
     {
         if (IsClientObject)
         {
-            if (IsValidSelfChildID(varChild))
+            if (IsValidSelfChildID(varChild) || IsValidSelfChildIDAdditionalCheck(varChild))
             {
                 *pszKeyboardShortcut = CanGetKeyboardShortcutInternal
                     ? GetKeyboardShortcutInternal(varChild)
@@ -2220,7 +2220,7 @@ public unsafe partial class AccessibleObject :
 
         if (IsClientObject)
         {
-            if (IsValidSelfChildID(varChild))
+            if (IsValidSelfChildID(varChild) || IsValidSelfChildIDAdditionalCheck(varChild))
             {
                 *pszName = CanGetNameInternal
                     ? GetNameInternal()
@@ -2364,7 +2364,7 @@ public unsafe partial class AccessibleObject :
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Failed)
         {
-            *pvarChildren = default;
+            *pvarChildren = VARIANT.Empty;
             return HRESULT.S_OK;
         }
 
@@ -2818,11 +2818,22 @@ public unsafe partial class AccessibleObject :
     /// <summary>
     ///  Checks if the <paramref name="childID"/> is representative of self.
     /// </summary>
-    internal virtual bool IsValidSelfChildID(VARIANT childID) =>
+    private static bool IsValidSelfChildID(VARIANT childID) =>
         childID.IsEmpty
         || childID.vt is not VARENUM.VT_I4 and not VARENUM.VT_INT
         || childID.data.intVal == (int)HRESULT.DISP_E_PARAMNOTFOUND
         || childID.data.intVal == (int)PInvoke.CHILDID_SELF;
+
+    /// <inheritdoc cref="IsValidSelfChildID(VARIANT)"/>
+    /// <remarks>
+    ///  <para>
+    ///   Derived classes may override this to provide additional terms to determine if
+    ///   <paramref name="childId"/> is representative of self. This method should then be
+    ///   called in the appropriate <see cref="IAccessible"/> interface method implementation
+    ///   where the additional terms is to be respected alongside <see cref="IsValidSelfChildID(VARIANT)"/>.
+    ///  </para>
+    /// </remarks>
+    internal virtual bool IsValidSelfChildIDAdditionalCheck(VARIANT childId) => false;
 
     /// <summary>
     ///  Tries to get corresponding AccessibleObject that is represented by <paramref name="variant"/>.

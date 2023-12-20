@@ -52,9 +52,8 @@ public partial class ComboBox
                 ? ExpandCollapseState.ExpandCollapseState_Expanded
                 : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
-        internal override bool IsValidSelfChildID(VARIANT childID) =>
-            (childID.vt is VARENUM.VT_I4 or VARENUM.VT_INT && childID.data.intVal == COMBOBOX_ACC_ITEM_INDEX)
-            || base.IsValidSelfChildID(childID);
+        internal override bool IsValidSelfChildIDAdditionalCheck(VARIANT childId) =>
+            childId.vt is VARENUM.VT_I4 or VARENUM.VT_INT && childId.data.intVal == COMBOBOX_ACC_ITEM_INDEX;
 
         /// <summary>
         ///  Gets the collection of item accessible objects.
@@ -133,7 +132,6 @@ public partial class ComboBox
 
             IReadOnlyList<Entry> entries = owner.Items.InnerList;
             Debug.Assert(index < entries.Count);
-
             Entry item = entries[index];
             if (!ItemAccessibleObjects.TryGetValue(item, out ComboBoxItemAccessibleObject? value))
             {

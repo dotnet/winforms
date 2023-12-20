@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using System.Globalization;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
