@@ -336,11 +336,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
-
-            if (value > (float)ushort.MaxValue)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(FillWeight), value, ushort.MaxValue));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, ushort.MaxValue);
 
             if (DataGridView is not null)
             {

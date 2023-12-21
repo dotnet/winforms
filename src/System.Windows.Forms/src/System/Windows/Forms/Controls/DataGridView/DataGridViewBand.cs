@@ -642,17 +642,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 value = minimumThickness;
             }
 
-            if (value > MaxBandThickness)
-            {
-                if (IsRow)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewRow.Height), value, MaxBandThickness));
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewColumn.Width), value, MaxBandThickness));
-                }
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxBandThickness);
 
             bool setThickness = true;
             if (IsRow)

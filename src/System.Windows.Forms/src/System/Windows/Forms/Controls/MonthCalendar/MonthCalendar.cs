@@ -876,13 +876,7 @@ public partial class MonthCalendar : Control
             if (!_todayDateSet || (DateTime.Compare(value, _todaysDate) != 0))
             {
                 // Throw if trying to set the TodayDate to a value greater than MaxDate.
-                if (DateTime.Compare(value, _maxDate) > 0)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(value),
-                        value,
-                        string.Format(SR.InvalidHighBoundArgumentEx, nameof(TodayDate), FormatDate(value), FormatDate(_maxDate)));
-                }
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(value, _maxDate);
 
                 // Throw if trying to set the TodayDate to a value less than MinDate.
                 ArgumentOutOfRangeException.ThrowIfLessThan(value, _minDate);
