@@ -24,41 +24,23 @@ public partial class DomainUpDown
 
         public override string? Name
         {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
+            get => _name;
+            set => _name = value;
         }
+
+        internal override bool CanGetNameInternal => false;
+
+        internal override bool CanSetNameInternal => false;
 
         public override AccessibleObject? Parent => null;
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                return AccessibleRole.ListItem;
-            }
-        }
+        public override AccessibleRole Role => AccessibleRole.ListItem;
 
-        public override AccessibleStates State
-        {
-            get
-            {
-                return AccessibleStates.Selectable;
-            }
-        }
+        public override AccessibleStates State => AccessibleStates.Selectable;
 
-        public override string? Value
-        {
-            get
-            {
-                return _name;
-            }
-        }
+        public override string? Value => _name;
+
+        internal override bool CanGetValueInternal => false;
 
         internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
     }

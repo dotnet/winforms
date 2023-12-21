@@ -14,13 +14,9 @@ public partial class DataGridViewButtonCell
         {
         }
 
-        public override string DefaultAction
-        {
-            get
-            {
-                return SR.DataGridView_AccButtonCellDefaultAction;
-            }
-        }
+        public override string DefaultAction => SR.DataGridView_AccButtonCellDefaultAction;
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {

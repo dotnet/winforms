@@ -26,6 +26,8 @@ public partial class MonthCalendar
 
         public override string DefaultAction => SR.AccessibleActionClick;
 
+        internal override bool CanGetDefaultActionInternal => false;
+
         public override void DoDefaultAction() => Invoke();
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
@@ -45,6 +47,8 @@ public partial class MonthCalendar
             };
 
         public override AccessibleObject Parent => _monthCalendarAccessibleObject;
+
+        private protected override bool IsInternal => true;
 
         private void RaiseMouseClick()
         {

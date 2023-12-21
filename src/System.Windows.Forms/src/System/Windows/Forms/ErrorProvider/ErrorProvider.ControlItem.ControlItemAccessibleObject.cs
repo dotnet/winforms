@@ -106,13 +106,13 @@ public partial class ErrorProvider
             internal override bool IsReadOnly => true;
 
             [AllowNull]
-            public override string Name
-            {
-                get => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
-                set => base.Name = value;
-            }
+            public override string Name => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
+
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleObject? Parent => _window?.AccessibilityObject;
+
+            private protected override bool IsInternal => true;
 
             public override AccessibleRole Role => AccessibleRole.Alert;
 

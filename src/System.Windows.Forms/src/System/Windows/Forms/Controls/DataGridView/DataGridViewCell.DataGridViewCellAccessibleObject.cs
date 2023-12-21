@@ -42,6 +42,8 @@ public abstract partial class DataGridViewCell
             }
         }
 
+        internal override bool CanGetDefaultActionInternal => false;
+
         public override string? Name
         {
             get
@@ -84,6 +86,8 @@ public abstract partial class DataGridViewCell
                 return name;
             }
         }
+
+        internal override bool CanGetNameInternal => false;
 
         public DataGridViewCell? Owner
         {
@@ -249,6 +253,10 @@ public abstract partial class DataGridViewCell
                     valueTypeConverter: null);
             }
         }
+
+        internal override bool CanGetValueInternal => false;
+
+        internal override bool CanSetValueInternal => false;
 
         public override void DoDefaultAction()
         {

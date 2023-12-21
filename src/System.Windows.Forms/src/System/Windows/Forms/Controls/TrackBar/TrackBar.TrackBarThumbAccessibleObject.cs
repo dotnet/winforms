@@ -8,12 +8,16 @@ namespace System.Windows.Forms;
 
 public partial class TrackBar
 {
-    internal class TrackBarThumbAccessibleObject : TrackBarChildAccessibleObject
+    internal sealed class TrackBarThumbAccessibleObject : TrackBarChildAccessibleObject
     {
         public TrackBarThumbAccessibleObject(TrackBar owningTrackBar) : base(owningTrackBar)
         { }
 
         public override string? Name => SR.TrackBarPositionButtonName;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

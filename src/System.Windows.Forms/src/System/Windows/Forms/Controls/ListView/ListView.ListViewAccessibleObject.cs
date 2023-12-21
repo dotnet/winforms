@@ -17,6 +17,8 @@ public partial class ListView
         {
         }
 
+        private protected override bool IsInternal => true;
+
         internal override Rectangle BoundingRectangle
         {
             get

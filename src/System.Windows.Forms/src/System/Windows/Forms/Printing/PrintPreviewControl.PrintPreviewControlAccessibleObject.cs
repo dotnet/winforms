@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 
 public partial class PrintPreviewControl
 {
-    internal class PrintPreviewControlAccessibleObject : ControlAccessibleObject, IScrollProvider.Interface
+    internal sealed class PrintPreviewControlAccessibleObject : ControlAccessibleObject, IScrollProvider.Interface
     {
         public PrintPreviewControlAccessibleObject(PrintPreviewControl owner) : base(owner)
         {
@@ -54,6 +54,8 @@ public partial class PrintPreviewControl
                 _ => null
             };
         }
+
+        private protected override bool IsInternal => true;
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch

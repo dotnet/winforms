@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class ListViewItem
 {
-    internal class ListViewItemTileAccessibleObject : ListViewItemBaseAccessibleObject
+    internal sealed class ListViewItemTileAccessibleObject : ListViewItemBaseAccessibleObject
     {
         private ListViewLabelEditAccessibleObject? _labelEditAccessibleObject;
         public ListViewItemTileAccessibleObject(ListViewItem owningItem) : base(owningItem)

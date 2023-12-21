@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class ToolStripOverflow
 {
-    internal class ToolStripOverflowAccessibleObject : ToolStripDropDownAccessibleObject
+    internal sealed class ToolStripOverflowAccessibleObject : ToolStripDropDownAccessibleObject
     {
         public ToolStripOverflowAccessibleObject(ToolStripOverflow owner) : base(owner)
         { }
@@ -17,6 +17,8 @@ public partial class ToolStripOverflow
             => this.TryGetOwnerAs(out ToolStripOverflow? owner) && (index >= 0 || index < owner.DisplayedItems.Count)
                 ? owner.DisplayedItems[index].AccessibilityObject
                 : null;
+
+        private protected override bool IsInternal => true;
 
         public override int GetChildCount()
             => this.TryGetOwnerAs(out ToolStripOverflow? owner)

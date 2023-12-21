@@ -13,7 +13,7 @@ public abstract partial class UpDownBase
     {
         internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
         {
-            internal class DirectionButtonAccessibleObject : AccessibleObject
+            internal sealed class DirectionButtonAccessibleObject : AccessibleObject
             {
                 private readonly bool _up;
                 private readonly UpDownButtonsAccessibleObject _parent;
@@ -48,6 +48,8 @@ public abstract partial class UpDownBase
                 }
 
                 public override string DefaultAction => SR.AccessibleActionPress;
+
+                internal override bool CanGetDefaultActionInternal => false;
 
                 public override void DoDefaultAction()
                 {
@@ -91,7 +93,13 @@ public abstract partial class UpDownBase
                     set { }
                 }
 
+                internal override bool CanGetNameInternal => false;
+
+                internal override bool CanSetNameInternal => false;
+
                 public override AccessibleObject Parent => _parent;
+
+                private protected override bool IsInternal => true;
 
                 public override AccessibleRole Role => AccessibleRole.PushButton;
 

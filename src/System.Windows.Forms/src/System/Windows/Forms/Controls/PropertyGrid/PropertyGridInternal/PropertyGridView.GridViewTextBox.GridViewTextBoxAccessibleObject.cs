@@ -99,6 +99,8 @@ internal partial class PropertyGridView
                 }
             }
 
+            private protected override bool IsInternal => true;
+
             internal override int[] RuntimeId => _runtimeId ??= base.RuntimeId;
 
             internal override bool IsReadOnly

@@ -143,3 +143,46 @@ internal interface IManagedWrapper<TComInterface1, TComInterface2, TComInterface
 
     ComInterfaceTable IManagedWrapper.GetComInterfaceTable() => InterfaceTable;
 }
+
+/// <summary>
+///  Apply to a class to apply a COM callable wrapper of the given interfaces. The class must also derive from the
+///  given COM wrapper structs' nested Interfaces.
+/// </summary>
+internal interface IManagedWrapper<TComInterface1, TComInterface2, TComInterface3, TComInterface4, TComInterface5, TComInterface6, TComInterface7, TComInterface8, TComInterface9, TComInterface10,
+    TComInterface11, TComInterface12, TComInterface13, TComInterface14, TComInterface15, TComInterface16, TComInterface17, TComInterface18, TComInterface19, TComInterface20,
+    TComInterface21, TComInterface22, TComInterface23, TComInterface24, TComInterface25, TComInterface26, TComInterface27> : IManagedWrapper
+    where TComInterface1 : unmanaged, IComIID, IVTable
+    where TComInterface2 : unmanaged, IComIID, IVTable
+    where TComInterface3 : unmanaged, IComIID, IVTable
+    where TComInterface4 : unmanaged, IComIID, IVTable
+    where TComInterface5 : unmanaged, IComIID, IVTable
+    where TComInterface6 : unmanaged, IComIID, IVTable
+    where TComInterface7 : unmanaged, IComIID, IVTable
+    where TComInterface8 : unmanaged, IComIID, IVTable
+    where TComInterface9 : unmanaged, IComIID, IVTable
+    where TComInterface10 : unmanaged, IComIID, IVTable
+    where TComInterface11 : unmanaged, IComIID, IVTable
+    where TComInterface12 : unmanaged, IComIID, IVTable
+    where TComInterface13 : unmanaged, IComIID, IVTable
+    where TComInterface14 : unmanaged, IComIID, IVTable
+    where TComInterface15 : unmanaged, IComIID, IVTable
+    where TComInterface16 : unmanaged, IComIID, IVTable
+    where TComInterface17 : unmanaged, IComIID, IVTable
+    where TComInterface18 : unmanaged, IComIID, IVTable
+    where TComInterface19 : unmanaged, IComIID, IVTable
+    where TComInterface20 : unmanaged, IComIID, IVTable
+    where TComInterface21 : unmanaged, IComIID, IVTable
+    where TComInterface22 : unmanaged, IComIID, IVTable
+    where TComInterface23 : unmanaged, IComIID, IVTable
+    where TComInterface24 : unmanaged, IComIID, IVTable
+    where TComInterface25 : unmanaged, IComIID, IVTable
+    where TComInterface26 : unmanaged, IComIID, IVTable
+    where TComInterface27 : unmanaged, IComIID, IVTable
+{
+    private static ComInterfaceTable InterfaceTable { get; }
+        = ComInterfaceTable.Create<TComInterface1, TComInterface2, TComInterface3, TComInterface4, TComInterface5, TComInterface6, TComInterface7, TComInterface8, TComInterface9, TComInterface10,
+            TComInterface11, TComInterface12, TComInterface13, TComInterface14, TComInterface15, TComInterface16, TComInterface17, TComInterface18, TComInterface19, TComInterface20,
+            TComInterface21, TComInterface22, TComInterface23, TComInterface24, TComInterface25, TComInterface26, TComInterface27>();
+
+    ComInterfaceTable IManagedWrapper.GetComInterfaceTable() => InterfaceTable;
+}

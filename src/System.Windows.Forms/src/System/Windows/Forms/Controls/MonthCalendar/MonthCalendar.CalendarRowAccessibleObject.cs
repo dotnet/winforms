@@ -13,7 +13,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a row in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarRowAccessibleObject : MonthCalendarChildAccessibleObject
+    internal sealed class CalendarRowAccessibleObject : MonthCalendarChildAccessibleObject
     {
         // This const is used to get ChildId.
         // It should take into account previous rows in a calendar body.
@@ -142,6 +142,8 @@ public partial class MonthCalendar
             }
         }
 
+        internal override bool CanGetDescriptionInternal => false;
+
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
@@ -187,7 +189,11 @@ public partial class MonthCalendar
 
         public override string? Name => null; // Rows don't have names like in a native calendar
 
+        internal override bool CanGetNameInternal => false;
+
         public override AccessibleObject Parent => _calendarBodyAccessibleObject;
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role => AccessibleRole.Row;
 

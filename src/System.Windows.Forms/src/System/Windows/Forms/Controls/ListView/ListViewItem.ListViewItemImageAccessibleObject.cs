@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class ListViewItem
 {
-    internal class ListViewItemImageAccessibleObject : AccessibleObject
+    internal sealed class ListViewItemImageAccessibleObject : AccessibleObject
     {
         private readonly ListViewItem _owningItem;
 
@@ -29,9 +29,13 @@ public partial class ListViewItem
 
         public override string DefaultAction => string.Empty;
 
+        internal override bool CanGetDefaultActionInternal => false;
+
         internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningItem.ListView?.AccessibilityObject;
 
         public override AccessibleObject Parent => _owningItem.AccessibilityObject;
+
+        private protected override bool IsInternal => true;
 
         internal override int[] RuntimeId
         {

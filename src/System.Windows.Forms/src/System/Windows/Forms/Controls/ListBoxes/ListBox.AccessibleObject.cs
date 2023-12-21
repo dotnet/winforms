@@ -26,6 +26,8 @@ public partial class ListBox
             _itemAccessibleObjects = new Dictionary<ItemArray.Entry, ListBoxItemAccessibleObject>();
         }
 
+        private protected override bool IsInternal => true;
+
         internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
             owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 

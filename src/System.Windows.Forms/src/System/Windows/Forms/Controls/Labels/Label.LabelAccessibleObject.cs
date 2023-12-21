@@ -15,6 +15,8 @@ public partial class Label
 
         public override string? KeyboardShortcut => !this.TryGetOwnerAs(out Label? owner) || !owner.UseMnemonic ? null : base.KeyboardShortcut;
 
+        private protected override bool IsInternal => true;
+
         public override string? Name
         {
             get

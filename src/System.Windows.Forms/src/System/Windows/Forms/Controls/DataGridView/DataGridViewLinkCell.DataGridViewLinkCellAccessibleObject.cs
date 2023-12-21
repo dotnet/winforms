@@ -14,13 +14,7 @@ public partial class DataGridViewLinkCell
         {
         }
 
-        public override string DefaultAction
-        {
-            get
-            {
-                return SR.DataGridView_AccLinkCellDefaultAction;
-            }
-        }
+        public override string DefaultAction => SR.DataGridView_AccLinkCellDefaultAction;
 
         public override void DoDefaultAction()
         {

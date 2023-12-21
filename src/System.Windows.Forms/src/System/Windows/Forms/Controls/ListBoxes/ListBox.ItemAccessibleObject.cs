@@ -36,6 +36,8 @@ public partial class ListBox
 
         public override AccessibleObject Parent => _owningAccessibleObject;
 
+        private protected override bool IsInternal => true;
+
         internal override int[] RuntimeId
         {
             get
@@ -84,16 +86,18 @@ public partial class ListBox
             }
         }
 
-        public override string? DefaultAction
-            => _owningAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
+        public override string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
 
-        public override string? Help => _owningAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
+        internal override BSTR GetDefaultActionInternal() =>
+            _owningAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
 
-        public override string? Name
-        {
-            get => _owningListBox.GetItemText(_itemEntry.Item);
-            set => base.Name = value;
-        }
+        public override string? Help => GetHelpInternal().ToNullableStringAndFree();
+
+        internal override BSTR GetHelpInternal() => _owningAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
+
+        public override string? Name => _owningListBox.GetItemText(_itemEntry.Item);
+
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleRole Role => _owningAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());
 

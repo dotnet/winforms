@@ -5,7 +5,7 @@ namespace System.Windows.Forms;
 
 public abstract partial class UpDownBase
 {
-    internal class UpDownBaseAccessibleObject : ControlAccessibleObject
+    internal sealed class UpDownBaseAccessibleObject : ControlAccessibleObject
     {
         public UpDownBaseAccessibleObject(UpDownBase owner) : base(owner)
         { }
@@ -26,6 +26,8 @@ public abstract partial class UpDownBase
                 _ => null,
             };
         }
+
+        private protected override bool IsInternal => true;
 
         public override int GetChildCount() => 2;
 

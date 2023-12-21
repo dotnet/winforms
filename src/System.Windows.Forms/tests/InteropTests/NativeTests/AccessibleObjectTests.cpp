@@ -62,24 +62,17 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetIAccessiblePair(IUnknown* pUnknown
         // Negative tests.
         idChild = 1;
         hr = pAccessibleEx->GetIAccessiblePair(NULL, &idChild);
-#if false
+
         assertEqualHr(E_POINTER, hr);
-#else
-        assertEqualHr(S_OK, hr);
-#endif
         assertEqualInt(1, idChild);
 
         result = NULL;
         hr = pAccessibleEx->GetIAccessiblePair(&result, NULL);
-        assertEqualHr(E_INVALIDARG, hr);
+        assertEqualHr(E_POINTER, hr);
         assertNull(result.p);
 
         hr = pAccessibleEx->GetIAccessiblePair(NULL, NULL);
-#if false
         assertEqualHr(E_POINTER, hr);
-#else
-        assertEqualHr(S_OK, hr);
-#endif
 
         return S_OK;
     });
@@ -95,14 +88,14 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown, int*
         hr = pUnknown->QueryInterface(IID_IAccessibleEx, (void**)&pAccessibleEx);
         assertEqualHr(S_OK, hr);
 
-        SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
+        SAFEARRAY *result;
         hr = pAccessibleEx->GetRuntimeId(&result);
         assertEqualHr(COR_E_NOTSUPPORTED, hr);
         SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pAccessibleEx->GetRuntimeId(NULL);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -126,7 +119,7 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetObjectForChild(IUnknown* pUnknown,
 
         // Negative tests.
         hr = pAccessibleEx->GetObjectForChild(idChild, NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1349,7 +1342,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetChildId(IUnknown* pUn
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_ChildId(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1373,7 +1366,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetDefaultAction(IUnknow
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_DefaultAction(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1397,7 +1390,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetDescription(IUnknown*
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_Description(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1421,7 +1414,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetHelp(IUnknown* pUnkno
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_Help(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1445,7 +1438,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetKeyboardShortcut(IUnk
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_KeyboardShortcut(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1469,7 +1462,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetName(IUnknown* pUnkno
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_Name(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1492,7 +1485,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetRole(IUnknown* pUnkno
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_Role(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1515,7 +1508,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetState(IUnknown* pUnkn
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_State(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1539,7 +1532,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetValue(IUnknown* pUnkn
 
         // Negative tests.
         hr = pLegacyIAccessibleProvider->get_Value(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });
@@ -1607,7 +1600,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetSelection(IUnknown* p
 
         // Negative tests
         hr = pLegacyIAccessibleProvider->GetSelection(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

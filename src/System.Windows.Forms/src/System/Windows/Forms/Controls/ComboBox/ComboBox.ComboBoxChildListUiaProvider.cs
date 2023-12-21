@@ -148,6 +148,8 @@ public partial class ComboBox
             return GetChildFragment(selectedIndex);
         }
 
+        private protected override bool IsInternal => true;
+
         internal override IRawElementProviderSimple.Interface[] GetSelection()
         {
             if (!_owningComboBox.IsHandleCreated)

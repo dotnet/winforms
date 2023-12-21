@@ -7,7 +7,7 @@ using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 
 namespace System.Windows.Forms;
 
-internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
+internal sealed unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
 {
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
@@ -45,6 +45,8 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
                 ? OwningListViewItemAccessibleObject
                 : OwningSubItemAccessibleObject
         : null;
+
+    private protected override bool IsInternal => true;
 
     internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch

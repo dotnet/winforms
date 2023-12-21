@@ -11,7 +11,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a calendar header in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarHeaderAccessibleObject : CalendarButtonAccessibleObject
+    internal sealed class CalendarHeaderAccessibleObject : CalendarButtonAccessibleObject
     {
         // A calendar header is the first in the calendar accessibility tree.
         // Indices start at 1.
@@ -58,6 +58,8 @@ public partial class MonthCalendar
         internal override int GetChildId() => ChildId;
 
         public override string Name => _initName;
+
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _calendarAccessibleObject;
 

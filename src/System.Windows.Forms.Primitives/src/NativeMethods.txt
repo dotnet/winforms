@@ -351,6 +351,7 @@ HT*
 HTREEITEM
 HWND_*
 IAccessible
+IAccessibleEx
 IAutoComplete2
 IClassFactory
 IClassFactory2
@@ -395,6 +396,7 @@ IHTMLElementCollection
 IHTMLWindow3
 IHTMLWindow4
 IInvokeProvider
+ILegacyIAccessibleProvider
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create

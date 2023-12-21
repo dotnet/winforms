@@ -9,7 +9,7 @@ namespace System.Windows.Forms.PropertyGridInternal;
 
 internal abstract partial class GridEntry
 {
-    public class GridEntryAccessibleObject : AccessibleObject, IOwnedObject<GridEntry>
+    internal class GridEntryAccessibleObject : AccessibleObject, IOwnedObject<GridEntry>
     {
         private readonly WeakReference<GridEntry> _owningGridEntry;
 
@@ -49,8 +49,12 @@ internal abstract partial class GridEntry
             }
         }
 
+        internal override bool CanGetDefaultActionInternal => !this.TryGetOwnerAs(out GridEntry? owner) || !owner.Expandable;
+
         public override string Description
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
+
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override ExpandCollapseState ExpandCollapseState
             => !this.TryGetOwnerAs(out GridEntry? owner) ? ExpandCollapseState.ExpandCollapseState_Collapsed : owner.Expandable
@@ -59,10 +63,16 @@ internal abstract partial class GridEntry
 
         public override string Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
+        internal override bool CanGetHelpInternal => false;
+
         public override string? Name => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyLabel : null;
 
-        public override AccessibleObject? Parent
-            => this.TryGetOwnerAs(out GridEntry? owner) ? owner.OwnerGridView?.AccessibilityObject : null;
+        internal override bool CanGetNameInternal => false;
+
+        public override AccessibleObject? Parent =>
+            this.TryGetOwnerAs(out GridEntry? owner) ? owner.OwnerGridView?.AccessibilityObject : null;
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role => AccessibleRole.Cell;
 
@@ -139,6 +149,10 @@ internal abstract partial class GridEntry
                 }
             }
         }
+
+        internal override bool CanGetValueInternal => false;
+
+        internal override bool CanSetValueInternal => false;
 
         internal override int Column => 0;
 

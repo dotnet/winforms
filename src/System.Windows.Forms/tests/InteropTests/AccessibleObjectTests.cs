@@ -741,14 +741,14 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         AccessibleObject accessible = new();
         using var dispatch = ComHelpers.TryGetComScope<IDispatch>(accessible);
         dispatch.Value->GetIDOfName("accChild", out int dispId).ThrowOnFailure();
-        Assert.Equal(0x00010002, dispId);
+        Assert.Equal(-5002, dispId);
 
         // We only ever get IUnknown type info in Core. This isn't necessary to replicate, it is meant
         // to show the minbar.
         using ComScope<ITypeInfo> typeInfo = new(null);
         dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo).ThrowOnFailure();
         HRESULT hr = typeInfo.Value->GetIDOfName("accChild", out int memberId);
-        Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, hr);
+        Assert.Equal(HRESULT.S_OK, hr);
         hr = typeInfo.Value->GetIDOfName("get_accChild", out memberId);
         Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, hr);
 
@@ -756,8 +756,8 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         typeInfo.Value->GetTypeAttr(&typeattr).ThrowOnFailure();
         try
         {
-            Assert.Equal(3, typeattr->cFuncs);
-            Assert.Equal(IUnknown.IID_Guid, typeattr->guid);
+            Assert.Equal(28, typeattr->cFuncs);
+            Assert.Equal(*IID.Get<IAccessible>(), typeattr->guid);
         }
         finally
         {
@@ -770,6 +770,8 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         public AccessibleObject ParentResult { get; set; }
 
         public override AccessibleObject Parent => ParentResult;
+
+        private protected override bool IsInternal => true;
     }
 
     private class StandardAccessibleObject : AccessibleObject

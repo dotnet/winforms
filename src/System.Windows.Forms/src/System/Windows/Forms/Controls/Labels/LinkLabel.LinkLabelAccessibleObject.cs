@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class LinkLabel
 {
-    internal class LinkLabelAccessibleObject : LabelAccessibleObject
+    internal sealed class LinkLabelAccessibleObject : LabelAccessibleObject
     {
         private int[]? _runtimeId;
 
@@ -38,15 +38,12 @@ public partial class LinkLabel
 
         internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
-        public override AccessibleObject? GetChild(int index)
-        {
-            if (this.TryGetOwnerAs(out LinkLabel? owner) && index >= 0 && index < GetChildCount())
-            {
-                return owner.Links[index].AccessibleObject;
-            }
+        public override AccessibleObject? GetChild(int index) =>
+            this.TryGetOwnerAs(out LinkLabel? owner) && index >= 0 && index < GetChildCount()
+                ? owner.Links[index].AccessibleObject
+                : null;
 
-            return null;
-        }
+        private protected override bool IsInternal => true;
 
         public override int GetChildCount() => this.TryGetOwnerAs(out LinkLabel? owner) ? owner.Links.Count : 0;
 

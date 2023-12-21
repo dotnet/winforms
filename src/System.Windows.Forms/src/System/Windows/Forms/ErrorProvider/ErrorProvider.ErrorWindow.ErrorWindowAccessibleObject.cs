@@ -52,6 +52,8 @@ public partial class ErrorProvider
                 return base.GetChild(index);
             }
 
+            private protected override bool IsInternal => true;
+
             public override int GetChildCount() => _owner.ControlItems.Count;
 
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
@@ -101,9 +103,14 @@ public partial class ErrorProvider
             [AllowNull]
             public override string Name
             {
-                get => string.IsNullOrEmpty(base.Name) ? SR.ErrorProviderDefaultAccessibleName : base.Name;
-                set => base.Name = value;
+                get
+                {
+                    string? name = base.Name;
+                    return string.IsNullOrEmpty(name) ? SR.ErrorProviderDefaultAccessibleName : name;
+                }
             }
+
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleRole Role => AccessibleRole.Grouping;
 

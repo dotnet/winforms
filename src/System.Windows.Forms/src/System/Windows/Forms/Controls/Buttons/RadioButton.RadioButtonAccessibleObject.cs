@@ -15,6 +15,8 @@ public partial class RadioButton
                 ? description
                 : SR.AccessibleActionCheck;
 
+        internal override bool CanGetDefaultActionInternal => false;
+
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.RadioButton);
 
         public override AccessibleStates State =>

@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class ListViewItem
 {
-    internal class ListViewItemDetailsAccessibleObject : ListViewItemBaseAccessibleObject
+    internal sealed class ListViewItemDetailsAccessibleObject : ListViewItemBaseAccessibleObject
     {
         private const int ImageAccessibleObjectIndex = 0;
         private readonly Dictionary<int, AccessibleObject> _listViewSubItemAccessibleObjects;
