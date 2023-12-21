@@ -19310,7 +19310,7 @@ public partial class DataGridView
         int rowIndex2,
         out int sortResult)
     {
-        DataGridViewSortCompareEventArgs dgvsce = new DataGridViewSortCompareEventArgs(
+        DataGridViewSortCompareEventArgs dgvsce = new(
             dataGridViewSortedColumn,
             value1,
             value2,
@@ -20174,7 +20174,7 @@ public partial class DataGridView
             Debug.Assert(_inPerformLayoutCount >= 0);
         }
     }
-#nullable disable
+
     private void PopulateNewRowWithDefaultValues()
     {
         if (NewRowIndex != -1)
@@ -20253,12 +20253,16 @@ public partial class DataGridView
 
             cellClip.Intersect(editingZone);
 
+            if (_editingPanel is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             if (cellClip.Width == 0 || cellClip.Height == 0)
             {
                 // we cannot simply make the control invisible because we want it to keep the focus.
                 // (and Control::CanFocus returns false if the control is not visible).
                 // So we place the editing control to the right of the DataGridView.
-                Debug.Assert(EditingControl is not null);
                 _editingPanel.Location = new Point(Width + 1, 0);
                 _dataGridViewState1[State1_EditingControlHidden] = true;
             }
@@ -20289,12 +20293,21 @@ public partial class DataGridView
                     cellClip.Height++;
                 }
 
+                if (InheritedEditingCellStyle is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 CurrentCellInternal.PositionEditingControl(
                     setLocation || _dataGridViewState1[State1_EditingControlHidden],
                     setSize || _dataGridViewState1[State1_EditingControlHidden],
-                    cellBounds, cellClip, InheritedEditingCellStyle,
-                    singleVerticalBorderAdded, singleHorizontalBorderAdded,
-                    isFirstDisplayedColumn, isFirstDisplayedRow);
+                    cellBounds,
+                    cellClip,
+                    InheritedEditingCellStyle,
+                    singleVerticalBorderAdded,
+                    singleHorizontalBorderAdded,
+                    isFirstDisplayedColumn,
+                    isFirstDisplayedRow);
                 _dataGridViewState1[State1_EditingControlHidden] = false;
             }
 
@@ -20359,7 +20372,9 @@ public partial class DataGridView
                                         int dataGridRowsCount = Rows.Count;
 #if DEBUG
                                         int dataGridViewRowsCount = Rows.Count;           // the number of rows in the dataGridView row collection not counting the AddNewRow
-                                        int rowCount = DataConnection.CurrencyManager.List.Count;
+
+                                        // We already check inside DataSource if DataConnection is null.
+                                        int rowCount = DataConnection!.CurrencyManager?.List.Count ?? 0;
                                         if (AllowUserToAddRowsInternal)
                                         {
                                             if (NewRowIndex < rowCount)
@@ -20375,10 +20390,11 @@ public partial class DataGridView
 
                                         Debug.Assert(rowCount == dataGridViewRowsCount, "out of sync");
 #endif
-                                        DataGridViewDataErrorEventArgs dgvdee = null;
+                                        DataGridViewDataErrorEventArgs? dgvdee = null;
                                         try
                                         {
-                                            DataConnection.DeleteRow(rowIndex);
+                                            // We already check inside DataSource if DataConnection is null.
+                                            DataConnection!.DeleteRow(rowIndex);
                                         }
                                         catch (Exception exception) when (!exception.IsCriticalException())
                                         {
@@ -20416,7 +20432,7 @@ public partial class DataGridView
                                     }
                                     else
                                     {
-                                        Rows.RemoveAtInternal(rowIndex, false /*force*/);
+                                        Rows.RemoveAtInternal(rowIndex, force: false);
                                         Debug.Assert(dataGridViewRow.Index == -1);
                                         DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
                                         OnUserDeletedRow(dgvre);
@@ -20503,16 +20519,17 @@ public partial class DataGridView
                 if (EditingControl is not null)
                 {
                     _dataGridViewState1[State1_LeavingWithTabKey] = true;
-                    if (!EndEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.LeaveControl,
-                                 DataGridViewValidateCellInternal.Always,
-                                 true /*fireCellLeave*/,
-                                 true /*fireCellEnter*/,
-                                 true /*fireRowLeave*/,
-                                 true /*fireRowEnter*/,
-                                 true /*fireLeave*/,
-                                 false /*keepFocus*/,
-                                 false /*resetCurrentCell*/,
-                                 false /*resetAnchorCell unused here*/))
+                    if (!EndEdit(
+                        DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.LeaveControl,
+                        DataGridViewValidateCellInternal.Always,
+                        fireCellLeave: true,
+                        fireCellEnter: true,
+                        fireRowLeave: true,
+                        fireRowEnter: true,
+                        fireLeave: true,
+                        keepFocus: false,
+                        resetCurrentCell: false,
+                        resetAnchorCell: false))
                     {
                         return true;
                     }
@@ -20545,7 +20562,7 @@ public partial class DataGridView
     private bool ProcessDownKeyInternal(Keys keyData, out bool moved)
     {
         bool success;
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         int firstVisibleColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
         int lastVisibleRowIndex = Rows.GetLastRow(DataGridViewElementStates.Visible);
         if (firstVisibleColumnIndex == -1 || lastVisibleRowIndex == -1)
@@ -20782,7 +20799,7 @@ public partial class DataGridView
                                     return true;
                                 }
 
-                                if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true /*forCurrentCellChange*/))
+                                if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, forCurrentCellChange: true))
                                 {
                                     return true;
                                 }
@@ -20795,11 +20812,12 @@ public partial class DataGridView
 
                                 ClearSelection();
                                 SetSelectedCellCore(_ptCurrentCell.X, nextVisibleRowIndex, true);
-                                success = SetCurrentCellAddressCore(_ptCurrentCell.X,
+                                success = SetCurrentCellAddressCore(
+                                    _ptCurrentCell.X,
                                     nextVisibleRowIndex,
-                                    true  /*setAnchorCellAddress*/,
-                                    false /*validateCurrentCell*/,
-                                    false /*throughMouseClick*/);
+                                    setAnchorCellAddress: true,
+                                    validateCurrentCell: false,
+                                    throughMouseClick: false);
                                 if (!success)
                                 {
                                     moved = false;
@@ -21445,7 +21463,8 @@ public partial class DataGridView
 
     protected bool ProcessEndKey(Keys keyData)
     {
-        DataGridViewColumn dataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible,
+        DataGridViewColumn? dataGridViewColumn = Columns.GetLastColumn(
+            DataGridViewElementStates.Visible,
             DataGridViewElementStates.None);
         int lastVisibleColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -21773,21 +21792,22 @@ public partial class DataGridView
 
         if (!moved)
         {
-            DataGridViewCell dataGridViewCurrentCell = null;
+            DataGridViewCell? dataGridViewCurrentCell = null;
             // Try to commit the potential editing
             if (EditMode == DataGridViewEditMode.EditOnEnter)
             {
                 if (_ptCurrentCell.X != -1)
                 {
                     dataGridViewCurrentCell = CurrentCellInternal;
-                    DataGridViewDataErrorEventArgs dgvdee = CommitEdit(ref dataGridViewCurrentCell,
+                    DataGridViewDataErrorEventArgs? dgvdee = CommitEdit(
+                        ref dataGridViewCurrentCell,
                         DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit,
                         DataGridViewValidateCellInternal.WhenChanged,
-                        false /*fireCellLeave*/,
-                        false /*fireCellEnter*/,
-                        false /*fireRowLeave*/,
-                        false /*fireRowEnter*/,
-                        false /*fireLeave*/);
+                        fireCellLeave: false,
+                        fireCellEnter: false,
+                        fireRowLeave: false,
+                        fireRowEnter: false,
+                        fireLeave: false);
                     if (dgvdee is not null)
                     {
                         if (dgvdee.ThrowException)
@@ -21799,16 +21819,17 @@ public partial class DataGridView
             }
             else
             {
-                EndEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit,
-                    DataGridViewValidateCellInternal.WhenChanged /*validateCell*/,
-                    false /*fireCellLeave*/,
-                    false /*fireCellEnter*/,
-                    false /*fireRowLeave*/,
-                    false /*fireRowEnter*/,
-                    false /*fireLeave*/,
-                    true /*keepFocus*/,
-                    true /*resetCurrentCell unused here*/,
-                    true /*resetAnchorCell unused here*/);
+                EndEdit(
+                    DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit,
+                    validateCell: DataGridViewValidateCellInternal.WhenChanged,
+                    fireCellLeave: false,
+                    fireCellEnter: false,
+                    fireRowLeave: false,
+                    fireRowEnter: false,
+                    fireLeave: false,
+                    keepFocus: true,
+                    resetCurrentCell: true,
+                    resetAnchorCell: true);
             }
 
             if (/*commitRow && */IsCurrentRowDirty)
@@ -21846,7 +21867,7 @@ public partial class DataGridView
             }
             else
             {
-                CancelEdit(true /*endEdit, DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.InitialValueRestoration*/);
+                CancelEdit(endEdit: true /*, DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.InitialValueRestoration*/);
             }
 
             return true;
@@ -21869,9 +21890,9 @@ public partial class DataGridView
                 && !IsSharedCellReadOnly(CurrentCellInternal, _ptCurrentCell.Y)
                 && (EditMode == DataGridViewEditMode.EditOnKeystrokeOrF2 || EditMode == DataGridViewEditMode.EditOnF2))
             {
-                bool success = ScrollIntoView(_ptCurrentCell.X, _ptCurrentCell.Y, false);
+                bool success = ScrollIntoView(_ptCurrentCell.X, _ptCurrentCell.Y, forCurrentCellChange: false);
                 Debug.Assert(success);
-                BeginEditInternal(EditMode == DataGridViewEditMode.EditOnF2 /*selectAll*/);
+                BeginEditInternal(selectAll: EditMode == DataGridViewEditMode.EditOnF2);
                 return true;
             }
         }
@@ -21904,7 +21925,7 @@ public partial class DataGridView
 
     protected bool ProcessHomeKey(Keys keyData)
     {
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         int firstVisibleColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
         if (firstVisibleColumnIndex == -1 || firstVisibleRowIndex == -1)
@@ -22209,7 +22230,7 @@ public partial class DataGridView
                     && (keyData & Keys.KeyCode) == Keys.C))
             && ClipboardCopyMode != DataGridViewClipboardCopyMode.Disable)
         {
-            DataObject dataObject = GetClipboardContent();
+            DataObject? dataObject = GetClipboardContent();
             if (dataObject is not null)
             {
                 Clipboard.SetDataObject(dataObject);
@@ -22237,8 +22258,8 @@ public partial class DataGridView
                     KeyEventArgs ke = new KeyEventArgs((Keys)(nint)m.WParamInternal | ModifierKeys);
                     if (ke.KeyCode != Keys.ProcessKey || m.LParamInternal != 0x01) // Changing IME context does not trigger editing mode
                     {
-                        Type editControlType = dataGridViewCell.EditType;
-                        Type editingCellInterface = null;
+                        Type? editControlType = dataGridViewCell.EditType;
+                        Type? editingCellInterface = null;
                         if (editControlType is null)
                         {
                             // Current cell does not have an editing control. Does it implement IDataGridViewEditingCell?
@@ -22278,7 +22299,7 @@ public partial class DataGridView
 
         return base.ProcessKeyEventArgs(ref m);
     }
-
+#nullable disable
     protected override bool ProcessKeyPreview(ref Message m)
     {
         bool dataGridViewWantsInputKey;
@@ -23765,7 +23786,8 @@ public partial class DataGridView
         }
 
         bool success;
-        DataGridViewColumn dataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible,
+        DataGridViewColumn dataGridViewColumn = Columns.GetLastColumn(
+            DataGridViewElementStates.Visible,
             DataGridViewElementStates.None);
         int lastVisibleColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -28891,7 +28913,8 @@ public partial class DataGridView
             previousVisibleRowIndex = Rows.GetPreviousRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible);
         }
 
-        dataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible,
+        dataGridViewColumn = Columns.GetLastColumn(
+            DataGridViewElementStates.Visible,
             DataGridViewElementStates.None);
         ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
         int lastVisibleColumnIndex = dataGridViewColumn.Index;

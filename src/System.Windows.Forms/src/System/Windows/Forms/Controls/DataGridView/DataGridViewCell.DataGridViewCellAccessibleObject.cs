@@ -303,7 +303,7 @@ public abstract partial class DataGridViewCell
                 else if (dataGridView.EditMode != DataGridViewEditMode.EditProgrammatically)
                 {
                     // start editing
-                    dataGridView.BeginEdit(true /*selectAll*/);
+                    dataGridView.BeginEdit(selectAll: true);
                 }
             }
         }
