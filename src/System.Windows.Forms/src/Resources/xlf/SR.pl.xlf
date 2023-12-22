@@ -10231,7 +10231,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Występuje, gdy wartość wybranej właściwości zostanie zmieniona.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

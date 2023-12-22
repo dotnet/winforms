@@ -103,6 +103,8 @@ public partial class DataGridViewRow
             }
         }
 
+        internal override bool CanGetNameInternal => false;
+
         public DataGridViewRow? Owner
         {
             get => _owningDataGridViewRow;
@@ -243,6 +245,8 @@ public partial class DataGridViewRow
                 return sb.ToString();
             }
         }
+
+        internal override bool CanGetValueInternal => false;
 
         public override AccessibleObject? GetChild(int index)
         {

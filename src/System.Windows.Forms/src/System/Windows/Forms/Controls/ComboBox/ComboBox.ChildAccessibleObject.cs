@@ -21,12 +21,10 @@ public partial class ComboBox
             }
         }
 
-        public override string? Name
-        {
-            get
-            {
-                return _owner.AccessibilityObject.Name;
-            }
-        }
+        public override string? Name => _owner.AccessibilityObject.Name;
+
+        internal override BSTR GetNameInternal() => _owner.AccessibilityObject.GetNameInternal();
+
+        internal override bool CanGetNameInternal => _owner.AccessibilityObject.CanGetNameInternal;
     }
 }

@@ -38,6 +38,10 @@ public partial class TrackBar
             ? owner.AccessibleDefaultActionDescription
             : null;
 
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
+
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Slider);
 
         public override AccessibleStates State

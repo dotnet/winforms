@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 
 public partial class TreeNode
 {
-    internal class TreeNodeAccessibleObject : AccessibleObject
+    internal sealed class TreeNodeAccessibleObject : AccessibleObject
     {
         private readonly TreeNode _owningTreeNode;
         private readonly TreeView _owningTreeView;
@@ -56,6 +56,8 @@ public partial class TreeNode
                     : SR.AccessibleActionExpand;
             }
         }
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {
@@ -115,8 +117,7 @@ public partial class TreeNode
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override AccessibleObject? HitTest(int x, int y)
-            => _owningTreeView.AccessibilityObject.HitTest(x, y);
+        public override AccessibleObject? HitTest(int x, int y) => _owningTreeView.AccessibilityObject.HitTest(x, y);
 
         internal int Index => _owningTreeView.Nodes.IndexOf(_owningTreeNode);
 
@@ -134,7 +135,11 @@ public partial class TreeNode
 
         public override string? Name => _owningTreeNode.Text;
 
+        internal override bool CanGetNameInternal => false;
+
         public override AccessibleObject? Parent => _owningTreeNode.Parent?.AccessibilityObject;
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role
             => _owningTreeView.CheckBoxes
@@ -263,6 +268,8 @@ public partial class TreeNode
         #region Value Pattern
 
         public override string? Value => _owningTreeNode.Text;
+
+        internal override bool CanGetValueInternal => false;
 
         #endregion
     }

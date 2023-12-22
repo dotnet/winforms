@@ -11,7 +11,7 @@ internal partial class CommandsPane
     /// <summary>
     ///  Represents the <see cref="CommandsPane"/> accessible object.
     /// </summary>
-    internal class CommandsPaneAccessibleObject : ControlAccessibleObject
+    internal sealed class CommandsPaneAccessibleObject : ControlAccessibleObject
     {
         private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
@@ -53,5 +53,7 @@ internal partial class CommandsPane
                     ? target.AccessibilityObject.Name
                     : null)
                 : null;
+
+        private protected override bool IsInternal => true;
     }
 }

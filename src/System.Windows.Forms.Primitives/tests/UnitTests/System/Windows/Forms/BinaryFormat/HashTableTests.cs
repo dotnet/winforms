@@ -122,7 +122,7 @@ public class HashtableTests
 #pragma warning restore SYSLIB0011
 
         deserialized.Count.Should().Be(hashtable.Count);
-        foreach (var key in hashtable.Keys)
+        foreach (object? key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
         }
@@ -145,7 +145,7 @@ public class HashtableTests
         format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
 
         deserialized!.Count.Should().Be(hashtable.Count);
-        foreach (var key in hashtable.Keys)
+        foreach (object? key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
         }
@@ -162,7 +162,7 @@ public class HashtableTests
         BinaryFormattedObject format = new(stream);
         format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
         deserialized!.Count.Should().Be(hashtable.Count);
-        foreach (var key in hashtable.Keys)
+        foreach (object? key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
         }

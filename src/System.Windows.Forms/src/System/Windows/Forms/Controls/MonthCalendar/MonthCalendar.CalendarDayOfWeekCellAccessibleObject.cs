@@ -11,7 +11,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a calendar day of week cell in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarDayOfWeekCellAccessibleObject : CalendarCellAccessibleObject
+    internal sealed class CalendarDayOfWeekCellAccessibleObject : CalendarCellAccessibleObject
     {
         private readonly CalendarRowAccessibleObject _calendarRowAccessibleObject;
         private readonly string _initName;

@@ -10231,7 +10231,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Se produce cuando cambia el valor de la propiedad Selected.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

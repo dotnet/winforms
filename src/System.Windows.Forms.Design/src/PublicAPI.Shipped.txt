@@ -135,14 +135,14 @@ System.ComponentModel.Design.CollectionEditor.CollectionType.get -> System.Type!
 System.ComponentModel.Design.CollectionEditor.Context.get -> System.ComponentModel.ITypeDescriptorContext?
 System.ComponentModel.Design.CollectionEditor.GetService(System.Type! serviceType) -> object?
 System.ComponentModel.Design.CollectionEditor.NewItemTypes.get -> System.Type![]!
-~System.ComponentModel.Design.ComponentDesigner.Component.get -> System.ComponentModel.IComponent
-~System.ComponentModel.Design.ComponentDesigner.InvokeGetInheritanceAttribute(System.ComponentModel.Design.ComponentDesigner toInvoke) -> System.ComponentModel.InheritanceAttribute
-~System.ComponentModel.Design.ComponentDesigner.RaiseComponentChanged(System.ComponentModel.MemberDescriptor member, object oldValue, object newValue) -> void
-~System.ComponentModel.Design.ComponentDesigner.RaiseComponentChanging(System.ComponentModel.MemberDescriptor member) -> void
-~System.ComponentModel.Design.ComponentDesigner.ShadowProperties.get -> System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection
-~System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.Contains(string propertyName) -> bool
-~System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.this[string propertyName].get -> object
-~System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.this[string propertyName].set -> void
+System.ComponentModel.Design.ComponentDesigner.Component.get -> System.ComponentModel.IComponent!
+System.ComponentModel.Design.ComponentDesigner.InvokeGetInheritanceAttribute(System.ComponentModel.Design.ComponentDesigner? toInvoke) -> System.ComponentModel.InheritanceAttribute?
+System.ComponentModel.Design.ComponentDesigner.RaiseComponentChanged(System.ComponentModel.MemberDescriptor? member, object? oldValue, object? newValue) -> void
+System.ComponentModel.Design.ComponentDesigner.RaiseComponentChanging(System.ComponentModel.MemberDescriptor? member) -> void
+System.ComponentModel.Design.ComponentDesigner.ShadowProperties.get -> System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection!
+System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.Contains(string! propertyName) -> bool
+System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.this[string! propertyName].get -> object?
+System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.this[string! propertyName].set -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category) -> void
@@ -308,21 +308,21 @@ virtual System.ComponentModel.Design.CollectionEditor.GetItems(object? editValue
 virtual System.ComponentModel.Design.CollectionEditor.GetObjectsFromInstance(object? instance) -> System.Collections.IList!
 virtual System.ComponentModel.Design.CollectionEditor.HelpTopic.get -> string!
 virtual System.ComponentModel.Design.CollectionEditor.SetItems(object? editValue, object![]? value) -> object?
-~virtual System.ComponentModel.Design.ComponentDesigner.ActionLists.get -> System.ComponentModel.Design.DesignerActionListCollection
-~virtual System.ComponentModel.Design.ComponentDesigner.AssociatedComponents.get -> System.Collections.ICollection
-~virtual System.ComponentModel.Design.ComponentDesigner.GetService(System.Type serviceType) -> object
-~virtual System.ComponentModel.Design.ComponentDesigner.InheritanceAttribute.get -> System.ComponentModel.InheritanceAttribute
-~virtual System.ComponentModel.Design.ComponentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.InitializeExistingComponent(System.Collections.IDictionary defaultValues) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.InitializeNewComponent(System.Collections.IDictionary defaultValues) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.ParentComponent.get -> System.ComponentModel.IComponent
-~virtual System.ComponentModel.Design.ComponentDesigner.PostFilterAttributes(System.Collections.IDictionary attributes) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.PostFilterEvents(System.Collections.IDictionary events) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.PostFilterProperties(System.Collections.IDictionary properties) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.PreFilterAttributes(System.Collections.IDictionary attributes) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.PreFilterEvents(System.Collections.IDictionary events) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
-~virtual System.ComponentModel.Design.ComponentDesigner.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
+virtual System.ComponentModel.Design.ComponentDesigner.ActionLists.get -> System.ComponentModel.Design.DesignerActionListCollection!
+virtual System.ComponentModel.Design.ComponentDesigner.AssociatedComponents.get -> System.Collections.ICollection!
+virtual System.ComponentModel.Design.ComponentDesigner.GetService(System.Type! serviceType) -> object?
+virtual System.ComponentModel.Design.ComponentDesigner.InheritanceAttribute.get -> System.ComponentModel.InheritanceAttribute?
+virtual System.ComponentModel.Design.ComponentDesigner.Initialize(System.ComponentModel.IComponent! component) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.InitializeExistingComponent(System.Collections.IDictionary? defaultValues) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.InitializeNewComponent(System.Collections.IDictionary? defaultValues) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.ParentComponent.get -> System.ComponentModel.IComponent?
+virtual System.ComponentModel.Design.ComponentDesigner.PostFilterAttributes(System.Collections.IDictionary! attributes) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.PostFilterEvents(System.Collections.IDictionary! events) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.PostFilterProperties(System.Collections.IDictionary! properties) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.PreFilterAttributes(System.Collections.IDictionary! attributes) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.PreFilterEvents(System.Collections.IDictionary! events) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.PreFilterProperties(System.Collections.IDictionary! properties) -> void
+virtual System.ComponentModel.Design.ComponentDesigner.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection!
 ~virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string
 virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent! component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection!
 virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent! component, System.ComponentModel.Design.DesignerActionListCollection! actionLists) -> void

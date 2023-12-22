@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project>
+
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
   <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
   <PropertyGroup>
-    <!-- Remove hardcoded .NET versions when Arcade is upgraded to .NET 9.0. https://github.com/dotnet/winforms/issues/9851-->
-    <NetMinimum>net8.0</NetMinimum>
-    <NetCurrent>net9.0</NetCurrent>
-    <NetPrevious/>
     <TargetFramework>$(NetCurrent)</TargetFramework>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>

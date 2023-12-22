@@ -50,7 +50,7 @@ public class AssemblyInfoTests
     {
         // Property is independent of the actual assembly.
         var assemblyInfo = new AssemblyInfo(Assembly.GetExecutingAssembly());
-        var stackTrace = assemblyInfo.StackTrace;
+        string stackTrace = assemblyInfo.StackTrace;
         Assert.Contains(nameof(AssemblyInfoTests), stackTrace);
     }
 
@@ -59,7 +59,7 @@ public class AssemblyInfoTests
     {
         // Property is independent of the actual assembly.
         var assemblyInfo = new AssemblyInfo(Assembly.GetExecutingAssembly());
-        var workingSet = assemblyInfo.WorkingSet;
+        long workingSet = assemblyInfo.WorkingSet;
         Assert.True(workingSet > 0);
     }
 

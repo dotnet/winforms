@@ -43,9 +43,15 @@ public partial class TabPage
             }
         }
 
-        public override string? DefaultAction => SystemIAccessibleInternal.TryGetDefaultAction(GetChildId());
+        public override string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
+
+        private protected override bool IsInternal => true;
+
+        internal override BSTR GetDefaultActionInternal() => SystemIAccessibleInternal.TryGetDefaultAction(GetChildId());
 
         public override string? Name => _owningTabPage.Text;
+
+        internal override bool CanGetNameInternal => false;
 
         private TabControl? OwningTabControl => _owningTabPage.ParentInternal as TabControl;
 
@@ -103,9 +109,13 @@ public partial class TabPage
         // +1 is needed because 0 is the Pane id of the selected tab
         internal override int GetChildId() => CurrentIndex + 1;
 
-        public override string? Help => SystemIAccessibleInternal.TryGetHelp(GetChildId());
+        public override string? Help => GetHelpInternal().ToNullableStringAndFree();
 
-        public override string? KeyboardShortcut => SystemIAccessibleInternal.TryGetKeyboardShortcut(GetChildId());
+        internal override BSTR GetHelpInternal() => SystemIAccessibleInternal.TryGetHelp(GetChildId());
+
+        public override string? KeyboardShortcut => GetKeyboardShortcutInternal((VARIANT)GetChildId()).ToNullableStringAndFree();
+
+        internal override BSTR GetKeyboardShortcutInternal(VARIANT childID) => SystemIAccessibleInternal.TryGetKeyboardShortcut(childID);
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch

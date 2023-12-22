@@ -50,6 +50,8 @@ public partial class TabPage
             return owningTabPage.Controls[index].AccessibilityObject;
         }
 
+        private protected override bool IsInternal => true;
+
         public override int GetChildCount()
             => this.IsOwnerHandleCreated(out TabPage? owningTabPage) ? owningTabPage.Controls.Count : -1;
 

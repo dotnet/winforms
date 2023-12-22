@@ -164,7 +164,9 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
         ComSafeArrayScope<ITextRangeProvider> result = new(1);
-        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
+        // Adding to the SAFEARRAY adds a reference
+        using var selection = ComHelpers.GetComScope<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
+        result[0] = selection;
         *pRetVal = result;
 
         return HRESULT.S_OK;
@@ -210,7 +212,9 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
         GetVisibleRangePoints(out int start, out int end);
 
         ComSafeArrayScope<ITextRangeProvider> result = new(1);
-        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
+        // Adding to the SAFEARRAY adds a reference
+        using var ranges = ComHelpers.GetComScope<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
+        result[0] = ranges;
         *pRetVal = result;
 
         return HRESULT.S_OK;

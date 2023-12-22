@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
@@ -50,7 +50,7 @@ public class PrinterUnitConvertTests
     [InlineData(PrinterUnit.ThousandthsOfAnInch, PrinterUnit.ThousandthsOfAnInch, 100)]
     public void Convert_Int_ReturnsExpected(PrinterUnit fromUnit, PrinterUnit toUnit, int expectedResult)
     {
-        var converted = PrinterUnitConvert.Convert(100, fromUnit, toUnit);
+        int converted = PrinterUnitConvert.Convert(100, fromUnit, toUnit);
         Assert.Equal(expectedResult, converted);
     }
 

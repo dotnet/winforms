@@ -11,7 +11,7 @@ internal partial class HelpPane
     /// <summary>
     ///  Represents the <see cref="HelpPane"/> accessible object.
     /// </summary>
-    internal class HelpPaneAccessibleObject : ControlAccessibleObject
+    internal sealed class HelpPaneAccessibleObject : ControlAccessibleObject
     {
         private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
@@ -64,5 +64,9 @@ internal partial class HelpPane
                     : string.Empty;
             }
         }
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameInternal => false;
     }
 }

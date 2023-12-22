@@ -25,8 +25,8 @@ public static class KeyboardSimulator
 
     private static (nint keyCode, nint lParam) GetKeyParameters(Keys key)
     {
-        var keyCode = (nint)key;
-        var scanCode = (int)key;
+        nint keyCode = (nint)key;
+        int scanCode = (int)key;
         const int repeatCount = 1;
         nint lParam = PARAM.FromLowHighUnsigned(repeatCount, scanCode);
         return (keyCode , lParam);

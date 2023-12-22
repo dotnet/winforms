@@ -518,8 +518,7 @@ internal class TabControlDesigner : ParentControlDesigner
         DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
         if (data is not null)
         {
-            ArrayList dragControls;
-            dragControls = new ArrayList(data.GetSortedDragControls(out _));
+            List<IComponent> dragControls = data.GetSortedDragControls(out _);
             if (dragControls is not null)
             {
                 for (int i = 0; i < dragControls.Count; i++)

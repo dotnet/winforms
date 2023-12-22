@@ -47,6 +47,10 @@ internal partial class PropertyGridView
 
         public override string? Name => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
 
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameInternal => false;
+
         internal override IRawElementProviderFragmentRoot.Interface FragmentRoot =>
             this.TryGetOwnerAs(out GridViewListBox? owner)
                 ? owner.OwningPropertyGridView.AccessibilityObject

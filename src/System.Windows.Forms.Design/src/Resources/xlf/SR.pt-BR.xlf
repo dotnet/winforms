@@ -2234,7 +2234,7 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Top">
         <source>Top</source>
-        <target state="translated">Superior</target>
+        <target state="translated">Top</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_TopDesc">

@@ -263,7 +263,7 @@ public class PrinterSettingsTests
     [Fact]
     public void PrintFileName_SetValue_ReturnsExpected()
     {
-        var printFileName = "fileName";
+        string printFileName = "fileName";
         var printerSettings = new PrinterSettings()
         {
             PrintFileName = printFileName
@@ -329,7 +329,7 @@ public class PrinterSettingsTests
     [Fact]
     public void PrintToFile_SetValue_ReturnsExpected()
     {
-        var printToFile = true;
+        bool printToFile = true;
         var printerSettings = new PrinterSettings()
         {
             PrintToFile = printToFile
@@ -610,7 +610,7 @@ public class PrinterSettingsTests
     public void ToString_ReturnsExpected()
     {
         var printerSettings = new PrinterSettings();
-        var expected = "[PrinterSettings "
+        string expected = "[PrinterSettings "
             + printerSettings.PrinterName
             + " Copies=" + printerSettings.Copies.ToString(CultureInfo.InvariantCulture)
             + " Collate=" + printerSettings.Collate.ToString(CultureInfo.InvariantCulture)

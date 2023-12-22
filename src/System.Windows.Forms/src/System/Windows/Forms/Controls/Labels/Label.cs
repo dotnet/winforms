@@ -509,36 +509,38 @@ public partial class Label : Control, IAutomationLiveRegion
         get => (ImageList?)Properties.GetObject(s_propImageList);
         set
         {
-            if (ImageList != value)
+            if (ImageList == value)
             {
-                EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
-                EventHandler disposedHandler = new EventHandler(DetachImageList);
-
-                // Remove the previous imagelist handle recreate handler
-                ImageList? imageList = ImageList;
-                if (imageList is not null)
-                {
-                    imageList.RecreateHandle -= recreateHandler;
-                    imageList.Disposed -= disposedHandler;
-                }
-
-                // Make sure we don't have an Image as well as an ImageList
-                if (value is not null)
-                {
-                    Properties.SetObject(s_propImage, null); // Image.set calls ImageList = null
-                }
-
-                Properties.SetObject(s_propImageList, value);
-
-                // Add the new imagelist handle recreate handler
-                if (value is not null)
-                {
-                    value.RecreateHandle += recreateHandler;
-                    value.Disposed += disposedHandler;
-                }
-
-                Invalidate();
+                return;
             }
+
+            EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
+            EventHandler disposedHandler = new EventHandler(DetachImageList);
+
+            // Remove the previous imagelist handle recreate handler
+            ImageList? imageList = ImageList;
+            if (imageList is not null)
+            {
+                imageList.RecreateHandle -= recreateHandler;
+                imageList.Disposed -= disposedHandler;
+            }
+
+            // Make sure we don't have an Image as well as an ImageList
+            if (value is not null)
+            {
+                Properties.SetObject(s_propImage, null); // Image.set calls ImageList = null
+            }
+
+            Properties.SetObject(s_propImageList, value);
+
+            // Add the new imagelist handle recreate handler
+            if (value is not null)
+            {
+                value.RecreateHandle += recreateHandler;
+                value.Disposed += disposedHandler;
+            }
+
+            Invalidate();
         }
     }
 
@@ -863,25 +865,20 @@ public partial class Label : Control, IAutomationLiveRegion
     private void Animate(bool animate)
     {
         bool currentlyAnimating = _labelState[s_stateAnimating] != 0;
-        if (animate != currentlyAnimating)
+        if (animate == currentlyAnimating || Properties.GetObject(s_propImage) is not Image image)
         {
-            Image? image = (Image?)Properties.GetObject(s_propImage);
-            if (animate)
-            {
-                if (image is not null)
-                {
-                    ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
-                    _labelState[s_stateAnimating] = animate ? 1 : 0;
-                }
-            }
-            else
-            {
-                if (image is not null)
-                {
-                    ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
-                    _labelState[s_stateAnimating] = animate ? 1 : 0;
-                }
-            }
+            return;
+        }
+
+        if (animate)
+        {
+            ImageAnimator.Animate(image, OnFrameChanged);
+            _labelState[s_stateAnimating] = animate ? 1 : 0;
+        }
+        else
+        {
+            ImageAnimator.StopAnimate(image, OnFrameChanged);
+            _labelState[s_stateAnimating] = animate ? 1 : 0;
         }
     }
 
@@ -959,6 +956,7 @@ public partial class Label : Control, IAutomationLiveRegion
         if (disposing)
         {
             StopAnimate();
+
             // Holding on to images and image list is a memory leak.
             if (ImageList is not null)
             {
@@ -972,13 +970,8 @@ public partial class Label : Control, IAutomationLiveRegion
                 Properties.SetObject(s_propImage, null);
             }
 
-            // Dispose the tooltip if one present..
-            if (_textToolTip is not null)
-            {
-                _textToolTip.Dispose();
-                _textToolTip = null;
-            }
-
+            _textToolTip?.Dispose();
+            _textToolTip = null;
             _controlToolTip = false;
         }
 

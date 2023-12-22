@@ -10231,7 +10231,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Se produit en cas de modification d'une valeur de propriété.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

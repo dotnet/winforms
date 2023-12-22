@@ -14,20 +14,11 @@ public partial class ToolStripLabel
             _owningToolStripLabel = ownerItem;
         }
 
-        public override string DefaultAction
-        {
-            get
-            {
-                if (_owningToolStripLabel.IsLink)
-                {
-                    return SR.AccessibleActionClick;
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
-        }
+        public override string DefaultAction => _owningToolStripLabel.IsLink ? SR.AccessibleActionClick : string.Empty;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {

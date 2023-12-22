@@ -19,8 +19,7 @@ internal class BindingSourceDesigner : ComponentDesigner
     {
         base.Initialize(component);
 
-        IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
-        if (componentChangeService is not null)
+        if (TryGetService(out IComponentChangeService? componentChangeService))
         {
             componentChangeService.ComponentChanged += OnComponentChanged;
             componentChangeService.ComponentRemoving += OnComponentRemoving;
@@ -31,8 +30,7 @@ internal class BindingSourceDesigner : ComponentDesigner
     {
         if (disposing)
         {
-            IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
-            if (componentChangeService is not null)
+            if (TryGetService(out IComponentChangeService? componentChangeService))
             {
                 componentChangeService.ComponentChanged -= OnComponentChanged;
                 componentChangeService.ComponentRemoving -= OnComponentRemoving;
@@ -49,32 +47,31 @@ internal class BindingSourceDesigner : ComponentDesigner
         {
             _bindingUpdatedByUser = false;
 
-            DataSourceProviderService dataSourceProviderService = GetService<DataSourceProviderService>();
+            DataSourceProviderService? dataSourceProviderService = GetService<DataSourceProviderService>();
             dataSourceProviderService?.NotifyDataSourceComponentAdded(Component);
         }
     }
 
     private void OnComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        BindingSource? bindingSource = Component as BindingSource;
-        if (bindingSource is not null && bindingSource.DataSource == e.Component)
+        if (Component is BindingSource bindingSource && bindingSource.DataSource == e.Component)
         {
-            IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
+            IComponentChangeService? componentChangeService = GetService<IComponentChangeService>();
             string previousDataMember = bindingSource.DataMember;
 
             PropertyDescriptorCollection propertyDescriptorCollection = TypeDescriptor.GetProperties(bindingSource);
             PropertyDescriptor? propertyDescriptor = propertyDescriptorCollection?["DataMember"];
 
-            if (componentChangeService is not null && propertyDescriptor is not null)
+            if (propertyDescriptor is not null)
             {
-                componentChangeService.OnComponentChanging(bindingSource, propertyDescriptor);
+                componentChangeService?.OnComponentChanging(bindingSource, propertyDescriptor);
             }
 
             bindingSource.DataSource = null;
 
-            if (componentChangeService is not null && propertyDescriptor is not null)
+            if (propertyDescriptor is not null)
             {
-                componentChangeService.OnComponentChanged(bindingSource, propertyDescriptor, previousDataMember, string.Empty);
+                componentChangeService?.OnComponentChanged(bindingSource, propertyDescriptor, previousDataMember, string.Empty);
             }
         }
     }

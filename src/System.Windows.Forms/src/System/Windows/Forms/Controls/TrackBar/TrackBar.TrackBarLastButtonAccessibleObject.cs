@@ -7,18 +7,24 @@ namespace System.Windows.Forms;
 
 public partial class TrackBar
 {
-    internal class TrackBarLastButtonAccessibleObject : TrackBarChildAccessibleObject
+    internal sealed class TrackBarLastButtonAccessibleObject : TrackBarChildAccessibleObject
     {
         public TrackBarLastButtonAccessibleObject(TrackBar owningTrackBar) : base(owningTrackBar)
         { }
 
         public override string DefaultAction => SR.AccessibleActionPress;
 
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
+
         public override string? Name => !this.TryGetOwnerAs(out TrackBar? owner) || ParentInternal is not { } parent
             ? null
             : owner.Orientation == Orientation.Horizontal && (owner.RightToLeft == RightToLeft.No || parent.IsMirrored)
                 ? SR.TrackBarLargeIncreaseButtonName
                 : SR.TrackBarLargeDecreaseButtonName;
+
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleStates State
             => !this.IsOwnerHandleCreated(out TrackBar? _) || IsDisplayed

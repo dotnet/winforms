@@ -1243,7 +1243,7 @@ public partial class TaskDialog : IWin32Window
                 // Note: Each Align() call when calculating the size must correspond
                 // with a Align() call when incrementing the pointer.
                 // Use a byte pointer so we can use byte-wise pointer arithmetics.
-                var sizeToAllocate = (byte*)0;
+                byte* sizeToAllocate = (byte*)0;
                 sizeToAllocate += sizeof(TASKDIALOGCONFIG);
 
                 // Strings in TasDialogConfig
@@ -1300,7 +1300,7 @@ public partial class TaskDialog : IWin32Window
                     // started with an aligned "address" value (0) when calculating the
                     // required allocation size. We must use the same size that we added
                     // as additional size when allocating the memory.
-                    var currentPtr = (byte*)ptrToFree;
+                    byte* currentPtr = (byte*)ptrToFree;
                     Align(ref currentPtr);
                     ptrTaskDialogConfig = (TASKDIALOGCONFIG*)currentPtr;
 
@@ -1402,7 +1402,7 @@ public partial class TaskDialog : IWin32Window
                             long bytesToCopy = SizeOfString(str);
                             Buffer.MemoryCopy(strPtr, currentPtr, bytesToCopy, bytesToCopy);
 
-                            var ptrToReturn = currentPtr;
+                            byte* ptrToReturn = currentPtr;
                             currentPtr += bytesToCopy;
                             return (char*)ptrToReturn;
                         }

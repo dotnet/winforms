@@ -459,9 +459,9 @@ internal unsafe partial struct VARIANT : IDisposable
 
         static void HeapTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
         {
-            var indices = new int[array.Rank];
-            var lower = new int[array.Rank];
-            var upper = new int[array.Rank];
+            int[] indices = new int[array.Rank];
+            int[] lower = new int[array.Rank];
+            int[] upper = new int[array.Rank];
             InternalTransposeArray(psa, array, arrayType, indices, lower, upper);
         }
 
@@ -675,8 +675,8 @@ internal unsafe partial struct VARIANT : IDisposable
             return Array.CreateInstance(elementType, (int)psa->GetBounds().cElements);
         }
 
-        var lengths = new int[psa->cDims];
-        var bounds = new int[psa->cDims];
+        int[] lengths = new int[psa->cDims];
+        int[] bounds = new int[psa->cDims];
         int counter = 0;
 
         // Copy the lower bounds and count of elements for the dimensions. These need to copied in reverse order.
@@ -758,8 +758,8 @@ internal unsafe partial struct VARIANT : IDisposable
                 return new Span<ushort>(ca.pElems, (int)ca.cElems).ToArray();
             case VT_BOOL:
                 {
-                    var data = new Span<VARIANT_BOOL>(ca.pElems, (int)ca.cElems);
-                    var result = new bool[data.Length];
+                    Span<VARIANT_BOOL> data = new(ca.pElems, (int)ca.cElems);
+                    bool[] result = new bool[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
                         result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
@@ -785,8 +785,8 @@ internal unsafe partial struct VARIANT : IDisposable
                 return new Span<double>(ca.pElems, (int)ca.cElems).ToArray();
             case VT_CY:
                 {
-                    var data = new Span<long>(ca.pElems, (int)ca.cElems);
-                    var result = new decimal[data.Length];
+                    Span<long> data = new Span<long>(ca.pElems, (int)ca.cElems);
+                    decimal[] result = new decimal[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
                         result[i] = decimal.FromOACurrency(data[i]);
@@ -824,8 +824,8 @@ internal unsafe partial struct VARIANT : IDisposable
             case VT_BSTR:
             case VT_LPWSTR:
                 {
-                    var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
-                    var result = new string?[data.Length];
+                    Span<IntPtr> data = new(ca.pElems, (int)ca.cElems);
+                    string?[] result = new string?[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
                         result[i] = Marshal.PtrToStringUni(data[i]);
@@ -836,8 +836,8 @@ internal unsafe partial struct VARIANT : IDisposable
 
             case VT_LPSTR:
                 {
-                    var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
-                    var result = new string?[data.Length];
+                    Span<IntPtr> data = new(ca.pElems, (int)ca.cElems);
+                    string?[] result = new string?[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
                         result[i] = Marshal.PtrToStringAnsi(data[i]);
@@ -848,8 +848,8 @@ internal unsafe partial struct VARIANT : IDisposable
 
             case VT_VARIANT:
                 {
-                    var data = new Span<VARIANT>(ca.pElems, (int)ca.cElems);
-                    var result = new object?[data.Length];
+                    Span<VARIANT> data = new(ca.pElems, (int)ca.cElems);
+                    object?[] result = new object?[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
                         result[i] = data[i].ToObject();

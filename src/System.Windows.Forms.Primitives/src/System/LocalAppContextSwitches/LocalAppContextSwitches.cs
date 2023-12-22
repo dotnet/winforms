@@ -102,11 +102,6 @@ internal static partial class LocalAppContextSwitches
                     return true;
                 }
 
-                if (switchName == AnchorLayoutV2SwitchName)
-                {
-                    return true;
-                }
-
                 if (switchName == TrackBarModernRenderingSwitchName)
                 {
                     return true;
@@ -126,7 +121,7 @@ internal static partial class LocalAppContextSwitches
     ///  Indicates whether AnchorLayoutV2 feature is enabled.
     /// </summary>
     /// <devdoc>
-    ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to true if application is targeting .NET 8.0 and beyond.
+    ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to false.
     ///  Refer to
     ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
     /// </devdoc>

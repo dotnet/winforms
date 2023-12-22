@@ -93,8 +93,7 @@ internal class SplitterPanelDesigner : PanelDesigner
 
     protected override void Dispose(bool disposing)
     {
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (cs is not null)
+        if (TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
         }
@@ -110,8 +109,7 @@ internal class SplitterPanelDesigner : PanelDesigner
         _designerHost = (IDesignerHost?)component.Site?.GetService(typeof(IDesignerHost));
         _splitContainerDesigner = (SplitContainerDesigner?)_designerHost?.GetDesigner(_splitterPanel.Parent!);
 
-        var cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (cs is not null)
+        if (TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
         }

@@ -41,6 +41,8 @@ internal partial class PropertyGridView
             }
         }
 
+        private protected override bool IsInternal => true;
+
         /// <inheritdoc />
         internal override int[] RuntimeId
             => new int[]

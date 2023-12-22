@@ -7,7 +7,7 @@ using System.ComponentModel;
 // - increment an integer counter until we find a name that isn't already in use.
 namespace DesignSurfaceExt;
 
-internal class NameCreationServiceImp : INameCreationService
+internal sealed class NameCreationServiceImp : INameCreationService
 {
     public NameCreationServiceImp() { }
 

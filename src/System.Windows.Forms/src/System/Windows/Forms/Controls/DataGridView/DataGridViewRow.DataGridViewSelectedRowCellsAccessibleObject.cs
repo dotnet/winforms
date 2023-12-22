@@ -17,7 +17,11 @@ public partial class DataGridViewRow
 
         public override string Name => SR.DataGridView_AccSelectedRowCellsName;
 
+        internal override bool CanGetNameInternal => false;
+
         public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role => AccessibleRole.Grouping;
 
@@ -28,35 +32,35 @@ public partial class DataGridViewRow
 
         public override string Value => Name;
 
+        internal override bool CanGetValueInternal => false;
+
         internal override int[] RuntimeId
             => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (index < GetChildCount())
+            if (index >= GetChildCount())
             {
-                int selectedCellsCount = -1;
-                for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
-                {
-                    AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
-                    if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
-                    {
-                        selectedCellsCount++;
-                    }
+                return null;
+            }
 
-                    if (selectedCellsCount == index)
-                    {
-                        return child;
-                    }
+            int selectedCellsCount = -1;
+            for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
+            {
+                AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
+                if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                {
+                    selectedCellsCount++;
                 }
 
-                Debug.Assert(false, "we should have found already the selected cell");
-                return null;
+                if (selectedCellsCount == index)
+                {
+                    return child;
+                }
             }
-            else
-            {
-                return null;
-            }
+
+            Debug.Assert(false, "we should have found already the selected cell");
+            return null;
         }
 
         public override int GetChildCount()

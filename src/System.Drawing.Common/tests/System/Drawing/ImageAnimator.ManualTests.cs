@@ -42,7 +42,7 @@ public class ImageAnimatorManualTests
 
         Stopwatch stopwatch = new();
 
-        foreach (var imageName in images)
+        foreach (string imageName in images)
         {
             string testOutputFolder = Path.Combine(OutputFolder, Path.GetFileNameWithoutExtension(imageName));
             Directory.CreateDirectory(testOutputFolder);
@@ -67,7 +67,7 @@ public class ImageAnimatorManualTests
         stopwatch.Start();
         Thread.Sleep(60_000);
 
-        foreach (var imageName in images)
+        foreach (string imageName in images)
         {
             ImageAnimator.StopAnimate(bitmaps[imageName], handlers[imageName]);
             bitmaps[imageName].Dispose();

@@ -11,7 +11,7 @@ public partial class DataGridViewTextBoxEditingControl
     /// <summary>
     ///  Defines the DataGridView TextBox EditingControl accessible object.
     /// </summary>
-    internal class DataGridViewTextBoxEditingControlAccessibleObject : TextBoxBaseAccessibleObject
+    internal sealed class DataGridViewTextBoxEditingControlAccessibleObject : TextBoxBaseAccessibleObject
     {
         /// <summary>
         ///  The parent is changed when the editing control is attached to another editing cell.
@@ -28,7 +28,11 @@ public partial class DataGridViewTextBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
+        private protected override bool IsInternal => true;
+
         public override string Name => this.GetOwnerAccessibleName(SR.DataGridView_AccEditingControlAccName);
+
+        internal override bool CanGetNameInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

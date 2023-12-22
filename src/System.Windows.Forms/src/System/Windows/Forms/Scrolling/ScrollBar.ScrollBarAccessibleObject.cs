@@ -73,6 +73,8 @@ public partial class ScrollBar
             };
         }
 
+        private protected override bool IsInternal => true;
+
         public override int GetChildCount()
             => this.IsOwnerHandleCreated(out ScrollBar? _)
                 ? ArePageButtonsDisplayed

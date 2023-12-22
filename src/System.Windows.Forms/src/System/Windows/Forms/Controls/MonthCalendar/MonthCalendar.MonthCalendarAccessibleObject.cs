@@ -12,7 +12,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents the accessible object of a MonthCalendar control.
     /// </summary>
-    internal class MonthCalendarAccessibleObject : ControlAccessibleObject
+    internal sealed class MonthCalendarAccessibleObject : ControlAccessibleObject
     {
         private const int MaxCalendarsCount = 12;
 
@@ -382,6 +382,8 @@ public partial class MonthCalendar
 
         public override AccessibleObject? GetFocused() => _focusedCellAccessibleObject;
 
+        private protected override bool IsInternal => true;
+
         private unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
         {
             if (!this.IsOwnerHandleCreated(out MonthCalendar? owner))
@@ -449,6 +451,8 @@ public partial class MonthCalendar
                 return string.Empty;
             }
         }
+
+        internal override bool CanGetHelpInternal => false;
 
         internal bool IsEnabled => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.Enabled;
 
@@ -570,7 +574,7 @@ public partial class MonthCalendar
                 switch (CalendarView)
                 {
                     case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH:
-                        if(this.TryGetOwnerAs(out owner))
+                        if (this.TryGetOwnerAs(out owner))
                         {
                             range = owner.SelectionRange;
                             return DateTime.Equals(range.Start.Date, range.End.Date)
@@ -580,7 +584,7 @@ public partial class MonthCalendar
 
                         return string.Empty;
                     case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR:
-                        if(this.TryGetOwnerAs(out owner))
+                        if (this.TryGetOwnerAs(out owner))
                         {
                             return $"{owner.SelectionStart:y}";
                         }
@@ -606,6 +610,12 @@ public partial class MonthCalendar
                 }
             }
         }
+
+        internal override bool CanGetValueInternal =>
+            CalendarView is not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
+                and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR
+                and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE
+                and not MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY;
 
         internal void UpdateDisplayRange()
         {

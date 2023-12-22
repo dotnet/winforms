@@ -14,81 +14,40 @@ public partial class DataGridView
             _parentAccessibleObject = parentAccessibleObject;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return SR.DataGridView_AccSelectedCellsName;
-            }
-        }
+        public override string Name => SR.DataGridView_AccSelectedCellsName;
 
-        public override AccessibleObject Parent
-        {
-            get
-            {
-                return _parentAccessibleObject;
-            }
-        }
+        internal override bool CanGetNameInternal => false;
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                return AccessibleRole.Grouping;
-            }
-        }
+        public override AccessibleObject Parent => _parentAccessibleObject;
 
-        public override AccessibleStates State
-        {
-            get
-            {
-                return AccessibleStates.Selected | AccessibleStates.Selectable;
-            }
-        }
+        private protected override bool IsInternal => true;
 
-        public override string Value
-        {
-            get
-            {
-                return Name;
-            }
-        }
+        public override AccessibleRole Role => AccessibleRole.Grouping;
+
+        public override AccessibleStates State => AccessibleStates.Selected | AccessibleStates.Selectable;
+
+        public override string Value => Name;
+
+        internal override bool CanGetValueInternal => false;
 
         internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
 
-        public override AccessibleObject? GetChild(int index)
-        {
-            if (_parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected))
-            {
-                return owner.SelectedCell(index).AccessibilityObject;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override AccessibleObject? GetChild(int index) =>
+            _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected)
+                ? owner.SelectedCell(index).AccessibilityObject
+                : null;
 
-        public override int GetChildCount()
-        {
-            return _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) ? owner.GetCellCount(DataGridViewElementStates.Selected) : base.GetChildCount();
-        }
+        public override int GetChildCount() =>
+            _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner)
+                ? owner.GetCellCount(DataGridViewElementStates.Selected)
+                : base.GetChildCount();
 
-        public override AccessibleObject GetSelected()
-        {
-            return this;
-        }
+        public override AccessibleObject GetSelected() => this;
 
-        public override AccessibleObject? GetFocused()
-        {
-            if (_parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && owner.CurrentCell is not null && owner.CurrentCell.Selected)
-            {
-                return owner.CurrentCell.AccessibilityObject;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override AccessibleObject? GetFocused() =>
+            _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && owner.CurrentCell is not null && owner.CurrentCell.Selected
+                ? owner.CurrentCell.AccessibilityObject
+                : null;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {
@@ -97,24 +56,14 @@ public partial class DataGridView
             switch (navigationDirection)
             {
                 case AccessibleNavigation.FirstChild:
-                    if (_parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
-                    {
-                        return owner.SelectedCell(0).AccessibilityObject;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return _parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0
+                        ? owner.SelectedCell(0).AccessibilityObject
+                        : null;
 
                 case AccessibleNavigation.LastChild:
-                    if (_parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
-                    {
-                        return owner.SelectedCell(owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return _parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0
+                        ? owner.SelectedCell(owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject
+                        : null;
 
                 default:
                     {

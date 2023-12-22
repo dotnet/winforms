@@ -58,11 +58,9 @@ public partial class ListViewItem
         internal override bool IsItemSelected
             => (State & AccessibleStates.Selected) != 0;
 
-        public override string? Name
-        {
-            get => _owningItem.Text;
-            set => base.Name = value;
-        }
+        public override string? Name => _owningItem.Text;
+
+        internal override bool CanGetNameInternal => false;
 
         private bool OwningListItemFocused
         {
@@ -112,6 +110,10 @@ public partial class ListViewItem
                 return SR.AccessibleActionDoubleClick;
             }
         }
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {
@@ -196,7 +198,7 @@ public partial class ListViewItem
         {
             get
             {
-                var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
+                int[] owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
 
                 Debug.Assert(owningListViewRuntimeId.Length >= 2);
 

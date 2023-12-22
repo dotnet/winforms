@@ -11,7 +11,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for the Today button in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarTodayLinkAccessibleObject : CalendarButtonAccessibleObject
+    internal sealed class CalendarTodayLinkAccessibleObject : CalendarButtonAccessibleObject
     {
         // This const is used to get ChildId.
         // It should take into account "Next" and "Previous" buttons and previous calendars IDs.
@@ -31,6 +31,8 @@ public partial class MonthCalendar
 
         public override string Description => SR.CalendarTodayLinkAccessibleObjectDescription;
 
+        internal override bool CanGetDescriptionInternal => false;
+
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
@@ -45,5 +47,7 @@ public partial class MonthCalendar
         public override string Name
             => string.Format(SR.MonthCalendarTodayButtonAccessibleName,
             _monthCalendarAccessibleObject.TodayDate.ToShortDateString());
+
+        internal override bool CanGetNameInternal => false;
     }
 }

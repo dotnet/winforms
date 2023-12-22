@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 
 public partial class ListViewGroup
 {
-    internal class ListViewGroupAccessibleObject : AccessibleObject
+    internal sealed class ListViewGroupAccessibleObject : AccessibleObject
     {
         private readonly ListView _owningListView;
         private readonly ListViewAccessibleObject _owningListViewAccessibilityObject;
@@ -87,6 +87,10 @@ public partial class ListViewGroup
 
         public override string DefaultAction => SR.AccessibleActionDoubleClick;
 
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
+
         internal override ExpandCollapseState ExpandCollapseState =>
             _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
                 ? ExpandCollapseState.ExpandCollapseState_Collapsed
@@ -99,13 +103,15 @@ public partial class ListViewGroup
                 ? $"{_owningGroup.Header}. {_owningGroup.Subtitle}"
                 : _owningGroup.Header;
 
+        internal override bool CanGetNameInternal => false;
+
         public override AccessibleRole Role => AccessibleRole.Grouping;
 
         internal override int[] RuntimeId
         {
             get
             {
-                var owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
+                int[] owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
 
                 Debug.Assert(owningListViewRuntimeId.Length >= 2);
 

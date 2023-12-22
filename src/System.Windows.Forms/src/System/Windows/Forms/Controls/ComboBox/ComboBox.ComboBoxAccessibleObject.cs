@@ -52,28 +52,8 @@ public partial class ComboBox
                 ? ExpandCollapseState.ExpandCollapseState_Expanded
                 : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
-        internal override string? get_accNameInternal(object childID)
-        {
-            ValidateChildID(ref childID);
-
-            if ((int)childID == COMBOBOX_ACC_ITEM_INDEX)
-            {
-                return Name;
-            }
-
-            return base.get_accNameInternal(childID);
-        }
-
-        internal override string? get_accKeyboardShortcutInternal(object childID)
-        {
-            ValidateChildID(ref childID);
-            if ((int)childID == COMBOBOX_ACC_ITEM_INDEX)
-            {
-                return KeyboardShortcut;
-            }
-
-            return base.get_accKeyboardShortcutInternal(childID);
-        }
+        internal override bool IsValidSelfChildIDAdditionalCheck(VARIANT childId) =>
+            childId.vt is VARENUM.VT_I4 or VARENUM.VT_INT && childId.data.intVal == COMBOBOX_ACC_ITEM_INDEX;
 
         /// <summary>
         ///  Gets the collection of item accessible objects.
@@ -126,6 +106,8 @@ public partial class ComboBox
                 return owner.DroppedDown ? SR.AccessibleActionCollapse : SR.AccessibleActionExpand;
             }
         }
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch

@@ -93,6 +93,8 @@ public partial class MonthCalendar
             }
         }
 
+        internal override bool CanGetDescriptionInternal => false;
+
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
@@ -178,6 +180,8 @@ public partial class MonthCalendar
                 };
             }
         }
+
+        internal override bool CanGetNameInternal => false;
 
         public override AccessibleObject Parent => _calendarRowAccessibleObject;
 

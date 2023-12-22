@@ -167,7 +167,7 @@ public static class CommonTestHelperEx
         invalidServiceProviderMock
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(new object());
-        var value = new object();
+        object value = new();
         return new TheoryData<IServiceProvider, object>
         {
             { null, null },

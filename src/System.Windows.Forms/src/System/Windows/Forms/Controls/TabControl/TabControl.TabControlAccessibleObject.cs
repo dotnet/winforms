@@ -56,6 +56,8 @@ public partial class TabControl
                 : owner.TabPages[index - 1].TabAccessibilityObject;
         }
 
+        private protected override bool IsInternal => true;
+
         public override int GetChildCount()
         {
             if (!this.IsOwnerHandleCreated(out TabControl? owner))

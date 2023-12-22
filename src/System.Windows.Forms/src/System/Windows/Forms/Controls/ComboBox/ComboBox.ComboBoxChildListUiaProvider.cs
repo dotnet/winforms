@@ -75,7 +75,7 @@ public partial class ComboBox
                 case NavigateDirection.NavigateDirection_FirstChild:
                     return GetChildFragment(0);
                 case NavigateDirection.NavigateDirection_LastChild:
-                    var childFragmentCount = GetChildFragmentCount();
+                    int childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
                     {
                         return GetChildFragment(childFragmentCount - 1);
@@ -147,6 +147,8 @@ public partial class ComboBox
             int selectedIndex = _owningComboBox.SelectedIndex;
             return GetChildFragment(selectedIndex);
         }
+
+        private protected override bool IsInternal => true;
 
         internal override IRawElementProviderSimple.Interface[] GetSelection()
         {

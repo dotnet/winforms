@@ -3397,7 +3397,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             // Get the subset of PropertyTabs that are common to all selected objects.
             foreach (Type tabType in GetCommonTabs(_selectedObjects, PropertyTabScope.Component))
             {
-                foreach (var @object in _selectedObjects)
+                foreach (object @object in _selectedObjects)
                 {
                     AddTab(tabType, PropertyTabScope.Component, @object, setupToolbar: false);
                 }

@@ -172,6 +172,76 @@ internal readonly unsafe struct ComInterfaceTable
         };
     }
 
+    /// <summary>
+    ///  Create an interface table for the given interfaces.
+    /// </summary>
+    public static ComInterfaceTable Create<TComInterface1, TComInterface2, TComInterface3, TComInterface4, TComInterface5, TComInterface6, TComInterface7, TComInterface8, TComInterface9, TComInterface10,
+        TComInterface11, TComInterface12, TComInterface13, TComInterface14, TComInterface15, TComInterface16, TComInterface17, TComInterface18, TComInterface19, TComInterface20,
+        TComInterface21, TComInterface22, TComInterface23, TComInterface24, TComInterface25, TComInterface26, TComInterface27>()
+        where TComInterface1 : unmanaged, IComIID, IVTable
+        where TComInterface2 : unmanaged, IComIID, IVTable
+        where TComInterface3 : unmanaged, IComIID, IVTable
+        where TComInterface4 : unmanaged, IComIID, IVTable
+        where TComInterface5 : unmanaged, IComIID, IVTable
+        where TComInterface6 : unmanaged, IComIID, IVTable
+        where TComInterface7 : unmanaged, IComIID, IVTable
+        where TComInterface8 : unmanaged, IComIID, IVTable
+        where TComInterface9 : unmanaged, IComIID, IVTable
+        where TComInterface10 : unmanaged, IComIID, IVTable
+        where TComInterface11 : unmanaged, IComIID, IVTable
+        where TComInterface12 : unmanaged, IComIID, IVTable
+        where TComInterface13 : unmanaged, IComIID, IVTable
+        where TComInterface14 : unmanaged, IComIID, IVTable
+        where TComInterface15 : unmanaged, IComIID, IVTable
+        where TComInterface16 : unmanaged, IComIID, IVTable
+        where TComInterface17 : unmanaged, IComIID, IVTable
+        where TComInterface18 : unmanaged, IComIID, IVTable
+        where TComInterface19 : unmanaged, IComIID, IVTable
+        where TComInterface20 : unmanaged, IComIID, IVTable
+        where TComInterface21 : unmanaged, IComIID, IVTable
+        where TComInterface22 : unmanaged, IComIID, IVTable
+        where TComInterface23 : unmanaged, IComIID, IVTable
+        where TComInterface24 : unmanaged, IComIID, IVTable
+        where TComInterface25 : unmanaged, IComIID, IVTable
+        where TComInterface26 : unmanaged, IComIID, IVTable
+        where TComInterface27 : unmanaged, IComIID, IVTable
+    {
+        Span<ComInterfaceEntry> entries = AllocateEntries<TComInterface1>(27);
+        entries[0] = GetEntry<TComInterface1>();
+        entries[1] = GetEntry<TComInterface2>();
+        entries[2] = GetEntry<TComInterface3>();
+        entries[3] = GetEntry<TComInterface4>();
+        entries[4] = GetEntry<TComInterface5>();
+        entries[5] = GetEntry<TComInterface6>();
+        entries[6] = GetEntry<TComInterface7>();
+        entries[7] = GetEntry<TComInterface8>();
+        entries[8] = GetEntry<TComInterface9>();
+        entries[9] = GetEntry<TComInterface10>();
+        entries[10] = GetEntry<TComInterface11>();
+        entries[11] = GetEntry<TComInterface12>();
+        entries[12] = GetEntry<TComInterface13>();
+        entries[13] = GetEntry<TComInterface14>();
+        entries[14] = GetEntry<TComInterface15>();
+        entries[15] = GetEntry<TComInterface16>();
+        entries[16] = GetEntry<TComInterface17>();
+        entries[17] = GetEntry<TComInterface18>();
+        entries[18] = GetEntry<TComInterface19>();
+        entries[19] = GetEntry<TComInterface20>();
+        entries[20] = GetEntry<TComInterface21>();
+        entries[21] = GetEntry<TComInterface22>();
+        entries[22] = GetEntry<TComInterface23>();
+        entries[23] = GetEntry<TComInterface24>();
+        entries[24] = GetEntry<TComInterface25>();
+        entries[25] = GetEntry<TComInterface26>();
+        entries[26] = GetEntry<TComInterface27>();
+
+        return new()
+        {
+            Entries = (ComInterfaceEntry*)Unsafe.AsPointer(ref entries[0]),
+            Count = entries.Length
+        };
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Span<ComInterfaceEntry> AllocateEntries<T>(int count)
     {

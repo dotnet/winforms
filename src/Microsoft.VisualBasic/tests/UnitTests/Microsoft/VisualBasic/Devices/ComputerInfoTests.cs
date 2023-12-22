@@ -38,7 +38,7 @@ public class ComputerInfoTests
     public void OSFullName()
     {
         var info = new ComputerInfo();
-        var fullName = info.OSFullName;
+        string fullName = info.OSFullName;
         Assert.False(string.IsNullOrEmpty(fullName));
         Assert.Equal(System.Runtime.InteropServices.RuntimeInformation.OSDescription, fullName);
     }

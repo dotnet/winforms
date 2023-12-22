@@ -19,7 +19,7 @@ public class WindowsFormsApplicationBaseTests
     public void GetApplicationInstanceID()
     {
         var assembly = typeof(WindowsFormsApplicationBaseTests).Assembly;
-        var expectedId = assembly.ManifestModule.ModuleVersionId.ToString();
+        string expectedId = assembly.ManifestModule.ModuleVersionId.ToString();
         Assert.Equal(expectedId, GetAppID(assembly));
     }
 
@@ -38,21 +38,21 @@ public class WindowsFormsApplicationBaseTests
     [Fact]
     public void GetApplicationInstanceID_GuidAttribute()
     {
-        var guid = Guid.NewGuid().ToString();
+        string guid = Guid.NewGuid().ToString();
         Assert.Equal($"{guid}1.2", GetUniqueIDFromAssembly(guid, new Version(1, 2, 3, 4)));
     }
 
     [Fact]
     public void GetApplicationInstanceID_GuidAttributeNewVersion()
     {
-        var guid = Guid.NewGuid().ToString();
+        string guid = Guid.NewGuid().ToString();
         Assert.Equal($"{guid}0.0", GetUniqueIDFromAssembly(guid, new Version()));
     }
 
     [Fact]
     public void GetApplicationInstanceID_GuidAttributeNullVersion()
     {
-        var guid = Guid.NewGuid().ToString();
+        string guid = Guid.NewGuid().ToString();
         Assert.Equal($"{guid}0.0", GetUniqueIDFromAssembly(guid, version: null));
     }
 }

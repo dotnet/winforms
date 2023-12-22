@@ -226,9 +226,9 @@ public class FontUnitConverterTest
         var values = converter.GetStandardValues();
         Assert.Equal(6, values.Count); // The six supported values of Graphics unit: World, Pixel, Point, Inch, Document, Millimeter.
 
-        foreach (var item in values)
+        foreach (GraphicsUnit item in values)
         {
-            Assert.NotEqual(GraphicsUnit.Display, (GraphicsUnit)item);
+            Assert.NotEqual(GraphicsUnit.Display, item);
         }
     }
 

@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class CheckedListBox
 {
-    internal class CheckedListBoxItemAccessibleObject : ListBoxItemAccessibleObject
+    internal sealed class CheckedListBoxItemAccessibleObject : ListBoxItemAccessibleObject
     {
         private readonly CheckedListBox _owningCheckedListBox;
 
@@ -29,6 +29,8 @@ public partial class CheckedListBox
                 return IsItemChecked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck;
             }
         }
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {
@@ -127,5 +129,7 @@ public partial class CheckedListBox
         }
 
         public override string Value => IsItemChecked.ToString();
+
+        internal override bool CanGetValueInternal => false;
     }
 }

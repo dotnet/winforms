@@ -20,7 +20,7 @@ public class PropertyGridTests
             () =>
             {
                 using PropertyGrid propertyGrid = new PropertyGrid();
-                var target = CreateComObjectWithStandardIErrorInfoUsage();
+                object target = CreateComObjectWithStandardIErrorInfoUsage();
                 propertyGrid.SelectedObject = target;
                 var entries = propertyGrid.GetCurrentEntries();
                 var encodingEntry = entries[0].Children.First(_ => _.PropertyName == "Int_Property");
@@ -53,8 +53,8 @@ public class PropertyGridTests
             "App.manifest",
             () =>
             {
-                using PropertyGrid propertyGrid = new PropertyGrid();
-                var target = CreateComObjectWithRawIErrorInfoUsage();
+                using PropertyGrid propertyGrid = new();
+                object target = CreateComObjectWithRawIErrorInfoUsage();
                 propertyGrid.SelectedObject = target;
                 var entries = propertyGrid.GetCurrentEntries();
                 var encodingEntry = entries[0].Children.First(_ => _.PropertyName == "Int_Property");

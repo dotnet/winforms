@@ -16,7 +16,7 @@ internal class PrintDialogDesigner : ComponentDesigner
     ///  may even ignore the defaultValues dictionary altogether if you wish.
     ///  The default implementation of this method does nothing.
     /// </summary>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         if (Component is PrintDialog dialog)
         {

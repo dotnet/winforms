@@ -140,7 +140,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
         ISelectionService selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
         IComponentChangeService changeService = _serviceProvider.GetRequiredService<IComponentChangeService>();
 
-        for (var i = 0; i < controls.Count; i++)
+        for (int i = 0; i < controls.Count; i++)
         {
             if (controls[0] is not ToolStrip control)
             {
@@ -194,7 +194,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
 
             if (controls.Count == 1 && control is ToolStrip)
             {
-                var name = TypeDescriptor.GetComponentName(control);
+                string? name = TypeDescriptor.GetComponentName(control);
                 if (string.IsNullOrEmpty(name))
                 {
                     name = control.GetType().Name;
@@ -218,7 +218,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
     public override void OnDragDrop(Glyph? glyph, DragEventArgs e)
     {
         // Expand the glyph only if ToolStrip is dragged around
-        var expandPanel = false;
+        bool expandPanel = false;
         List<IComponent>? components = null;
 
         if (e.Data is DropSourceBehavior.BehaviorDataObject data)

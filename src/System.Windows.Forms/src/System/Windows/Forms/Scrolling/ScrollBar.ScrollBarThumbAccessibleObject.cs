@@ -8,13 +8,17 @@ namespace System.Windows.Forms;
 
 public partial class ScrollBar
 {
-    internal class ScrollBarThumbAccessibleObject : ScrollBarChildAccessibleObject
+    internal sealed class ScrollBarThumbAccessibleObject : ScrollBarChildAccessibleObject
     {
         public ScrollBarThumbAccessibleObject(ScrollBar owningScrollBar) : base(owningScrollBar)
         {
         }
 
         public override string? DefaultAction => string.Empty;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

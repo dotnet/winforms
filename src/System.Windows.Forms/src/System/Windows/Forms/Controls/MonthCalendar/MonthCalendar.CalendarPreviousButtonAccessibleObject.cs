@@ -11,7 +11,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for the Previous button in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarPreviousButtonAccessibleObject : CalendarButtonAccessibleObject
+    internal sealed class CalendarPreviousButtonAccessibleObject : CalendarButtonAccessibleObject
     {
         // The "Previous" button is the first in the calendar accessibility tree.
         // Indices start at 1.
@@ -29,6 +29,8 @@ public partial class MonthCalendar
             => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_PREV);
 
         public override string Description => SR.CalendarPreviousButtonAccessibleObjectDescription;
+
+        internal override bool CanGetDescriptionInternal => false;
 
         internal override void Invoke()
         {
@@ -72,5 +74,7 @@ public partial class MonthCalendar
         internal override int GetChildId() => ChildId;
 
         public override string Name => SR.MonthCalendarPreviousButtonAccessibleName;
+
+        internal override bool CanGetNameInternal => false;
     }
 }

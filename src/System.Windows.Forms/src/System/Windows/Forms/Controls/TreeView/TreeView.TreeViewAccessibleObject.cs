@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 
 public partial class TreeView
 {
-    internal class TreeViewAccessibleObject : ControlAccessibleObject
+    internal sealed class TreeViewAccessibleObject : ControlAccessibleObject
     {
         public TreeViewAccessibleObject(TreeView owningTreeView) : base(owningTreeView) { }
 
@@ -31,6 +31,8 @@ public partial class TreeView
             => index >= 0 && index < GetChildCount() && this.TryGetOwnerAs(out TreeView? owningTreeView)
                 ? owningTreeView.Nodes[index].AccessibilityObject
                 : null;
+
+        private protected override bool IsInternal => true;
 
         public override int GetChildCount() =>
             this.TryGetOwnerAs(out TreeView? owningTreeView) ? owningTreeView.Nodes.Count : base.GetChildCount();

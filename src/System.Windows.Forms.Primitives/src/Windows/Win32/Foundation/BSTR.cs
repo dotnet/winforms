@@ -10,7 +10,7 @@ internal readonly unsafe partial struct BSTR : IDisposable
 {
     // Use Marshal here to allocate/free as that is cross-plat which can come into play with our ComNativeDescriptor.
 
-    public BSTR(string value) : this((char*)Marshal.StringToBSTR(value))
+    public BSTR(string? value) : this((char*)Marshal.StringToBSTR(value))
     {
     }
 
@@ -33,5 +33,17 @@ internal readonly unsafe partial struct BSTR : IDisposable
         return result;
     }
 
+    /// <summary>
+    ///  Converts the <see cref="BSTR"/> to a nullable string and frees it.
+    /// </summary>
+    public readonly string? ToNullableStringAndFree()
+    {
+        string? result = ToString();
+        Dispose();
+        return result;
+    }
+
     public bool IsNull => Value is null;
+
+    public bool IsNullOrEmpty => Length == 0;
 }

@@ -3,7 +3,7 @@ using System.Windows.Forms.Design;
 
 namespace DesignSurfaceExt;
 
-internal class DesignerOptionServiceExt4SnapLines : DesignerOptionService
+internal sealed class DesignerOptionServiceExt4SnapLines : DesignerOptionService
 {
     public DesignerOptionServiceExt4SnapLines() : base() { }
 
@@ -20,7 +20,7 @@ internal class DesignerOptionServiceExt4SnapLines : DesignerOptionService
     }
 }
 
-internal class DesignerOptionServiceExt4Grid : DesignerOptionService
+internal sealed class DesignerOptionServiceExt4Grid : DesignerOptionService
 {
     private System.Drawing.Size _gridSize;
 
@@ -42,7 +42,7 @@ internal class DesignerOptionServiceExt4Grid : DesignerOptionService
     }
 }
 
-internal class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionService
+internal sealed class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionService
 {
     private System.Drawing.Size _gridSize;
 
@@ -64,7 +64,7 @@ internal class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionServ
     }
 }
 
-internal class DesignerOptionServiceExt4NoGuides : DesignerOptionService
+internal sealed class DesignerOptionServiceExt4NoGuides : DesignerOptionService
 {
     public DesignerOptionServiceExt4NoGuides() : base() { }
 

@@ -2,13 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using static Interop;
-using System.Reflection;
-using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
 using Windows.Win32.System.Variant;
+using UIA = Windows.Win32.UI.Accessibility;
+using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -1517,6 +1517,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.DefaultAction)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetDefaultActionInternal)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDefaultAction(varChild));
         mockAccessibleObject.Verify(a => a.DefaultAction, Times.Once());
@@ -1536,11 +1539,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.DefaultAction)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetDefaultActionInternal)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.DefaultAction)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetDefaultActionInternal)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1608,6 +1617,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Description)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetDescriptionInternal)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDescription(varChild));
         mockAccessibleObject.Verify(a => a.Description, Times.Once());
@@ -1627,11 +1639,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Description)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetDescriptionInternal)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.Description)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetDescriptionInternal)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1646,6 +1664,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.CanGetDescriptionInternal)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accDescription(varChild));
@@ -1699,6 +1720,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Help)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpInternal)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelp(varChild));
         mockAccessibleObject.Verify(a => a.Help, Times.Once());
@@ -1718,11 +1742,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Help)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetHelpInternal)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.Help)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetHelpInternal)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1737,6 +1767,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpInternal)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelp(varChild));
@@ -1797,6 +1830,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetHelpTopic(out dummy))
             .Callback(handler)
             .Returns(result);
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpTopicInternal)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelpTopic(out string pszHelpFile, varChild));
         Assert.Equal(stringResult, pszHelpFile);
@@ -1821,11 +1857,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.GetHelpTopic(out dummy))
             .Callback(handler)
             .Returns(result);
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetHelpTopicInternal)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.GetHelpTopic(out dummy))
             .Callback(handler)
             .Returns(result);
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetHelpTopicInternal)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -1840,6 +1882,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.CanGetHelpTopicInternal)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accHelpTopic(out string pszHelpFile, varChild));
@@ -2119,7 +2164,7 @@ public partial class AccessibleObjectTests
         AccessibleObject accessibleObject = control.TestAccessor().Dynamic.NcAccessibilityObject;
 
         IAccessible iAccessible = accessibleObject;
-        Assert.Equal(AccessibleRole.Window, iAccessible.get_accRole((int)PInvoke.CHILDID_SELF));
+        Assert.Equal((int)AccessibleRole.Window, iAccessible.get_accRole((int)PInvoke.CHILDID_SELF));
         Assert.True(control.IsHandleCreated);
     }
 
@@ -2294,6 +2339,9 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Value)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObject
+            .Setup(a => a.CanGetValueInternal)
+            .Returns(false);
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accValue(varChild));
         mockAccessibleObject.Verify(a => a.Value, Times.Once());
@@ -2313,11 +2361,17 @@ public partial class AccessibleObjectTests
             .Setup(a => a.Value)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild1
+            .Setup(a => a.CanGetValueInternal)
+            .Returns(false);
         var mockAccessibleObjectChild2 = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObjectChild2
             .Setup(a => a.Value)
             .Returns(result)
             .Verifiable();
+        mockAccessibleObjectChild2
+            .Setup(a => a.CanGetValueInternal)
+            .Returns(false);
 
         var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
         mockAccessibleObject
@@ -2332,6 +2386,9 @@ public partial class AccessibleObjectTests
         mockAccessibleObject
             .Setup(a => a.GetChildCount())
             .Returns(3);
+        mockAccessibleObject
+            .Setup(a => a.CanGetValueInternal)
+            .Returns(false);
 
         IAccessible iAccessible = mockAccessibleObject.Object;
         Assert.Equal(result, iAccessible.get_accValue(varChild));
@@ -2671,10 +2728,12 @@ public partial class AccessibleObjectTests
         int idChild = unchecked((int)0xdeadbeef);
         Assert.NotEqual(expectedIdChild, idChild);
 
-        HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, &idChild);
+        using ComScope<UIA.IAccessible> accessible = new(null);
+        HRESULT result = ((UIA.IAccessibleEx.Interface)accessibleObject).GetIAccessiblePair(accessible, &idChild);
+        using ComScope<UIA.IAccessible> expected = new(ComHelpers.TryGetComPointer<UIA.IAccessible>(accessibleObject));
 
         Assert.Equal(HRESULT.S_OK, result);
-        Assert.Equal(accessibleObject, pAcc);
+        Assert.Equal((nint)expected.Value, (nint)accessible.Value);
         Assert.Equal(expectedIdChild, idChild);
     }
 
@@ -2683,10 +2742,11 @@ public partial class AccessibleObjectTests
     {
         AccessibleObject accessibleObject = new();
 
-        HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, null);
+        using ComScope<UIA.IAccessible> accessible = new(null);
+        HRESULT result = ((UIA.IAccessibleEx.Interface)accessibleObject).GetIAccessiblePair(accessible, pidChild: null);
 
-        Assert.Equal(HRESULT.E_INVALIDARG, result);
-        Assert.Null(pAcc);
+        Assert.Equal(HRESULT.E_POINTER, result);
+        Assert.True(accessible.IsNull);
     }
 
     [WinFormsFact]

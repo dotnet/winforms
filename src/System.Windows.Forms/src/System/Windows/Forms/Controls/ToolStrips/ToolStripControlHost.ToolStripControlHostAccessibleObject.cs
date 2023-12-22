@@ -10,7 +10,7 @@ public partial class ToolStripControlHost
     /// <summary>
     ///  Defines the ToolStripControlHost AccessibleObject.
     /// </summary>
-    internal class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
+    internal sealed class ToolStripControlHostAccessibleObject : ToolStripItemAccessibleObject
     {
         private readonly ToolStripControlHost _ownerItem;
 
@@ -36,6 +36,10 @@ public partial class ToolStripControlHost
                 return string.Empty;
             }
         }
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         /// <summary>
         ///  Performs the default action associated with this accessible object.

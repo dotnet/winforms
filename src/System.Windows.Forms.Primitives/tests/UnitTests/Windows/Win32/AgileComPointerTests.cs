@@ -28,7 +28,7 @@ public class AgileComPointerTests
     [StaFact]
     public async Task AgileComPointer_MultiThread_COMPointerValue_ForSameObject()
     {
-        using AgileComPointer<IStream> agileStream = CreateMyStreamAgileComPointer(out var originalPtr);
+        using AgileComPointer<IStream> agileStream = CreateMyStreamAgileComPointer(out nint originalPtr);
         try
         {
             using AgileComPointer<IStream> proxyAgileStream = await GetProxyAgileComPointer(agileStream);
