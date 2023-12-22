@@ -164,10 +164,7 @@ public partial class DataGridView
             }
         }
 
-        public override AccessibleObject GetSelected()
-        {
-            return SelectedCellsAccessibilityObject;
-        }
+        public override AccessibleObject GetSelected() => SelectedCellsAccessibilityObject;
 
         public override AccessibleObject? HitTest(int x, int y)
         {
@@ -257,7 +254,7 @@ public partial class DataGridView
                 case UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId:
                     return (VARIANT)(this.TryGetOwnerAs(out owner) && owner.CanFocus);
                 case UIA_PROPERTY_ID.UIA_ItemStatusPropertyId:
-                    var canSort = false;
+                    bool canSort = false;
                     if (!this.TryGetOwnerAs(out owner))
                     {
                         return base.GetPropertyValue(propertyID);

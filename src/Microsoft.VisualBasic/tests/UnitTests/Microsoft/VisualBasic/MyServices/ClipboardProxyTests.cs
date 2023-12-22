@@ -14,7 +14,7 @@ public class ClipboardProxyTests
     public void Clear()
     {
         var clipboard = (new Computer()).Clipboard;
-        var text = GetUniqueText();
+        string text = GetUniqueText();
         clipboard.SetText(text);
         Assert.True(System.Windows.Forms.Clipboard.ContainsText());
         clipboard.Clear();
@@ -25,7 +25,7 @@ public class ClipboardProxyTests
     public void Text()
     {
         var clipboard = (new Computer()).Clipboard;
-        var text = GetUniqueText();
+        string text = GetUniqueText();
         clipboard.SetText(text, TextDataFormat.UnicodeText);
         Assert.Equal(System.Windows.Forms.Clipboard.ContainsText(), clipboard.ContainsText());
         Assert.Equal(System.Windows.Forms.Clipboard.GetText(), clipboard.GetText());

@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="ResourceNotFound">
         <source>Resource '{1}' cannot be found in class '{0}'.</source>
-        <target state="new">Resource '{1}' cannot be found in class '{0}'.</target>
+        <target state="translated">Impossibile trovare la risorsa '{1}' nella classe '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

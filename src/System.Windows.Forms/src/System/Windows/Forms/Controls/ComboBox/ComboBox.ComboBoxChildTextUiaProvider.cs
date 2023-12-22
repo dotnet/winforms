@@ -13,7 +13,7 @@ public partial class ComboBox
     /// <summary>
     ///  Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
     /// </summary>
-    internal class ComboBoxChildTextUiaProvider : AccessibleObject
+    internal sealed class ComboBoxChildTextUiaProvider : AccessibleObject
     {
         private const int COMBOBOX_TEXT_ACC_ITEM_INDEX = 1;
 
@@ -54,14 +54,23 @@ public partial class ComboBox
         [AllowNull]
         public override string Name
         {
-            get
-            {
-                return _owner.AccessibilityObject.Name ?? string.Empty;
-            }
+            get => _owner.AccessibilityObject.Name ?? string.Empty;
             set
             {
                 // Do nothing.
             }
+        }
+
+        internal override bool CanGetNameInternal => false;
+
+        internal override bool CanSetNameInternal => false;
+
+        private protected override bool IsInternal => true;
+
+        internal override BSTR GetNameInternal()
+        {
+            BSTR name = _owner.AccessibilityObject.GetNameInternal();
+            return name.IsNull ? new(string.Empty) : name;
         }
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)

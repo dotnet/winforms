@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design
     {
         private DesignerActionListCollection? _actionLists;
 
-        public override void InitializeNewComponent(IDictionary defaultValues)
+        public override void InitializeNewComponent(IDictionary? defaultValues)
         {
             base.InitializeNewComponent(defaultValues);
             NotifyIcon icon = (NotifyIcon)Component;

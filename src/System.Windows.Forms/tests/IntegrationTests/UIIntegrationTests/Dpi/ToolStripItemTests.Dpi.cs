@@ -47,7 +47,7 @@ public class ToolStripItemDpiTests : ControlTestBase
             form.Show();
 
             DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED_BEFOREPARENT, toolStrip, newDpi);
-            var factor = (float)newDpi / form.DeviceDpi;
+            float factor = (float)newDpi / form.DeviceDpi;
 
             Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size, precision: 1);
             form.Close();

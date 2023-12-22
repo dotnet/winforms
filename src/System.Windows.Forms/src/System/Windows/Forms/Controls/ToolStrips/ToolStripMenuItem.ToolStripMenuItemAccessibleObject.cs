@@ -11,7 +11,7 @@ public partial class ToolStripMenuItem
     /// <summary>
     ///  An implementation of AccessibleChild for use with ToolStripItems
     /// </summary>
-    internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
+    internal sealed class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
     {
         private readonly ToolStripMenuItem _owningToolStripMenuItem;
 
@@ -115,14 +115,11 @@ public partial class ToolStripMenuItem
             return sizeOfSet;
         }
 
-        public override string DefaultAction
-        {
-            get
-            {
-                return Owner.AccessibleDefaultActionDescription
-                    ?? (_owningToolStripMenuItem.CheckOnClick ? SR.AccessibleActionCheck : base.DefaultAction);
-            }
-        }
+        public override string DefaultAction =>
+            Owner.AccessibleDefaultActionDescription
+                ?? (_owningToolStripMenuItem.CheckOnClick ? SR.AccessibleActionCheck : base.DefaultAction);
+
+        private protected override bool IsInternal => true;
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) =>
             patternId switch

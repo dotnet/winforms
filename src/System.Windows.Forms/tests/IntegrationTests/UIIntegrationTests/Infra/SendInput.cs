@@ -20,12 +20,12 @@ public class SendInput
     {
         await SendAsync(window, inputSimulator =>
         {
-            foreach (var key in keys)
+            foreach (object key in keys)
             {
                 switch (key)
                 {
                     case string str:
-                        var text = str.Replace("\r\n", "\r").Replace("\n", "\r");
+                        string text = str.Replace("\r\n", "\r").Replace("\n", "\r");
                         int index = 0;
                         while (index < text.Length)
                         {

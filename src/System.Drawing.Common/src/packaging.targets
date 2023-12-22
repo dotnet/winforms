@@ -20,6 +20,12 @@
     <PlaceholderFile>$(MSBuildThisFileDirectory)_._</PlaceholderFile>
   </PropertyGroup>
 
+  <!-- Main packages don't include assets for net6.0 and net7.0 anymore. -->
+  <ItemGroup>
+    <PackageValidationBaselineFrameworkToIgnore Include="net6.0" />
+    <PackageValidationBaselineFrameworkToIgnore Include="net7.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Include="$(LicenseFile)"
           PackagePath="$([System.IO.Path]::GetFileName('$(LicenseFile)'))"

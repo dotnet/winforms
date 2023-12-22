@@ -42,6 +42,8 @@ public abstract partial class DataGridViewCell
             }
         }
 
+        internal override bool CanGetDefaultActionInternal => false;
+
         public override string? Name
         {
             get
@@ -84,6 +86,8 @@ public abstract partial class DataGridViewCell
                 return name;
             }
         }
+
+        internal override bool CanGetNameInternal => false;
 
         public DataGridViewCell? Owner
         {
@@ -250,6 +254,10 @@ public abstract partial class DataGridViewCell
             }
         }
 
+        internal override bool CanGetValueInternal => false;
+
+        internal override bool CanSetValueInternal => false;
+
         public override void DoDefaultAction()
         {
             if (_owner is null)
@@ -320,8 +328,8 @@ public abstract partial class DataGridViewCell
             Rectangle columnRect = _owner.DataGridView.RectangleToScreen(
                 _owner.DataGridView.GetColumnDisplayRectangle(_owner.ColumnIndex, cutOverflow: false));
 
-            var cellRight = columnRect.Left + columnRect.Width;
-            var cellLeft = columnRect.Left;
+            int cellRight = columnRect.Left + columnRect.Width;
+            int cellLeft = columnRect.Left;
 
             int rightToLeftRowHeadersWidth = 0;
             int leftToRightRowHeadersWidth = 0;

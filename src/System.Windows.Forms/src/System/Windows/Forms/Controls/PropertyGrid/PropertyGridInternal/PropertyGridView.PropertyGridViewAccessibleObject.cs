@@ -95,6 +95,8 @@ internal partial class PropertyGridView
             }
         }
 
+        internal override bool CanGetNameInternal => false;
+
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Table);
 
         public AccessibleObject? Next(GridEntry current)
@@ -392,6 +394,8 @@ internal partial class PropertyGridView
                 return null;
             }
         }
+
+        private protected override bool IsInternal => true;
 
         public override int GetChildCount() =>
             this.TryGetOwnerAs(out PropertyGridView? owner) && owner.AccessibilityGetGridEntries() is { } entries

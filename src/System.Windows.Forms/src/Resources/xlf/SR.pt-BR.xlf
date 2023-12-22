@@ -10231,7 +10231,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Ocorre quando o valor da propriedade selecionada é alterado.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

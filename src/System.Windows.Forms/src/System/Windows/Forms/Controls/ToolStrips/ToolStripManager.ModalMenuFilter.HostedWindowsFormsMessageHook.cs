@@ -59,7 +59,7 @@ public static partial class ToolStripManager
                     }
 
                     _callBack = MessageHookProc;
-                    var hook = Marshal.GetFunctionPointerForDelegate(_callBack);
+                    IntPtr hook = Marshal.GetFunctionPointerForDelegate(_callBack);
                     _messageHookHandle = PInvoke.SetWindowsHookEx(
                         WINDOWS_HOOK_ID.WH_GETMESSAGE,
                         (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,

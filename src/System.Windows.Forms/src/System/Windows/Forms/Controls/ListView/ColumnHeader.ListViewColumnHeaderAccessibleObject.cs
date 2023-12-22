@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class ColumnHeader
 {
-    internal class ListViewColumnHeaderAccessibleObject : AccessibleObject
+    internal sealed class ListViewColumnHeaderAccessibleObject : AccessibleObject
     {
         private readonly ColumnHeader _owningColumnHeader;
 
@@ -18,6 +18,10 @@ public partial class ColumnHeader
         }
 
         public override string? Name => _owningColumnHeader.Text;
+
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameInternal => false;
 
         internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, _owningColumnHeader.GetHashCode() };
 

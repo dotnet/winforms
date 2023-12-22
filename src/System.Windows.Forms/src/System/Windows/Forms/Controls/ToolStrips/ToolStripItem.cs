@@ -1822,8 +1822,12 @@ public abstract partial class ToolStripItem :
              ParentInternal.LastMouseDownedItem == this));
 
     /// <summary>
-    ///  Occurs when selected item changed.
+    ///  Occurs when value of the <see cref="ToolStripItem.Selected" /> property changes.
     /// </summary>
+    /// <remarks>
+    ///  This event is raised when item is selected by mouse, keyboard or programmatically.
+    ///  .NET Core 3.1 had removed MainMenu and MenuItem controls. ToolStripMenuItem.SelectedChanged event is recommended as a replacement for MenuItem.Select event.
+    /// </remarks>
     [SRDescription(nameof(SR.ToolStripItemSelectedChangedDescr))]
     public event EventHandler? SelectedChanged
     {
@@ -1831,6 +1835,10 @@ public abstract partial class ToolStripItem :
         remove => Events.RemoveHandler(s_selectedChangedEvent, value);
     }
 
+    /// <summary>
+    ///  Raises the <see cref="ToolStripItem.SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
+    ///  Call base.OnSelectedChanged to send this event to any registered event listeners.
+    /// </summary>
     protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
 
     protected internal virtual bool ShowKeyboardCues

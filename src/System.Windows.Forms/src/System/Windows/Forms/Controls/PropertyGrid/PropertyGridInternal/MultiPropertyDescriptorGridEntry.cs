@@ -243,7 +243,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
 
                     if (propertyInfo is not null)
                     {
-                        var component = ownerArray.GetValue(i)!;
+                        object component = ownerArray.GetValue(i)!;
                         changeService.OnComponentChanging(component, propertyInfo);
                         changeService.OnComponentChanged(component, propertyInfo);
                     }
@@ -321,7 +321,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
                         EventDescriptor? eventDescriptor = _eventBindings.GetEvent(mergeDescriptor[0]);
                         if (eventDescriptor is not null)
                         {
-                            return ViewEvent(owner, null, eventDescriptor, true);
+                            return ViewEvent(owner, newHandler: null, eventDescriptor, alwaysNavigate: true);
                         }
                     }
 

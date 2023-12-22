@@ -64,6 +64,10 @@ public partial class ComboBox
 
         public override string Name => base.Name ?? SR.ComboBoxEditDefaultAccessibleName;
 
+        private protected override bool IsInternal => true;
+
+        internal override bool CanGetNameInternal => false;
+
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {

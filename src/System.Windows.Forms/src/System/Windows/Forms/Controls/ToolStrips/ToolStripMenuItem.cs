@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
@@ -1123,7 +1124,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return string.Empty;
         }
 
-        return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(shortcutKeys);
+        return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
     }
 
     internal override bool IsBeingTabbedTo()

@@ -10232,7 +10232,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemSelectedChangedDescr">
         <source>Occurs when the Selected property value changes.</source>
-        <target state="new">Occurs when the Selected property value changes.</target>
+        <target state="translated">Возникает при смене значения свойства Selected.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemSize">

@@ -1681,7 +1681,7 @@ public partial class ListBox : ListControl
                 int count = (int)PInvoke.SendMessage(this, PInvoke.LB_GETSELCOUNT);
                 if (count > 0)
                 {
-                    var result = new int[count];
+                    int[] result = new int[count];
                     fixed (int* pResult = result)
                     {
                         PInvoke.SendMessage(this, PInvoke.LB_GETSELITEMS, (WPARAM)count, (LPARAM)pResult);

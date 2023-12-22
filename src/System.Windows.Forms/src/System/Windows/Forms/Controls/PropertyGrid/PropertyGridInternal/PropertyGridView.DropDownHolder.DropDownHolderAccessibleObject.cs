@@ -10,7 +10,7 @@ internal partial class PropertyGridView
 {
     internal partial class DropDownHolder
     {
-        internal class DropDownHolderAccessibleObject : ControlAccessibleObject
+        internal sealed class DropDownHolderAccessibleObject : ControlAccessibleObject
         {
             private readonly DropDownHolder _owningDropDownHolder;
 
@@ -49,6 +49,10 @@ internal partial class PropertyGridView
                 _owningDropDownHolder._gridView?.AccessibilityObject;
 
             public override string? Name => SR.PropertyGridViewDropDownControlHolderAccessibleName;
+
+            private protected override bool IsInternal => true;
+
+            internal override bool CanGetNameInternal => false;
 
             private bool ExistsInAccessibleTree => _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;
         }

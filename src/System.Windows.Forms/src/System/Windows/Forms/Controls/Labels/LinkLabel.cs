@@ -34,7 +34,6 @@ public partial class LinkLabel : Label, IButtonControl
     private Font? _linkFont;
     private Font? _hoverLinkFont;
 
-    private bool _textLayoutValid;
     private bool _receivedDoubleClick;
     private readonly List<Link> _links = new(2);
 
@@ -103,21 +102,22 @@ public partial class LinkLabel : Label, IButtonControl
         get => _focusLink;
         set
         {
-            if (_focusLink != value)
+            if (_focusLink == value)
             {
-                if (_focusLink is not null)
-                {
-                    InvalidateLink(_focusLink);
-                }
+                return;
+            }
 
-                _focusLink = value;
+            if (_focusLink is not null)
+            {
+                InvalidateLink(_focusLink);
+            }
 
-                if (_focusLink is not null)
-                {
-                    InvalidateLink(_focusLink);
+            _focusLink = value;
 
-                    UpdateAccessibilityLink(_focusLink);
-                }
+            if (_focusLink is not null)
+            {
+                InvalidateLink(_focusLink);
+                UpdateAccessibilityLink(_focusLink);
             }
         }
     }
@@ -264,15 +264,17 @@ public partial class LinkLabel : Label, IButtonControl
         get => _links.Count == 0 ? false : _links[0].Visited;
         set
         {
-            if (value != LinkVisited)
+            if (value == LinkVisited)
             {
-                if (_links.Count == 0)
-                {
-                    Links.Add(new Link(this));
-                }
-
-                _links[0].Visited = value;
+                return;
             }
+
+            if (_links.Count == 0)
+            {
+                Links.Add(new Link(this));
+            }
+
+            _links[0].Visited = value;
         }
     }
 
@@ -503,17 +505,14 @@ public partial class LinkLabel : Label, IButtonControl
     /// <summary>
     ///  Ensures that we have analyzed the text run so that we can render each segment and link.
     /// </summary>
-    private void EnsureRun(Graphics g)
+    private Region? EnsureRun(Graphics g)
     {
         Debug.Assert(g is not null);
 
-        if (_textLayoutValid)
+        if (_textRegion is not null)
         {
-            return;
+            return _textRegion;
         }
-
-        _textRegion?.Dispose();
-        _textRegion = null;
 
         string text = Text;
 
@@ -521,8 +520,7 @@ public partial class LinkLabel : Label, IButtonControl
         {
             Links.Clear();
             Links.Add(new Link(0, -1));   // default 'magic' link.
-            _textLayoutValid = true;
-            return;
+            return null;
         }
 
         using StringFormat textFormat = CreateStringFormat();
@@ -594,7 +592,7 @@ public partial class LinkLabel : Label, IButtonControl
             _textRegion = visualRegion;
         }
 
-        _textLayoutValid = true;
+        return _textRegion;
     }
 
     internal override StringFormat CreateStringFormat()
@@ -647,7 +645,7 @@ public partial class LinkLabel : Label, IButtonControl
     ///  Determines whether the whole link label contains only one link,
     ///  and the link runs from the beginning of the label to the end of it.
     /// </summary>
-    private bool IsOneLink()
+    private bool IsLabelFilledByOneLink()
     {
         if (_links is null || _links.Count != 1 || Text is null)
         {
@@ -692,7 +690,7 @@ public partial class LinkLabel : Label, IButtonControl
     {
         if (IsHandleCreated)
         {
-            if (link is null || link.VisualRegion is null || IsOneLink())
+            if (link is null || link.VisualRegion is null || IsLabelFilledByOneLink())
             {
                 Invalidate();
             }
@@ -719,7 +717,11 @@ public partial class LinkLabel : Label, IButtonControl
         _hoverLinkFont = null;
     }
 
-    private void InvalidateTextLayout() => _textLayoutValid = false;
+    private void InvalidateTextLayout()
+    {
+        _textRegion?.Dispose();
+        _textRegion = null;
+    }
 
     private bool LinkInText(int start, int length) => start >= 0 && start < Text.Length && length > 0;
 
@@ -906,37 +908,39 @@ public partial class LinkLabel : Label, IButtonControl
 
         Link? pointIn = PointInLink(e.X, e.Y);
 
-        if (pointIn != hoverLink)
+        if (pointIn == hoverLink)
+        {
+            return;
+        }
+
+        if (hoverLink is not null)
+        {
+            hoverLink.State &= ~LinkState.Hover;
+        }
+
+        if (pointIn is not null)
+        {
+            pointIn.State |= LinkState.Hover;
+            if (pointIn.Enabled)
+            {
+                OverrideCursor = Cursors.Hand;
+            }
+        }
+        else
+        {
+            OverrideCursor = null;
+        }
+
+        if (_hoverLinkFont != _linkFont)
         {
             if (hoverLink is not null)
             {
-                hoverLink.State &= ~LinkState.Hover;
+                InvalidateLink(hoverLink);
             }
 
             if (pointIn is not null)
             {
-                pointIn.State |= LinkState.Hover;
-                if (pointIn.Enabled)
-                {
-                    OverrideCursor = Cursors.Hand;
-                }
-            }
-            else
-            {
-                OverrideCursor = null;
-            }
-
-            if (_hoverLinkFont != _linkFont)
-            {
-                if (hoverLink is not null)
-                {
-                    InvalidateLink(hoverLink);
-                }
-
-                if (pointIn is not null)
-                {
-                    InvalidateLink(pointIn);
-                }
+                InvalidateLink(pointIn);
             }
         }
     }
@@ -957,229 +961,207 @@ public partial class LinkLabel : Label, IButtonControl
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        // The focus rectangle if there is only one link
-        RectangleF finalrect = RectangleF.Empty;
         Animate();
-
         ImageAnimator.UpdateFrames(Image);
-
         Graphics g = e.GraphicsInternal;
-
-        EnsureRun(g);
-
-        if (Text.Length == 0)
-        {
-            PaintLinkBackground(g);
-        }
-        else
-        {
-            // Paint enabled link label
-            if (AutoEllipsis)
-            {
-                Rectangle clientRect = ClientRectWithPadding;
-                Size preferredSize = GetPreferredSize(new Size(clientRect.Width, clientRect.Height));
-                _showToolTip = clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height;
-            }
-            else
-            {
-                _showToolTip = false;
-            }
-
-            if (Enabled)
-            {
-                // Control.Enabled not to be confused with Link.Enabled
-                bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
-                using var foreBrush = ForeColor.GetCachedSolidBrushScope();
-                using var linkBrush = LinkColor.GetCachedSolidBrushScope();
-
-                if (!optimizeBackgroundRendering)
-                {
-                    PaintLinkBackground(g);
-                }
-
-                LinkUtilities.EnsureLinkFonts(Font, LinkBehavior, ref _linkFont, ref _hoverLinkFont);
-
-                Region originalClip = g.Clip;
-
-                try
-                {
-                    if (IsOneLink())
-                    {
-                        // Exclude the area to draw the focus rectangle.
-                        g.Clip = originalClip;
-                        RectangleF[]? rects = _links[0].VisualRegion?.GetRegionScans(e.GraphicsInternal.Transform);
-                        if (rects is not null && rects.Length > 0)
-                        {
-                            if (UseCompatibleTextRendering)
-                            {
-                                finalrect = new RectangleF(rects[0].Location, SizeF.Empty);
-                                foreach (RectangleF rect in rects)
-                                {
-                                    finalrect = RectangleF.Union(finalrect, rect);
-                                }
-                            }
-                            else
-                            {
-                                finalrect = ClientRectWithPadding;
-                                Size finalRectSize = finalrect.Size.ToSize();
-
-                                Size requiredSize = MeasureTextCache.GetTextSize(Text, Font, finalRectSize, CreateTextFormatFlags(finalRectSize));
-
-                                finalrect.Width = requiredSize.Width;
-
-                                if (requiredSize.Height < finalrect.Height)
-                                {
-                                    finalrect.Height = requiredSize.Height;
-                                }
-
-                                finalrect = CalcTextRenderBounds(Rectangle.Round(finalrect), ClientRectWithPadding, RtlTranslateContent(TextAlign));
-                            }
-
-                            using (Region region = new Region(finalrect))
-                            {
-                                g.ExcludeClip(region);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (Link link in _links)
-                        {
-                            if (link.VisualRegion is not null)
-                            {
-                                g.ExcludeClip(link.VisualRegion);
-                            }
-                        }
-                    }
-
-                    // When there is only one link in link label, it's not necessary to paint with foreBrush
-                    // first as it will be overlapped by linkBrush in the following steps.
-
-                    if (!IsOneLink())
-                    {
-                        PaintLink(
-                            e,
-                            link: null,
-                            foreBrush,
-                            linkBrush,
-                            _linkFont,
-                            _hoverLinkFont,
-                            optimizeBackgroundRendering,
-                            finalrect);
-                    }
-
-                    foreach (Link link in _links)
-                    {
-                        PaintLink(
-                            e,
-                            link,
-                            foreBrush,
-                            linkBrush,
-                            _linkFont,
-                            _hoverLinkFont,
-                            optimizeBackgroundRendering,
-                            finalrect);
-                    }
-
-                    if (optimizeBackgroundRendering)
-                    {
-                        g.Clip = originalClip;
-
-                        // This shouldn't be null, but it would require significant refactoring to encapsulate.
-                        g.ExcludeClip(_textRegion!);
-                        PaintLinkBackground(g);
-                    }
-                }
-                finally
-                {
-                    g.Clip = originalClip;
-                }
-            }
-            else
-            {
-                // Paint disabled link label (disabled control, not to be confused with disabled link).
-                Region originalClip = g.Clip;
-
-                try
-                {
-                    // We need to paint the background first before clipping to textRegion because it is calculated using
-                    // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
-
-                    PaintLinkBackground(g);
-
-                    if (UseCompatibleTextRendering)
-                    {
-                        // The clipping only applies when rendering through GDI+. The region shouldn't be null, but
-                        // it would require significant refactoring to encapsulate.
-                        g.IntersectClip(_textRegion!);
-
-                        StringFormat stringFormat = CreateStringFormat();
-                        ControlPaint.DrawStringDisabled(g, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
-                    }
-                    else
-                    {
-                        Color foreColor;
-                        using (DeviceContextHdcScope scope = new(e, applyGraphicsState: false))
-                        {
-                            foreColor = scope.HDC.FindNearestColor(DisabledColor);
-                        }
-
-                        Rectangle clientRectWidthPadding = ClientRectWithPadding;
-
-                        ControlPaint.DrawStringDisabled(
-                            g,
-                            Text,
-                            Font,
-                            foreColor,
-                            clientRectWidthPadding,
-                            CreateTextFormatFlags(clientRectWidthPadding.Size));
-                    }
-                }
-                finally
-                {
-                    g.Clip = originalClip;
-                }
-            }
-        }
+        Region? textRegion = EnsureRun(g);
 
         // We can't call base.OnPaint because labels paint differently from link labels,
         // but we still need to raise the Paint event.
 
+        if (textRegion is null)
+        {
+            Debug.Assert(Text.Length == 0);
+            PaintLinkBackground(g);
+            RaisePaintEvent(this, e);
+            return;
+        }
+
+        if (AutoEllipsis)
+        {
+            Rectangle clientRect = ClientRectWithPadding;
+            Size preferredSize = GetPreferredSize(new Size(clientRect.Width, clientRect.Height));
+            _showToolTip = clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height;
+        }
+        else
+        {
+            _showToolTip = false;
+        }
+
+        if (Enabled)
+        {
+            PaintEnabled();
+        }
+        else
+        {
+            PaintDisabled();
+        }
+
         RaisePaintEvent(this, e);
+
+        void PaintEnabled()
+        {
+            // Control.Enabled not to be confused with Link.Enabled
+            bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
+            using var foreBrush = ForeColor.GetCachedSolidBrushScope();
+            using var linkBrush = LinkColor.GetCachedSolidBrushScope();
+
+            if (!optimizeBackgroundRendering)
+            {
+                PaintLinkBackground(g);
+            }
+
+            Debug.Assert((_linkFont is null && _hoverLinkFont is null)
+                || (_linkFont is not null && _hoverLinkFont is not null));
+
+            LinkUtilities.EnsureLinkFonts(Font, LinkBehavior, ref _linkFont, ref _hoverLinkFont);
+
+            using GraphicsStateScope graphicsScope = new(g);
+            Region originalClip = g.Clip;
+
+            // The focus rectangle if there is only one link
+            RectangleF focusRectangle = RectangleF.Empty;
+
+            if (!IsLabelFilledByOneLink())
+            {
+                foreach (Link link in _links)
+                {
+                    if (link.VisualRegion is not null)
+                    {
+                        g.ExcludeClip(link.VisualRegion);
+                    }
+                }
+
+                // When there is only one link in link label, this step is not necessary as it will be overlapped
+                // by the rest of the rendering.
+
+                PaintLink(
+                    e,
+                    link: null,
+                    foreBrush,
+                    linkBrush,
+                    _linkFont,
+                    _hoverLinkFont,
+                    optimizeBackgroundRendering,
+                    focusRectangle,
+                    textRegion);
+            }
+            else if (_links[0].VisualRegion?.GetRegionScans(e.GraphicsInternal.Transform) is { } regionRectangles
+                && regionRectangles.Length > 0)
+            {
+                // Exclude the area to draw the focus rectangle.
+
+                if (UseCompatibleTextRendering)
+                {
+                    focusRectangle = new RectangleF(regionRectangles[0].Location, SizeF.Empty);
+                    foreach (RectangleF rect in regionRectangles)
+                    {
+                        focusRectangle = RectangleF.Union(focusRectangle, rect);
+                    }
+                }
+                else
+                {
+                    focusRectangle = ClientRectWithPadding;
+                    Size finalRectSize = focusRectangle.Size.ToSize();
+
+                    Size requiredSize = MeasureTextCache.GetTextSize(Text, Font, finalRectSize, CreateTextFormatFlags(finalRectSize));
+
+                    focusRectangle.Width = requiredSize.Width;
+
+                    if (requiredSize.Height < focusRectangle.Height)
+                    {
+                        focusRectangle.Height = requiredSize.Height;
+                    }
+
+                    focusRectangle = CalcTextRenderBounds(Rectangle.Round(focusRectangle), ClientRectWithPadding, RtlTranslateContent(TextAlign));
+                }
+
+                using Region region = new(focusRectangle);
+                g.ExcludeClip(region);
+            }
+
+            foreach (Link link in _links)
+            {
+                PaintLink(
+                    e,
+                    link,
+                    foreBrush,
+                    linkBrush,
+                    _linkFont,
+                    _hoverLinkFont,
+                    optimizeBackgroundRendering,
+                    focusRectangle,
+                    textRegion);
+            }
+
+            if (optimizeBackgroundRendering)
+            {
+                g.Clip = originalClip;
+                g.ExcludeClip(textRegion);
+                PaintLinkBackground(g);
+            }
+        }
+
+        void PaintDisabled()
+        {
+            // Paint disabled link label (disabled control, not to be confused with disabled link).
+
+            using GraphicsStateScope graphicsScope = new(g);
+
+            // We need to paint the background first before clipping to textRegion because it is calculated using
+            // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
+
+            PaintLinkBackground(g);
+
+            if (UseCompatibleTextRendering)
+            {
+                // The clipping only applies when rendering through GDI+.
+                g.IntersectClip(textRegion);
+                StringFormat stringFormat = CreateStringFormat();
+                ControlPaint.DrawStringDisabled(g, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
+            }
+            else
+            {
+                Color foreColor;
+                using (DeviceContextHdcScope scope = new(e, applyGraphicsState: false))
+                {
+                    foreColor = scope.HDC.FindNearestColor(DisabledColor);
+                }
+
+                Rectangle clientRectWidthPadding = ClientRectWithPadding;
+
+                ControlPaint.DrawStringDisabled(
+                    g,
+                    Text,
+                    Font,
+                    foreColor,
+                    clientRectWidthPadding,
+                    CreateTextFormatFlags(clientRectWidthPadding.Size));
+            }
+        }
     }
 
     protected override void OnPaintBackground(PaintEventArgs e)
     {
-        Image? i = Image;
-
-        if (i is not null)
-        {
-            Region oldClip = e.Graphics.Clip;
-            Rectangle imageBounds = CalcImageRenderBounds(i, ClientRectangle, RtlTranslateAlignment(ImageAlign));
-            e.Graphics.ExcludeClip(imageBounds);
-            try
-            {
-                base.OnPaintBackground(e);
-            }
-            finally
-            {
-                e.Graphics.Clip = oldClip;
-            }
-
-            e.Graphics.IntersectClip(imageBounds);
-            try
-            {
-                base.OnPaintBackground(e);
-                DrawImage(e.Graphics, i, ClientRectangle, RtlTranslateAlignment(ImageAlign));
-            }
-            finally
-            {
-                e.Graphics.Clip = oldClip;
-            }
-        }
-        else
+        if (Image is not { } image)
         {
             base.OnPaintBackground(e);
+            return;
+        }
+
+        Rectangle imageBounds = CalcImageRenderBounds(image, ClientRectangle, RtlTranslateAlignment(ImageAlign));
+
+        using GraphicsStateScope backgroundPaintScope = new(e.Graphics);
+        {
+            e.Graphics.ExcludeClip(imageBounds);
+            base.OnPaintBackground(e);
+        }
+
+        using GraphicsStateScope imagePaintScope = new(e.Graphics);
+        {
+            e.Graphics.IntersectClip(imageBounds);
+            base.OnPaintBackground(e);
+            DrawImage(e.Graphics, image, ClientRectangle, RtlTranslateAlignment(ImageAlign));
         }
     }
 
@@ -1243,7 +1225,8 @@ public partial class LinkLabel : Label, IButtonControl
         Font linkFont,
         Font hoverLinkFont,
         bool optimizeBackgroundRendering,
-        RectangleF finalrect)
+        RectangleF focusRectangle,
+        Region textRegion)
     {
         Graphics g = e.GraphicsInternal;
 
@@ -1251,9 +1234,16 @@ public partial class LinkLabel : Label, IButtonControl
         Debug.Assert(foreBrush is not null, "Must pass valid foreBrush");
         Debug.Assert(linkBrush is not null, "Must pass valid linkBrush");
 
-        Font font = Font;
-
         if (link is not null)
+        {
+            PaintLink();
+        }
+        else
+        {
+            PaintNoLink();
+        }
+
+        void PaintLink()
         {
             if (link.VisualRegion is null)
             {
@@ -1264,7 +1254,7 @@ public partial class LinkLabel : Label, IButtonControl
             Color brushColor = Color.Empty;
             LinkState linkState = link.State;
 
-            font = (linkState & LinkState.Hover) == LinkState.Hover ? hoverLinkFont : linkFont;
+            Font font = (linkState & LinkState.Hover) == LinkState.Hover ? hoverLinkFont : linkFont;
 
             if (link.Enabled)
             {
@@ -1283,7 +1273,7 @@ public partial class LinkLabel : Label, IButtonControl
                 brushColor = DisabledLinkColor;
             }
 
-            g.Clip = IsOneLink() ? new Region(finalrect) : link.VisualRegion;
+            g.Clip = IsLabelFilledByOneLink() ? new Region(focusRectangle) : link.VisualRegion;
 
             if (optimizeBackgroundRendering)
             {
@@ -1305,46 +1295,39 @@ public partial class LinkLabel : Label, IButtonControl
             {
                 brushColor = g.FindNearestColor(brushColor);
 
-                Rectangle clientRectWithPadding = ClientRectWithPadding;
+                Rectangle clientAreaMinusPadding = ClientRectWithPadding;
 
-#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
                 TextRenderer.DrawText(
                     g,
                     Text,
                     font,
-                    clientRectWithPadding,
+                    clientAreaMinusPadding,
                     brushColor,
-                    CreateTextFormatFlags(clientRectWithPadding.Size)
+                    CreateTextFormatFlags(clientAreaMinusPadding.Size)
 #if DEBUG
                     // Skip the asserts in TextRenderer because the DC has been modified
                     | TextRenderer.SkipAssertFlag
 #endif
                     );
-#pragma warning restore SA1009
             }
 
-            if (Focused && ShowFocusCues && FocusLink == link)
+            if (Focused
+                && ShowFocusCues
+                && FocusLink == link
+                && link.VisualRegion.GetRegionScans(g.Transform) is { } regionRectangles && regionRectangles.Length > 0)
             {
                 // Get the rectangles making up the visual region, and draw each one.
-                RectangleF[] rects = link.VisualRegion.GetRegionScans(g.Transform);
-                if (rects is not null && rects.Length > 0)
+                if (IsLabelFilledByOneLink())
                 {
-                    Rectangle focusRect;
-
-                    if (IsOneLink())
+                    // Draw one merged focus rectangle
+                    Debug.Assert(focusRectangle != RectangleF.Empty, "focusRectangle should be initialized");
+                    ControlPaint.DrawFocusRectangle(g, Rectangle.Ceiling(focusRectangle), ForeColor, BackColor);
+                }
+                else
+                {
+                    foreach (RectangleF rect in regionRectangles)
                     {
-                        // Draw one merged focus rectangle
-                        focusRect = Rectangle.Ceiling(finalrect);
-                        Debug.Assert(finalrect != RectangleF.Empty, "finalrect should be initialized");
-
-                        ControlPaint.DrawFocusRectangle(g, focusRect, ForeColor, BackColor);
-                    }
-                    else
-                    {
-                        foreach (RectangleF rect in rects)
-                        {
-                            ControlPaint.DrawFocusRectangle(g, Rectangle.Ceiling(rect), ForeColor, BackColor);
-                        }
+                        ControlPaint.DrawFocusRectangle(g, Rectangle.Ceiling(rect), ForeColor, BackColor);
                     }
                 }
             }
@@ -1352,22 +1335,23 @@ public partial class LinkLabel : Label, IButtonControl
             return;
         }
 
-        // Painting with no link.
-        // Because the code has been like that since long time, we assume that _textRegion is not null.
-        g.IntersectClip(_textRegion!);
+        void PaintNoLink()
+        {
+            // Painting with no link.
+            g.IntersectClip(textRegion);
 
-        if (optimizeBackgroundRendering)
-        {
-            PaintLinkBackground(g);
-        }
+            if (optimizeBackgroundRendering)
+            {
+                PaintLinkBackground(g);
+            }
 
-        if (UseCompatibleTextRendering)
-        {
-            StringFormat stringFormat = CreateStringFormat();
-            g.DrawString(Text, font, foreBrush, ClientRectWithPadding, stringFormat);
-        }
-        else
-        {
+            if (UseCompatibleTextRendering)
+            {
+                StringFormat stringFormat = CreateStringFormat();
+                g.DrawString(Text, Font, foreBrush, ClientRectWithPadding, stringFormat);
+                return;
+            }
+
             Color color;
             using (DeviceContextHdcScope hdc = new(g, applyGraphicsState: false))
             {
@@ -1379,7 +1363,7 @@ public partial class LinkLabel : Label, IButtonControl
             TextRenderer.DrawText(
                 g,
                 Text,
-                font,
+                Font,
                 clientRectWithPadding,
                 color,
                 CreateTextFormatFlags(clientRectWithPadding.Size));
@@ -1784,5 +1768,16 @@ public partial class LinkLabel : Label, IButtonControl
                 base.WndProc(ref msg);
                 break;
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            InvalidateTextLayout();
+            InvalidateLinkFonts();
+        }
+
+        base.Dispose(disposing);
     }
 }

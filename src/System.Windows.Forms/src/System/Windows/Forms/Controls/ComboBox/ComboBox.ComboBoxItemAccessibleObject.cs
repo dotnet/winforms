@@ -57,8 +57,12 @@ public partial class ComboBox
             }
         }
 
-        public override string? DefaultAction
-            => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
+        public override string? DefaultAction => GetDefaultActionInternal().ToNullableStringAndFree();
+
+        internal override BSTR GetDefaultActionInternal() =>
+            _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
+
+        private protected override bool IsInternal => true;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
@@ -119,8 +123,9 @@ public partial class ComboBox
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override string? Help
-            => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
+        public override string? Help => GetHelpInternal().ToNullableStringAndFree();
+
+        internal override BSTR GetHelpInternal() => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
@@ -136,11 +141,9 @@ public partial class ComboBox
             }
         }
 
-        public override string? Name
-        {
-            get => _owningComboBox is null ? base.Name : _owningComboBox.GetItemText(_owningItem.Item);
-            set => base.Name = value;
-        }
+        public override string? Name => _owningComboBox is null ? base.Name : _owningComboBox.GetItemText(_owningItem.Item);
+
+        internal override bool CanGetNameInternal => _owningComboBox is null;
 
         public override AccessibleRole Role
             => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());

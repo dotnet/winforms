@@ -470,10 +470,13 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         // We need to echo that change up the inheritance in case the owner object isn't a sited component.
         NotifyParentsOfChanges(this);
     }
-#nullable disable
+
     public override bool OnMouseClick(int x, int y, int count, MouseButtons button)
     {
-        if (_propertyValueUIItems is not null && count == 2 && ((button & MouseButtons.Left) == MouseButtons.Left))
+        if (_propertyValueUIItems is not null
+            && _uiItemRects is not null
+            && count == 2
+            && ((button & MouseButtons.Left) == MouseButtons.Left))
         {
             for (int i = 0; i < _propertyValueUIItems.Length; i++)
             {
@@ -492,7 +495,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     {
         base.PaintLabel(g, rect, clipRect, selected, paintFullLabel);
 
-        IPropertyValueUIService uiService = PropertyValueUIService;
+        IPropertyValueUIService? uiService = PropertyValueUIService;
 
         if (uiService is null)
         {
@@ -530,12 +533,16 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         OwnerGridView.LabelPaintMargin = (s_imageSize + 1) * _propertyValueUIItems.Length;
     }
 
-    private object SetPropertyValue(object owner, object value, bool reset, string undoText)
+    private object? SetPropertyValue(
+        object? owner,
+        object? value,
+        bool reset,
+        string? undoText)
     {
-        DesignerTransaction transaction = null;
+        DesignerTransaction? transaction = null;
         try
         {
-            object oldValue = GetPropertyValue(owner);
+            object? oldValue = GetPropertyValue(owner);
 
             if (value is not null && value.Equals(oldValue))
             {
@@ -544,7 +551,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             ClearCachedValues();
 
-            IDesignerHost host = DesignerHost;
+            IDesignerHost? host = DesignerHost;
 
             transaction = host?.CreateTransaction(undoText ?? string.Format(SR.PropertyGridSetValue, PropertyDescriptor.Name));
 
@@ -558,6 +565,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 try
                 {
+                    if (owner is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
                     ComponentChangeService?.OnComponentChanging(owner, PropertyDescriptor);
                 }
                 catch (CheckoutException coEx)
@@ -589,7 +601,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             // Determine if this is an event being created, and if so, navigate to the event code
 
-            EventDescriptor eventDescriptor = null;
+            EventDescriptor? eventDescriptor = null;
 
             // This is possibly an event.  Check it out.
             if (owner is not null && value is string)
@@ -602,18 +614,18 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 if (eventDescriptor is null)
                 {
                     // If we have a merged property descriptor, pull out one of the elements.
-                    object eventObj = owner;
+                    object? eventObj = owner;
 
-                    if (PropertyDescriptor is MergePropertyDescriptor && owner is Array)
+                    if (PropertyDescriptor is MergePropertyDescriptor && owner is Array objArray)
                     {
-                        var objArray = owner as Array;
                         if (objArray.Length > 0)
                         {
                             eventObj = objArray.GetValue(0);
                         }
                     }
 
-                    eventDescriptor = TypeDescriptor.GetEvents(eventObj)[PropertyDescriptor.Name];
+                    // TypeDescriptor will return an empty collection if component is null.
+                    eventDescriptor = TypeDescriptor.GetEvents(eventObj!)[PropertyDescriptor.Name];
                 }
             }
 
@@ -622,11 +634,16 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 if (reset)
                 {
+                    if (owner is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
                     PropertyDescriptor.ResetValue(owner);
                 }
                 else if (eventDescriptor is not null)
                 {
-                    ViewEvent(owner, (string)value, eventDescriptor, false);
+                    ViewEvent(owner, (string?)value, eventDescriptor, false);
                 }
                 else
                 {
@@ -639,7 +656,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 // Now notify the change service that the change was successful.
                 if (needChangeNotify)
                 {
-                    ComponentChangeService?.OnComponentChanged(owner, PropertyDescriptor, oldValue: null, value);
+                    // We have already checked if owner is null.
+                    ComponentChangeService?.OnComponentChanged(owner!, PropertyDescriptor, oldValue: null, value);
                 }
 
                 NotifyParentsOfChanges(this);
@@ -683,15 +701,15 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         return owner;
     }
 
-    protected void SetPropertyValueCore(object owner, object newValue)
+    protected void SetPropertyValueCore(object? owner, object? newValue)
     {
         // Store the current cursor and set it to the HourGlass.
-        Cursor oldCursor = Cursor.Current;
+        Cursor? oldCursor = Cursor.Current;
         try
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            object realOwner = owner;
+            object? realOwner = owner;
 
             if (realOwner is ICustomTypeDescriptor descriptor)
             {
@@ -720,7 +738,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
                 if (treatAsValueType)
                 {
-                    GridEntry parent = ParentGridEntry;
+                    GridEntry? parent = ParentGridEntry;
                     if (parent is not null && parent.IsValueEditable)
                     {
                         parent.PropertyValue = owner;
@@ -738,11 +756,15 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     /// <summary>
     ///  Navigates code to the given event.
     /// </summary>
-    protected bool ViewEvent(object owner, string newHandler, EventDescriptor eventDescriptor, bool alwaysNavigate)
+    protected bool ViewEvent(
+        object? owner,
+        string? newHandler,
+        EventDescriptor? eventDescriptor,
+        bool alwaysNavigate)
     {
-        object value = GetPropertyValue(owner);
+        object? value = GetPropertyValue(owner);
 
-        string handler = value as string;
+        string? handler = value as string;
 
         if (handler is null && value is not null && TypeConverter is not null && TypeConverter.CanConvertTo(typeof(string)))
         {
@@ -785,13 +807,18 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             eventDescriptor = _eventBindings?.GetEvent(PropertyDescriptor);
         }
 
-        IDesignerHost host = DesignerHost;
-        DesignerTransaction transaction = null;
+        IDesignerHost? host = DesignerHost;
+        DesignerTransaction? transaction = null;
 
         try
         {
             // This check can cause exceptions if the event has unreferenced dependencies, which we want to catch.
             // This must be done before the transaction is started or the commit/cancel will also throw.
+            if (eventDescriptor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             if (eventDescriptor.EventType is null)
             {
                 return false;
@@ -800,7 +827,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             if (host is not null)
             {
                 string componentName = component.Site?.Name ?? component.GetType().Name;
-                transaction = DesignerHost.CreateTransaction(string.Format(
+                transaction = host.CreateTransaction(string.Format(
                     SR.WindowsFormsSetEvent,
                     $"{componentName}.{PropertyName}"));
             }
@@ -872,17 +899,20 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     ///  Displays the user code for the given event. This will return true if the user
     ///  code could be displayed, or false otherwise.
     /// </summary>
-    private static void ShowCodeIdle(object sender, EventArgs e)
+    private static void ShowCodeIdle(object? sender, EventArgs e)
     {
         Application.Idle -= ShowCodeIdle;
         if (s_targetBindingService is not null)
         {
-            s_targetBindingService.ShowCode(s_targetComponent, s_targetEventdesc);
+            // We set s_targetComponent and s_targetEventdesc with s_targetBindingService,
+            // so we don't expect them to be null here.
+            s_targetBindingService.ShowCode(s_targetComponent!, s_targetEventdesc!);
             s_targetBindingService = null;
             s_targetComponent = null;
             s_targetEventdesc = null;
         }
     }
 
-    protected override GridEntryAccessibleObject GetAccessibilityObject() => new PropertyDescriptorGridEntryAccessibleObject(this);
+    protected override GridEntryAccessibleObject GetAccessibilityObject() =>
+        new PropertyDescriptorGridEntryAccessibleObject(this);
 }

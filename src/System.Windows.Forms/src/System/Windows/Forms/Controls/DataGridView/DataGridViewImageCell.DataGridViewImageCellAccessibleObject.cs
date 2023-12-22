@@ -14,15 +14,11 @@ public partial class DataGridViewImageCell
         {
         }
 
-        public override string DefaultAction
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
+        public override string DefaultAction => string.Empty;
 
         public override string? Description => Owner is DataGridViewImageCell imageCell ? imageCell.Description : null;
+
+        internal override bool CanGetDescriptionInternal => false;
 
         public override string? Value
         {

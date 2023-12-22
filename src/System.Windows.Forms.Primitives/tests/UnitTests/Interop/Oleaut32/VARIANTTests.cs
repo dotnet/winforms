@@ -1791,7 +1791,7 @@ public unsafe class VARIANTTests
 
         try
         {
-            var result = new nint[] { 0, ptr1, ptr2 };
+            nint[] result = new nint[] { 0, ptr1, ptr2 };
             fixed (nint* pResult = result)
             {
                 if (nint.Size == 4)
@@ -1833,7 +1833,7 @@ public unsafe class VARIANTTests
         nint ptr2 = Marshal.StringToCoTaskMemUni("");
         try
         {
-            var result = new nint[] { 0, ptr1, ptr2 };
+            nint[] result = new nint[] { 0, ptr1, ptr2 };
             fixed (nint* pResult = result)
             {
                 if (nint.Size == 4)
@@ -1875,7 +1875,7 @@ public unsafe class VARIANTTests
         nint ptr2 = Marshal.StringToCoTaskMemAnsi("");
         try
         {
-            var result = new nint[] { 0, ptr1, ptr2 };
+            nint[] result = new nint[] { 0, ptr1, ptr2 };
             fixed (nint* pResult = result)
             {
                 if (nint.Size == 4)
@@ -4379,7 +4379,7 @@ public unsafe class VARIANTTests
         using BSTR ptr1 = new("text");
         using BSTR ptr2 = new("");
 
-        var result = new nint[] { 0, ptr1, ptr2 };
+        nint[] result = new nint[] { 0, ptr1, ptr2 };
         SAFEARRAY* psa = CreateSafeArray(VT_BSTR, result);
         using VARIANT variant = new()
         {
@@ -5616,7 +5616,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void ToObject_RECORDARRAYValid_ReturnsExpected()
     {
-        var result = new int[] { 1, 2 };
+        int[] result = new int[] { 1, 2 };
         CustomRecordInfo recordInfo = new()
         {
             GetGuidAction = () => (typeof(int).GUID, HRESULT.S_OK)
@@ -5635,7 +5635,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void ToObject_RECORDARRAYInvalidFFeatures_ThrowsArgumentException()
     {
-        var result = new int[] { 1, 2 };
+        int[] result = new int[] { 1, 2 };
         CustomRecordInfo recordInfo = new();
         using ComScope<IRecordInfo> pRecordInfo = new(recordInfo.GetComInterface());
         SAFEARRAY* psa = CreateRecordSafeArray(result, pRecordInfo);
@@ -5656,7 +5656,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void ToObject_RECORDARRAYInvalidGetGuidHR_ThrowsArgumentException()
     {
-        var result = new int[] { 1, 2 };
+        int[] result = new int[] { 1, 2 };
         CustomRecordInfo record = new()
         {
             GetGuidAction = () => (Guid.Empty, HRESULT.DISP_E_DIVBYZERO)
@@ -5682,7 +5682,7 @@ public unsafe class VARIANTTests
     [MemberData(nameof(RECORDARRAY_InvalidGuid_TestData))]
     public void ToObject_RECORDARRAY_InvokeInvalidGuid_ThrowsArgumentException(Guid guid)
     {
-        var result = new int[] { 1, 2 };
+        int[] result = new int[] { 1, 2 };
         CustomRecordInfo record = new()
         {
             GetGuidAction = () => (guid, HRESULT.S_OK)

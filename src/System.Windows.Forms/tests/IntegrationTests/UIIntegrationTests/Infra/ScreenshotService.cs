@@ -30,7 +30,7 @@ internal static class ScreenshotService
                 return;
             }
 
-            var directory = Path.GetDirectoryName(fullPath)!;
+            string directory = Path.GetDirectoryName(fullPath)!;
             Directory.CreateDirectory(directory);
 
             bitmap.Save(fullPath, ImageFormat.Png);
@@ -49,8 +49,8 @@ internal static class ScreenshotService
         if (Screen.PrimaryScreen is not { } primaryScreen)
             return null;
 
-        var width = primaryScreen.Bounds.Width;
-        var height = primaryScreen.Bounds.Height;
+        int width = primaryScreen.Bounds.Width;
+        int height = primaryScreen.Bounds.Height;
 
         if (width <= 0 || height <= 0)
         {

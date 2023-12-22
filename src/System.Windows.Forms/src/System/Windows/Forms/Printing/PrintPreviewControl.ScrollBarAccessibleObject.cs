@@ -7,15 +7,18 @@ namespace System.Windows.Forms;
 
 public partial class PrintPreviewControl
 {
-    internal class ScrollBarAccessibleObject : ScrollBar.ScrollBarAccessibleObject
+    internal sealed class ScrollBarAccessibleObject : ScrollBar.ScrollBarAccessibleObject
     {
         public ScrollBarAccessibleObject(ScrollBar owner) : base(owner)
         {
         }
 
-        public override AccessibleObject? Parent
-            => this.TryGetOwnerAs(out ScrollBar? scrollBar) && scrollBar.Parent is PrintPreviewControl printPreviewControl
-                ? printPreviewControl.AccessibilityObject : base.Parent;
+        public override AccessibleObject? Parent =>
+            this.TryGetOwnerAs(out ScrollBar? scrollBar) && scrollBar.Parent is PrintPreviewControl printPreviewControl
+                ? printPreviewControl.AccessibilityObject
+                : base.Parent;
+
+        private protected override bool IsInternal => true;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

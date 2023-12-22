@@ -65,7 +65,7 @@ public partial class DataGridViewColumnHeaderCell
         // return the top header row accessible object
         public override AccessibleObject? Parent => Owner is null
             ? throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet)
-            : Owner.DataGridView?.AccessibilityObject?.GetChild(0);
+            : Owner.DataGridView?.AccessibilityObject.GetChild(0);
 
         public override AccessibleRole Role => AccessibleRole.ColumnHeader;
 

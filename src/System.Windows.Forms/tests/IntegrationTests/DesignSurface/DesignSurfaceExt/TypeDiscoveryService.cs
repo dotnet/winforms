@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design;
 ///  This service is requested by <see cref="TypeDescriptor" /> when asking for type information for a component.
 ///  This is a sample implementation suitable for this sample application.
 /// </summary>
-internal class TypeDiscoveryService : ITypeDiscoveryService
+internal sealed class TypeDiscoveryService : ITypeDiscoveryService
 {
     public TypeDiscoveryService() { }
 

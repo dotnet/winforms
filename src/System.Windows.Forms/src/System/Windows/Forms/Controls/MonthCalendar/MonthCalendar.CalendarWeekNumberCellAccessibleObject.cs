@@ -11,7 +11,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a calendar week number cell in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarWeekNumberCellAccessibleObject : CalendarCellAccessibleObject
+    internal sealed class CalendarWeekNumberCellAccessibleObject : CalendarCellAccessibleObject
     {
         // This const is used to get ChildId.
         // It should take into account next cells in a row.

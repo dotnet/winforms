@@ -38,14 +38,14 @@ public abstract class FontCollection : IDisposable
             int status = Gdip.GdipGetFontCollectionFamilyCount(new HandleRef(this, _nativeFontCollection), out numSought);
             Gdip.CheckStatus(status);
 
-            var gpfamilies = new IntPtr[numSought];
+            IntPtr[] gpfamilies = new IntPtr[numSought];
             int numFound;
             status = Gdip.GdipGetFontCollectionFamilyList(new HandleRef(this, _nativeFontCollection), numSought, gpfamilies,
                                                          out numFound);
             Gdip.CheckStatus(status);
 
             Debug.Assert(numSought == numFound, "GDI+ can't give a straight answer about how many fonts there are");
-            var families = new FontFamily[numFound];
+            FontFamily[] families = new FontFamily[numFound];
             for (int f = 0; f < numFound; f++)
             {
                 IntPtr native;

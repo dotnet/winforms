@@ -42,13 +42,9 @@ public partial class DataGridView
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return SR.DataGridView_AccTopRow;
-            }
-        }
+        public override string Name => SR.DataGridView_AccTopRow;
+
+        internal override bool CanGetNameInternal => false;
 
         public DataGridView? Owner
         {
@@ -96,13 +92,9 @@ public partial class DataGridView
                 GetHashCode()
             };
 
-        public override string Value
-        {
-            get
-            {
-                return Name;
-            }
-        }
+        public override string Value => Name;
+
+        internal override bool CanGetValueInternal => false;
 
         public override AccessibleObject? GetChild(int index)
         {

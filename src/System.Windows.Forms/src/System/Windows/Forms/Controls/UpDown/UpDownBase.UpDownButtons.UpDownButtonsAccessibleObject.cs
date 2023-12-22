@@ -9,7 +9,7 @@ public abstract partial class UpDownBase
 {
     internal partial class UpDownButtons
     {
-        internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
+        internal sealed partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
         {
             private int[]? _runtimeId;
 
@@ -94,11 +94,12 @@ public abstract partial class UpDownBase
                     string? baseName = base.Name;
                     return string.IsNullOrEmpty(baseName) ? SR.DefaultUpDownButtonsAccessibleName : baseName;
                 }
-                set => base.Name = value;
             }
 
             public override AccessibleObject? Parent
                 => this.TryGetOwnerAs(out UpDownButtons? owner) ? owner.AccessibilityObject : null;
+
+            private protected override bool IsInternal => true;
 
             internal void ReleaseChildUiaProviders()
             {

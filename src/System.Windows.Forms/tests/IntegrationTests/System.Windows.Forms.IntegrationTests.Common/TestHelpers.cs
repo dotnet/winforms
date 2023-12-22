@@ -53,8 +53,8 @@ public static class TestHelpers
         if (string.IsNullOrEmpty(projectName))
             throw new ArgumentNullException(nameof(projectName));
 
-        var repoRoot = GetRepoRoot();
-        var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
+        string repoRoot = GetRepoRoot();
+        string exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
         if (!File.Exists(exePath))
             throw new FileNotFoundException("File does not exist", exePath);
@@ -101,7 +101,7 @@ public static class TestHelpers
     /// <returns>The new Process</returns>
     public static Process StartProcess(ProcessStartInfo startInfo)
     {
-        var dotnetPath = GetDotNetPath();
+        string dotnetPath = GetDotNetPath();
         if (!Directory.Exists(dotnetPath))
             throw new DirectoryNotFoundException($"{dotnetPath} directory cannot be found.");
 
@@ -174,16 +174,16 @@ public static class TestHelpers
     private static string GetGlobalDotNetPath()
     {
         // find the repo root
-        var repoRoot = GetRepoRoot();
+        string repoRoot = GetRepoRoot();
 
         // make sure there's a global.json
-        var jsonFile = Path.Combine(repoRoot, "global.json");
+        string jsonFile = Path.Combine(repoRoot, "global.json");
         if (!File.Exists(jsonFile))
             throw new FileNotFoundException("global.json does not exist");
 
         // parse the file into a json object
-        var jsonContents = File.ReadAllText(jsonFile);
-        var jsonObject = JObject.Parse(jsonContents);
+        string jsonContents = File.ReadAllText(jsonFile);
+        JObject jsonObject = JObject.Parse(jsonContents);
 
         string dotnetVersion;
         try
@@ -199,8 +199,8 @@ public static class TestHelpers
 
         // Check to see if the matching version is installed
         // The default install location is C:\Program Files\dotnet\sdk
-        var defaultSdkRoot = @"C:\Program Files\dotnet\sdk";
-        var sdkPath = Path.Combine(defaultSdkRoot, dotnetVersion);
+        string defaultSdkRoot = @"C:\Program Files\dotnet\sdk";
+        string sdkPath = Path.Combine(defaultSdkRoot, dotnetVersion);
         if (!Directory.Exists(sdkPath))
             throw new DirectoryNotFoundException($"dotnet sdk {dotnetVersion} is not installed globally");
 
@@ -214,8 +214,8 @@ public static class TestHelpers
     /// <returns>The repo root</returns>
     private static string GetRepoRoot()
     {
-        var gitPath = RelativePathBackwardsUntilFind(".git");
-        var repoRoot = Directory.GetParent(gitPath).FullName;
+        string gitPath = RelativePathBackwardsUntilFind(".git");
+        string repoRoot = Directory.GetParent(gitPath).FullName;
         return repoRoot;
     }
 
@@ -231,15 +231,15 @@ public static class TestHelpers
             throw new ArgumentNullException(nameof(seek));
         }
 
-        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
-        var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-        var currentDirectory = Path.GetDirectoryName(codeBasePath);
-        var root = Directory.GetDirectoryRoot(currentDirectory);
+        Uri codeBaseUrl = new(Assembly.GetExecutingAssembly().Location);
+        string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+        string currentDirectory = Path.GetDirectoryName(codeBasePath);
+        string root = Directory.GetDirectoryRoot(currentDirectory);
         while (!currentDirectory.Equals(root, StringComparison.CurrentCultureIgnoreCase))
         {
             if (Directory.GetDirectories(currentDirectory, seek, SearchOption.TopDirectoryOnly).Length == 1)
             {
-                var ret = Path.Combine(currentDirectory, seek);
+                string ret = Path.Combine(currentDirectory, seek);
                 return ret;
             }
 

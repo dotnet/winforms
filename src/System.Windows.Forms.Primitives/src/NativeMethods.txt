@@ -351,6 +351,7 @@ HT*
 HTREEITEM
 HWND_*
 IAccessible
+IAccessibleEx
 IAutoComplete2
 IClassFactory
 IClassFactory2
@@ -395,6 +396,7 @@ IHTMLElementCollection
 IHTMLWindow3
 IHTMLWindow4
 IInvokeProvider
+ILegacyIAccessibleProvider
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create
@@ -823,6 +825,7 @@ TYPE_E_BADMODULEKIND
 TYPEATTR
 TYPEDESC
 TYPEKIND
+UIA_CONTROLTYPE_ID
 UIA_EVENT_ID
 UiaAppendRuntimeId
 UiaClientsAreListening

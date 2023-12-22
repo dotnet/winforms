@@ -21,6 +21,6 @@ public class BinaryEditorTests
         var serviceProvider = new Mock<IServiceProvider>();
         serviceProvider.Setup(s => s.GetService(typeof(IWindowsFormsEditorService))).Returns(editorService.Object);
 
-        var result = editor.EditValue(serviceProvider.Object, new byte[10]);
+        object result = editor.EditValue(serviceProvider.Object, new byte[10]);
     }
 }

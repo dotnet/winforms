@@ -40,19 +40,12 @@ public abstract partial class ToolStripItem
             }
         }
 
-        public override string? Description
-        {
-            get
-            {
-                string? description = _ownerItem.AccessibleDescription;
-                if (description is not null)
-                {
-                    return description;
-                }
+        internal override bool CanGetDefaultActionInternal => false;
 
-                return base.Description;
-            }
-        }
+        public override string? Description =>
+            _ownerItem.AccessibleDescription is { } description ? description : base.Description;
+
+        internal override bool CanGetDescriptionInternal => IsInternal && _ownerItem.AccessibleDescription is null;
 
         public override string? Help
         {
@@ -70,6 +63,9 @@ public abstract partial class ToolStripItem
             }
         }
 
+        internal override bool CanGetHelpInternal
+            => IsInternal && (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent] is null;
+
         public override string KeyboardShortcut
         {
             get
@@ -86,6 +82,8 @@ public abstract partial class ToolStripItem
                 return mnemonic == '\0' ? string.Empty : $"Alt+{mnemonic}";
             }
         }
+
+        internal override bool CanGetKeyboardShortcutInternal => false;
 
         // We need to provide a unique ID. Others are implementing this in the same manner. First item should be UiaAppendRuntimeId
         // since this is not a top-level element of the fragment. Second item can be anything, but here it is a hash.
@@ -132,6 +130,10 @@ public abstract partial class ToolStripItem
             }
             set => _ownerItem.AccessibleName = value;
         }
+
+        internal override bool CanGetNameInternal => false;
+
+        internal override bool CanSetNameInternal => false;
 
         internal ToolStripItem Owner => _ownerItem;
 
@@ -215,6 +217,8 @@ public abstract partial class ToolStripItem
 
             return base.GetHelpTopic(out fileName);
         }
+
+        internal override bool CanGetHelpTopicInternal => IsInternal && Owner.Events[s_queryAccessibilityHelpEvent] is null;
 
         public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
         {

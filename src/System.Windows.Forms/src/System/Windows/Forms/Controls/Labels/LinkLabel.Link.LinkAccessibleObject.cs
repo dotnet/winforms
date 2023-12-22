@@ -12,7 +12,7 @@ public partial class LinkLabel
 {
     public partial class Link
     {
-        internal class LinkAccessibleObject : AccessibleObject
+        internal sealed class LinkAccessibleObject : AccessibleObject
         {
             private readonly LinkLabelAccessibleObject _linkLabelAccessibleObject;
             private readonly Link _owningLink;
@@ -60,7 +60,11 @@ public partial class LinkLabel
 
             public override string DefaultAction => SR.AccessibleActionClick;
 
+            internal override bool CanGetDefaultActionInternal => false;
+
             public override string? Description => _owningLink.Description;
+
+            internal override bool CanGetDescriptionInternal => false;
 
             public override void DoDefaultAction()
             {
@@ -115,12 +119,15 @@ public partial class LinkLabel
                     int end = LinkLabel.ConvertToCharIndex(_owningLink.Start + _owningLink.Length, text);
                     string? name = text.Substring(start, end - start);
 
-                     return _owningLinkLabel.UseMnemonic ? name = WindowsFormsUtils.TextWithoutMnemonics(name) : name;
+                    return _owningLinkLabel.UseMnemonic ? name = WindowsFormsUtils.TextWithoutMnemonics(name) : name;
                 }
-                set => base.Name = value;
             }
 
+            internal override bool CanGetNameInternal => false;
+
             public override AccessibleObject Parent => _linkLabelAccessibleObject;
+
+            private protected override bool IsInternal => true;
 
             public override AccessibleRole Role => AccessibleRole.Link;
 
@@ -152,6 +159,8 @@ public partial class LinkLabel
             // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
             // Value is optional for this role (Link).
             public override string Value => string.Empty;
+
+            internal override bool CanGetValueInternal => false;
         }
     }
 }

@@ -39,7 +39,9 @@ public partial class DateTimePicker
 
         // Note: returns empty string instead of null, because the date value replaces null,
         // so name is not empty in this case even if AccessibleName is not set.
-        public override string Name => this.GetOwnerAccessibleName("");
+        public override string Name => this.GetOwnerAccessibleName(string.Empty);
+
+        internal override bool CanGetNameInternal => false;
 
         public override string Value
         {
@@ -49,6 +51,8 @@ public partial class DateTimePicker
                 return !string.IsNullOrEmpty(baseValue) ? baseValue : this.GetOwnerText();
             }
         }
+
+        internal override bool CanGetValueInternal => false;
 
         public override AccessibleStates State
         {
@@ -97,6 +101,8 @@ public partial class DateTimePicker
                 ExpandCollapseState.ExpandCollapseState_Expanded => SR.AccessibleActionCollapse,
                 _ => string.Empty
             };
+
+        internal override bool CanGetDefaultActionInternal => false;
 
         public override void DoDefaultAction()
         {

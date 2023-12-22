@@ -57,12 +57,12 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
 
     private string ReportLinkClickedEventArgs(object sender, LinkClickedEventArgs e)
     {
-        var control = (RichTextBox)sender;
-        var prefix = control.Text.Remove(e.LinkStart);
-        var content = control.Text.Substring(e.LinkStart, e.LinkLength);
-        var suffix = control.Text.Substring(e.LinkStart + e.LinkLength);
+        RichTextBox control = (RichTextBox)sender;
+        string prefix = control.Text.Remove(e.LinkStart);
+        string content = control.Text.Substring(e.LinkStart, e.LinkLength);
+        string suffix = control.Text.Substring(e.LinkStart + e.LinkLength);
 
-        var index = prefix.LastIndexOf('\n');
+        int index = prefix.LastIndexOf('\n');
         if (index >= 0)
         {
             prefix = prefix.Substring(index + 1);
@@ -95,7 +95,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
                 if (e.Control && e.KeyCode == Keys.F)
                 {
                     richTextBox.Select();
-                    var location = richTextBox.Find(Prompt.ShowDialog(this, "", ""));
+                    int location = richTextBox.Find(Prompt.ShowDialog(this, "", ""));
                     Debug.WriteLine(location.ToString());
                 }
             }

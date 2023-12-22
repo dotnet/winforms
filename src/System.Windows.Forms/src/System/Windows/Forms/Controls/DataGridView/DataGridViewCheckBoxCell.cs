@@ -1000,7 +1000,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         if (IsParentAccessibilityObjectCreated)
         {
-            var cellName = AccessibilityObject.Name ?? string.Empty;
+            string cellName = AccessibilityObject.Name ?? string.Empty;
             string notificationText = CheckState switch
             {
                 CheckState.Checked => string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName),

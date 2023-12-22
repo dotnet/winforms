@@ -302,7 +302,7 @@ public sealed unsafe class EncoderParameter : IDisposable
     [Obsolete("This constructor has been deprecated. Use EncoderParameter(Encoder encoder, int numberValues, EncoderParameterValueType type, IntPtr value) instead.")]
     public EncoderParameter(Encoder encoder, int NumberOfValues, int Type, int Value)
     {
-        var size = (EncoderParameterValueType)Type switch
+        int size = (EncoderParameterValueType)Type switch
         {
             EncoderParameterValueType.ValueTypeByte or EncoderParameterValueType.ValueTypeAscii => 1,
             EncoderParameterValueType.ValueTypeShort => 2,
@@ -327,7 +327,7 @@ public sealed unsafe class EncoderParameter : IDisposable
 
     public EncoderParameter(Encoder encoder, int numberValues, EncoderParameterValueType type, IntPtr value)
     {
-        var size = type switch
+        int size = type switch
         {
             EncoderParameterValueType.ValueTypeByte or EncoderParameterValueType.ValueTypeAscii => 1,
             EncoderParameterValueType.ValueTypeShort => 2,

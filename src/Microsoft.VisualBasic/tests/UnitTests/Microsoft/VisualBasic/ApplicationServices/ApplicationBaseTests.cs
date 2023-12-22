@@ -55,7 +55,7 @@ public class ApplicationBaseTests
     public void GetEnvironmentVariable_ArgumentException()
     {
         var app = new ApplicationBase();
-        var key = GetEnvironmentVariables().LastOrDefault().Item1 ?? "";
+        string key = GetEnvironmentVariables().LastOrDefault().Item1 ?? "";
         var ex = Assert.Throws<ArgumentException>(() => app.GetEnvironmentVariable($"{key}z"));
         _ = ex.ToString(); // ensure message can be formatted
     }
@@ -64,9 +64,9 @@ public class ApplicationBaseTests
     {
         var pairs = new List<(string, string)>();
         var vars = Environment.GetEnvironmentVariables();
-        foreach (var key in vars.Keys)
+        foreach (string key in vars.Keys)
         {
-            pairs.Add(((string)key, (string)vars[key]));
+            pairs.Add((key, (string)vars[key]));
         }
 
         return pairs.OrderBy(pair => pair.Item1).ToArray();

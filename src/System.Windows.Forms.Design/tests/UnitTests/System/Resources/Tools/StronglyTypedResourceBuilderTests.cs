@@ -695,7 +695,7 @@ public partial class StronglyTypedResourceBuilderTests
     {
         using UnmanagedMemoryStream resourceAudio =
             Assert.IsType<UnmanagedMemoryStream>(audioPropertyInfo.GetValue(obj: null));
-        var contents = new byte[resourceAudio.Length];
+        byte[] contents = new byte[resourceAudio.Length];
         int pos = (int)(resourceAudio.Position = 0);
         while (pos < resourceAudio.Length)
         {

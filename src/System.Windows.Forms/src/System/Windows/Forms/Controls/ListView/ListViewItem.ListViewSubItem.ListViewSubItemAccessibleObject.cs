@@ -11,7 +11,7 @@ public partial class ListViewItem
 {
     public partial class ListViewSubItem
     {
-        internal class ListViewSubItemAccessibleObject : AccessibleObject
+        internal sealed class ListViewSubItemAccessibleObject : AccessibleObject
         {
             private readonly ListView _owningListView;
             private readonly ListViewItem _owningItem;
@@ -89,13 +89,13 @@ public partial class ListViewItem
             /// <summary>
             ///  Gets or sets the accessible name.
             /// </summary>
-            public override string? Name
-            {
-                get => base.Name ?? OwningSubItem?.Text ?? string.Empty;
-                set => base.Name = value;
-            }
+            public override string? Name => base.Name ?? OwningSubItem?.Text ?? string.Empty;
+
+            internal override bool CanGetNameInternal => false;
 
             public override AccessibleObject Parent => ParentInternal;
+
+            private protected override bool IsInternal => true;
 
             private ListViewItemBaseAccessibleObject ParentInternal
                 => (ListViewItemBaseAccessibleObject)_owningItem.AccessibilityObject;
@@ -104,7 +104,7 @@ public partial class ListViewItem
             {
                 get
                 {
-                    var owningItemRuntimeId = Parent.RuntimeId;
+                    int[] owningItemRuntimeId = Parent.RuntimeId;
 
                     Debug.Assert(owningItemRuntimeId.Length >= 4);
 

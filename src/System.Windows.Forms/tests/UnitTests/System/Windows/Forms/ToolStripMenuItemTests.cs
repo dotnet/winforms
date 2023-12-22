@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
@@ -11,7 +12,7 @@ public class ToolStripMenuItemTests
     [WinFormsFact]
     public void ToolStripMenuItem_Ctor_Default()
     {
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -126,7 +127,7 @@ public class ToolStripMenuItemTests
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.F1)]
     public void ToolStripMenuItem_SetShortcutKeys(Keys keys)
     {
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         item.ShortcutKeys = keys;
         Assert.Equal(keys, item.ShortcutKeys);
     }
@@ -138,8 +139,48 @@ public class ToolStripMenuItemTests
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift)]
     public void ToolStripMenuItem_SetShortcutKeys_ThrowsInvalidEnumArgumentException(Keys keys)
     {
-        using var item = new SubToolStripMenuItem();
+        using SubToolStripMenuItem item = new();
         Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(CultureInfo_Shortcut_TestData))]
+    public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo threadCulture, CultureInfo threadUICulture, string expectedShortcutText)
+    {
+        CultureInfo uiCulture = Thread.CurrentThread.CurrentUICulture;
+        CultureInfo curCulture = Thread.CurrentThread.CurrentCulture;
+
+        Thread.CurrentThread.CurrentUICulture = threadUICulture;
+        Thread.CurrentThread.CurrentCulture = threadCulture;
+        using SubToolStripMenuItem item = new();
+        item.ShortcutKeys = Keys.Control | Keys.Shift | Keys.K;
+        Assert.Equal(expectedShortcutText, item.GetShortcutText());
+
+        Thread.CurrentThread.CurrentUICulture = uiCulture;
+        Thread.CurrentThread.CurrentCulture = curCulture;
+    }
+
+    public static IEnumerable<object[]> CultureInfo_Shortcut_TestData()
+    {
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("en-US"), "Ctrl+Shift+K" };
+
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("zh-CN"), "Ctrl+Shift+K" };
+
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("fr-FR"), "Ctrl+Majuscule+K" };
+
+        yield return new object[] { new CultureInfo("en-US"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
+        yield return new object[] { new CultureInfo("fr-FR"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
+        yield return new object[] { new CultureInfo("zh-CN"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
+        yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
     }
 
     private class SubToolStripMenuItem : ToolStripMenuItem

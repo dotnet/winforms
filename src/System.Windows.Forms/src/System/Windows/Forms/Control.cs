@@ -12203,8 +12203,8 @@ public unsafe partial class Control :
         // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
         // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
         // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
-        var container = this as ContainerControl;
-        var isLocalFontSet = IsFontSet();
+        ContainerControl? container = this as ContainerControl;
+        bool isLocalFontSet = IsFontSet();
 
         ScaledControlFont = GetScaledFont(localFont, _deviceDpi, fontDpi);
 

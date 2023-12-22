@@ -8,7 +8,7 @@ using System.Text;
 
 namespace System.Diagnostics;
 
-internal class DebuggerAttributeInfo
+internal sealed class DebuggerAttributeInfo
 {
     public object Instance { get; set; }
     public IEnumerable<PropertyInfo> Properties { get; set; }

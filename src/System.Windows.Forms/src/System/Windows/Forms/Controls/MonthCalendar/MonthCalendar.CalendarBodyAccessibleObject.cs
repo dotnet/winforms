@@ -12,7 +12,7 @@ public partial class MonthCalendar
     /// <summary>
     ///  Represents an accessible object for a calendar body in <see cref="MonthCalendar"/> control.
     /// </summary>
-    internal class CalendarBodyAccessibleObject : MonthCalendarChildAccessibleObject
+    internal sealed class CalendarBodyAccessibleObject : MonthCalendarChildAccessibleObject
     {
         // A calendar body is the second in the calendar accessibility tree.
         // Indices start at 1.
@@ -197,7 +197,11 @@ public partial class MonthCalendar
 
         public override string Name => _initName;
 
+        internal override bool CanGetNameInternal => false;
+
         public override AccessibleObject Parent => _calendarAccessibleObject;
+
+        private protected override bool IsInternal => true;
 
         public override AccessibleRole Role => AccessibleRole.Table;
 

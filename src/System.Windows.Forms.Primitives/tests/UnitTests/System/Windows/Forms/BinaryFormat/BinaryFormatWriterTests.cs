@@ -45,7 +45,7 @@ public class BinaryFormatWriterTests
         {
             Hashtable deserializedHashtable = (Hashtable)deserialized;
             deserializedHashtable.Count.Should().Be(hashtable.Count);
-            foreach (var key in hashtable.Keys)
+            foreach (object? key in hashtable.Keys)
             {
                 deserializedHashtable[key].Should().Be(hashtable[key]);
             }
@@ -75,7 +75,7 @@ public class BinaryFormatWriterTests
         {
             Hashtable deserializedHashtable = (Hashtable)deserialized!;
             deserializedHashtable.Count.Should().Be(hashtable.Count);
-            foreach (var key in hashtable.Keys)
+            foreach (object? key in hashtable.Keys)
             {
                 deserializedHashtable[key].Should().Be(hashtable[key]);
             }

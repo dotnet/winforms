@@ -32,7 +32,12 @@ public partial class TrackBar
             }
         }
 
-        public override string? Help => ParentInternal?.SystemIAccessible.TryGetHelp(GetChildId());
+        public override string? Help => GetHelpInternal().ToNullableStringAndFree();
+
+        private protected override bool IsInternal => true;
+
+        internal override BSTR GetHelpInternal()
+            => ParentInternal is { } parent ? parent.SystemIAccessible.TryGetHelp(GetChildId()) : default;
 
         public override AccessibleRole Role
             => ParentInternal?.SystemIAccessible.TryGetRole(GetChildId()) ?? AccessibleRole.None;

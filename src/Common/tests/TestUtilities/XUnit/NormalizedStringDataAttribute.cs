@@ -18,4 +18,3 @@ public class NormalizedStringDataAttribute : CommonMemberDataAttribute
         { "teststring", "teststring" }
     });
 }
-

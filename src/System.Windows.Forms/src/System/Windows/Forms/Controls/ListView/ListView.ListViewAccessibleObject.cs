@@ -17,6 +17,8 @@ public partial class ListView
         {
         }
 
+        private protected override bool IsInternal => true;
+
         internal override Rectangle BoundingRectangle
         {
             get
@@ -382,7 +384,7 @@ public partial class ListView
                 return;
             }
 
-            foreach (var view in s_enumViewValues)
+            foreach (int view in s_enumViewValues)
             {
                 if (view == viewId)
                 {

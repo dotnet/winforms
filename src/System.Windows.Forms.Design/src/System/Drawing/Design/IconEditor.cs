@@ -63,7 +63,7 @@ public class IconEditor : UITypeEditor
         if (_fileDialog is null)
         {
             _fileDialog = new OpenFileDialog();
-            var filter = CreateFilterEntry(this);
+            string filter = CreateFilterEntry(this);
 
             Debug.Assert(s_imageExtenders.Length <= 0, "Why does IconEditor have subclasses if Icon doesn't?");
 

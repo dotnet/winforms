@@ -11,16 +11,21 @@ namespace System;
 /// </summary>
 /// <typeparam name="T">The type of the class being accessed.</typeparam>
 /// <remarks>
-///  Does not allow access to public members- use the object directly.
-///
-///  One should strive to *not* access internal state where otherwise avoidable.
-///  Ask yourself if you can test the contract of the object in question
-///  *without* manipulating internals directly. Often you can.
-///
-///  Where internals access is more useful are testing building blocks of more
-///  complicated objects, such as internal helper methods or classes.
-///
-///  This can be used to access private/internal objects as well via
+///  <para>
+///   Does not allow access to public members- use the object directly.
+///  </para>
+///  <para>
+///   One should strive to *not* access internal state where otherwise avoidable.
+///   Ask yourself if you can test the contract of the object in question
+///   *without* manipulating internals directly. Often you can.
+///  </para>
+///  <para>
+///   Where internals access is more useful are testing building blocks of more
+///   complicated objects, such as internal helper methods or classes.
+///  </para>
+///  <para>
+///   This can be used to access private/internal objects as well via
+///  </para>
 /// </remarks>
 /// <example>
 ///  This class can also be derived from to create a strongly typed wrapper
@@ -83,7 +88,7 @@ public class TestAccessor<T> : ITestAccessor
     /// <inheritdoc/>
     public dynamic Dynamic => _dynamicWrapper;
 
-    private class DynamicWrapper : DynamicObject
+    private sealed class DynamicWrapper : DynamicObject
     {
         private readonly object? _instance;
 
@@ -122,11 +127,11 @@ public class TestAccessor<T> : ITestAccessor
 
                 if (methodInfo is not null || type == typeof(object))
                 {
-                    // Found something, or already at the top of the type heirarchy
+                    // Found something, or already at the top of the type hierarchy
                     break;
                 }
 
-                // Walk up the heirarchy
+                // Walk up the hierarchy
                 type = type?.BaseType;
             }
             while (true);
@@ -176,11 +181,11 @@ public class TestAccessor<T> : ITestAccessor
 
                 if (info is not null || type == typeof(object))
                 {
-                    // Found something, or already at the top of the type heirarchy
+                    // Found something, or already at the top of the type hierarchy
                     break;
                 }
 
-                // Walk up the type heirarchy
+                // Walk up the type hierarchy
                 type = type?.BaseType;
             }
             while (true);

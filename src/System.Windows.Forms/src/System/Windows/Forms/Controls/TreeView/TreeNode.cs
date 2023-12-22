@@ -1129,7 +1129,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         int iT;
         string nodeText = node.Text;
 
-        var nodeCount = _childNodes.Count;
+        int nodeCount = _childNodes.Count;
         if (nodeCount > 0)
         {
             if (parentTreeView.TreeViewNodeSorter is null)
@@ -1382,7 +1382,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             node.StateImageIndexer.Key = StateImageIndexer.Key;
         }
 
-        var nodeCount = _childNodes.Count;
+        int nodeCount = _childNodes.Count;
         if (nodeCount > 0)
         {
             for (int i = 0; i < nodeCount; i++)
@@ -1425,7 +1425,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         else
         {
-            var nodeCount = _childNodes.Count;
+            int nodeCount = _childNodes.Count;
             if (!ignoreChildren && nodeCount > 0)
             {
                 // Virtual root should collapse all its children
@@ -2048,7 +2048,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             si.AddValue(nameof(StateImageKey), StateImageIndexer.Key);
         }
 
-        var nodeCount = _childNodes.Count;
+        int nodeCount = _childNodes.Count;
         si.AddValue("ChildCount", nodeCount);
 
         if (nodeCount > 0)
