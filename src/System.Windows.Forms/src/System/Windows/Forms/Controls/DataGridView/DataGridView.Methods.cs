@@ -11923,28 +11923,14 @@ public partial class DataGridView
 
     private void CheckEventArgsIndexesUpperBounds(IDataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(e.ColumnIndex, Columns.Count, "e.ColumnIndex");
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(e.RowIndex, Rows.Count, "e.RowIndex");
     }
 
     private static void CheckEventArgsIndexesNotNegative(IDataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex < 0)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex < 0)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(e.ColumnIndex, "e.ColumnIndex");
+        ArgumentOutOfRangeException.ThrowIfNegative(e.RowIndex, "e.RowIndex");
     }
 
     protected virtual void OnCellBeginEdit(DataGridViewCellCancelEventArgs e)

@@ -1023,10 +1023,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex || value > ALLOWEDIMAGES)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, ALLOWEDIMAGES);
 
             if (StateImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
             {

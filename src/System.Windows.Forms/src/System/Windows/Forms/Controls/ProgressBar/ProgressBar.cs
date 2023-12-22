@@ -454,7 +454,7 @@ public partial class ProgressBar : Control
             {
                 if (value < _minimum || value > _maximum)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, "'minimum'", "'maximum'"));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, nameof(Minimum), nameof(Maximum)));
                 }
 
                 _value = value;

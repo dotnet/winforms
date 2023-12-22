@@ -236,10 +236,7 @@ public partial class RichTextBox : TextBoxBase
 
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(BulletIndent), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             _bulletIndent = value;
 
@@ -828,13 +825,8 @@ public partial class RichTextBox : TextBoxBase
         }
         set
         {
-            if (value > 2000 || value < -2000)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidBoundArgument, nameof(SelectionCharOffset), value, -2000, 2000));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 2000);
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -2000);
 
             ForceHandleCreate();
             CHARFORMAT2W cf = new()
