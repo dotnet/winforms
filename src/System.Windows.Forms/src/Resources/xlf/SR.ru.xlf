@@ -5850,11 +5850,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Действие, выполняющееся для данного элемента управления, вызвано из неверного потока. Для выполнения данного действия перейдите в правильный поток с помощью Control.Invoke или Control.BeginInvoke.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">Значение '{1}' недопустимо для '{0}'. '{0}' должно быть больше {2} и меньше {3}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">Недопустимый формат файла.</target>

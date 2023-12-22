@@ -1499,13 +1499,8 @@ public partial class RichTextBox : TextBoxBase
 
         set
         {
-            if (value <= 0.015625f || value >= 64.0f)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidExBoundArgument, nameof(ZoomFactor), value, 0.015625f, 64.0f));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, 0.015625f);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, 64.0f);
 
             if (value != _zoomMultiplier)
             {

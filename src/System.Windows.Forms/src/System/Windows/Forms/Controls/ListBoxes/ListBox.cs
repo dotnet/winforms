@@ -585,10 +585,8 @@ public partial class ListBox : ListControl
 
         set
         {
-            if (value < 1 || value > 255)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 255);
 
             if (_itemHeight != value)
             {
