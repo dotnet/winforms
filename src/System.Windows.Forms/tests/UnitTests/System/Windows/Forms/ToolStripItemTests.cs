@@ -15400,23 +15400,23 @@ public class ToolStripItemTests
 
     // Unit test for https://github.com/dotnet/winforms/issues/8548
     [WinFormsFact]
-    public void ToolStripItem_OnItemSelected()
+    public void ToolStripItem_OnItemSelectedChanged()
     {
         using MyMenuStrip menuStrip1 = new();
         using ToolStripMenuItem toolStripMenuItem1 = new();
         using ToolStripMenuItem toolStripMenuItem2 = new();
         using ToolStripMenuItem toolStripMenuItem3 = new();
 
-        menuStrip1.Size = new Size(50, 100);
-        toolStripMenuItem1.Size = new Size(15, 30);
+        menuStrip1.Size = new Size(100, 50);
+        toolStripMenuItem1.Size = new Size(10, 30);
         toolStripMenuItem2.Size = new Size(15, 30);
         toolStripMenuItem3.Size = new Size(15, 30);
 
-        bool callBackInvoked = false;
+        int callBackInvokedCount = 0;
 
         toolStripMenuItem2.SelectedChanged += (e, s) =>
         {
-            callBackInvoked = true;
+            callBackInvokedCount++;
         };
 
         menuStrip1.Items.AddRange(new ToolStripMenuItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
@@ -15429,14 +15429,16 @@ public class ToolStripItemTests
             menuStrip1.MoveMouse(new MouseEventArgs(MouseButtons.None, 0, new Point(i, 5)));
         }
 
-        Assert.False(callBackInvoked);
+        Assert.Equal(0, callBackInvokedCount);
 
-        for (int i = 10; i < 50; i++)
+        for (int i = 10; i < 100; i++)
         {
             menuStrip1.MoveMouse(new MouseEventArgs(MouseButtons.None, 0, new Point(i, 5)));
         }
 
-        Assert.True(callBackInvoked);
+        // SelectedChanged event should be fired once in one round.
+
+        Assert.Equal(1, callBackInvokedCount);
     }
 
     private class MyMenuStrip: MenuStrip
