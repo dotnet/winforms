@@ -5874,11 +5874,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Ungültiger HDC-Typ: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss kleiner als {2} sein.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidNullArgument">
         <source>Null is not a valid value for '{0}'.</source>
         <target state="translated">NULL ist kein gültiger Wert für {0}.</target>

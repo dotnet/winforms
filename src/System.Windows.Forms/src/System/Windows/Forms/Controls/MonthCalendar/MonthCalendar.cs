@@ -506,14 +506,7 @@ public partial class MonthCalendar : Control
                 return;
             }
 
-            if (value > DateTimePicker.EffectiveMaxDate(_maxDate))
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
-            }
-
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, DateTimePicker.EffectiveMaxDate(_maxDate));
             ArgumentOutOfRangeException.ThrowIfLessThan(value, DateTimePicker.MinimumDateTime);
 
             _minDate = value;
