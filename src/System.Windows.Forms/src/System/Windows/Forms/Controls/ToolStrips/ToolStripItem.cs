@@ -2587,15 +2587,9 @@ public abstract partial class ToolStripItem :
     {
         if (_state[s_stateMouseDownAndNoDrag] || _state[s_statePressed] || _state[s_stateSelected])
         {
-            bool wasSelected = _state[s_stateSelected];
             _state[s_stateMouseDownAndNoDrag | s_statePressed | s_stateSelected] = false;
 
             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-
-            if (wasSelected)
-            {
-                OnSelectedChanged(EventArgs.Empty);
-            }
 
             Invalidate();
         }
@@ -3651,8 +3645,6 @@ public abstract partial class ToolStripItem :
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             }
-
-            OnSelectedChanged(EventArgs.Empty);
         }
     }
 
