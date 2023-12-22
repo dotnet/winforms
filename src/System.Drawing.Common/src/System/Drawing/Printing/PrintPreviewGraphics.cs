@@ -29,7 +29,7 @@ internal sealed class PrintPreviewGraphics
     {
         get
         {
-            IntPtr hdevmode = _printPageEventArgs.PageSettings.PrinterSettings.GetHdevmodeInternal();
+            HGLOBAL hdevmode = _printPageEventArgs.PageSettings.PrinterSettings.GetHdevmodeInternal();
 
             using DeviceContext dc = _printPageEventArgs.PageSettings.PrinterSettings.CreateDeviceContext(hdevmode);
             using Graphics graphics = Graphics.FromHdcInternal(dc.Hdc);

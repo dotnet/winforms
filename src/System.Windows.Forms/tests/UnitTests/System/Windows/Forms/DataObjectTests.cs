@@ -2156,7 +2156,7 @@ public class DataObjectTests
             tymed = TYMED.TYMED_HGLOBAL
         };
 
-        HGLOBAL handle = PInvoke.GlobalAlloc(
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
             1);
 
@@ -2170,7 +2170,7 @@ public class DataObjectTests
         }
         finally
         {
-            PInvoke.GlobalFree(handle);
+            PInvokeCore.GlobalFree(handle);
         }
     }
 
@@ -2199,7 +2199,7 @@ public class DataObjectTests
             tymed = TYMED.TYMED_HGLOBAL
         };
 
-        HGLOBAL handle = PInvoke.GlobalAlloc(
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
             1);
 
@@ -2213,7 +2213,7 @@ public class DataObjectTests
         }
         finally
         {
-            PInvoke.GlobalFree(handle);
+            PInvokeCore.GlobalFree(handle);
         }
     }
 
@@ -2279,7 +2279,7 @@ public class DataObjectTests
             tymed = TYMED.TYMED_HGLOBAL
         };
 
-        HGLOBAL handle = PInvoke.GlobalAlloc(
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
             1);
 
@@ -2298,7 +2298,7 @@ public class DataObjectTests
         }
         finally
         {
-            PInvoke.GlobalFree(handle);
+            PInvokeCore.GlobalFree(handle);
         }
     }
 
@@ -2320,7 +2320,7 @@ public class DataObjectTests
             tymed = TYMED.TYMED_HGLOBAL
         };
 
-        HGLOBAL handle = PInvoke.GlobalAlloc(
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
            (uint)sizeof(DROPFILES));
 
@@ -2337,7 +2337,7 @@ public class DataObjectTests
         }
         finally
         {
-            PInvoke.GlobalFree(handle);
+            PInvokeCore.GlobalFree(handle);
         }
     }
 

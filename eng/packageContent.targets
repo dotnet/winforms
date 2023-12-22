@@ -56,8 +56,8 @@
       This means we build a real assembly that has no associated official intellisense docs.
       Contact the intellisense team for guidance.
     -->
-    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerProject)' != 'true'" 
-            Text="$(AssemblyName).xml was not found in $(_DotnetApiDocsPackageName) package. Contact the intellisense team about adding the docs for this assembly."
+    <Error Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerProject)' != 'true' and '$(HasNoPublicIntellisense)' != 'true'"
+           Text="$(AssemblyName).xml was not found in $(_DotnetApiDocsPackageName) package. Contact the intellisense team about adding the docs for this assembly."
     />
 
     <ItemGroup>

@@ -87,7 +87,6 @@ DefMDIChildProc
 DefWindowProc
 DeleteDC
 DeleteEnhMetaFile
-DeleteObject
 DESKTOP_ACCESS_FLAGS
 DestroyAcceleratorTable
 DestroyCursor
@@ -269,7 +268,6 @@ GetProcAddress
 GetProcessDpiAwareness
 GetProcessWindowStation
 GETPROPERTYSTOREFLAGS
-GetRegionData
 GetRgnBox
 GetROP2
 GetScrollInfo
@@ -325,14 +323,7 @@ GetWindowText
 GetWindowTextLength
 GetWindowThreadProcessId
 GetWorldTransform
-GlobalAlloc
-GlobalFree
-GlobalLock
-GlobalReAlloc
-GlobalSize
-GlobalUnlock
 GMR_*
-HBMMENU_*
 HC_*
 HDI_MASK
 HDLAYOUT
@@ -349,7 +340,6 @@ HitTestThemeBackground
 HPROPSHEETPAGE
 HT*
 HTREEITEM
-HWND_*
 IAccessible
 IAccessibleEx
 IAutoComplete2

@@ -40,7 +40,7 @@ public class PreviewPrintController : PrintController
 
         // We need a DC as a reference; we don't actually draw on it.
         // We make sure to reuse the same one to improve performance.
-        _dc = document.PrinterSettings.CreateInformationContext(_modeHandle!);
+        _dc = document.PrinterSettings.CreateInformationContext(_modeHandle ?? HGLOBAL.Null);
     }
 
     /// <summary>
