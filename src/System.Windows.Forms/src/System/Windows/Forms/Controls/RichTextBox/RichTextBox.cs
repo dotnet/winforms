@@ -1491,8 +1491,11 @@ public partial class RichTextBox : TextBoxBase
 
         set
         {
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, 0.015625f);
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, 64.0f);
+            if (!float.IsNaN(value))
+            {
+                ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, 0.015625f);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, 64.0f);
+            }
 
             if (value != _zoomMultiplier)
             {

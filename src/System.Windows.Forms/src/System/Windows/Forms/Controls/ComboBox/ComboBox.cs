@@ -3372,11 +3372,10 @@ public partial class ComboBox : ListControl
         ArgumentOutOfRangeException.ThrowIfNegative(start);
 
         // the Length can be negative to support Selecting in the "reverse" direction..
-        int end = start + length;
-
-        // but end cannot be negative... this means Length is far negative...
+        // but start + length cannot be negative... this means Length is far negative...
         ArgumentOutOfRangeException.ThrowIfLessThan(length, -start);
 
+        int end = start + length;
         PInvoke.SendMessage(this, PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
     }
 
