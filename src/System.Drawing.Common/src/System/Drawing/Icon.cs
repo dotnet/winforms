@@ -426,9 +426,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         Rectangle copy = targetRect;
 
         using Matrix transform = graphics.Transform;
-        PointF point = new PointF(targetRect.X, targetRect.Y);
-        transform.TransformPoints(new PointF[] { point });
-        PointF offset = point;
+        PointF offset = transform.Offset;
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
 
