@@ -16,6 +16,7 @@ internal class InheritanceUI
     private static Bitmap s_inheritanceGlyph;
     private static Rectangle s_inheritanceGlyphRect;
     private ToolTip _tooltip;
+    private const int IconSize = 16;
 
     /// <summary>
     ///  The bitmap we use to show inheritance.
@@ -23,7 +24,7 @@ internal class InheritanceUI
     public static Bitmap InheritanceGlyph => s_inheritanceGlyph ??= ScaleHelper.GetIconResourceAsBitmap(
         typeof(InheritanceUI),
         "InheritedGlyph",
-        ScaleHelper.InitialSystemDpi);
+        ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
 
     /// <summary>
     ///  The rectangle surrounding the glyph.

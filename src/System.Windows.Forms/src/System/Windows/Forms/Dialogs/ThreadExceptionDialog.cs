@@ -36,6 +36,7 @@ public class ThreadExceptionDialog : Form
     private const int PICTUREWIDTH = 64;
     private const int PICTUREHEIGHT = 64;
     private const int EXCEPTIONMESSAGEVERTICALPADDING = 4;
+    private const int IconSize = 16;
 
     private readonly int _scaledMaxWidth = MAXWIDTH;
     private readonly int _scaledMaxHeight = MAXHEIGHT;
@@ -278,20 +279,26 @@ public class ThreadExceptionDialog : Form
         _detailsButton.FlatStyle = FlatStyle.Standard;
         _detailsButton.Click += new EventHandler(DetailsClick);
 
-        Button? b = null;
+        Button? button = null;
         int startIndex = 0;
 
         if (detailAnchor)
         {
-            b = _detailsButton;
+            button = _detailsButton;
 
-            _expandImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), DownBitmapName, DeviceDpi);
-            _collapseImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), UpBitmapName, DeviceDpi);
+            _expandImage = ScaleHelper.GetIconResourceAsBitmap(
+                GetType(),
+                DownBitmapName,
+                ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
+            _collapseImage = ScaleHelper.GetIconResourceAsBitmap(
+                GetType(),
+                UpBitmapName,
+                ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
 
-            b.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
-            b.Image = _expandImage;
-            b.ImageAlign = ContentAlignment.MiddleLeft;
-            Controls.Add(b);
+            button.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
+            button.Image = _expandImage;
+            button.ImageAlign = ContentAlignment.MiddleLeft;
+            Controls.Add(button);
             startIndex = 1;
         }
 
@@ -300,9 +307,9 @@ public class ThreadExceptionDialog : Form
 
         for (int i = startIndex; i < buttons.Length; i++)
         {
-            b = buttons[i];
-            b.SetBounds(buttonLeft, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
-            Controls.Add(b);
+            button = buttons[i];
+            button.SetBounds(buttonLeft, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
+            Controls.Add(button);
             buttonLeft += _scaledButtonAlignmentWidth;
         }
 
