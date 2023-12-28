@@ -156,7 +156,7 @@ public partial class CheckedListBox : ListBox
     }
 
     /// <summary>
-    ///  Collection of items in this listBox.
+    ///  Collection of items in this <see cref="ListBox"/>
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -382,7 +382,7 @@ public partial class CheckedListBox : ListBox
     public bool GetItemChecked(int index) => GetItemCheckState(index) != CheckState.Unchecked;
 
     /// <summary>
-    ///  Invalidates the given item in the listBox
+    ///  Invalidates the given item in the <see cref="ListBox"/>
     /// </summary>
     private unsafe void InvalidateItem(int index)
     {

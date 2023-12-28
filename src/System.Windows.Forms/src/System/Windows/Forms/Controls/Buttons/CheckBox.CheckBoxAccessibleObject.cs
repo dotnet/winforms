@@ -95,43 +95,46 @@ public partial class CheckBox
 
         internal override void SetValue(string? newValue)
         {
-            if (this.TryGetOwnerAs(out CheckBox? owner))
+            if (!this.TryGetOwnerAs(out CheckBox? owner))
             {
-                if (owner.ThreeState)
-                {
-                    if (CheckState.Checked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        owner.CheckState = CheckState.Checked;
-                        return;
-                    }
-                    else if (CheckState.Unchecked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        owner.CheckState = CheckState.Unchecked;
-                        return;
-                    }
-                    else if (CheckState.Unchecked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        owner.CheckState = CheckState.Unchecked;
-                        return;
-                    }
-                }
-                else if ("true".Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    owner.Checked = true;
-                    return;
-                }
-                else if ("false".Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    owner.Checked = false;
-                    return;
-                }
+                return;
             }
 
-            throw new InvalidOperationException("Invalid value");
+            if (owner.ThreeState)
+            {
+                if (CheckState.Checked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    owner.CheckState = CheckState.Checked;
+                    return;
+                }
+                else if (CheckState.Unchecked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    owner.CheckState = CheckState.Unchecked;
+                    return;
+                }
+                else if (CheckState.Indeterminate.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    owner.CheckState = CheckState.Indeterminate;
+                    return;
+                }
+
+                throw new ArgumentException($"'{newValue}' does not specify a {nameof(CheckBox)} {nameof(CheckState)}.");
+            }
+            else if ("true".Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
+            {
+                owner.Checked = true;
+                return;
+            }
+            else if ("false".Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
+            {
+                owner.Checked = false;
+                return;
+            }
+
+            throw new ArgumentException($"'{newValue}' does not specify a {nameof(CheckBox)} {nameof(CheckState)}.");
         }
 
-        public override string Value =>
-            this.TryGetOwnerAs(out CheckBox? owner)
+        public override string Value => this.TryGetOwnerAs(out CheckBox? owner)
             ? owner.ThreeState ? owner.CheckState.ToString() : owner.Checked.ToString()
             : string.Empty;
     }
