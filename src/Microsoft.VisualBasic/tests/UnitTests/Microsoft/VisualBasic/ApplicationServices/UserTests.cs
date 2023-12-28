@@ -8,7 +8,7 @@ public class UserTests
     [Fact]
     public void Properties()
     {
-        var user = new User();
+        User user = new();
         Assert.Equal(System.Threading.Thread.CurrentPrincipal, user.CurrentPrincipal);
         if (user.CurrentPrincipal is not null)
         {

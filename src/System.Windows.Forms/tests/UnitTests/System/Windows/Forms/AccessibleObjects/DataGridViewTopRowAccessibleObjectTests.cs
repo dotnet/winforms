@@ -1234,7 +1234,7 @@ public class DataGridViewTopRowAccessibleObjectTests
     [WinFormsFact]
     public void DataGridViewTopRowAccessibleObject_GetPropertyValue_ReturnsExpected()
     {
-        using DataGridView dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
 
         Assert.True((bool)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));

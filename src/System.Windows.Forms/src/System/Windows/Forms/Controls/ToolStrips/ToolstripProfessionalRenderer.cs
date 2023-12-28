@@ -237,7 +237,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         if (e.Item is ToolStripDropDownItem item && item.Pressed && item.HasDropDownItems)
         {
-            Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+            Rectangle bounds = new(Point.Empty, item.Size);
 
             RenderPressedGradient(e.Graphics, bounds);
         }
@@ -273,7 +273,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             return;
         }
 
-        Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+        Rectangle bounds = new(Point.Empty, item.Size);
         if (item.BackgroundImage is not null)
         {
             Rectangle fillRect = item.Selected ? item.ContentRectangle : bounds;
@@ -351,7 +351,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         ToolStripButton? item = e.Item as ToolStripButton;
         Graphics g = e.Graphics;
-        Rectangle bounds = new Rectangle(Point.Empty, item?.Size ?? Size.Empty);
+        Rectangle bounds = new(Point.Empty, item?.Size ?? Size.Empty);
 
         if (item is not null && item.CheckState == CheckState.Unchecked)
         {
@@ -421,7 +421,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         }
         else
         {
-            Rectangle bounds = new Rectangle(Point.Empty, toolStrip.Size);
+            Rectangle bounds = new(Point.Empty, toolStrip.Size);
 
             // draw the shadow lines on the bottom and right
             using (var pen = ColorTable.ToolStripBorder.GetCachedPenScope())
@@ -550,7 +550,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         ToolStripItem item = e.Item;
         Graphics g = e.Graphics;
-        Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+        Rectangle bounds = new(Point.Empty, item.Size);
 
         if ((bounds.Width == 0) || (bounds.Height == 0))
         {
@@ -846,7 +846,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             return null;
         }
 
-        Rectangle bounds = new Rectangle(Point.Empty, toolStrip.Size);
+        Rectangle bounds = new(Point.Empty, toolStrip.Size);
 
         // Render curve
         // eat away at the corners by drawing the parent background
@@ -854,19 +854,19 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         {
             // Paint pieces of the parent here to give toolStrip rounded effect
             Point topLeft = Point.Empty;
-            Point topRight = new Point(bounds.Width - 1, 0);
-            Point bottomLeft = new Point(0, bounds.Height - 1);
-            Point bottomRight = new Point(bounds.Width - 1, bounds.Height - 1);
+            Point topRight = new(bounds.Width - 1, 0);
+            Point bottomLeft = new(0, bounds.Height - 1);
+            Point bottomRight = new(bounds.Width - 1, bounds.Height - 1);
 
             // Pixels to eat away with the parent background
             // Grip side
-            Rectangle topLeftParentHorizontalPixels = new Rectangle(topLeft, onePix);
-            Rectangle bottomLeftParentHorizontalPixels = new Rectangle(bottomLeft, new Size(2, 1));
-            Rectangle bottomLeftParentVerticalPixels = new Rectangle(bottomLeft.X, bottomLeft.Y - 1, 1, 2);
+            Rectangle topLeftParentHorizontalPixels = new(topLeft, onePix);
+            Rectangle bottomLeftParentHorizontalPixels = new(bottomLeft, new Size(2, 1));
+            Rectangle bottomLeftParentVerticalPixels = new(bottomLeft.X, bottomLeft.Y - 1, 1, 2);
 
             // OverflowSide
-            Rectangle bottomRightHorizontalPixels = new Rectangle(bottomRight.X - 1, bottomRight.Y, 2, 1);
-            Rectangle bottomRightVerticalPixels = new Rectangle(bottomRight.X, bottomRight.Y - 1, 1, 2);
+            Rectangle bottomRightHorizontalPixels = new(bottomRight.X - 1, bottomRight.Y, 2, 1);
+            Rectangle bottomRightVerticalPixels = new(bottomRight.X, bottomRight.Y - 1, 1, 2);
 
             // TopSide
             Rectangle topRightHorizontalPixels, topRightVerticalPixels;
@@ -882,7 +882,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 topRightVerticalPixels = new Rectangle(topRight.X, topRight.Y, 1, 3);
             }
 
-            Region parentRegionToPaint = new Region(topLeftParentHorizontalPixels);
+            Region parentRegionToPaint = new(topLeftParentHorizontalPixels);
             parentRegionToPaint.Union(topLeftParentHorizontalPixels);
             parentRegionToPaint.Union(bottomLeftParentHorizontalPixels);
             parentRegionToPaint.Union(bottomLeftParentVerticalPixels);
@@ -1001,7 +1001,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             }
 
             // draw second gradient
-            using (LinearGradientBrush b = new LinearGradientBrush(endGradient, middleColor, endColor, mode))
+            using (LinearGradientBrush b = new(endGradient, middleColor, endColor, mode))
             {
                 if (mode == LinearGradientMode.Horizontal)
                 {
@@ -1027,7 +1027,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
     private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
     {
-        using Pen p = new Pen(ColorTable.StatusStripBorder);
+        using Pen p = new(ColorTable.StatusStripBorder);
         e.Graphics.DrawLine(p, 0, 0, e.ToolStrip.Width, 0);
     }
 
@@ -1110,7 +1110,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     {
         Graphics g = e.Graphics;
         ToolStripItem item = e.Item;
-        Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+        Rectangle bounds = new(Point.Empty, item.Size);
 
         Rectangle fillRect = item.Selected ? item.ContentRectangle : bounds;
 
@@ -1145,10 +1145,10 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         Control? parent = control.ParentInternal;
         if (parent is not null)
         {
-            Rectangle gradientBounds = new Rectangle(Point.Empty, parent.Size);
+            Rectangle gradientBounds = new(Point.Empty, parent.Size);
             if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
             {
-                using LinearGradientBrush b = new LinearGradientBrush(
+                using LinearGradientBrush b = new(
                     gradientBounds,
                     beginColor,
                     endColor,
@@ -1159,11 +1159,11 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         }
         else
         {
-            Rectangle gradientBounds = new Rectangle(Point.Empty, control.Size);
+            Rectangle gradientBounds = new(Point.Empty, control.Size);
             if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
             {
                 // Don't have a parent that we know about - paint the gradient as if there isn't another container.
-                using LinearGradientBrush b = new LinearGradientBrush(
+                using LinearGradientBrush b = new(
                     gradientBounds,
                     beginColor,
                     endColor,
@@ -1178,7 +1178,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
         ToolStrip toolStrip = e.ToolStrip;
-        Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
+        Rectangle bounds = new(Point.Empty, e.ToolStrip.Size);
 
         // fill up the background
         LinearGradientMode mode = (toolStrip.Orientation == Orientation.Horizontal) ? LinearGradientMode.Vertical : LinearGradientMode.Horizontal;
@@ -1187,7 +1187,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
     private void RenderToolStripDropDownBackground(ToolStripRenderEventArgs e)
     {
-        Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
+        Rectangle bounds = new(Point.Empty, e.ToolStrip.Size);
 
         using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrushScope();
         e.Graphics.FillRectangle(brush, bounds);
@@ -1199,7 +1199,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         if (e.ToolStrip is ToolStripDropDown toolStripDropDown)
         {
-            Rectangle bounds = new Rectangle(Point.Empty, toolStripDropDown.Size);
+            Rectangle bounds = new(Point.Empty, toolStripDropDown.Size);
 
             using (var pen = ColorTable.MenuBorder.GetCachedPenScope())
             {
@@ -1221,7 +1221,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         Graphics g = e.Graphics;
         ToolStripOverflowButton? item = e.Item as ToolStripOverflowButton;
-        Rectangle overflowBoundsFill = new Rectangle(Point.Empty, e.Item.Size);
+        Rectangle overflowBoundsFill = new(Point.Empty, e.Item.Size);
         Rectangle bounds = overflowBoundsFill;
 
         bool drawCurve = RoundedEdges && (item?.GetCurrentParent() is not MenuStrip);
@@ -1274,8 +1274,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         {
             // draw shadow pixel on bottom left +1, +1
             using var pen = overflowBottomLeftShadow.GetCachedPenScope();
-            Point start = new Point(overflowBoundsFill.Left - 1, overflowBoundsFill.Height - 2);
-            Point end = new Point(overflowBoundsFill.Left, overflowBoundsFill.Height - 2);
+            Point start = new(overflowBoundsFill.Left - 1, overflowBoundsFill.Height - 2);
+            Point end = new(overflowBoundsFill.Left, overflowBoundsFill.Height - 2);
             if (rightToLeft)
             {
                 start.X = overflowBoundsFill.Right + 1;
@@ -1302,8 +1302,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         {
             if (horizontal)
             {
-                Point top1 = new Point(overflowBoundsFill.X - 2, 0);
-                Point top2 = new Point(overflowBoundsFill.X - 1, 1);
+                Point top1 = new(overflowBoundsFill.X - 2, 0);
+                Point top2 = new(overflowBoundsFill.X - 1, 1);
 
                 if (rightToLeft)
                 {
@@ -1325,7 +1325,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         {
             if (horizontal)
             {
-                Rectangle fillRect = new Rectangle(overflowBoundsFill.X - 1, 0, 1, 1);
+                Rectangle fillRect = new(overflowBoundsFill.X - 1, 0, 1, 1);
                 if (rightToLeft)
                 {
                     fillRect.X = overflowBoundsFill.Right;
@@ -1342,15 +1342,15 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
     private void RenderToolStripCurve(ToolStripRenderEventArgs e)
     {
-        Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
+        Rectangle bounds = new(Point.Empty, e.ToolStrip.Size);
         ToolStrip toolStrip = e.ToolStrip;
         Rectangle displayRect = toolStrip.DisplayRectangle;
 
         Graphics g = e.Graphics;
 
         Point topLeft = Point.Empty;
-        Point topRight = new Point(bounds.Width - 1, 0);
-        Point bottomLeft = new Point(0, bounds.Height - 1);
+        Point topRight = new(bounds.Width - 1, 0);
+        Point bottomLeft = new(0, bounds.Height - 1);
 
         // Add in shadow pixels - the detail that makes them look round
 
@@ -1358,15 +1358,15 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         using (var brush = ColorTable.ToolStripGradientMiddle.GetCachedSolidBrushScope())
         {
             // there are two shadow rects (one pixel wide) on the top
-            Rectangle topLeftShadowRect = new Rectangle(topLeft, onePix);
+            Rectangle topLeftShadowRect = new(topLeft, onePix);
             topLeftShadowRect.X += 1;
 
             // second shadow rect
-            Rectangle topLeftShadowRect2 = new Rectangle(topLeft, onePix);
+            Rectangle topLeftShadowRect2 = new(topLeft, onePix);
             topLeftShadowRect2.Y += 1;
 
             // on the right there are two more shadow rects
-            Rectangle topRightShadowRect = new Rectangle(topRight, onePix);
+            Rectangle topRightShadowRect = new(topRight, onePix);
             topRightShadowRect.X -= 2; // was 2?
 
             // second top right shadow pix
@@ -1374,7 +1374,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             topRightShadowRect2.Y += 1;
             topRightShadowRect2.X += 1;
 
-            Rectangle[] paintRects = new Rectangle[] { topLeftShadowRect, topLeftShadowRect2, topRightShadowRect, topRightShadowRect2 };
+            Rectangle[] paintRects = [topLeftShadowRect, topLeftShadowRect2, topRightShadowRect, topRightShadowRect2];
 
             // prevent the painting of anything that would obscure an item.
             for (int i = 0; i < paintRects.Length; i++)
@@ -1400,7 +1400,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             }
 
             // set the one dark pixel in the bottom left hand corner
-            Rectangle otherBottom = new Rectangle(bottomLeft.X, bottomLeft.Y - 2, 1, 1);
+            Rectangle otherBottom = new(bottomLeft.X, bottomLeft.Y - 2, 1, 1);
             if (!displayRect.IntersectsWith(otherBottom))
             {
                 g.FillRectangle(brush, otherBottom);
@@ -1571,7 +1571,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     {
         Graphics g = e.Graphics;
         ToolStripItem item = e.Item;
-        Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+        Rectangle bounds = new(Point.Empty, item.Size);
         bool drawHotBorder = false;
 
         Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
@@ -1652,7 +1652,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     // used only for drawing the overflow button madness.
     private static Point RenderArrowInternal(Graphics g, Rectangle dropDownRect, ArrowDirection direction, Brush brush)
     {
-        Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
+        Point middle = new(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
 
         // if the width is odd - favor pushing it over one pixel right.
         middle.X += (dropDownRect.Width % 2);

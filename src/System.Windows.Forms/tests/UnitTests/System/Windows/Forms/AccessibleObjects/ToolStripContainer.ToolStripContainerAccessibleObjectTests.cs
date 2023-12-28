@@ -22,7 +22,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "ToolStripContainer1")]
     public void ToolStripContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
-        using var control = new ToolStripContainer
+        using ToolStripContainer control = new()
         {
             Name = "ToolStripContainer1",
             AccessibleName = "TestName"
@@ -38,7 +38,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripContainerAccessibleObject_GetPropertyValue_HasKeyboardFocus_ReturnsTrue_IfControlHasFocus()
     {
-        using var control = new ToolStripContainer();
+        using ToolStripContainer control = new();
 
         var accessibleObject = new ToolStripContainer.ToolStripContainerAccessibleObject(control);
         Assert.False(control.IsHandleCreated);
@@ -52,7 +52,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripContainerAccessibleObject_GetPropertyValue_HasKeyboardFocus_ReturnsFalse_IfControlHasNoFocus()
     {
-        using var control = new ToolStripContainer();
+        using ToolStripContainer control = new();
 
         var accessibleObject = new ToolStripContainer.ToolStripContainerAccessibleObject(control);
         bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);

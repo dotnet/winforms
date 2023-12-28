@@ -11,8 +11,8 @@ public partial class MatrixTests
     [MemberData(nameof(MatrixElements_TestData))]
     public void Ctor_Matrix3x2(float m11, float m12, float m21, float m22, float dx, float dy, bool isIdentity, bool isInvertible)
     {
-        Matrix3x2 matrix3X2 = new Matrix3x2(m11, m12, m21, m22, dx, dy);
-        using (var matrix = new Matrix(matrix3X2))
+        Matrix3x2 matrix3X2 = new(m11, m12, m21, m22, dx, dy);
+        using (Matrix matrix = new(matrix3X2))
         {
             Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);
             Assert.Equal(matrix3X2, matrix.MatrixElements);
@@ -27,8 +27,8 @@ public partial class MatrixTests
     [MemberData(nameof(MatrixElements_TestData))]
     public void MatrixElements_RoundTrip(float m11, float m12, float m21, float m22, float dx, float dy, bool isIdentity, bool isInvertible)
     {
-        Matrix3x2 matrix3X2 = new Matrix3x2(m11, m12, m21, m22, dx, dy);
-        using (var matrix = new Matrix())
+        Matrix3x2 matrix3X2 = new(m11, m12, m21, m22, dx, dy);
+        using (Matrix matrix = new())
         {
             matrix.MatrixElements = matrix3X2;
             Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);

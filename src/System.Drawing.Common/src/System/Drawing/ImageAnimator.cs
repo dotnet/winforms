@@ -293,7 +293,7 @@ public sealed partial class ImageAnimator
 
             foreach (Guid guid in dimensions)
             {
-                FrameDimension dimension = new FrameDimension(guid);
+                FrameDimension dimension = new(guid);
                 if (dimension.Equals(FrameDimension.Time))
                 {
                     return image.GetFrameCount(FrameDimension.Time) > 1;

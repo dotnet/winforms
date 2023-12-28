@@ -661,7 +661,7 @@ public class DataGridViewCellStyle : ICloneable
 
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder(128);
+        StringBuilder sb = new(128);
         sb.Append("DataGridViewCellStyle {");
         bool firstPropAdded = true;
         if (BackColor != Color.Empty)

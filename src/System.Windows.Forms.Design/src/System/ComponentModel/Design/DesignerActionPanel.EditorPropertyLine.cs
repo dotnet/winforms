@@ -76,7 +76,7 @@ internal sealed partial class DesignerActionPanel
                 int maxWidth = 0;
 
                 // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
-                using (var hdc = new GetDcScope((HWND)listBox.Handle))
+                using (GetDcScope hdc = new((HWND)listBox.Handle))
                 {
                     using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
                     using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
@@ -290,7 +290,7 @@ internal sealed partial class DesignerActionPanel
                     int width = EditRegionSize.Height - EditorLineSwatchPadding * 2;
                     int height = width - 1;
                     _swatch = new Bitmap(width, height);
-                    Rectangle rect = new Rectangle(1, 1, width - 2, height - 2);
+                    Rectangle rect = new(1, 1, width - 2, height - 2);
                     using (Graphics swatchGraphics = Graphics.FromImage(_swatch))
                     {
                         _editor.PaintValue(Value, swatchGraphics, rect);
@@ -342,7 +342,7 @@ internal sealed partial class DesignerActionPanel
 
             if (ActionPanel.RightToLeft != RightToLeft.Yes)
             {
-                Rectangle editorBounds = new Rectangle(Point.Empty, EditRegionSize);
+                Rectangle editorBounds = new(Point.Empty, EditRegionSize);
                 Size dropDownSize = _dropDownHolder.Size;
                 Point editorLocation = ActionPanel.PointToScreen(EditRegionLocation);
                 Rectangle rectScreen = Screen.FromRectangle(ActionPanel.RectangleToScreen(editorBounds)).WorkingArea;
@@ -366,7 +366,7 @@ internal sealed partial class DesignerActionPanel
             {
                 _dropDownHolder.RightToLeft = ActionPanel.RightToLeft;
 
-                Rectangle editorBounds = new Rectangle(Point.Empty, EditRegionSize);
+                Rectangle editorBounds = new(Point.Empty, EditRegionSize);
                 Size dropDownSize = _dropDownHolder.Size;
                 Point editorLocation = ActionPanel.PointToScreen(EditRegionLocation);
                 Rectangle rectScreen = Screen.FromRectangle(ActionPanel.RectangleToScreen(editorBounds)).WorkingArea;

@@ -60,16 +60,16 @@ public class ImageAttributesTests
     [Fact]
     public void Ctor_Default_Success()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
     }
 
     [Fact]
     public void Clone_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix);
 
@@ -85,7 +85,7 @@ public class ImageAttributesTests
     [Fact]
     public void Clone_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.Clone());
@@ -94,10 +94,10 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrix_ColorMatrix_Success()
     {
-        using (var brush = new SolidBrush(_actualGreen))
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualGreen))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix);
             bitmap.SetPixel(0, 0, _actualYellow);
@@ -120,7 +120,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorMatrix_DropShadowRepaintWhenAreaIsSmallerThanTheFilteredElement_TestData))]
     public void SetColorMatrix_ColorMatrixI_Success(Color color)
     {
-        ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+        ColorMatrix colorMatrix = new(new float[][]
         {
             new float[] {1, 0, 0, 0, 0},
             new float[] {0, 1, 0, 0, 0},
@@ -129,12 +129,12 @@ public class ImageAttributesTests
             new float[] {0, 0, 0, 0, 1},
         });
 
-        using (var brush = new SolidBrush(color))
-        using (var bitmapBig = new Bitmap(200, 100))
-        using (var bitmapSmall = new Bitmap(100, 100))
+        using (SolidBrush brush = new(color))
+        using (Bitmap bitmapBig = new(200, 100))
+        using (Bitmap bitmapSmall = new(100, 100))
         using (var graphicsSmallBitmap = Graphics.FromImage(bitmapSmall))
         using (var graphicsBigBitmap = Graphics.FromImage(bitmapBig))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             graphicsSmallBitmap.FillRectangle(Brushes.White, 0, 0, 100, 100);
             graphicsSmallBitmap.FillEllipse(brush, 0, 0, 100, 100);
@@ -152,9 +152,9 @@ public class ImageAttributesTests
     {
         var grayShade = Color.FromArgb(255, 100, 100, 100);
 
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             bitmap.SetPixel(0, 0, _actualYellow);
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default);
@@ -178,11 +178,11 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_TestData))]
     public void SetColorMatrix_ColorMatrixDefaultFlagType_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
-        using (var brush = new SolidBrush(_actualYellow))
-        using (var pen = new Pen(brush))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualYellow))
+        using (Pen pen = new(brush))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type);
 
@@ -211,11 +211,11 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustTypeI_TestData))]
     public void SetColorMatrix_ColorMatrixDefaultFlagTypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
-        using (var brush = new SolidBrush(_actualYellow))
-        using (var pen = new Pen(brush))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualYellow))
+        using (Pen pen = new(brush))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type);
 
@@ -228,7 +228,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrix_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix));
@@ -240,7 +240,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrix_NullMatrix_ThrowsArgumentException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(null));
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(null, ColorMatrixFlag.Default));
@@ -261,7 +261,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetColorMatrix_InvalidTypes_ThrowsInvalidEnumArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type));
         }
@@ -280,7 +280,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetColorMatrix_InvalidFlags_ThrowsArgumentException(ColorMatrixFlag flag)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, flag));
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, flag, ColorAdjustType.Default));
@@ -290,9 +290,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearColorMatrix_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix);
             imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix);
@@ -317,11 +317,11 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearColorMatrix_DefaultFlagType_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
-        using (var brush = new SolidBrush(_actualYellow))
-        using (var pen = new Pen(brush))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualYellow))
+        using (Pen pen = new(brush))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type);
             imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix, ColorMatrixFlag.Default, type);
@@ -344,7 +344,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearColorMatrix_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorMatrix());
@@ -355,7 +355,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearColorMatrix_InvalidTypes_ThrowsInvalidEnumArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorMatrix(type));
         }
@@ -364,10 +364,10 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrices_ColorMatrixGrayMatrix_Success()
     {
-        using (var brush = new SolidBrush(_actualGreen))
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualGreen))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix);
             bitmap.SetPixel(0, 0, _actualYellow);
@@ -389,10 +389,10 @@ public class ImageAttributesTests
     [MemberData(nameof(SetColorMatrices_Flags_TestData))]
     public void SetColorMatrices_ColorMatrixGrayMatrixFlags_Success(ColorMatrixFlag flag, Color grayShade, Color expectedGrayShade)
     {
-        using (var brush = new SolidBrush(_actualGreen))
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualGreen))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix, flag);
             bitmap.SetPixel(0, 0, _actualYellow);
@@ -418,10 +418,10 @@ public class ImageAttributesTests
     public void SetColorMatrices_ColorMatrixGrayMatrixFlagsTypes_Success
         (ColorMatrixFlag flag, ColorAdjustType type, Color grayShade, Color expectedGrayShade)
     {
-        using (var brush = new SolidBrush(_actualGreen))
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualGreen))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix, flag, type);
             bitmap.SetPixel(0, 0, _actualYellow);
@@ -449,10 +449,10 @@ public class ImageAttributesTests
     [MemberData(nameof(SetColorMatrices_FlagsTypesI_TestData))]
     public void SetColorMatrices_ColorMatrixGrayMatrixFlagsTypesI_Success(ColorMatrixFlag flag, ColorAdjustType type, Color grayShade)
     {
-        using (var brush = new SolidBrush(_actualGreen))
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (SolidBrush brush = new(_actualGreen))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix, flag, type);
             bitmap.SetPixel(0, 0, _actualYellow);
@@ -466,7 +466,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrices_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix));
@@ -478,7 +478,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrices_NullMatrices_ThrowsArgumentException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(null, _grayMatrix));
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(null, _grayMatrix, ColorMatrixFlag.Default));
@@ -494,7 +494,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetColorMatrices_InvalidTypes_ThrowsInvalidEnumArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () =>
                 imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix, ColorMatrixFlag.Default, type));
@@ -508,7 +508,7 @@ public class ImageAttributesTests
     [InlineData((ColorMatrixFlag)int.MaxValue)]
     public void SetColorMatrices_InvalidFlags_ThrowsArgumentException(ColorMatrixFlag flag)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, _grayMatrix, flag));
             AssertExtensions.Throws<ArgumentException>(null, () =>
@@ -519,9 +519,9 @@ public class ImageAttributesTests
     [Fact]
     public void SetThreshold_Threshold_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetThreshold(0.7f);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 230, 50, 220));
@@ -534,9 +534,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_TestData))]
     public void SetThreshold_ThresholdType_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetThreshold(0.7f, type);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 230, 50, 220));
@@ -549,9 +549,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustTypeI_TestData))]
     public void SetThreshold_ThresholdTypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetThreshold(0.7f, type);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 230, 50, 220));
@@ -563,7 +563,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetThreshold_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetThreshold(0.5f));
@@ -573,7 +573,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetThreshold_InvalidType_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetThreshold(0.5f, type));
         }
@@ -582,9 +582,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearThreshold_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetThreshold(0.7f);
             imageAttr.ClearThreshold();
@@ -598,9 +598,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearThreshold_ThresholdTypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetThreshold(0.7f, type);
             imageAttr.ClearThreshold(type);
@@ -613,7 +613,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearThreshold_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearThreshold(ColorAdjustType.Default));
@@ -623,7 +623,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearThreshold_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearThreshold(type));
         }
@@ -632,9 +632,9 @@ public class ImageAttributesTests
     [Fact]
     public void SetGamma_Gamma_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 255, 0));
@@ -647,9 +647,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_TestData))]
     public void SetGamma_GammaType_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f, type);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 255, 0));
@@ -662,9 +662,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustTypeI_TestData))]
     public void SetGamma_GammaTypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f, type);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 255, 0));
@@ -676,7 +676,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetGamma_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetGamma(2.2f));
@@ -687,7 +687,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetGamma_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetGamma(2.2f, type));
         }
@@ -697,9 +697,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearGamma_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f, type);
             imageAttr.ClearGamma(type);
@@ -713,7 +713,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearGamma_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearGamma(ColorAdjustType.Default));
@@ -723,7 +723,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearGamma_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearGamma(type));
         }
@@ -732,9 +732,9 @@ public class ImageAttributesTests
     [Fact]
     public void SetNoOp_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f);
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix);
@@ -749,9 +749,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void SetNoOp_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f, type);
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type);
@@ -766,7 +766,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetNoOp_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetNoOp());
@@ -777,7 +777,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetNoOp_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetNoOp(type));
         }
@@ -786,9 +786,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearNoOp_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f);
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix);
@@ -805,9 +805,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_TestData))]
     public void ClearNoOp_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f, type);
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type);
@@ -824,9 +824,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustTypeI_TestData))]
     public void ClearNoOp_TypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetGamma(2.2f, type);
             imageAttr.SetColorMatrix(_greenComponentToZeroColorMatrix, ColorMatrixFlag.Default, type);
@@ -842,7 +842,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearNoOp_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearNoOp());
@@ -853,7 +853,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearNoOp_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearNoOp(type));
         }
@@ -862,9 +862,9 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorKey_Success()
     {
-        using var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height);
+        using Bitmap bitmap = new(_rectangle.Width, _rectangle.Height);
         using var graphics = Graphics.FromImage(bitmap);
-        using var imageAttr = new ImageAttributes();
+        using ImageAttributes imageAttr = new();
 
         imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150));
 
@@ -877,9 +877,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_TestData))]
     public void SetColorKey_Type_Success(ColorAdjustType type)
     {
-        using var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height);
+        using Bitmap bitmap = new(_rectangle.Width, _rectangle.Height);
         using var graphics = Graphics.FromImage(bitmap);
-        using var imageAttr = new ImageAttributes();
+        using ImageAttributes imageAttr = new();
 
         imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150), type);
 
@@ -892,9 +892,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustTypeI_TestData))]
     public void SetColorKey_TypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150), type);
 
@@ -907,7 +907,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorKey_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150)));
@@ -919,7 +919,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetColorKey_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () =>
                 imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150), type));
@@ -929,9 +929,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearColorKey_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150));
             imageAttr.ClearColorKey();
@@ -946,9 +946,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearColorKey_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150), type);
             imageAttr.ClearColorKey(type);
@@ -962,7 +962,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearColorKey_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorKey());
@@ -973,7 +973,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearColorKey_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorKey(type));
         }
@@ -991,9 +991,9 @@ public class ImageAttributesTests
     [MemberData(nameof(SetOutputChannel_ColorChannelFlag_TestData))]
     public void SetOutputChannel_Flag_Success(ColorChannelFlag flag, Color actualColor, Color expectedColor)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(flag);
 
@@ -1019,9 +1019,9 @@ public class ImageAttributesTests
     [MemberData(nameof(SetOutputChannel_ColorChannelFlagType_TestData))]
     public void SetOutputChannel_FlagType_Success(ColorChannelFlag flag, ColorAdjustType type, Color actualColor, Color expectedColor)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(flag, type);
 
@@ -1051,9 +1051,9 @@ public class ImageAttributesTests
     [MemberData(nameof(SetOutputChannel_ColorChannelFlagTypeI_TestData))]
     public void SetOutputChannel_FlagTypeI_Success(ColorChannelFlag flag, ColorAdjustType type, Color color)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(flag, type);
 
@@ -1066,7 +1066,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannel_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelY));
@@ -1077,7 +1077,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetOutputChannel_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelY, type));
         }
@@ -1096,7 +1096,7 @@ public class ImageAttributesTests
     [MemberData(nameof(SetOutputChannel_InvalidColorChannelFlags_TestData))]
     public void SetOutputChannel_InvalidFlags_ThrowsArgumentException(ColorChannelFlag flag)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetOutputChannel(flag));
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetOutputChannel(flag, ColorAdjustType.Default));
@@ -1106,9 +1106,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearOutputChannel_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelC);
             imageAttr.ClearOutputChannel();
@@ -1123,9 +1123,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearOutputChannel_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelC, type);
             imageAttr.ClearOutputChannel(type);
@@ -1139,7 +1139,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearOutputChannel_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannel());
@@ -1150,7 +1150,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearOutputChannel_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannel(type));
         }
@@ -1159,9 +1159,9 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannelColorProfile_Name_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelC);
             imageAttr.SetOutputChannelColorProfile(Helpers.GetTestColorProfilePath("RSWOP.icm"));
@@ -1174,7 +1174,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannelColorProfile_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () =>
@@ -1186,7 +1186,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannelColorProfile_Null_ThrowsArgumentNullException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<ArgumentNullException>(() => imageAttr.SetOutputChannelColorProfile(null));
             Assert.Throws<ArgumentNullException>(() => imageAttr.SetOutputChannelColorProfile(null, ColorAdjustType.Default));
@@ -1196,7 +1196,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannelColorProfile_InvalidPath_ThrowsArgumentException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<ArgumentException>(() => imageAttr.SetOutputChannelColorProfile(string.Empty));
             Assert.Throws<ArgumentException>(() => imageAttr.SetOutputChannelColorProfile(string.Empty, ColorAdjustType.Default));
@@ -1206,7 +1206,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannelColorProfile_InvalidPath_ThrowsOutOfMemoryException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<OutOfMemoryException>(() => imageAttr.SetOutputChannelColorProfile("invalidPath"));
             Assert.Throws<OutOfMemoryException>(() => imageAttr.SetOutputChannelColorProfile("invalidPath", ColorAdjustType.Default));
@@ -1217,7 +1217,7 @@ public class ImageAttributesTests
     public void SetOutputChannelColorProfile_InvalidPath_ThrowsPathTooLongException()
     {
         string fileNameTooLong = new('a', short.MaxValue);
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<PathTooLongException>(() => imageAttr.SetOutputChannelColorProfile(fileNameTooLong));
             Assert.Throws<PathTooLongException>(() => imageAttr.SetOutputChannelColorProfile(fileNameTooLong, ColorAdjustType.Default));
@@ -1228,7 +1228,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetOutputChannelColorProfile_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetOutputChannelColorProfile("path", type));
         }
@@ -1237,9 +1237,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearOutputChannelColorProfile_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelC);
             imageAttr.SetOutputChannelColorProfile(Helpers.GetTestColorProfilePath("RSWOP.icm"));
@@ -1255,9 +1255,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearOutputChannelColorProfile_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetOutputChannel(ColorChannelFlag.ColorChannelC, type);
             imageAttr.SetOutputChannelColorProfile(Helpers.GetTestColorProfilePath("RSWOP.icm"), type);
@@ -1272,7 +1272,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearOutputChannelColorProfile_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannelColorProfile());
@@ -1283,7 +1283,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearOutputChannelColorProfile_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannelColorProfile(type));
         }
@@ -1292,9 +1292,9 @@ public class ImageAttributesTests
     [Fact]
     public void SetRemapTable_Map_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetRemapTable(_yellowToRedColorMap);
             bitmap.SetPixel(0, 0, _yellowToRedColorMap[0].OldColor);
@@ -1307,9 +1307,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_TestData))]
     public void SetRemapTable_MapType_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetRemapTable(_yellowToRedColorMap, type);
             bitmap.SetPixel(0, 0, _yellowToRedColorMap[0].OldColor);
@@ -1322,9 +1322,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustTypeI_TestData))]
     public void SetRemapTable_MapTypeI_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetRemapTable(_yellowToRedColorMap, type);
             bitmap.SetPixel(0, 0, _yellowToRedColorMap[0].OldColor);
@@ -1336,7 +1336,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetRemapTable_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetRemapTable(_yellowToRedColorMap));
@@ -1347,7 +1347,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetRemapTable_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetRemapTable(_yellowToRedColorMap, type));
         }
@@ -1356,7 +1356,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetRemapTable_NullMap_ThrowsNullReferenceException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<NullReferenceException>(() => imageAttr.SetRemapTable(null, ColorAdjustType.Default));
         }
@@ -1365,7 +1365,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetRemapTable_NullMapMeber_ThrowsNullReferenceException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<NullReferenceException>(() => imageAttr.SetRemapTable(new ColorMap[1] { null }, ColorAdjustType.Default));
         }
@@ -1374,7 +1374,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetRemapTable_EmptyMap_ThrowsArgumentException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetRemapTable(new ColorMap[0], ColorAdjustType.Default));
         }
@@ -1383,9 +1383,9 @@ public class ImageAttributesTests
     [Fact]
     public void ClearRemapTable_Success()
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetRemapTable(_yellowToRedColorMap);
             imageAttr.ClearRemapTable();
@@ -1399,9 +1399,9 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_AllTypesAllowed_TestData))]
     public void ClearRemapTable_Type_Success(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         using (var graphics = Graphics.FromImage(bitmap))
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             imageAttr.SetRemapTable(_yellowToRedColorMap, type);
             imageAttr.ClearRemapTable(type);
@@ -1414,7 +1414,7 @@ public class ImageAttributesTests
     [Fact]
     public void ClearRemapTable_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearRemapTable());
@@ -1425,7 +1425,7 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void ClearRemapTable_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearRemapTable(type));
         }
@@ -1434,7 +1434,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetWrapMode_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetWrapMode(WrapMode.Clamp));
@@ -1445,10 +1445,10 @@ public class ImageAttributesTests
     [Fact]
     public void GetAdjustedPalette_Disposed_ThrowsArgumentException()
     {
-        var imageAttr = new ImageAttributes();
+        ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.GetAdjustedPalette(bitmap.Palette, ColorAdjustType.Default));
         }
@@ -1457,7 +1457,7 @@ public class ImageAttributesTests
     [Fact]
     public void GetAdjustedPalette_NullPallete_ThrowsNullReferenceException()
     {
-        using (var imageAttr = new ImageAttributes())
+        using (ImageAttributes imageAttr = new())
         {
             Assert.Throws<NullReferenceException>(() => imageAttr.GetAdjustedPalette(null, ColorAdjustType.Default));
         }
@@ -1467,8 +1467,8 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void GetAdjustedPalette_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
-        using (var imageAttr = new ImageAttributes())
+        using (Bitmap bitmap = new(_rectangle.Width, _rectangle.Height))
+        using (ImageAttributes imageAttr = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.GetAdjustedPalette(bitmap.Palette, type));
         }

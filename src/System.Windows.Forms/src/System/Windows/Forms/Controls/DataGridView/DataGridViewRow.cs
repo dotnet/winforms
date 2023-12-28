@@ -1434,7 +1434,7 @@ public partial class DataGridViewRow : DataGridViewBand
         DataGridView dataGridView = DataGridView;
         Rectangle updatedClipBounds = clipBounds;
         DataGridViewRow sharedRow = dataGridView.Rows.SharedRow(rowIndex);
-        DataGridViewCellStyle inheritedRowStyle = new DataGridViewCellStyle();
+        DataGridViewCellStyle inheritedRowStyle = new();
         BuildInheritedRowStyle(rowIndex, inheritedRowStyle);
         DataGridViewRowPrePaintEventArgs dgvrprepe = dataGridView.RowPrePaintEventArgs;
         dgvrprepe.SetProperties(graphics,
@@ -1519,7 +1519,7 @@ public partial class DataGridViewRow : DataGridViewBand
         bool isFirstDisplayedColumn = true;
         DataGridViewElementStates cellState = DataGridViewElementStates.None;
         DataGridViewCell cell;
-        DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
+        DataGridViewCellStyle inheritedCellStyle = new();
         DataGridViewColumn? dataGridViewColumnNext = null;
         DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
 
@@ -1719,7 +1719,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
             if (clipBounds.IntersectsWith(cellBounds))
             {
-                DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
+                DataGridViewCellStyle inheritedCellStyle = new();
                 DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
                 BuildInheritedRowHeaderCellStyle(inheritedCellStyle);
                 dgvabsEffective = AdjustRowHeaderBorderStyle(dataGridView.AdvancedRowHeadersBorderStyle,

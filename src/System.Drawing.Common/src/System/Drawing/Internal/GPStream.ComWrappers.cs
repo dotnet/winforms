@@ -17,7 +17,7 @@ internal sealed partial class GPStream : Ole32.IStream
         }
 
         // The cloned object should have the same current "position"
-        var clone = new GPStream(_dataStream)
+        GPStream clone = new(_dataStream)
         {
             _virtualPosition = _virtualPosition
         };

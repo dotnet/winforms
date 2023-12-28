@@ -92,7 +92,7 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
     public void Add(int integer)
     {
-        DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
+        DataGridViewIntLinkedListElement newHead = new(integer);
         if (_headElement is not null)
         {
             newHead.Next = _headElement;

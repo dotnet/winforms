@@ -11,7 +11,7 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
     [WinFormsFact]
     public void DataGridViewEditingPanelAccessibleObject_FirstAndLastChildren_AreNull()
     {
-        using DataGridView dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
 
@@ -27,7 +27,7 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
     [WinFormsFact]
     public void DataGridViewEditingPanelAccessibleObject_EditedState_FirstAndLastChildren_AreNotNull()
     {
-        using DataGridView dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
         dataGridView.CurrentCell = cell;
@@ -45,7 +45,7 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
     [WinFormsFact]
     public void DataGridViewEditingPanelAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using DataGridView dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         Panel editingPanel = dataGridView.EditingPanel;
         // AccessibleRole is not set = Default
 
@@ -61,7 +61,7 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void DataGridViewEditingPanelAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using DataGridView dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         Panel editingPanel = dataGridView.EditingPanel;
         // AccessibleRole is not set = Default
 
@@ -95,7 +95,7 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
     [MemberData(nameof(DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using DataGridView dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         Panel editingPanel = dataGridView.EditingPanel;
         editingPanel.AccessibleRole = role;
 

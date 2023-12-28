@@ -224,13 +224,13 @@ public sealed class PrintDialog : CommonDialog
         // Because of the packing any field after nCopies can't be accessed equivalently on both 32 and 64 bit.
         // This isn't pretty, but it avoids a lot of duplication.
 
-        PRINTDLGW_32 dialogSettings32 = new PRINTDLGW_32()
+        PRINTDLGW_32 dialogSettings32 = new()
         {
             lStructSize = (uint)sizeof(PRINTDLGW_32),
             lpfnPrintHook = HookProcFunctionPointer
         };
 
-        PRINTDLGW_64 dialogSettings64 = new PRINTDLGW_64()
+        PRINTDLGW_64 dialogSettings64 = new()
         {
             lStructSize = (uint)sizeof(PRINTDLGW_64),
             lpfnPrintHook = HookProcFunctionPointer

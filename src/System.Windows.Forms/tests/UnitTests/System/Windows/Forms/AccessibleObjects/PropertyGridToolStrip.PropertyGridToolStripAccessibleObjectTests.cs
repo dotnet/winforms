@@ -10,8 +10,8 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
     [WinFormsFact]
     public void PropertyGridToolStripAccessibleObject_Ctor_Default()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridToolStrip propertyGridToolStrip = new(propertyGrid);
         PropertyGridToolStrip.PropertyGridToolStripAccessibleObject accessibleObject =
             new PropertyGridToolStrip.PropertyGridToolStripAccessibleObject(propertyGridToolStrip, propertyGrid);
 
@@ -23,8 +23,8 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
     [WinFormsFact]
     public void PropertyGridToolStripAccessibleObject_ControlType_IsToolBar_IfAccessibleRoleIsDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridToolStrip propertyGridToolStrip = new(propertyGrid);
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -37,8 +37,8 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
     [WinFormsFact]
     public void PropertyGridToolStripAccessibleObject_Role_IsToolBar_ByDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridToolStrip propertyGridToolStrip = new(propertyGrid);
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = propertyGridToolStrip.AccessibilityObject.Role;

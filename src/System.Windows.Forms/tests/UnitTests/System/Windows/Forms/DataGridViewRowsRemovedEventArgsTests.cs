@@ -11,7 +11,7 @@ public class DataGridViewRowsRemovedEventArgsTests
     [InlineData(1, 2)]
     public void Ctor_Int_Int(int rowIndex, int rowCount)
     {
-        var e = new DataGridViewRowsRemovedEventArgs(rowIndex, rowCount);
+        DataGridViewRowsRemovedEventArgs e = new(rowIndex, rowCount);
         Assert.Equal(rowIndex, e.RowIndex);
         Assert.Equal(rowCount, e.RowCount);
     }

@@ -206,9 +206,9 @@ public partial class WinformsControlsTest
     {
         var mainObject = new Mocks.MainObject();
         mainObject.Text = "Test text";
-        Form form = new Form();
-        TextBox textBox = new TextBox();
-        Binding binding = new Binding("Text", mainObject, "Text");
+        Form form = new();
+        TextBox textBox = new();
+        Binding binding = new("Text", mainObject, "Text");
         textBox.DataBindings.Add(binding);
         textBox.Parent = form;
         form.Show();

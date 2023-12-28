@@ -247,7 +247,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
             if (cs is not null)
             {
-                ComponentEventHandler ce = new ComponentEventHandler(OnComponentAddedRemoved);
+                ComponentEventHandler ce = new(OnComponentAddedRemoved);
                 cs.ComponentAdded += ce;
                 cs.ComponentRemoved += ce;
                 cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
@@ -273,7 +273,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
             if (cs is not null)
             {
-                ComponentEventHandler ce = new ComponentEventHandler(OnComponentAddedRemoved);
+                ComponentEventHandler ce = new(OnComponentAddedRemoved);
                 cs.ComponentAdded -= ce;
                 cs.ComponentRemoved -= ce;
                 cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);

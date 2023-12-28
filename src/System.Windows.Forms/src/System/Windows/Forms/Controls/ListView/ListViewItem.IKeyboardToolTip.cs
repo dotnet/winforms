@@ -21,7 +21,7 @@ public partial class ListViewItem : IKeyboardToolTip
 
     IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
     {
-        List<Rectangle> neighboringRectangles = new List<Rectangle>();
+        List<Rectangle> neighboringRectangles = new();
         if (_listView is null)
         {
             return neighboringRectangles;
@@ -94,7 +94,7 @@ public partial class ListViewItem : IKeyboardToolTip
 
         Rectangle itemBounds = _listView.GetItemRect(index, ItemBoundsPortion.Label);
         Rectangle listviewBounds = _listView.AccessibilityObject.Bounds;
-        Point point = new Point(listviewBounds.X + itemBounds.X, listviewBounds.Y + itemBounds.Y);
+        Point point = new(listviewBounds.X + itemBounds.X, listviewBounds.Y + itemBounds.Y);
 
         switch (_listView.View)
         {

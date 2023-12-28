@@ -21,7 +21,7 @@ internal partial class CollectionEditors : Form
     {
         InitializeComponent();
 
-        var imageList = new ImageList();
+        ImageList imageList = new();
         imageList.Images.Add("SmallA", Image.FromFile("Images\\SmallA.bmp"));
         imageList.Images.Add(Image.FromFile("Images\\SmallABlue.bmp"));
         imageList.Images.Add("LargeA", Image.FromFile("Images\\LargeA.bmp"));

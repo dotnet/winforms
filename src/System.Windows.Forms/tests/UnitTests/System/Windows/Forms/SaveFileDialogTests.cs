@@ -8,7 +8,7 @@ public class SaveFileDialogTests
     [WinFormsFact]
     public void SaveFileDialog_Ctor_Default()
     {
-        using var dialog = new SaveFileDialog();
+        using SaveFileDialog dialog = new();
         Assert.True(dialog.CheckWriteAccess);
         Assert.False(dialog.CreatePrompt);
         Assert.True(dialog.ExpandedMode);
@@ -19,7 +19,7 @@ public class SaveFileDialogTests
     [BoolData]
     public void SaveFileDialog_CheckWriteAccess_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SaveFileDialog
+        using SaveFileDialog dialog = new()
         {
             CheckWriteAccess = value
         };
@@ -38,7 +38,7 @@ public class SaveFileDialogTests
     [BoolData]
     public void SaveFileDialog_CreatePrompt_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SaveFileDialog
+        using SaveFileDialog dialog = new()
         {
             CreatePrompt = value
         };
@@ -57,7 +57,7 @@ public class SaveFileDialogTests
     [BoolData]
     public void SaveFileDialog_ExpandedMode_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SaveFileDialog
+        using SaveFileDialog dialog = new()
         {
             ExpandedMode = value
         };
@@ -76,7 +76,7 @@ public class SaveFileDialogTests
     [BoolData]
     public void SaveFileDialog_OverwritePrompt_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SaveFileDialog
+        using SaveFileDialog dialog = new()
         {
             OverwritePrompt = value
         };
@@ -94,7 +94,7 @@ public class SaveFileDialogTests
     [WinFormsFact]
     public void SaveFileDialog_Reset_Invoke_Success()
     {
-        using var dialog = new SaveFileDialog
+        using SaveFileDialog dialog = new()
         {
             CheckWriteAccess = false,
             CreatePrompt = true,

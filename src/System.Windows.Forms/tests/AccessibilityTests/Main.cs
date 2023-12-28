@@ -14,55 +14,55 @@ public partial class Main : Form
 
     private void Button1_Click(object sender, EventArgs e)
     {
-        CommonControl1 commonControl1 = new CommonControl1();
+        CommonControl1 commonControl1 = new();
         commonControl1.Show();
     }
 
     private void Button2_Click(object sender, EventArgs e)
     {
-        CommonControl2 commonControl2 = new CommonControl2();
+        CommonControl2 commonControl2 = new();
         commonControl2.Show();
     }
 
     private void Button3_Click(object sender, EventArgs e)
     {
-        DataControls dataControls = new DataControls();
+        DataControls dataControls = new();
         dataControls.Show();
     }
 
     private void Button4_Click(object sender, EventArgs e)
     {
-        DialogControls dialogsTesting = new DialogControls();
+        DialogControls dialogsTesting = new();
         dialogsTesting.Show();
     }
 
     private void Button5_Click(object sender, EventArgs e)
     {
-        MenuForm menuForm = new MenuForm();
+        MenuForm menuForm = new();
         menuForm.Show();
     }
 
     private void Button6_Click(object sender, EventArgs e)
     {
-        PrintingControls printingTesting = new PrintingControls();
+        PrintingControls printingTesting = new();
         printingTesting.Show();
     }
 
     private void Button7_Click(object sender, EventArgs e)
     {
-        RemainingControls remainingControls = new RemainingControls();
+        RemainingControls remainingControls = new();
         remainingControls.Show();
     }
 
     private void Button8_Click(object sender, EventArgs e)
     {
-        ContainerControls containerControl = new ContainerControls();
+        ContainerControls containerControl = new();
         containerControl.Show();
     }
 
     private void button9_Click(object sender, EventArgs e)
     {
-        ContainerControls2 containerControl2 = new ContainerControls2();
+        ContainerControls2 containerControl2 = new();
         containerControl2.Show();
     }
 

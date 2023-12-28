@@ -3535,7 +3535,7 @@ public partial class ComboBox : ListControl
             for (int i = 0; i < Items.Count; i++)
             {
                 int original = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
-                MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
+                MeasureItemEventArgs mievent = new(graphics, i, original);
                 OnMeasureItem(mievent);
                 if (mievent.ItemHeight != original)
                 {

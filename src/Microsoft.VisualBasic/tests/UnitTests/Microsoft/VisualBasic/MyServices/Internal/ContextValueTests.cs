@@ -15,9 +15,9 @@ public class ContextValueTests
     [Fact]
     public void MultipleInstances()
     {
-        var context1 = new ContextValue<int>();
+        ContextValue<int> context1 = new();
         context1.Value = 1;
-        var context2 = new ContextValue<int>();
+        ContextValue<int> context2 = new();
         context2.Value = 2;
         Assert.Equal(1, context1.Value);
         Assert.Equal(2, context2.Value);
@@ -26,9 +26,9 @@ public class ContextValueTests
     [Fact]
     public void MultipleThreads()
     {
-        var context = new ContextValue<string>();
+        ContextValue<string> context = new();
         context.Value = "Hello";
-        var thread = new Thread(() =>
+        Thread thread = new(() =>
         {
             Assert.Null(context.Value);
             context.Value = "World";

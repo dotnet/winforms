@@ -13,10 +13,10 @@ partial class DataGridViewTests
     [WinFormsFact]
     public void DataGridView_GridColor_Rendering()
     {
-        using Form form = new Form();
+        using Form form = new();
 
         // Only want to render one cell to validate
-        using var dataGrid = new DataGridView
+        using DataGridView dataGrid = new()
         {
             GridColor = Color.Blue,
             ColumnCount = 1,
@@ -27,8 +27,8 @@ partial class DataGridViewTests
 
         form.Controls.Add(dataGrid);
 
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
 
         dataGrid.PrintToMetafile(emf);
 
@@ -101,18 +101,18 @@ partial class DataGridViewTests
     {
         #region DataGridView setup
 
-        using Font formFont1 = new Font("Times New Roman", 12F, FontStyle.Regular);
+        using Font formFont1 = new("Times New Roman", 12F, FontStyle.Regular);
         using Form form = new Form
         {
             Font = formFont1,
             Size = new Size(700, 200)
         };
 
-        using Font customCellStyleFont = new Font("Tahoma", 8.25F, FontStyle.Regular);
-        using Font customColumnHeaderFont = new Font("Consolas", 14F, FontStyle.Italic);
-        using Font customRowHeaderFont = new Font("Arial", 9F, FontStyle.Bold);
+        using Font customCellStyleFont = new("Tahoma", 8.25F, FontStyle.Regular);
+        using Font customColumnHeaderFont = new("Consolas", 14F, FontStyle.Italic);
+        using Font customRowHeaderFont = new("Arial", 9F, FontStyle.Bold);
 
-        var defaultCellStyle = new DataGridViewCellStyle
+        DataGridViewCellStyle defaultCellStyle = new()
         {
             Font = customCellStyleFont,
 
@@ -137,8 +137,8 @@ partial class DataGridViewTests
             ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
         };
 
-        var column1 = new DataGridViewTextBoxColumn { HeaderText = "Style" };
-        var column2 = new DataGridViewTextBoxColumn { HeaderText = "Font" };
+        DataGridViewTextBoxColumn column1 = new() { HeaderText = "Style" };
+        DataGridViewTextBoxColumn column2 = new() { HeaderText = "Font" };
         dataGridView.Columns.AddRange(new[] { column1, column2, });
         dataGridView.Rows.Add(nameof(DataGridView.DefaultCellStyle), customCellStyleFont.ToString());
         dataGridView.Rows.Add(nameof(DataGridView.ColumnHeadersDefaultCellStyle), customColumnHeaderFont.ToString());
@@ -159,8 +159,8 @@ partial class DataGridViewTests
 
         #endregion
 
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
 
         Assert.NotEqual(IntPtr.Zero, dataGridView.Handle);
         dataGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);

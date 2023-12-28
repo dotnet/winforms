@@ -17,7 +17,7 @@ public class AssemblyInfoTests
     [MemberData(nameof(AssemblyProperties_TestData))]
     public void AssemblyProperties(System.Reflection.Assembly assembly)
     {
-        var assemblyInfo = new AssemblyInfo(assembly);
+        AssemblyInfo assemblyInfo = new(assembly);
         var assemblyName = assembly.GetName();
         Assert.Equal(assemblyName.Name, assemblyInfo.AssemblyName);
         Assert.Equal(System.IO.Path.GetDirectoryName(assembly.Location), assemblyInfo.DirectoryPath);
@@ -40,7 +40,7 @@ public class AssemblyInfoTests
     public void LoadedAssemblies()
     {
         var executingAssembly = Assembly.GetExecutingAssembly();
-        var assemblyInfo = new AssemblyInfo(executingAssembly);
+        AssemblyInfo assemblyInfo = new(executingAssembly);
         var loadedAssemblies = assemblyInfo.LoadedAssemblies;
         Assert.Contains(executingAssembly, loadedAssemblies);
     }
@@ -49,7 +49,7 @@ public class AssemblyInfoTests
     public void StackTrace()
     {
         // Property is independent of the actual assembly.
-        var assemblyInfo = new AssemblyInfo(Assembly.GetExecutingAssembly());
+        AssemblyInfo assemblyInfo = new(Assembly.GetExecutingAssembly());
         string stackTrace = assemblyInfo.StackTrace;
         Assert.Contains(nameof(AssemblyInfoTests), stackTrace);
     }
@@ -58,7 +58,7 @@ public class AssemblyInfoTests
     public void WorkingSet()
     {
         // Property is independent of the actual assembly.
-        var assemblyInfo = new AssemblyInfo(Assembly.GetExecutingAssembly());
+        AssemblyInfo assemblyInfo = new(Assembly.GetExecutingAssembly());
         long workingSet = assemblyInfo.WorkingSet;
         Assert.True(workingSet > 0);
     }

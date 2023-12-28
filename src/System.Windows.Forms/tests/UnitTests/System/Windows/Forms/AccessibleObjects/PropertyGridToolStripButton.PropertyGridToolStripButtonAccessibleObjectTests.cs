@@ -10,7 +10,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_IsItemSelected_ReturnsExpected()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
@@ -28,7 +28,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_Role_IsRadiButton()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         AccessibleObject accessibleObject = toolStripButtons[0].AccessibilityObject;
 
@@ -38,7 +38,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_SelectionItemPatternSupported_ReturnsExpected()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._viewPropertyPagesButton;
         AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
@@ -56,7 +56,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsRadioButton()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         AccessibleObject accessibleObject = toolStripButtons[0].AccessibilityObject;
 
@@ -68,7 +68,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_AddToSelection_UpdatesCheckedStateAndPropertySort()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
@@ -96,7 +96,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_Invoke_UpdatesCheckedStateAndPropertySort()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
@@ -124,7 +124,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_RemoveFromSelection_DoesNotUpdateCheckedStateAndPropertySort()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
@@ -146,7 +146,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_SelectItem_UpdatesCheckedStateAndPropertySort()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
@@ -174,7 +174,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     [WinFormsFact]
     public void PropertyGridToolStripButtonAccessibleObject_IsTogglePatternSupported_ReturnsExpected()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._viewPropertyPagesButton;
         AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;

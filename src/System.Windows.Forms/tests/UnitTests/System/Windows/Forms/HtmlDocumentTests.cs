@@ -15,8 +15,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveLinkColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -47,8 +47,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ActiveLinkColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_ActiveLinkColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -79,8 +79,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ActiveLinkColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_ActiveLinkColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -103,8 +103,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_ActiveLinkColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -133,8 +133,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_All_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -153,8 +153,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_All_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -173,8 +173,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveElement_GetNotActiveWithBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -190,8 +190,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveElement_GetNotActiveWithoutBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -207,8 +207,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ActiveElement_GetNoActiveElement_ReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -232,8 +232,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_BackColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -264,8 +264,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(BackColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_BackColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -296,8 +296,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(BackColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_BackColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -326,8 +326,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_BackColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -356,8 +356,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Body_GetWithBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -373,8 +373,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Body_GetWithoutBody_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -390,8 +390,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Body_GetNoBody_ReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -415,8 +415,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Cookie_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -432,8 +432,8 @@ public class HtmlDocumentTests
     [InlineData("cookie", "cookie")]
     public async Task HtmlDocument_Cookie_Set_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -467,8 +467,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DefaultEncoding_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -482,8 +482,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DefaultEncoding_GetWithCustomValueOnMeta_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -497,8 +497,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DefaultEncoding_GetCustomValueSet_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -519,8 +519,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Domain_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -534,8 +534,8 @@ public class HtmlDocumentTests
     [StringWithNullData]
     public async Task HtmlDocument_Domain_Set_ThrowsCOMException(string value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -550,8 +550,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DomDocument_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -572,8 +572,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Encoding_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -587,8 +587,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Encoding_GetWithCustomValueOnMeta_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -601,8 +601,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Encoding_GetCustomValueSet_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -625,8 +625,8 @@ public class HtmlDocumentTests
     [InlineData("UTF-8", "utf-8")]
     public async Task HtmlDocument_Encoding_Set_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -659,8 +659,8 @@ public class HtmlDocumentTests
     [InlineData("reasonable")]
     public async Task HtmlDocument_Charset_SetInvalid_ThrowsArgumentException(string value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -673,8 +673,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Focused_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -688,8 +688,8 @@ public class HtmlDocumentTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
     public async Task HtmlDocument_Focused_GetFocused_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -712,8 +712,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ForeColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -744,8 +744,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ForeColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_ForeColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -776,8 +776,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(ForeColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_ForeColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -798,8 +798,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_ForeColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -829,8 +829,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Forms_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -849,8 +849,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Forms_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -865,8 +865,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Images_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -885,8 +885,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Images_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -901,8 +901,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_LinkColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -933,8 +933,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(LinkColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_LinkColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -965,8 +965,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(LinkColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_LinkColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -987,8 +987,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_LinkColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1017,8 +1017,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Links_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1037,8 +1037,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Links_GetEmpty_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1053,8 +1053,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_RightToLeft_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1078,8 +1078,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(RightToLeft_CustomValueOnHtml_TestData))]
     public async Task HtmlDocument_RightToLeft_GetCustomValueOnHtml_ReturnsExpected(string rtl, bool expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1101,8 +1101,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(RightToLeft_CustomValueSet_TestData))]
     public async Task HtmlDocument_RightToLeft_GetCustomValueSet_ReturnsExpected(string rtl, bool expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1125,8 +1125,8 @@ public class HtmlDocumentTests
     [InlineData(false, "ltr", "rtl")]
     public async Task HtmlDocument_RightToLeft_Set_GetReturnsExpected(bool value, string expectedNative1, string expectedNative2)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1162,8 +1162,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Title_GetWithTitle_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1176,8 +1176,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Title_GetNoTitle_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1191,8 +1191,8 @@ public class HtmlDocumentTests
     [NormalizedStringData]
     public async Task HtmlDocument_Title_GetCustomValueSet_ReturnsExpected(string title, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1213,8 +1213,8 @@ public class HtmlDocumentTests
     [NormalizedStringData]
     public async Task HtmlDocument_Title_Set_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1243,14 +1243,14 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Url_GetDocument_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
 
         const string Html = "<html></html>";
-        var source = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(Html);
@@ -1264,8 +1264,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_VisitedLinkColor_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1296,8 +1296,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(VisitedLinkColor_GetCustomValueOnBody_TestData))]
     public async Task HtmlDocument_VisitedLinkColor_GetCustomValueOnBody_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1328,8 +1328,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(VisitedLinkColor_GetCustomValueSet_TestData))]
     public async Task HtmlDocument_VisitedLinkColor_GetCustomValueSet_ReturnsExpected(object value, Color expected)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1350,8 +1350,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Color_Set_TestData))]
     public async Task HtmlDocument_VisitedLinkColor_Set_GetReturnsExpected(Color value, Color expected, string expectedNative)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1380,8 +1380,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Window_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1399,8 +1399,8 @@ public class HtmlDocumentTests
     [InlineData("onclick")]
     public async Task HtmlDocument_AttachEventHandler_AttachDetach_Success(string eventName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1461,8 +1461,8 @@ public class HtmlDocumentTests
     [InlineData("onbeforedeactivate")]
     public async Task HtmlDocument_AttachEventHandler_InvokeClick_Success(string eventName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1499,8 +1499,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_AttachEventHandler_EmptyEventName_ThrowsCOMException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1517,8 +1517,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_AttachEventHandler_NullEventName_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1537,8 +1537,8 @@ public class HtmlDocumentTests
     [InlineData("h1", "H1")]
     public async Task HtmlDocument_CreateElement_Invoke_ReturnsExpected(string tagName, string expectedTagName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1554,8 +1554,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_CreateElement_NullElementTag_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1570,8 +1570,8 @@ public class HtmlDocumentTests
     [InlineData("onclick")]
     public async Task HtmlDocument_DetachEventHandler_AttachDetach_Success(string eventName)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1598,8 +1598,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DetachEventHandler_EmptyEventName_ThrowsCOMException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1615,8 +1615,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_DetachEventHandler_NullEventName_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1632,8 +1632,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Equals_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1655,8 +1655,8 @@ public class HtmlDocumentTests
     [InlineData("copy", false, "def")]
     public async Task HtmlDocument_ExecCommand_Invoke_Success(string command, bool showUI, object value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1673,8 +1673,8 @@ public class HtmlDocumentTests
     [InlineData("NoSuchCommand", false, null)]
     public async Task HtmlDocument_ExecCommand_InvalidCommand_ThrowsCOMException(string command, bool showUI, object value)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1688,8 +1688,8 @@ public class HtmlDocumentTests
     [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
     public async Task HtmlDocument_Focus_Invoke_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1707,8 +1707,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementById_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1725,8 +1725,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementById_NullId_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1739,8 +1739,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementFromPoint_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1756,8 +1756,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementsByTagName_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1781,8 +1781,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementsByTagName_IndexIntoByString_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1801,8 +1801,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetElementsByTagName_NullTagName_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1815,8 +1815,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_GetHashCode_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1833,8 +1833,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_InvokeScript_ScriptExists_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1872,8 +1872,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_InvokeScript_NoSuchScript_ReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1899,8 +1899,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Write_TestData))]
     public async Task HtmlDocument_Write_InvokeEmpty_Success(string text, string expectedInnerHtml)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1916,8 +1916,8 @@ public class HtmlDocumentTests
     [MemberData(nameof(Write_TestData))]
     public async Task HtmlDocument_Write_InvokeNotEmpty_Success(string text, string expectedInnerHtml)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1933,8 +1933,8 @@ public class HtmlDocumentTests
     [BoolData]
     public async Task HtmlDocument_OpenNew_Invoke_Success(bool replaceInHistory)
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1951,8 +1951,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_OperatorEquals_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1971,8 +1971,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_OperatorNotEquals_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -1992,8 +1992,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Click_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2030,8 +2030,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_ContextMenuShowing_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2068,8 +2068,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Focusing_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2106,8 +2106,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_LosingFocus_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2144,8 +2144,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_MouseDown_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2182,8 +2182,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_MouseLeave_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2220,8 +2220,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_MouseMove_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2258,8 +2258,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_MouseOver_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2296,8 +2296,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_MouseUp_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2334,8 +2334,8 @@ public class HtmlDocumentTests
     [WinFormsFact]
     public async Task HtmlDocument_Stop_InvokeEvent_Success()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -2371,7 +2371,7 @@ public class HtmlDocumentTests
 
     private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
     {
-        var source = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(html);

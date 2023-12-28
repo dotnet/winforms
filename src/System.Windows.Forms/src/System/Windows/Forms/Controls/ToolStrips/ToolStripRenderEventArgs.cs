@@ -106,7 +106,7 @@ public class ToolStripRenderEventArgs : EventArgs
                 if (ownerItem is not null && ownerItem.ParentInternal is not null && !ownerItem.IsOnDropDown)
                 {
                     // translate the item into our coordinate system.
-                    Rectangle itemBounds = new Rectangle(ToolStrip.PointToClient(ownerItem.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords)), ownerItem.Size);
+                    Rectangle itemBounds = new(ToolStrip.PointToClient(ownerItem.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords)), ownerItem.Size);
 
                     Rectangle overlap = ToolStrip.ClientRectangle;
                     overlap.Inflate(1, 1);

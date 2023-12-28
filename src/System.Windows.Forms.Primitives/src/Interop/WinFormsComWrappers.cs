@@ -12,7 +12,7 @@ internal partial class Interop
     /// </summary>
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
-        internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
+        internal static WinFormsComWrappers Instance { get; } = new();
 
         private WinFormsComWrappers() { }
 

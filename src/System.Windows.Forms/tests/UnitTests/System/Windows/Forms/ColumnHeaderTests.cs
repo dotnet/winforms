@@ -12,7 +12,7 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Ctor_Default()
     {
-        using var header = new SubColumnHeader();
+        using SubColumnHeader header = new();
         Assert.True(header.CanRaiseEvents);
         Assert.Null(header.Container);
         Assert.False(header.DesignMode);
@@ -38,7 +38,7 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_Ctor_Int(int imageIndex)
     {
-        using var header = new SubColumnHeader(imageIndex);
+        using SubColumnHeader header = new(imageIndex);
         Assert.True(header.CanRaiseEvents);
         Assert.Null(header.Container);
         Assert.False(header.DesignMode);
@@ -62,7 +62,7 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Ctor_String(string imageKey, string expectedImageKey)
     {
-        using var header = new SubColumnHeader(imageKey);
+        using SubColumnHeader header = new(imageKey);
         Assert.True(header.CanRaiseEvents);
         Assert.Null(header.Container);
         Assert.False(header.DesignMode);
@@ -85,8 +85,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_DisplayIndex_GetWithListView_ReturnsExpected()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.Equal(0, header.DisplayIndex);
     }
@@ -97,7 +97,7 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_DisplayIndex_SetWithoutListView_GetReturnsExpected(int value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             DisplayIndex = value
         };
@@ -127,10 +127,10 @@ public class ColumnHeaderTests
     [MemberData(nameof(DisplayIndex_Set_TestData))]
     public void ColumnHeader_DisplayIndex_SetWithListView_GetReturnsExpected(int columnIndex, int value, int[] expectedDisplayIndices)
     {
-        using var listView = new ListView();
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
-        using var header3 = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
+        using ColumnHeader header3 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
         listView.Columns.Add(header3);
@@ -153,10 +153,10 @@ public class ColumnHeaderTests
     [MemberData(nameof(DisplayIndex_Set_TestData))]
     public void ColumnHeader_DisplayIndex_SetWithListViewWithHandle_GetReturnsExpected(int columnIndex, int value, int[] expectedDisplayIndices)
     {
-        using var listView = new ListView();
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
-        using var header3 = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
+        using ColumnHeader header3 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
         listView.Columns.Add(header3);
@@ -207,10 +207,10 @@ public class ColumnHeaderTests
     [MemberData(nameof(DisplayIndex_SetGetColOrderArray_TestData))]
     public void ColumnHeader_DisplayIndex_GetColumnOrderArray_Success(int columnIndex, int value, int[] expectedDisplayIndices)
     {
-        using var listView = new ListView();
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
-        using var header3 = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
+        using ColumnHeader header3 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
         listView.Columns.Add(header3);
@@ -227,8 +227,8 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_DisplayIndex_SetInvalidWithListView_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.Throws<ArgumentOutOfRangeException>("DisplayIndex", () => header.DisplayIndex = value);
     }
@@ -237,7 +237,7 @@ public class ColumnHeaderTests
     public void ColumnHeader_DisplayIndex_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.DisplayIndex)];
-        using var item = new ColumnHeader();
+        using ColumnHeader item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.DisplayIndex = -1;
@@ -258,7 +258,7 @@ public class ColumnHeaderTests
     public void ColumnHeader_DisplayIndex_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.DisplayIndex)];
-        using var item = new ColumnHeader();
+        using ColumnHeader item = new();
         Assert.False(property.CanResetValue(item));
 
         item.DisplayIndex = -1;
@@ -281,7 +281,7 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_ImageIndex_SetWithoutListView_GetReturnsExpected(int value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             ImageIndex = value
         };
@@ -300,7 +300,7 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_ImageIndex_SetWithImageKey_GetReturnsExpected(int value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             ImageKey = "ImageKey",
             ImageIndex = value
@@ -320,8 +320,8 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_ImageIndex_SetWithListView_GetReturnsExpected(int value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.ImageIndex = value;
@@ -342,12 +342,12 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_ImageIndex_SetWithListViewWithEmptyList_GetReturnsExpected(int value)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.ImageIndex = value;
@@ -369,16 +369,16 @@ public class ColumnHeaderTests
     [InlineData(2, 1)]
     public void ColumnHeader_ImageIndex_SetWithListViewWithNotEmptyList_GetReturnsExpected(int value, int expected)
     {
-        using var image1 = new Bitmap(10, 10);
-        using var image2 = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image1 = new(10, 10);
+        using Bitmap image2 = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image1);
         imageList.Images.Add(image2);
-        using var listView = new ListView
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.ImageIndex = value;
@@ -399,8 +399,8 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_ImageIndex_SetWithListViewWithHandle_GetReturnsExpected(int value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -434,13 +434,13 @@ public class ColumnHeaderTests
     [InlineData(1)]
     public void ColumnHeader_ImageIndex_GetColumnWithoutImageList_Success(int value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageIndex = value;
-        var column = new LVCOLUMNW
+        LVCOLUMNW column = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE
         };
@@ -455,21 +455,21 @@ public class ColumnHeaderTests
     [InlineData(2, 0)]
     public void ColumnHeader_ImageIndex_GetColumnWithImageList_Success(int value, int expected)
     {
-        using var image1 = new Bitmap(10, 10);
-        using var image2 = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image1 = new(10, 10);
+        using Bitmap image2 = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image1);
         imageList.Images.Add(image2);
-        using var listView = new ListView
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageIndex = value;
-        var column = new LVCOLUMNW
+        LVCOLUMNW column = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
             fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
@@ -482,15 +482,15 @@ public class ColumnHeaderTests
     [InlineData(-2)]
     public void ColumnHeader_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => header.ImageIndex = value);
     }
 
     [WinFormsFact]
     public void ColumnHeader_ImageIndex_SetInvalidSetColumn_ThrowsInvalidOperationException()
     {
-        using var listView = new InvalidSetColumnListView();
-        using var header = new ColumnHeader();
+        using InvalidSetColumnListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
@@ -502,7 +502,7 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_ImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             ImageKey = value
         };
@@ -521,7 +521,7 @@ public class ColumnHeaderTests
     [InlineData("ImageKey", "ImageKey")]
     public void ColumnHeader_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expectedImageKey)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             ImageIndex = 0,
             ImageKey = value
@@ -539,8 +539,8 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_ImageKey_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.ImageKey = value;
@@ -559,12 +559,12 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_ImageKey_SetWithListViewWithEmptyList_GetReturnsExpected(string value, string expected)
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.ImageKey = value;
@@ -588,16 +588,16 @@ public class ColumnHeaderTests
     [InlineData("NoSuchImage", "NoSuchImage")]
     public void ColumnHeader_ImageKey_SetWithListViewWithNotEmptyList_GetReturnsExpected(string value, string expected)
     {
-        using var image1 = new Bitmap(10, 10);
-        using var image2 = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image1 = new(10, 10);
+        using Bitmap image2 = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add("Image1", image1);
         imageList.Images.Add("Image2", image2);
-        using var listView = new ListView
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.ImageKey = value;
@@ -616,8 +616,8 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_ImageKey_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -654,13 +654,13 @@ public class ColumnHeaderTests
     [InlineData("NoSuchImage")]
     public void ColumnHeader_ImageKey_GetColumnWithoutImageList_Success(string value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageKey = value;
-        var column = new LVCOLUMNW
+        LVCOLUMNW column = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE
         };
@@ -677,21 +677,21 @@ public class ColumnHeaderTests
     [InlineData("NoSuchImage", 0)]
     public void ColumnHeader_ImageKey_GetColumnWithImageList_Success(string value, int expected)
     {
-        using var image1 = new Bitmap(10, 10);
-        using var image2 = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image1 = new(10, 10);
+        using Bitmap image2 = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add("Image1", image1);
         imageList.Images.Add("Image2", image2);
-        using var listView = new ListView
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageKey = value;
-        var column = new LVCOLUMNW
+        LVCOLUMNW column = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
             fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
@@ -703,8 +703,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_ImageKey_SetInvalidSetColumn_ThrowsInvalidOperationException()
     {
-        using var listView = new InvalidSetColumnListView();
-        using var header = new ColumnHeader();
+        using InvalidSetColumnListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
@@ -715,8 +715,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_ImageList_GetWithListViewWithoutImageList_ReturnsExpected()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.Null(header.ImageList);
     }
@@ -724,12 +724,12 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_ImageList_GetWithListViewWithImageList_ReturnsExpected()
     {
-        using var imageList = new ImageList();
-        using var listView = new ListView
+        using ImageList imageList = new();
+        using ListView listView = new()
         {
             SmallImageList = imageList
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.Same(listView.SmallImageList, header.ImageList);
     }
@@ -737,8 +737,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Index_GetWithListView_ReturnsExpected()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.Equal(0, header.Index);
     }
@@ -746,8 +746,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_ListView_GetWithListView_ReturnsExpected()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.Same(listView, header.ListView);
     }
@@ -756,14 +756,14 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Name_GetWithSite_ReturnsExpected(string name, string expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(x => x.Name)
             .Returns(name);
         mockSite
             .Setup(x => x.Container)
             .Returns((IContainer)null);
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Site = mockSite.Object
         };
@@ -774,7 +774,7 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Name_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Name = value
         };
@@ -789,8 +789,8 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Name_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.Name = value;
@@ -807,8 +807,8 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Name_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -838,7 +838,7 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Name_SetWithSite_GetReturnsExpected(string value, string expected)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Site = Mock.Of<ISite>(),
             Name = value
@@ -856,7 +856,7 @@ public class ColumnHeaderTests
     public void ColumnHeader_Name_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.Name)];
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.False(property.CanResetValue(header));
 
         // Set null.
@@ -883,7 +883,7 @@ public class ColumnHeaderTests
     public void ColumnHeader_Name_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.Name)];
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.False(property.ShouldSerializeValue(header));
 
         // Set null.
@@ -914,8 +914,8 @@ public class ColumnHeaderTests
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.Name)];
 
         // Get name from the Site
-        using ColumnHeader header = new ColumnHeader();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using ColumnHeader header = new();
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns(name);
@@ -936,7 +936,7 @@ public class ColumnHeaderTests
     [StringWithNullData]
     public void ColumnHeader_Tag_Set_GetReturnsExpected(object value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Tag = value
         };
@@ -951,7 +951,7 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Text_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Text = value
         };
@@ -966,8 +966,8 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Text_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.Text = value;
@@ -982,8 +982,8 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public void ColumnHeader_Text_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
@@ -999,14 +999,14 @@ public class ColumnHeaderTests
     [NormalizedStringData]
     public unsafe void ColumnHeader_Text_GetColumn_Success(string value, string expected)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.Text = value;
         char* buffer = stackalloc char[256];
-        var column = new LVCOLUMNW
+        LVCOLUMNW column = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_TEXT,
             pszText = buffer,
@@ -1025,13 +1025,13 @@ public class ColumnHeaderTests
     [InlineData(RightToLeft.Inherit, false, HorizontalAlignment.Left)]
     public void ColumnHeader_TextAlign_GetWithListView_ReturnsExpected(RightToLeft rightToLeft, bool rightToLeftLayout, HorizontalAlignment expected)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             RightToLeft = rightToLeft,
             RightToLeftLayout = rightToLeftLayout
         };
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
         Assert.Equal(HorizontalAlignment.Left, header1.TextAlign);
@@ -1052,7 +1052,7 @@ public class ColumnHeaderTests
     public void ColumnHeader_Text_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.Text)];
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.False(property.CanResetValue(header));
 
         // Set null.
@@ -1079,7 +1079,7 @@ public class ColumnHeaderTests
     public void ColumnHeader_Text_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.Text)];
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.False(property.ShouldSerializeValue(header));
 
         // Set null.
@@ -1106,7 +1106,7 @@ public class ColumnHeaderTests
     [EnumData<HorizontalAlignment>]
     public void ColumnHeader_TextAlign_SetWithoutListView_GetReturnsExpected(HorizontalAlignment value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             TextAlign = value
         };
@@ -1126,9 +1126,9 @@ public class ColumnHeaderTests
     [InlineData(1, HorizontalAlignment.Right, HorizontalAlignment.Right)]
     public void ColumnHeader_TextAlign_SetWithListView_GetReturnsExpected(int columnIndex, HorizontalAlignment value, HorizontalAlignment expected)
     {
-        using var listView = new ListView();
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
 
@@ -1151,9 +1151,9 @@ public class ColumnHeaderTests
     [InlineData(1, HorizontalAlignment.Right, HorizontalAlignment.Right)]
     public void ColumnHeader_TextAlign_SetWithListViewWithHandle_GetReturnsExpected(int columnIndex, HorizontalAlignment value, HorizontalAlignment expected)
     {
-        using var listView = new ListView();
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -1189,15 +1189,15 @@ public class ColumnHeaderTests
     [InlineData(1, HorizontalAlignment.Right, 0x4001)]
     public unsafe void ColumnHeader_TextAlign_GetColumn_Success(int columnIndex, HorizontalAlignment value, int expected)
     {
-        using var listView = new ListView();
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new();
         listView.Columns.Add(header1);
         listView.Columns.Add(header2);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         listView.Columns[columnIndex].TextAlign = value;
-        var column = new LVCOLUMNW
+        LVCOLUMNW column = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_FMT
         };
@@ -1209,15 +1209,15 @@ public class ColumnHeaderTests
     [InvalidEnumData<HorizontalAlignment>]
     public void ColumnHeader_TextAlign_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
     {
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => header.TextAlign = value);
     }
 
     [WinFormsFact]
     public void ColumnHeader_Width_GetWithListView_GetReturnsExpected()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.Equal(60, header.Width);
@@ -1226,8 +1226,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Width_GetWithListViewWithHandle_GetReturnsExpected()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -1247,11 +1247,11 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Width_GetWithListViewWithHandleWithDetails_GetReturnsExpected()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = View.Details
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -1283,7 +1283,7 @@ public class ColumnHeaderTests
     [MemberData(nameof(Width_Set_TestData))]
     public void ColumnHeader_Width_SetWithoutListView_GetReturnsExpected(int value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Width = value
         };
@@ -1298,8 +1298,8 @@ public class ColumnHeaderTests
     [MemberData(nameof(Width_Set_TestData))]
     public void ColumnHeader_Width_SetWithListView_GetReturnsExpected(int value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.Width = value;
@@ -1316,8 +1316,8 @@ public class ColumnHeaderTests
     [MemberData(nameof(Width_Set_TestData))]
     public void ColumnHeader_Width_SetWithListViewWithHandle_GetReturnsExpected(int value)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -1350,11 +1350,11 @@ public class ColumnHeaderTests
     [InlineData(75)]
     public void ColumnHeader_Width_GetColumnWidth_ReturnsExpected(int value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = View.Details
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -1368,11 +1368,11 @@ public class ColumnHeaderTests
     [InlineData(-1)]
     public void ColumnHeader_Width_GetColumnWidthCustom_ReturnsExpected(int value)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = View.Details
         };
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -1384,7 +1384,7 @@ public class ColumnHeaderTests
     [EnumData<ColumnHeaderAutoResizeStyle>]
     public void ColumnHeader_AutoSize_WithoutListView_Nop(ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         header.AutoResize(headerAutoResize);
         Assert.Equal(60, header.Width);
 
@@ -1397,8 +1397,8 @@ public class ColumnHeaderTests
     [EnumData<ColumnHeaderAutoResizeStyle>]
     public void ColumnHeader_AutoSize_WithListView_Success(ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
 
         header.AutoResize(headerAutoResize);
@@ -1415,8 +1415,8 @@ public class ColumnHeaderTests
     [EnumData<ColumnHeaderAutoResizeStyle>]
     public void ColumnHeader_AutoSize_WithListViewWithHandle_Success(ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -1446,18 +1446,18 @@ public class ColumnHeaderTests
     [InvalidEnumData<ColumnHeaderAutoResizeStyle>]
     public void ColumnHeader_AutoSize_InvalidHeaderAutoResize_ThrowsInvalidEnumArgumentException(ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.Throws<InvalidEnumArgumentException>("headerAutoResize", () => header.AutoResize(headerAutoResize));
     }
 
     [WinFormsFact]
     public void ColumnHeader_Clone_Invoke_ReturnsExpected()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var source = new ColumnHeader
+        using ColumnHeader source = new()
         {
             DisplayIndex = 1,
             ImageKey = "imageKey",
@@ -1489,12 +1489,12 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Clone_InvokeWithListView_ReturnsExpected()
     {
-        using var listView = new ListView();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using ListView listView = new();
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var source = new ColumnHeader
+        using ColumnHeader source = new()
         {
             DisplayIndex = 1,
             ImageKey = "imageKey",
@@ -1528,11 +1528,11 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Clone_InvokeSubClass_ReturnsExpected()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var source = new SubColumnHeader
+        using SubColumnHeader source = new()
         {
             DisplayIndex = 1,
             ImageKey = "imageKey",
@@ -1568,7 +1568,7 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Dispose_WithoutListView_Success()
     {
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         header.Dispose();
         header.Dispose();
     }
@@ -1576,8 +1576,8 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_Dispose_WithListView_Success()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         listView.Columns.Add(header);
         header.Dispose();
         Assert.Empty(listView.Columns);
@@ -1589,7 +1589,7 @@ public class ColumnHeaderTests
     [WinFormsFact]
     public void ColumnHeader_ToString_Invoke_ReturnsExpected()
     {
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         Assert.Equal($"ColumnHeader: Text: ColumnHeader", header.ToString());
     }
 
@@ -1597,7 +1597,7 @@ public class ColumnHeaderTests
     [StringWithNullData]
     public void ColumnHeader_ToString_InvokeWithText_ReturnsExpected(string value)
     {
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Text = value
         };
@@ -1626,13 +1626,13 @@ public class ColumnHeaderTests
     {
         using (new NoAssertContext())
         {
-            using var imageList = new ImageList();
-            using var imageList2 = new ImageList();
-            using var listView = new ListView
+            using ImageList imageList = new();
+            using ImageList imageList2 = new();
+            using ListView listView = new()
             {
                 SmallImageList = imageList
             };
-            using var header = new ColumnHeader();
+            using ColumnHeader header = new();
             listView.Columns.Add(header);
             var indexer = new ColumnHeader.ColumnHeaderImageListIndexer(header);
             indexer.ImageList = imageList2;

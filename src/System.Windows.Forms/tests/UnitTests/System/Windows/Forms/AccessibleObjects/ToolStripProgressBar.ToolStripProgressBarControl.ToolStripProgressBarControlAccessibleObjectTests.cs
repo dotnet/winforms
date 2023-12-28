@@ -11,8 +11,8 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
     [WinFormsFact]
     public void ToolStripProgressBarControlAccessibleObject_ctor_default()
     {
-        using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
-        ToolStripProgressBarControlAccessibleObject accessibleObject = new ToolStripProgressBarControlAccessibleObject(toolStripProgressBarControl);
+        using ToolStripProgressBarControl toolStripProgressBarControl = new();
+        ToolStripProgressBarControlAccessibleObject accessibleObject = new(toolStripProgressBarControl);
 
         Assert.Equal(toolStripProgressBarControl, accessibleObject.Owner);
         Assert.False(toolStripProgressBarControl.IsHandleCreated);
@@ -21,7 +21,7 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
     [WinFormsFact]
     public void ToolStripProgressBarControlAccessibleObject_ControlType_IsProgressBar_IfAccessibleRoleIsDefault()
     {
-        using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
+        using ToolStripProgressBarControl toolStripProgressBarControl = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripProgressBarControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -35,7 +35,7 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
     [InlineData(false, AccessibleRole.None)]
     public void ToolStripProgressBarControlAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
+        using ToolStripProgressBarControl toolStripProgressBarControl = new();
         // AccessibleRole is not set = Default
 
         if (createControl)
@@ -68,7 +68,7 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
     [MemberData(nameof(ToolStripProgressBarControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripProgressBarControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
+        using ToolStripProgressBarControl toolStripProgressBarControl = new();
         toolStripProgressBarControl.AccessibleRole = role;
 
         AccessibleObject accessibleObject = toolStripProgressBarControl.AccessibilityObject;

@@ -8,8 +8,8 @@ public class ToolStripComboBox_ToolStripComboBoxAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripComboBoxAccessibleObject_ReleaseUiaProvider_ToolStripComboBoxControl()
     {
-        using var toolStrip = new ToolStrip();
-        using var toolStripComboBox = new ToolStripComboBox();
+        using ToolStrip toolStrip = new();
+        using ToolStripComboBox toolStripComboBox = new();
         toolStrip.Items.Add(toolStripComboBox);
         toolStripComboBox.Parent = toolStrip;
         toolStrip.CreateControl();

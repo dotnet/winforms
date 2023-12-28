@@ -348,7 +348,7 @@ public partial class DomainUpDown : UpDownBase
     {
         if (ReadOnly)
         {
-            char[] character = new char[] { e.KeyChar };
+            char[] character = [e.KeyChar];
             UnicodeCategory uc = char.GetUnicodeCategory(character[0]);
 
             if (uc == UnicodeCategory.LetterNumber

@@ -14,7 +14,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_Ctor_Default()
     {
-        using var item = new SubToolStripSeparator();
+        using SubToolStripSeparator item = new();
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -92,7 +92,7 @@ public class ToolStripSeparatorTests
     [BoolData]
     public void ToolStripSeparator_AutoToolTip_Set_GetReturnsExpected(bool value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             AutoToolTip = value
         };
@@ -119,7 +119,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(BackgroundImage_Set_TestData))]
     public void ToolStripSeparator_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             BackgroundImage = value
         };
@@ -134,7 +134,7 @@ public class ToolStripSeparatorTests
     [EnumData<ImageLayout>]
     public void ToolStripSeparator_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             BackgroundImageLayout = value
         };
@@ -148,7 +148,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_CanSelect_InvokeDesignMode_ReturnsTrue()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -158,7 +158,7 @@ public class ToolStripSeparatorTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             Site = mockSite.Object
         };
@@ -169,7 +169,7 @@ public class ToolStripSeparatorTests
     [EnumData<ToolStripItemDisplayStyle>]
     public void ToolStripSeparator_DisplayStyle_Set_GetReturnsExpected(ToolStripItemDisplayStyle value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             DisplayStyle = value
         };
@@ -183,7 +183,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_DisplayStyle_SetWithHandler_CallsDisplayStyleChanged()
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -218,7 +218,7 @@ public class ToolStripSeparatorTests
     [InvalidEnumData<ToolStripItemDisplayStyle>]
     public void ToolStripSeparator_DisplayStyle_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemDisplayStyle value)
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.DisplayStyle = value);
     }
 
@@ -226,7 +226,7 @@ public class ToolStripSeparatorTests
     [BoolData]
     public void ToolStripSeparator_DoubleClickEnabled_Set_GetReturnsExpected(bool value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             DoubleClickEnabled = value
         };
@@ -253,7 +253,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripSeparator_Enabled_Set_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             Visible = visible,
             Image = image,
@@ -273,7 +273,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_Enabled_SetWithHandler_CallsEnabledChanged()
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -317,7 +317,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(Font_Set_TestData))]
     public void ToolStripSeparator_Font_Set_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             DisplayStyle = displayStyle
         };
@@ -334,7 +334,7 @@ public class ToolStripSeparatorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStripSeparator_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ForeColor = value
         };
@@ -348,7 +348,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -384,7 +384,7 @@ public class ToolStripSeparatorTests
     public void ToolStripSeparator_ForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripSeparator))[nameof(ToolStripSeparator.ForeColor)];
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.False(property.CanResetValue(item));
 
         item.ForeColor = Color.Red;
@@ -400,7 +400,7 @@ public class ToolStripSeparatorTests
     public void ToolStripSeparator_ForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripSeparator))[nameof(ToolStripSeparator.ForeColor)];
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.ForeColor = Color.Red;
@@ -427,7 +427,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(Image_Set_TestData))]
     public void ToolStripSeparator_Image_Set_GetReturnsExpected(Color imageTransparentColor, Image value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ImageTransparentColor = imageTransparentColor
         };
@@ -446,7 +446,7 @@ public class ToolStripSeparatorTests
     [EnumData<ContentAlignment>]
     public void ToolStripSeparator_ImageAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ImageAlign = value
         };
@@ -463,7 +463,7 @@ public class ToolStripSeparatorTests
     [InlineData((ContentAlignment)int.MinValue)]
     public void ToolStripSeparator_ImageAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.ImageAlign = value);
     }
 
@@ -473,7 +473,7 @@ public class ToolStripSeparatorTests
     [InlineData(1)]
     public void ToolStripSeparator_ImageIndex_Set_GetReturnsExpected(int value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ImageIndex = value
         };
@@ -492,7 +492,7 @@ public class ToolStripSeparatorTests
     [NormalizedStringData]
     public void ToolStripSeparator_ImageKey_Set_GetReturnsExpected(string value, string expected)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ImageKey = value
         };
@@ -511,7 +511,7 @@ public class ToolStripSeparatorTests
     [EnumData<ToolStripItemImageScaling>]
     public void ToolStripSeparator_ImageScaling_Set_GetReturnsExpected(ToolStripItemImageScaling value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ImageScaling = value
         };
@@ -537,7 +537,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(ImageTransparentColor_Set_TestData))]
     public void ToolStripSeparator_ImageTransparentColor_Set_GetReturnsExpected(Image image, Color value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             Image = image
         };
@@ -554,7 +554,7 @@ public class ToolStripSeparatorTests
     [BoolData]
     public void ToolStripSeparator_RightToLeftAutoMirrorImage_Set_GetReturnsExpected(bool value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             RightToLeftAutoMirrorImage = value
         };
@@ -573,7 +573,7 @@ public class ToolStripSeparatorTests
     [StringWithNullData]
     public void ToolStripSeparator_Text_Set_GetReturnsExpected(string value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             Text = value
         };
@@ -587,7 +587,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_Text_SetWithHandler_CallsTextChanged()
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -623,7 +623,7 @@ public class ToolStripSeparatorTests
     [EnumData<ContentAlignment>]
     public void ToolStripSeparator_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             TextAlign = value
         };
@@ -640,7 +640,7 @@ public class ToolStripSeparatorTests
     [InlineData((ContentAlignment)int.MinValue)]
     public void ToolStripSeparator_TextAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextAlign = value);
     }
 
@@ -656,7 +656,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(TextDirection_Set_TestData))]
     public void ToolStripSeparator_TextDirection_Set_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             TextDirection = value
         };
@@ -671,7 +671,7 @@ public class ToolStripSeparatorTests
     [InvalidEnumData<ToolStripTextDirection>]
     public void ToolStripSeparator_TextDirection_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripTextDirection value)
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextDirection = value);
     }
 
@@ -679,7 +679,7 @@ public class ToolStripSeparatorTests
     [EnumData<TextImageRelation>]
     public void ToolStripSeparator_TextImageRelation_Set_GetReturnsExpected(TextImageRelation value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             TextImageRelation = value
         };
@@ -698,7 +698,7 @@ public class ToolStripSeparatorTests
     [InlineData((TextImageRelation)7)]
     public void ToolStripSeparator_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextImageRelation = value);
     }
 
@@ -706,7 +706,7 @@ public class ToolStripSeparatorTests
     [StringData]
     public void ToolStripSeparator_ToolTipText_Set_GetReturnsExpected(string value)
     {
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             ToolTipText = value
         };
@@ -720,7 +720,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var item = new SubToolStripSeparator();
+        using SubToolStripSeparator item = new();
         ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
         Assert.Equal(AccessibleRole.Separator, accessibleObject.Role);
         Assert.NotSame(accessibleObject, item.CreateAccessibilityInstance());
@@ -730,7 +730,7 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -753,7 +753,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ToolStripSeparator_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
     {
-        using var item = new ToolStripSeparator();
+        using ToolStripSeparator item = new();
         Assert.Equal(new Size(6, 6), item.GetPreferredSize(proposedSize));
 
         // Call again.
@@ -797,11 +797,11 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(GetPreferredSize_WithOwner_TestData))]
     public void ToolStripSeparator_GetPreferredSize_InvokeWithOwner_ReturnsExpected(ToolStripLayoutStyle ownerLayoutStyle, Size proposedSize, Size expected)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             LayoutStyle = ownerLayoutStyle
         };
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             Owner = owner
         };
@@ -827,11 +827,11 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(GetPreferredSize_WithToolStripDropDownMenuOwner_TestData))]
     public void ToolStripSeparator_GetPreferredSize_InvokeWithToolStripDropDownMenuOwner_ReturnsExpected(ToolStripLayoutStyle ownerLayoutStyle, Size proposedSize)
     {
-        using var owner = new ToolStripDropDownMenu
+        using ToolStripDropDownMenu owner = new()
         {
             LayoutStyle = ownerLayoutStyle
         };
-        using var item = new ToolStripSeparator
+        using ToolStripSeparator item = new()
         {
             Owner = owner
         };
@@ -845,11 +845,11 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(GetPreferredSize_WithOwner_TestData))]
     public void ToolStripSeparator_GetPreferredSize_InvokeWithParent_ReturnsExpected(ToolStripLayoutStyle parentLayoutStyle, Size proposedSize, Size expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             LayoutStyle = parentLayoutStyle
         };
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             Parent = parent
         };
@@ -896,11 +896,11 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(GetPreferredSize_WithToolStripDropDownMenuParent_TestData))]
     public void ToolStripSeparator_GetPreferredSize_InvokeWithToolStripDropDownMenuParent_ReturnsExpected(ToolStripLayoutStyle ownerLayoutStyle, Size proposedSize, Size expected)
     {
-        using var parent = new ToolStripDropDownMenu
+        using ToolStripDropDownMenu parent = new()
         {
             LayoutStyle = ownerLayoutStyle
         };
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             Parent = parent
         };
@@ -923,7 +923,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripSeparator_OnFontChanged_Invoke_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             DisplayStyle = displayStyle
         };
@@ -938,8 +938,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripSeparator_OnFontChanged_InvokeWithOwner_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip owner = new();
+        using SubToolStripSeparator item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -969,8 +969,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripSeparator_OnFontChanged_InvokeWithOwnerWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip owner = new();
+        using SubToolStripSeparator item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -1013,8 +1013,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripSeparator_OnFontChanged_InvokeWithParent_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip parent = new();
+        using SubToolStripSeparator item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -1044,8 +1044,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripSeparator_OnFontChanged_InvokeWithParentWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip parent = new();
+        using SubToolStripSeparator item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -1088,7 +1088,7 @@ public class ToolStripSeparatorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ToolStripSeparator_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
     {
-        using var item = new SubToolStripSeparator();
+        using SubToolStripSeparator item = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -1114,7 +1114,7 @@ public class ToolStripSeparatorTests
         {
             yield return new object[] { layoutStyle, null };
 
-            var image = new Bitmap(10, 10);
+            Bitmap image = new(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { layoutStyle, new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4)) };
         }
@@ -1124,14 +1124,14 @@ public class ToolStripSeparatorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ToolStripSeparator_OnPaint_InvokeWithOwner_DoesNotCallPaint(PaintEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int renderSeparatorCallCount = 0;
         renderer.RenderSeparator += (sender, e) => renderSeparatorCallCount++;
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             Renderer = renderer
         };
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             Owner = owner
         };
@@ -1160,14 +1160,14 @@ public class ToolStripSeparatorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ToolStripSeparator_OnPaint_InvokeWithParent_DoesNotCallPaint(PaintEventArgs eventArgs)
     {
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         int renderSeparatorCallCount = 0;
         renderer.RenderSeparator += (sender, e) => renderSeparatorCallCount++;
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             Renderer = renderer
         };
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             Parent = parent
         };
@@ -1208,23 +1208,23 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnPaint_WithOwnerAndParent_TestData))]
     public void ToolStripSeparator_OnPaint_InvokeWithOwnerAndParent_DoesNotCallPaint(ToolStripLayoutStyle ownerLayoutStyle, ToolStripLayoutStyle parentLayoutStyle, bool expectedVertical)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        var renderer1 = new SubToolStripRenderer();
-        var renderer2 = new SubToolStripRenderer();
-        using var owner = new ToolStrip
+        SubToolStripRenderer renderer1 = new();
+        SubToolStripRenderer renderer2 = new();
+        using ToolStrip owner = new()
         {
             LayoutStyle = ownerLayoutStyle,
             Renderer = renderer1
         };
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             LayoutStyle = parentLayoutStyle,
             Renderer = renderer2
         };
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             Owner = owner,
             Parent = parent
@@ -1279,23 +1279,23 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(OnPaint_WithOwnerAndToolStripDropDownMenuParent_TestData))]
     public void ToolStripSeparator_OnPaint_InvokeWithOwnerAndToolStripDropDownMenuParent_DoesNotCallPaint(ToolStripLayoutStyle ownerLayoutStyle, ToolStripLayoutStyle parentLayoutStyle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        var renderer1 = new SubToolStripRenderer();
-        var renderer2 = new SubToolStripRenderer();
-        using var owner = new ToolStrip
+        SubToolStripRenderer renderer1 = new();
+        SubToolStripRenderer renderer2 = new();
+        using ToolStrip owner = new()
         {
             LayoutStyle = ownerLayoutStyle,
             Renderer = renderer1
         };
-        using var parent = new ToolStripDropDownMenu
+        using ToolStripDropDownMenu parent = new()
         {
             LayoutStyle = parentLayoutStyle,
             Renderer = renderer2
         };
-        using var item = new SubToolStripSeparator
+        using SubToolStripSeparator item = new()
         {
             Owner = owner,
             Parent = parent
@@ -1338,9 +1338,9 @@ public class ToolStripSeparatorTests
     [WinFormsFact]
     public void ToolStripSeparator_OnPaint_NullE_ThrowsNullReferenceException()
     {
-        using var owner = new ToolStrip();
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip owner = new();
+        using ToolStrip parent = new();
+        using SubToolStripSeparator item = new()
         {
             Owner = owner,
             Parent = parent
@@ -1366,7 +1366,7 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(SetBounds_TestData))]
     public void ToolStripSeparator_SetBounds_Invoke_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
     {
-        using var item = new SubToolStripSeparator();
+        using SubToolStripSeparator item = new();
         int locationChangedCallCount = 0;
         item.LocationChanged += (sender, e) =>
         {
@@ -1395,8 +1395,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(SetBounds_TestData))]
     public void ToolStripSeparator_SetBounds_InvokeWithOwner_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip owner = new();
+        using SubToolStripSeparator item = new()
         {
             Owner = owner
         };
@@ -1457,8 +1457,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(SetBounds_ToolStripDropDownMenuOwner_TestData))]
     public void ToolStripSeparator_SetBounds_InvokeWithToolStripDropDownMenuOwner_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
     {
-        using var owner = new ToolStripDropDownMenu();
-        using var item = new SubToolStripSeparator
+        using ToolStripDropDownMenu owner = new();
+        using SubToolStripSeparator item = new()
         {
             Owner = owner
         };
@@ -1518,8 +1518,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(SetBounds_WithParent_TestData))]
     public void ToolStripSeparator_SetBounds_InvokeWithParent_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripSeparator
+        using ToolStrip parent = new();
+        using SubToolStripSeparator item = new()
         {
             Parent = parent
         };
@@ -1572,8 +1572,8 @@ public class ToolStripSeparatorTests
     [MemberData(nameof(SetBounds_WithParent_TestData))]
     public void ToolStripSeparator_SetBounds_InvokeWithDropDownMenuParent_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStripDropDownMenu();
-        using var item = new SubToolStripSeparator
+        using ToolStripDropDownMenu parent = new();
+        using SubToolStripSeparator item = new()
         {
             Parent = parent
         };

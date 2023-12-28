@@ -14,7 +14,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_Ctor_Default()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Null(control.ActiveControl);
         Assert.False(control.AllowDrop);
         Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -138,7 +138,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -177,7 +177,7 @@ public class UpDownBaseTests
             return;
         }
 
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle
         };
@@ -200,7 +200,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_AutoScroll_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -229,7 +229,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_AutoScroll_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -286,7 +286,7 @@ public class UpDownBaseTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void UpDownBase_AutoScrollMargin_Set_GetReturnsExpected(bool autoScroll, Size value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             AutoScroll = autoScroll
         };
@@ -317,7 +317,7 @@ public class UpDownBaseTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void UpDownBase_AutoScrollMargin_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             AutoScroll = autoScroll
         };
@@ -373,7 +373,7 @@ public class UpDownBaseTests
     [MemberData(nameof(AutoScrollMinSize_TestData))]
     public void UpDownBase_AutoScrollMinSize_Set_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             AutoScroll = autoScroll
         };
@@ -402,7 +402,7 @@ public class UpDownBaseTests
     [MemberData(nameof(AutoScrollMinSize_TestData))]
     public void UpDownBase_AutoScrollMinSize_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             AutoScroll = autoScroll
         };
@@ -444,7 +444,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -469,7 +469,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             AutoSize = true
         };
@@ -514,7 +514,7 @@ public class UpDownBaseTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void UpDownBase_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BackColor = value
         };
@@ -537,7 +537,7 @@ public class UpDownBaseTests
     [MemberData(nameof(BackColor_SetWithHandle_TestData))]
     public void UpDownBase_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -565,7 +565,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -601,7 +601,7 @@ public class UpDownBaseTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void UpDownBase_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BackgroundImage = value
         };
@@ -617,7 +617,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -629,7 +629,7 @@ public class UpDownBaseTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -640,7 +640,7 @@ public class UpDownBaseTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -661,7 +661,7 @@ public class UpDownBaseTests
     [EnumData<ImageLayout>]
     public void UpDownBase_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BackgroundImageLayout = value
         };
@@ -679,7 +679,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -732,7 +732,7 @@ public class UpDownBaseTests
     [MemberData(nameof(BorderStyle_Set_TestData))]
     public void UpDownBase_BorderStyle_Set_GetReturnsExpected(BorderStyle value, Size expectedPreferredSize)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = value
         };
@@ -769,7 +769,7 @@ public class UpDownBaseTests
     [MemberData(nameof(BorderStyle_SetWithHandle_TestData))]
     public void UpDownBase_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount, int expectedCreatedCallCount, Size expectedPreferredSize)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -802,7 +802,7 @@ public class UpDownBaseTests
     [InvalidEnumData<BorderStyle>]
     public void UpDownBase_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
@@ -810,7 +810,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_ChangingText_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             ChangingText = value
         };
@@ -832,7 +832,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_ChangingText_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -875,7 +875,7 @@ public class UpDownBaseTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void UpDownBase_ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             ContextMenuStrip = value
         };
@@ -891,7 +891,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_ContextMenuStrip_SetWithHandler_CallsContextMenuStripChanged()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -902,7 +902,7 @@ public class UpDownBaseTests
         control.ContextMenuStripChanged += handler;
 
         // Set different.
-        using var menu1 = new ContextMenuStrip();
+        using ContextMenuStrip menu1 = new();
         control.ContextMenuStrip = menu1;
         Assert.Same(menu1, control.ContextMenuStrip);
         Assert.Equal(1, callCount);
@@ -913,7 +913,7 @@ public class UpDownBaseTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var menu2 = new ContextMenuStrip();
+        using ContextMenuStrip menu2 = new();
         control.ContextMenuStrip = menu2;
         Assert.Same(menu2, control.ContextMenuStrip);
         Assert.Equal(2, callCount);
@@ -943,7 +943,7 @@ public class UpDownBaseTests
     [MemberData(nameof(ForeColor_Set_TestData))]
     public void UpDownBase_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             ForeColor = value
         };
@@ -960,7 +960,7 @@ public class UpDownBaseTests
     [MemberData(nameof(ForeColor_Set_TestData))]
     public void UpDownBase_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -988,7 +988,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1024,7 +1024,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_InterceptArrowKeys_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             InterceptArrowKeys = value
         };
@@ -1046,7 +1046,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_InterceptArrowKeys_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1099,7 +1099,7 @@ public class UpDownBaseTests
     [MemberData(nameof(MaximumSize_Set_TestData))]
     public void UpDownBase_MaximumSize_Set_GetReturnsExpected(Size value, int expectedWidth, int expectedLayoutCallCount)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -1143,7 +1143,7 @@ public class UpDownBaseTests
     [MemberData(nameof(MinimumSize_Set_TestData))]
     public void UpDownBase_MinimumSize_Set_GetReturnsExpected(Size value, int expectedWidth, int expectedLayoutCallCount)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -1171,7 +1171,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_ReadOnly_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             ReadOnly = value
         };
@@ -1193,7 +1193,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_ReadOnly_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1250,7 +1250,7 @@ public class UpDownBaseTests
         {
             int validateEditTextCallCount = 0;
             int onChangedCallCount = 0;
-            using var control = new CustomValidateUpDownBase
+            using CustomValidateUpDownBase control = new()
             {
                 ChangingText = changingText,
                 UserEdit = userEdit,
@@ -1290,7 +1290,7 @@ public class UpDownBaseTests
         {
             int validateEditTextCallCount = 0;
             int onChangedCallCount = 0;
-            using var control = new CustomValidateUpDownBase
+            using CustomValidateUpDownBase control = new()
             {
                 ChangingText = changingText,
                 UserEdit = userEdit,
@@ -1338,7 +1338,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1374,7 +1374,7 @@ public class UpDownBaseTests
     [EnumData<HorizontalAlignment>]
     public void UpDownBase_TextAlign_Set_GetReturnsExpected(HorizontalAlignment value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             TextAlign = value
         };
@@ -1391,7 +1391,7 @@ public class UpDownBaseTests
     [EnumData<HorizontalAlignment>]
     public void UpDownBase_TextAlign_SetWithHandle_GetReturnsExpected(HorizontalAlignment value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1420,7 +1420,7 @@ public class UpDownBaseTests
     [InvalidEnumData<HorizontalAlignment>]
     public void UpDownBase_TextAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
     {
-        var control = new SubUpDownBase();
+        SubUpDownBase control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.TextAlign = value);
     }
 
@@ -1440,7 +1440,7 @@ public class UpDownBaseTests
     [MemberData(nameof(UpDownAlign_Set_TestData))]
     public void UpDownBase_UpDownAlign_Set_GetReturnsExpected(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft,
@@ -1471,7 +1471,7 @@ public class UpDownBaseTests
     [MemberData(nameof(UpDownAlign_SetWithHandle_TestData))]
     public void UpDownBase_UpDownAlign_SetWithHandle_GetReturnsExpected(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment value, int expectedInvalidatedCallCount)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft
@@ -1504,7 +1504,7 @@ public class UpDownBaseTests
     [InvalidEnumData<LeftRightAlignment>]
     public void UpDownBase_UpDownAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(LeftRightAlignment value)
     {
-        var control = new SubUpDownBase();
+        SubUpDownBase control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.UpDownAlign = value);
     }
 
@@ -1512,7 +1512,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_UserEdit_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             UserEdit = value
         };
@@ -1534,7 +1534,7 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_UserEdit_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1570,7 +1570,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1587,7 +1587,7 @@ public class UpDownBaseTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void UpDownBase_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
 
         int expectedWidth = Application.UseVisualStyles ? 122 : 123;
         Size preferredSize = control.GetPreferredSize(proposedSize);
@@ -1604,7 +1604,7 @@ public class UpDownBaseTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void UpDownBase_GetPreferredSize_InvokeWithBounds_ReturnsExpected(Size proposedSize)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
@@ -1649,7 +1649,7 @@ public class UpDownBaseTests
     [MemberData(nameof(GetPreferredSize_WithConstrainedSize_TestData))]
     public void UpDownBase_GetPreferredSize_InvokeWithConstrainedSize_ReturnsExpected(Size minimumSize, Size maximumSize, Size proposedSize, int expectedWidth)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             MinimumSize = minimumSize,
             MaximumSize = maximumSize,
@@ -1673,7 +1673,7 @@ public class UpDownBaseTests
     [InlineData((-1), false)]
     public void UpDownBase_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -1700,7 +1700,7 @@ public class UpDownBaseTests
     [InlineData((ControlStyles)(-1), false)]
     public void UpDownBase_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1710,7 +1710,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1724,7 +1724,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnChanged_TestData))]
     public void UpDownBase_OnChanged_Invoke_Nop(object source, EventArgs e)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         control.OnChanged(source, e);
         Assert.False(control.IsHandleCreated);
 
@@ -1737,7 +1737,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnChanged_TestData))]
     public void UpDownBase_OnChanged_InvokeWithHandle_Nop(object source, EventArgs e)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1779,7 +1779,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void UpDownBase_OnFontChanged_Invoke_CallsFontChanged(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment upDownAlign, EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft,
@@ -1829,7 +1829,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnHandleCreated_TestData))]
     public void UpDownBase_OnHandleCreated_Invoke_CallsHandleCreated(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment upDownAlign, EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft,
@@ -1862,7 +1862,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnHandleCreated_TestData))]
     public void UpDownBase_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment upDownAlign, EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft,
@@ -1897,7 +1897,7 @@ public class UpDownBaseTests
     [NewAndDefaultData<EventArgs>]
     public void UpDownBase_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1925,7 +1925,7 @@ public class UpDownBaseTests
     [NewAndDefaultData<EventArgs>]
     public void UpDownBase_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -1971,7 +1971,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnLayout_TestData))]
     public void UpDownBase_OnLayout_Invoke_CallsLayout(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment upDownAlign, LayoutEventArgs eventArgs)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft,
@@ -2014,7 +2014,7 @@ public class UpDownBaseTests
     [MemberData(nameof(MouseEventArgs_TestData))]
     public void UpDownBase_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2037,7 +2037,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_OnMouseDown_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseDown(null));
     }
 
@@ -2045,7 +2045,7 @@ public class UpDownBaseTests
     [NewAndDefaultData<EventArgs>]
     public void UpDownBase_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2069,7 +2069,7 @@ public class UpDownBaseTests
     [NewAndDefaultData<EventArgs>]
     public void UpDownSubUpDownBase_OnMouseHover_Invoke_CallsMouseHover(EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2093,7 +2093,7 @@ public class UpDownBaseTests
     [NewAndDefaultData<EventArgs>]
     public void UpDownBase_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2117,7 +2117,7 @@ public class UpDownBaseTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void UpDownBase_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2141,7 +2141,7 @@ public class UpDownBaseTests
     [MemberData(nameof(MouseEventArgs_TestData))]
     public void UpUpBase_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2164,7 +2164,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_OnMouseUp_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseUp(null));
     }
 
@@ -2172,7 +2172,7 @@ public class UpDownBaseTests
     [MemberData(nameof(MouseEventArgs_TestData))]
     public void UpDownBase_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2196,8 +2196,8 @@ public class UpDownBaseTests
     [BoolData]
     public void UpDownBase_OnMouseWheel_InvokeHandledMouseEventArgs_SetsHandled(bool handled)
     {
-        using var control = new SubUpDownBase();
-        var eventArgs = new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4, handled);
+        using SubUpDownBase control = new();
+        HandledMouseEventArgs eventArgs = new(MouseButtons.Left, 1, 2, 3, 4, handled);
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2216,7 +2216,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_OnMouseWheel_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseWheel(null));
     }
 
@@ -2242,11 +2242,11 @@ public class UpDownBaseTests
     [MemberData(nameof(OnPaint_TestData))]
     public void UpDownBase_OnPaint_Invoke_CallsPaint(Size size, bool enabled, BorderStyle borderStyle, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             Size = size,
             Enabled = enabled,
@@ -2278,11 +2278,11 @@ public class UpDownBaseTests
     [MemberData(nameof(OnPaint_TestData))]
     public void UpDownBase_OnPaint_InvokeWithHandle_CallsPaint(Size size, bool enabled, BorderStyle borderStyle, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             Size = size,
             Enabled = enabled,
@@ -2332,7 +2332,7 @@ public class UpDownBaseTests
             return;
         }
 
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
     }
 
@@ -2344,7 +2344,7 @@ public class UpDownBaseTests
             return;
         }
 
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
     }
 
@@ -2381,7 +2381,7 @@ public class UpDownBaseTests
         int upButtonCallCount = 0;
         int downButtonCallCount = 0;
         int validateEditTextCallCount = 0;
-        using var control = new CustomValidateUpDownBase
+        using CustomValidateUpDownBase control = new()
         {
             InterceptArrowKeys = interceptArrowKeys,
             UserEdit = userEdit,
@@ -2419,7 +2419,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_OnTextBoxKeyDown_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.Throws<NullReferenceException>(() => control.OnTextBoxKeyDown(new object(), null));
     }
 
@@ -2435,7 +2435,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnTextBoxKeyPress_TestData))]
     public void UpPressBase_OnTextBoxKeyPress_Invoke_CallsKeyPress(object source, KeyPressEventArgs eventArgs)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         KeyPressEventHandler handler = (sender, e) =>
         {
@@ -2474,7 +2474,7 @@ public class UpDownBaseTests
     public void UpPressBase_OnTextBoxLostFocus_Invoke_CallsLostFocus(bool userEdit, object source, EventArgs eventArgs, int expectedValidateEditTextCallCount)
     {
         int validateEditTextCallCount = 0;
-        using var control = new CustomValidateUpDownBase
+        using CustomValidateUpDownBase control = new()
         {
             UserEdit = userEdit,
             ValidateEditTextAction = () => validateEditTextCallCount++
@@ -2516,7 +2516,7 @@ public class UpDownBaseTests
     [MemberData(nameof(OnTextBoxResize_TestData))]
     public void UpDownBase_OnTextBoxResize_Invoke_CallsTextBoxResize(BorderStyle borderStyle, RightToLeft rightToLeft, LeftRightAlignment upDownAlign, object source, EventArgs eventArgs)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             BorderStyle = borderStyle,
             RightToLeft = rightToLeft,
@@ -2560,7 +2560,7 @@ public class UpDownBaseTests
     {
         using (new NoAssertContext())
         {
-            using var control = new CustomValidateUpDownBase
+            using CustomValidateUpDownBase control = new()
             {
                 ChangingText = changingText,
                 UserEdit = userEdit
@@ -2599,7 +2599,7 @@ public class UpDownBaseTests
     [InlineData(-1, -2)]
     public void UpDownBase_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         Assert.False(control.IsHandleCreated);
 
@@ -2615,7 +2615,7 @@ public class UpDownBaseTests
     [InlineData("text", 1, 2)]
     public void UpDownBase_Select_Invoke_Success(string text, int start, int length)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             Text = text
         };
@@ -2634,7 +2634,7 @@ public class UpDownBaseTests
     [InlineData("text", 1, 2)]
     public void UpDownBase_Select_InvokeWithHandle_Success(string text, int start, int length)
     {
-        using var control = new SubUpDownBase
+        using SubUpDownBase control = new()
         {
             Text = text
         };
@@ -2680,7 +2680,7 @@ public class UpDownBaseTests
     [MemberData(nameof(SetBoundsCore_TestData))]
     public void UpDownBase_SetBoundsCore_Invoke_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int preferredHeight = control.PreferredHeight;
         int moveCallCount = 0;
         int locationChangedCallCount = 0;
@@ -2815,7 +2815,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_ValidateEditText_Invoke_Nop()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         control.ValidateEditText();
         Assert.False(control.IsHandleCreated);
 
@@ -2827,7 +2827,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_ValidateEditText_InvokeWithHandle_Nop()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2855,10 +2855,10 @@ public class UpDownBaseTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubUpDownBase();
+            using SubUpDownBase control = new();
             int callCount = 0;
             control.LostFocus += (sender, e) => callCount++;
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
                 Result = (IntPtr)250
@@ -2873,7 +2873,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_WndProc_InvokeKillFocusWithHandle_Success()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2884,7 +2884,7 @@ public class UpDownBaseTests
 
         int callCount = 0;
         control.LostFocus += (sender, e) => callCount++;
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
             Result = (IntPtr)250
@@ -2903,7 +2903,7 @@ public class UpDownBaseTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubUpDownBase();
+            using SubUpDownBase control = new();
             int callCount = 0;
             control.MouseHover += (sender, e) =>
             {
@@ -2911,7 +2911,7 @@ public class UpDownBaseTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_MOUSEHOVER,
                 Result = (IntPtr)250
@@ -2926,7 +2926,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2942,7 +2942,7 @@ public class UpDownBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
@@ -2959,7 +2959,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_WndProc_InvokeSetFocusWithoutHandle_Success()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         int callCount = 0;
         control.GotFocus += (sender, e) =>
         {
@@ -2967,7 +2967,7 @@ public class UpDownBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -2981,7 +2981,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_WndProc_InvokeSetFocusWithHandle_Success()
     {
-        using var control = new SubUpDownBase();
+        using SubUpDownBase control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2997,7 +2997,7 @@ public class UpDownBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -3015,7 +3015,7 @@ public class UpDownBaseTests
     public void UpDownBase_Invokes_SetToolTip_IfExternalToolTipIsSet()
     {
         using UpDownBase upDownBase = new SubUpDownBase();
-        using ToolTip toolTip = new ToolTip();
+        using ToolTip toolTip = new();
         upDownBase.CreateControl();
 
         string actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);

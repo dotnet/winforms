@@ -16,7 +16,7 @@ public class NodeLabelEditEventArgsTests
     [MemberData(nameof(Ctor_TreeNode_TestData))]
     public void Ctor_TreeNode(TreeNode node)
     {
-        var e = new NodeLabelEditEventArgs(node);
+        NodeLabelEditEventArgs e = new(node);
         Assert.Equal(node, e.Node);
         Assert.Null(e.Label);
         Assert.False(e.CancelEdit);
@@ -33,7 +33,7 @@ public class NodeLabelEditEventArgsTests
     [MemberData(nameof(Ctor_TreeNode_String_TestData))]
     public void Ctor_TreeNode_String(TreeNode node, string label)
     {
-        var e = new NodeLabelEditEventArgs(node, label);
+        NodeLabelEditEventArgs e = new(node, label);
         Assert.Equal(node, e.Node);
         Assert.Equal(label, e.Label);
         Assert.False(e.CancelEdit);
@@ -44,7 +44,7 @@ public class NodeLabelEditEventArgsTests
     [InlineData(false)]
     public void CancelEdit_Set_GetReturnsExpected(bool value)
     {
-        var e = new NodeLabelEditEventArgs(new TreeNode())
+        NodeLabelEditEventArgs e = new(new TreeNode())
         {
             CancelEdit = value
         };

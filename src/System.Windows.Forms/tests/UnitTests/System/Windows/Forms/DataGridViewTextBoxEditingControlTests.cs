@@ -17,7 +17,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Ctor_Default()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.False(control.AcceptsReturn);
         Assert.False(control.AcceptsTab);
         Assert.Null(control.AccessibleDefaultActionDescription);
@@ -134,7 +134,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("Edit", createParams.ClassName);
@@ -161,7 +161,7 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(EditingControlDataGridView_Set_TestData))]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlDataGridView_Set_GetReturnsExpected(DataGridView value)
     {
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = value
         };
@@ -188,7 +188,7 @@ public class DataGridViewTextBoxEditingControlTests
             return result;
         }
 
-        using var control = new CustomGetEditingControlFormattedValueDataGridViewTextBoxEditingControl
+        using CustomGetEditingControlFormattedValueDataGridViewTextBoxEditingControl control = new()
         {
             GetEditingControlFormattedValueAction = action
         };
@@ -202,7 +202,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData("text", "text", true)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlFormattedValue_Set_GetReturnsExpected(string value, string expected, bool expectedValueChanged)
     {
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlFormattedValue = value
         };
@@ -227,11 +227,11 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData("text", "text", true)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlFormattedValue_SetWithDataGridView_GetReturnsExpected(string value, string expected, bool expectedValueChanged)
     {
-        using var dataGridView = new DataGridView
+        using DataGridView dataGridView = new()
         {
             ColumnCount = 1
         };
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView,
             EditingControlFormattedValue = value
@@ -256,8 +256,8 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlFormattedValue_SetWithDataGridViewNoColumns_GetReturnsExpected()
     {
-        using var dataGridView = new DataGridView();
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridView dataGridView = new();
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView
         };
@@ -282,7 +282,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlFormattedValue_SetNonStringValue_ThrowsInvalidCastException()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.Throws<InvalidCastException>(() => control.EditingControlFormattedValue = new object());
     }
 
@@ -293,7 +293,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData(1)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlRowIndex_Set_GetReturnsExpected(int value)
     {
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlRowIndex = value
         };
@@ -310,7 +310,7 @@ public class DataGridViewTextBoxEditingControlTests
     [BoolData]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlValueChanged_Set_GetReturnsExpected(bool value)
     {
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlValueChanged = value
         };
@@ -334,7 +334,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData("text", "text", true)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Text_Set_GetReturnsExpected(string value, string expected, bool expectedValueChanged)
     {
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             Text = value
         };
@@ -359,11 +359,11 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData("text", "text", true)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Text_SetWithDataGridView_GetReturnsExpected(string value, string expected, bool expectedValueChanged)
     {
-        using var dataGridView = new DataGridView
+        using DataGridView dataGridView = new()
         {
             ColumnCount = 1
         };
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView,
             Text = value
@@ -388,8 +388,8 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Text_SetWithDataGridViewNoColumns_GetReturnsExpected()
     {
-        using var dataGridView = new DataGridView();
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridView dataGridView = new();
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView
         };
@@ -417,7 +417,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData("text", "text", true)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Text_SetWithHandle_GetReturnsExpected(string value, string expected, bool expectedValueChanged)
     {
-        using var control = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -451,7 +451,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -486,7 +486,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_Text_SetWithHandlerWithHandle_CallsTextChanged()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -546,8 +546,8 @@ public class DataGridViewTextBoxEditingControlTests
     {
         yield return new object[] { new DataGridViewCellStyle(), null, Color.FromArgb(0xFF, 0x00, 0x00, 0x00), SystemColors.WindowText, false, HorizontalAlignment.Left, false };
 
-        using var font = new Font("Arial", 8.25f);
-        var customStyle = new DataGridViewCellStyle
+        using Font font = new("Arial", 8.25f);
+        DataGridViewCellStyle customStyle = new()
         {
             Font = font,
             BackColor = Color.Gray,
@@ -555,7 +555,7 @@ public class DataGridViewTextBoxEditingControlTests
         };
         yield return new object[] { customStyle, font, Color.Gray, Color.Green, false, HorizontalAlignment.Left, false };
 
-        var transparentStyle = new DataGridViewCellStyle
+        DataGridViewCellStyle transparentStyle = new()
         {
             Font = font,
             BackColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78),
@@ -733,8 +733,8 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(ApplyCellStyleToEditingDataGridViewTextBoxEditingControl_TestData))]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_ApplyCellStyleToEditingDataGridViewTextBoxEditingControl_Invoke_Success(DataGridViewCellStyle dataGridViewCellStyle, Font expectedFont, Color expectedBackColor, Color expectedForeColor, bool expectedWordWrap, HorizontalAlignment expectedTextAlign, bool expectedRepositionOnValueChange)
     {
-        using var oldFont = new Font("Arial", 8.25f);
-        using var control = new DataGridViewTextBoxEditingControl
+        using Font oldFont = new("Arial", 8.25f);
+        using DataGridViewTextBoxEditingControl control = new()
         {
             Font = oldFont,
             BackColor = Color.Red,
@@ -755,8 +755,8 @@ public class DataGridViewTextBoxEditingControlTests
     {
         yield return new object[] { new DataGridViewCellStyle(), null, Color.FromArgb(0xFF, 0x00, 0x00, 0x00), Color.FromArgb(0xFF, 0x00, 0x00, 0x00), SystemColors.WindowText, false, HorizontalAlignment.Left, false };
 
-        using var font = new Font("Arial", 8.25f);
-        var customStyle = new DataGridViewCellStyle
+        using Font font = new("Arial", 8.25f);
+        DataGridViewCellStyle customStyle = new()
         {
             Font = font,
             BackColor = Color.Gray,
@@ -764,7 +764,7 @@ public class DataGridViewTextBoxEditingControlTests
         };
         yield return new object[] { customStyle, font, Color.Gray, SystemColors.Control, Color.Green, false, HorizontalAlignment.Left, false };
 
-        var transparentStyle = new DataGridViewCellStyle
+        DataGridViewCellStyle transparentStyle = new()
         {
             Font = font,
             BackColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78),
@@ -942,9 +942,9 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(ApplyCellStyleToEditingDataGridViewTextBoxEditingControl_WithDataGridView_TestData))]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_ApplyCellStyleToEditingDataGridViewTextBoxEditingControl_InvokeWithDataGridView_Success(DataGridViewCellStyle dataGridViewCellStyle, Font expectedFont, Color expectedBackColor, Color expectedEditingPanelBackColor, Color expectedForeColor, bool expectedWordWrap, HorizontalAlignment expectedTextAlign, bool expectedRepositionOnValueChange)
     {
-        using var dataGridView = new DataGridView();
-        using var oldFont = new Font("Arial", 8.25f);
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridView dataGridView = new();
+        using Font oldFont = new("Arial", 8.25f);
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView,
             Font = oldFont,
@@ -966,7 +966,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_ApplyCellStyleToEditingDataGridViewTextBoxEditingControl_NullDataGridViewCellStyle_ThrowsArgumentNullException()
     {
-        using var control = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl control = new();
         Assert.Throws<ArgumentNullException>("dataGridViewCellStyle", () => control.ApplyCellStyleToEditingControl(null));
     }
 
@@ -975,7 +975,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData(false, AccessibleRole.None)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         if (createControl)
         {
             control.CreateControl();
@@ -994,7 +994,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -1052,7 +1052,7 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(EditingControlWantsInputKey_TestData))]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlWantsInputKey_InvokeEmpty_ReturnsExpected(RightToLeft rightToLeft, bool valueChanged, bool multiline, bool acceptsReturn, Keys keyData, bool dataGridViewWantsInputKey, bool expected)
     {
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             RightToLeft = rightToLeft,
             EditingControlValueChanged = valueChanged,
@@ -1070,7 +1070,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1079,7 +1079,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InvalidEnumData<DataGridViewDataErrorContexts>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetEditingControlFormattedValue_Invoke_ReturnsExpected(DataGridViewDataErrorContexts context)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.Empty(Assert.IsType<string>(control.GetEditingControlFormattedValue(context)));
     }
 
@@ -1088,7 +1088,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InvalidEnumData<DataGridViewDataErrorContexts>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetEditingControlFormattedValue_InvokeWithText_ReturnsExpected(DataGridViewDataErrorContexts context)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             Text = "text"
         };
@@ -1118,7 +1118,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData((ControlStyles)(-1), false)]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1128,7 +1128,7 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1136,7 +1136,7 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1164,7 +1164,7 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1203,7 +1203,7 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingControl_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1231,8 +1231,8 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingControl_OnHandleCreated_InvokeWithDataGridView_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var dataGridView = new DataGridView();
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using DataGridView dataGridView = new();
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView
         };
@@ -1272,7 +1272,7 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(OnHandleCreated_WithHandle_TestData))]
     public void DataGridViewTextBoxEditingControl_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(bool userPaint, EventArgs eventArgs)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -1303,7 +1303,7 @@ public class DataGridViewTextBoxEditingControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) => callCount++;
 
@@ -1322,7 +1322,7 @@ public class DataGridViewTextBoxEditingControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnMouseWheel_InvokeWithDataGridView_CallsMouseWheel(MouseEventArgs eventArgs)
     {
-        using var dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         int dataGridViewCallCount = 0;
         dataGridView.MouseWheel += (sender, e) =>
         {
@@ -1330,7 +1330,7 @@ public class DataGridViewTextBoxEditingControlTests
             Assert.Same(eventArgs, e);
             dataGridViewCallCount++;
         };
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView
         };
@@ -1354,7 +1354,7 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1382,11 +1382,11 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_InvokeWithDataGridView_CallsTextChanged(EventArgs eventArgs)
     {
-        using var dataGridView = new DataGridView
+        using DataGridView dataGridView = new()
         {
             ColumnCount = 1
         };
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView
         };
@@ -1414,8 +1414,8 @@ public class DataGridViewTextBoxEditingControlTests
     [NewAndDefaultData<EventArgs>]
     public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_InvokeWithDataGridViewNoColumns_CallsTextChanged(EventArgs eventArgs)
     {
-        using var dataGridView = new DataGridView();
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using DataGridView dataGridView = new();
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView
         };
@@ -1447,11 +1447,11 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingControl_PrepareEditingControlForEdit_InvokeSelectAll_Success()
     {
-        var dataGridView = new DataGridView
+        DataGridView dataGridView = new()
         {
             ColumnCount = 1
         };
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView,
             Text = "text"
@@ -1480,11 +1480,11 @@ public class DataGridViewTextBoxEditingControlTests
     [WinFormsFact]
     public void DataGridViewTextBoxEditingControl_PrepareEditingControlForEdit_InvokeNotSelectAll_Success()
     {
-        var dataGridView = new DataGridView
+        DataGridView dataGridView = new()
         {
             ColumnCount = 1
         };
-        using var control = new DataGridViewTextBoxEditingControl
+        using DataGridViewTextBoxEditingControl control = new()
         {
             EditingControlDataGridView = dataGridView,
             Text = "text"
@@ -1542,7 +1542,7 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void DataGridViewTextBoxEditingControl_ProcessKeyEventArgs_InvokeWithoutParent_ReturnsFalse(int msg, IntPtr wParam, char newChar, bool handled, bool expected, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -1568,7 +1568,7 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam
@@ -1585,8 +1585,8 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void DataGridViewTextBoxEditingControl_ProcessKeyEventArgs_InvokeWithParent_ReturnsFalse(int msg, IntPtr wParam, char newChar, bool handled, bool expected, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var parent = new Control();
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using Control parent = new();
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             Parent = parent
         };
@@ -1615,7 +1615,7 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam
@@ -1639,11 +1639,11 @@ public class DataGridViewTextBoxEditingControlTests
             return true;
         }
 
-        using var parent = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl parent = new()
         {
             ProcessKeyEventArgsAction = action
         };
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             Parent = parent
         };
@@ -1672,7 +1672,7 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam
@@ -1691,7 +1691,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData((int)PInvoke.WM_SYSCHAR)]
     public void DataGridViewTextBoxEditingControl_ProcessKeyEventArgs_InvokeCharAfterImeChar_Success(int msg)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -1700,11 +1700,11 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = true;
             keyPressCallCount++;
         };
-        var charM = new Message
+        Message charM = new()
         {
             Msg = msg
         };
-        var imeM = new Message
+        Message imeM = new()
         {
             Msg = (int)PInvoke.WM_IME_CHAR
         };
@@ -1750,7 +1750,7 @@ public class DataGridViewTextBoxEditingControlTests
     [InlineData((int)PInvoke.WM_SYSKEYUP)]
     public void DataGridViewTextBoxEditingControl_ProcessKeyEventArgs_InvokeNonCharAfterImeChar_Success(int msg)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -1768,11 +1768,11 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = true;
             keyCallCount++;
         };
-        var charM = new Message
+        Message charM = new()
         {
             Msg = msg
         };
-        var imeM = new Message
+        Message imeM = new()
         {
             Msg = (int)PInvoke.WM_IME_CHAR
         };
@@ -1833,7 +1833,7 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void DataGridViewTextBoxEditingControl_ProcessKeyMessage_InvokeWithoutParent_ReturnsFalse(int msg, IntPtr wParam, char newChar, bool handled, bool expected, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var control = new SubDataGridViewTextBoxEditingControl();
+        using SubDataGridViewTextBoxEditingControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -1859,7 +1859,7 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam
@@ -1876,8 +1876,8 @@ public class DataGridViewTextBoxEditingControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void DataGridViewTextBoxEditingControl_ProcessKeyMessage_InvokeWithParent_ReturnsFalse(int msg, IntPtr wParam, char newChar, bool handled, bool expected, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var parent = new Control();
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using Control parent = new();
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             Parent = parent
         };
@@ -1906,7 +1906,7 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam
@@ -1930,11 +1930,11 @@ public class DataGridViewTextBoxEditingControlTests
             return true;
         }
 
-        using var parent = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl parent = new()
         {
             ProcessKeyEventArgsAction = action
         };
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             Parent = parent
         };
@@ -1963,7 +1963,7 @@ public class DataGridViewTextBoxEditingControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam
@@ -1989,15 +1989,15 @@ public class DataGridViewTextBoxEditingControlTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessKeyPreviewAction = action
         };
-        using var control = new SubDataGridViewTextBoxEditingControl
+        using SubDataGridViewTextBoxEditingControl control = new()
         {
             Parent = parent
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };
@@ -2018,11 +2018,11 @@ public class DataGridViewTextBoxEditingControlTests
             return result;
         }
 
-        using var control = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl control = new()
         {
             ProcessKeyEventArgsAction = action
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };
@@ -2046,7 +2046,7 @@ public class DataGridViewTextBoxEditingControlTests
             return parentResult;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessKeyPreviewAction = parentAction
         };
@@ -2058,12 +2058,12 @@ public class DataGridViewTextBoxEditingControlTests
             return result;
         }
 
-        using var control = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl control = new()
         {
             Parent = parent,
             ProcessKeyEventArgsAction = action
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };

@@ -77,7 +77,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             {
                 Rectangle bounds = GetPaintingBounds(designerHost, item);
                 bounds.Inflate(GLYPHBORDER, GLYPHBORDER);
-                Region rgn = new Region(bounds);
+                Region rgn = new(bounds);
                 try
                 {
                     bounds.Inflate(-GLYPHINSET, -GLYPHINSET);
@@ -293,7 +293,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         }
 
         // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents won't do it for us.
-        ArrayList origSel = new ArrayList(originalSelComps);
+        ArrayList origSel = new(originalSelComps);
         if (origSel.Count == 0)
         {
             if (keyService is not null && keyService.SelectedDesignerControl is not null)
@@ -567,7 +567,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 // Proceed with the drag and drop, passing in the list item.
                 try
                 {
-                    ArrayList dragItems = new ArrayList();
+                    ArrayList dragItems = new();
                     ICollection selComps = selSvc.GetSelectedComponents();
                     // create our list of controls-to-drag
                     foreach (IComponent comp in selComps)
@@ -582,7 +582,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     if (selSvc.PrimarySelection is ToolStripItem selectedItem)
                     {
                         ToolStrip owner = selectedItem.Owner;
-                        ToolStripItemDataObject data = new ToolStripItemDataObject(dragItems, selectedItem, owner);
+                        ToolStripItemDataObject data = new(dragItems, selectedItem, owner);
                         DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(QueryContinueDrag);
                         if (glyphItem is ToolStripDropDownItem ddItem)
                         {
@@ -900,7 +900,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     Graphics g = bSvc.AdornerWindowGraphics;
                     try
                     {
-                        using Pen p = new Pen(new SolidBrush(Color.Black));
+                        using Pen p = new(new SolidBrush(Color.Black));
                         p.DashStyle = DashStyle.Dot;
                         g.DrawRectangle(p, bounds);
                     }
@@ -945,7 +945,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         }
 
         // Remember the point where the mouse down occurred. The DragSize indicates the size that the mouse can move before a drag event should be started.
-        Size dragSize = new Size(1, 1);
+        Size dragSize = new(1, 1);
 
         IDesignerHost designerHost = (IDesignerHost)glyphItem.Site.GetService(typeof(IDesignerHost));
         Debug.Assert(designerHost is not null, "Invalid DesignerHost");

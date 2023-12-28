@@ -9,8 +9,8 @@ public class DataGridViewColumnStateChangedEventArgsTests
     [Fact]
     public void Ctor_DataGridViewColumn_DataGridViewElementStates()
     {
-        using var dataGridViewColumn = new DataGridViewColumn();
-        var e = new DataGridViewColumnStateChangedEventArgs(dataGridViewColumn, DataGridViewElementStates.Displayed);
+        using DataGridViewColumn dataGridViewColumn = new();
+        DataGridViewColumnStateChangedEventArgs e = new(dataGridViewColumn, DataGridViewElementStates.Displayed);
         Assert.Equal(dataGridViewColumn, e.Column);
         Assert.Equal(DataGridViewElementStates.Displayed, e.StateChanged);
     }

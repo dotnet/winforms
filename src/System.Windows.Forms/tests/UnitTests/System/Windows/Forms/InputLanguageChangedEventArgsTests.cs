@@ -18,7 +18,7 @@ public class InputLanguageChangedEventArgsTests
     [MemberData(nameof(Ctor_CultureInfo_Byte_TestData))]
     public void Ctor_CultureInfo_Byte(CultureInfo culture, byte charSet)
     {
-        var e = new InputLanguageChangedEventArgs(culture, charSet);
+        InputLanguageChangedEventArgs e = new(culture, charSet);
         Assert.Equal(InputLanguage.FromCulture(culture), e.InputLanguage);
         Assert.Equal(culture, e.Culture);
         Assert.Equal(charSet, e.CharSet);
@@ -59,7 +59,7 @@ public class InputLanguageChangedEventArgsTests
             return;
         }
 
-        var e = new InputLanguageChangedEventArgs(inputLanguage, charSet);
+        InputLanguageChangedEventArgs e = new(inputLanguage, charSet);
         Assert.Equal(inputLanguage, e.InputLanguage);
         Assert.Equal(inputLanguage.Culture, e.Culture);
         Assert.Equal(charSet, e.CharSet);

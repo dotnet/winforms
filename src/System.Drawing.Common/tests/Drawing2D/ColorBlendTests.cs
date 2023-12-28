@@ -8,7 +8,7 @@ public class ColorBlendTests
     [Fact]
     public void Ctor_Default()
     {
-        var blend = new ColorBlend();
+        ColorBlend blend = new();
         Assert.Equal(new Color[1], blend.Colors);
         Assert.Equal(new float[1], blend.Positions);
     }
@@ -18,7 +18,7 @@ public class ColorBlendTests
     [InlineData(2)]
     public void Ctor_Count(int count)
     {
-        var blend = new ColorBlend(count);
+        ColorBlend blend = new(count);
         Assert.Equal(new Color[count], blend.Colors);
         Assert.Equal(new float[count], blend.Positions);
     }
@@ -38,7 +38,7 @@ public class ColorBlendTests
     [Fact]
     public void Colors_Set_GetReturnsExpected()
     {
-        var blend = new ColorBlend { Colors = null };
+        ColorBlend blend = new() { Colors = null };
         Assert.Null(blend.Colors);
 
         blend.Colors = new Color[10];
@@ -48,7 +48,7 @@ public class ColorBlendTests
     [Fact]
     public void Positions_Set_GetReturnsExpected()
     {
-        var blend = new ColorBlend { Positions = null };
+        ColorBlend blend = new() { Positions = null };
         Assert.Null(blend.Positions);
 
         blend.Positions = new float[10];

@@ -11,7 +11,7 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Ctor_Default()
     {
-        using var dialog = new SubFontDialog();
+        using SubFontDialog dialog = new();
         Assert.True(dialog.AllowScriptChange);
         Assert.True(dialog.AllowSimulations);
         Assert.True(dialog.AllowVectorFonts);
@@ -40,7 +40,7 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Ctor_Default_OverridenReset()
     {
-        using var dialog = new EmptyResetFontDialog();
+        using EmptyResetFontDialog dialog = new();
         Assert.True(dialog.AllowScriptChange);
         Assert.True(dialog.AllowSimulations);
         Assert.True(dialog.AllowVectorFonts);
@@ -72,7 +72,7 @@ public class FontDialogTests
     [InlineData(false, 0x440101, 0x40101)]
     public void FontDialog_AllowScriptChange_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             AllowScriptChange = value
         };
@@ -95,7 +95,7 @@ public class FontDialogTests
     [InlineData(false, 0x41101, 0x40101)]
     public void FontDialog_AllowSimulations_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             AllowSimulations = value
         };
@@ -118,7 +118,7 @@ public class FontDialogTests
     [InlineData(false, 0x40901, 0x40101)]
     public void FontDialog_AllowVectorFonts_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             AllowVectorFonts = value
         };
@@ -141,7 +141,7 @@ public class FontDialogTests
     [InlineData(false, 0x1040101, 0x40101)]
     public void FontDialog_AllowVerticalFonts_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             AllowVerticalFonts = value
         };
@@ -172,7 +172,7 @@ public class FontDialogTests
     [MemberData(nameof(Color_Set_TestData))]
     public void FontDialog_Color_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             Color = value
         };
@@ -187,7 +187,7 @@ public class FontDialogTests
     [MemberData(nameof(Color_Set_TestData))]
     public void FontDialog_Color_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             Color = Color.Yellow
         };
@@ -205,7 +205,7 @@ public class FontDialogTests
     [InlineData(false, 0x40101, 0x44101)]
     public void FontDialog_FixedPitchOnly_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             FixedPitchOnly = value
         };
@@ -226,8 +226,8 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Font_GetWithSmallMinSize_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var dialog = new FontDialog
+        using Font font = new("Arial", 8.25f);
+        using FontDialog dialog = new()
         {
             MinSize = 1,
             Font = font
@@ -238,8 +238,8 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Font_GetWithLargeMinSize_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var dialog = new FontDialog
+        using Font font = new("Arial", 8.25f);
+        using FontDialog dialog = new()
         {
             MinSize = 100,
             Font = font
@@ -256,8 +256,8 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Font_GetWithSmallMaxSize_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var dialog = new FontDialog
+        using Font font = new("Arial", 8.25f);
+        using FontDialog dialog = new()
         {
             MaxSize = 1,
             Font = font
@@ -274,8 +274,8 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Font_GetWithLargeMaxSize_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var dialog = new FontDialog
+        using Font font = new("Arial", 8.25f);
+        using FontDialog dialog = new()
         {
             MaxSize = 100,
             Font = font
@@ -288,7 +288,7 @@ public class FontDialogTests
         yield return new object[] { null };
         yield return new object[] { SystemFonts.MenuFont };
 
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         yield return new object[] { font };
     }
 
@@ -296,7 +296,7 @@ public class FontDialogTests
     [MemberData(nameof(Font_Set_TestData))]
     public void FontDialog_Font_Set_GetReturnsExpected(Font value)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             Font = value
         };
@@ -311,8 +311,8 @@ public class FontDialogTests
     [MemberData(nameof(Font_Set_TestData))]
     public void FontDialog_Font_SetWithCustomOldValue_GetReturnsExpected(Font value)
     {
-        using var font = new Font("Arial", 8.25f);
-        using var dialog = new FontDialog
+        using Font font = new("Arial", 8.25f);
+        using FontDialog dialog = new()
         {
             Font = font
         };
@@ -329,10 +329,10 @@ public class FontDialogTests
     public void FontDialog_Font_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(FontDialog))[nameof(FontDialog.Font)];
-        using var dialog = new FontDialog();
+        using FontDialog dialog = new();
         Assert.False(property.CanResetValue(dialog));
 
-        using var font = new Font("Arial", 8.25f);
+        using Font font = new("Arial", 8.25f);
         dialog.Font = font;
         Assert.Same(font, dialog.Font);
         Assert.True(property.CanResetValue(dialog));
@@ -346,10 +346,10 @@ public class FontDialogTests
     public void FontDialog_Font_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(FontDialog))[nameof(FontDialog.Font)];
-        using var dialog = new FontDialog();
+        using FontDialog dialog = new();
         Assert.False(property.ShouldSerializeValue(dialog));
 
-        using var font = new Font("Arial", 8.25f);
+        using Font font = new("Arial", 8.25f);
         dialog.Font = font;
         Assert.Same(font, dialog.Font);
         Assert.True(property.ShouldSerializeValue(dialog));
@@ -364,7 +364,7 @@ public class FontDialogTests
     [InlineData(false, 0x40101, 0x50101)]
     public void FontDialog_FontMustExist_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             FontMustExist = value
         };
@@ -389,7 +389,7 @@ public class FontDialogTests
     [InlineData(int.MaxValue, int.MaxValue)]
     public void FontDialog_MinSize_Set_GetReturnsExpected(int value, int expected)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             MinSize = value
         };
@@ -410,7 +410,7 @@ public class FontDialogTests
     [InlineData(int.MaxValue, int.MaxValue, int.MaxValue)]
     public void FontDialog_MinSize_SetWithMaxSize_GetReturnsExpected(int value, int expected, int expectedMaxSize)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             MaxSize = 10,
             MinSize = value
@@ -431,7 +431,7 @@ public class FontDialogTests
     [InlineData(int.MaxValue, int.MaxValue)]
     public void FontDialog_MaxSize_Set_GetReturnsExpected(int value, int expected)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             MaxSize = value
         };
@@ -452,7 +452,7 @@ public class FontDialogTests
     [InlineData(int.MaxValue, int.MaxValue, 10)]
     public void FontDialog_MaxSize_SetWithMinSize_GetReturnsExpected(int value, int expected, int expectedMinSize)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             MinSize = 10,
             MaxSize = value
@@ -471,7 +471,7 @@ public class FontDialogTests
     [InlineData(false, 0x40101, 0x40501)]
     public void FontDialog_ScriptsOnly_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             ScriptsOnly = value
         };
@@ -494,7 +494,7 @@ public class FontDialogTests
     [InlineData(false, 0x40101, 0x40301)]
     public void FontDialog_ShowApply_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             ShowApply = value
         };
@@ -516,7 +516,7 @@ public class FontDialogTests
     [BoolData]
     public void FontDialog_ShowColor_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FontDialog
+        using FontDialog dialog = new()
         {
             ShowColor = value
         };
@@ -536,7 +536,7 @@ public class FontDialogTests
     [InlineData(false, 0x40001, 0x40101)]
     public void FontDialog_ShowEffects_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             ShowEffects = value
         };
@@ -559,7 +559,7 @@ public class FontDialogTests
     [InlineData(false, 0x40101, 0x40105)]
     public void FontDialog_ShowHelp_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             ShowHelp = value
         };
@@ -580,8 +580,8 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_Reset_Invoke_Success()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var dialog = new SubFontDialog
+        using Font font = new("Arial", 8.25f);
+        using SubFontDialog dialog = new()
         {
             AllowScriptChange = false,
             AllowSimulations = false,
@@ -646,7 +646,7 @@ public class FontDialogTests
     [MemberData(nameof(HookProc_TestData))]
     public void FontDialog_HookProc_Invoke_ReturnsZero(bool showColor, int msg, IntPtr wparam)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             ShowColor = showColor
         };
@@ -677,8 +677,8 @@ public class FontDialogTests
     [MemberData(nameof(HookProc_WithHWnd_TestData))]
     public void FontDialog_HookProc_InvokeWithHWnd_ReturnsZero(bool showColor, int msg, IntPtr wparam, int expectedApplyCallCount)
     {
-        using var control = new CustomClass();
-        using var dialog = new SubFontDialog
+        using CustomClass control = new();
+        using SubFontDialog dialog = new()
         {
             ShowColor = showColor
         };
@@ -709,7 +709,7 @@ public class FontDialogTests
     [BoolData]
     public void FontDialog_HookProc_Invoke_InvalidCommandHWnd(bool showColor)
     {
-        using var dialog = new SubFontDialog
+        using SubFontDialog dialog = new()
         {
             ShowColor = showColor
         };
@@ -722,7 +722,7 @@ public class FontDialogTests
     [NewAndDefaultData<EventArgs>]
     public void FontDialog_OnApply_Invoke_CallsApply(EventArgs eventArgs)
     {
-        using var dialog = new SubFontDialog();
+        using SubFontDialog dialog = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -745,7 +745,7 @@ public class FontDialogTests
     [WinFormsFact]
     public void FontDialog_ToString_Invoke_ReturnsExpected()
     {
-        using var dialog = new SubFontDialog();
+        using SubFontDialog dialog = new();
         Assert.Equal($"System.Windows.Forms.Tests.FontDialogTests+SubFontDialog,  Font: {Control.DefaultFont}", dialog.ToString());
     }
 

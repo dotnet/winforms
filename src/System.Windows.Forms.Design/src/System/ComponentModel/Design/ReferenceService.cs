@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 internal sealed class ReferenceService : IReferenceService, IDisposable
 {
-    private static readonly Attribute[] _attributes = new Attribute[] { DesignerSerializationVisibilityAttribute.Content };
+    private static readonly Attribute[] _attributes = [DesignerSerializationVisibilityAttribute.Content];
 
     private IServiceProvider _provider; // service provider we use to get to other services
     private List<IComponent>? _addedComponents; // list of newly added components

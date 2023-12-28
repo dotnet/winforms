@@ -457,8 +457,8 @@ public partial class TabControl : Control
         {
             if (_imageList != value)
             {
-                EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
-                EventHandler disposedHandler = new EventHandler(DetachImageList);
+                EventHandler recreateHandler = new(ImageListRecreateHandle);
+                EventHandler disposedHandler = new(DetachImageList);
 
                 if (_imageList is not null)
                 {
@@ -1947,7 +1947,7 @@ public partial class TabControl : Control
 
     private bool WmSelChange()
     {
-        TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(SelectedTab, SelectedIndex, false, TabControlAction.Selecting);
+        TabControlCancelEventArgs tcc = new(SelectedTab, SelectedIndex, false, TabControlAction.Selecting);
         OnSelecting(tcc);
         if (!tcc.Cancel)
         {
@@ -1990,7 +1990,7 @@ public partial class TabControl : Control
         // if 'cancelled' return from here else..
         // fire Deselected.
         _lastSelection = SelectedIndex;
-        TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(SelectedTab, SelectedIndex, false, TabControlAction.Deselecting);
+        TabControlCancelEventArgs tcc = new(SelectedTab, SelectedIndex, false, TabControlAction.Deselecting);
         OnDeselecting(tcc);
         if (!tcc.Cancel)
         {

@@ -26,7 +26,7 @@ public class TASKDIALOGCONFIGTests
             return;
         }
 
-        TASKDIALOGCONFIG sut = new TASKDIALOGCONFIG();
+        TASKDIALOGCONFIG sut = new();
         byte* addr = (byte*)&sut;
         fixed (void* mainIconPtr = &sut.mainIcon)
         fixed (void* footerIconPtr = &sut.footerIcon)
@@ -77,7 +77,7 @@ public class TASKDIALOGCONFIGTests
             return;
         }
 
-        TASKDIALOGCONFIG sut = new TASKDIALOGCONFIG();
+        TASKDIALOGCONFIG sut = new();
         byte* addr = (byte*)&sut;
         fixed (void* mainIconPtr = &sut.mainIcon)
         fixed (void* footerIconPtr = &sut.footerIcon)

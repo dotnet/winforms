@@ -12,7 +12,7 @@ public class CreateParamsTests
     [StringWithNullData]
     public void CreateParams_ClassName_Set_GetReturnsExpected(string value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             ClassName = value
         };
@@ -23,7 +23,7 @@ public class CreateParamsTests
     [StringWithNullData]
     public void CreateParams_Caption_Set_GetReturnsExpected(string value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Caption = value
         };
@@ -34,7 +34,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_Style_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Style = value
         };
@@ -45,7 +45,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_ExStyle_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             ExStyle = value
         };
@@ -56,7 +56,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_ClassStyle_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             ClassStyle = value
         };
@@ -67,7 +67,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_X_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             X = value
         };
@@ -78,7 +78,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_Y_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Y = value
         };
@@ -89,7 +89,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_Width_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Width = value
         };
@@ -100,7 +100,7 @@ public class CreateParamsTests
     [IntegerData<int>]
     public void CreateParams_Height_Set_GetReturnsExpected(int value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Height = value
         };
@@ -111,7 +111,7 @@ public class CreateParamsTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntPtrTheoryData))]
     public void CreateParams_Parent_Set_GetReturnsExpected(IntPtr value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Parent = value
         };
@@ -122,7 +122,7 @@ public class CreateParamsTests
     [StringWithNullData]
     public void CreateParams_Param_Set_GetReturnsExpected(string value)
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             Param = value
         };
@@ -132,7 +132,7 @@ public class CreateParamsTests
     [Fact]
     public void CreateParams_ToString_Invoke_ReturnsExpected()
     {
-        var createParams = new CreateParams
+        CreateParams createParams = new()
         {
             ClassName = "className",
             Caption = "caption",

@@ -17,7 +17,7 @@ public class TreeViewImageIndexConverterTests
     [Fact]
     public void TreeViewImageIndexConverter_ConvertTo_destinationType_null_ThrowsArgumentNullException()
     {
-        var converter = new TreeViewImageIndexConverter();
+        TreeViewImageIndexConverter converter = new();
 
         Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(context: null, culture: null, new object(), destinationType: null));
     }
@@ -34,7 +34,7 @@ public class TreeViewImageIndexConverterTests
     [MemberData(nameof(TreeViewImageIndexConverter_ConvertFrom_special_string_to_int_ReturnsExpected_TestData))]
     public void TreeViewImageIndexConverter_ConvertFrom_special_string_to_int_ReturnsExpected(object value, object expected)
     {
-        var converter = new TreeViewImageIndexConverter();
+        TreeViewImageIndexConverter converter = new();
 
         object result = converter.ConvertFrom(context: null, culture: null, value);
 
@@ -53,7 +53,7 @@ public class TreeViewImageIndexConverterTests
     [MemberData(nameof(TreeViewImageIndexConverter_ConvertTo_special_int_to_string_ReturnsExpected_TestData))]
     public void TreeViewImageIndexConverter_ConvertTo_special_int_to_string_ReturnsExpected(object value, object expected)
     {
-        var converter = new TreeViewImageIndexConverter();
+        TreeViewImageIndexConverter converter = new();
 
         object result = converter.ConvertTo(context: null, culture: null, value, destinationType: typeof(string));
 
@@ -63,7 +63,7 @@ public class TreeViewImageIndexConverterTests
     [Fact]
     public void TreeViewImageIndexConverter_GetStandardValues_Null_Context_ReturnsExpected()
     {
-        var converter = new TreeViewImageIndexConverter();
+        TreeViewImageIndexConverter converter = new();
 
         StandardValuesCollection result = converter.GetStandardValues(context: null);
 

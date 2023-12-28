@@ -634,7 +634,7 @@ public partial class Splitter : Control
     /// </summary>
     private SplitData CalcSplitBounds()
     {
-        SplitData spd = new SplitData();
+        SplitData spd = new();
         Control? target = FindTarget();
         spd.target = target;
         if (target is not null)

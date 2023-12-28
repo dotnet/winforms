@@ -29,7 +29,7 @@ partial class ToolStripContainer
     private void InitializeComponent()
     {
         this.components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolStripContainer));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(ToolStripContainer));
         this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
         this.toolStrip1 = new System.Windows.Forms.ToolStrip();
         this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);

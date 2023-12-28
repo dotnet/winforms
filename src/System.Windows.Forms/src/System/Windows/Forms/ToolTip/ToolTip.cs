@@ -193,7 +193,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     {
         get
         {
-            CreateParams cp = new CreateParams();
+            CreateParams cp = new();
             if (TopLevelControl is not null && !TopLevelControl.IsDisposed)
             {
                 cp.Parent = TopLevelControl.Handle;
@@ -2036,7 +2036,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         Control? toolControl = window as Control;
 
         Size currentTooltipSize = rect.Size;
-        PopupEventArgs e = new PopupEventArgs(window, toolControl, IsBalloon, currentTooltipSize);
+        PopupEventArgs e = new(window, toolControl, IsBalloon, currentTooltipSize);
         OnPopup(e);
 
         if (toolControl is DataGridView dataGridView && dataGridView.CancelToolTipPopup(this))

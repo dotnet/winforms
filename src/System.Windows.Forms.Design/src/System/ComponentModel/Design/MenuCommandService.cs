@@ -246,8 +246,8 @@ public class MenuCommandService : IMenuCommandService, IDisposable
                                     {
                                         if (dai[i] is DesignerActionMethodItem dami && dami.IncludeAsDesignerVerb)
                                         {
-                                            EventHandler handler = new EventHandler(dami.Invoke);
-                                            DesignerVerb verb = new DesignerVerb(dami.DisplayName!, handler);
+                                            EventHandler handler = new(dami.Invoke);
+                                            DesignerVerb verb = new(dami.DisplayName!, handler);
                                             designerActionVerbs.Add(verb);
                                             verbCount++;
                                         }

@@ -32,55 +32,55 @@ namespace WinformsControlsTest
         private void InitializeComponent()
         {
             // chart1
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new();
 
             // chart2
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36890D, 32D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36891D, 56D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36892D, 35D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36893D, 12D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36894D, 35D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36895D, 6D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36896D, 23D);
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new(36890D, 32D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new(36891D, 56D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new(36892D, 35D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new(36893D, 12D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new(36894D, 35D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new(36895D, 6D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new(36896D, 23D);
 
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36890D, 67D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint9 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36891D, 24D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint10 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36892D, 12D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint11 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36893D, 8D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint12 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36894D, 46D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint13 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36895D, 14D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint14 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(36896D, 76D);
-            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new(36890D, 67D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint9 = new(36891D, 24D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint10 = new(36892D, 12D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint11 = new(36893D, 8D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint12 = new(36894D, 46D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint13 = new(36895D, 14D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint14 = new(36896D, 76D);
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new();
 
             // chart3
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new();
+            System.Windows.Forms.DataVisualization.Charting.Title title3 = new();
 
             // chart4
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint15 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 39);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint16 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 18);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint17 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 15);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint18 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 12);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint19 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 8);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint20 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 4.5);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint21 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 3.2000000476837158);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint22 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 2);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint23 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0, 1);
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint15 = new(0, 39);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint16 = new(0, 18);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint17 = new(0, 15);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint18 = new(0, 12);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint19 = new(0, 8);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint20 = new(0, 4.5);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint21 = new(0, 3.2000000476837158);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint22 = new(0, 2);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint23 = new(0, 1);
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new();
+            System.Windows.Forms.DataVisualization.Charting.Title title4 = new();
 
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();

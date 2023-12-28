@@ -77,7 +77,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     {
         get
         {
-            BaseContextMenuStrip toolStripContextMenu = new BaseContextMenuStrip(Component.Site);
+            BaseContextMenuStrip toolStripContextMenu = new(Component.Site);
             // If multiple Items Selected don't show the custom properties...
             if (_selectionService.SelectionCount > 1)
             {
@@ -1035,7 +1035,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     {
         base.PreFilterProperties(properties);
         // Handle shadowed properties
-        string[] shadowProps = new string[] { "AutoSize", "AccessibleName", "Visible", "Overflow" };
+        string[] shadowProps = ["AutoSize", "AccessibleName", "Visible", "Overflow"];
 
         PropertyDescriptor prop;
         Attribute[] empty = Array.Empty<Attribute>();

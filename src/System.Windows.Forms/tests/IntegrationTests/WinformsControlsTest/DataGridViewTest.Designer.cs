@@ -31,8 +31,8 @@ partial class DataGridViewTest
     /// </summary>
     private void InitializeComponent()
     {
-        System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-        System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+        System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new();
+        System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new();
         this.dataGridView1 = new System.Windows.Forms.DataGridView();
         this.column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
         this.column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();

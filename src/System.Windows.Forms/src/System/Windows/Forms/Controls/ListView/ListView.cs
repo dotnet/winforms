@@ -606,7 +606,7 @@ public partial class ListView : Control
         }
     }
 
-    internal ToolTip KeyboardToolTip { get; } = new ToolTip();
+    internal ToolTip KeyboardToolTip { get; } = new();
 
     /// <summary>
     ///  The currently checked list items.
@@ -2679,7 +2679,7 @@ public partial class ListView : Control
                     if (OwnerDraw)
                     {
                         using Graphics g = nmcd->nmcd.hdc.CreateGraphics();
-                        DrawListViewItemEventArgs e = new DrawListViewItemEventArgs(
+                        DrawListViewItemEventArgs e = new(
                             g,
                             Items[(int)nmcd->nmcd.dwItemSpec],
                             itemBounds,
@@ -2992,7 +2992,7 @@ public partial class ListView : Control
     {
         if (!string.IsNullOrEmpty(fileName))
         {
-            FileInfo fi = new FileInfo(fileName);
+            FileInfo fi = new(fileName);
             if (fi.Exists)
             {
                 // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
@@ -3347,7 +3347,7 @@ public partial class ListView : Control
 
         if (VirtualMode)
         {
-            SearchForVirtualItemEventArgs sviEvent = new SearchForVirtualItemEventArgs(isTextSearch, isPrefixSearch, includeSubItemsInSearch, text, pt, dir, startIndex);
+            SearchForVirtualItemEventArgs sviEvent = new(isTextSearch, isPrefixSearch, includeSubItemsInSearch, text, pt, dir, startIndex);
 
             OnSearchForVirtualItem(sviEvent);
             // NOTE: this will cause a RetrieveVirtualItem event w/o a corresponding cache hint event.
@@ -5613,7 +5613,7 @@ public partial class ListView : Control
         ApplyUpdateCachedItems();
         if (IsHandleCreated && _listItemSorter is not null)
         {
-            NativeMethods.ListViewCompareCallback callback = new NativeMethods.ListViewCompareCallback(CompareFunc);
+            NativeMethods.ListViewCompareCallback callback = new(CompareFunc);
             IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callback);
             PInvoke.SendMessage(this, PInvoke.LVM_SORTITEMS, (WPARAM)0, (LPARAM)callbackPointer);
             GC.KeepAlive(callback);
@@ -6118,7 +6118,7 @@ public partial class ListView : Control
                 (_listViewState[LISTVIEWSTATE_headerControlTracking] || _listViewState[LISTVIEWSTATE_headerDividerDblClick]))
             {
                 int newColumnWidth = ((nmheader->pitem->mask & HDI_MASK.HDI_WIDTH) != 0) ? nmheader->pitem->cxy : -1;
-                ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader->iItem, newColumnWidth);
+                ColumnWidthChangingEventArgs colWidthChanging = new(nmheader->iItem, newColumnWidth);
                 OnColumnWidthChanging(colWidthChanging);
                 m.ResultInternal = (LRESULT)(colWidthChanging.Cancel ? 1 : 0);
                 if (colWidthChanging.Cancel)
@@ -6251,7 +6251,7 @@ public partial class ListView : Control
                         return false;
                     }
 
-                    ColumnReorderedEventArgs chrevent = new ColumnReorderedEventArgs(
+                    ColumnReorderedEventArgs chrevent = new(
                         from,
                         to,
                         Columns[header->iItem]);
@@ -6535,7 +6535,7 @@ public partial class ListView : Control
                     _listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                     NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
                     string? text = dispInfo->item.pszText.ToString();
-                    LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
+                    LabelEditEventArgs e = new(dispInfo->item.iItem, text);
                     OnAfterLabelEdit(e);
                     m.ResultInternal = (LRESULT)(nint)(BOOL)e.CancelEdit;
 
@@ -6595,7 +6595,7 @@ public partial class ListView : Control
 
                         if (oldState != newState)
                         {
-                            ItemCheckEventArgs e = new ItemCheckEventArgs(nmlv->iItem, newState, oldState);
+                            ItemCheckEventArgs e = new(nmlv->iItem, newState, oldState);
                             OnItemCheck(e);
                             m.ResultInternal = (LRESULT)(nint)(BOOL)(e.NewValue == oldState);
                         }
@@ -6617,7 +6617,7 @@ public partial class ListView : Control
 
                         if (newValue != oldValue)
                         {
-                            ItemCheckedEventArgs e = new ItemCheckedEventArgs(Items[nmlv->iItem]);
+                            ItemCheckedEventArgs e = new(Items[nmlv->iItem]);
                             OnItemChecked(e);
 
                             AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
@@ -6659,7 +6659,7 @@ public partial class ListView : Control
                             {
                                 if (VirtualListSize > 0)
                                 {
-                                    ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(0, VirtualListSize - 1, newState != 0);
+                                    ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new(0, VirtualListSize - 1, newState != 0);
                                     OnVirtualItemsSelectionRangeChanged(lvvisrce);
                                 }
                             }
@@ -6673,7 +6673,7 @@ public partial class ListView : Control
 
                                 if (Items.Count > 0)
                                 {
-                                    ListViewItemSelectionChangedEventArgs lvisce = new ListViewItemSelectionChangedEventArgs(Items[nmlv->iItem],
+                                    ListViewItemSelectionChangedEventArgs lvisce = new(Items[nmlv->iItem],
                                                                                                                              nmlv->iItem,
                                                                                                                              newState != 0);
                                     OnItemSelectionChanged(lvisce);
@@ -6805,7 +6805,7 @@ public partial class ListView : Control
                     {
                         NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
 
-                        RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
+                        RetrieveVirtualItemEventArgs rVI = new(dispInfo->item.iItem);
                         OnRetrieveVirtualItem(rVI);
                         ListViewItem lvItem = rVI.Item ?? throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
 
@@ -6961,7 +6961,7 @@ public partial class ListView : Control
         if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-            Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
+            Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);
             using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             g.DrawRectangle(pen, rect);
             rect.Inflate(-1, -1);

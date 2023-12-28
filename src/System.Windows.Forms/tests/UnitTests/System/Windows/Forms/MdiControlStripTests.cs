@@ -15,7 +15,7 @@ public class MdiControlStripTests
     public void MdiControlStrip_Ctor_Default()
     {
         using Form form = new();
-        using var mdiControlStrip = new SubMdiControlStrip(form);
+        using SubMdiControlStrip mdiControlStrip = new(form);
         Assert.Null(mdiControlStrip.AccessibleDefaultActionDescription);
         Assert.Null(mdiControlStrip.AccessibleDescription);
         Assert.Null(mdiControlStrip.AccessibleName);
@@ -155,7 +155,7 @@ public class MdiControlStripTests
     public void MdiControlStrip_Ctor_VerifyMenuItemsInRightOrder()
     {
         using Form form = new();
-        using var mdiControlStrip = new SubMdiControlStrip(form);
+        using SubMdiControlStrip mdiControlStrip = new(form);
 
         Assert.Equal(4, mdiControlStrip.Items.Count);
 
@@ -173,7 +173,7 @@ public class MdiControlStripTests
     public void MdiControlStrip_Ctor_VerifyMenuItemsHaveImages()
     {
         using Form form = new();
-        using var mdiControlStrip = new SubMdiControlStrip(form);
+        using SubMdiControlStrip mdiControlStrip = new(form);
 
         ToolStripMenuItem[] items = new ToolStripMenuItem[]
         {
@@ -312,9 +312,9 @@ public class MdiControlStripTests
     [WinFormsFact]
     public void MdiControlStrip_MaximizedChildWindow_RecreatesOnSizeChanged()
     {
-        using var mdiParent = new Form() { IsMdiContainer = true, Text = "Parent" };
-        using var mdiChild = new Form() { MdiParent = mdiParent, Text = "Child" };
-        using var menuStrip = new MenuStrip();
+        using Form mdiParent = new() { IsMdiContainer = true, Text = "Parent" };
+        using Form mdiChild = new() { MdiParent = mdiParent, Text = "Child" };
+        using MenuStrip menuStrip = new();
 
         mdiParent.Controls.Add(menuStrip);
         mdiParent.MainMenuStrip = menuStrip;

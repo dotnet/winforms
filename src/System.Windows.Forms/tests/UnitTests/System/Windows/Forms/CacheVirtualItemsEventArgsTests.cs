@@ -12,7 +12,7 @@ public class CacheVirtualItemsEventArgsTests
     [InlineData(1, 2)]
     public void Ctor_Int_Int(int startIndex, int endIndex)
     {
-        var e = new CacheVirtualItemsEventArgs(startIndex, endIndex);
+        CacheVirtualItemsEventArgs e = new(startIndex, endIndex);
         Assert.Equal(startIndex, e.StartIndex);
         Assert.Equal(endIndex, e.EndIndex);
     }

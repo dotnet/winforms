@@ -28,7 +28,7 @@ public class ImageListImageEditor : ImageEditor
             return value;
         }
 
-        var images = new ArrayList();
+        ArrayList images = new();
         if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return images;
@@ -71,7 +71,7 @@ public class ImageListImageEditor : ImageEditor
             {
                 foreach (string name in _fileDialog.FileNames)
                 {
-                    using FileStream file = new FileStream(name, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    using FileStream file = new(name, FileMode.Open, FileAccess.Read, FileShare.Read);
                     ImageListImage image = LoadImageFromStream(file, name.EndsWith(".ico"));
                     image.Name = Path.GetFileName(name);
                     images.Add(image);
@@ -103,7 +103,7 @@ public class ImageListImageEditor : ImageEditor
         stream.Read(buffer, 0, (int)stream.Length);
 
         // The created image will take over ownership of the stream.
-        MemoryStream ms = new MemoryStream(buffer);
+        MemoryStream ms = new(buffer);
         return ImageListImage.ImageListImageFromStream(ms, imageIsIcon);
     }
 

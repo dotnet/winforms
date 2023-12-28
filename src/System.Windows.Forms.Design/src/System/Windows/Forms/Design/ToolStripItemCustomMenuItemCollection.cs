@@ -65,7 +65,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private ToolStripMenuItem CreatePropertyBasedItem(string text, string propertyName, string imageName)
     {
-        ToolStripMenuItem item = new ToolStripMenuItem(text);
+        ToolStripMenuItem item = new(text);
         bool browsable = IsPropertyBrowsable(propertyName);
         item.Visible = browsable;
         if (browsable)
@@ -91,7 +91,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
     /// </summary>
     private ToolStripMenuItem CreateEnumValueItem(string propertyName, string name, object value)
     {
-        ToolStripMenuItem item = new ToolStripMenuItem(name)
+        ToolStripMenuItem item = new(name)
         {
             Tag = new EnumValueDescription(propertyName, value)
         };
@@ -101,7 +101,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
 
     private ToolStripMenuItem CreateBooleanItem(string text, string propertyName)
     {
-        ToolStripMenuItem item = new ToolStripMenuItem(text);
+        ToolStripMenuItem item = new(text);
         bool browsable = IsPropertyBrowsable(propertyName);
         item.Visible = browsable;
         item.Tag = propertyName;

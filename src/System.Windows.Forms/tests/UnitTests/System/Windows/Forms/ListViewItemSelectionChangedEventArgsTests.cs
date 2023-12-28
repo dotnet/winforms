@@ -17,7 +17,7 @@ public class ListViewItemSelectionChangedEventArgsTests
     [MemberData(nameof(Ctor_ListViewItem_Int_Bool_TestData))]
     public void Ctor_ListViewItem_Int_Bool(ListViewItem item, int itemIndex, bool isSelected)
     {
-        var e = new ListViewItemSelectionChangedEventArgs(item, itemIndex, isSelected);
+        ListViewItemSelectionChangedEventArgs e = new(item, itemIndex, isSelected);
         Assert.Equal(item, e.Item);
         Assert.Equal(itemIndex, e.ItemIndex);
         Assert.Equal(isSelected, e.IsSelected);

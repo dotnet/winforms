@@ -9,7 +9,7 @@ public class SRCategoryAttributeTests
     [Fact]
     public void VerifyCategoryForValidCategoryAttribute()
     {
-        SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(nameof(SR.CatAccessibility));
+        SRCategoryAttribute srCategoryAttribute = new(nameof(SR.CatAccessibility));
         Assert.Equal(SR.CatAccessibility, srCategoryAttribute.Category);
     }
 
@@ -17,7 +17,7 @@ public class SRCategoryAttributeTests
     public void InvalidCategoryShouldReturnCategoryNameAsIs()
     {
         const string fakeCategory = "fakeCategory";
-        SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(fakeCategory);
+        SRCategoryAttribute srCategoryAttribute = new(fakeCategory);
         Assert.Equal(fakeCategory, srCategoryAttribute.Category);
     }
 }

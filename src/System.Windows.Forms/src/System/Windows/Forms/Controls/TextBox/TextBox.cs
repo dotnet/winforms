@@ -834,7 +834,7 @@ public partial class TextBox : TextBoxBase
             && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-            Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
+            Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);
             using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             g.DrawRectangle(pen, rect);
             rect.Inflate(-1, -1);

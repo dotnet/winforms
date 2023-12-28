@@ -165,7 +165,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // We should never add anything while we're unloading.
         if (_state[s_stateUnloading])
         {
-            Exception ex = new Exception(SR.DesignerHostUnloading)
+            Exception ex = new(SR.DesignerHostUnloading)
             {
                 HelpLink = SR.DesignerHostUnloading
             };
@@ -177,7 +177,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             if (string.Equals(component.GetType().FullName, _rootComponentClassName, StringComparison.OrdinalIgnoreCase))
             {
-                Exception ex = new Exception(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
+                Exception ex = new(string.Format(SR.DesignerHostCyclicAdd, component.GetType().FullName, _rootComponentClassName))
                 {
                     HelpLink = SR.DesignerHostCyclicAdd
                 };
@@ -198,7 +198,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
 
         // Raise an adding event for our container if the container is us.
-        ComponentEventArgs ce = new ComponentEventArgs(component);
+        ComponentEventArgs ce = new(component);
         (_events[s_eventComponentAdding] as ComponentEventHandler)?.Invoke(containerToAddTo, ce);
         return true;
     }
@@ -226,7 +226,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             designer = _surface!.CreateDesigner(component, true) as IRootDesigner;
             if (designer is null)
             {
-                Exception ex = new Exception(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
+                Exception ex = new(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
                 {
                     HelpLink = SR.DesignerHostNoTopLevelDesigner
                 };
@@ -271,7 +271,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
 
         // The component has been added.  Note that it is tempting to move this above the designer because the designer will never need to know that its own component just got added, but this would be bad because the designer is needed to extract shadowed properties from the component.
-        ComponentEventArgs ce = new ComponentEventArgs(component);
+        ComponentEventArgs ce = new(component);
         (_events[s_eventComponentAdded] as ComponentEventHandler)?.Invoke(containerToAddTo, ce);
     }
 
@@ -612,7 +612,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             return false;
         }
 
-        ComponentEventArgs ce = new ComponentEventArgs(component);
+        ComponentEventArgs ce = new(component);
 
         ComponentEventHandler? eh = _events[s_eventComponentRemoving] as ComponentEventHandler;
         eh?.Invoke(this, ce);
@@ -658,7 +658,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         try
         {
             ComponentEventHandler? eh = _events[s_eventComponentRemoved] as ComponentEventHandler;
-            ComponentEventArgs ce = new ComponentEventArgs(component);
+            ComponentEventArgs ce = new(component);
             eh?.Invoke(this, ce);
         }
         finally
@@ -1005,7 +1005,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
             if (component is null)
             {
-                InvalidOperationException ex = new InvalidOperationException(string.Format(SR.DesignerHostFailedComponentCreate, componentType.Name))
+                InvalidOperationException ex = new(string.Format(SR.DesignerHostFailedComponentCreate, componentType.Name))
                 {
                     HelpLink = SR.DesignerHostFailedComponentCreate
                 };

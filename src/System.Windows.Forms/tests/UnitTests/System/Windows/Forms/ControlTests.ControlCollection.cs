@@ -31,9 +31,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_ControlNewCollection_Success()
     {
-        using var owner = new Control();
-        using var control1 = new Control();
-        using var control2 = new Control();
+        using Control owner = new();
+        using Control control1 = new();
+        using Control control2 = new();
         var collection = new Control.ControlCollection(owner);
         int parentLayoutCallCount = 0;
         void parentHandler(object sender, LayoutEventArgs e)
@@ -105,9 +105,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_ControlExistingCollection_Success()
     {
-        using var owner = new Control();
-        using var control1 = new Control();
-        using var control2 = new Control();
+        using Control owner = new();
+        using Control control1 = new();
+        using Control control2 = new();
         Control.ControlCollection collection = owner.Controls;
         int parentLayoutCallCount = 0;
         string affectedProperty = null;
@@ -182,9 +182,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_ControlHasParent_Success()
     {
-        using var owner1 = new Control();
-        using var owner2 = new Control();
-        using var control = new Control();
+        using Control owner1 = new();
+        using Control owner2 = new();
+        using Control control = new();
         Control.ControlCollection collection1 = owner1.Controls;
         Control.ControlCollection collection2 = owner2.Controls;
         int layoutCallCount = 0;
@@ -221,7 +221,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_ControlWithCustomLayoutEngine_Success()
     {
-        using var owner = new Control();
+        using Control owner = new();
         Control.ControlCollection collection = owner.Controls;
         int layoutCallCount = 0;
         string affectedProperty = null;
@@ -235,8 +235,8 @@ public class ControlControlCollectionTests
 
         owner.Layout += parentHandler;
 
-        using var control = new CustomLayoutEngineControl();
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        using CustomLayoutEngineControl control = new();
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.InitLayout(control, BoundsSpecified.All))
             .Verifiable();
@@ -276,9 +276,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_TabIndex_Success()
     {
-        using var owner = new SubControl();
+        using SubControl owner = new();
         Control.ControlCollection collection = owner.Controls;
-        using var control1 = new SubControl
+        using SubControl control1 = new()
         {
             TabIndex = 1
         };
@@ -292,7 +292,7 @@ public class ControlControlCollectionTests
         Assert.Equal(0, tabIndexChangedCallCount1);
 
         // Add another.
-        using var control2 = new SubControl();
+        using SubControl control2 = new();
         int tabIndexChangedCallCount2 = 0;
         control2.TabIndexChanged += (sender, e) => tabIndexChangedCallCount2++;
         collection.Add(control2);
@@ -306,7 +306,7 @@ public class ControlControlCollectionTests
 
         // Add another.
         control1.TabIndex = 10;
-        using var control3 = new SubControl();
+        using SubControl control3 = new();
         int tabIndexChangedCallCount3 = 0;
         control3.TabIndexChanged += (sender, e) => tabIndexChangedCallCount3++;
         collection.Add(control3);
@@ -326,8 +326,8 @@ public class ControlControlCollectionTests
     [BoolData]
     public void ControlCollection_Add_InvokeValueWithoutHandleOwnerWithHandle_CreatedValueIfVisible(bool visible)
     {
-        using var owner = new Control();
-        using var control = new Control
+        using Control owner = new();
+        using Control control = new()
         {
             Visible = visible
         };
@@ -355,8 +355,8 @@ public class ControlControlCollectionTests
     [BoolData]
     public void ControlCollection_Add_InvokeValueWithHandleOwnerWithoutHandle_Success(bool visible)
     {
-        using var owner = new Control();
-        using var control = new Control
+        using Control owner = new();
+        using Control control = new()
         {
             Visible = visible
         };
@@ -384,8 +384,8 @@ public class ControlControlCollectionTests
     [BoolData]
     public void ControlCollection_Add_InvokeValueWithHandleOwnerWithHandleControlNewCollection_Success(bool visible)
     {
-        using var owner = new Control();
-        using var control = new Control
+        using Control owner = new();
+        using Control control = new()
         {
             Visible = visible
         };
@@ -423,8 +423,8 @@ public class ControlControlCollectionTests
     [BoolData]
     public void ControlCollection_Add_InvokeValueWithHandleOwnerWithHandleControlExistingCollection_Success(bool visible)
     {
-        using var owner = new Control();
-        using var control = new Control
+        using Control owner = new();
+        using Control control = new()
         {
             Visible = visible
         };
@@ -462,9 +462,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_InvokeWithHandler_CallsControlAdded()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         Control.ControlCollection collection = owner.Controls;
         int parentChangedCallCount = 0;
         int callCount = 0;
@@ -540,8 +540,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_InvokeWithNonOverridenProperties_DoesNotCallPropertyHandlers()
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
 
         int parentChangedCallCount = 0;
@@ -583,8 +583,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_InvokeWithNonOverridenPropertiesWithHandle_DoesNotCallPropertyHandlers()
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -626,8 +626,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Add_OverridenProperties_TestData()
     {
-        var parentContext = new BindingContext();
-        var childContext = new BindingContext();
+        BindingContext parentContext = new();
+        BindingContext childContext = new();
         yield return new object[] { parentContext, childContext, childContext };
         yield return new object[] { parentContext, null, parentContext };
         yield return new object[] { null, childContext, childContext };
@@ -638,15 +638,15 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Add_OverridenProperties_TestData))]
     public void ControlCollection_Add_InvokeWithOverridenProperties_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
 
         owner.Enabled = false;
         Assert.True(control.Enabled);
         owner.Visible = false;
         Assert.True(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Equal(Control.DefaultFont, control.Font);
         owner.ForeColor = Color.Red;
@@ -776,8 +776,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Add_OverridenPropertiesWithHandle_TestData()
     {
-        var parentContext = new BindingContext();
-        var childContext = new BindingContext();
+        BindingContext parentContext = new();
+        BindingContext childContext = new();
         yield return new object[] { parentContext, childContext, childContext, 0 };
         yield return new object[] { parentContext, null, parentContext, 1 };
         yield return new object[] { null, childContext, childContext, 0 };
@@ -788,15 +788,15 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Add_OverridenPropertiesWithHandle_TestData))]
     public void ControlCollection_Add_InvokeWithOverridenPropertiesWithHandle_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
 
         owner.Enabled = false;
         Assert.True(control.Enabled);
         owner.Visible = false;
         Assert.True(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Equal(Control.DefaultFont, control.Font);
         owner.ForeColor = Color.Red;
@@ -941,15 +941,15 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Add_OverridenProperties_TestData))]
     public void ControlCollection_Add_InvokeWithOverridenPropertiesAxHost_DoesNotCallPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
-        using var owner = new Control();
-        using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+        using Control owner = new();
+        using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
         var collection = new Control.ControlCollection(owner);
 
         owner.Enabled = false;
         Assert.True(control.Enabled);
         owner.Visible = false;
         Assert.True(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Equal(Control.DefaultFont, control.Font);
         owner.ForeColor = Color.Red;
@@ -1014,15 +1014,15 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Add_OverridenPropertiesWithHandle_TestData))]
     public void ControlCollection_Add_InvokeWithOverridenPropertiesAxHostWithHandle_CallSPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
-        using var owner = new Control();
-        using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+        using Control owner = new();
+        using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
         var collection = new Control.ControlCollection(owner);
 
         owner.Enabled = false;
         Assert.True(control.Enabled);
         owner.Visible = false;
         Assert.True(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Equal(Control.DefaultFont, control.Font);
         owner.ForeColor = Color.Red;
@@ -1108,8 +1108,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_TopLevelValue_ThrowsArgumentException()
     {
-        using var owner = new Control();
-        using var control = new SubControl();
+        using Control owner = new();
+        using SubControl control = new();
         control.SetTopLevel(true);
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentException>(() => collection.Add(control));
@@ -1119,7 +1119,7 @@ public class ControlControlCollectionTests
     public void ControlCollection_Add_DifferentThreadValueOwner_ThrowsArgumentException()
     {
         Control owner = null;
-        var thread = new Thread(() =>
+        Thread thread = new(() =>
         {
             owner = new Control();
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -1127,7 +1127,7 @@ public class ControlControlCollectionTests
         thread.Start();
         thread.Join();
 
-        using var control = new Control();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentException>(() => collection.Add(control));
     }
@@ -1136,7 +1136,7 @@ public class ControlControlCollectionTests
     public void ControlCollection_Add_DifferentThreadValueControl_ThrowsArgumentException()
     {
         Control control = null;
-        var thread = new Thread(() =>
+        Thread thread = new(() =>
         {
             control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1144,7 +1144,7 @@ public class ControlControlCollectionTests
         thread.Start();
         thread.Join();
 
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentException>(() => collection.Add(control));
     }
@@ -1152,7 +1152,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_SameAsOwner_ThrowsArgumentException()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentException>(() => collection.Add(owner));
     }
@@ -1160,8 +1160,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_OwnerParent_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var owner = new Control
+        using Control parent = new();
+        using Control owner = new()
         {
             Parent = parent
         };
@@ -1172,12 +1172,12 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_OwnerGrandParent_ThrowsArgumentException()
     {
-        using var grandparent = new Control();
-        using var parent = new Control
+        using Control grandparent = new();
+        using Control parent = new()
         {
             Parent = grandparent
         };
-        using var owner = new Control
+        using Control owner = new()
         {
             Parent = parent
         };
@@ -1188,10 +1188,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_AddRange_Invoke_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         Control.ControlCollection collection = owner.Controls;
         int parentLayoutCallCount = 0;
         object affectedControl = null;
@@ -1260,7 +1260,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_AddRange_NullControls_ThrowsArgumentNullException()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentNullException>("controls", () => collection.AddRange(null));
     }
@@ -1268,10 +1268,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Clear_Invoke_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -1316,10 +1316,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Clone_Invoke_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var sourceCollection = new Control.ControlCollection(owner);
         ICloneable iCloneable = sourceCollection;
         sourceCollection.Add(child1);
@@ -1359,10 +1359,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Contains_Invoke_ReturnsExpected()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control child1 = new();
+        using Control child2 = new();
         collection.Add(child1);
         collection.Add(child2);
 
@@ -1384,16 +1384,16 @@ public class ControlControlCollectionTests
     [InlineData("abcdef", false)]
     public void ControlCollection_ContainsKey_Invoke_ReturnsExpected(string key, bool expected)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -1414,28 +1414,28 @@ public class ControlControlCollectionTests
     [InlineData("NAME2")]
     public void ControlCollection_Find_InvokeKeyExists_ReturnsExpected(string key)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
-        using var grandchild1 = new Control
+        using Control grandchild1 = new()
         {
             Name = "name1"
         };
-        using var grandchild2 = new Control
+        using Control grandchild2 = new()
         {
             Name = "name2"
         };
-        using var grandchild3 = new Control
+        using Control grandchild3 = new()
         {
             Name = "name2"
         };
@@ -1467,16 +1467,16 @@ public class ControlControlCollectionTests
     [InlineData("abcdef")]
     public void ControlCollection_Find_InvokeNoSuchKey_ReturnsEmpty(string key)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -1493,7 +1493,7 @@ public class ControlControlCollectionTests
     [NullAndEmptyStringData]
     public void ControlCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
@@ -1502,10 +1502,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetChildIndex_InvokeControl_ReturnsExpected()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control child1 = new();
+        using Control child2 = new();
         collection.Add(child1);
         collection.Add(child2);
 
@@ -1516,10 +1516,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetChildIndex_InvokeControlBoolThrowException_ReturnsExpected()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control child1 = new();
+        using Control child2 = new();
         collection.Add(child1);
         collection.Add(child2);
 
@@ -1530,10 +1530,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetChildIndex_InvokeControlBoolNoSuchControl_ReturnsExpected()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control child1 = new();
+        using Control child2 = new();
         collection.Add(child1);
         collection.Add(child2);
 
@@ -1553,10 +1553,10 @@ public class ControlControlCollectionTests
     [MemberData(nameof(GetChildIndex_NoSuchControl_TestData))]
     public void ControlCollection_GetChildIndex_NoSuchControl_ThrowsArgumentException(Control child)
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control child1 = new();
+        using Control child2 = new();
         collection.Add(child1);
         collection.Add(child2);
 
@@ -1567,7 +1567,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetEnumerator_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         IEnumerator enumerator = collection.GetEnumerator();
         for (int i = 0; i < 2; i++)
@@ -1588,10 +1588,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -1625,8 +1625,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetEnumerator_AddDuringEnumeration_ReturnsExpected()
     {
-        using var owner = new Control();
-        using var child = new Control();
+        using Control owner = new();
+        using Control child = new();
         var collection = new Control.ControlCollection(owner);
         IEnumerator enumerator = collection.GetEnumerator();
         collection.Add(child);
@@ -1648,10 +1648,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetEnumerator_InvokeRemoveBeforeEnumeration_ReturnsExpected()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -1679,10 +1679,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_GetEnumerator_InvokeRemoveAtEndOfEnumeration_ReturnsExpected()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -1717,10 +1717,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_IndexOf_Invoke_ReturnsExpected()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control child1 = new();
+        using Control child2 = new();
         collection.Add(child1);
         collection.Add(child2);
 
@@ -1742,16 +1742,16 @@ public class ControlControlCollectionTests
     [InlineData("abcdef", -1)]
     public void ControlCollection_IndexOfKey_Invoke_ReturnsExpected(string key, int expected)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -1773,16 +1773,16 @@ public class ControlControlCollectionTests
     [InlineData("name2", 1)]
     public void ControlCollection_Item_GetStringValidKey_ReturnsExpected(string key, int expectedIndex)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -1807,16 +1807,16 @@ public class ControlControlCollectionTests
     [InlineData("abcdef")]
     public void ControlCollection_Item_GetStringNoSuchKey_ReturnsNull(string key)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -1835,10 +1835,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Item_GetInt_ReturnsExpected()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -1855,7 +1855,7 @@ public class ControlControlCollectionTests
     [InlineData(1)]
     public void ControlCollection_Item_GetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
@@ -1866,8 +1866,8 @@ public class ControlControlCollectionTests
     [InlineData(2)]
     public void ControlCollection_Item_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new Control();
-        using var child = new Control();
+        using Control owner = new();
+        using Control child = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
@@ -1876,9 +1876,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeChildWithoutHandleOwnerWithoutHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -1936,9 +1936,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeContainerControlParent_Success()
     {
-        using var owner = new ContainerControl();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using ContainerControl owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -2001,9 +2001,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeChildWithHandleOwnerWithoutHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         Control.ControlCollection collection = owner.Controls;
         collection.Add(child1);
         collection.Add(child2);
@@ -2077,9 +2077,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeChildWithHandleOwnerWithHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         Control.ControlCollection collection = owner.Controls;
         collection.Add(child1);
         collection.Add(child2);
@@ -2168,11 +2168,11 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeChildFromAnotherParent_Nop()
     {
-        using var owner1 = new Control();
-        using var owner2 = new Control();
-        using var control1 = new Control();
-        using var control2 = new Control();
-        using var control3 = new Control();
+        using Control owner1 = new();
+        using Control owner2 = new();
+        using Control control1 = new();
+        using Control control2 = new();
+        using Control control3 = new();
         var collection1 = new Control.ControlCollection(owner1);
         var collection2 = new Control.ControlCollection(owner2);
         collection1.Add(control1);
@@ -2196,8 +2196,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeWithNonOverridenProperties_DoesNotCallPropertyHandlers()
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(control);
 
@@ -2240,8 +2240,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeWithNonOverridenPropertiesWithHandle_DoesNotCallPropertyHandlers()
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(control);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2284,8 +2284,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Remove_OverridenProperties_TestData()
     {
-        var parentContext = new BindingContext();
-        var childContext = new BindingContext();
+        BindingContext parentContext = new();
+        BindingContext childContext = new();
         yield return new object[] { parentContext, childContext, childContext };
         yield return new object[] { parentContext, null, parentContext };
         yield return new object[] { null, childContext, childContext };
@@ -2296,8 +2296,8 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Remove_OverridenProperties_TestData))]
     public void ControlCollection_Remove_InvokeWithOverridenProperties_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(control);
 
@@ -2305,7 +2305,7 @@ public class ControlControlCollectionTests
         Assert.False(control.Enabled);
         owner.Visible = false;
         Assert.False(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Same(font, control.Font);
         owner.ForeColor = Color.Red;
@@ -2426,8 +2426,8 @@ public class ControlControlCollectionTests
 
     public static IEnumerable<object[]> Remove_OverridenPropertiesWithHandle_TestData()
     {
-        var parentContext = new BindingContext();
-        var childContext = new BindingContext();
+        BindingContext parentContext = new();
+        BindingContext childContext = new();
         yield return new object[] { parentContext, childContext, childContext, 0 };
         yield return new object[] { parentContext, null, parentContext, 1 };
         yield return new object[] { null, childContext, childContext, 0 };
@@ -2438,8 +2438,8 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Remove_OverridenPropertiesWithHandle_TestData))]
     public void ControlCollection_Remove_InvokeWithOverridenPropertiesWithHandle_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
-        using var owner = new Control();
-        using var control = new Control();
+        using Control owner = new();
+        using Control control = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(control);
 
@@ -2447,7 +2447,7 @@ public class ControlControlCollectionTests
         Assert.False(control.Enabled);
         owner.Visible = false;
         Assert.False(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Same(font, control.Font);
         owner.ForeColor = Color.Red;
@@ -2568,8 +2568,8 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Remove_OverridenProperties_TestData))]
     public void ControlCollection_Remove_InvokeWithOverridenPropertiesAxHost_DoesNotCallPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
-        using var owner = new Control();
-        using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+        using Control owner = new();
+        using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
         var collection = new Control.ControlCollection(owner);
         collection.Add(control);
 
@@ -2577,7 +2577,7 @@ public class ControlControlCollectionTests
         Assert.False(control.Enabled);
         owner.Visible = false;
         Assert.False(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Same(font, control.Font);
         owner.ForeColor = Color.Red;
@@ -2630,8 +2630,8 @@ public class ControlControlCollectionTests
     [MemberData(nameof(Remove_OverridenPropertiesWithHandle_TestData))]
     public void ControlCollection_Remove_InvokeWithOverridenPropertiesAxHostWithHandle_CallSPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
-        using var owner = new Control();
-        using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+        using Control owner = new();
+        using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
         var collection = new Control.ControlCollection(owner);
         collection.Add(control);
 
@@ -2639,7 +2639,7 @@ public class ControlControlCollectionTests
         Assert.False(control.Enabled);
         owner.Visible = false;
         Assert.False(control.Visible);
-        var font = new Font("Arial", 8.25f);
+        Font font = new("Arial", 8.25f);
         owner.Font = font;
         Assert.Same(font, control.Font);
         owner.ForeColor = Color.Red;
@@ -2714,9 +2714,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Remove_InvokeWithHandler_CallsControlRemoved()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -2790,9 +2790,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_RemoveAt_Invoke_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -2846,7 +2846,7 @@ public class ControlControlCollectionTests
     [InlineData(1)]
     public void ControlCollection_RemoveAt_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
@@ -2857,8 +2857,8 @@ public class ControlControlCollectionTests
     [InlineData(2)]
     public void ControlCollection_RemoveAtInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new Control();
-        using var child = new Control();
+        using Control owner = new();
+        using Control child = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
@@ -2869,16 +2869,16 @@ public class ControlControlCollectionTests
     [InlineData("NAME2")]
     public void ControlCollection_RemoveByKey_InvokeValidKey_ReturnsExpected(string key)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -2943,16 +2943,16 @@ public class ControlControlCollectionTests
     [InlineData("abcdef")]
     public void ControlCollection_RemoveByKey_InvokeNoSuchKey_ReturnsNull(string key)
     {
-        using var owner = new Control();
-        using var child1 = new Control
+        using Control owner = new();
+        using Control child1 = new()
         {
             Name = "name1"
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Name = "name2"
         };
-        using var child3 = new Control
+        using Control child3 = new()
         {
             Name = "name2"
         };
@@ -2972,10 +2972,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_SetChildIndex_InvokeChildWithoutHandleOwnerWithoutHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -3038,10 +3038,10 @@ public class ControlControlCollectionTests
     [InlineData(4, 2)]
     public void ControlCollection_SetChildIndex_InvokeLargeIndex_Success(int index, int expectedParentLayoutCallCount)
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -3091,10 +3091,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_SetChildIndex_InvokeChildWithHandleOwnerWithoutHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         Control.ControlCollection collection = owner.Controls;
         collection.Add(child1);
         collection.Add(child2);
@@ -3170,10 +3170,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_SetChildIndex_InvokeChildWithHandleOwnerWithHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         Control.ControlCollection collection = owner.Controls;
         collection.Add(child1);
         collection.Add(child2);
@@ -3264,10 +3264,10 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_SetChildIndex_InvokeChildWithoutHandleOwnerWithHandle_Success()
     {
-        using var owner = new Control();
-        using var child1 = new SubControl();
-        using var child2 = new Control();
-        using var child3 = new Control();
+        using Control owner = new();
+        using SubControl child1 = new();
+        using Control child2 = new();
+        using Control child3 = new();
         Control.ControlCollection collection = owner.Controls;
         collection.Add(child1);
         collection.Add(child2);
@@ -3344,7 +3344,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_SetChildIndex_NullChild_ThrowsArgumentNullException()
     {
-        using var owner = new Control();
+        using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentNullException>("child", () => collection.SetChildIndex(null, 0));
     }
@@ -3352,8 +3352,8 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_SetChildIndex_InvalidIndex_ThrowsArgumentOutOfRangeException()
     {
-        using var owner = new Control();
-        using var child = new Control();
+        using Control owner = new();
+        using Control child = new();
         var collection = new Control.ControlCollection(owner);
         collection.Add(child);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.SetChildIndex(child, -2));
@@ -3362,9 +3362,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_IListAdd_Invoke_Success()
     {
-        using var owner = new Control();
-        using var control1 = new Control();
-        using var control2 = new Control();
+        using Control owner = new();
+        using Control control1 = new();
+        using Control control2 = new();
         IList collection = owner.Controls;
         int parentLayoutCallCount = 0;
         string affectedProperty = null;
@@ -3436,7 +3436,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_IListAdd_NotControl_ThrowsArgumentException()
     {
-        using var owner = new Control();
+        using Control owner = new();
         IList collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentException>("control", () => collection.Add(new object()));
         Assert.Throws<ArgumentException>("control", () => collection.Add(null));
@@ -3445,9 +3445,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_IListRemove_Invoke_Success()
     {
-        using var owner = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control owner = new();
+        using Control child1 = new();
+        using Control child2 = new();
         IList collection = new Control.ControlCollection(owner);
         collection.Add(child1);
         collection.Add(child2);
@@ -3505,7 +3505,7 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_IListRemove_NotControl_ThrowsArgumentException()
     {
-        using var owner = new Control();
+        using Control owner = new();
         IList collection = new Control.ControlCollection(owner);
         collection.Remove(new object());
         collection.Remove(null);

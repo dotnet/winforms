@@ -511,8 +511,8 @@ public partial class Label : Control, IAutomationLiveRegion
                 return;
             }
 
-            EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
-            EventHandler disposedHandler = new EventHandler(DetachImageList);
+            EventHandler recreateHandler = new(ImageListRecreateHandle);
+            EventHandler disposedHandler = new(DetachImageList);
 
             // Remove the previous imagelist handle recreate handler
             ImageList? imageList = ImageList;
@@ -1445,7 +1445,7 @@ public partial class Label : Control, IAutomationLiveRegion
                 // this so we can tell what's going on.
 
                 Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
-                Point pt = new Point((int)m.LParamInternal);
+                Point pt = new((int)m.LParamInternal);
                 m.ResultInternal = (LRESULT)(nint)(rectInScreen.Contains(pt) ? PInvoke.HTCLIENT : PInvoke.HTNOWHERE);
                 break;
 

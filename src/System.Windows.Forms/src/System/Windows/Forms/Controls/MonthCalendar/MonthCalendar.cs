@@ -2113,7 +2113,7 @@ public partial class MonthCalendar : Control
     private unsafe void WmDateBold(ref Message m)
     {
         NMDAYSTATE* nmmcds = (NMDAYSTATE*)(nint)m.LParamInternal;
-        Span<int> boldDates = new Span<int>((int*)nmmcds->prgDayState, nmmcds->cDayState);
+        Span<int> boldDates = new((int*)nmmcds->prgDayState, nmmcds->cDayState);
         WriteBoldDates(boldDates);
     }
 

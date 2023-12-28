@@ -348,8 +348,8 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             if (mi is not null)
             {
                 CodeExpression? field = SerializeToExpression(manager, control);
-                CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(field, methodName);
-                CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
+                CodeMethodReferenceExpression method = new(field, methodName);
+                CodeMethodInvokeExpression methodInvoke = new();
                 methodInvoke.Method = method;
 
                 if (parameters is not null)
@@ -357,7 +357,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
                     methodInvoke.Parameters.AddRange(parameters);
                 }
 
-                CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
+                CodeExpressionStatement statement = new(methodInvoke);
 
                 switch (ordering)
                 {
@@ -384,7 +384,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
 
     private void SerializeResumeLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
     {
-        CodeExpressionCollection parameters = new CodeExpressionCollection();
+        CodeExpressionCollection parameters = new();
         parameters.Add(new CodePrimitiveExpression(false));
         Type[] paramTypes = { typeof(bool) };
         SerializeMethodInvocation(manager, statements, control, "ResumeLayout", parameters, paramTypes, StatementOrdering.Append);
@@ -425,15 +425,15 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
 
                 // Create the "control.Controls.SetChildIndex" call
                 CodeExpression controlsCollection = new CodePropertyReferenceExpression(SerializeToExpression(manager, control), "Controls");
-                CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(controlsCollection, "SetChildIndex");
-                CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
+                CodeMethodReferenceExpression method = new(controlsCollection, "SetChildIndex");
+                CodeMethodInvokeExpression methodInvoke = new();
                 methodInvoke.Method = method;
 
                 // Fill in parameters
                 CodeExpression? childControl = SerializeToExpression(manager, child);
                 methodInvoke.Parameters.Add(childControl);
                 methodInvoke.Parameters.Add(SerializeToExpression(manager, 0));
-                CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
+                CodeExpressionStatement statement = new(methodInvoke);
                 statements.Add(statement);
             }
         }

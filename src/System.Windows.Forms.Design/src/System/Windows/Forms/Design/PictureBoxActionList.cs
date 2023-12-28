@@ -37,7 +37,7 @@ internal class PictureBoxActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        DesignerActionItemCollection items = new();
         items.Add(new DesignerActionMethodItem(this, "ChooseImage", SR.ChooseImageDisplayName, SR.PropertiesCategoryName, SR.ChooseImageDescription, true));
         items.Add(new DesignerActionPropertyItem("SizeMode", SR.SizeModeDisplayName, SR.PropertiesCategoryName, SR.SizeModeDescription));
         return items;

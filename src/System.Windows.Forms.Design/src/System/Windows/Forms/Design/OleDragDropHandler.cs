@@ -176,7 +176,7 @@ internal partial class OleDragDropHandler
 
                     // Create a dictionary of default values that the designer can
                     // use to initialize a control with.
-                    Hashtable defaultValues = new Hashtable();
+                    Hashtable defaultValues = new();
                     if (parent is not null)
                         defaultValues["Parent"] = parent;
 
@@ -870,7 +870,7 @@ internal partial class OleDragDropHandler
                     //
                     if (selectionUISvc.Dragging && moveAllowed)
                     {
-                        Rectangle offset = new Rectangle(de.X - _dragBase.X, de.Y - _dragBase.Y, 0, 0);
+                        Rectangle offset = new(de.X - _dragBase.X, de.Y - _dragBase.Y, 0, 0);
                         selectionUISvc.DragMoved(offset);
                     }
                 }

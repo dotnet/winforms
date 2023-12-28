@@ -317,8 +317,8 @@ public abstract partial class UpDownBase
                 Color color = _parent.BackColor;
 
                 Rectangle clientRect = ClientRectangle;
-                Point pt1 = new Point(clientRect.Left, clientRect.Bottom - 1);
-                Point pt2 = new Point(clientRect.Right, clientRect.Bottom - 1);
+                Point pt1 = new(clientRect.Left, clientRect.Bottom - 1);
+                Point pt2 = new(clientRect.Right, clientRect.Bottom - 1);
 
                 using DeviceContextHdcScope hdc = new(e);
                 using PInvoke.CreatePenScope hpen = new(color);

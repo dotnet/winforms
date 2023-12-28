@@ -12,7 +12,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_Ctor_Default()
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.Null(control.AcceptButton);
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
@@ -170,7 +170,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -190,7 +190,7 @@ public class FormTests
     [WinFormsFact]
     public static void Form_Ctor_show_icon_by_default()
     {
-        using var form = new Form();
+        using Form form = new();
         Assert.True(form.Handle != IntPtr.Zero);
 
         HICON hSmallIcon = (HICON)PInvoke.SendMessage(form, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
@@ -207,8 +207,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_AcceptButtonGetSet()
     {
-        using var form = new Form();
-        var mock = new Mock<IButtonControl>(MockBehavior.Strict);
+        using Form form = new();
+        Mock<IButtonControl> mock = new(MockBehavior.Strict);
         mock.Setup(x => x.NotifyDefault(It.IsAny<bool>()));
 
         form.AcceptButton = mock.Object;
@@ -220,7 +220,7 @@ public class FormTests
     [BoolData]
     public void Form_Active_Set_GetReturnsExpected(bool value)
     {
-        using var form = new Form
+        using Form form = new()
         {
             Active = value
         };
@@ -235,7 +235,7 @@ public class FormTests
     /*[Fact]
     public void Form_ActiveFormNotSetActive()
     {
-        using var form = new Form();
+        using Form form = new();
 
         form.Visible = true;
         form.Active = false;
@@ -248,8 +248,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_ActiveMdiChildInternalGetSet()
     {
-        using var form = new Form();
-        using var child = new Form();
+        using Form form = new();
+        using Form child = new();
 
         form.ActiveMdiChildInternal = child;
 
@@ -260,8 +260,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_ActiveMdiChildGetSet()
     {
-        using var form = new Form();
-        using var child = new Form
+        using Form form = new();
+        using Form child = new()
         {
             Visible = true,
             Enabled = true
@@ -276,8 +276,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_ActiveMdiChildGetSetChildNotVisible()
     {
-        using var form = new Form();
-        using var child = new Form
+        using Form form = new();
+        using Form child = new()
         {
             Visible = false,
             Enabled = true
@@ -291,8 +291,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_ActiveMdiChildGetSetChildNotEnabled()
     {
-        using var form = new Form();
-        using var child = new Form
+        using Form form = new();
+        using Form child = new()
         {
             Visible = true,
             Enabled = false
@@ -307,7 +307,7 @@ public class FormTests
     [BoolData]
     public void Form_AllowTransparency_Set_GetReturnsExpected(bool value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = value
         };
@@ -341,7 +341,7 @@ public class FormTests
     [MemberData(nameof(AllowTransparency_SetWithOpacityAndTransparencyKey_TestData))]
     public void Form_AllowTransparency_SetWithOpacityAndTransparencyKey_GetReturnsExpected(bool value, Color expectedTransparencyKey, float expectedOpacity)
     {
-        using var control = new Form
+        using Form control = new()
         {
             Opacity = 0.5,
             TransparencyKey = Color.Red,
@@ -371,7 +371,7 @@ public class FormTests
     [BoolData]
     public void Form_AllowTransparency_SetNotTopLevel_GetReturnsExpected(bool value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false,
             AllowTransparency = value
@@ -401,7 +401,7 @@ public class FormTests
     [InlineData(false, 0)]
     public void Form_AllowTransparency_SetWithHandle_GetReturnsExpected(bool value, int expectedStyleChangedCallCount)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -450,7 +450,7 @@ public class FormTests
     [MemberData(nameof(AllowTransparency_SetWithOpacityAndTransparencyKeyWithHandle_TestData))]
     public void Form_AllowTransparency_SetWithOpacityAndTransparencyKeyWithHandle_GetReturnsExpected(bool value, Color expectedTransparencyKey, float expectedOpacity, int expectedStyleChangedCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             Opacity = 0.5,
             TransparencyKey = Color.Red
@@ -498,7 +498,7 @@ public class FormTests
     [InlineData(false, 0)]
     public void Form_AllowTransparency_SetNotTopLevelWithHandle_GetReturnsExpected(bool value, int expectedStyleChangedCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false
         };
@@ -546,7 +546,7 @@ public class FormTests
     [BoolData]
     public void Form_AutoScale_Set_GetReturnsExpected(bool value)
     {
-        using var form = new Form
+        using Form form = new()
         {
             AutoScale = value
         };
@@ -563,7 +563,7 @@ public class FormTests
     [EnumData<AutoScaleMode>]
     public void Form_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
     {
-        using var form = new Form
+        using Form form = new()
         {
             AutoScaleMode = value
         };
@@ -578,7 +578,7 @@ public class FormTests
     [BoolData]
     public void Form_AutoScroll_Set_GetReturnsExpected(bool value)
     {
-        using var form = new Form
+        using Form form = new()
         {
             AutoScroll = value
         };
@@ -593,7 +593,7 @@ public class FormTests
     [BoolData]
     public void Form_AutoSizeSet_GetReturnsExpected(bool value)
     {
-        using var form = new Form
+        using Form form = new()
         {
             AutoSize = value
         };
@@ -620,7 +620,7 @@ public class FormTests
     [MemberData(nameof(Opacity_Set_TestData))]
     public void Form_Opacity_Set_GetReturnsExpected(bool allowTransparency, double value, double expected, bool expectedAllowTransparency, bool expectedHandleCreated)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = allowTransparency,
             Opacity = value
@@ -654,7 +654,7 @@ public class FormTests
     [MemberData(nameof(Opacity_SetWithTransparencyKey_TestData))]
     public void Form_Opacity_SetWithTransparencyKey_GetReturnsExpected(bool allowTransparency, double value, double expected)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = allowTransparency,
             TransparencyKey = Color.Red,
@@ -677,7 +677,7 @@ public class FormTests
     [MemberData(nameof(Opacity_Set_TestData))]
     public void Form_Opacity_SetTopLevel_GetReturnsExpected(bool allowTransparency, double value, double expected, bool expectedAllowTransparency, bool expectedHandleCreated)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false,
             AllowTransparency = allowTransparency,
@@ -709,7 +709,7 @@ public class FormTests
     [MemberData(nameof(Opacity_SetNotTransparentWithHandle_TestData))]
     public void Form_Opacity_SetNotTransparentWithHandle_GetReturnsExpected(bool allowTransparency, double value, double expected)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = allowTransparency;
         int invalidatedCallCount = 0;
@@ -745,7 +745,7 @@ public class FormTests
     [InlineData(-0.1, 0, 0)]
     public void Form_Opacity_SetTransparentWithHandleSetAllowTransparencyBefore_GetReturnsExpected(float value, float expected, int expectedStyleChangedCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = true
         };
@@ -791,7 +791,7 @@ public class FormTests
     [MemberData(nameof(Opacity_SetTransparentWithHandle_TestData))]
     public void Form_Opacity_SetTransparentWithHandleSetAllowTransparencyAfter_GetReturnsExpected(bool allowTransparency, float value, float expected, int expectedStyleChangedCallCount)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = allowTransparency;
         int invalidatedCallCount = 0;
@@ -836,7 +836,7 @@ public class FormTests
     [MemberData(nameof(Opacity_SetWithTransparencyKeyWithHandle_TestData))]
     public void Form_Opacity_SetWithTransparencyKeyWithHandle_GetReturnsExpected(bool allowTransparency, double value, double expected)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = allowTransparency;
         control.TransparencyKey = Color.Red;
@@ -886,7 +886,7 @@ public class FormTests
     [MemberData(nameof(Opacity_SetTopLevelWithHandle_TestData))]
     public void Form_Opacity_SetTopLevelWithHandle_GetReturnsExpected(bool allowTransparency, double value, double expected, bool expectedAllowTransparency, int expectedStyleChangedCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false,
             AllowTransparency = allowTransparency
@@ -930,7 +930,7 @@ public class FormTests
     [MemberData(nameof(Parent_Set_TestData))]
     public void Form_Parent_Set_GetReturnsExpected(Control value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false,
             Parent = value
@@ -950,8 +950,8 @@ public class FormTests
     [MemberData(nameof(Parent_Set_TestData))]
     public void Form_Parent_SetWithNonNullOldParent_GetReturnsExpected(Control value)
     {
-        using var oldParent = new Control();
-        using var control = new Form
+        using Control oldParent = new();
+        using Form control = new()
         {
             TopLevel = false,
             Parent = oldParent
@@ -979,7 +979,7 @@ public class FormTests
             return;
         }
 
-        using var form = new Form();
+        using Form form = new();
         form.Show();
 
         form.Location = new Point(10, 11);
@@ -1008,7 +1008,7 @@ public class FormTests
             return;
         }
 
-        using var form = new Form();
+        using Form form = new();
         form.Show();
 
         form.Location = new Point(10, 11);
@@ -1034,7 +1034,7 @@ public class FormTests
     [InlineData(true, false)]
     public static void ShowIcon_renders_icon_correctly(bool showIcon, bool expectedIconNull)
     {
-        using var form = new Form();
+        using Form form = new();
         Assert.True(form.Handle != 0);
 
         form.ShowIcon = showIcon;
@@ -1048,7 +1048,7 @@ public class FormTests
     [WinFormsFact]
     public static void ShowIcon_false_should_render_no_icon()
     {
-        using var form = new Form();
+        using Form form = new();
         Assert.True(form.Handle != IntPtr.Zero);
 
         WINDOW_EX_STYLE extendedStyle = unchecked((WINDOW_EX_STYLE)(long)PInvoke.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE));
@@ -1071,11 +1071,11 @@ public class FormTests
     [MemberData(nameof(Parent_SetMdiChild_TestData))]
     public void Form_Parent_SetMdiChild_GetReturnsExpected(Control value)
     {
-        using var oldParent = new Form
+        using Form oldParent = new()
         {
             IsMdiContainer = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = oldParent,
             Parent = value
@@ -1096,8 +1096,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_Parent_SetNonNull_AddsToControls()
     {
-        using var parent = new Control();
-        using var control = new Form
+        using Control parent = new();
+        using Form control = new()
         {
             TopLevel = false,
             Parent = parent
@@ -1117,7 +1117,7 @@ public class FormTests
     [MemberData(nameof(Parent_Set_TestData))]
     public void Form_Parent_SetWithHandle_GetReturnsExpected(Control value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false
         };
@@ -1150,8 +1150,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_Parent_SetWithHandler_CallsParentChanged()
     {
-        using var parent = new Control();
-        using var control = new Form
+        using Control parent = new();
+        using Form control = new()
         {
             TopLevel = false
         };
@@ -1189,7 +1189,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_Parent_SetSame_ThrowsArgumentException()
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false
         };
@@ -1200,8 +1200,8 @@ public class FormTests
     [WinFormsFact]
     public void Form_Parent_SetTopLevel_ThrowsArgumentException()
     {
-        using var control = new Form();
-        using var parent = new Control();
+        using Form control = new();
+        using Control parent = new();
         Assert.Throws<ArgumentException>(() => control.Parent = parent);
         Assert.Null(control.Parent);
     }
@@ -1209,15 +1209,15 @@ public class FormTests
     [WinFormsFact]
     public void Form_Parent_SetFormWithMdiParent_ThrowsArgumentException()
     {
-        using var oldParent = new Form
+        using Form oldParent = new()
         {
             IsMdiContainer = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = oldParent
         };
-        using var parent = new Form();
+        using Form parent = new();
         Assert.Throws<ArgumentException>("value", () => control.Parent = parent);
         Assert.NotNull(control.Parent);
         Assert.Same(oldParent, control.MdiParent);
@@ -1226,14 +1226,14 @@ public class FormTests
     [WinFormsFact]
     public void Form_Parent_ShowIconInMaximized()
     {
-        using var parent = new Form();
-        using var menuStrip = new MenuStrip();
+        using Form parent = new();
+        using MenuStrip menuStrip = new();
         parent.Controls.Add(menuStrip);
         parent.IsMdiContainer = true;
         parent.MainMenuStrip = menuStrip;
         parent.Show();
         Assert.True(parent.Handle != IntPtr.Zero);
-        using var control = new Form();
+        using Form control = new();
         control.MdiParent = parent;
         control.Icon = Form.DefaultIcon;
         Assert.True(control.Handle != IntPtr.Zero);
@@ -1275,7 +1275,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_Set_TestData))]
     public void Form_TransparencyKey_Set_GetReturnsExpected(bool allowTransparency, Color value, bool expectedAllowTransparency)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = allowTransparency,
             TransparencyKey = value
@@ -1307,7 +1307,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithCustomOldValue_TestData))]
     public void Form_TransparencyKey_SetWithCustomOldValue_GetReturnsExpected(bool allowTransparency, Color value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = allowTransparency,
             TransparencyKey = Color.Yellow
@@ -1341,7 +1341,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithOpacity_TestData))]
     public void Form_TransparencyKey_SetWithOpacity_GetReturnsExpected(bool allowTransparency, Color value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = allowTransparency,
             Opacity = 0.5,
@@ -1374,7 +1374,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetMdiContainer_TestData))]
     public void Form_TransparencyKey_SetMdiContainer_Nop(bool allowTransparency, Color value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             IsMdiContainer = true,
             AllowTransparency = allowTransparency,
@@ -1396,7 +1396,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_Set_TestData))]
     public void Form_TransparencyKey_SetNotTopLevel_GetReturnsExpected(bool allowTransparency, Color value, bool expectedAllowTransparency)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = true,
             AllowTransparency = allowTransparency,
@@ -1418,7 +1418,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_TransparencyKey_SetNotTransparentWithHandleSetNotAllowTransparency_GetReturnsExpected()
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1457,7 +1457,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithHandleSetNotAllowTransparency_TestData))]
     public void Form_TransparencyKey_SetTransparentWithHandleSetNotAllowTransparency_GetReturnsExpected(Color value, bool expectedAllowTransparency, int expectedStyleChangedCallCount)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1489,7 +1489,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_TransparencyKey_SetNotTransparentWithHandleSetAllowTransparencyBefore_GetReturnsExpected()
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = true
         };
@@ -1531,7 +1531,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithHandleSetAllowTransparency_TestData))]
     public void Form_TransparencyKey_SetTransparentWithHandleSetAllowTransparencyBefore_GetReturnsExpected(Color value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             AllowTransparency = true
         };
@@ -1566,7 +1566,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_TransparencyKey_SetNotTransparentWithHandleSetAllowTransparencyAfter_GetReturnsExpected()
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = true;
         int invalidatedCallCount = 0;
@@ -1600,7 +1600,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithHandleSetAllowTransparency_TestData))]
     public void Form_TransparencyKey_SetTransparentWithHandleSetAllowTransparencyAfter_GetReturnsExpected(Color value)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = true;
         int invalidatedCallCount = 0;
@@ -1633,7 +1633,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_TransparencyKey_SetNotTransparentWithHandleSetOpacityBefore_GetReturnsExpected()
     {
-        using var control = new Form
+        using Form control = new()
         {
             Opacity = 0.5
         };
@@ -1669,7 +1669,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithHandleSetAllowTransparency_TestData))]
     public void Form_TransparencyKey_SetTransparentWithHandleSetOpacityBefore_GetReturnsExpected(Color value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             Opacity = 0.5
         };
@@ -1704,7 +1704,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_TransparencyKey_SetNotTransparentWithHandleSetOpacityAfter_GetReturnsExpected()
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Opacity = 0.5;
         int invalidatedCallCount = 0;
@@ -1738,7 +1738,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetWithHandleSetAllowTransparency_TestData))]
     public void Form_TransparencyKey_SetTransparentWithHandleSetOpacityAfter_GetReturnsExpected(Color value)
     {
-        using var control = new Form();
+        using Form control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Opacity = 0.5;
         int invalidatedCallCount = 0;
@@ -1783,7 +1783,7 @@ public class FormTests
     [MemberData(nameof(TransparencyKey_SetNotTopLevelWithHandle_TestData))]
     public void Form_TransparencyKey_SetNotTopLevelWithHandle_GetReturnsExpected(bool allowTransparency, Color value, bool expectedAllowTransparency, int expectedStyleChangedCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             TopLevel = false,
             AllowTransparency = allowTransparency
@@ -1821,7 +1821,7 @@ public class FormTests
     {
         // Regression test for https://github.com/dotnet/winforms/issues/6421
 
-        using var form = new Form
+        using Form form = new()
         {
             ShowInTaskbar = true,
         };
@@ -1859,7 +1859,7 @@ public class FormTests
     [MemberData(nameof(Visible_Set_TestData))]
     public void Form_Visible_Set_GetReturnsExpected(DialogResult dialogResult, bool value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             DialogResult = dialogResult,
             Visible = value
@@ -1898,12 +1898,12 @@ public class FormTests
     [MemberData(nameof(Visible_SetMdiChild_TestData))]
     public void Form_Visible_SetMdiChild_GetReturnsExpected(DialogResult dialogResult, bool parentVisible, bool value, bool expected)
     {
-        using var parent = new Form
+        using Form parent = new()
         {
             IsMdiContainer = true,
             Visible = parentVisible
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = parent,
             DialogResult = dialogResult,
@@ -1932,7 +1932,7 @@ public class FormTests
     [MemberData(nameof(Visible_Set_TestData))]
     public void Form_Visible_SetWithHandle_GetReturnsExpected(DialogResult dialogResult, bool value)
     {
-        using var control = new Form
+        using Form control = new()
         {
             DialogResult = dialogResult
         };
@@ -1980,12 +1980,12 @@ public class FormTests
     [EnumData<DialogResult>]
     public void Form_Visible_SetTrueMdiChildVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult)
     {
-        using var parent = new Form
+        using Form parent = new()
         {
             IsMdiContainer = true,
             Visible = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = parent,
             DialogResult = dialogResult
@@ -2032,12 +2032,12 @@ public class FormTests
     [EnumData<DialogResult>]
     public void Form_Visible_SetFalseMdiChildVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult)
     {
-        using var parent = new Form
+        using Form parent = new()
         {
             IsMdiContainer = true,
             Visible = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = parent,
             DialogResult = dialogResult
@@ -2084,11 +2084,11 @@ public class FormTests
     [MemberData(nameof(Visible_Set_TestData))]
     public void Form_Visible_SetMdiChildNotVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult, bool value)
     {
-        using var parent = new Form
+        using Form parent = new()
         {
             IsMdiContainer = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = parent,
             DialogResult = dialogResult,
@@ -2126,7 +2126,7 @@ public class FormTests
     [MemberData(nameof(Visible_SetWithHandler_TestData))]
     public void Form_Visible_SetTrueWithHandler_CallsVisibleChanged(DialogResult dialogResult, bool value, int expectedLoadCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             DialogResult = dialogResult
         };
@@ -2181,12 +2181,12 @@ public class FormTests
     [WinFormsFact]
     public void Form_Visible_SetWithHandlerMdiChildVisible_CallsVisibleChanged()
     {
-        using var parent = new Form
+        using Form parent = new()
         {
             IsMdiContainer = true,
             Visible = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = parent
         };
@@ -2234,11 +2234,11 @@ public class FormTests
     [WinFormsFact]
     public void Form_Visible_SetWithHandlerMdiChildNotVisible_CallsVisibleChanged()
     {
-        using var parent = new Form
+        using Form parent = new()
         {
             IsMdiContainer = true
         };
-        using var control = new Form
+        using Form control = new()
         {
             MdiParent = parent
         };
@@ -2287,7 +2287,7 @@ public class FormTests
     [MemberData(nameof(Visible_SetWithHandler_TestData))]
     public void Form_Visible_SetTrueWithHandlerWithHandle_CallsVisibleChanged(DialogResult dialogResult, bool value, int expectedLoadCallCount)
     {
-        using var control = new Form
+        using Form control = new()
         {
             DialogResult = dialogResult
         };
@@ -2345,7 +2345,7 @@ public class FormTests
     [BoolData]
     public void Form_Visible_SetWithHandlerWithHandle_CallsVisibleChanged(bool initialVisible)
     {
-        using var control = new Form
+        using Form control = new()
         {
             Visible = initialVisible
         };
@@ -2406,7 +2406,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -2421,7 +2421,7 @@ public class FormTests
     [InlineData((-1), false)]
     public void Form_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -2448,7 +2448,7 @@ public class FormTests
     [InlineData((ControlStyles)(-1), false)]
     public void Form_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -2458,7 +2458,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.True(control.GetTopLevel());
     }
 
@@ -2466,7 +2466,7 @@ public class FormTests
     [NewAndDefaultData<EventArgs>]
     public void Form_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2492,7 +2492,7 @@ public class FormTests
     [NewAndDefaultData<EventArgs>]
     public void Form_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -2519,7 +2519,7 @@ public class FormTests
     [NewAndDefaultData<EventArgs>]
     public void Form_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2545,7 +2545,7 @@ public class FormTests
     [NewAndDefaultData<EventArgs>]
     public void Form_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubForm();
+        using SubForm control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>

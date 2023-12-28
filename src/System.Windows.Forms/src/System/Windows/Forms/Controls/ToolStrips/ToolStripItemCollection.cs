@@ -388,7 +388,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
 
                 if (!_owner.IsDisposingItems)
                 {
-                    ToolStripItemEventArgs e = new ToolStripItemEventArgs(item);
+                    ToolStripItemEventArgs e = new(item);
                     _owner.OnItemRemoved(e);
 
                     // don't fire the ItemRemoved event for Overflow

@@ -8,7 +8,7 @@ public class ServerComputerTests
     [Fact]
     public void Properties()
     {
-        var computer = new ServerComputer();
+        ServerComputer computer = new();
 
         Assert.Equal(System.Environment.MachineName, computer.Name);
 

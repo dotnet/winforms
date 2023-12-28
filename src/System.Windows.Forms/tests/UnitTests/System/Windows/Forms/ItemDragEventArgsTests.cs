@@ -11,7 +11,7 @@ public class ItemDragEventArgsTests
     [InlineData((MouseButtons)(MouseButtons.None - 1))]
     public void Ctor_MouseButtons(MouseButtons button)
     {
-        var e = new ItemDragEventArgs(button);
+        ItemDragEventArgs e = new(button);
         Assert.Equal(button, e.Button);
         Assert.Null(e.Item);
     }
@@ -21,7 +21,7 @@ public class ItemDragEventArgsTests
     [InlineData((MouseButtons)(MouseButtons.None - 1), null)]
     public void Ctor_MouseButtons_Object(MouseButtons button, object item)
     {
-        var e = new ItemDragEventArgs(button, item);
+        ItemDragEventArgs e = new(button, item);
         Assert.Equal(button, e.Button);
         Assert.Equal(item, e.Item);
     }

@@ -166,7 +166,7 @@ public class PageSettings : ICloneable
         {
             RectangleF printableArea = default;
             using DeviceContext dc = _printerSettings.CreateInformationContext(this);
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new(dc, dc.Hdc);
 
             int dpiX = Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX);
             int dpiY = Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY);

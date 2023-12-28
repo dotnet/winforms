@@ -484,7 +484,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         }
         else
         {
-            List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner!.Children.Count);
+            List<ControlInformation> controlsInfo = new(Owner!.Children.Count);
 
             foreach (IArrangedElement element in Owner.Children)
             {

@@ -16,16 +16,16 @@ public class SerializableTypesTests
     [Fact]
     public void AxHostState_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
         string payload = "abc";
         string licenseKey = "licenseKey";
         string netBlob;
         AxHost.State state;
 
-        using (var stream = new MemoryStream(256))
+        using (MemoryStream stream = new(256))
         {
             var bytes = Encoding.UTF8.GetBytes(payload);
-            using (var writer = new BinaryWriter(stream))
+            using (BinaryWriter writer = new(stream))
             {
                 writer.Write(bytes.Length);
                 writer.Write(bytes);
@@ -71,10 +71,10 @@ public class SerializableTypesTests
     [Fact]
     public void ImageListStreamer_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
         string netBlob;
 
-        using (var imageList = new ImageList()
+        using (ImageList imageList = new()
             {
                 ImageSize = new Size(16, 16),
                 TransparentColor = Color.White
@@ -106,8 +106,8 @@ public class SerializableTypesTests
     [Fact]
     public void LinkArea_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        var linkArea = new LinkArea(5, 7);
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        LinkArea linkArea = new(5, 7);
         var netBlob = BinarySerialization.ToBase64String(linkArea);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
@@ -126,8 +126,8 @@ public class SerializableTypesTests
     [Fact]
     public void ListViewGroup_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        var listViewGroup = new ListViewGroup("Header", HorizontalAlignment.Center)
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        ListViewGroup listViewGroup = new("Header", HorizontalAlignment.Center)
         {
             Tag = "Tag",
             Name = "GroupName",
@@ -159,12 +159,12 @@ public class SerializableTypesTests
     [Fact]
     public void ListViewItem_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
         string netBlob;
 
-        using (var font = new Font(FontFamily.GenericSansSerif, 9f))
+        using (Font font = new(FontFamily.GenericSansSerif, 9f))
         {
-            var listViewItem = new ListViewItem("Item1", 0)
+            ListViewItem listViewItem = new("Item1", 0)
             {
                 ForeColor = Color.White,
                 BackColor = Color.Black,
@@ -206,12 +206,12 @@ public class SerializableTypesTests
     [Fact]
     public void ListViewSubItemAndSubItemStyle_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
         string netBlob;
 
-        using (var font = new Font(FontFamily.GenericSansSerif, 9f))
+        using (Font font = new(FontFamily.GenericSansSerif, 9f))
         {
-            var listViewSubItem = new ListViewSubItem(
+            ListViewSubItem listViewSubItem = new(
                 new ListViewItem(),
                 "SubItem1",
                 foreColor: Color.White,
@@ -248,8 +248,8 @@ public class SerializableTypesTests
     [Fact]
     public void Padding_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        var padding = new Padding(1, 2, 3, 4);
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        Padding padding = new(1, 2, 3, 4);
         var netBlob = BinarySerialization.ToBase64String(padding);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
@@ -268,11 +268,11 @@ public class SerializableTypesTests
     [Fact]
     public void TableLayoutSettings_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 
         string netBlob;
 
-        using (var tableLayoutPanel = new TableLayoutPanel
+        using (TableLayoutPanel tableLayoutPanel = new()
         {
             Name = "table",
             CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetDouble,
@@ -286,10 +286,10 @@ public class SerializableTypesTests
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
 
-            var button00_10 = new Button() { Name = "button00_10" };
+            Button button00_10 = new() { Name = "button00_10" };
             tableLayoutPanel.Controls.Add(button00_10, 0, 0);
             tableLayoutPanel.SetColumnSpan(button00_10, 2);
-            var label20_21 = new Label() { Name = "label20_21" };
+            Label label20_21 = new() { Name = "label20_21" };
             tableLayoutPanel.Controls.Add(label20_21, 2, 0);
             tableLayoutPanel.SetRowSpan(label20_21, 2);
             tableLayoutPanel.Controls.Add(new RadioButton() { Name = "radioButton01" }, 0, 1);
@@ -345,9 +345,9 @@ public class SerializableTypesTests
     [Fact]
     public void TreeNodeAndPropertyBag_RoundTripAndExchangeWithNet()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
         var children = new TreeNode[] { new TreeNode("node2"), new TreeNode("node3") };
-        TreeNode treeNodeIn = new TreeNode("node1", 1, 2, children)
+        TreeNode treeNodeIn = new("node1", 1, 2, children)
         {
             ToolTipText = "tool tip text",
             Name = "node1",

@@ -16,7 +16,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_Ctor_Default()
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -126,7 +126,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -149,7 +149,7 @@ public class UserControlTests
     [InlineData(BorderStyle.FixedSingle, 0x56810000, 0x10000)]
     public void UserControl_CreateParams_GetBorderStyle_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubUserControl
+        using SubUserControl control = new()
         {
             BorderStyle = borderStyle
         };
@@ -173,7 +173,7 @@ public class UserControlTests
     [BoolData]
     public void UserControl_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -198,7 +198,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new UserControl
+        using UserControl control = new()
         {
             AutoSize = true
         };
@@ -238,7 +238,7 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -267,7 +267,7 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_SetDesignMode_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
@@ -277,7 +277,7 @@ public class UserControlTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubUserControl
+        using SubUserControl control = new()
         {
             Site = mockSite.Object
         };
@@ -309,8 +309,8 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_SetWithParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubUserControl
+        using Control parent = new();
+        using SubUserControl control = new()
         {
             Parent = parent
         };
@@ -357,8 +357,8 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_SetDesignModeWithParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using Control parent = new();
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
@@ -368,7 +368,7 @@ public class UserControlTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubUserControl
+        using SubUserControl control = new()
         {
             Parent = parent,
             Site = mockSite.Object
@@ -415,8 +415,8 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_SetWithCustomLayoutEngineParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubUserControl
+        using CustomLayoutEngineControl parent = new();
+        using SubUserControl control = new()
         {
             Parent = parent
         };
@@ -483,7 +483,7 @@ public class UserControlTests
     [EnumData<AutoSizeMode>]
     public void UserControl_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -515,8 +515,8 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_SetWithParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubUserControl
+        using Control parent = new();
+        using SubUserControl control = new()
         {
             Parent = parent
         };
@@ -588,8 +588,8 @@ public class UserControlTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void UserControl_AutoSizeMode_SetWithCustomLayoutEngineParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubUserControl
+        using CustomLayoutEngineControl parent = new();
+        using SubUserControl control = new()
         {
             Parent = parent
         };
@@ -660,7 +660,7 @@ public class UserControlTests
     [InvalidEnumData<AutoSizeMode>]
     public void UserControl_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoSizeMode = value);
     }
 
@@ -676,7 +676,7 @@ public class UserControlTests
     [MemberData(nameof(AutoValidate_Set_TestData))]
     public void UserControl_AutoValidate_Set_GetReturnsExpected(AutoValidate value, AutoValidate expected)
     {
-        using var control = new UserControl
+        using UserControl control = new()
         {
             AutoValidate = value
         };
@@ -692,7 +692,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_AutoValidate_SetWithHandler_CallsAutoValidateChanged()
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -728,7 +728,7 @@ public class UserControlTests
     [InvalidEnumData<AutoValidate>]
     public void UserControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoValidate = value);
     }
 
@@ -736,7 +736,7 @@ public class UserControlTests
     [EnumData<BorderStyle>]
     public void UserControl_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var control = new UserControl
+        using UserControl control = new()
         {
             BorderStyle = value
         };
@@ -755,7 +755,7 @@ public class UserControlTests
     [InlineData(BorderStyle.None, 0)]
     public void UserControl_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -784,7 +784,7 @@ public class UserControlTests
     [InvalidEnumData<BorderStyle>]
     public void UserControl_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
@@ -792,7 +792,7 @@ public class UserControlTests
     [NormalizedStringData]
     public void UserControl_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new UserControl
+        using UserControl control = new()
         {
             Text = value
         };
@@ -809,7 +809,7 @@ public class UserControlTests
     [NormalizedStringData]
     public void UserControl_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -837,7 +837,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -873,7 +873,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -888,7 +888,7 @@ public class UserControlTests
     [InlineData((-1), false)]
     public void UserControl_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -915,7 +915,7 @@ public class UserControlTests
     [InlineData((ControlStyles)(-1), false)]
     public void UserControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -925,14 +925,14 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.False(control.GetTopLevel());
     }
 
     [WinFormsFact]
     public void UserControl_OnCreateControl_Invoke_Nop()
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         int bindingContextChangedCallCount = 0;
         int loadChangedCallCount = 0;
         control.BindingContextChanged += (sender, e) =>
@@ -966,7 +966,7 @@ public class UserControlTests
     [NewAndDefaultData<EventArgs>]
     public void UserControl_OnLoad_Invoke_CallsLoad(EventArgs eventArgs)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -990,7 +990,7 @@ public class UserControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void UserControl_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -1016,7 +1016,7 @@ public class UserControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void UserControl_OnMouseDown_InvokeWithHandle_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1055,7 +1055,7 @@ public class UserControlTests
     [NewAndDefaultData<EventArgs>]
     public void UserControl_OnResize_Invoke_CallsResize(EventArgs eventArgs)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1091,8 +1091,8 @@ public class UserControlTests
     [NewAndDefaultData<EventArgs>]
     public void UserControl_OnResize_InvokeWithBackgroundImage_CallsResize(EventArgs eventArgs)
     {
-        using var backgroundImage = new Bitmap(10, 10);
-        using var control = new SubUserControl
+        using Bitmap backgroundImage = new(10, 10);
+        using SubUserControl control = new()
         {
             BackgroundImage = backgroundImage
         };
@@ -1139,7 +1139,7 @@ public class UserControlTests
     [MemberData(nameof(OnResize_WithHandle_TestData))]
     public void UserControl_OnResize_InvokeWithHandle_CallsResize(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1189,8 +1189,8 @@ public class UserControlTests
     [MemberData(nameof(OnResize_WithHandle_TestData))]
     public void UserControl_OnResize_InvokeWithBackgroundImageWithHandle_CallsResize(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var backgroundImage = new Bitmap(10, 10);
-        using var control = new SubUserControl
+        using Bitmap backgroundImage = new(10, 10);
+        using SubUserControl control = new()
         {
             BackgroundImage = backgroundImage
         };
@@ -1242,7 +1242,7 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_ValidateChildren_InvokeWithoutChildren_ReturnsTrue()
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.True(control.ValidateChildren());
     }
 
@@ -1256,31 +1256,31 @@ public class UserControlTests
     [MemberData(nameof(ValidateChildren_TestData))]
     public void UserControl_ValidateChildren_InvokeWithChildren_ReturnsExpected(bool cancel, int expectedCallCount)
     {
-        using var control = new UserControl();
-        using var child1 = new Control();
-        using var grandchild1 = new Control();
+        using UserControl control = new();
+        using Control child1 = new();
+        using Control grandchild1 = new();
         child1.Controls.Add(grandchild1);
-        using var child2 = new UserControl();
-        using var grandchild2 = new Control();
+        using UserControl child2 = new();
+        using Control grandchild2 = new();
         child2.Controls.Add(grandchild2);
-        using var child3 = new TabControl();
-        using var grandchild3 = new TabPage();
+        using TabControl child3 = new();
+        using TabPage grandchild3 = new();
         child3.Controls.Add(grandchild3);
-        using var child4 = new SubControl();
+        using SubControl child4 = new();
         child4.SetStyle(ControlStyles.Selectable, false);
-        using var child5 = new SubControl
+        using SubControl child5 = new()
         {
             Enabled = false
         };
-        using var child6 = new SubControl
+        using SubControl child6 = new()
         {
             Visible = false
         };
-        using var child7 = new SubControl
+        using SubControl child7 = new()
         {
             TabStop = false
         };
-        using var child8 = new SubControl
+        using SubControl child8 = new()
         {
             CausesValidation = false
         };
@@ -1450,7 +1450,7 @@ public class UserControlTests
     [EnumData<ValidationConstraints>]
     public void UserControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.True(control.ValidateChildren(validationConstraints));
     }
 
@@ -1482,31 +1482,31 @@ public class UserControlTests
     [MemberData(nameof(ValidateChildren_ValidationConstraints_TestData))]
     public void UserControl_ValidateChildren_InvokeValidationConstraintsWithChildren_ReturnsExpected(ValidationConstraints validationConstraints, bool cancel, int expectedChild1CallCount, int expectedGrandchild2CallCount, int expectedGrandchild3CallCount, int expectedChild4CallCount, int expectedChild5CallCount, int expectedChild6CallCount, int expectedChild7CallCount)
     {
-        using var control = new UserControl();
-        using var child1 = new Control();
-        using var grandchild1 = new Control();
+        using UserControl control = new();
+        using Control child1 = new();
+        using Control grandchild1 = new();
         child1.Controls.Add(grandchild1);
-        using var child2 = new UserControl();
-        using var grandchild2 = new Control();
+        using UserControl child2 = new();
+        using Control grandchild2 = new();
         child2.Controls.Add(grandchild2);
-        using var child3 = new TabControl();
-        using var grandchild3 = new TabPage();
+        using TabControl child3 = new();
+        using TabPage grandchild3 = new();
         child3.Controls.Add(grandchild3);
-        using var child4 = new SubControl();
+        using SubControl child4 = new();
         child4.SetStyle(ControlStyles.Selectable, false);
-        using var child5 = new SubControl
+        using SubControl child5 = new()
         {
             Enabled = false
         };
-        using var child6 = new SubControl
+        using SubControl child6 = new()
         {
             Visible = false
         };
-        using var child7 = new SubControl
+        using SubControl child7 = new()
         {
             TabStop = false
         };
-        using var child8 = new SubControl
+        using SubControl child8 = new()
         {
             CausesValidation = false
         };
@@ -1677,14 +1677,14 @@ public class UserControlTests
     [InlineData((ValidationConstraints)(0x20))]
     public void UserControl_ValidateChildren_InvalidValidationConstraints_ThrowsInvalidEnumArgumentException(ValidationConstraints validationConstraints)
     {
-        using var control = new UserControl();
+        using UserControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("validationConstraints", () => control.ValidateChildren(validationConstraints));
     }
 
     [WinFormsFact]
     public void UserControl_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubUserControl();
+        using SubUserControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1700,7 +1700,7 @@ public class UserControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
@@ -1717,9 +1717,9 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_WndProc_InvokeSetFocusWithHandle_Success()
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubUserControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubUserControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1730,7 +1730,7 @@ public class UserControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -1747,9 +1747,9 @@ public class UserControlTests
     [WinFormsFact]
     public void UserControl_WndProc_InvokeSetFocusWithActiveControlWithHandle_Success()
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubUserControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubUserControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         control.ActiveControl = child2;
@@ -1761,7 +1761,7 @@ public class UserControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250

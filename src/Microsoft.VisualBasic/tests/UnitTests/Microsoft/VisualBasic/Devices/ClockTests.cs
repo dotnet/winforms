@@ -8,7 +8,7 @@ public class ClockTests
     [Fact]
     public void LocalTime()
     {
-        var clock = new Clock();
+        Clock clock = new();
 
         var before = clock.LocalTime;
         System.Threading.Thread.Sleep(10);
@@ -25,7 +25,7 @@ public class ClockTests
     [Fact]
     public void GmtTime()
     {
-        var clock = new Clock();
+        Clock clock = new();
 
         var before = clock.GmtTime;
         System.Threading.Thread.Sleep(10);
@@ -42,7 +42,7 @@ public class ClockTests
     [Fact]
     public void TickCount()
     {
-        var clock = new Clock();
+        Clock clock = new();
 
         int before = clock.TickCount;
         System.Threading.Thread.Sleep(10);

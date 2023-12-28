@@ -616,7 +616,7 @@ public partial class PrintPreviewControl : Control
         Size controlPhysicalSize = PixelsToPhysical(rect.Size, _screenDPI);
 
         // center pages on screen if small enough
-        Point offset = new Point(
+        Point offset = new(
             Math.Max(0, (rect.Width - _virtualSize.Width) / 2),
             Math.Max(0, (rect.Height - _virtualSize.Height) / 2));
         offset.X -= Position.X;

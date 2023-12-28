@@ -12,7 +12,7 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_Deserialize_AxHost_FormatterEnabled_Throws()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 
         string resxPath = Path.GetFullPath(@".\Resources\AxHosts.resx");
         using MemoryStream resourceStream = new();
@@ -41,7 +41,7 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_Deserialize_AxHost_FormatterDisabled_Throws()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: false);
+        using BinaryFormatterScope formatterScope = new(enable: false);
 
         string resxPath = Path.GetFullPath(@".\Resources\AxHosts.resx");
         using MemoryStream resourceStream = new();
@@ -74,7 +74,7 @@ public class ResXResourceReaderTests
     {
         byte[] resxBytes = Encoding.UTF8.GetBytes(ResxHelper.CreateResx());
         using Stream resxStream = new MemoryStream(resxBytes);
-        using ResXResourceReader resXReader = new ResXResourceReader(resxStream);
+        using ResXResourceReader resXReader = new(resxStream);
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
         Assert.NotNull(enumerator);
     }

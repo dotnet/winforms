@@ -70,7 +70,7 @@ public class BitmapEditorTests
     public void BitmapEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
         SubBitmapEditor editor = new();
-        using (MemoryStream stream = new MemoryStream())
+        using (MemoryStream stream = new())
         using (Bitmap image = new(10, 10))
         {
             image.Save(stream, ImageFormat.Bmp);

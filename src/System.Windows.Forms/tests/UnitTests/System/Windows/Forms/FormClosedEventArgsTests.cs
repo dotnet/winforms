@@ -11,7 +11,7 @@ public class FormClosedEventArgsTests
     [InlineData((CloseReason)(CloseReason.None - 1))]
     public void Ctor_CloseReason(CloseReason closeReason)
     {
-        var e = new FormClosedEventArgs(closeReason);
+        FormClosedEventArgs e = new(closeReason);
         Assert.Equal(closeReason, e.CloseReason);
     }
 }

@@ -27,7 +27,7 @@ public abstract partial class AxHost
         {
             if (value is byte[] valueAsBytes)
             {
-                using MemoryStream ms = new MemoryStream(valueAsBytes);
+                using MemoryStream ms = new(valueAsBytes);
                 return new State(ms);
             }
 

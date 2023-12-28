@@ -12,8 +12,8 @@ public class HtmlWindowTests
     [WinFormsFact]
     public async Task HtmlWindow_Opener_NoneReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -28,8 +28,8 @@ public class HtmlWindowTests
     [WinFormsFact]
     public async Task HtmlWindow_WindowFrameElement_NoneReturnsNull()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -44,8 +44,8 @@ public class HtmlWindowTests
     [WinFormsFact]
     public async Task HtmlWindow_DomWindow_Get_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent
         };
@@ -65,8 +65,8 @@ public class HtmlWindowTests
     [WinFormsFact]
     public async Task HtmlWindow_NavigateAround_MaintainsEquality()
     {
-        using var parent = new Control();
-        using var control = new WebBrowser
+        using Control parent = new();
+        using WebBrowser control = new()
         {
             Parent = parent,
         };
@@ -91,7 +91,7 @@ public class HtmlWindowTests
 
     private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
     {
-        var source = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(html);

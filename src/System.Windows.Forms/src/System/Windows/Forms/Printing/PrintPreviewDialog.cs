@@ -753,7 +753,7 @@ public partial class PrintPreviewDialog : Form
     [MemberNotNull(nameof(_pageToolStripLabel))]
     private void InitForm()
     {
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(PrintPreviewDialog));
+        ComponentResourceManager resources = new(typeof(PrintPreviewDialog));
         _toolStrip1 = new ToolStrip();
         _printToolStripButton = new ToolStripButton();
         _zoomToolStripSplitButton = new ToolStripSplitButton();
@@ -1144,7 +1144,7 @@ public partial class PrintPreviewDialog : Form
     {
         if (sender is ToolStripItem item && !item.Selected)
         {
-            Rectangle rect = new Rectangle(0, 0, item.Bounds.Width - 1, item.Bounds.Height - 1);
+            Rectangle rect = new(0, 0, item.Bounds.Width - 1, item.Bounds.Height - 1);
             e.Graphics.DrawRectangle(SystemPens.ControlDark, rect);
         }
     }

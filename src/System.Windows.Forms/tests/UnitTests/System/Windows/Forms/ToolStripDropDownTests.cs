@@ -15,7 +15,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Ctor_Default()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -162,7 +162,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -189,7 +189,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(CreateParams_GetDropShadowEnabled_TestData))]
     public void ToolStripDropDown_CreateParams_GetDropShadowEnabled_ReturnsExpected(bool dropShadowEnabled, int expectedClassStyle)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             DropShadowEnabled = dropShadowEnabled
         };
@@ -222,7 +222,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(CreateParams_GetTopLevelOpacity_TestData))]
     public void ToolStripDropDown_CreateParams_GetTopLevelOpacity_ReturnsExpected(bool topLevel, float opacity, int expectedClassStyle, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             TopLevel = topLevel,
             Opacity = opacity
@@ -248,7 +248,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_AllowItemReorder_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AllowItemReorder = value
         };
@@ -269,7 +269,7 @@ public class ToolStripDropDownTests
     [Fact] // x-thread
     public void ToolStripDropDown_AllowItemReorder_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -298,7 +298,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_AllowItemReorder_SetWithHandleSTA_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -334,7 +334,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_AllowItemReorder_SetAllowDrop_ThrowsArgumentException()
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AllowDrop = true
         };
@@ -349,7 +349,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_AllowTransparency_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AllowTransparency = value
         };
@@ -380,7 +380,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(AllowTransparency_SetWithOpacity_TestData))]
     public void ToolStripDropDown_AllowTransparency_SetWithOpacity_GetReturnsExpected(bool value, float expectedOpacity)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Opacity = 0.5,
             AllowTransparency = value
@@ -406,7 +406,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_AllowTransparency_SetNotTopLevel_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TopLevel = false,
             AllowTransparency = value
@@ -433,7 +433,7 @@ public class ToolStripDropDownTests
     [InlineData(false, 0)]
     public void ToolStripDropDown_AllowTransparency_SetWithHandle_GetReturnsExpected(bool value, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -479,7 +479,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(AllowTransparency_SetWithOpacityWithHandle_TestData))]
     public void ToolStripDropDown_AllowTransparency_SetWithOpacityWithHandle_GetReturnsExpected(bool value, float expectedOpacity, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Opacity = 0.5
         };
@@ -523,7 +523,7 @@ public class ToolStripDropDownTests
     [InlineData(false, 0)]
     public void ToolStripDropDown_AllowTransparency_SetNotTopLevelWithHandle_GetReturnsExpected(bool value, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TopLevel = false
         };
@@ -592,7 +592,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Anchor_Set_TestData))]
     public void ToolStripDropDown_Anchor_Set_GetReturnsExpected(AnchorStyles value, AnchorStyles expected, DockStyle expectedDock)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -620,7 +620,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_AutoClose_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AutoClose = value
         };
@@ -642,7 +642,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_AutoClose_SetNotTopMost_GetReturnsExpected(bool value)
     {
-        using var control = new NotTopMostToolStripDropDown
+        using NotTopMostToolStripDropDown control = new()
         {
             AutoClose = value
         };
@@ -665,7 +665,7 @@ public class ToolStripDropDownTests
     [InlineData(false, 1)]
     public void ToolStripDropDown_AutoSize_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -698,8 +698,8 @@ public class ToolStripDropDownTests
     [InlineData(false, 1, 2)]
     public void ToolStripDropDown_AutoSize_SetWithParent_GetReturnsExpected(bool value, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new ToolStripDropDown
+        using Control parent = new();
+        using ToolStripDropDown control = new()
         {
             TopLevel = false,
             Parent = parent
@@ -754,7 +754,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AutoSize = true
         };
@@ -793,7 +793,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void ToolStripDropDown_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             BackgroundImage = value
         };
@@ -809,7 +809,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -820,7 +820,7 @@ public class ToolStripDropDownTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -831,7 +831,7 @@ public class ToolStripDropDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -852,7 +852,7 @@ public class ToolStripDropDownTests
     [EnumData<ImageLayout>]
     public void ToolStripDropDown_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             BackgroundImageLayout = value
         };
@@ -870,7 +870,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -912,7 +912,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(BindingContext_Set_TestData))]
     public void ToolStripDropDown_BindingContext_Set_GetReturnsExpected(BindingContext value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             BindingContext = value
         };
@@ -928,7 +928,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_BindingContext_SetWithHandler_CallsBindingContextChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -939,7 +939,7 @@ public class ToolStripDropDownTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        var context1 = new BindingContext();
+        BindingContext context1 = new();
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -950,7 +950,7 @@ public class ToolStripDropDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var context2 = new BindingContext();
+        BindingContext context2 = new();
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -971,7 +971,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_CanOverflow_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -998,7 +998,7 @@ public class ToolStripDropDownTests
     [InlineData(false, 0)]
     public void ToolStripDropDown_CanOverflow_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1052,7 +1052,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void ToolStripDropDown_ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             ContextMenuStrip = value
         };
@@ -1068,7 +1068,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_ContextMenuStrip_SetWithHandler_CallsContextMenuStripChanged()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1079,7 +1079,7 @@ public class ToolStripDropDownTests
         control.ContextMenuStripChanged += handler;
 
         // Set different.
-        using var menu1 = new ContextMenuStrip();
+        using ContextMenuStrip menu1 = new();
         control.ContextMenuStrip = menu1;
         Assert.Same(menu1, control.ContextMenuStrip);
         Assert.Equal(1, callCount);
@@ -1090,7 +1090,7 @@ public class ToolStripDropDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var menu2 = new ContextMenuStrip();
+        using ContextMenuStrip menu2 = new();
         control.ContextMenuStrip = menu2;
         Assert.Same(menu2, control.ContextMenuStrip);
         Assert.Equal(2, callCount);
@@ -1194,7 +1194,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(DefaultDropDownDirection_Get_TestData))]
     public void ToolStripDropDown_DefaultDropDownDirection_Get_ReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             LayoutStyle = layoutStyle,
             Dock = dock,
@@ -1207,7 +1207,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(DefaultDropDownDirection_Get_TestData))]
     public void ToolStripDropDown_DefaultDropDownDirection_GetDesignMode_ReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -1220,7 +1220,7 @@ public class ToolStripDropDownTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Site = mockSite.Object,
             LayoutStyle = layoutStyle,
@@ -1320,11 +1320,11 @@ public class ToolStripDropDownTests
     [MemberData(nameof(DefaultDropDownDirection_GetWithParent_TestData))]
     public void ToolStripDropDown_DefaultDropDownDirection_GetWithParent_ReturnsExpected(DockStyle parentDock, ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Dock = parentDock
         };
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TopLevel = false,
             Parent = parent,
@@ -1339,7 +1339,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(DefaultDropDownDirection_GetWithParent_TestData))]
     public void ToolStripDropDown_DefaultDropDownDirection_GetDesignModeWithParent_ReturnsExpected(DockStyle parentDock, ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -1352,11 +1352,11 @@ public class ToolStripDropDownTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var parent = new Control
+        using Control parent = new()
         {
             Dock = parentDock
         };
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TopLevel = false,
             Parent = parent,
@@ -1383,7 +1383,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(DefaultDropDownDirection_Set_TestData))]
     public void ToolStripDropDown_DefaultDropDownDirection_Set_GetReturnsExpected(ToolStripDropDownDirection value, ToolStripDropDownDirection expected)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             DefaultDropDownDirection = value
         };
@@ -1400,7 +1400,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(DefaultDropDownDirection_Set_TestData))]
     public void ToolStripDropDown_DefaultDropDownDirection_SetWithHandle_GetReturnsExpected(ToolStripDropDownDirection value, ToolStripDropDownDirection expected)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1429,7 +1429,7 @@ public class ToolStripDropDownTests
     public void ToolStripDropDown_DefaultDropDownDirection_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.DefaultDropDownDirection)];
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.False(property.CanResetValue(control));
 
         control.DefaultDropDownDirection = ToolStripDropDownDirection.Right;
@@ -1445,7 +1445,7 @@ public class ToolStripDropDownTests
     public void ToolStripDropDown_DefaultDropDownDirection_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.DefaultDropDownDirection)];
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.DefaultDropDownDirection = ToolStripDropDownDirection.Right;
@@ -1465,14 +1465,14 @@ public class ToolStripDropDownTests
     [InvalidEnumData<ToolStripDropDownDirection>]
     public void ToolStripDropDown_DefaultDropDownDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripDropDownDirection value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.DefaultDropDownDirection = value);
     }
 
     [WinFormsFact]
     public void ToolStripDropDown_Font_Get_ReturnsSame()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotSame(Control.DefaultFont, control.Font);
         Assert.Same(control.Font, control.Font);
     }
@@ -1480,13 +1480,13 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Font_GetWithParent_ReturnsExpected()
     {
-        using var font1 = new Font("Arial", 8.25f);
-        using var font2 = new Font("Arial", 8.5f);
-        using var parent = new Control
+        using Font font1 = new("Arial", 8.25f);
+        using Font font2 = new("Arial", 8.5f);
+        using Control parent = new()
         {
             Font = font1
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1501,13 +1501,13 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Font_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        using var font1 = new Font("Arial", 8.25f);
-        using var font2 = new Font("Arial", 8.5f);
-        using var parent = new SubAxHost("00000000-0000-0000-0000-000000000000")
+        using Font font1 = new("Arial", 8.25f);
+        using Font font2 = new("Arial", 8.5f);
+        using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             Font = font1
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1523,7 +1523,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void ToolStripDropDown_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             Font = value
         };
@@ -1541,7 +1541,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1552,7 +1552,7 @@ public class ToolStripDropDownTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -1583,9 +1583,9 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Font_SetWithItemsWithHandler_CallsFontChanged()
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new ToolStripDropDown();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using ToolStripDropDown control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -1599,7 +1599,7 @@ public class ToolStripDropDownTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Same(font1, item1.Font);
@@ -1640,17 +1640,17 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Font_SetWithItemsWithFontWithHandler_CallsFontChanged()
     {
-        using var childFont1 = new Font("Arial", 1);
-        using var childFont2 = new Font("Arial", 1);
-        using var child1 = new SubToolStripItem
+        using Font childFont1 = new("Arial", 1);
+        using Font childFont2 = new("Arial", 1);
+        using SubToolStripItem child1 = new()
         {
             Font = childFont1
         };
-        using var child2 = new SubToolStripItem
+        using SubToolStripItem child2 = new()
         {
             Font = childFont2
         };
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         control.Items.Add(child1);
         control.Items.Add(child2);
 
@@ -1664,7 +1664,7 @@ public class ToolStripDropDownTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Same(childFont1, child1.Font);
@@ -1706,7 +1706,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStripDropDown_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             ForeColor = value
         };
@@ -1722,7 +1722,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1758,7 +1758,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStripDropDown_GripMargin_Set_GetReturnsExpected(Padding value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         control.GripMargin = value;
         Assert.Equal(value, control.GripMargin);
         Assert.False(control.IsHandleCreated);
@@ -1774,7 +1774,7 @@ public class ToolStripDropDownTests
     [InlineData(ToolStripGripStyle.Visible, 1)]
     public void ToolStripDropDown_GripStyle_Set_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -1802,7 +1802,7 @@ public class ToolStripDropDownTests
     [InvalidEnumData<ToolStripGripStyle>]
     public void ToolStripDropDown_GripStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripGripStyle value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.GripStyle = value);
     }
 
@@ -1828,7 +1828,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void ToolStripDropDown_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             ImeMode = value
         };
@@ -1845,7 +1845,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void ToolStripDropDown_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1873,7 +1873,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_ImeMode_SetWithHandler_CallsImeModeChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1909,7 +1909,7 @@ public class ToolStripDropDownTests
     [InvalidEnumData<ImeMode>]
     public void ToolStripDropDown_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
     }
 
@@ -1935,7 +1935,7 @@ public class ToolStripDropDownTests
                 expectedLocationChangedCallCount = 1;
         }
 
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int moveCallCount = 0;
         int locationChangedCallCount = 0;
         int layoutCallCount = 0;
@@ -2021,7 +2021,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Opacity_Set_TestData))]
     public void ToolStripDropDown_Opacity_Set_GetReturnsExpected(bool allowTransparency, double value, double expected, bool expectedAllowTransparency)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AllowTransparency = allowTransparency,
             Opacity = value
@@ -2041,7 +2041,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Opacity_Set_TestData))]
     public void ToolStripDropDown_Opacity_SetTopLevel_GetReturnsExpected(bool allowTransparency, double value, double expected, bool expectedAllowTransparency)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TopLevel = false,
             AllowTransparency = allowTransparency,
@@ -2070,7 +2070,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Opacity_SetNotTransparentWithHandle_TestData))]
     public void ToolStripDropDown_Opacity_SetNotTransparentWithHandle_GetReturnsExpected(bool allowTransparency, double value, double expected, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = allowTransparency;
         int invalidatedCallCount = 0;
@@ -2104,7 +2104,7 @@ public class ToolStripDropDownTests
     [InlineData(-0.1, 0, 0)]
     public void ToolStripDropDown_Opacity_SetTransparentWithHandleSetAllowTransparencyBefore_GetReturnsExpected(float value, float expected, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             AllowTransparency = true
         };
@@ -2148,7 +2148,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Opacity_SetTransparentWithHandle_TestData))]
     public void ToolStripDropDown_Opacity_SetTransparentWithHandleSetAllowTransparencyAfter_GetReturnsExpected(bool allowTransparency, float value, float expected, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.AllowTransparency = allowTransparency;
         int invalidatedCallCount = 0;
@@ -2194,7 +2194,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Opacity_SetTopLevelWithHandle_TestData))]
     public void ToolStripDropDown_Opacity_SetTopLevelWithHandle_GetReturnsExpected(bool allowTransparency, double value, double expected, bool expectedAllowTransparency, int expectedStyleChangedCallCount)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TopLevel = false,
             AllowTransparency = allowTransparency
@@ -2236,7 +2236,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Region_Set_TestData))]
     public void ToolStripDropDown_Region_Set_GetReturnsExpected(Region value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Region = value
         };
@@ -2253,7 +2253,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(Region_Set_TestData))]
     public void ToolStripDropDown_Region_SetWithHandle_GetReturnsExpected(Region value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2281,7 +2281,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Region_SetWithHandler_CallsRegionChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2292,7 +2292,7 @@ public class ToolStripDropDownTests
         control.RegionChanged += handler;
 
         // Set different.
-        using var region1 = new Region();
+        using Region region1 = new();
         control.Region = region1;
         Assert.Same(region1, control.Region);
         Assert.Equal(1, callCount);
@@ -2303,7 +2303,7 @@ public class ToolStripDropDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var region2 = new Region();
+        using Region region2 = new();
         control.Region = region2;
         Assert.Same(region2, control.Region);
         Assert.Equal(2, callCount);
@@ -2324,11 +2324,11 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_RightToLeft_GetWithSourceToolStripDropDown_ReturnsExpected()
     {
-        using var sourceControl = new Control
+        using Control sourceControl = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         control.Show(sourceControl, Point.Empty);
         Assert.Equal(RightToLeft.Yes, control.RightToLeft);
 
@@ -2339,11 +2339,11 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_RightToLeft_GetWithOwnerItem_ReturnsExpected()
     {
-        using var ownerItem = new SubToolStripItem
+        using SubToolStripItem ownerItem = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             OwnerItem = ownerItem
         };
@@ -2356,15 +2356,15 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_RightToLeft_GetWithSourceControlAndOwnerItem_ReturnsExpected()
     {
-        using var sourceControl = new Control
+        using Control sourceControl = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var ownerItem = new SubToolStripItem
+        using SubToolStripItem ownerItem = new()
         {
             RightToLeft = RightToLeft.No
         };
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             OwnerItem = ownerItem
         };
@@ -2378,7 +2378,7 @@ public class ToolStripDropDownTests
     [InlineData(RightToLeft.Inherit, RightToLeft.No, 0)]
     public void ToolStripDropDown_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -2403,7 +2403,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2439,7 +2439,7 @@ public class ToolStripDropDownTests
     [InvalidEnumData<RightToLeft>]
     public void ToolStripDropDown_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
     }
 
@@ -2447,7 +2447,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_Stretch_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Stretch = value
         };
@@ -2469,7 +2469,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_Stretch_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2508,7 +2508,7 @@ public class ToolStripDropDownTests
     [InlineData(2)]
     public void ToolStripDropDown_TabIndex_Set_GetReturnsExpected(int value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TabIndex = value
         };
@@ -2524,7 +2524,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_TabIndex_SetWithHandler_CallsTabIndexChanged()
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TabIndex = 0
         };
@@ -2562,7 +2562,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_TabIndex_SetNegative_CallsArgumentOutOfRangeException()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.TabIndex = -1);
     }
 
@@ -2570,7 +2570,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TabStop = value
         };
@@ -2592,7 +2592,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2628,7 +2628,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             TabStop = true
         };
@@ -2667,7 +2667,7 @@ public class ToolStripDropDownTests
     [NormalizedStringData]
     public void ToolStripDropDown_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Text = value
         };
@@ -2684,7 +2684,7 @@ public class ToolStripDropDownTests
     [NormalizedStringData]
     public void ToolStripDropDown_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2712,7 +2712,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2751,7 +2751,7 @@ public class ToolStripDropDownTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStripDropDown_TextDirection_Set_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -2780,7 +2780,7 @@ public class ToolStripDropDownTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStripDropDown_TextDirection_SetWithHandle_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2822,7 +2822,7 @@ public class ToolStripDropDownTests
     [InlineData(false, false, 1)]
     public void ToolStripDropDown_TopLevel_Set_GetReturnsExpected(bool visible, bool value, int expectedStyleChangedCallCount1)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             Visible = visible
         };
@@ -2865,7 +2865,7 @@ public class ToolStripDropDownTests
     [InlineData(false, false, 1, 3, 1)]
     public void ToolStripDropDown_TopLevel_SetWithHandle_GetReturnsExpected(bool visible, bool value, int expectedStyleChangedCallCount1, int expectedStyleChangedCallCount2, int expectedCreatedCallCount)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             Visible = visible
         };
@@ -2907,8 +2907,8 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_TopLevel_SetWithParent_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new SubToolStripDropDown
+        using Control parent = new();
+        using SubToolStripDropDown control = new()
         {
             TopLevel = false,
             Parent = parent
@@ -2921,7 +2921,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         ToolStripDropDown.ToolStripDropDownAccessibleObject instance = Assert.IsType<ToolStripDropDown.ToolStripDropDownAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
@@ -2933,7 +2933,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -2958,7 +2958,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(CreateDefaultItem_Button_TestData))]
     public void ToolStripDropDown_CreateDefaultItem_InvokeButton_Success(string text, Image image, EventHandler onClick)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         ToolStripButton button = Assert.IsType<ToolStripButton>(control.CreateDefaultItem(text, image, onClick));
         Assert.Equal(text, button.Text);
         Assert.Same(image, button.Image);
@@ -2976,7 +2976,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(CreateDefaultItem_Separator_TestData))]
     public void ToolStripDropDown_CreateDefaultItem_InvokeSeparator_Success(Image image, EventHandler onClick)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         ToolStripSeparator separator = Assert.IsType<ToolStripSeparator>(control.CreateDefaultItem("-", image, onClick));
         Assert.Empty(separator.Text);
         Assert.Null(separator.Image);
@@ -2991,7 +2991,7 @@ public class ToolStripDropDownTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         ToolStripItem button = Assert.IsAssignableFrom<ToolStripItem>(control.CreateDefaultItem(text, null, onClick));
         button.PerformClick();
         Assert.Equal(expectedCallCount, callCount);
@@ -3000,7 +3000,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_CreateLayoutSettings_InvokeFlow_ReturnsExpected()
     {
-        using var toolStrip = new SubToolStripDropDown();
+        using SubToolStripDropDown toolStrip = new();
         FlowLayoutSettings settings = Assert.IsType<FlowLayoutSettings>(toolStrip.CreateLayoutSettings(ToolStripLayoutStyle.Flow));
         Assert.Equal(FlowDirection.TopDown, settings.FlowDirection);
         Assert.NotNull(settings.LayoutEngine);
@@ -3011,7 +3011,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_CreateLayoutSettings_InvokeTable_ReturnsExpected()
     {
-        var toolStrip = new SubToolStripDropDown();
+        SubToolStripDropDown toolStrip = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.CreateLayoutSettings(ToolStripLayoutStyle.Table));
         Assert.Equal(0, settings.ColumnCount);
         Assert.Empty(settings.ColumnStyles);
@@ -3029,14 +3029,14 @@ public class ToolStripDropDownTests
     [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow)]
     public void ToolStripDropDown_CreateLayoutSettings_InvalidLayoutStyle_ReturnsNull(ToolStripLayoutStyle layoutStyle)
     {
-        var toolStrip = new SubToolStripDropDown();
+        SubToolStripDropDown toolStrip = new();
         Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
     }
 
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_Invoke_Success()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -3087,11 +3087,11 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeWithSourceControl_Success()
     {
-        using var sourceControl = new Control
+        using Control sourceControl = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         control.Show(sourceControl, Point.Empty);
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -3146,7 +3146,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeNotVisible_Success()
     {
-        using var control = new ToolStripDropDown
+        using ToolStripDropDown control = new()
         {
             Visible = false
         };
@@ -3200,9 +3200,9 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeWithItems_Success()
     {
-        using var control = new ToolStripDropDown();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using ToolStripDropDown control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemRemovedCallCount = 0;
@@ -3280,7 +3280,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeDisposing_Success()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -3331,7 +3331,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeNotDisposing_Success()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e) => callCount++;
         control.Disposed += handler;
@@ -3368,11 +3368,11 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeDisposingWithSourceControl_Success()
     {
-        using var sourceControl = new Control
+        using Control sourceControl = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         control.Show(sourceControl, Point.Empty);
         int callCount = 0;
         void handler(object sender, EventArgs e)
@@ -3427,11 +3427,11 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeNotDisposingWithSourceControl_Success()
     {
-        using var sourceControl = new Control
+        using Control sourceControl = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         control.Show(sourceControl, Point.Empty);
         int callCount = 0;
         void handler(object sender, EventArgs e) => callCount++;
@@ -3473,9 +3473,9 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeDisposingWithItems_Success()
     {
-        using var control = new SubToolStripDropDown();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using SubToolStripDropDown control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemRemovedCallCount = 0;
@@ -3554,9 +3554,9 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_Dispose_InvokeNotDisposingWithItems_Success()
     {
-        using var control = new SubToolStripDropDown();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using SubToolStripDropDown control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemRemovedCallCount = 0;
@@ -3620,7 +3620,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
     }
 
@@ -3635,7 +3635,7 @@ public class ToolStripDropDownTests
     [InlineData((-1), false)]
     public void ToolStripDropDown_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -3662,7 +3662,7 @@ public class ToolStripDropDownTests
     [InlineData((ControlStyles)(-1), false)]
     public void ToolStripDropDown_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -3672,7 +3672,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.True(control.GetTopLevel());
     }
 
@@ -3687,7 +3687,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(UICuesEventArgs_TestData))]
     public void ToolStripDropDown_OnChangeUICues_Invoke_CallsChangeUICues(UICuesEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         UICuesEventHandler handler = (sender, e) =>
         {
@@ -3714,14 +3714,14 @@ public class ToolStripDropDownTests
         yield return new object[] { new SubToolStripItem(), null };
         yield return new object[] { new SubToolStripItem(), new ToolStripDropDownClosedEventArgs(ToolStripDropDownCloseReason.AppFocusChange) };
 
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        var designModeOwnerItem = new SubToolStripItem
+        SubToolStripItem designModeOwnerItem = new()
         {
             Site = mockSite.Object
         };
@@ -3733,7 +3733,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnClosed_TestData))]
     public void ToolStripDropDown_OnClosed_Invoke_CallsClosed(ToolStripItem ownerItem, ToolStripDropDownClosedEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             OwnerItem = ownerItem
         };
@@ -3762,7 +3762,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnClosed_TestData))]
     public void ToolStripDropDown_OnClosed_InvokeWithHandle_CallsClosed(ToolStripItem ownerItem, ToolStripDropDownClosedEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             OwnerItem = ownerItem
         };
@@ -3810,7 +3810,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnClosing_TestData))]
     public void ToolStripDropDown_OnClosing_Invoke_CallsClosing(ToolStripDropDownClosingEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         void handler(object sender, ToolStripDropDownClosingEventArgs e)
         {
@@ -3834,7 +3834,7 @@ public class ToolStripDropDownTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripDropDown_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3864,7 +3864,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(GiveFeedbackEventArgs_TestData))]
     public void ToolStripDropDown_OnGiveFeedback_Invoke_CallsGiveFeedback(GiveFeedbackEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         GiveFeedbackEventHandler handler = (sender, e) =>
         {
@@ -3899,7 +3899,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnHandleCreated_TestData))]
     public void ToolStripDropDown_OnHandleCreated_Invoke_CallsHandleCreated(bool topLevel, float opacity, EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             TopLevel = topLevel,
             Opacity = opacity
@@ -3938,7 +3938,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnHandleCreated_TestData))]
     public void ToolStripDropDown_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(bool topLevel, float opacity, EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             TopLevel = topLevel,
             Opacity = opacity
@@ -3978,7 +3978,7 @@ public class ToolStripDropDownTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripDropDown_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4004,7 +4004,7 @@ public class ToolStripDropDownTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripDropDown_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -4037,7 +4037,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(HelpEventArgs_TestData))]
     public void ToolStripDropDown_OnHelpRequested_Invoke_CallsHelpRequested(HelpEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         HelpEventHandler handler = (sender, e) =>
         {
@@ -4061,7 +4061,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void ToolStripDropDown_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -4085,7 +4085,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void ToolStripDropDown_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         KeyPressEventHandler handler = (sender, e) =>
         {
@@ -4109,7 +4109,7 @@ public class ToolStripDropDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void ToolStripDropDown_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -4144,7 +4144,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_TestData))]
     public void ToolStripDropDown_OnLayout_Invoke_CallsLayout(bool autoSize, LayoutEventArgs eventArgs, int expectedLayoutCallCount)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4191,7 +4191,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_WithOverflowButton_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithOverflowButton_CallsLayout(bool autoSize, LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4230,7 +4230,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_WithOverflowButton_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithOverflowButtonWithDropDown_CallsLayout(bool autoSize, LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4269,9 +4269,9 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithItems_CallsLayout(bool autoSize, LayoutEventArgs eventArgs, int expectedLayoutCallCount)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStripDropDown
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4337,7 +4337,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_WithHandle_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithHandle_CallsLayout(bool autoSize, LayoutEventArgs eventArgs, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4387,7 +4387,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_WithOverflowButton_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithOverflowButtonWithHandle_CallsLayout(bool autoSize, LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4439,7 +4439,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_WithOverflowButton_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithOverflowButtonWithDropDownWithHandle_CallsLayout(bool autoSize, LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4502,9 +4502,9 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnLayout_WithItemsWithHandle_TestData))]
     public void ToolStripDropDown_OnLayout_InvokeWithItemsWithHandle_CallsLayout(bool autoSize, LayoutEventArgs eventArgs, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStripDropDown
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStripDropDown control = new()
         {
             AutoSize = autoSize
         };
@@ -4572,7 +4572,7 @@ public class ToolStripDropDownTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripDropDown_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4599,14 +4599,14 @@ public class ToolStripDropDownTests
         yield return new object[] { new SubToolStripItem(), null };
         yield return new object[] { new SubToolStripItem(), new EventArgs() };
 
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        var designModeOwnerItem = new SubToolStripItem
+        SubToolStripItem designModeOwnerItem = new()
         {
             Site = mockSite.Object
         };
@@ -4618,7 +4618,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnOpened_TestData))]
     public void ToolStripDropDown_OnOpened_Invoke_CallsOpened(ToolStripItem ownerItem, EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             OwnerItem = ownerItem
         };
@@ -4647,7 +4647,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnOpened_TestData))]
     public void ToolStripDropDown_OnOpened_InvokeWithHandle_CallsOpened(ToolStripItem ownerItem, EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown
+        using SubToolStripDropDown control = new()
         {
             OwnerItem = ownerItem
         };
@@ -4696,7 +4696,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnOpening_TestData))]
     public void ToolStripDropDown_OnOpening_Invoke_CallsOpening(CancelEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         void handler(object sender, CancelEventArgs e)
         {
@@ -4732,7 +4732,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnScroll_TestData))]
     public void ToolStripDropDown_OnScroll_Invoke_CallsHandler(ScrollEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int callCount = 0;
@@ -4761,7 +4761,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_OnScroll_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.Throws<NullReferenceException>(() => control.OnScroll(null));
     }
 
@@ -4769,7 +4769,7 @@ public class ToolStripDropDownTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripDropDown_OnStyleChanged_Invoke_CallsStyleChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4793,7 +4793,7 @@ public class ToolStripDropDownTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripDropDown_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4824,7 +4824,7 @@ public class ToolStripDropDownTests
     [MemberData(nameof(OnValidating_TestData))]
     public void ToolStripDropDown_OnValidating_Invoke_CallsValidating(CancelEventArgs eventArgs)
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         int callCount = 0;
         CancelEventHandler handler = (sender, e) =>
         {
@@ -4847,7 +4847,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubToolStripDropDown();
+        using SubToolStripDropDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4863,7 +4863,7 @@ public class ToolStripDropDownTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
@@ -4880,7 +4880,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_KeyboardArrowNavigation_Test()
     {
-        ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+        ToolStripMenuItem toolStrip = new();
         ToolStripItemCollection items = toolStrip.DropDown.DisplayedItems;
         items.Add("First item");
         items.Add("Second item");
@@ -4917,7 +4917,7 @@ public class ToolStripDropDownTests
     [WinFormsFact]
     public void ToolStripDropDown_WorkingAreaConstrained_DefaultValueTest()
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         Assert.True(control.WorkingAreaConstrained);
     }
 
@@ -4925,7 +4925,7 @@ public class ToolStripDropDownTests
     [BoolData]
     public void ToolStripDropDown_WorkingAreaConstrained_AssignmentTest(bool value)
     {
-        using var control = new ToolStripDropDown();
+        using ToolStripDropDown control = new();
         control.WorkingAreaConstrained = value;
         Assert.Equal(value, control.WorkingAreaConstrained);
     }

@@ -238,12 +238,12 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
     /// </summary>
     public int SaveHdc()
     {
-        HandleRef hdc = new HandleRef(this, _hDC);
+        HandleRef hdc = new(this, _hDC);
         int state = Gdi32.SaveDC(hdc);
 
         _contextStack ??= new();
 
-        GraphicsState g = new GraphicsState();
+        GraphicsState g = new();
         g.hBitmap = _hCurrentBmp;
         g.hBrush = _hCurrentBrush;
         g.hPen = _hCurrentPen;
@@ -267,8 +267,8 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
     /// </summary>
     public void SetClip(WindowsRegion region)
     {
-        HandleRef hdc = new HandleRef(this, _hDC);
-        HandleRef hRegion = new HandleRef(region, region.HRegion);
+        HandleRef hdc = new(this, _hDC);
+        HandleRef hRegion = new(region, region.HRegion);
 
         Gdi32.SelectClipRgn(hdc, hRegion);
     }
@@ -284,7 +284,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
             return;
         }
 
-        WindowsRegion clip = new WindowsRegion(0, 0, 0, 0);
+        WindowsRegion clip = new(0, 0, 0, 0);
         try
         {
             int result = Gdi32.GetClipRgn(new HandleRef(this, _hDC), new HandleRef(clip, clip.HRegion));

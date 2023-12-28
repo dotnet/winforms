@@ -465,7 +465,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         // Only invalidate if there's something to invalidate.
         if (point1 != _oldPoint1 && point2 != _oldPoint2 && _oldPoint1 != Point.Empty)
         {
-            var invalidRect = new Rectangle(
+            Rectangle invalidRect = new(
                 _oldPoint1.X,
                 _oldPoint1.Y,
                 _oldPoint2.X - _oldPoint1.X + 1,
@@ -801,7 +801,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     {
         base.OnDragOver(de);
 
-        var mouseLocation = new Point(de.X, de.Y);
+        Point mouseLocation = new(de.X, de.Y);
 
         if (mouseLocation.Equals(_lastMouseLocation)
             || _childInfo is null

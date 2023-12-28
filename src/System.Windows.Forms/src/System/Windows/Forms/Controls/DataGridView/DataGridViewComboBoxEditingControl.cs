@@ -19,7 +19,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     protected override AccessibleObject CreateAccessibilityInstance()
     {
-        var controlAccessibleObject = new DataGridViewComboBoxEditingControlAccessibleObject(this);
+        DataGridViewComboBoxEditingControlAccessibleObject controlAccessibleObject = new(this);
         _dataGridView?.SetAccessibleObjectParent(controlAccessibleObject);
         return controlAccessibleObject;
     }

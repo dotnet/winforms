@@ -21,7 +21,7 @@ public class VScrollBar_VScrollBarAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void VScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)
     {
-        using var scrollBar = new VScrollBar();
+        using VScrollBar scrollBar = new();
 
         if (createControl)
         {
@@ -41,7 +41,7 @@ public class VScrollBar_VScrollBarAccessibleObjectTests
     [InlineData("Test")]
     public void VScrollBarAccessibleObject_Description_Get_ReturnsExpected(string accessibleDescription)
     {
-        using var scrollBar = new VScrollBar();
+        using VScrollBar scrollBar = new();
         scrollBar.AccessibleDescription = accessibleDescription;
         ScrollBarAccessibleObject accessibleObject =
             Assert.IsType<ScrollBarAccessibleObject>(scrollBar.AccessibilityObject);
@@ -56,7 +56,7 @@ public class VScrollBar_VScrollBarAccessibleObjectTests
     [InlineData("Test")]
     public void VScrollBarAccessibleObject_Name_Get_ReturnsExpected(string accessibleName)
     {
-        using var scrollBar = new VScrollBar();
+        using VScrollBar scrollBar = new();
         scrollBar.AccessibleName = accessibleName;
         ScrollBarAccessibleObject accessibleObject =
             Assert.IsType<ScrollBarAccessibleObject>(scrollBar.AccessibilityObject);
@@ -68,7 +68,7 @@ public class VScrollBar_VScrollBarAccessibleObjectTests
     [WinFormsFact]
     public void VScrollBarAccessibleObject_ControlType_IsScrollBar_IfAccessibleRoleIsDefault()
     {
-        using VScrollBar scrollBar = new VScrollBar();
+        using VScrollBar scrollBar = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -96,7 +96,7 @@ public class VScrollBar_VScrollBarAccessibleObjectTests
     [MemberData(nameof(VScrollBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void VScrollBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using VScrollBar scrollBar = new VScrollBar();
+        using VScrollBar scrollBar = new();
         scrollBar.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

@@ -9,8 +9,8 @@ public class DataGridViewColumnEventArgsTests
     [Fact]
     public void Ctor_DataGridViewColumn()
     {
-        using var dataGridViewColumn = new DataGridViewColumn();
-        var e = new DataGridViewColumnEventArgs(dataGridViewColumn);
+        using DataGridViewColumn dataGridViewColumn = new();
+        DataGridViewColumnEventArgs e = new(dataGridViewColumn);
         Assert.Equal(dataGridViewColumn, e.Column);
     }
 

@@ -16,7 +16,7 @@ public class LinkConverterTests
     [InlineData(typeof(string), true)]
     public void LinkConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Equal(expected, converter.CanConvertFrom(sourceType));
     }
 
@@ -32,7 +32,7 @@ public class LinkConverterTests
     [MemberData(nameof(ConvertFrom_TestData))]
     public void LinkConverter_ConvertFrom_String_ReturnsExpected(string value, object expected)
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         AssertEqualLink(expected, converter.ConvertFrom(value));
         AssertEqualLink(expected, converter.ConvertFrom(null, null, value));
         AssertEqualLink(expected, converter.ConvertFrom(null, CultureInfo.InvariantCulture, value));
@@ -43,7 +43,7 @@ public class LinkConverterTests
     [InlineData(null)]
     public void LinkConverter_ConvertFrom_InvalidValue_ThrowsNotSupportedException(object value)
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(value));
     }
 
@@ -52,7 +52,7 @@ public class LinkConverterTests
     [InlineData("1,2,3")]
     public void LinkConverter_ConvertFrom_InvalidString_ThrowsArgumentException(string value)
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Throws<ArgumentException>(() => converter.ConvertFrom(value));
     }
 
@@ -64,14 +64,14 @@ public class LinkConverterTests
     [InlineData(null, false)]
     public void LinkConverter_CanConvertTo_Invoke_ReturnsExpected(Type destinationType, bool expected)
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Equal(expected, converter.CanConvertTo(destinationType));
     }
 
     [Fact]
     public void LinkConverter_ConvertTo_String_ReturnsExpected()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Equal("1, 2", converter.ConvertTo(new LinkLabel.Link(1, 2), typeof(string)));
         Assert.Equal("1, 2", converter.ConvertTo(null, null, new LinkLabel.Link(1, 2), typeof(string)));
         Assert.Equal("1, 2", converter.ConvertTo(null, CultureInfo.InvariantCulture, new LinkLabel.Link(1, 2), typeof(string)));
@@ -80,7 +80,7 @@ public class LinkConverterTests
     [Fact]
     public void LinkConverter_ConvertTo_InstanceDescriptor_ReturnsExpected()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new LinkLabel.Link(1, 2), typeof(InstanceDescriptor)));
         Assert.Equal(typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int) }), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2 }, descriptor.Arguments);
@@ -90,7 +90,7 @@ public class LinkConverterTests
     [Fact]
     public void LinkConverter_ConvertTo_InstanceDescriptorWithLinkData_ReturnsExpected()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new LinkLabel.Link(1, 2, "linkData"), typeof(InstanceDescriptor)));
         Assert.Equal(typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(object) }), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2, "linkData" }, descriptor.Arguments);
@@ -100,14 +100,14 @@ public class LinkConverterTests
     [Fact]
     public void LinkConverter_ConvertTo_NullDestinationType_ThrowsArgumentNullException()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(new object(), null));
     }
 
     [Fact]
     public void LinkConverter_ConvertTo_ValueNotLink_ThrowsNotSupportedException()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(1, typeof(InstanceDescriptor)));
     }
 
@@ -116,21 +116,21 @@ public class LinkConverterTests
     [InlineData(typeof(int))]
     public void LinkConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new LinkLabel.Link(), destinationType));
     }
 
     [Fact]
     public void LinkConverter_GetCreateInstanceSupported_Invoke_ReturnsFalse()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.False(converter.GetCreateInstanceSupported());
     }
 
     [Fact]
     public void LinkConverter_GetPropertiesSupported_Invoke_ReturnsFalse()
     {
-        var converter = new LinkConverter();
+        LinkConverter converter = new();
         Assert.False(converter.GetPropertiesSupported());
     }
 

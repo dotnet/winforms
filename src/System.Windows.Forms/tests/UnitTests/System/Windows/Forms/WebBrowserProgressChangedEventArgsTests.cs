@@ -13,7 +13,7 @@ public class WebBrowserProgressChangedEventArgsTests
     [InlineData(2, 1)]
     public void Ctor_Long_Long(long currentProgress, long maximumProgress)
     {
-        var e = new WebBrowserProgressChangedEventArgs(currentProgress, maximumProgress);
+        WebBrowserProgressChangedEventArgs e = new(currentProgress, maximumProgress);
         Assert.Equal(currentProgress, e.CurrentProgress);
         Assert.Equal(maximumProgress, e.MaximumProgress);
     }

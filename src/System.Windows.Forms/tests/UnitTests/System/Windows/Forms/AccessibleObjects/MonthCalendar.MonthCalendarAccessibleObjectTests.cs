@@ -21,7 +21,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     {
         // UIA is less accessible than the test
         // so we have to use "int" type here for "expected" argument
-        using MonthCalendar monthCalendar = new MonthCalendar()
+        using MonthCalendar monthCalendar = new()
         {
             AccessibleName = name
         };
@@ -36,7 +36,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     [WinFormsFact]
     public void MonthCalendarAccessibleObject_Role_IsExpected_ByDefault()
     {
-        using MonthCalendar monthCalendar = new MonthCalendar();
+        using MonthCalendar monthCalendar = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = monthCalendar.AccessibilityObject.Role;
@@ -64,7 +64,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     [MemberData(nameof(MonthCalendarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void MonthCalendarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using MonthCalendar monthCalendar = new MonthCalendar();
+        using MonthCalendar monthCalendar = new();
         monthCalendar.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -77,8 +77,8 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     [WinFormsFact]
     public void MonthCalendarAccessibleObject_GetPropertyValue_ReturnsExpected()
     {
-        using MonthCalendar monthCalendar = new MonthCalendar();
-        DateTime dt = new DateTime(2000, 1, 1);
+        using MonthCalendar monthCalendar = new();
+        DateTime dt = new(2000, 1, 1);
         monthCalendar.SetDate(dt);
 
         Assert.Equal(dt.ToLongDateString(), ((BSTR)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
@@ -247,7 +247,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     public void MonthCalendarAccessibleObject_FragmentNavigate_FirstChild_Returns_Expected()
     {
         using MonthCalendar monthCalendar = new();
-        var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
 
         AccessibleObject previousButton = accessibleObject.PreviousButtonAccessibleObject;
 
@@ -258,7 +258,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     public void MonthCalendarAccessibleObject_FragmentNavigate_LastChild_Returns_Expected()
     {
         using MonthCalendar monthCalendar = new();
-        var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
 
         AccessibleObject todayLink = accessibleObject.TodayLinkAccessibleObject;
 
@@ -269,7 +269,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     public void MonthCalendarAccessibleObject_FragmentNavigate_LastChild_Returns_Expected_IfTodayLinkHidden()
     {
         using MonthCalendar monthCalendar = new() { ShowToday = false };
-        var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+        MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
 
         AccessibleObject lastCalendar = accessibleObject.CalendarsAccessibleObjects?.Last?.Value;
 

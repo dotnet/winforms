@@ -10,7 +10,7 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
     [WinFormsFact]
     public void DataGridViewButtonCellAccessibleObject_Ctor_Default()
     {
-        var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+        DataGridViewButtonCellAccessibleObject accessibleObject = new(null);
         Assert.Null(accessibleObject.Owner);
         Assert.Equal(AccessibleRole.Cell, accessibleObject.Role);
     }
@@ -18,35 +18,35 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
     [WinFormsFact]
     public void DataGridViewButtonCellAccessibleObject_DefaultAction_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+        DataGridViewButtonCellAccessibleObject accessibleObject = new(null);
         Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, accessibleObject.DefaultAction);
     }
 
     [WinFormsFact]
     public void DataGridViewButtonCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+        DataGridViewButtonCellAccessibleObject accessibleObject = new(null);
         Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
     }
 
     [WinFormsFact]
     public void DataGridViewButtonCellAccessibleObject_GetChildCount_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+        DataGridViewButtonCellAccessibleObject accessibleObject = new(null);
         Assert.Equal(0, accessibleObject.GetChildCount());
     }
 
     [WinFormsFact]
     public void DataGridViewButtonCellAccessibleObject_IsIAccessibleExSupported_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+        DataGridViewButtonCellAccessibleObject accessibleObject = new(null);
         Assert.True(accessibleObject.IsIAccessibleExSupported());
     }
 
     [WinFormsFact]
     public void DataGridViewButtonCellAccessibleObject_ControlType_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
+        DataGridViewButtonCellAccessibleObject accessibleObject = new(null);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 

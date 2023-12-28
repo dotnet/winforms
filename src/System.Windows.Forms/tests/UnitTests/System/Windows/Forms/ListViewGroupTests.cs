@@ -14,7 +14,7 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_Ctor_Default()
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Empty(group.Footer);
         Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
         Assert.Equal("ListViewGroup", group.Header);
@@ -35,7 +35,7 @@ public class ListViewGroupTests
     [NormalizedStringData]
     public void ListViewGroup_Ctor_String(string header, string expectedHeader)
     {
-        var group = new ListViewGroup(header);
+        ListViewGroup group = new(header);
         Assert.Empty(group.Footer);
         Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
         Assert.Equal(expectedHeader, group.Header);
@@ -65,7 +65,7 @@ public class ListViewGroupTests
     [MemberData(nameof(Ctor_String_HorizontalAlignment_TestData))]
     public void ListViewGroup_Ctor_String_HorizontalAlignment(string header, HorizontalAlignment headerAlignment, string expectedHeader)
     {
-        var group = new ListViewGroup(header, headerAlignment);
+        ListViewGroup group = new(header, headerAlignment);
         Assert.Empty(group.Footer);
         Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
         Assert.Equal(expectedHeader, group.Header);
@@ -93,7 +93,7 @@ public class ListViewGroupTests
     [MemberData(nameof(Ctor_String_String_TestData))]
     public void ListViewGroup_Ctor_String_String(string key, string header, string expectedHeader)
     {
-        var group = new ListViewGroup(key, header);
+        ListViewGroup group = new(key, header);
         Assert.Empty(group.Footer);
         Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
         Assert.Equal(expectedHeader, group.Header);
@@ -116,8 +116,8 @@ public class ListViewGroupTests
     [InlineData(ListViewGroupCollapsedState.Expanded)]
     public void ListViewGroup_GetNativeCollapsedState_Succeeds(ListViewGroupCollapsedState collapsedState)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup() { CollapsedState = collapsedState };
+        using ListView listView = new();
+        ListViewGroup group = new() { CollapsedState = collapsedState };
         listView.Groups.Add(group);
 
         Assert.Equal(collapsedState, group.GetNativeCollapsedState());
@@ -126,7 +126,7 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_GetNativeCollapsedState_NoListView_Throws()
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Throws<InvalidOperationException>(() => group.GetNativeCollapsedState());
     }
 
@@ -135,7 +135,7 @@ public class ListViewGroupTests
     [InlineData(-1)]
     public void ListViewGroup_TitleImageIndex_SetWithoutListView_GetReturnsExpected(int value)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             TitleImageIndex = value
         };
@@ -152,8 +152,8 @@ public class ListViewGroupTests
     [InlineData(-1)]
     public void ListViewGroup_TitleImageIndex_SetWithListView_GetReturnsExpected(int value)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
 
         group.TitleImageIndex = value;
@@ -171,8 +171,8 @@ public class ListViewGroupTests
     [InlineData(-1)]
     public void ListViewGroup_TitleImageIndex_SetWithListViewWithHandle_GetReturnsExpected(int value)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -210,23 +210,23 @@ public class ListViewGroupTests
             {
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
+                using ListView listView = new();
 
-                using var groupImageList = new ImageList();
+                using ImageList groupImageList = new();
                 groupImageList.Images.Add(new Bitmap(10, 10));
                 groupImageList.Images.Add(new Bitmap(20, 20));
                 listView.GroupImageList = groupImageList;
                 Assert.Equal((nint)groupImageList.Handle,
                     PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
 
-                var group = new ListViewGroup();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
                 group.TitleImageIndex = value.Index;
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_TITLEIMAGE | LVGROUP_MASK.LVGF_GROUPID,
@@ -245,9 +245,9 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_TitleImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
     {
-        var random = new Random();
+        Random random = new();
         int value = random.Next(2, int.MaxValue) * -1;
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => group.TitleImageIndex = value);
     }
 
@@ -255,7 +255,7 @@ public class ListViewGroupTests
     [NormalizedStringData]
     public void ListViewGroup_TitleImageIndex_SetTitleImageKey_GetReturnsExpected(string key, string expected)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             TitleImageIndex = 0
         };
@@ -273,7 +273,7 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_TitleImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             TitleImageKey = value
         };
@@ -290,8 +290,8 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_TitleImageKey_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
 
         group.TitleImageKey = value;
@@ -312,8 +312,8 @@ public class ListViewGroupTests
     [InlineData("ListViewGroup", "ListViewGroup")]
     public void ListViewGroup_TitleImageKey_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -351,22 +351,22 @@ public class ListViewGroupTests
             {
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
+                using ListView listView = new();
 
-                using var groupImageList = new ImageList();
+                using ImageList groupImageList = new();
                 groupImageList.Images.Add(value.Key, new Bitmap(10, 10));
                 listView.GroupImageList = groupImageList;
                 Assert.Equal((nint)groupImageList.Handle,
                     PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
 
-                var group = new ListViewGroup();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
                 group.TitleImageKey = value.Key;
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_TITLEIMAGE | LVGROUP_MASK.LVGF_GROUPID
@@ -387,7 +387,7 @@ public class ListViewGroupTests
     [InlineData(-1)]
     public void ListViewGroup_TitleImageKey_SetTitleImageIndex_GetReturnsExpected(int value)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             TitleImageKey = "key"
         };
@@ -405,7 +405,7 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Subtitle_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Subtitle = value
         };
@@ -422,8 +422,8 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Subtitle_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
 
         group.Subtitle = value;
@@ -444,8 +444,8 @@ public class ListViewGroupTests
     [InlineData("ListViewGroup", "ListViewGroup")]
     public void ListViewGroup_Subtitle_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -495,8 +495,8 @@ public class ListViewGroupTests
 
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
-                var group = new ListViewGroup();
+                using ListView listView = new();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -504,7 +504,7 @@ public class ListViewGroupTests
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
 
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_SUBTITLE | LVGROUP_MASK.LVGF_GROUPID,
@@ -527,7 +527,7 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Footer_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Footer = value
         };
@@ -544,8 +544,8 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Footer_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
 
         group.Footer = value;
@@ -566,8 +566,8 @@ public class ListViewGroupTests
     [InlineData("ListViewGroup", "ListViewGroup")]
     public void ListViewGroup_Footer_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -606,8 +606,8 @@ public class ListViewGroupTests
 
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
-                var group = new ListViewGroup();
+                using ListView listView = new();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -615,7 +615,7 @@ public class ListViewGroupTests
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
                 char* buffer = stackalloc char[256];
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
@@ -648,7 +648,7 @@ public class ListViewGroupTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void ListViewGroup_FooterAlignment_SetWithoutListView_GetReturnsExpected(string footer, HorizontalAlignment value, string expectedFooter)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Footer = footer,
             FooterAlignment = value
@@ -667,8 +667,8 @@ public class ListViewGroupTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void ListViewGroup_FooterAlignment_SetWithListView_GetReturnsExpected(string footer, HorizontalAlignment value, string expectedFooter)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup
+        using ListView listView = new();
+        ListViewGroup group = new()
         {
             Footer = footer
         };
@@ -691,8 +691,8 @@ public class ListViewGroupTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void ListViewGroup_FooterAlignment_SetWithListViewWithHandle_GetReturnsExpected(string footer, HorizontalAlignment value, string expectedFooter)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup
+        using ListView listView = new();
+        ListViewGroup group = new()
         {
             Footer = footer
         };
@@ -746,8 +746,8 @@ public class ListViewGroupTests
             int expectedAlign = int.Parse(expectedAlignString);
 
             Application.EnableVisualStyles();
-            using var listView = new ListView();
-            var group1 = new ListViewGroup
+            using ListView listView = new();
+            ListViewGroup group1 = new()
             {
                 Footer = footer
             };
@@ -759,7 +759,7 @@ public class ListViewGroupTests
 
             Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
             char* buffer = stackalloc char[256];
-            var lvgroup = new LVGROUP
+            LVGROUP lvgroup = new()
             {
                 cbSize = (uint)sizeof(LVGROUP),
                 mask = LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
@@ -778,7 +778,7 @@ public class ListViewGroupTests
     [InvalidEnumData<HorizontalAlignment>]
     public void ListViewGroup_FooterAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => group.FooterAlignment = value);
     }
 
@@ -787,7 +787,7 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Header_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Header = value
         };
@@ -804,8 +804,8 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Header_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
 
         group.Header = value;
@@ -826,8 +826,8 @@ public class ListViewGroupTests
     [InlineData("ListViewGroup", "ListViewGroup")]
     public void ListViewGroup_Header_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -866,8 +866,8 @@ public class ListViewGroupTests
 
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
-                var group = new ListViewGroup();
+                using ListView listView = new();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -875,7 +875,7 @@ public class ListViewGroupTests
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
                 char* buffer = stackalloc char[256];
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
@@ -898,7 +898,7 @@ public class ListViewGroupTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void ListViewGroup_HeaderAlignment_SetWithoutListView_GetReturnsExpected(string header, HorizontalAlignment value, string expectedHeader)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Header = header,
             HeaderAlignment = value
@@ -917,8 +917,8 @@ public class ListViewGroupTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void ListViewGroup_HeaderAlignment_SetWithListView_GetReturnsExpected(string header, HorizontalAlignment value, string expectedHeader)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup
+        using ListView listView = new();
+        ListViewGroup group = new()
         {
             Header = header
         };
@@ -941,8 +941,8 @@ public class ListViewGroupTests
     [MemberData(nameof(Alignment_Set_TestData))]
     public void ListViewGroup_HeaderAlignment_SetWithListViewWithHandle_GetReturnsExpected(string header, HorizontalAlignment value, string expectedHeader)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup
+        using ListView listView = new();
+        ListViewGroup group = new()
         {
             Header = header
         };
@@ -996,8 +996,8 @@ public class ListViewGroupTests
             int expectedAlign = int.Parse(expectedAlignString);
 
             Application.EnableVisualStyles();
-            using var listView = new ListView();
-            var group1 = new ListViewGroup
+            using ListView listView = new();
+            ListViewGroup group1 = new()
             {
                 Header = header
             };
@@ -1009,7 +1009,7 @@ public class ListViewGroupTests
 
             Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
             char* buffer = stackalloc char[256];
-            var lvgroup = new LVGROUP
+            LVGROUP lvgroup = new()
             {
                 cbSize = (uint)sizeof(LVGROUP),
                 mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
@@ -1028,7 +1028,7 @@ public class ListViewGroupTests
     [InvalidEnumData<HorizontalAlignment>]
     public void ListViewGroup_HeaderAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => group.HeaderAlignment = value);
     }
 
@@ -1043,7 +1043,7 @@ public class ListViewGroupTests
     [MemberData(nameof(CollapsedState_TestData))]
     public void ListViewGroup_Collapse_SetWithoutListView_GetReturnsExpected(ListViewGroupCollapsedState value, ListViewGroupCollapsedState expected)
     {
-        var group = new ListViewGroup()
+        ListViewGroup group = new()
         {
             CollapsedState = value
         };
@@ -1059,8 +1059,8 @@ public class ListViewGroupTests
     [MemberData(nameof(CollapsedState_TestData))]
     public void ListViewGroup_Collapse_SetWithListView_GetReturnsExpected(ListViewGroupCollapsedState value, ListViewGroupCollapsedState expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup
+        using ListView listView = new();
+        ListViewGroup group = new()
         {
             CollapsedState = value
         };
@@ -1082,8 +1082,8 @@ public class ListViewGroupTests
     [MemberData(nameof(CollapsedState_TestData))]
     public void ListViewGroup_Collapse_SetWithListViewWithHandle_GetReturnsExpected(ListViewGroupCollapsedState value, ListViewGroupCollapsedState expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup
+        using ListView listView = new();
+        ListViewGroup group = new()
         {
             CollapsedState = value
         };
@@ -1122,8 +1122,8 @@ public class ListViewGroupTests
             {
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
-                var group = new ListViewGroup();
+                using ListView listView = new();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -1131,7 +1131,7 @@ public class ListViewGroupTests
                 ListViewGroupCollapsedState expectedCollapsedState = (ListViewGroupCollapsedState)data[1];
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_STATE | LVGROUP_MASK.LVGF_GROUPID,
@@ -1164,7 +1164,7 @@ public class ListViewGroupTests
     [InvalidEnumData<ListViewGroupCollapsedState>]
     public void ListViewGroup_CollapsedState_SetInvalid_ThrowsInvalidEnumArgumentException(ListViewGroupCollapsedState value)
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => group.CollapsedState = value);
     }
 
@@ -1172,7 +1172,7 @@ public class ListViewGroupTests
     [StringWithNullData]
     public void ListViewGroup_Name_Set_GetReturnsExpected(string value)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Name = value
         };
@@ -1189,7 +1189,7 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Task_SetWithoutListView_GetReturnsExpected(string value, string expected)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             TaskLink = value
         };
@@ -1206,8 +1206,8 @@ public class ListViewGroupTests
     [InlineData("te\0xt", "te\0xt")]
     public void ListViewGroup_Task_SetWithListView_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
 
         group.TaskLink = value;
@@ -1228,8 +1228,8 @@ public class ListViewGroupTests
     [InlineData("ListViewGroup", "ListViewGroup")]
     public void ListViewGroup_Task_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var listView = new ListView();
-        var group = new ListViewGroup();
+        using ListView listView = new();
+        ListViewGroup group = new();
         listView.Groups.Add(group);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         int invalidatedCallCount = 0;
@@ -1271,15 +1271,15 @@ public class ListViewGroupTests
 
                 Application.EnableVisualStyles();
 
-                using var listView = new ListView();
-                var group = new ListViewGroup();
+                using ListView listView = new();
+                ListViewGroup group = new();
                 listView.Groups.Add(group);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
                 group.TaskLink = value;
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUP
+                LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
                     mask = LVGROUP_MASK.LVGF_TASK | LVGROUP_MASK.LVGF_GROUPID,
@@ -1301,7 +1301,7 @@ public class ListViewGroupTests
     [StringWithNullData]
     public void ListViewGroup_Tag_Set_GetReturnsExpected(string value)
     {
-        var group = new ListViewGroup
+        ListViewGroup group = new()
         {
             Tag = value
         };
@@ -1318,11 +1318,11 @@ public class ListViewGroupTests
         yield return new object[] { new ListViewGroup() };
         yield return new object[] { new ListViewGroup("header", HorizontalAlignment.Center) { Name = "name", Tag = "tag" } };
 
-        var groupWithEmptyItems = new ListViewGroup();
+        ListViewGroup groupWithEmptyItems = new();
         Assert.Empty(groupWithEmptyItems.Items);
         yield return new object[] { groupWithEmptyItems };
 
-        var groupWithItems = new ListViewGroup();
+        ListViewGroup groupWithItems = new();
         groupWithItems.Items.Add(new ListViewItem("text"));
         yield return new object[] { groupWithItems };
     }
@@ -1331,10 +1331,10 @@ public class ListViewGroupTests
     [MemberData(nameof(Serialize_Deserialize_TestData))]
     public void ListViewGroup_Serialize_Deserialize_Success(ListViewGroup group)
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        using var stream = new MemoryStream();
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        var formatter = new BinaryFormatter();
+        BinaryFormatter formatter = new();
         formatter.Serialize(stream, group);
         stream.Seek(0, SeekOrigin.Begin);
 
@@ -1351,17 +1351,17 @@ public class ListViewGroupTests
     [NormalizedStringData]
     public void ListViewGroup_ToString_Invoke_ReturnsExpected(string header, string expected)
     {
-        var group = new ListViewGroup(header);
+        ListViewGroup group = new(header);
         Assert.Equal(expected, group.ToString());
     }
 
     [WinFormsFact]
     public void ListViewGroup_ISerializableGetObjectData_InvokeSimple_Success()
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         ISerializable iSerializable = group;
-        var info = new SerializationInfo(typeof(ListViewGroup), new FormatterConverter());
-        var context = new StreamingContext();
+        SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
+        StreamingContext context = new();
 
         iSerializable.GetObjectData(info, context);
         Assert.Equal("ListViewGroup", info.GetString("Header"));
@@ -1374,12 +1374,12 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_ISerializableGetObjectData_InvokeWithEmptyItems_Success()
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         Assert.Empty(group.Items);
 
         ISerializable iSerializable = group;
-        var info = new SerializationInfo(typeof(ListViewGroup), new FormatterConverter());
-        var context = new StreamingContext();
+        SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
+        StreamingContext context = new();
 
         iSerializable.GetObjectData(info, context);
         Assert.Equal("ListViewGroup", info.GetString("Header"));
@@ -1392,12 +1392,12 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_ISerializableGetObjectData_InvokeWithItems_Success()
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         group.Items.Add(new ListViewItem("text"));
 
         ISerializable iSerializable = group;
-        var info = new SerializationInfo(typeof(ListViewGroup), new FormatterConverter());
-        var context = new StreamingContext();
+        SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
+        StreamingContext context = new();
 
         iSerializable.GetObjectData(info, context);
         Assert.Equal("ListViewGroup", info.GetString("Header"));
@@ -1411,19 +1411,19 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_ISerializableGetObjectData_NullInfo_ThrowsArgumentNullException()
     {
-        var group = new ListViewGroup();
+        ListViewGroup group = new();
         ISerializable iSerializable = group;
-        var context = new StreamingContext();
+        StreamingContext context = new();
         Assert.Throws<ArgumentNullException>("info", () => iSerializable.GetObjectData(null, context));
     }
 
     [WinFormsFact]
     public void ListViewGroup_InvokeAdd_DoesNotAddTreeViewItemToList()
     {
-        using var listView = new ListView();
-        ListViewItem listViewItem = new ListViewItem();
-        ListViewItem listViewItemGroup = new ListViewItem();
-        ListViewGroup listViewGroup = new ListViewGroup();
+        using ListView listView = new();
+        ListViewItem listViewItem = new();
+        ListViewItem listViewItemGroup = new();
+        ListViewGroup listViewGroup = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Groups.Add(listViewGroup);
         listView.Items.Add(listViewItem);
@@ -1436,9 +1436,9 @@ public class ListViewGroupTests
     [WinFormsFact]
     public void ListViewGroup_InvokeRemove_DoesNotRemoveTreeViewItemFromList()
     {
-        using var listView = new ListView();
-        ListViewItem listViewItem = new ListViewItem();
-        ListViewGroup listViewGroup = new ListViewGroup();
+        using ListView listView = new();
+        ListViewItem listViewItem = new();
+        ListViewGroup listViewGroup = new();
         var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Groups.Add(listViewGroup);
         listView.Items.Add(listViewItem);

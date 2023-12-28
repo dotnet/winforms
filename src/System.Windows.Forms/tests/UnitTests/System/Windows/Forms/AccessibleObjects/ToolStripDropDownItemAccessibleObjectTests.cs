@@ -206,7 +206,7 @@ public class ToolStripDropDownItemAccessibleObjectTests
     public void ToolStripDropDownItemAccessibleObject_ReleaseUiaProvider_DropDown()
     {
         using NoAssertContext context = new();
-        using var toolStripDropDownItem = new SubToolStripDropDownItem();
+        using SubToolStripDropDownItem toolStripDropDownItem = new();
 
         _ = toolStripDropDownItem.AccessibilityObject;
         _ = toolStripDropDownItem.DropDown.AccessibilityObject;

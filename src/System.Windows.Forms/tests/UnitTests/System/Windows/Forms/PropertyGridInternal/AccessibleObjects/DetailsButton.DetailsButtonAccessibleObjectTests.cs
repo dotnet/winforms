@@ -10,10 +10,10 @@ public class DetailsButton_DetailsButtonAccessibleObjectTests
     [WinFormsFact]
     public void DetailsButtonAccessibleObject_Ctor_Default()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using GridErrorDialog gridErrorDlg = new GridErrorDialog(propertyGrid);
-        using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
-        DetailsButton.DetailsButtonAccessibleObject accessibleObject = new DetailsButton.DetailsButtonAccessibleObject(detailsButton);
+        using PropertyGrid propertyGrid = new();
+        using GridErrorDialog gridErrorDlg = new(propertyGrid);
+        using DetailsButton detailsButton = new(gridErrorDlg);
+        DetailsButton.DetailsButtonAccessibleObject accessibleObject = new(detailsButton);
 
         Assert.Equal(detailsButton, accessibleObject.Owner);
         Assert.False(propertyGrid.IsHandleCreated);
@@ -24,9 +24,9 @@ public class DetailsButton_DetailsButtonAccessibleObjectTests
     [WinFormsFact]
     public void DetailsButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using GridErrorDialog gridErrorDlg = new GridErrorDialog(propertyGrid);
-        using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
+        using PropertyGrid propertyGrid = new();
+        using GridErrorDialog gridErrorDlg = new(propertyGrid);
+        using DetailsButton detailsButton = new(gridErrorDlg);
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)detailsButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -42,9 +42,9 @@ public class DetailsButton_DetailsButtonAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void DetailsButtonAccessibleObject_Role_IsPushButton_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using GridErrorDialog gridErrorDlg = new GridErrorDialog(propertyGrid);
-        using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
+        using PropertyGrid propertyGrid = new();
+        using GridErrorDialog gridErrorDlg = new(propertyGrid);
+        using DetailsButton detailsButton = new(gridErrorDlg);
         // AccessibleRole is not set = Default
 
         if (createControl)

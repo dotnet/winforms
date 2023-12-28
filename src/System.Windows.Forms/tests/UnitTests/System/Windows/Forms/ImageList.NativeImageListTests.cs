@@ -10,7 +10,7 @@ public class ListView_NativeImageListTests
     [WinFormsFact]
     public void NativeImageList_Dispose_releases_native_handle()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
         using ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(ClassicImageListStreamer);
 
         NativeImageList nativeImageList = result.GetNativeImageList();

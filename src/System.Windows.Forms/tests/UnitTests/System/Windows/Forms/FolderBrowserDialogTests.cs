@@ -8,7 +8,7 @@ public class FolderBrowserDialogTests
     [WinFormsFact]
     public void FolderBrowserDialog_Ctor_Default()
     {
-        using var dialog = new FolderBrowserDialog();
+        using FolderBrowserDialog dialog = new();
         Assert.True(dialog.AddToRecent);
         Assert.True(dialog.AutoUpgradeEnabled);
         Assert.Null(dialog.Container);
@@ -30,7 +30,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FolderBrowserDialog_AddToRecent_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             AddToRecent = value
         };
@@ -49,7 +49,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FolderBrowserDialog_AutoUpgradeEnabled_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             AutoUpgradeEnabled = value
         };
@@ -68,7 +68,7 @@ public class FolderBrowserDialogTests
     [StringWithNullData]
     public void FolderBrowserDialog_Description_Set_GetReturnsExpected(string value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             Description = value
         };
@@ -83,7 +83,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FolderBrowserDialog_OkRequiresInteraction_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             OkRequiresInteraction = value
         };
@@ -103,7 +103,7 @@ public class FolderBrowserDialogTests
     [InlineData(Environment.SpecialFolder.StartMenu)]
     public void FolderBrowserDialog_RootFolder_Set_GetReturnsExpected(Environment.SpecialFolder value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             RootFolder = value
         };
@@ -118,7 +118,7 @@ public class FolderBrowserDialogTests
     [StringWithNullData]
     public void FolderBrowserDialog_InitialDirectory_Set_GetReturnsExpected(string value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             InitialDirectory = value
         };
@@ -133,7 +133,7 @@ public class FolderBrowserDialogTests
     [StringWithNullData]
     public void FolderBrowserDialog_SelectedPath_Set_GetReturnsExpected(string value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             SelectedPath = value
         };
@@ -148,7 +148,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FolderBrowserDialog_ShowHiddenFiles_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             ShowHiddenFiles = value
         };
@@ -167,7 +167,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FileDialog_ShowPinnedPlaces_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             ShowPinnedPlaces = value
         };
@@ -186,7 +186,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FolderBrowserDialog_ShowNewFolderButton_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             ShowNewFolderButton = value
         };
@@ -205,7 +205,7 @@ public class FolderBrowserDialogTests
     [BoolData]
     public void FolderBrowserDialog_UseDescriptionForTitle_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             UseDescriptionForTitle = value
         };
@@ -223,7 +223,7 @@ public class FolderBrowserDialogTests
     [WinFormsFact]
     public void FolderBrowserDialog_Reset_Invoke_Success()
     {
-        using var dialog = new FolderBrowserDialog
+        using FolderBrowserDialog dialog = new()
         {
             AddToRecent = false,
             AutoUpgradeEnabled = false,
@@ -261,7 +261,7 @@ public class FolderBrowserDialogTests
     [WinFormsFact]
     public void FolderBrowserDialog_HelpRequest_AddRemove_Success()
     {
-        using var dialog = new FolderBrowserDialog();
+        using FolderBrowserDialog dialog = new();
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
 
@@ -275,7 +275,7 @@ public class FolderBrowserDialogTests
     [InlineData("1d5a0215-fa19-4e3b-8ab9-06da88c28ae7")]
     public void FolderBrowserDialog_ClientGuid_Set_GetReturnsExpected(Guid value)
     {
-        using var dialog = new FolderBrowserDialog { ClientGuid = value };
+        using FolderBrowserDialog dialog = new() { ClientGuid = value };
         Assert.Equal(value, dialog.ClientGuid);
 
         // Set same.

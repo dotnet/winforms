@@ -175,7 +175,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     {
         get
         {
-            float[] width = new float[] { 0 };
+            float[] width = [0];
             int status = Gdip.GdipGetPenWidth(new HandleRef(this, NativePen), width);
             Gdip.CheckStatus(status);
 
@@ -413,7 +413,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     {
         get
         {
-            float[] miterLimit = new float[] { 0 };
+            float[] miterLimit = [0];
             int status = Gdip.GdipGetPenMiterLimit(new HandleRef(this, NativePen), miterLimit);
             Gdip.CheckStatus(status);
 
@@ -468,7 +468,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     {
         get
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             int status = Gdip.GdipGetPenTransform(new HandleRef(this, NativePen), new HandleRef(matrix, matrix.NativeMatrix));
             Gdip.CheckStatus(status);
 
@@ -772,7 +772,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     {
         get
         {
-            float[] dashOffset = new float[] { 0 };
+            float[] dashOffset = [0];
             int status = Gdip.GdipGetPenDashOffset(new HandleRef(this, NativePen), dashOffset);
             Gdip.CheckStatus(status);
 

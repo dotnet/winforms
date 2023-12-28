@@ -52,7 +52,7 @@ internal class EnumCodeDomSerializer : CodeDomSerializer
             // should be providing us a conversion to Enum[] for flag styles.
             // If it doesn't, we will emit a warning and just do a cast from the enum value.
 
-            CodeTypeReferenceExpression enumType = new CodeTypeReferenceExpression(enumValue.GetType());
+            CodeTypeReferenceExpression enumType = new(enumValue.GetType());
 
             // If names is of length 1, then this is a simple field reference. Otherwise,
             // it is an or-d combination of expressions.

@@ -12,7 +12,7 @@ public class CheckedListBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckedListBoxAccessibleObject_CheckBounds()
     {
-        using CheckedListBox checkedListBox = new CheckedListBox();
+        using CheckedListBox checkedListBox = new();
         checkedListBox.Size = new Size(120, 100);
         checkedListBox.Items.Add("a");
         checkedListBox.Items.Add("b");
@@ -41,7 +41,7 @@ public class CheckedListBoxAccessibleObjectTests
     [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId)]
     public void CheckedListBoxAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
     {
-        using CheckedListBox checkedListBox = new CheckedListBox();
+        using CheckedListBox checkedListBox = new();
         // AccessibleRole is not set = Default
 
         if (createControl)
@@ -74,7 +74,7 @@ public class CheckedListBoxAccessibleObjectTests
     [MemberData(nameof(CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using CheckedListBox checkedListBox = new CheckedListBox();
+        using CheckedListBox checkedListBox = new();
         checkedListBox.AccessibleRole = role;
 
         VARIANT actual = checkedListBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -89,7 +89,7 @@ public class CheckedListBoxAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void CheckedListBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using CheckedListBox checkedListBox = new CheckedListBox();
+        using CheckedListBox checkedListBox = new();
         // AccessibleRole is not set = Default
 
         if (createControl)

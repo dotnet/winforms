@@ -73,7 +73,7 @@ internal partial class StringCollectionEditor
         [MemberNotNull(nameof(_overarchingLayoutPanel))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(StringCollectionEditor));
+            ComponentResourceManager resources = new(typeof(StringCollectionEditor));
             _instruction = new Label();
             _textEntry = new TextBox();
             _okButton = new Button();

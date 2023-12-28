@@ -78,7 +78,7 @@ public partial class DataGridView
 
         if (createdByEditing)
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(Rows[NewRowIndex]);
+            DataGridViewRowEventArgs dgvre = new(Rows[NewRowIndex]);
             OnUserAddedRow(dgvre);
 
             if (IsAccessibilityObjectCreated)
@@ -2707,7 +2707,7 @@ public partial class DataGridView
                 }
             }
 
-            DataGridViewCellCancelEventArgs dgvcce = new DataGridViewCellCancelEventArgs(_ptCurrentCell.X, _ptCurrentCell.Y);
+            DataGridViewCellCancelEventArgs dgvcce = new(_ptCurrentCell.X, _ptCurrentCell.Y);
             OnCellBeginEdit(dgvcce);
             if (dgvcce.Cancel)
             {
@@ -2799,7 +2799,7 @@ public partial class DataGridView
 
             Debug.Assert(EditingControl is not null);
             Debug.Assert(_editingPanel is not null);
-            DataGridViewEditingControlShowingEventArgs dgvese = new DataGridViewEditingControlShowingEventArgs(EditingControl, dataGridViewCellStyle);
+            DataGridViewEditingControlShowingEventArgs dgvese = new(EditingControl, dataGridViewCellStyle);
             OnEditingControlShowing(dgvese);
             Debug.Assert(dgvese.CellStyle is not null);
             if (_editingPanel is null || EditingControl is null)
@@ -3120,7 +3120,7 @@ public partial class DataGridView
     private Rectangle CalcColResizeFeedbackRect(int mouseX)
     {
         Rectangle inside = _layout.Data;
-        Rectangle r = new Rectangle(
+        Rectangle r = new(
             mouseX + _mouseBarOffset - 1,
             inside.Y,
             3,
@@ -3141,7 +3141,7 @@ public partial class DataGridView
     private Rectangle CalcRowResizeFeedbackRect(int mouseY)
     {
         Rectangle inside = _layout.Data;
-        Rectangle r = new Rectangle(
+        Rectangle r = new(
             inside.X,
             mouseY + _mouseBarOffset - 1,
             inside.Width,
@@ -3313,7 +3313,7 @@ public partial class DataGridView
                 IsCurrentRowDirtyInternal = false;
                 if (VirtualMode)
                 {
-                    QuestionEventArgs qe = new QuestionEventArgs(discardNewRow);
+                    QuestionEventArgs qe = new(discardNewRow);
                     OnCancelRowEdit(qe);
                     discardNewRow &= qe.Response;
                 }
@@ -4479,7 +4479,7 @@ public partial class DataGridView
     {
         ClearRegionCache();
 
-        LayoutData newLayout = new LayoutData(_layout);
+        LayoutData newLayout = new(_layout);
         Rectangle oldResizeRect = _layout.ResizeBoxRect;
 
         // Inside region
@@ -5196,7 +5196,7 @@ public partial class DataGridView
 
     private void CorrectColumnFrozenStates(DataGridViewColumn[] dataGridViewColumns)
     {
-        DataGridView dataGridViewTmp = new DataGridView();
+        DataGridView dataGridViewTmp = new();
         DataGridViewColumn dataGridViewColumnClone;
         foreach (DataGridViewColumn dataGridViewColumn in Columns)
         {
@@ -5579,7 +5579,7 @@ public partial class DataGridView
             return _cachedScrollableRegion;
         }
 
-        using (Region region = new Region(scroll))
+        using (Region region = new(scroll))
         {
             HRGN hrgn = default;
             using (Graphics graphics = CreateGraphicsInternal())
@@ -5602,7 +5602,7 @@ public partial class DataGridView
         Debug.Assert(Rows.Count > 1);
         Debug.Assert(NewRowIndex != -1);
 
-        DataGridViewRowCancelEventArgs dgvrce = new DataGridViewRowCancelEventArgs(Rows[NewRowIndex]);
+        DataGridViewRowCancelEventArgs dgvrce = new(Rows[NewRowIndex]);
         OnUserDeletingRow(dgvrce);
         if (dgvrce.Cancel)
         {
@@ -5614,7 +5614,7 @@ public partial class DataGridView
         DataGridViewRow dataGridViewRow = Rows[NewRowIndex];
         Rows.RemoveAtInternal(NewRowIndex, force: false);
         Debug.Assert(dataGridViewRow.Index == -1);
-        DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
+        DataGridViewRowEventArgs dgvre = new(dataGridViewRow);
         OnUserDeletedRow(dgvre);
 
         // CorrectRowIndexesAfterDeletion resets this.newRowIndex to -1.
@@ -5777,7 +5777,7 @@ public partial class DataGridView
         DrawShadowRect(r);
         if (_dataGridViewState2[State2_ShowColumnRelocationInsertion])
         {
-            Rectangle rectInsertionBar = new Rectangle(0, _layout.ColumnHeaders.Top, InsertionBarWidth, _layout.ColumnHeaders.Height);
+            Rectangle rectInsertionBar = new(0, _layout.ColumnHeaders.Top, InsertionBarWidth, _layout.ColumnHeaders.Height);
             // this.trackColumnEdge is the column preceding the insertion point
             if (_trackColumnEdge == -1)
             {
@@ -5906,7 +5906,7 @@ public partial class DataGridView
             _dataGridViewOper[OperationLastEditCtrlClickDoubled] = false;
         }
 
-        MouseEventArgs me = new MouseEventArgs(
+        MouseEventArgs me = new(
             e.Button,
             e.Clicks,
             adjustedX,
@@ -5920,7 +5920,7 @@ public partial class DataGridView
             mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
         }
 
-        DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(
+        DataGridViewCellMouseEventArgs dgvcme = new(
             hti._col,
             hti._row,
             mouseX,
@@ -6073,7 +6073,7 @@ public partial class DataGridView
                 case DataGridViewMouseEvent.MouseUp:
                     if (_dataGridViewState2[State2_NextMouseUpIsDouble])
                     {
-                        MouseEventArgs meTmp = new MouseEventArgs(
+                        MouseEventArgs meTmp = new(
                             e.Button,
                             2,
                             adjustedX,
@@ -6428,7 +6428,7 @@ public partial class DataGridView
 
             if (!IsInnerCellOutOfBounds(curColIndex, curRowIndex))
             {
-                DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(curColIndex, curRowIndex);
+                DataGridViewCellEventArgs dgvce = new(curColIndex, curRowIndex);
                 OnCellEndEdit(dgvce);
             }
 
@@ -7337,7 +7337,7 @@ public partial class DataGridView
             DataFormats.UnicodeText,
             DataFormats.CommaSeparatedValue
         };
-        DataObject dataObject = new DataObject();
+        DataObject dataObject = new();
         bool includeColumnHeaders = false, includeRowHeaders = false;
         string? cellContent = null;
         StringBuilder? sbContent = null;
@@ -9377,7 +9377,7 @@ public partial class DataGridView
                 displayHeight = Rows.SharedRow(indexTmp).GetHeight(indexTmp);
             }
 
-            Rectangle rowRect = new Rectangle(data.X,
+            Rectangle rowRect = new(data.X,
                 cy,
                 data.Width,
                 displayHeight);
@@ -9584,7 +9584,7 @@ public partial class DataGridView
 
     public HitTestInfo HitTest(int x, int y)
     {
-        HitTestInfo hti = new HitTestInfo();
+        HitTestInfo hti = new();
 
         if (!_layout.Inside.Contains(x, y))
         {
@@ -11564,7 +11564,7 @@ public partial class DataGridView
     internal void OnAutoSizeColumnModeChanged(DataGridViewColumn dataGridViewColumn, DataGridViewAutoSizeColumnMode previousInheritedMode)
     {
         ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
-        DataGridViewAutoSizeColumnModeEventArgs dgvascme = new DataGridViewAutoSizeColumnModeEventArgs(dataGridViewColumn, previousInheritedMode);
+        DataGridViewAutoSizeColumnModeEventArgs dgvascme = new(dataGridViewColumn, previousInheritedMode);
         OnAutoSizeColumnModeChanged(dgvascme);
     }
 
@@ -11770,12 +11770,12 @@ public partial class DataGridView
     {
         if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+            DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
             OnColumnContextMenuStripChanged(dgvce);
         }
         else
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs((DataGridViewRow)dataGridViewBand);
+            DataGridViewRowEventArgs dgvre = new((DataGridViewRow)dataGridViewBand);
             OnRowContextMenuStripChanged(dgvre);
         }
     }
@@ -11784,12 +11784,12 @@ public partial class DataGridView
     {
         if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+            DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
             OnColumnDefaultCellStyleChanged(dgvce);
         }
         else
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs((DataGridViewRow)dataGridViewBand);
+            DataGridViewRowEventArgs dgvre = new((DataGridViewRow)dataGridViewBand);
             OnRowDefaultCellStyleChanged(dgvre);
         }
     }
@@ -11798,12 +11798,12 @@ public partial class DataGridView
     {
         if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+            DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
             OnColumnDividerWidthChanged(dgvce);
         }
         else
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs((DataGridViewRow)dataGridViewBand);
+            DataGridViewRowEventArgs dgvre = new((DataGridViewRow)dataGridViewBand);
             OnRowDividerHeightChanged(dgvre);
         }
     }
@@ -11812,12 +11812,12 @@ public partial class DataGridView
     {
         if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+            DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
             OnColumnHeaderCellChanged(dgvce);
         }
         else
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs((DataGridViewRow)dataGridViewBand);
+            DataGridViewRowEventArgs dgvre = new((DataGridViewRow)dataGridViewBand);
             OnRowHeaderCellChanged(dgvre);
         }
     }
@@ -11826,12 +11826,12 @@ public partial class DataGridView
     {
         if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+            DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
             OnColumnMinimumWidthChanged(dgvce);
         }
         else
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs((DataGridViewRow)dataGridViewBand);
+            DataGridViewRowEventArgs dgvre = new((DataGridViewRow)dataGridViewBand);
             OnRowMinimumHeightChanged(dgvre);
         }
     }
@@ -11840,12 +11840,12 @@ public partial class DataGridView
     {
         if (dataGridViewBand is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+            DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
             OnColumnWidthChanged(dgvce);
         }
         else
         {
-            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs((DataGridViewRow)dataGridViewBand);
+            DataGridViewRowEventArgs dgvre = new((DataGridViewRow)dataGridViewBand);
             OnRowHeightChanged(dgvre);
         }
     }
@@ -12084,7 +12084,7 @@ public partial class DataGridView
 
     internal void OnCellContextMenuStripChanged(DataGridViewCell dataGridViewCell)
     {
-        DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(dataGridViewCell);
+        DataGridViewCellEventArgs dgvce = new(dataGridViewCell);
         OnCellContextMenuStripChanged(dgvce);
     }
 
@@ -12096,7 +12096,7 @@ public partial class DataGridView
 
     internal ContextMenuStrip? OnCellContextMenuStripNeeded(int columnIndex, int rowIndex, ContextMenuStrip? contextMenuStrip)
     {
-        DataGridViewCellContextMenuStripNeededEventArgs dgvccmsne = new DataGridViewCellContextMenuStripNeededEventArgs(columnIndex, rowIndex, contextMenuStrip);
+        DataGridViewCellContextMenuStripNeededEventArgs dgvccmsne = new(columnIndex, rowIndex, contextMenuStrip);
         OnCellContextMenuStripNeeded(dgvccmsne);
         return dgvccmsne.ContextMenuStrip;
     }
@@ -12169,7 +12169,7 @@ public partial class DataGridView
     {
         Debug.Assert(dataGridViewCell.RowIndex >= -1);
         Debug.Assert(dataGridViewCell.ColumnIndex >= -1);
-        DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(dataGridViewCell);
+        DataGridViewCellEventArgs dgvce = new(dataGridViewCell);
         OnCellErrorTextChanged(dgvce);
     }
 
@@ -12185,7 +12185,7 @@ public partial class DataGridView
     {
         Debug.Assert(columnIndex >= 0);
         Debug.Assert(rowIndex >= 0);
-        DataGridViewCellErrorTextNeededEventArgs dgvcetne = new DataGridViewCellErrorTextNeededEventArgs(columnIndex, rowIndex, errorText);
+        DataGridViewCellErrorTextNeededEventArgs dgvcetne = new(columnIndex, rowIndex, errorText);
         OnCellErrorTextNeeded(dgvcetne);
         return dgvcetne.ErrorText;
     }
@@ -13201,7 +13201,7 @@ public partial class DataGridView
 
     internal void OnCellStyleChanged(DataGridViewCell dataGridViewCell)
     {
-        DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(dataGridViewCell);
+        DataGridViewCellEventArgs dgvce = new(dataGridViewCell);
         OnCellStyleChanged(dgvce);
     }
 
@@ -13381,7 +13381,7 @@ public partial class DataGridView
 
     internal void OnCellToolTipTextChanged(DataGridViewCell dataGridViewCell)
     {
-        DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(dataGridViewCell);
+        DataGridViewCellEventArgs dgvce = new(dataGridViewCell);
         OnCellToolTipTextChanged(dgvce);
     }
 
@@ -13393,7 +13393,7 @@ public partial class DataGridView
 
     internal string? OnCellToolTipTextNeeded(int columnIndex, int rowIndex, string toolTipText)
     {
-        DataGridViewCellToolTipTextNeededEventArgs dgvctttne = new DataGridViewCellToolTipTextNeededEventArgs(columnIndex, rowIndex, toolTipText);
+        DataGridViewCellToolTipTextNeededEventArgs dgvctttne = new(columnIndex, rowIndex, toolTipText);
         OnCellToolTipTextNeeded(dgvctttne);
         return dgvctttne.ToolTipText;
     }
@@ -13451,7 +13451,7 @@ public partial class DataGridView
         DataGridViewCellStyle dataGridViewCellStyle = currentCell.GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
         object? val = currentCell.GetValueInternal(rowIndex);
         object? editedFormattedValue = currentCell.GetEditedFormattedValue(val, rowIndex, ref dataGridViewCellStyle, context);
-        DataGridViewCellValidatingEventArgs dgvcfvce = new DataGridViewCellValidatingEventArgs(columnIndex, rowIndex, editedFormattedValue);
+        DataGridViewCellValidatingEventArgs dgvcfvce = new(columnIndex, rowIndex, editedFormattedValue);
         OnCellValidating(dgvcfvce);
         if (dataGridViewCell is not null)
         {
@@ -13542,7 +13542,7 @@ public partial class DataGridView
             if (dataGridViewRow.Displayed)
             {
                 dataGridViewRow.Displayed = false;
-                DataGridViewRowStateChangedEventArgs dgvrsce = new DataGridViewRowStateChangedEventArgs(dataGridViewRow, DataGridViewElementStates.Displayed);
+                DataGridViewRowStateChangedEventArgs dgvrsce = new(dataGridViewRow, DataGridViewElementStates.Displayed);
                 OnRowStateChanged(rowIndex: -1, dgvrsce);
             }
         }
@@ -14415,7 +14415,7 @@ public partial class DataGridView
     internal void OnColumnNameChanged(DataGridViewColumn dataGridViewColumn)
     {
         ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
-        DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+        DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
         OnColumnNameChanged(dgvce);
     }
 
@@ -14607,7 +14607,7 @@ public partial class DataGridView
     internal void OnColumnSortModeChanged(DataGridViewColumn dataGridViewColumn)
     {
         ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
-        DataGridViewColumnEventArgs dgvce = new DataGridViewColumnEventArgs(dataGridViewColumn);
+        DataGridViewColumnEventArgs dgvce = new(dataGridViewColumn);
         OnColumnSortModeChanged(dgvce);
     }
 
@@ -15007,7 +15007,7 @@ public partial class DataGridView
     {
         if (element is DataGridViewColumn dataGridViewColumn)
         {
-            DataGridViewColumnStateChangedEventArgs dgvcsce = new DataGridViewColumnStateChangedEventArgs(dataGridViewColumn, elementState);
+            DataGridViewColumnStateChangedEventArgs dgvcsce = new(dataGridViewColumn, elementState);
 
             OnColumnStateChanged(dgvcsce);
         }
@@ -15020,7 +15020,7 @@ public partial class DataGridView
                     dataGridViewRow = Rows[index];
                 }
 
-                DataGridViewRowStateChangedEventArgs dgvrsce = new DataGridViewRowStateChangedEventArgs(dataGridViewRow, elementState);
+                DataGridViewRowStateChangedEventArgs dgvrsce = new(dataGridViewRow, elementState);
 
                 OnRowStateChanged(dataGridViewRow.Index == -1 ? index : dataGridViewRow.Index, dgvrsce);
             }
@@ -15028,7 +15028,7 @@ public partial class DataGridView
             {
                 if (element is DataGridViewCell dataGridViewCell)
                 {
-                    DataGridViewCellStateChangedEventArgs dgvcsce = new DataGridViewCellStateChangedEventArgs(dataGridViewCell, elementState);
+                    DataGridViewCellStateChangedEventArgs dgvcsce = new(dataGridViewCell, elementState);
 
                     OnCellStateChanged(dgvcsce);
                 }
@@ -16355,7 +16355,7 @@ public partial class DataGridView
                                         e.Y,
                                         e.Delta,
                                         defaultHandledValue: false);
-                                    DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new DataGridViewColumnDividerDoubleClickEventArgs(columnIndex, hme);
+                                    DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new(columnIndex, hme);
                                     Debug.Assert(Columns[columnIndex].Resizable == DataGridViewTriState.True);
                                     OnColumnDividerDoubleClick(dgvcddce);
                                 }
@@ -16375,7 +16375,7 @@ public partial class DataGridView
                                     e.Y,
                                     e.Delta,
                                     defaultHandledValue: false);
-                                DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new DataGridViewRowDividerDoubleClickEventArgs(-1, hme);
+                                DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new(-1, hme);
                                 Debug.Assert(_columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing);
                                 OnRowDividerDoubleClick(dgvrddce);
                                 break;
@@ -16405,7 +16405,7 @@ public partial class DataGridView
                                         e.Y,
                                         e.Delta,
                                         defaultHandledValue: false);
-                                    DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new DataGridViewRowDividerDoubleClickEventArgs(rowIndex, hme);
+                                    DataGridViewRowDividerDoubleClickEventArgs dgvrddce = new(rowIndex, hme);
                                     Debug.Assert(Rows[rowIndex].Resizable == DataGridViewTriState.True);
                                     OnRowDividerDoubleClick(dgvrddce);
                                 }
@@ -16425,7 +16425,7 @@ public partial class DataGridView
                                     e.Y,
                                     e.Delta,
                                     defaultHandledValue: false);
-                                DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new DataGridViewColumnDividerDoubleClickEventArgs(-1, hme);
+                                DataGridViewColumnDividerDoubleClickEventArgs dgvcddce = new(-1, hme);
                                 Debug.Assert(_rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing);
                                 OnColumnDividerDoubleClick(dgvcddce);
                                 break;
@@ -16472,7 +16472,7 @@ public partial class DataGridView
                 mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
             }
 
-            DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, e);
+            DataGridViewCellMouseEventArgs dgvcme = new(hti._col, hti._row, mouseX, e.Y - hti.RowY, e);
             OnCellMouseDown(dgvcme);
         }
     }
@@ -16709,7 +16709,7 @@ public partial class DataGridView
                     DataGridViewCellMouseEventArgs dgvcme;
                     if (_dataGridViewState2[State2_NextMouseUpIsDouble])
                     {
-                        MouseEventArgs meTmp = new MouseEventArgs(e.Button, 2, e.X, e.Y, e.Delta);
+                        MouseEventArgs meTmp = new(e.Button, 2, e.X, e.Y, e.Delta);
                         dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, meTmp);
                     }
                     else
@@ -17319,7 +17319,7 @@ public partial class DataGridView
         if (rowDisplayed)
         {
             dataGridViewRow.Displayed = false;
-            DataGridViewRowStateChangedEventArgs dgvrsce = new DataGridViewRowStateChangedEventArgs(dataGridViewRow, DataGridViewElementStates.Displayed);
+            DataGridViewRowStateChangedEventArgs dgvrsce = new(dataGridViewRow, DataGridViewElementStates.Displayed);
             OnRowStateChanged(rowIndex: -1, dgvrsce);
         }
 
@@ -18046,7 +18046,7 @@ public partial class DataGridView
 
                 if (canCreateNewRow)
                 {
-                    DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(Rows[NewRowIndex]);
+                    DataGridViewRowEventArgs dgvre = new(Rows[NewRowIndex]);
                     if (VirtualMode || DataSource is not null)
                     {
                         if (DataConnection is not null && DataConnection.InterestedInRowEvents)
@@ -18148,7 +18148,7 @@ public partial class DataGridView
     internal string OnRowErrorTextNeeded(int rowIndex, string errorText)
     {
         Debug.Assert(rowIndex >= 0);
-        DataGridViewRowErrorTextNeededEventArgs dgvretne = new DataGridViewRowErrorTextNeededEventArgs(rowIndex, errorText);
+        DataGridViewRowErrorTextNeededEventArgs dgvretne = new(rowIndex, errorText);
         OnRowErrorTextNeeded(dgvretne);
         return dgvretne.ErrorText;
     }
@@ -18680,7 +18680,7 @@ public partial class DataGridView
         Debug.Assert(_autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None);
         if (VirtualMode || DataSource is not null)
         {
-            DataGridViewRowHeightInfoPushedEventArgs dgvrhipe = new DataGridViewRowHeightInfoPushedEventArgs(rowIndex, height, minimumHeight);
+            DataGridViewRowHeightInfoPushedEventArgs dgvrhipe = new(rowIndex, height, minimumHeight);
             OnRowHeightInfoPushed(dgvrhipe);
             if (dgvrhipe.Handled)
             {
@@ -18700,7 +18700,7 @@ public partial class DataGridView
         Debug.Assert(columnIndex >= 0 && rowIndex >= 0);
         if (rowIndex < Rows.Count && columnIndex < Columns.Count)
         {
-            DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(columnIndex, rowIndex);
+            DataGridViewCellEventArgs dgvce = new(columnIndex, rowIndex);
             OnRowLeave(dgvce);
             if (dataGridViewCell is not null)
             {
@@ -19081,7 +19081,7 @@ public partial class DataGridView
             CurrentCellInternal.CacheEditingControl();
         }
 
-        DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
+        DataGridViewRowEventArgs dgvre = new(dataGridViewRow);
         OnRowUnshared(dgvre);
     }
 
@@ -19147,7 +19147,7 @@ public partial class DataGridView
             InvalidateRowPrivate(rowIndex);
         }
 
-        DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(columnIndex, rowIndex);
+        DataGridViewCellEventArgs dgvce = new(columnIndex, rowIndex);
         OnRowValidated(dgvce);
         if (dataGridViewCell is not null)
         {
@@ -19221,7 +19221,7 @@ public partial class DataGridView
 
     private void OnScroll(ScrollEventType scrollEventType, int oldValue, int newValue, ScrollOrientation orientation)
     {
-        ScrollEventArgs se = new ScrollEventArgs(scrollEventType, oldValue, newValue, orientation);
+        ScrollEventArgs se = new(scrollEventType, oldValue, newValue, orientation);
         OnScroll(se);
         RefreshByCurrentPos(oldValue, newValue);
         if (Focused && IsGridFocusRectangleEnabled())
@@ -19662,7 +19662,7 @@ public partial class DataGridView
         bool paintingNeeded = false;
         int borderWidth = BorderWidth;
         // Does the clipRect intersect with the top edge?
-        Rectangle edge = new Rectangle(0, 0, bounds.Width, borderWidth);
+        Rectangle edge = new(0, 0, bounds.Width, borderWidth);
         paintingNeeded = clipRect.IntersectsWith(edge);
         if (!paintingNeeded)
         {
@@ -19722,7 +19722,7 @@ public partial class DataGridView
             bool isFirstDisplayedColumn = true;
             bool isLastVisibleColumn = false;
             DataGridViewCell cell;
-            DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
+            DataGridViewCellStyle inheritedCellStyle = new();
             DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
             DataGridViewColumn? dataGridViewColumnNext = null;
 
@@ -20070,7 +20070,7 @@ public partial class DataGridView
         if (g.IsVisible(_layout.TopLeftHeader))
         {
             DataGridViewCell cell = TopLeftHeaderCell;
-            DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
+            DataGridViewCellStyle inheritedCellStyle = new();
             BuildInheritedColumnHeaderCellStyle(inheritedCellStyle, cell);
             Rectangle cellBounds = _layout.TopLeftHeader;
             cellBounds.Width = RowHeadersWidth;
@@ -20216,7 +20216,7 @@ public partial class DataGridView
                 leftEdge -= Columns[_ptCurrentCell.X].Width - 1;
             }
 
-            Rectangle cellBounds = new Rectangle(leftEdge, GetRowYFromIndex(_ptCurrentCell.Y),
+            Rectangle cellBounds = new(leftEdge, GetRowYFromIndex(_ptCurrentCell.Y),
                                                  Columns[_ptCurrentCell.X].Width, Rows.SharedRow(_ptCurrentCell.Y).GetHeight(_ptCurrentCell.Y));
             Rectangle cellClip = cellBounds;
             // Need to clip the zones of the frozen columns and rows and headers.
@@ -20348,7 +20348,7 @@ public partial class DataGridView
                             }
                             else
                             {
-                                DataGridViewRowCancelEventArgs dgvrce = new DataGridViewRowCancelEventArgs(Rows[rowIndex]);
+                                DataGridViewRowCancelEventArgs dgvrce = new(Rows[rowIndex]);
                                 OnUserDeletingRow(dgvrce);
                                 if (!dgvrce.Cancel)
                                 {
@@ -20408,7 +20408,7 @@ public partial class DataGridView
                                         if (dataGridRowsCount != Rows.Count)
                                         {
                                             Debug.Assert(dataGridViewRow.Index == -1);
-                                            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
+                                            DataGridViewRowEventArgs dgvre = new(dataGridViewRow);
                                             OnUserDeletedRow(dgvre);
                                         }
                                         else if (dgvdee is null)
@@ -20420,7 +20420,7 @@ public partial class DataGridView
                                     {
                                         Rows.RemoveAtInternal(rowIndex, force: false);
                                         Debug.Assert(dataGridViewRow.Index == -1);
-                                        DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
+                                        DataGridViewRowEventArgs dgvre = new(dataGridViewRow);
                                         OnUserDeletedRow(dgvre);
                                     }
                                 }
@@ -22241,7 +22241,7 @@ public partial class DataGridView
                     && !IsSharedCellReadOnly(dataGridViewCell, _ptCurrentCell.Y)
                     && (EditMode == DataGridViewEditMode.EditOnKeystroke || EditMode == DataGridViewEditMode.EditOnKeystrokeOrF2))
                 {
-                    KeyEventArgs ke = new KeyEventArgs((Keys)(nint)m.WParamInternal | ModifierKeys);
+                    KeyEventArgs ke = new((Keys)(nint)m.WParamInternal | ModifierKeys);
                     if (ke.KeyCode != Keys.ProcessKey || m.LParamInternal != 0x01) // Changing IME context does not trigger editing mode
                     {
                         Type? editControlType = dataGridViewCell.EditType;
@@ -22289,7 +22289,7 @@ public partial class DataGridView
     protected override bool ProcessKeyPreview(ref Message m)
     {
         bool dataGridViewWantsInputKey;
-        KeyEventArgs ke = new KeyEventArgs((Keys)(nint)m.WParamInternal | ModifierKeys);
+        KeyEventArgs ke = new((Keys)(nint)m.WParamInternal | ModifierKeys);
 
         // Refactor the special keys into two parts.
         // 1. Escape and Space exist in both WM_CHAR and WM_KEYDOWN, WM_KEYUP.
@@ -28361,7 +28361,7 @@ public partial class DataGridView
 
     private bool ShouldSerializeAlternatingRowsDefaultCellStyle()
     {
-        DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
+        DataGridViewCellStyle defaultStyle = new();
         return !AlternatingRowsDefaultCellStyle.Equals(defaultStyle);
     }
 
@@ -28382,7 +28382,7 @@ public partial class DataGridView
 
     private bool ShouldSerializeRowsDefaultCellStyle()
     {
-        DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
+        DataGridViewCellStyle defaultStyle = new();
         return !RowsDefaultCellStyle.Equals(defaultStyle);
     }
 
@@ -29418,7 +29418,7 @@ public partial class DataGridView
                     mouseX += ((htiToUse._col == -1) ? RowHeadersWidth : Columns[htiToUse._col].Thickness);
                 }
 
-                DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(htiToUse._col, htiToUse._row, mouseX, e.Y - htiToUse.RowY, e);
+                DataGridViewCellMouseEventArgs dgvcme = new(htiToUse._col, htiToUse._row, mouseX, e.Y - htiToUse.RowY, e);
                 OnCellMouseMove(dgvcme);
             }
         }
@@ -29429,7 +29429,7 @@ public partial class DataGridView
                 && _ptMouseEnteredCell.Y >= -1
                 && _ptMouseEnteredCell.Y < Rows.Count)
             {
-                DataGridViewCellEventArgs dgvce = new DataGridViewCellEventArgs(_ptMouseEnteredCell.X, _ptMouseEnteredCell.Y);
+                DataGridViewCellEventArgs dgvce = new(_ptMouseEnteredCell.X, _ptMouseEnteredCell.Y);
                 OnCellMouseLeave(dgvce);
             }
             else

@@ -15,12 +15,12 @@ public class ListBox_ListBoxItemAccessibleObjectTests
     {
         // Regression test for https://github.com/dotnet/winforms/issues/3706
 
-        using var form = new Form
+        using Form form = new()
         {
             BindingContext = new BindingContext()
         };
 
-        using var control = new ListBox
+        using ListBox control = new()
         {
             Parent = form,
             DisplayMember = TestDataSources.PersonDisplayMember,

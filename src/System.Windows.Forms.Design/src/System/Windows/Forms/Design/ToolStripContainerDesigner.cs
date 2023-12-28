@@ -94,10 +94,10 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            DesignerActionListCollection actions = new DesignerActionListCollection();
+            DesignerActionListCollection actions = new();
 
             // Here is our action list we'll use
-            ToolStripContainerActionList actionList = new ToolStripContainerActionList(_toolStripContainer!)
+            ToolStripContainerActionList actionList = new(_toolStripContainer!)
             {
                 AutoShow = true
             };
@@ -147,7 +147,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     {
         get
         {
-            ArrayList components = new ArrayList();
+            ArrayList components = new();
             foreach (Control parent in _toolStripContainer!.Controls)
             {
                 foreach (Control control in parent.Controls)
@@ -238,7 +238,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             if (panelDesigner is not null)
             {
                 // create our glyph, and set its cursor appropriately
-                ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
+                ControlBodyGlyph bodyGlyph = new(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
                 selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
 
                 bool addGlyphs = true;
@@ -371,10 +371,10 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         _panels = [_contentToolStripPanel, _leftToolStripPanel, _rightToolStripPanel, _topToolStripPanel, _bottomToolStripPanel];
 
         // Add custom bitmaps for the child toolStripPanels.
-        ToolboxBitmapAttribute bottomToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_BottomToolStripPanel");
-        ToolboxBitmapAttribute rightToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_RightToolStripPanel");
-        ToolboxBitmapAttribute topToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_TopToolStripPanel");
-        ToolboxBitmapAttribute leftToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_LeftToolStripPanel");
+        ToolboxBitmapAttribute bottomToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_BottomToolStripPanel");
+        ToolboxBitmapAttribute rightToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_RightToolStripPanel");
+        ToolboxBitmapAttribute topToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_TopToolStripPanel");
+        ToolboxBitmapAttribute leftToolboxBitmapAttribute = new(typeof(ToolStripPanel), "ToolStripContainer_LeftToolStripPanel");
 
         TypeDescriptor.AddAttributes(_bottomToolStripPanel, bottomToolboxBitmapAttribute, new DescriptionAttribute("bottom"));
         TypeDescriptor.AddAttributes(_rightToolStripPanel, rightToolboxBitmapAttribute, new DescriptionAttribute("right"));

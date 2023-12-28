@@ -116,7 +116,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
                     selectionManager.Refresh();
 
                     Point loc = _behaviorService.ControlToAdornerWindow(parent);
-                    var translatedBounds = new Rectangle(loc, parent.Size);
+                    Rectangle translatedBounds = new(loc, parent.Size);
                     _behaviorService.Invalidate(translatedBounds);
                 }
             }

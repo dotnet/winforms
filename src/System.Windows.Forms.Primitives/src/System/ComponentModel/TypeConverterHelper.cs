@@ -20,7 +20,7 @@ internal static class TypeConverterHelper
     {
         culture ??= CultureInfo.CurrentCulture;
 
-        using BufferScope<Range> tokens = new BufferScope<Range>(stackalloc Range[16]);
+        using BufferScope<Range> tokens = new(stackalloc Range[16]);
         int tokensCount = text.Split(tokens, culture.TextInfo.ListSeparator[0]);
 
         if (tokensCount != output.Length)

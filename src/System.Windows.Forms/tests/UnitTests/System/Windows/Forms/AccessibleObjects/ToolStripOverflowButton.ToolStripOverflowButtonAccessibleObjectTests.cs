@@ -11,9 +11,9 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
     [WinFormsFact]
     public void ToolStripOverflowButtonAccessibleObject_Ctor_Default()
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
-        ToolStripOverflowButtonAccessibleObject accessibleObject = new ToolStripOverflowButtonAccessibleObject(toolStripOverflowButton);
+        using ToolStrip toolStrip = new();
+        ToolStripOverflowButton toolStripOverflowButton = new(toolStrip);
+        ToolStripOverflowButtonAccessibleObject accessibleObject = new(toolStripOverflowButton);
 
         Assert.Equal(toolStripOverflowButton, accessibleObject.Owner);
         Assert.False(toolStrip.IsHandleCreated);
@@ -22,8 +22,8 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
     [WinFormsFact]
     public void ToolStripOverflowButtonAccessibleObject_ControlType_IsMenuItem_IfAccessibleRoleIsDefault()
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
+        using ToolStrip toolStrip = new();
+        ToolStripOverflowButton toolStripOverflowButton = new(toolStrip);
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -35,8 +35,8 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
     [WinFormsFact]
     public void ToolStripOverflowButtonAccessibleObject_Role_IsMenuItem_ByDefault()
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
+        using ToolStrip toolStrip = new();
+        ToolStripOverflowButton toolStripOverflowButton = new(toolStrip);
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripOverflowButton.AccessibilityObject.Role;
@@ -64,8 +64,8 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
     [MemberData(nameof(ToolStripOverflowButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripOverflowButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
+        using ToolStrip toolStrip = new();
+        ToolStripOverflowButton toolStripOverflowButton = new(toolStrip);
         toolStripOverflowButton.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

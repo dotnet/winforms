@@ -8,7 +8,7 @@ public class TabPageTabPageControlCollectionTests
     [WinFormsFact]
     public void TabPageControlCollection_Ctor_TabPage()
     {
-        using var owner = new TabPage();
+        using TabPage owner = new();
         var collection = new TabPage.TabPageControlCollection(owner);
         Assert.Empty(collection);
         Assert.False(collection.IsReadOnly);
@@ -24,9 +24,9 @@ public class TabPageTabPageControlCollectionTests
     [WinFormsFact]
     public void TabPageControlCollection_Add_ControlExistingCollection_Success()
     {
-        using var owner = new TabPage();
-        using var control1 = new Control();
-        using var control2 = new Control();
+        using TabPage owner = new();
+        using Control control1 = new();
+        using Control control2 = new();
         TabPage.TabPageControlCollection collection = Assert.IsType<TabPage.TabPageControlCollection>(owner.Controls);
         int parentLayoutCallCount = 0;
         string affectedProperty = null;
@@ -101,8 +101,8 @@ public class TabPageTabPageControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Add_TabPageValue_ThrowsArgumentException()
     {
-        using var owner = new TabPage();
-        using var control = new TabPage();
+        using TabPage owner = new();
+        using TabPage control = new();
         var collection = new TabPage.TabPageControlCollection(owner);
         Assert.Throws<ArgumentException>(() => collection.Add(control));
     }

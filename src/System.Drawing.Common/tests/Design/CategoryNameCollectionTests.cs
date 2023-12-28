@@ -8,26 +8,26 @@ public class CategoryNameCollectionTests
     [Fact]
     public void Ctor_StringArray()
     {
-        string[] value = new string[] { "1", "2", "3" };
-        var collection = new CategoryNameCollection(value);
+        string[] value = ["1", "2", "3"];
+        CategoryNameCollection collection = new(value);
         Assert.Equal(value, collection.Cast<string>());
     }
 
     [Fact]
     public void Ctor_CategoryNameCollection()
     {
-        string[] value = new string[] { "1", "2", "3" };
-        var sourceCollection = new CategoryNameCollection(value);
+        string[] value = ["1", "2", "3"];
+        CategoryNameCollection sourceCollection = new(value);
 
-        var collection = new CategoryNameCollection(sourceCollection);
+        CategoryNameCollection collection = new(sourceCollection);
         Assert.Equal(value, collection.Cast<string>());
     }
 
     [Fact]
     public void Indexer_Get_ReturnsExpected()
     {
-        string[] value = new string[] { "1", "2", "3" };
-        var sourceCollection = new CategoryNameCollection(value);
+        string[] value = ["1", "2", "3"];
+        CategoryNameCollection sourceCollection = new(value);
 
         for (int i = 0; i < sourceCollection.Count; i++)
         {
@@ -41,8 +41,8 @@ public class CategoryNameCollectionTests
     [Fact]
     public void CopyTo_Valid_Success()
     {
-        string[] value = new string[] { "1", "2", "3" };
-        var sourceCollection = new CategoryNameCollection(value);
+        string[] value = ["1", "2", "3"];
+        CategoryNameCollection sourceCollection = new(value);
 
         string[] destination = new string[5];
         sourceCollection.CopyTo(destination, 1);

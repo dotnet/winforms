@@ -8,7 +8,7 @@ public class BrushTests
     [Fact]
     public void SetNativeBrush_Brush_Success()
     {
-        using (var brush = new SubBrush())
+        using (SubBrush brush = new())
         {
             brush.PublicSetNativeBrush(10);
             brush.PublicSetNativeBrush(IntPtr.Zero);
@@ -21,7 +21,7 @@ public class BrushTests
     [Fact]
     public void Dispose_NoSuchEntryPoint_SilentyCatchesException()
     {
-        var brush = new SubBrush();
+        SubBrush brush = new();
         brush.PublicSetNativeBrush(10);
         brush.Dispose();
     }

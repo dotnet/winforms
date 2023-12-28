@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2005-2007 Novell, Inc (http://www.novell.com)
@@ -35,7 +35,7 @@ public class ColorMatrixTests
     [Fact]
     public void Ctor_Default()
     {
-        ColorMatrix cm = new ColorMatrix();
+        ColorMatrix cm = new();
 
         Assert.Equal(1, cm.Matrix00);
         Assert.Equal(1, cm.Matrix11);
@@ -112,7 +112,7 @@ public class ColorMatrixTests
     [Fact]
     public void Ctor_TooBigArraySize_MapOnly4and4Elements()
     {
-        ColorMatrix cm = new ColorMatrix(new float[][]
+        ColorMatrix cm = new(new float[][]
         {
             new float[] { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f },
             new float[] { 1.0f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f },
@@ -152,7 +152,7 @@ public class ColorMatrixTests
     [Fact]
     public void AccessToNotExistingElement_ThrowsIndexOutOfRangeException()
     {
-        ColorMatrix cm = new ColorMatrix(new float[][]
+        ColorMatrix cm = new(new float[][]
         {
             new float[] { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f },
             new float[] { 1.0f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f },
@@ -167,7 +167,7 @@ public class ColorMatrixTests
     [Fact]
     public void Ctor_SetValue_ReturnsExpected()
     {
-        ColorMatrix cm = new ColorMatrix(IndexedColorMatrix);
+        ColorMatrix cm = new(IndexedColorMatrix);
 
         Assert.Equal(0.0f, cm.Matrix00);
         Assert.Equal(1.0f, cm.Matrix10);
@@ -211,7 +211,7 @@ public class ColorMatrixTests
     [Fact]
     public void MatrixElement_SetValues_ReturnsExpected()
     {
-        ColorMatrix cm = new ColorMatrix();
+        ColorMatrix cm = new();
 
         cm.Matrix00 = 1;
         cm.Matrix01 = 2;
@@ -269,7 +269,7 @@ public class ColorMatrixTests
     [Fact]
     public void MatrixElementByIndexer_SetValue_ReturnsExpetecd()
     {
-        ColorMatrix cm = new ColorMatrix(IndexedColorMatrix);
+        ColorMatrix cm = new(IndexedColorMatrix);
 
         for (int i = 0; i < 5; i++)
         {

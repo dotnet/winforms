@@ -232,7 +232,7 @@ public partial class ListView
 
         public virtual ColumnHeader Add(string? key, string? text, int width, HorizontalAlignment textAlign, string imageKey)
         {
-            ColumnHeader columnHeader = new ColumnHeader(imageKey)
+            ColumnHeader columnHeader = new(imageKey)
             {
                 Name = key,
                 Text = text,
@@ -244,7 +244,7 @@ public partial class ListView
 
         public virtual ColumnHeader Add(string? key, string? text, int width, HorizontalAlignment textAlign, int imageIndex)
         {
-            ColumnHeader columnHeader = new ColumnHeader(imageIndex)
+            ColumnHeader columnHeader = new(imageIndex)
             {
                 Name = key,
                 Text = text,
@@ -468,7 +468,7 @@ public partial class ListView
 
         public void Insert(int index, string? key, string? text, int width, HorizontalAlignment textAlign, string imageKey)
         {
-            ColumnHeader columnHeader = new ColumnHeader(imageKey)
+            ColumnHeader columnHeader = new(imageKey)
             {
                 Name = key,
                 Text = text,
@@ -480,7 +480,7 @@ public partial class ListView
 
         public void Insert(int index, string? key, string? text, int width, HorizontalAlignment textAlign, int imageIndex)
         {
-            ColumnHeader columnHeader = new ColumnHeader(imageIndex)
+            ColumnHeader columnHeader = new(imageIndex)
             {
                 Name = key,
                 Text = text,

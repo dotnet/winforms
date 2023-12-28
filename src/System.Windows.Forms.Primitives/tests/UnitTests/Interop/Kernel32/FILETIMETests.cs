@@ -26,7 +26,7 @@ public class FILETIMETests
     [Fact]
     public void FILETIME_Ctor_DateTime()
     {
-        var dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
+        DateTime dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
         var ft = new PInvoke.FILETIME(dt);
         Assert.Equal(3680495616u, ft.dwLowDateTime);
         Assert.Equal(30812454u, ft.dwHighDateTime);

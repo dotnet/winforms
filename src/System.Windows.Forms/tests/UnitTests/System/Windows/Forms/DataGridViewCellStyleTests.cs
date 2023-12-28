@@ -14,7 +14,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Ctor_Default()
     {
-        var style = new DataGridViewCellStyle();
+        DataGridViewCellStyle style = new();
         Assert.Equal(DataGridViewCellStyleScopes.None, style.Scope);
         Assert.Equal(DataGridViewContentAlignment.NotSet, style.Alignment);
         Assert.Equal(Color.Empty, style.BackColor);
@@ -37,8 +37,8 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Ctor_NonEmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
-        var source = new DataGridViewCellStyle
+        NumberFormatInfo formatProvider = new();
+        DataGridViewCellStyle source = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter,
             BackColor = Color.Red,
@@ -54,7 +54,7 @@ public class DataGridViewCellStyleTests
             Tag = "tag",
             WrapMode = DataGridViewTriState.True
         };
-        var style = new DataGridViewCellStyle(source);
+        DataGridViewCellStyle style = new(source);
 
         Assert.Equal(DataGridViewCellStyleScopes.None, style.Scope);
         Assert.Equal(DataGridViewContentAlignment.BottomCenter, style.Alignment);
@@ -78,9 +78,9 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Ctor_EmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
-        var source = new DataGridViewCellStyle();
-        var style = new DataGridViewCellStyle(source);
+        NumberFormatInfo formatProvider = new();
+        DataGridViewCellStyle source = new();
+        DataGridViewCellStyle style = new(source);
 
         Assert.Equal(DataGridViewCellStyleScopes.None, style.Scope);
         Assert.Equal(DataGridViewContentAlignment.NotSet, style.Alignment);
@@ -111,7 +111,7 @@ public class DataGridViewCellStyleTests
     [EnumData<DataGridViewContentAlignment>]
     public void DataGridViewCellStyle_Alignment_Set_GetReturnsExpected(DataGridViewContentAlignment value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Alignment = value
         };
@@ -126,7 +126,7 @@ public class DataGridViewCellStyleTests
     [InvalidEnumData<DataGridViewContentAlignment>]
     public void DataGridViewCellStyle_Alignment_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewContentAlignment value)
     {
-        var style = new DataGridViewCellStyle();
+        DataGridViewCellStyle style = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => style.Alignment = value);
     }
 
@@ -134,7 +134,7 @@ public class DataGridViewCellStyleTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void DataGridViewCellStyle_BackColor_Set_GetReturnsExpected(Color value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             BackColor = value
         };
@@ -148,7 +148,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_BackColor_SetEmpty_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             BackColor = Color.Red
         };
@@ -169,7 +169,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(DataSourceNullValue_TestData))]
     public void DataGridViewCellStyle_DataSourceNullValue_Set_GetReturnsExpected(object value, bool expectedIsDataSourceNullValueDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             DataSourceNullValue = value
         };
@@ -186,7 +186,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(DataSourceNullValue_TestData))]
     public void DataGridViewCellStyle_DataSourceNullValue_SetWithNonNullOldValue_GetReturnsExpected(object value, bool expectedIsDataSourceNullValueDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             DataSourceNullValue = "oldValue"
         };
@@ -204,7 +204,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(DataSourceNullValue_TestData))]
     public void DataGridViewCellStyle_DataSourceNullValue_SetWithNullOldValue_GetReturnsExpected(object value, bool expectedIsDataSourceNullValueDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             DataSourceNullValue = null
         };
@@ -221,8 +221,8 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_DataSourceNullValue_SetEqual_GetReturnsExpected()
     {
-        var value = new AlwaysEqual();
-        var style = new DataGridViewCellStyle
+        AlwaysEqual value = new();
+        DataGridViewCellStyle style = new()
         {
             DataSourceNullValue = value
         };
@@ -234,8 +234,8 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_DataSourceNullValue_SetDifferent_GetReturnsExpected()
     {
-        var value = new AlwaysEqual();
-        var style = new DataGridViewCellStyle
+        AlwaysEqual value = new();
+        DataGridViewCellStyle style = new()
         {
             DataSourceNullValue = value
         };
@@ -247,7 +247,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_DataSourceNullValue_SetDBNull_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             DataSourceNullValue = "value"
         };
@@ -266,7 +266,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(Font_TestData))]
     public void DataGridViewCellStyle_Font_Set_GetReturnsExpected(Font value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Font = value
         };
@@ -280,7 +280,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Font_SetNull_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Font = SystemFonts.DefaultFont
         };
@@ -292,7 +292,7 @@ public class DataGridViewCellStyleTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
     public void DataGridViewCellStyle_ForeColor_Set_GetReturnsExpected(Color value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             ForeColor = value
         };
@@ -306,7 +306,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_ForeColor_SetEmpty_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             ForeColor = Color.Red
         };
@@ -318,7 +318,7 @@ public class DataGridViewCellStyleTests
     [NormalizedStringData]
     public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value, string expected)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Format = value
         };
@@ -333,7 +333,7 @@ public class DataGridViewCellStyleTests
     [NormalizedStringData]
     public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Format = "value"
         };
@@ -345,7 +345,7 @@ public class DataGridViewCellStyleTests
     {
         yield return new object[] { null, CultureInfo.CurrentCulture, true };
 
-        var numberFormatInfo = new NumberFormatInfo();
+        NumberFormatInfo numberFormatInfo = new();
         yield return new object[] { numberFormatInfo, numberFormatInfo, false };
     }
 
@@ -353,7 +353,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(FormatProvider_TestData))]
     public void DataGridViewCellStyle_FormatProvider_Set_GetReturnsExpected(IFormatProvider value, IFormatProvider expected, bool expectedIsFormatProviderDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             FormatProvider = value
         };
@@ -369,7 +369,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_FormatProvider_SetNull_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             FormatProvider = new NumberFormatInfo()
         };
@@ -391,7 +391,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(NullValue_TestData))]
     public void DataGridViewCellStyle_NullValue_Set_GetReturnsExpected(object value, bool expectedIsNullValueDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             NullValue = value
         };
@@ -408,7 +408,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(NullValue_TestData))]
     public void DataGridViewCellStyle_NullValue_SetWithNonNullOldValue_GetReturnsExpected(object value, bool expectedIsNullValueDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             NullValue = "oldValue"
         };
@@ -426,7 +426,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(NullValue_TestData))]
     public void DataGridViewCellStyle_NullValue_SetWithNullOldValue_GetReturnsExpected(object value, bool expectedIsNullValueDefault)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             NullValue = null
         };
@@ -443,8 +443,8 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_NullValue_SetEqual_GetReturnsExpected()
     {
-        var value = new AlwaysEqual();
-        var style = new DataGridViewCellStyle
+        AlwaysEqual value = new();
+        DataGridViewCellStyle style = new()
         {
             NullValue = value
         };
@@ -456,8 +456,8 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_NullValue_SetDifferent_GetReturnsExpected()
     {
-        var value = new AlwaysEqual();
-        var style = new DataGridViewCellStyle
+        AlwaysEqual value = new();
+        DataGridViewCellStyle style = new()
         {
             NullValue = value
         };
@@ -469,7 +469,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_NullValue_SetEmpty_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             NullValue = "value"
         };
@@ -495,7 +495,7 @@ public class DataGridViewCellStyleTests
     [MemberData(nameof(Padding_TestData))]
     public void DataGridViewCellStyle_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Padding = value
         };
@@ -510,7 +510,7 @@ public class DataGridViewCellStyleTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void DataGridViewCellStyle_SelectionBackColor_Set_GetReturnsExpected(Color value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             SelectionBackColor = value
         };
@@ -524,7 +524,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_SelectionBackColor_SetEmpty_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             SelectionBackColor = Color.Red
         };
@@ -536,7 +536,7 @@ public class DataGridViewCellStyleTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
     public void DataGridViewCellStyle_SelectionForeColor_Set_GetReturnsExpected(Color value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             SelectionForeColor = value
         };
@@ -550,7 +550,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_SelectionForeColor_SetEmpty_GetReturnsExpected()
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             SelectionForeColor = Color.Red
         };
@@ -562,7 +562,7 @@ public class DataGridViewCellStyleTests
     [StringWithNullData]
     public void DataGridViewCellStyle_Tag_Set_GetReturnsExpected(object value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Tag = value
         };
@@ -577,7 +577,7 @@ public class DataGridViewCellStyleTests
     [StringWithNullData]
     public void DataGridViewCellStyle_Tag_SetWithNonNullOldValue_GetReturnsExpected(object value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             Tag = "tag"
         };
@@ -593,7 +593,7 @@ public class DataGridViewCellStyleTests
     [EnumData<DataGridViewTriState>]
     public void DataGridViewCellStyle_WrapMode_Set_GetReturnsExpected(DataGridViewTriState value)
     {
-        var style = new DataGridViewCellStyle
+        DataGridViewCellStyle style = new()
         {
             WrapMode = value
         };
@@ -608,15 +608,15 @@ public class DataGridViewCellStyleTests
     [InvalidEnumData<DataGridViewTriState>]
     public void DataGridViewCellStyle_WrapMode_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewTriState value)
     {
-        var style = new DataGridViewCellStyle();
+        DataGridViewCellStyle style = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => style.WrapMode = value);
     }
 
     [Fact]
     public void DataGridViewCellStyle_ApplyStyle_NonEmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
-        var source = new DataGridViewCellStyle
+        NumberFormatInfo formatProvider = new();
+        DataGridViewCellStyle source = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter,
             BackColor = Color.Red,
@@ -632,7 +632,7 @@ public class DataGridViewCellStyleTests
             Tag = "tag",
             WrapMode = DataGridViewTriState.True
         };
-        var style = new DataGridViewCellStyle();
+        DataGridViewCellStyle style = new();
         style.ApplyStyle(source);
 
         Assert.Equal(DataGridViewCellStyleScopes.None, style.Scope);
@@ -657,9 +657,9 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_ApplyStyle_EmptyDataGridViewCellStyle_Nop()
     {
-        var formatProvider = new NumberFormatInfo();
-        var source = new DataGridViewCellStyle();
-        var style = new DataGridViewCellStyle
+        NumberFormatInfo formatProvider = new();
+        DataGridViewCellStyle source = new();
+        DataGridViewCellStyle style = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter,
             BackColor = Color.Red,
@@ -699,15 +699,15 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_ApplyStyle_NullDataGridViewCellStyle_ThrowsArgumentNullException()
     {
-        var style = new DataGridViewCellStyle();
+        DataGridViewCellStyle style = new();
         Assert.Throws<ArgumentNullException>("dataGridViewCellStyle", () => style.ApplyStyle(null));
     }
 
     [Fact]
     public void DataGridViewCellStyle_Clone_NonEmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
-        var source = new DataGridViewCellStyle
+        NumberFormatInfo formatProvider = new();
+        DataGridViewCellStyle source = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter,
             BackColor = Color.Red,
@@ -747,8 +747,8 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Clone_EmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
-        var source = new DataGridViewCellStyle();
+        NumberFormatInfo formatProvider = new();
+        DataGridViewCellStyle source = new();
         DataGridViewCellStyle style = source.Clone();
 
         Assert.Equal(DataGridViewCellStyleScopes.None, style.Scope);
@@ -773,7 +773,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_ICloneableClone_NonEmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
+        NumberFormatInfo formatProvider = new();
         ICloneable source = new DataGridViewCellStyle
         {
             Alignment = DataGridViewContentAlignment.BottomCenter,
@@ -814,7 +814,7 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_ICloneableClone_EmptyDataGridViewCellStyle_Success()
     {
-        var formatProvider = new NumberFormatInfo();
+        NumberFormatInfo formatProvider = new();
         ICloneable source = new DataGridViewCellStyle();
         DataGridViewCellStyle style = Assert.IsType<DataGridViewCellStyle>(source.Clone());
 
@@ -840,7 +840,7 @@ public class DataGridViewCellStyleTests
     public static IEnumerable<object[]> Equals_TestData()
     {
         Font font = SystemFonts.DefaultFont;
-        var formatProvider = new NumberFormatInfo();
+        NumberFormatInfo formatProvider = new();
 
         yield return new object[] { new DataGridViewCellStyle(), new DataGridViewCellStyle(), true };
 

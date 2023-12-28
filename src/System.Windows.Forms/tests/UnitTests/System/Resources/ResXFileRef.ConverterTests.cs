@@ -38,7 +38,7 @@ public class ResXFileRef_Converter
     [Fact]
     public void ConvertFrom_ReturnNullWhenValueIsNotAString()
     {
-        var value = new object();
+        object value = new();
         var converter = new ResXFileRef.Converter();
 
         var result = converter.ConvertFrom(null, null, value);

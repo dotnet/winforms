@@ -17,7 +17,7 @@ public class ToolStripControlHost_ToolStripHostedControlAccessibleObjectTests
     [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
     public void ToolStripHostedControlAccessibleObject_GetPropertyValue_IsOffscreenPropertyId_ReturnExpected(Type type)
     {
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         toolStrip.CreateControl();
         using ToolStripControlHost item = ReflectionHelper.InvokePublicConstructor<ToolStripControlHost>(type);
         item.Size = new Size(0, 0);

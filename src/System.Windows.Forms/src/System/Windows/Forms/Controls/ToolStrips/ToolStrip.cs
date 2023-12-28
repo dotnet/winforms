@@ -185,7 +185,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         Items.AddRange(items);
     }
 
-    internal List<ToolStripDropDown> ActiveDropDowns { get; } = new List<ToolStripDropDown>(1);
+    internal List<ToolStripDropDown> ActiveDropDowns { get; } = new(1);
 
     // returns true when entered into menu mode through this toolstrip/menustrip
     // this is only really supported for menustrip active event, but to prevent casting everywhere...
@@ -327,7 +327,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
                 if (value)
                 {
-                    ToolStripSplitStackDragDropHandler dragDropHandler = new ToolStripSplitStackDragDropHandler(this);
+                    ToolStripSplitStackDragDropHandler dragDropHandler = new(this);
                     ItemReorderDropSource = dragDropHandler;
                     ItemReorderDropTarget = dragDropHandler;
 
@@ -1007,7 +1007,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             if (_imageList != value)
             {
-                EventHandler handler = new EventHandler(ImageListRecreateHandle);
+                EventHandler handler = new(ImageListRecreateHandle);
 
                 // Remove the previous imagelist handle recreate handler.
                 if (_imageList is not null)
@@ -2248,7 +2248,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             return GetNextItemHorizontal(selectedItem, down);
         }
 
-        Point midPointOfCurrent = new Point(selectedItem.Bounds.X + selectedItem.Width / 2,
+        Point midPointOfCurrent = new(selectedItem.Bounds.X + selectedItem.Width / 2,
                                                 selectedItem.Bounds.Y + selectedItem.Height / 2);
 
         for (int i = 0; i < DisplayedItems.Count; i++)
@@ -2272,7 +2272,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
             // [ otherControl ]
             //       *
-            Point otherItemMidLocation = new Point(otherItem.Bounds.X + otherItem.Width / 2, (down) ? otherItem.Bounds.Top : otherItem.Bounds.Bottom);
+            Point otherItemMidLocation = new(otherItem.Bounds.X + otherItem.Width / 2, (down) ? otherItem.Bounds.Top : otherItem.Bounds.Bottom);
             int oppositeSide = otherItemMidLocation.X - midPointOfCurrent.X;
             int adjacentSide = otherItemMidLocation.Y - midPointOfCurrent.Y;
 
@@ -2571,7 +2571,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     internal void HandleItemClick(ToolStripItem dismissingItem)
     {
-        ToolStripItemClickedEventArgs e = new ToolStripItemClickedEventArgs(dismissingItem);
+        ToolStripItemClickedEventArgs e = new(dismissingItem);
         OnItemClicked(e);
         // Ensure both the overflow and the main toolstrip fire ItemClick event
         // otherwise the overflow won't dismiss.
@@ -2728,7 +2728,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         if (!IsCurrentlyDragging && !IsLocationChanging && IsInToolStripPanel)
         {
-            ToolStripLocationCancelEventArgs cae = new ToolStripLocationCancelEventArgs(new Point(x, y), false);
+            ToolStripLocationCancelEventArgs cae = new(new Point(x, y), false);
             try
             {
                 if (location.X != x || location.Y != y)
@@ -2780,7 +2780,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
     private protected override void PrintToMetaFileRecursive(HDC hDC, IntPtr lParam, Rectangle bounds)
     {
-        using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
+        using Bitmap image = new(bounds.Width, bounds.Height);
         using Graphics g = Graphics.FromImage(image);
         using DeviceContextHdcScope imageHdc = new(g, applyGraphicsState: false);
 
@@ -3755,7 +3755,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                                 ROP_CODE.SRCCOPY);
 
                             // Paint the item into the offscreen bitmap
-                            using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
+                            using (PaintEventArgs itemPaintEventArgs = new(itemGraphics, clippingRect))
                             {
                                 item.FireEvent(itemPaintEventArgs, ToolStripItemEventType.Paint);
                             }
@@ -4067,7 +4067,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     public ToolStripItem? GetItemAt(Point point)
     {
-        Rectangle comparisonRect = new Rectangle(point, s_onePixel);
+        Rectangle comparisonRect = new(point, s_onePixel);
         Rectangle bounds;
 
         // Check the last item we had the mouse over
@@ -4680,7 +4680,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     internal override bool ShouldSerializeMinimumSize()
     {
-        Size invalidDefaultSize = new Size(-1, -1);
+        Size invalidDefaultSize = new(-1, -1);
         return (CommonProperties.GetMinimumSize(this, invalidDefaultSize) != invalidDefaultSize);
     }
 

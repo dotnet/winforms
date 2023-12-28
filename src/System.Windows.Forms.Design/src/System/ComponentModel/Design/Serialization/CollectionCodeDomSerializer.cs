@@ -199,8 +199,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                             result = resultCollection;
                         }
 
-                        CodeMethodInvokeExpression clearMethod = new CodeMethodInvokeExpression(target, "Clear");
-                        CodeExpressionStatement clearStatement = new CodeExpressionStatement(clearMethod);
+                        CodeMethodInvokeExpression clearMethod = new(target, "Clear");
+                        CodeExpressionStatement clearStatement = new(clearMethod);
                         resultCollection.Insert(0, clearStatement);
                     }
                 }
@@ -316,8 +316,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             provider ??= TypeDescriptor.GetProvider(originalCollection);
 
             MethodInfo[] methods = provider.GetReflectionType(originalCollection).GetMethods(BindingFlags.Public | BindingFlags.Instance);
-            List<MethodInfo> addRangeMethods = new List<MethodInfo>();
-            List<MethodInfo> addMethods = new List<MethodInfo>();
+            List<MethodInfo> addRangeMethods = new();
+            List<MethodInfo> addMethods = new();
             foreach (MethodInfo method in methods)
             {
                 switch (method.Name)
@@ -391,7 +391,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             {
                 // For an array, we need an array create expression.  First, get the array type
                 Type elementType = targetType.GetElementType()!;
-                CodeTypeReference elementTypeRef = new CodeTypeReference(elementType);
+                CodeTypeReference elementTypeRef = new(elementType);
                 Trace(TraceLevel.Verbose, $"Array type: {elementType.Name}");
                 Trace(TraceLevel.Verbose, $"Count: {valuesToSerialize.Count}");
                 // Now create an ArrayCreateExpression, and fill its initializers.
@@ -466,12 +466,12 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         Type elementType,
         ICollection valuesToSerialize)
     {
-        CodeStatementCollection statements = new CodeStatementCollection();
+        CodeStatementCollection statements = new();
         using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAdd)}"))
         {
             Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
             // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
-            CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(targetExpression!, "Add");
+            CodeMethodReferenceExpression methodRef = new(targetExpression!, "Add");
 
             if (valuesToSerialize.Count == 0)
             {
@@ -552,7 +552,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         Type elementType,
         ICollection valuesToSerialize)
     {
-        CodeStatementCollection statements = new CodeStatementCollection();
+        CodeStatementCollection statements = new();
         using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAddRange)}"))
         {
             Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
@@ -621,7 +621,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             if (arrayList.Count > 0)
             {
                 // Now convert the array list into an array create expression.
-                CodeTypeReference elementTypeRef = new CodeTypeReference(elementType);
+                CodeTypeReference elementTypeRef = new(elementType);
                 // Now create an ArrayCreateExpression, and fill its initializers.
                 CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression
                 {
@@ -632,7 +632,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     arrayCreate.Initializers.Add(expression);
                 }
 
-                CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(targetExpression!, "AddRange");
+                CodeMethodReferenceExpression methodRef = new(targetExpression!, "AddRange");
                 CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
                 {
                     Method = methodRef

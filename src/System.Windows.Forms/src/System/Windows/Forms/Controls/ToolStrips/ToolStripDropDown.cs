@@ -1117,7 +1117,7 @@ public partial class ToolStripDropDown : ToolStrip
                 screenPoint = suggestedBounds.Location;
             }
 
-            Rectangle suggestedScreenBounds = new Rectangle(screenPoint, suggestedBounds.Size);
+            Rectangle suggestedScreenBounds = new(screenPoint, suggestedBounds.Size);
             if (WorkingAreaConstrained)
             {
                 dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(suggestedScreenBounds);
@@ -1158,7 +1158,7 @@ public partial class ToolStripDropDown : ToolStrip
             LayoutTransaction.DoLayout(this, this, PropertyNames.PreferredSize);
         }
 
-        Rectangle dropDownBounds = new Rectangle(Point.Empty, GetSuggestedSize());
+        Rectangle dropDownBounds = new(Point.Empty, GetSuggestedSize());
         // calculate the offset from the upper left hand corner of the item.
         switch (dropDownDirection)
         {
@@ -1687,7 +1687,7 @@ public partial class ToolStripDropDown : ToolStrip
     /// </summary>
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        Rectangle bounds = new Rectangle(x, y, width, height);
+        Rectangle bounds = new(x, y, width, height);
         bounds = GetDropDownBounds(bounds);
 
         base.SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
@@ -1751,7 +1751,7 @@ public partial class ToolStripDropDown : ToolStrip
                     // Fire Opening event
                     // Cancellable event in which default value of e.Cancel depends on
                     // the number of displayed items >0.
-                    CancelEventArgs openEventArgs = new CancelEventArgs(cancel: DisplayedItems.Count == 0);
+                    CancelEventArgs openEventArgs = new(cancel: DisplayedItems.Count == 0);
                     OnOpening(openEventArgs);
 
                     openingEventCancelled = openEventArgs.Cancel;
@@ -1904,7 +1904,7 @@ public partial class ToolStripDropDown : ToolStrip
 
                             // Fire OnClosed.
                             // if you make VisibleChanged throw you don't get closed. Sorry.
-                            var closedEventArgs = new ToolStripDropDownClosedEventArgs(reason);
+                            ToolStripDropDownClosedEventArgs closedEventArgs = new(reason);
                             OnClosed(closedEventArgs);
 
                             if (TopLevel && (!IsDisposed || !Disposing))
@@ -2130,7 +2130,7 @@ public partial class ToolStripDropDown : ToolStrip
         }
         else
         {
-            List<ToolStripDropDown> dropDowns = new List<ToolStripDropDown>(ActiveDropDowns);
+            List<ToolStripDropDown> dropDowns = new(ActiveDropDowns);
 
             // We can't iterate through the active dropdown collection
             // here as changing visibility changes the collection.

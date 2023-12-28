@@ -22,7 +22,7 @@ public class HScrollBar_HScrollBarAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void HScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)
     {
-        using var scrollBar = new HScrollBar();
+        using HScrollBar scrollBar = new();
 
         if (createControl)
         {

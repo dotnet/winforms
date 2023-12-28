@@ -20,7 +20,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     {
         using (new NoAssertContext())
         {
-            using ComboBox control = new ComboBox();
+            using ComboBox control = new();
 
             HashNotImplementedObject item1 = new();
             HashNotImplementedObject item2 = new();
@@ -61,7 +61,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         using (new NoAssertContext())
         {
             // Regression test for https://github.com/dotnet/winforms/issues/3549
-            using ComboBox control = new ComboBox()
+            using ComboBox control = new()
             {
                 DataSource = TestDataSources.GetPersons(),
                 DisplayMember = TestDataSources.PersonDisplayMember
@@ -192,7 +192,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [WinFormsFact]
     public void ComboBoxItemAccessibleObject_IsPatternSupported_ReturnsTrue_ForScrollItemPattern()
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         comboBox.CreateControl();
 
@@ -211,7 +211,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [WinFormsFact]
     public void ComboBoxItemAccessibleObject_GetPropertyValue_Pattern_IsAvailable()
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         comboBox.CreateControl();
 
@@ -241,7 +241,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [MemberData(nameof(ComboBoxItemAccessibleObject_ScrollIntoView_DoNothing_IfControlIsNotEnabled_TestData))]
     public void ComboBoxItemAccessibleObject_ScrollIntoView_DoNothing_IfControlIsNotEnabled(ComboBoxStyle comboBoxStyle)
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         comboBox.IntegralHeight = false;
         comboBox.DropDownStyle = comboBoxStyle;
         comboBox.Enabled = false;
@@ -290,7 +290,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [MemberData(nameof(ComboBoxItemAccessibleObject_ScrollIntoView_EnsureVisible_TestData))]
     public void ComboBoxItemAccessibleObject_ScrollIntoView_EnsureVisible(ComboBoxStyle comboBoxStyle, bool scrollingDown, int itemIndex, int itemsCount)
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         comboBox.IntegralHeight = false;
         comboBox.DropDownStyle = comboBoxStyle;
         comboBox.CreateControl();
@@ -370,7 +370,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
                 int y = index * 15;
                 int initialYPosition = comboBoxStyle == ComboBoxStyle.Simple ? 56 : 55;
                 int x = comboBoxStyle == ComboBoxStyle.Simple ? 10 : 9;
-                Point point = new Point(x, y + initialYPosition);
+                Point point = new(x, y + initialYPosition);
 
                 yield return new object[] { comboBoxStyle, index, point };
             }
@@ -381,7 +381,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [MemberData(nameof(ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_IfComboBoxIsScrollable_TestData))]
     public void ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_IfComboBoxIsScrollable(ComboBoxStyle comboBoxStyle, int itemIndex, Point expectedPosition)
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         comboBox.IntegralHeight = false;
         comboBox.DropDownStyle = comboBoxStyle;
         comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
@@ -444,7 +444,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [MemberData(nameof(ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_ForDifferentHeightItems_TestData))]
     public void ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_ForDifferentHeightItems(ComboBoxStyle comboBoxStyle, int itemIndex, Rectangle expectedRect)
     {
-        using DifferentHeightComboBox comboBox = new DifferentHeightComboBox();
+        using DifferentHeightComboBox comboBox = new();
         comboBox.DropDownStyle = comboBoxStyle;
         comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         comboBox.CreateControl();
@@ -493,7 +493,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
             }
 
             e.DrawBackground();
-            using var brush = new SolidBrush(e.ForeColor);
+            using SolidBrush brush = new(e.ForeColor);
             e.Graphics.DrawString(
                 Items[e.Index].ToString(),
                 e.Font,

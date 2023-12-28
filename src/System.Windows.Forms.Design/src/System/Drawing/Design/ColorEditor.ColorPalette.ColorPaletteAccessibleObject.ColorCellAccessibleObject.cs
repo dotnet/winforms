@@ -33,7 +33,7 @@ public partial class ColorEditor
                         FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
 
                         // Translate rect to screen coordinates
-                        var pt = new Point(rect.X, rect.Y);
+                        Point pt = new(rect.X, rect.Y);
 
                         if (_parent.ColorPalette is { } palette && palette.IsHandleCreated)
                         {

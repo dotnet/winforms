@@ -150,7 +150,7 @@ public class MessageBox
         MessageBoxOptions options,
         string helpFilePath)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath);
+        HelpInfo hpi = new(helpFilePath);
         return ShowCore(null, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
@@ -167,7 +167,7 @@ public class MessageBox
         MessageBoxOptions options,
         string helpFilePath)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath);
+        HelpInfo hpi = new(helpFilePath);
         return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
@@ -184,7 +184,7 @@ public class MessageBox
         string helpFilePath,
         string keyword)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath, keyword);
+        HelpInfo hpi = new(helpFilePath, keyword);
         return ShowCore(null, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
@@ -202,7 +202,7 @@ public class MessageBox
         string helpFilePath,
         string keyword)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath, keyword);
+        HelpInfo hpi = new(helpFilePath, keyword);
         return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
@@ -219,7 +219,7 @@ public class MessageBox
         string helpFilePath,
         HelpNavigator navigator)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath, navigator);
+        HelpInfo hpi = new(helpFilePath, navigator);
         return ShowCore(null, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
@@ -237,7 +237,7 @@ public class MessageBox
         string helpFilePath,
         HelpNavigator navigator)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath, navigator);
+        HelpInfo hpi = new(helpFilePath, navigator);
         return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
@@ -255,7 +255,7 @@ public class MessageBox
         HelpNavigator navigator,
         object? param)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath, navigator, param);
+        HelpInfo hpi = new(helpFilePath, navigator, param);
 
         return ShowCore(null, text, caption, buttons, icon, defaultButton, options, hpi);
     }
@@ -275,7 +275,7 @@ public class MessageBox
         HelpNavigator navigator,
         object? param)
     {
-        HelpInfo hpi = new HelpInfo(helpFilePath, navigator, param);
+        HelpInfo hpi = new(helpFilePath, navigator, param);
 
         return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
     }

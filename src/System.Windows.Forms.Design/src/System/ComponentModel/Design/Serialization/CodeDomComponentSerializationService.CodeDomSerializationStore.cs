@@ -138,7 +138,7 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             Dictionary<string, CodeDomComponentSerializationState> state = new(_objects.Count);
-            DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
+            DesignerSerializationManager manager = new(new LocalServices(this, _provider));
             if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
             {
                 foreach (IDesignerSerializationProvider provider in hostManager.SerializationProviders)
@@ -206,7 +206,7 @@ public sealed partial class CodeDomComponentSerializationService
 
         private void Deserialize(IServiceProvider? provider, IContainer? container, bool validateRecycledTypes, bool applyDefaults, List<object>? objects)
         {
-            PassThroughSerializationManager delegator = new PassThroughSerializationManager(new LocalDesignerSerializationManager(this, new LocalServices(this, provider)));
+            PassThroughSerializationManager delegator = new(new LocalDesignerSerializationManager(this, new LocalServices(this, provider)));
             if (container is not null)
             {
                 delegator.Manager.Container = container;
@@ -345,7 +345,7 @@ public sealed partial class CodeDomComponentSerializationService
                 }
 
                 CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-                using var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
+                using StringWriter stringWriter = new(CultureInfo.InvariantCulture);
                 Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {stateEntry.Key}: ");
                 Debug.Indent();
 
@@ -375,7 +375,7 @@ public sealed partial class CodeDomComponentSerializationService
                 }
 
                 // spit this line by line so it respects the indent.
-                StringReader stringReader = new StringReader(stringWriter.ToString());
+                StringReader stringReader = new(stringWriter.ToString());
                 for (string? ln = stringReader.ReadLine(); ln is not null; ln = stringReader.ReadLine())
                 {
                     Debug.WriteLine(ln);

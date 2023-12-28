@@ -111,7 +111,7 @@ public partial class MaskedTextBox : TextBoxBase
     /// </summary>
     public MaskedTextBox()
     {
-        MaskedTextProvider maskedTextProvider = new MaskedTextProvider(nullMask, CultureInfo.CurrentCulture);
+        MaskedTextProvider maskedTextProvider = new(nullMask, CultureInfo.CurrentCulture);
         _flagState[IS_NULL_MASK] = true;
         Initialize(maskedTextProvider);
     }
@@ -123,7 +123,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         ArgumentNullException.ThrowIfNull(mask);
 
-        MaskedTextProvider maskedTextProvider = new MaskedTextProvider(mask, CultureInfo.CurrentCulture);
+        MaskedTextProvider maskedTextProvider = new(mask, CultureInfo.CurrentCulture);
         _flagState[IS_NULL_MASK] = false;
         Initialize(maskedTextProvider);
     }
@@ -209,7 +209,7 @@ public partial class MaskedTextBox : TextBoxBase
             if (value != _maskedTextProvider.AllowPromptAsInput)
             {
                 // Recreate masked text provider since this property is read-only.
-                MaskedTextProvider newProvider = new MaskedTextProvider(
+                MaskedTextProvider newProvider = new(
                     _maskedTextProvider.Mask,
                     _maskedTextProvider.Culture,
                     value,
@@ -254,7 +254,7 @@ public partial class MaskedTextBox : TextBoxBase
             if (value != _maskedTextProvider.AsciiOnly)
             {
                 // Recreate masked text provider since this property is read-only.
-                MaskedTextProvider newProvider = new MaskedTextProvider(
+                MaskedTextProvider newProvider = new(
                     _maskedTextProvider.Mask,
                     _maskedTextProvider.Culture,
                     _maskedTextProvider.AllowPromptAsInput,
@@ -353,7 +353,7 @@ public partial class MaskedTextBox : TextBoxBase
             if (!_maskedTextProvider.Culture.Equals(value))
             {
                 // Recreate masked text provider since this property is read-only.
-                MaskedTextProvider newProvider = new MaskedTextProvider(
+                MaskedTextProvider newProvider = new(
                     _maskedTextProvider.Mask,
                     value,
                     _maskedTextProvider.AllowPromptAsInput,
@@ -706,7 +706,7 @@ public partial class MaskedTextBox : TextBoxBase
             }
 
             // Recreate masked text provider since this property is read-only.
-            MaskedTextProvider newProvider = new MaskedTextProvider(
+            MaskedTextProvider newProvider = new(
                 newMask!,
                 _maskedTextProvider.Culture,
                 _maskedTextProvider.AllowPromptAsInput,
@@ -913,7 +913,7 @@ public partial class MaskedTextBox : TextBoxBase
                 }
 
                 // Recreate masked text provider to be consistent with AllowPromptAsInput - current text may have chars with same value as new prompt.
-                MaskedTextProvider newProvider = new MaskedTextProvider(
+                MaskedTextProvider newProvider = new(
                     _maskedTextProvider.Mask,
                     _maskedTextProvider.Culture,
                     _maskedTextProvider.AllowPromptAsInput,
@@ -2068,7 +2068,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         if (BeepOnError)
         {
-            Media.SoundPlayer sp = new Media.SoundPlayer();
+            Media.SoundPlayer sp = new();
             sp.Play();
         }
 
@@ -2373,7 +2373,7 @@ public partial class MaskedTextBox : TextBoxBase
                 message = SR.MaskedTextBoxTypeValidationSucceeded;
             }
 
-            TypeValidationEventArgs tve = new TypeValidationEventArgs(_validatingType, isValidInput, parseRetVal, message);
+            TypeValidationEventArgs tve = new(_validatingType, isValidInput, parseRetVal, message);
             OnTypeValidationCompleted(tve);
 
             if (e is not null)
@@ -2910,7 +2910,7 @@ public partial class MaskedTextBox : TextBoxBase
             && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-            Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
+            Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);
             using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             g.DrawRectangle(pen, rect);
             rect.Inflate(-1, -1);

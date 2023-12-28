@@ -570,7 +570,7 @@ public sealed partial class Application
                 }
 
                 // Then, we rudely destroy all of the windows on the thread
-                ThreadWindows tw = new ThreadWindows(true);
+                ThreadWindows tw = new(true);
                 tw.Dispose();
 
                 // And dispose the parking form, if it isn't already

@@ -150,7 +150,7 @@ internal partial class StyleCollectionEditor
         /// </summary>
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(StyleCollectionEditor));
+            ComponentResourceManager resources = new(typeof(StyleCollectionEditor));
             _addRemoveInsertTableLayoutPanel = new TableLayoutPanel();
             _addButton = new Button();
             _removeButton = new Button();

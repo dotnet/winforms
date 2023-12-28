@@ -66,7 +66,7 @@ public class ToolStripControlHost_ToolStripControlHostAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripControlHostAccessibleObject_ReleaseUiaProvider_ToolStripControlHostControl()
     {
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         using Control control = new();
         using ToolStripControlHost toolStripControlHost = new(control);
         toolStrip.Items.Add(toolStripControlHost);

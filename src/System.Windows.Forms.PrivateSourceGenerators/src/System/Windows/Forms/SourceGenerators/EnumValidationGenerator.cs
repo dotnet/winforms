@@ -84,7 +84,7 @@ namespace SourceGenerated
             {
                 if (enumsToValidate.Any())
                 {
-                    var sb = new StringBuilder();
+                    StringBuilder sb = new();
                     GenerateValidator(context, sb, enumsToValidate);
                     context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -204,7 +204,7 @@ namespace SourceGenerated
 
         INamedTypeSymbol? flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
 
-        var foundTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        HashSet<ITypeSymbol> foundTypes = new(SymbolEqualityComparer.Default);
 
         foreach (SyntaxNode argument in argumentsToValidate)
         {

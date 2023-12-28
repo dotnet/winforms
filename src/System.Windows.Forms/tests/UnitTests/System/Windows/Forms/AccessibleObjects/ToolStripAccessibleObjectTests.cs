@@ -12,7 +12,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripAccessibleObject_Ctor_Default()
     {
-        using ToolStrip toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
 
         var accessibleObject = new ToolStrip.ToolStripAccessibleObject(toolStrip);
         Assert.NotNull(accessibleObject.Owner);
@@ -22,7 +22,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
     {
-        using var toolStrip = new ToolStrip()
+        using ToolStrip toolStrip = new()
         {
             Name = "Name1",
             AccessibleName = "Test Name"
@@ -37,7 +37,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
     {
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
 
         bool supportsLegacyIAccessiblePatternId = toolStripAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
@@ -48,7 +48,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
     {
-        using var toolStrip = new ToolStrip()
+        using ToolStrip toolStrip = new()
         {
             AccessibleRole = AccessibleRole.Link
         };
@@ -62,7 +62,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
     {
-        using var toolStrip = new ToolStrip()
+        using ToolStrip toolStrip = new()
         {
             AccessibleDescription = "Test Description"
         };
@@ -76,7 +76,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripAccessibleObject_ControlType_IsToolBar_IfAccessibleRoleIsDefault()
     {
-        using ToolStrip toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -104,7 +104,7 @@ public class ToolStripAccessibleObjectTests
     [MemberData(nameof(ToolStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStrip toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         toolStrip.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -158,7 +158,7 @@ public class ToolStripAccessibleObjectTests
     [WinFormsFact]
     public unsafe void ToolStripAccessibleObject_FragmentNavigate_FirstChild_ThumbButton()
     {
-        using ToolStrip toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         toolStrip.CreateControl();
 
         var accessibleObject = toolStrip.AccessibilityObject;

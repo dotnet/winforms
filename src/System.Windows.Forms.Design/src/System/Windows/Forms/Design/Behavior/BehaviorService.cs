@@ -197,7 +197,7 @@ public sealed partial class BehaviorService : IDisposable
 
         // Build up the eventargs for firing our dragbegin/end events
         ICollection dragComponents = ((DropSourceBehavior.BehaviorDataObject)dropSourceBehavior.DataObject).DragComponents;
-        BehaviorDragDropEventArgs eventArgs = new BehaviorDragDropEventArgs(dragComponents);
+        BehaviorDragDropEventArgs eventArgs = new(dragComponents);
 
         try
         {
@@ -274,7 +274,7 @@ public sealed partial class BehaviorService : IDisposable
             return Point.Empty;
         }
 
-        var pt = new Point(c.Left, c.Top);
+        Point pt = new(c.Left, c.Top);
         PInvoke.MapWindowPoints(c.Parent, _adornerWindow, ref pt);
         if (c.Parent.IsMirrored)
         {

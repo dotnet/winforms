@@ -12,7 +12,7 @@ public class DataGridViewCellEventArgsTests
     [InlineData(1, 2)]
     public void Ctor_Int_Int(int columnIndex, int rowIndex)
     {
-        var e = new DataGridViewCellEventArgs(columnIndex, rowIndex);
+        DataGridViewCellEventArgs e = new(columnIndex, rowIndex);
         Assert.Equal(columnIndex, e.ColumnIndex);
         Assert.Equal(rowIndex, e.RowIndex);
     }

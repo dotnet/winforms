@@ -68,7 +68,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
     public Icon(string fileName, int width, int height) : this()
     {
-        using (FileStream f = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+        using (FileStream f = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
             Debug.Assert(f is not null, "File.OpenRead returned null instead of throwing an exception");
             _iconData = new byte[(int)f.Length];
@@ -159,7 +159,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         }
         else
         {
-            MemoryStream stream = new MemoryStream();
+            MemoryStream stream = new();
             Save(stream);
             si.AddValue("IconData", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
         }
@@ -846,7 +846,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     private Bitmap PngFrame()
     {
         Debug.Assert(_iconData is not null);
-        using var stream = new MemoryStream();
+        using MemoryStream stream = new();
         stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
         return new Bitmap(stream);
     }

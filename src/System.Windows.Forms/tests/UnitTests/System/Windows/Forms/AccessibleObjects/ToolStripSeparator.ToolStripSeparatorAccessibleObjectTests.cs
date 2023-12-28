@@ -11,8 +11,8 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripSeparatorAccessibleObject_Ctor_Default()
     {
-        using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
-        ToolStripSeparatorAccessibleObject accessibleObject = new ToolStripSeparatorAccessibleObject(toolStripSeparator);
+        using ToolStripSeparator toolStripSeparator = new();
+        ToolStripSeparatorAccessibleObject accessibleObject = new(toolStripSeparator);
 
         Assert.Equal(toolStripSeparator, accessibleObject.Owner);
     }
@@ -20,7 +20,7 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripSeparatorAccessibleObject_ControlType_IsSeparator_IfAccessibleRoleIsDefault()
     {
-        using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
+        using ToolStripSeparator toolStripSeparator = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -31,7 +31,7 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripSeparatorAccessibleObject_Role_IsSeparator_ByDefault()
     {
-        using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
+        using ToolStripSeparator toolStripSeparator = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripSeparator.AccessibilityObject.Role;
@@ -58,7 +58,7 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
     [MemberData(nameof(ToolStripSeparatorAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripSeparatorAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
+        using ToolStripSeparator toolStripSeparator = new();
         toolStripSeparator.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

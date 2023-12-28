@@ -68,7 +68,7 @@ public class TabPage_TabAccessibleObjectTests
     [WinFormsFact]
     public void TabAccessibleObject_DefaultAction_ReturnsNull_IfHandleIsNotCreated()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
         TabPageCollection pages = tabControl.TabPages;
         pages.Add(new TabPage());
 

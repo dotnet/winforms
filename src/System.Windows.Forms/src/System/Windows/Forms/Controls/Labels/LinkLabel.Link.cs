@@ -82,7 +82,7 @@ public partial class LinkLabel
                 {
                     if (Owner is not null && !string.IsNullOrEmpty(Owner.Text))
                     {
-                        StringInfo stringInfo = new StringInfo(Owner.Text);
+                        StringInfo stringInfo = new(Owner.Text);
                         return stringInfo.LengthInTextElements - Start;
                     }
                     else

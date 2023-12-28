@@ -9,7 +9,7 @@ public class EncoderTests
     public void Ctor_Guid()
     {
         Guid guid = Guid.NewGuid();
-        Encoder encoder = new Encoder(guid);
+        Encoder encoder = new(guid);
         Assert.Equal(guid, encoder.Guid);
     }
 
