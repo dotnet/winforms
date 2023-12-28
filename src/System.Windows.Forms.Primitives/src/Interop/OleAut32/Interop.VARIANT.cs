@@ -326,7 +326,7 @@ internal unsafe partial struct VARIANT : IDisposable
                         break;
                     case VT_BOOL:
                         {
-                            var data = new Span<VARIANT_BOOL>(psa->pvData, array.Length);
+                            Span<VARIANT_BOOL> data = new(psa->pvData, array.Length);
                             var result = GetSpan<bool>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -338,7 +338,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
                     case VT_DECIMAL:
                         {
-                            var data = new Span<DECIMAL>(psa->pvData, array.Length);
+                            Span<DECIMAL> data = new(psa->pvData, array.Length);
                             var result = GetSpan<decimal>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -350,7 +350,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
                     case VT_CY:
                         {
-                            var data = new Span<long>(psa->pvData, array.Length);
+                            Span<long> data = new(psa->pvData, array.Length);
                             var result = GetSpan<decimal>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -362,7 +362,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
                     case VT_DATE:
                         {
-                            var data = new Span<double>(psa->pvData, array.Length);
+                            Span<double> data = new(psa->pvData, array.Length);
                             var result = GetSpan<DateTime>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -374,7 +374,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
                     case VT_BSTR:
                         {
-                            var data = new Span<IntPtr>(psa->pvData, array.Length);
+                            Span<IntPtr> data = new(psa->pvData, array.Length);
                             var result = GetSpan<string?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -387,7 +387,7 @@ internal unsafe partial struct VARIANT : IDisposable
                     case VT_DISPATCH:
                     case VT_UNKNOWN:
                         {
-                            var data = new Span<IntPtr>(psa->pvData, array.Length);
+                            Span<IntPtr> data = new(psa->pvData, array.Length);
                             var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -399,7 +399,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
                     case VT_VARIANT:
                         {
-                            var data = new Span<VARIANT>(psa->pvData, array.Length);
+                            Span<VARIANT> data = new(psa->pvData, array.Length);
                             var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -785,7 +785,7 @@ internal unsafe partial struct VARIANT : IDisposable
                 return new Span<double>(ca.pElems, (int)ca.cElems).ToArray();
             case VT_CY:
                 {
-                    Span<long> data = new Span<long>(ca.pElems, (int)ca.cElems);
+                    Span<long> data = new(ca.pElems, (int)ca.cElems);
                     decimal[] result = new decimal[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
@@ -797,7 +797,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
             case VT_DATE:
                 {
-                    var data = new Span<double>(ca.pElems, (int)ca.cElems);
+                    Span<double> data = new(ca.pElems, (int)ca.cElems);
                     var result = new DateTime[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {

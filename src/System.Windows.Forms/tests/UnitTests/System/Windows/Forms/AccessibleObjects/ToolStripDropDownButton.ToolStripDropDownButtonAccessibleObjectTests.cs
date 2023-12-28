@@ -11,8 +11,8 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
     [WinFormsFact]
     public void ToolStripDropDownButtonAccessibleObject_Ctor_Default()
     {
-        using ToolStripDropDownButton toolStripDropDownButton = new ToolStripDropDownButton();
-        ToolStripDropDownButtonAccessibleObject accessibleObject = new ToolStripDropDownButtonAccessibleObject(toolStripDropDownButton);
+        using ToolStripDropDownButton toolStripDropDownButton = new();
+        ToolStripDropDownButtonAccessibleObject accessibleObject = new(toolStripDropDownButton);
 
         Assert.Equal(toolStripDropDownButton, accessibleObject.Owner);
     }
@@ -20,7 +20,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
     [WinFormsFact]
     public void ToolStripDropDownButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
     {
-        using ToolStripDropDownButton toolStripDropDownButton = new ToolStripDropDownButton();
+        using ToolStripDropDownButton toolStripDropDownButton = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripDropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -31,7 +31,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
     [WinFormsFact]
     public void ToolStripDropDownButtonAccessibleObject_Role_IsMenuItem_ByDefault()
     {
-        using ToolStripDropDownButton toolStripDropDownButton = new ToolStripDropDownButton();
+        using ToolStripDropDownButton toolStripDropDownButton = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripDropDownButton.AccessibilityObject.Role;
@@ -58,7 +58,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
     [MemberData(nameof(ToolStripDropDownButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripDropDownButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripDropDownButton toolStripDropDownButton = new ToolStripDropDownButton();
+        using ToolStripDropDownButton toolStripDropDownButton = new();
         toolStripDropDownButton.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripDropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -72,7 +72,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
     {
         using ToolStrip toolStrip = new();
 
-        using ToolStripDropDownButton dropDownItem = new ToolStripDropDownButton();
+        using ToolStripDropDownButton dropDownItem = new();
         dropDownItem.DropDownItems.Add(string.Empty);
 
         toolStrip.Items.Add(dropDownItem);

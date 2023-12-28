@@ -284,7 +284,7 @@ internal sealed partial class DesignerActionPanel
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
         {
-            Rectangle editRect = new Rectangle(EditRegionRelativeLocation, EditRegionSize);
+            Rectangle editRect = new(EditRegionRelativeLocation, EditRegionSize);
             g.FillRectangle(SystemBrushes.Window, editRect);
             g.DrawRectangle(SystemPens.ControlDark, editRect);
         }

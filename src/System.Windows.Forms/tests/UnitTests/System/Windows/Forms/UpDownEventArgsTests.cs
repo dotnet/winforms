@@ -12,7 +12,7 @@ public class UpDownEventArgsTests
     [InlineData(1)]
     public void Ctor_Int(int buttonPushed)
     {
-        var e = new UpDownEventArgs(buttonPushed);
+        UpDownEventArgs e = new(buttonPushed);
         Assert.Equal(buttonPushed, e.ButtonID);
     }
 }

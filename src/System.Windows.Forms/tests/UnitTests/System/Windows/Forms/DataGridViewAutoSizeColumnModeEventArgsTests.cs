@@ -16,7 +16,7 @@ public class DataGridViewAutoSizeColumnModeEventArgsTests
     [MemberData(nameof(Ctor_DataGridViewColumn_DataGridViewAutoSizeColumn_TestData))]
     public void Ctor_DataGridViewColumn_DataGridViewAutoSizeColumn(DataGridViewColumn dataGridViewColumn, DataGridViewAutoSizeColumnMode previousMode)
     {
-        var e = new DataGridViewAutoSizeColumnModeEventArgs(dataGridViewColumn, previousMode);
+        DataGridViewAutoSizeColumnModeEventArgs e = new(dataGridViewColumn, previousMode);
         Assert.Equal(dataGridViewColumn, e.Column);
         Assert.Equal(previousMode, e.PreviousMode);
     }

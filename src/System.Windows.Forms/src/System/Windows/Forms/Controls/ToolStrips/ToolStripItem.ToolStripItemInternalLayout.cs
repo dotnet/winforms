@@ -95,8 +95,8 @@ public partial class ToolStripItem
 
         protected virtual ToolStripItemLayoutOptions CommonLayoutOptions()
         {
-            ToolStripItemLayoutOptions layoutOptions = new ToolStripItemLayoutOptions();
-            Rectangle bounds = new Rectangle(Point.Empty, _ownerItem.Size);
+            ToolStripItemLayoutOptions layoutOptions = new();
+            Rectangle bounds = new(Point.Empty, _ownerItem.Size);
 
             layoutOptions.Client = bounds;
 

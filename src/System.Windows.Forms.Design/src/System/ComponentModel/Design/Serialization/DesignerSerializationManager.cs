@@ -767,7 +767,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
 
         if (instance is null)
         {
-            ResolveNameEventArgs e = new ResolveNameEventArgs(name);
+            ResolveNameEventArgs e = new(name);
             OnResolveName(e);
             instance = e.Value;
         }

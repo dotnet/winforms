@@ -377,13 +377,13 @@ public class TableLayoutPanel : Panel, IExtenderProvider
 
             for (int j = 0; j < rows; j++)
             {
-                Rectangle outsideCellBounds = new Rectangle(
+                Rectangle outsideCellBounds = new(
                     startx,
                     starty,
                     colStrips[i].MinSize,
                     rowStrips[j].MinSize);
 
-                Rectangle insideCellBounds = new Rectangle(
+                Rectangle insideCellBounds = new(
                     outsideCellBounds.X + (cellBorderWidth + 1) / 2,
                     outsideCellBounds.Y + (cellBorderWidth + 1) / 2,
                     outsideCellBounds.Width - (cellBorderWidth + 1) / 2,
@@ -429,7 +429,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
         {
             // Paint the border of the table if we are not auto scrolling.
 
-            Rectangle tableBounds = new Rectangle(
+            Rectangle tableBounds = new(
                 cellBorderWidth / 2 + displayRect.X,
                 cellBorderWidth / 2 + displayRect.Y,
                 displayRect.Width - cellBorderWidth,

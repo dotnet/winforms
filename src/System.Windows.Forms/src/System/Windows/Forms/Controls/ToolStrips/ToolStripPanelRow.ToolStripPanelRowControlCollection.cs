@@ -224,7 +224,7 @@ public partial class ToolStripPanelRow
                 // unfortunately we don't know the index of the control in the ToolStripPanel's
                 // control collection, as all rows share this collection.
                 // To unparent this control we need to use Remove instead  of RemoveAt.
-                using (LayoutTransaction t = new LayoutTransaction(ToolStripPanel, control, PropertyNames.Parent))
+                using (LayoutTransaction t = new(ToolStripPanel, control, PropertyNames.Parent))
                 {
                     _owner.ToolStripPanel.Controls.Remove(control);
                     _owner.OnControlRemoved(control, index);

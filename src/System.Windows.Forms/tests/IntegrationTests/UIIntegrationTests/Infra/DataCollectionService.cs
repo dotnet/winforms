@@ -164,7 +164,7 @@ internal static class DataCollectionService
 
             Directory.CreateDirectory(logDir);
 
-            var exceptionDetails = new StringBuilder();
+            StringBuilder exceptionDetails = new();
             exceptionDetails.AppendLine(ex.ToString());
             exceptionDetails.AppendLine("---------------------------------");
             exceptionDetails.AppendLine("Stack Trace at Log Time:");

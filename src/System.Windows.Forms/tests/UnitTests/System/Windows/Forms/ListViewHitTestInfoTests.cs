@@ -16,7 +16,7 @@ public class ListViewHitTestInfoTests
     [MemberData(nameof(Ctor_ListViewItem_ListViewSubItem_ListViewHitTestLocations_TestData))]
     public void ListViewHitTestInfo_Ctor_ListViewItem_ListViewSubItem_ListViewHitTestLocations(ListViewItem hitItem, ListViewItem.ListViewSubItem hitSubItem, ListViewHitTestLocations hitTestLocations)
     {
-        var info = new ListViewHitTestInfo(hitItem, hitSubItem, hitTestLocations);
+        ListViewHitTestInfo info = new(hitItem, hitSubItem, hitTestLocations);
         Assert.Equal(hitItem, info.Item);
         Assert.Equal(hitSubItem, info.SubItem);
         Assert.Equal(hitTestLocations, info.Location);

@@ -221,7 +221,7 @@ public partial class DataGridViewRow
                     return SR.DataGridView_AccRowCreateNew;
                 }
 
-                StringBuilder sb = new StringBuilder(1024);
+                StringBuilder sb = new(1024);
 
                 int childCount = GetChildCount();
 

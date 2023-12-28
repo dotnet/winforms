@@ -45,7 +45,7 @@ public class TestBitmap
     public void TestPixels()
     {
         // Tests GetSetPixel/SetPixel
-        Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppRgb);
+        Bitmap bmp = new(100, 100, PixelFormat.Format32bppRgb);
         bmp.SetPixel(0, 0, Color.FromArgb(255, 128, 128, 128));
         Color color = bmp.GetPixel(0, 0);
 
@@ -59,8 +59,8 @@ public class TestBitmap
     [Fact]
     public void LockBits_IndexedWrite_NonIndexed()
     {
-        using Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format8bppIndexed);
-        Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        using Bitmap bmp = new(100, 100, PixelFormat.Format8bppIndexed);
+        Rectangle rect = new(0, 0, bmp.Width, bmp.Height);
         BitmapData bd = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
         bmp.UnlockBits(bd);
     }
@@ -68,10 +68,10 @@ public class TestBitmap
     [Fact]
     public void LockBits_NonIndexedWrite_ToIndexed()
     {
-        using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppRgb))
+        using (Bitmap bmp = new(100, 100, PixelFormat.Format32bppRgb))
         {
-            BitmapData bd = new BitmapData();
-            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bd = new();
+            Rectangle rect = new(0, 0, bmp.Width, bmp.Height);
             bd = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed, bd);
 
             try
@@ -88,9 +88,9 @@ public class TestBitmap
     [Fact]
     public void LockBits_ImageLockMode_Invalid()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format24bppRgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format24bppRgb))
         {
-            Rectangle r = new Rectangle(4, 4, 4, 4);
+            Rectangle r = new(4, 4, 4, 4);
             BitmapData data = bmp.LockBits(r, (ImageLockMode)0, PixelFormat.Format24bppRgb);
             try
             {
@@ -110,9 +110,9 @@ public class TestBitmap
     [Fact]
     public void LockBits_Double()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format24bppRgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format24bppRgb))
         {
-            Rectangle r = new Rectangle(4, 4, 4, 4);
+            Rectangle r = new(4, 4, 4, 4);
             BitmapData data = bmp.LockBits(r, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
             {
@@ -128,7 +128,7 @@ public class TestBitmap
     [Fact]
     public void Format1bppIndexed()
     {
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format1bppIndexed))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format1bppIndexed))
         {
             Color c = bmp.GetPixel(0, 0);
             Assert.Equal(-16777216, c.ToArgb());
@@ -139,7 +139,7 @@ public class TestBitmap
     [Fact]
     public void Format4bppIndexed()
     {
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format4bppIndexed))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format4bppIndexed))
         {
             Color c = bmp.GetPixel(0, 0);
             Assert.Equal(-16777216, c.ToArgb());
@@ -150,7 +150,7 @@ public class TestBitmap
     [Fact]
     public void Format8bppIndexed()
     {
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format8bppIndexed))
         {
             Color c = bmp.GetPixel(0, 0);
             Assert.Equal(-16777216, c.ToArgb());
@@ -162,7 +162,7 @@ public class TestBitmap
     {
         bool alpha = Image.IsAlphaPixelFormat(format);
         int size = Image.GetPixelFormatSize(format) / 8 * 2;
-        using (Bitmap bmp = new Bitmap(2, 1, format))
+        using (Bitmap bmp = new(2, 1, format))
         {
             Color a = Color.FromArgb(128, 64, 32, 16);
             Color b = Color.FromArgb(192, 96, 48, 24);
@@ -342,8 +342,8 @@ public class TestBitmap
     public void Clone()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        Rectangle rect = new Rectangle(0, 0, 50, 50);
-        using (Bitmap bmp = new Bitmap(sInFile))
+        Rectangle rect = new(0, 0, 50, 50);
+        using (Bitmap bmp = new(sInFile))
         using (Bitmap bmpNew = bmp.Clone(rect, PixelFormat.Format32bppArgb))
         {
             Color colororg0 = bmp.GetPixel(0, 0);
@@ -360,7 +360,7 @@ public class TestBitmap
     public void CloneImage()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         using (Bitmap bmpNew = (Bitmap)bmp.Clone())
         {
             Assert.Equal(bmp.Width, bmpNew.Width);
@@ -373,7 +373,7 @@ public class TestBitmap
     public void Frames()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             int cnt = bmp.GetFrameCount(FrameDimension.Page);
             int active = bmp.SelectActiveFrame(FrameDimension.Page, 0);
@@ -391,7 +391,7 @@ public class TestBitmap
 
     static string ByteArrayToString(byte[] arrInput)
     {
-        StringBuilder sOutput = new StringBuilder(arrInput.Length);
+        StringBuilder sOutput = new(arrInput.Length);
         for (int i = 0; i < arrInput.Length; i++)
         {
             sOutput.Append(arrInput[i].ToString("X2"));
@@ -493,7 +493,7 @@ public class TestBitmap
     public void Rotate()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal("312958A3C67402E1299413794988A3C7", RotateBmp(bmp, RotateFlipType.Rotate90FlipNone));
             Assert.Equal("BF70D8DA4F1545AEDD77D0296B47AE58", RotateBmp(bmp, RotateFlipType.Rotate180FlipNone));
@@ -507,7 +507,7 @@ public class TestBitmap
 
     private Bitmap CreateBitmap(int width, int height, PixelFormat fmt)
     {
-        Bitmap bmp = new Bitmap(width, height, fmt);
+        Bitmap bmp = new(width, height, fmt);
         using (Graphics gr = Graphics.FromImage(bmp))
         {
             Color c = Color.FromArgb(255, 100, 200, 250);
@@ -600,8 +600,8 @@ public class TestBitmap
     // Tests the LockBitmap functions. Makes a hash of the block of pixels that it returns
     // firsts, changes them, and then using GetPixel does another check of the changes.
     // The results match the .NET Framework
-    private static byte[] DefaultBitmapHash = new byte[] { 0xD8, 0xD3, 0x68, 0x9C, 0x86, 0x7F, 0xB6, 0xA0, 0x76, 0xD6, 0x00, 0xEF, 0xFF, 0xE5, 0x8E, 0x1B };
-    private static byte[] FinalWholeBitmapHash = new byte[] { 0x5F, 0x52, 0x98, 0x37, 0xE3, 0x94, 0xE1, 0xA6, 0x06, 0x6C, 0x5B, 0xF1, 0xA9, 0xC2, 0xA9, 0x43 };
+    private static byte[] DefaultBitmapHash = [0xD8, 0xD3, 0x68, 0x9C, 0x86, 0x7F, 0xB6, 0xA0, 0x76, 0xD6, 0x00, 0xEF, 0xFF, 0xE5, 0x8E, 0x1B];
+    private static byte[] FinalWholeBitmapHash = [0x5F, 0x52, 0x98, 0x37, 0xE3, 0x94, 0xE1, 0xA6, 0x06, 0x6C, 0x5B, 0xF1, 0xA9, 0xC2, 0xA9, 0x43];
 
     [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void LockBitmap_Format32bppArgb_Format32bppArgb_ReadWrite_Whole()
@@ -655,7 +655,7 @@ public class TestBitmap
         }
     }
 
-    private static byte[] FinalPartialBitmapHash = new byte[] { 0xED, 0xD8, 0xDC, 0x9B, 0x44, 0x00, 0x22, 0x9B, 0x07, 0x06, 0x4A, 0x21, 0x70, 0xA7, 0x31, 0x1D };
+    private static byte[] FinalPartialBitmapHash = [0xED, 0xD8, 0xDC, 0x9B, 0x44, 0x00, 0x22, 0x9B, 0x07, 0x06, 0x4A, 0x21, 0x70, 0xA7, 0x31, 0x1D];
 
     [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void LockBitmap_Format32bppArgb_Format32bppArgb_ReadWrite_Partial()
@@ -721,7 +721,7 @@ public class TestBitmap
         Color red = Color.FromArgb(Color.Red.A, Color.Red.R, Color.Red.G, Color.Red.B);
         Color blue = Color.FromArgb(Color.Blue.A, Color.Blue.R, Color.Blue.G, Color.Blue.B);
 
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format32bppRgb))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format32bppRgb))
         {
             bmp.SetPixel(0, 0, red);
             pixel_colour = bmp.GetPixel(0, 0);
@@ -776,7 +776,7 @@ public class TestBitmap
             }
         }
 
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format32bppArgb))
         {
             bmp.SetPixel(0, 0, red);
 
@@ -820,7 +820,7 @@ public class TestBitmap
     [Fact]
     public void DefaultFormat1()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         {
             Assert.Equal(ImageFormat.MemoryBmp, bmp.RawFormat);
         }
@@ -830,12 +830,12 @@ public class TestBitmap
     public void DefaultFormat2()
     {
         string filename = Path.GetTempFileName();
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         {
             bmp.Save(filename);
         }
 
-        using (Bitmap other = new Bitmap(filename))
+        using (Bitmap other = new(filename))
         {
             Assert.Equal(ImageFormat.Png, other.RawFormat);
         }
@@ -846,7 +846,7 @@ public class TestBitmap
     [Fact]
     public void BmpDataStride1()
     {
-        Bitmap bmp = new Bitmap(184, 184, PixelFormat.Format1bppIndexed);
+        Bitmap bmp = new(184, 184, PixelFormat.Format1bppIndexed);
         BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format1bppIndexed);
         try
         {
@@ -868,7 +868,7 @@ public class TestBitmap
     [Fact]
     public void Format1bppIndexed_Palette()
     {
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format1bppIndexed))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format1bppIndexed))
         {
             ColorPalette pal = bmp.Palette;
             Assert.Equal(2, pal.Entries.Length);
@@ -904,7 +904,7 @@ public class TestBitmap
     [Fact]
     public void Format4bppIndexed_Palette()
     {
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format4bppIndexed))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format4bppIndexed))
         {
             ColorPalette pal = bmp.Palette;
             Assert.Equal(16, pal.Entries.Length);
@@ -1180,7 +1180,7 @@ public class TestBitmap
     [Fact]
     public void Format8bppIndexed_Palette()
     {
-        using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
+        using (Bitmap bmp = new(1, 1, PixelFormat.Format8bppIndexed))
         {
             ColorPalette pal = bmp.Palette;
             Assert.Equal(256, pal.Entries.Length);
@@ -1201,7 +1201,7 @@ public class TestBitmap
 
     private void SetResolution(float x, float y)
     {
-        using (Bitmap bmp = new Bitmap(1, 1))
+        using (Bitmap bmp = new(1, 1))
         {
             bmp.SetResolution(x, y);
         }
@@ -1277,7 +1277,7 @@ public class BitmapFullTrustTest
     {
         IntPtr hicon;
         int size;
-        using (Icon icon = new Icon(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
+        using (Icon icon = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
         {
             size = icon.Width;
             using (Bitmap bitmap = Bitmap.FromHicon(icon.Handle))
@@ -1299,7 +1299,7 @@ public class BitmapFullTrustTest
     {
         IntPtr hicon;
         int size;
-        using (Icon icon = new Icon(Helpers.GetTestBitmapPath("32x32_one_entry_4bit.ico")))
+        using (Icon icon = new(Helpers.GetTestBitmapPath("32x32_one_entry_4bit.ico")))
         {
             size = icon.Width;
             using (Bitmap bitmap = Bitmap.FromHicon(icon.Handle))
@@ -1321,7 +1321,7 @@ public class BitmapFullTrustTest
     {
         IntPtr hicon;
         int size;
-        using (Icon icon = new Icon(Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico")))
+        using (Icon icon = new(Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico")))
         {
             size = icon.Width;
             using (Bitmap bitmap = Bitmap.FromHicon(icon.Handle))
@@ -1343,7 +1343,7 @@ public class BitmapFullTrustTest
     {
         IntPtr hicon;
         int size;
-        using (Icon icon = new Icon(Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico")))
+        using (Icon icon = new(Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico")))
         {
             size = icon.Width;
             using (Bitmap bitmap = Bitmap.FromHicon(icon.Handle))
@@ -1365,7 +1365,7 @@ public class BitmapFullTrustTest
     {
         IntPtr hbitmap;
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bitmap = new Bitmap(sInFile))
+        using (Bitmap bitmap = new(sInFile))
         {
             Assert.Equal(PixelFormat.Format24bppRgb, bitmap.PixelFormat);
             Assert.Equal(0, bitmap.Palette.Entries.Length);
@@ -1393,7 +1393,7 @@ public class BitmapFullTrustTest
     {
         IntPtr hbitmap;
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bitmap = new Bitmap(sInFile))
+        using (Bitmap bitmap = new(sInFile))
         {
             Assert.Equal(PixelFormat.Format24bppRgb, bitmap.PixelFormat);
             Assert.Equal(0, bitmap.Palette.Entries.Length);

@@ -16,7 +16,7 @@ public class TreeNodeMouseHoverEventArgsTests
     [MemberData(nameof(Ctor_TreeNode_TestData))]
     public void Ctor_TreeNode(TreeNode node)
     {
-        var e = new TreeNodeMouseHoverEventArgs(node);
+        TreeNodeMouseHoverEventArgs e = new(node);
         Assert.Equal(node, e.Node);
     }
 }

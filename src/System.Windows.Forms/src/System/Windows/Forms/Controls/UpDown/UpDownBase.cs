@@ -522,12 +522,12 @@ public abstract partial class UpDownBase : ContainerControl
                 Rectangle clipBounds = e.ClipRectangle;
 
                 // Draw a themed textbox-like border, which is what the spin control does
-                VisualStyleRenderer vsr = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
+                VisualStyleRenderer vsr = new(VisualStyleElement.TextBox.TextEdit.Normal);
                 int border = ThemedBorderWidth;
-                Rectangle clipLeft = new Rectangle(bounds.Left, bounds.Top, border, bounds.Height);
-                Rectangle clipTop = new Rectangle(bounds.Left, bounds.Top, bounds.Width, border);
-                Rectangle clipRight = new Rectangle(bounds.Right - border, bounds.Top, border, bounds.Height);
-                Rectangle clipBottom = new Rectangle(bounds.Left, bounds.Bottom - border, bounds.Width, border);
+                Rectangle clipLeft = new(bounds.Left, bounds.Top, border, bounds.Height);
+                Rectangle clipTop = new(bounds.Left, bounds.Top, bounds.Width, border);
+                Rectangle clipRight = new(bounds.Right - border, bounds.Top, border, bounds.Height);
+                Rectangle clipBottom = new(bounds.Left, bounds.Bottom - border, bounds.Width, border);
                 clipLeft.Intersect(clipBounds);
                 clipTop.Intersect(clipBounds);
                 clipRight.Intersect(clipBounds);
@@ -830,7 +830,7 @@ public abstract partial class UpDownBase : ContainerControl
         Rectangle upDownEditBounds = Rectangle.Empty;
         Rectangle upDownButtonsBounds = Rectangle.Empty;
 
-        Rectangle clientArea = new Rectangle(Point.Empty, ClientSize);
+        Rectangle clientArea = new(Point.Empty, ClientSize);
         int totalClientWidth = clientArea.Width;
         bool themed = Application.RenderWithVisualStyles;
         BorderStyle borderStyle = BorderStyle;

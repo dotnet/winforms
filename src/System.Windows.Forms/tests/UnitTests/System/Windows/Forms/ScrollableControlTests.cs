@@ -15,7 +15,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_Ctor_Default()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -119,7 +119,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -143,7 +143,7 @@ public class ScrollableControlTests
     [InlineData(false, false, 0x56010000)]
     public void ScrollableControl_CreateParams_GetHScroll_ReturnsExpected(bool hScroll, bool horizontalScrollVisible, int expectedStyle)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         control.HorizontalScroll.Visible = horizontalScrollVisible;
         control.HScroll = hScroll;
 
@@ -170,7 +170,7 @@ public class ScrollableControlTests
     [InlineData(false, false, 0x56010000)]
     public void ScrollableControl_CreateParams_GetVScroll_ReturnsExpected(bool vScroll, bool verticalScrollVisible, int expectedStyle)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         control.VerticalScroll.Visible = verticalScrollVisible;
         control.VScroll = vScroll;
 
@@ -212,7 +212,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetClientRectangle_TestData))]
     public void ScrollableControl_ClientRectangle_should_reduce_if_scrollbars_shown(bool createHandle, int width, int height, int childWidth, int childHeight, Rectangle expected)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = true,
             ClientSize = new Size(width, height)
@@ -225,7 +225,7 @@ public class ScrollableControlTests
         }
 
         // add a child control
-        var child = new Button
+        Button child = new()
         {
             Width = childWidth,
             Height = childHeight
@@ -240,7 +240,7 @@ public class ScrollableControlTests
     [InlineData(false, 1, 4)]
     public void ScrollableControl_AutoScroll_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -276,7 +276,7 @@ public class ScrollableControlTests
     [InlineData(false, 1, 4)]
     public void ScrollableControl_AutoScroll_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -339,7 +339,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void ScrollableControl_AutoScrollMargin_Set_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -370,7 +370,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void ScrollableControl_AutoScrollMargin_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -414,7 +414,7 @@ public class ScrollableControlTests
     public void ScrollableControl_AutoScrollMargin_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMargin)];
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         Assert.False(property.CanResetValue(control));
 
         control.AutoScrollMargin = new Size(1, 0);
@@ -438,7 +438,7 @@ public class ScrollableControlTests
     public void ScrollableControl_AutoScrollMargin_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMargin)];
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.AutoScrollMargin = new Size(1, 0);
@@ -464,7 +464,7 @@ public class ScrollableControlTests
     [InlineData(-1, -2)]
     public void ScrollableControl_AutoScrollMargin_SetInvalid_ThrowsArgumentOutOfRangeException(int x, int y)
     {
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScrollMargin = new Size(x, y));
     }
 
@@ -472,7 +472,7 @@ public class ScrollableControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
     public void ScrollableControl_AutoScrollPosition_Set_GetReturnsExpected(Point value)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScrollPosition = value
         };
@@ -489,7 +489,7 @@ public class ScrollableControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
     public void ScrollableControl_AutoScrollPosition_SetWithHandle_GetReturnsExpected(Point value)
     {
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -518,7 +518,7 @@ public class ScrollableControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
     public void ScrollableControl_AutoScrollPosition_SetWithAutoScroll_GetReturnsExpected(Point value)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = true,
             AutoScrollPosition = value
@@ -536,7 +536,7 @@ public class ScrollableControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
     public void ScrollableControl_AutoScrollPosition_SetWithVisibleBars_GetReturnsExpected(Point value)
     {
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         control.HorizontalScroll.Visible = true;
         control.VerticalScroll.Visible = true;
 
@@ -569,7 +569,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AutoScrollMinSize_TestData))]
     public void ScrollableControl_AutoScrollMinSize_Set_GetReturnsExpected(bool autoScroll, Size value, bool expectedAutoScroll, int expectedLayoutCallCount)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -613,7 +613,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AutoScrollMinSize_WithHandle_TestData))]
     public void ScrollableControl_AutoScrollMinSize_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, bool expectedAutoScroll, int expectedLayoutCallCount, int expectedStyleChangedCallCount)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -655,7 +655,7 @@ public class ScrollableControlTests
     public void ScrollableControl_AutoScrollMinSize_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMinSize)];
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         Assert.False(property.CanResetValue(control));
 
         control.AutoScrollMinSize = new Size(1, 0);
@@ -679,7 +679,7 @@ public class ScrollableControlTests
     public void ScrollableControl_AutoScrollMinSize_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMinSize)];
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.AutoScrollMinSize = new Size(1, 0);
@@ -706,7 +706,7 @@ public class ScrollableControlTests
     [InlineData(false, true, true)]
     public void ScrollableControl_DisplayRectangle_GetWithClientRectangle_ReturnsExpected(bool autoScroll, bool hScroll, bool vScroll)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             ClientSize = new Size(70, 80),
             Padding = new Padding(1, 2, 3, 4),
@@ -724,7 +724,7 @@ public class ScrollableControlTests
     [BoolData]
     public void ScrollableControl_HScroll_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             HScroll = value
         };
@@ -749,7 +749,7 @@ public class ScrollableControlTests
     [BoolData]
     public void ScrollableControl_HScroll_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -789,7 +789,7 @@ public class ScrollableControlTests
     [MemberData(nameof(ControlTests.Padding_Set_TestData), MemberType = typeof(ControlTests))]
     public void ScrollableControl_Padding_Set_GetReturnsExpected(Padding value, Padding expected, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -814,7 +814,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -825,7 +825,7 @@ public class ScrollableControlTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -836,7 +836,7 @@ public class ScrollableControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -852,7 +852,7 @@ public class ScrollableControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
     public void ScrollableControl_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             RightToLeft = value
         };
@@ -867,7 +867,7 @@ public class ScrollableControlTests
     [BoolData]
     public void ScrollableControl_Visible_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             Visible = value
         };
@@ -886,7 +886,7 @@ public class ScrollableControlTests
     [BoolData]
     public void ScrollableControl_VScroll_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             VScroll = value
         };
@@ -911,7 +911,7 @@ public class ScrollableControlTests
     [BoolData]
     public void ScrollableControl_VScroll_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1023,7 +1023,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AdjustFormScrollbars_TestData))]
     public void ScrollableControl_AdjustFormScrollbars_Invoke_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             RightToLeft = rightToLeft,
             HScroll = hScroll,
@@ -1047,7 +1047,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AdjustFormScrollbars_TestData))]
     public void ScrollableControl_AdjustFormScrollbars_InvokeAutoScroll_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = true,
             RightToLeft = rightToLeft,
@@ -1114,7 +1114,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AdjustFormScrollbars_AutoScrollMinSize_TestData))]
     public void ScrollableControl_AdjustFormScrollbars_InvokeAutoScrollMinSize_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScrollMinSize = new Size(10, 20),
             RightToLeft = rightToLeft,
@@ -1181,7 +1181,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AdjustFormScrollbars_WithHandle_TestData))]
     public void ScrollableControl_AdjustFormScrollbars_InvokeWithHandle_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue, int expectedInvalidatedCallCount)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             RightToLeft = rightToLeft,
             HScroll = hScroll,
@@ -1215,7 +1215,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AdjustFormScrollbars_WithHandle_TestData))]
     public void ScrollableControl_AdjustFormScrollbars_InvokeWithHandleAutoScroll_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue, int expectedInvalidatedCallCount)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = true,
             RightToLeft = rightToLeft,
@@ -1292,7 +1292,7 @@ public class ScrollableControlTests
     [MemberData(nameof(AdjustFormScrollbars_WithHandleAutoScrollMinSize_TestData))]
     public void ScrollableControl_AdjustFormScrollbars_InvokeWithHandleAutoScrollMinSize_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue, int expectedInvalidatedCallCount)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScrollMinSize = new Size(10, 20),
             RightToLeft = rightToLeft,
@@ -1326,7 +1326,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1341,7 +1341,7 @@ public class ScrollableControlTests
     [InlineData((-1), false)]
     public void ScrollableControl_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -1368,7 +1368,7 @@ public class ScrollableControlTests
     [InlineData((ControlStyles)(-1), false)]
     public void ScrollableControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1378,7 +1378,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1402,7 +1402,7 @@ public class ScrollableControlTests
     {
         Assert.Same(eventArgs?.AffectedComponent, affectedControl);
 
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -1430,7 +1430,7 @@ public class ScrollableControlTests
     [NewAndDefaultData<EventArgs>]
     public void ScrollableControl_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1465,7 +1465,7 @@ public class ScrollableControlTests
     [MemberData(nameof(OnPaddingChanged_WithHandle_TestData))]
     public void ScrollableControl_OnPaddingChanged_InvokeWithHandle_CallsPaddingChanged(bool resizeRedraw, EventArgs eventArgs)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1527,11 +1527,11 @@ public class ScrollableControlTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void ScrollableControl_OnPaintBackground_Invoke_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             HScroll = hScroll,
             VScroll = vScroll
@@ -1674,11 +1674,11 @@ public class ScrollableControlTests
     [MemberData(nameof(OnPaintBackground_VisualStyles_on_WithParent_TestData))]
     public void ScrollableControl_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             Bounds = new Rectangle(1, 2, 10, 20),
             Parent = parent,
@@ -1726,11 +1726,11 @@ public class ScrollableControlTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void ScrollableControl_OnPaintBackground_InvokeWithHandle_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             HScroll = hScroll,
             VScroll = vScroll
@@ -1814,15 +1814,15 @@ public class ScrollableControlTests
     [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
     public void ScrollableControl_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var parent = new Control
+        using Control parent = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             Bounds = new Rectangle(1, 2, 10, 20),
             Parent = parent,
@@ -1882,7 +1882,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
     }
 
@@ -1890,7 +1890,7 @@ public class ScrollableControlTests
     [NewAndDefaultData<EventArgs>]
     public void ScrollableControl_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -1926,7 +1926,7 @@ public class ScrollableControlTests
     [NewAndDefaultData<EventArgs>]
     public void ScrollableControl_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1993,7 +1993,7 @@ public class ScrollableControlTests
     [MemberData(nameof(OnScroll_TestData))]
     public void ScrollableControl_OnScroll_Invoke_CallsScroll(ScrollEventArgs eventArgs)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         int callCount = 0;
         ScrollEventHandler handler = (sender, e) =>
         {
@@ -2019,7 +2019,7 @@ public class ScrollableControlTests
     [MemberData(nameof(OnScroll_TestData))]
     public void ScrollableControl_OnScroll_InvokeWithHandle_CallsScroll(ScrollEventArgs eventArgs)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2058,7 +2058,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_Scale_InvokeWithoutPaddingWithDockPadding_Success()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Equal(0, control.DockPadding.Left);
         Assert.Equal(0, control.DockPadding.Top);
         Assert.Equal(0, control.DockPadding.Right);
@@ -2075,7 +2075,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_Scale_InvokeWithoutPaddingWithoutDockPadding_Success()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         control.Scale(10, 20);
         Assert.Equal(0, control.DockPadding.Left);
         Assert.Equal(0, control.DockPadding.Top);
@@ -2087,7 +2087,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_Scale_InvokeWithPaddingWithDockPadding_Success()
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
@@ -2102,7 +2102,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_Scale_InvokeWithPaddingWithoutDockPadding_Success()
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
@@ -2121,7 +2121,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_ScaleCore_InvokeWithoutPaddingWithDockPadding_Success()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.Equal(0, control.DockPadding.Left);
         Assert.Equal(0, control.DockPadding.Top);
         Assert.Equal(0, control.DockPadding.Right);
@@ -2138,7 +2138,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_ScaleCore_InvokeWithoutPaddingWithoutDockPadding_Success()
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         control.ScaleCore(10, 20);
         Assert.Equal(0, control.DockPadding.Left);
         Assert.Equal(0, control.DockPadding.Top);
@@ -2150,7 +2150,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_ScaleCore_InvokeWithPaddingWithDockPadding_Success()
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
@@ -2165,7 +2165,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_ScaleCore_InvokeWithPaddingWithoutDockPadding_Success()
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
@@ -2185,7 +2185,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_ScaleControl_InvokeWithDockPadding_Success()
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
@@ -2205,7 +2205,7 @@ public class ScrollableControlTests
     [WinFormsFact]
     public void ScrollableControl_ScaleControl_InvokeWithoutDockPadding_Success()
     {
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         control.Scale(new SizeF(10, 20));
         Assert.Equal(0, control.DockPadding.Left);
         Assert.Equal(0, control.DockPadding.Top);
@@ -2232,7 +2232,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetAutoScrollMargin_TestData))]
     public void ScrollableControl_SetAutoScrollMargin_Invoke_Success(bool autoScroll, int width, int height, Size expectedAutoScrollMargin, int expectedLayoutCallCount)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -2256,7 +2256,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetAutoScrollMargin_TestData))]
     public void ScrollableControl_SetAutoScrollMargin_InvokeWithHandle_Success(bool autoScroll, int width, int height, Size expectedAutoScrollMargin, int expectedLayoutCallCount)
     {
-        using var control = new ScrollableControl
+        using ScrollableControl control = new()
         {
             AutoScroll = autoScroll
         };
@@ -2290,8 +2290,8 @@ public class ScrollableControlTests
     {
         const int width = 70;
         const int height = 80;
-        Size scrollableSize = new Size(100, 150);
-        Size nonScrollableSize = new Size(width, height);
+        Size scrollableSize = new(100, 150);
+        Size nonScrollableSize = new(width, height);
 
         yield return new object[] { true, width, height, 0, 0, new Point(0, 0), scrollableSize };
         yield return new object[] { false, width, height, 0, 0, new Point(0, 0), nonScrollableSize };
@@ -2324,7 +2324,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetDisplayRectLocation_TestData))]
     public void ScrollableControl_SetDisplayRectLocation_Invoke_Success(bool autoScroll, int width, int height, int scrollX, int scrollY, Point expectedDisplayRectangleLocation, Size expectedDisplayRectangleSize)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = autoScroll,
             ClientSize = new Size(width, height)
@@ -2336,7 +2336,7 @@ public class ScrollableControlTests
         Assert.Equal(Point.Empty, control.AutoScrollPosition);
 
         // With child.
-        using var child = new LargeControl();
+        using LargeControl child = new();
         control.Controls.Add(child);
         Assert.Equal(child.ExpectedSize, child.Bounds);
 
@@ -2351,8 +2351,8 @@ public class ScrollableControlTests
     {
         const int width = 70;
         const int height = 80;
-        Size scrollableSize = new Size(100, 150);
-        Size nonScrollableSize = new Size(width, height);
+        Size scrollableSize = new(100, 150);
+        Size nonScrollableSize = new(width, height);
 
         yield return new object[] { true, width, height, 0, 0, new Point(0, 0), scrollableSize, 1 };
         yield return new object[] { false, width, height, 0, 0, new Point(0, 0), nonScrollableSize, 0 };
@@ -2385,7 +2385,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetDisplayRectLocation_WithHandle_TestData))]
     public void ScrollableControl_SetDisplayRectLocation_InvokeWithHandle_Success(bool autoScroll, int width, int height, int scrollX, int scrollY, Point expectedDisplayRectangleLocation, Size expectedDisplayRectangleSize, int expectedInvalidatedCallCount)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = autoScroll,
             ClientSize = new Size(width, height)
@@ -2408,7 +2408,7 @@ public class ScrollableControlTests
         Assert.Equal(0, createdCallCount);
 
         // With child.
-        using var child = new LargeControl();
+        using LargeControl child = new();
         control.Controls.Add(child);
         Assert.Equal(child.ExpectedSize, child.Bounds);
 
@@ -2435,7 +2435,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetScrollState_TestData))]
     public void ScrollableControl_SetScrollState_Invoke_GetScrollStateReturnsExpected(int bit, bool value, bool expected)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         control.SetScrollState(bit, value);
         Assert.Equal(expected, control.GetScrollState(bit));
         Assert.False(control.IsHandleCreated);
@@ -2450,7 +2450,7 @@ public class ScrollableControlTests
     [MemberData(nameof(SetScrollState_TestData))]
     public void ScrollableControl_GetScrollState_InvokeWithHandle_GetStyleReturnsExpected(int bit, bool value, bool expected)
     {
-        using var control = new SubScrollableControl();
+        using SubScrollableControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2506,8 +2506,8 @@ public class ScrollableControlTests
 
         foreach (bool hScroll in new bool[] { true, false })
         {
-            var childControl = new SmallControl();
-            var parentControl = new LargeControl();
+            SmallControl childControl = new();
+            LargeControl parentControl = new();
             parentControl.Controls.Add(childControl);
             yield return new object[] { true, true, true, new Size(70, 80), parentControl, new Rectangle(0, 0, 100, 150) };
             yield return new object[] { true, hScroll, true, new Size(70, 80), childControl, new Rectangle(0, 0, 100, 150) };
@@ -2515,8 +2515,8 @@ public class ScrollableControlTests
 
         foreach (bool vScroll in new bool[] { true, false })
         {
-            var childControl = new SmallControl();
-            var parentControl = new LargeControl();
+            SmallControl childControl = new();
+            LargeControl parentControl = new();
             parentControl.Controls.Add(childControl);
             yield return new object[] { true, true, true, new Size(70, 80), parentControl, new Rectangle(0, 0, 100, 150) };
             yield return new object[] { true, true, vScroll, new Size(70, 80), childControl, new Rectangle(0, 0, 100, 150) };
@@ -2527,7 +2527,7 @@ public class ScrollableControlTests
     [MemberData(nameof(ScrollControlIntoView_TestData))]
     public void ScrollableControl_ScrollControlIntoView_Invoke_Success(bool autoScroll, bool hScroll, bool vScroll, Size clientSize, Control activeControl, Rectangle expectedDisplayRectangle)
     {
-        using var control = new SubScrollableControl
+        using SubScrollableControl control = new()
         {
             AutoScroll = autoScroll,
             HScroll = hScroll,

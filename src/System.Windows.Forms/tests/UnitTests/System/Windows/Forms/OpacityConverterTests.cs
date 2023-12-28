@@ -17,7 +17,7 @@ public class OpacityConverterTests
     [InlineData(typeof(string), true)]
     public void OpacityConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Equal(expected, converter.CanConvertFrom(sourceType));
     }
 
@@ -38,7 +38,7 @@ public class OpacityConverterTests
     [MemberData(nameof(ConvertFrom_TestData))]
     public void OpacityConverter_ConvertFrom_String_ReturnsExpected(string value, double expected)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Equal(expected, Assert.IsType<double>(converter.ConvertFrom(value)), 5);
         Assert.Equal(expected, Assert.IsType<double>(converter.ConvertFrom(null, null, value)), 5);
     }
@@ -48,7 +48,7 @@ public class OpacityConverterTests
     [InlineData(null)]
     public void OpacityConverter_ConvertFrom_InvalidValue_ThrowsNotSupportedException(object value)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(value));
     }
 
@@ -64,7 +64,7 @@ public class OpacityConverterTests
     [InlineData("invalid")]
     public void OpacityConverter_ConvertFrom_InvalidString_ThrowsFormatException(string value)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Throws<FormatException>(() => converter.ConvertFrom(value));
     }
 
@@ -76,7 +76,7 @@ public class OpacityConverterTests
     [InlineData(null, false)]
     public void OpacityConverter_CanConvertTo_Invoke_ReturnsExpected(Type destinationType, bool expected)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Equal(expected, converter.CanConvertTo(destinationType));
     }
 
@@ -85,7 +85,7 @@ public class OpacityConverterTests
     [InlineData(0, "0")]
     public void OpacityConverter_ConvertTo_String_ReturnsExpected(object value, string expected)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Equal(expected, converter.ConvertTo(value, typeof(string)));
         Assert.Equal(expected, converter.ConvertTo(null, null, value, typeof(string)));
     }
@@ -93,14 +93,14 @@ public class OpacityConverterTests
     [Fact]
     public void OpacityConverter_ConvertTo_NullDestinationType_ThrowsArgumentNullException()
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(new object(), null));
     }
 
     [Fact]
     public void OpacityConverter_ConvertTo_ValueNotDouble_ThrowsNotSupportedException()
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(1, typeof(InstanceDescriptor)));
     }
 
@@ -110,21 +110,21 @@ public class OpacityConverterTests
     [InlineData(typeof(int))]
     public void OpacityConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(1.1, destinationType));
     }
 
     [Fact]
     public void OpacityConverter_ConverterGetCreateInstanceSupported_Invoke_ReturnsFalse()
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.False(converter.GetCreateInstanceSupported());
     }
 
     [Fact]
     public void OpacityConverter_ConverterGetPropertiesSupported_Invoke_ReturnsFalse()
     {
-        var converter = new OpacityConverter();
+        OpacityConverter converter = new();
         Assert.False(converter.GetPropertiesSupported());
     }
 }

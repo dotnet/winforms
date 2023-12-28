@@ -33,7 +33,7 @@ public class PaperSizeTests
     [Fact]
     public void Ctor_Default()
     {
-        var size = new PaperSize();
+        PaperSize size = new();
         Assert.Equal(PaperKind.Custom, size.Kind);
         Assert.Equal(0, size.Height);
         Assert.Empty(size.PaperName);
@@ -47,7 +47,7 @@ public class PaperSizeTests
     [InlineData("name", 100, 200)]
     public void Ctor_String_Int_Int(string name, int width, int height)
     {
-        var size = new PaperSize(name, width, height);
+        PaperSize size = new(name, width, height);
         Assert.Equal(PaperKind.Custom, size.Kind);
         Assert.Equal(height, size.Height);
         Assert.Equal(name, size.PaperName);
@@ -82,7 +82,7 @@ public class PaperSizeTests
     [MemberData(nameof(Height_Set_TestData))]
     public void Height_Set_GetReturnsExpected(int rawKind, int value)
     {
-        var size = new PaperSize
+        PaperSize size = new()
         {
             RawKind = rawKind,
             Height = value
@@ -109,7 +109,7 @@ public class PaperSizeTests
     [MemberData(nameof(NonCustomRawKind_TestData))]
     public void Height_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
     {
-        var size = new PaperSize("name", 100, 200)
+        PaperSize size = new("name", 100, 200)
         {
             RawKind = rawKind
         };
@@ -130,7 +130,7 @@ public class PaperSizeTests
     [MemberData(nameof(PaperName_Set_TestData))]
     public void PaperName_Set_GetReturnsExpected(int rawKind, string value)
     {
-        var size = new PaperSize
+        PaperSize size = new()
         {
             RawKind = rawKind,
             PaperName = value
@@ -146,7 +146,7 @@ public class PaperSizeTests
     [MemberData(nameof(NonCustomRawKind_TestData))]
     public void PaperName_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
     {
-        var size = new PaperSize("name", 100, 200)
+        PaperSize size = new("name", 100, 200)
         {
             RawKind = rawKind
         };
@@ -164,7 +164,7 @@ public class PaperSizeTests
     [InlineData(int.MinValue, (PaperKind)int.MinValue)]
     public void RawKind_Set_GetReturnsExpected(int value, PaperKind expectedKind)
     {
-        var size = new PaperSize
+        PaperSize size = new()
         {
             RawKind = value
         };
@@ -191,7 +191,7 @@ public class PaperSizeTests
     [MemberData(nameof(Width_Set_TestData))]
     public void Width_Set_GetReturnsExpected(int rawKind, int value)
     {
-        var size = new PaperSize
+        PaperSize size = new()
         {
             RawKind = rawKind,
             Width = value
@@ -207,7 +207,7 @@ public class PaperSizeTests
     [MemberData(nameof(NonCustomRawKind_TestData))]
     public void Width_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
     {
-        var size = new PaperSize("name", 100, 200)
+        PaperSize size = new("name", 100, 200)
         {
             RawKind = rawKind
         };

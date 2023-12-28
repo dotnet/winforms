@@ -148,7 +148,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
             listView.SmallImageList = imageList;
         }
 
-        ListViewItem listViewItem = new ListViewItem("1", 0);
+        ListViewItem listViewItem = new("1", 0);
         listView.Items.Add(listViewItem);
 
         var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;

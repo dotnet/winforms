@@ -24,7 +24,7 @@ public class GetWindowTextTests
         // Use a long string that exceeds the initial buffer size (16).
         string longText = new('X', 50);
 
-        var windowClass = new ChangeWindowTextClass();
+        ChangeWindowTextClass windowClass = new();
         windowClass.Register();
         HWND windowHandle = (HWND)windowClass.CreateWindow(shortText);
 

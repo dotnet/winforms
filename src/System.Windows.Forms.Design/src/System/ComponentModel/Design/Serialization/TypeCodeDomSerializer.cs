@@ -73,7 +73,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
                 Error(manager, string.Format(SR.SerializerTypeAbstract, baseType.FullName), SR.SerializerTypeAbstract);
             }
 
-            ResolveNameEventHandler onResolveName = new ResolveNameEventHandler(OnResolveName);
+            ResolveNameEventHandler onResolveName = new(OnResolveName);
             manager.ResolveName += onResolveName;
             rootObject = manager.CreateInstance(baseType, null, declaration.Name, true);
 
@@ -81,8 +81,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
             int count = declaration.Members.Count;
             _nameTable = new HybridDictionary(count, caseInsensitive);
             _statementTable = new Dictionary<string, OrderedCodeStatementCollection>(count);
-            Dictionary<string, string> names = new Dictionary<string, string>(count);
-            RootContext rootCtx = new RootContext(new CodeThisReferenceExpression(), rootObject);
+            Dictionary<string, string> names = new(count);
+            RootContext rootCtx = new(new CodeThisReferenceExpression(), rootObject);
             manager.Context.Push(rootCtx);
             try
             {
@@ -407,10 +407,10 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
         Trace(TraceLevel.Verbose, "TypeCodeDomSerializer::Serialize");
 
         // As a type serializer we are responsible for creating the type declaration. Other serializers may access this type declaration and add members to it, so we need to place it on the context stack. The serialization process also looks at the root context to see if there is a root component. The root context is also used by the serializers to add statement collections for serialized components.
-        CodeTypeDeclaration docType = new CodeTypeDeclaration(manager.GetName(root)!);
-        CodeThisReferenceExpression thisRef = new CodeThisReferenceExpression();
-        RootContext rootCtx = new RootContext(thisRef, root);
-        StatementContext statementCtx = new StatementContext();
+        CodeTypeDeclaration docType = new(manager.GetName(root)!);
+        CodeThisReferenceExpression thisRef = new();
+        RootContext rootCtx = new(thisRef, root);
+        StatementContext statementCtx = new();
         // Populate the statement context with a list of members we'd like to see statements for
         statementCtx.StatementCollection.Populate(root);
         if (members is not null)
@@ -489,7 +489,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     /// </summary>
     private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection? members, StatementContext statementCtx, CodeTypeDeclaration typeDecl)
     {
-        Dictionary<string, CodeMethodMap> methodMap = new Dictionary<string, CodeMethodMap>();
+        Dictionary<string, CodeMethodMap> methodMap = new();
         // Go through all of our members and root object and fish out matching statement context info for each object.  The statement context will probably contain more objects than our members, because each object that returned a statement collection was placed in the context. That's fine, because for each major component we serialized it pushed its statement collection on the context stack and statements were added there as well, forming a complete graph.
         if (members is not null)
         {

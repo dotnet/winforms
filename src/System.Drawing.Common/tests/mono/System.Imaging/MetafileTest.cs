@@ -43,7 +43,7 @@ public class MetafileTest
     public void Metafile_String()
     {
         string filename = Helpers.GetTestBitmapPath(WmfPlaceable);
-        using (Metafile mf = new Metafile(filename))
+        using (Metafile mf = new(filename))
         using (Metafile clone = (Metafile)mf.Clone())
         {
         }
@@ -93,7 +93,7 @@ public class MetafileTest
     [Fact]
     public void GetMetafileHeader_FromFile_WmfPlaceable()
     {
-        using (Metafile mf = new Metafile(Helpers.GetTestBitmapPath(WmfPlaceable)))
+        using (Metafile mf = new(Helpers.GetTestBitmapPath(WmfPlaceable)))
         {
             MetafileHeader header1 = mf.GetMetafileHeader();
             Check_MetafileHeader_WmfPlaceable(header1);
@@ -110,7 +110,7 @@ public class MetafileTest
     public void GetMetafileHeader_FromFileStream_WmfPlaceable()
     {
         using (FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(WmfPlaceable)))
-        using (Metafile mf = new Metafile(fs))
+        using (Metafile mf = new(fs))
         {
             MetafileHeader header1 = mf.GetMetafileHeader();
             Check_MetafileHeader_WmfPlaceable(header1);
@@ -127,8 +127,8 @@ public class MetafileTest
     public void GetMetafileHeader_FromMemoryStream_WmfPlaceable()
     {
         string filename = Helpers.GetTestBitmapPath(WmfPlaceable);
-        using (MemoryStream ms = new MemoryStream(File.ReadAllBytes(filename)))
-        using (Metafile mf = new Metafile(ms))
+        using (MemoryStream ms = new(File.ReadAllBytes(filename)))
+        using (Metafile mf = new(ms))
         {
             MetafileHeader header1 = mf.GetMetafileHeader();
             Check_MetafileHeader_WmfPlaceable(header1);
@@ -166,7 +166,7 @@ public class MetafileTest
     [Fact]
     public void GetMetafileHeader_FromFile_Emf()
     {
-        using (Metafile mf = new Metafile(Helpers.GetTestBitmapPath(Emf)))
+        using (Metafile mf = new(Helpers.GetTestBitmapPath(Emf)))
         {
             MetafileHeader header1 = mf.GetMetafileHeader();
             Check_MetafileHeader_Emf(header1);
@@ -177,7 +177,7 @@ public class MetafileTest
     public void GetMetafileHeader_FromFileStream_Emf()
     {
         using (FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(Emf)))
-        using (Metafile mf = new Metafile(fs))
+        using (Metafile mf = new(fs))
         {
             MetafileHeader header1 = mf.GetMetafileHeader();
             Check_MetafileHeader_Emf(header1);
@@ -188,8 +188,8 @@ public class MetafileTest
     public void GetMetafileHeader_FromMemoryStream_Emf()
     {
         string filename = Helpers.GetTestBitmapPath(Emf);
-        using (MemoryStream ms = new MemoryStream(File.ReadAllBytes(filename)))
-        using (Metafile mf = new Metafile(ms))
+        using (MemoryStream ms = new(File.ReadAllBytes(filename)))
+        using (Metafile mf = new(ms))
         {
             MetafileHeader header1 = mf.GetMetafileHeader();
             Check_MetafileHeader_Emf(header1);
@@ -226,14 +226,14 @@ public class MetafileFulltrustTest
 
     private void Metafile_IntPtrEmfType(EmfType type)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 IntPtr hdc = g.GetHdc();
                 try
                 {
-                    Metafile mf = new Metafile(hdc, type);
+                    Metafile mf = new(hdc, type);
                     CheckEmptyHeader(mf, type);
                 }
                 finally
@@ -247,13 +247,13 @@ public class MetafileFulltrustTest
     [Fact]
     public void Metafile_IntPtrRectangle_Empty()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr hdc = g.GetHdc();
             try
             {
-                Metafile mf = new Metafile(hdc, new Rectangle());
+                Metafile mf = new(hdc, new Rectangle());
                 CheckEmptyHeader(mf, EmfType.EmfPlusDual);
             }
             finally
@@ -266,13 +266,13 @@ public class MetafileFulltrustTest
     [Fact]
     public void Metafile_IntPtrRectangleF_Empty()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr hdc = g.GetHdc();
             try
             {
-                Metafile mf = new Metafile(hdc, new RectangleF());
+                Metafile mf = new(hdc, new RectangleF());
                 CheckEmptyHeader(mf, EmfType.EmfPlusDual);
             }
             finally
@@ -284,13 +284,13 @@ public class MetafileFulltrustTest
 
     private void Metafile_StreamEmfType(Stream stream, EmfType type)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr hdc = g.GetHdc();
             try
             {
-                Metafile mf = new Metafile(stream, hdc, type);
+                Metafile mf = new(stream, hdc, type);
                 CheckEmptyHeader(mf, type);
             }
             finally
@@ -309,7 +309,7 @@ public class MetafileFulltrustTest
     [Fact]
     public void Metafile_StreamIntPtrEmfType_EmfOnly()
     {
-        using (MemoryStream ms = new MemoryStream())
+        using (MemoryStream ms = new())
         {
             Metafile_StreamEmfType(ms, EmfType.EmfOnly);
         }
@@ -318,7 +318,7 @@ public class MetafileFulltrustTest
     [Fact]
     public void Metafile_StreamIntPtrEmfType_Invalid()
     {
-        using (MemoryStream ms = new MemoryStream())
+        using (MemoryStream ms = new())
         {
             Assert.Throws<ArgumentException>(() => Metafile_StreamEmfType(ms, (EmfType)int.MinValue));
         }
@@ -329,7 +329,7 @@ public class MetafileFulltrustTest
         string name = $"{type}-{(single ? "Single" : "Multiple")}.emf";
         string filename = Path.Combine(Path.GetTempPath(), name);
         Metafile mf;
-        using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb))
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -369,10 +369,10 @@ public class MetafileFulltrustTest
     [Fact]
     public void Measure()
     {
-        Font test_font = new Font(FontFamily.GenericMonospace, 12);
+        Font test_font = new(FontFamily.GenericMonospace, 12);
 
         Metafile mf;
-        using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr hdc = g.GetHdc();
@@ -396,11 +396,11 @@ public class MetafileFulltrustTest
             SizeF size = g.MeasureString(text, test_font);
             Assert.False(size.IsEmpty);
 
-            StringFormat sf = new StringFormat();
+            StringFormat sf = new();
             sf.FormatFlags = StringFormatFlags.NoClip;
             sf.SetMeasurableCharacterRanges(ranges);
 
-            RectangleF rect = new RectangleF(0, 0, size.Width, size.Height);
+            RectangleF rect = new(0, 0, size.Width, size.Height);
             Region[] region = g.MeasureCharacterRanges(text, test_font, rect, sf);
             Assert.Equal(2, region.Length);
 
@@ -414,7 +414,7 @@ public class MetafileFulltrustTest
     public void WorldTransforms()
     {
         Metafile mf;
-        using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb))
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {

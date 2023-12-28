@@ -435,13 +435,13 @@ public partial class Binding
             {
                 if (_propInfo is not null)
                 {
-                    EventHandler handler = new EventHandler(Target_PropertyChanged);
+                    EventHandler handler = new(Target_PropertyChanged);
                     _propInfo.AddValueChanged(BindableComponent, handler);
                 }
 
                 if (_validateInfo is not null)
                 {
-                    CancelEventHandler handler = new CancelEventHandler(Target_Validate);
+                    CancelEventHandler handler = new(Target_Validate);
                     _validateInfo.AddEventHandler(BindableComponent, handler);
                 }
             }
@@ -450,13 +450,13 @@ public partial class Binding
         {
             if (_propInfo is not null)
             {
-                EventHandler handler = new EventHandler(Target_PropertyChanged);
+                EventHandler handler = new(Target_PropertyChanged);
                 _propInfo.RemoveValueChanged(BindableComponent, handler);
             }
 
             if (_validateInfo is not null)
             {
-                CancelEventHandler handler = new CancelEventHandler(Target_Validate);
+                CancelEventHandler handler = new(Target_Validate);
                 _validateInfo.RemoveEventHandler(BindableComponent, handler);
             }
         }

@@ -16,8 +16,8 @@ public class FontCacheTests
             fonts[i] = new Font("Arial", i + 6);
         }
 
-        FontCache cache = new FontCache(softLimit: 4, hardLimit: 8);
-        Random random = new Random();
+        FontCache cache = new(softLimit: 4, hardLimit: 8);
+        Random random = new();
         try
         {
             for (int i = 0; i < 10_000; i++)

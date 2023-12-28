@@ -13,7 +13,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_Ctor_Default()
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -153,7 +153,7 @@ public class MenuStripTests
     [BoolData]
     public void MenuStrip_CanOverflow_Set_GetReturnsExpected(bool value)
     {
-        using var control = new MenuStrip();
+        using MenuStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -180,7 +180,7 @@ public class MenuStripTests
     [InlineData(false, 0)]
     public void MenuStrip_CanOverflow_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount)
     {
-        using var control = new MenuStrip();
+        using MenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -227,7 +227,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_DefaultPadding_GetVisibleGrip_ReturnsExpected()
     {
-        using var control = new SubMenuStrip
+        using SubMenuStrip control = new()
         {
             GripStyle = ToolStripGripStyle.Visible
         };
@@ -239,7 +239,7 @@ public class MenuStripTests
     [InlineData(ToolStripGripStyle.Visible, 1)]
     public void MenuStrip_GripStyle_Set_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
     {
-        using var control = new MenuStrip();
+        using MenuStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -266,7 +266,7 @@ public class MenuStripTests
     [InlineData(ToolStripGripStyle.Visible, 1)]
     public void MenuStrip_GripStyle_SetWithHandle_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
     {
-        using var control = new MenuStrip();
+        using MenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -311,7 +311,7 @@ public class MenuStripTests
     [MemberData(nameof(MdiWindowListItem_Set_TestData))]
     public void MenuStrip_MdiWindowListItem_Set_GetReturnsExpected(ToolStripMenuItem value)
     {
-        using var control = new MenuStrip
+        using MenuStrip control = new()
         {
             MdiWindowListItem = value
         };
@@ -328,7 +328,7 @@ public class MenuStripTests
     [BoolData]
     public void MenuStrip_ShowItemToolTips_Set_GetReturnsExpected(bool value)
     {
-        using var control = new MenuStrip
+        using MenuStrip control = new()
         {
             ShowItemToolTips = value
         };
@@ -351,7 +351,7 @@ public class MenuStripTests
     [BoolData]
     public void MenuStrip_Stretch_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Stretch = value
         };
@@ -373,7 +373,7 @@ public class MenuStripTests
     [BoolData]
     public void MenuStrip_Stretch_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new MenuStrip();
+        using MenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -409,7 +409,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         ToolStrip.ToolStripAccessibleObject instance = Assert.IsAssignableFrom<ToolStrip.ToolStripAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
@@ -421,7 +421,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubMenuStrip
+        using SubMenuStrip control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -446,7 +446,7 @@ public class MenuStripTests
     [MemberData(nameof(CreateDefaultItem_Button_TestData))]
     public void MenuStrip_CreateDefaultItem_InvokeButton_Success(string text, Image image, EventHandler onClick)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         ToolStripMenuItem item = Assert.IsType<ToolStripMenuItem>(control.CreateDefaultItem(text, image, onClick));
         Assert.Equal(text, item.Text);
         Assert.Same(image, item.Image);
@@ -464,7 +464,7 @@ public class MenuStripTests
     [MemberData(nameof(CreateDefaultItem_Separator_TestData))]
     public void MenuStrip_CreateDefaultItem_InvokeSeparator_Success(Image image, EventHandler onClick)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         ToolStripSeparator separator = Assert.IsType<ToolStripSeparator>(control.CreateDefaultItem("-", image, onClick));
         Assert.Empty(separator.Text);
         Assert.Null(separator.Image);
@@ -479,7 +479,7 @@ public class MenuStripTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         ToolStripItem item = Assert.IsAssignableFrom<ToolStripItem>(control.CreateDefaultItem(text, null, onClick));
         item.PerformClick();
         Assert.Equal(expectedCallCount, callCount);
@@ -488,7 +488,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
     }
 
@@ -503,7 +503,7 @@ public class MenuStripTests
     [InlineData((-1), false)]
     public void MenuStrip_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -530,7 +530,7 @@ public class MenuStripTests
     [InlineData((ControlStyles)(-1), false)]
     public void MenuStrip_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -540,7 +540,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -548,7 +548,7 @@ public class MenuStripTests
     [NewAndDefaultData<EventArgs>]
     public void MenuStrip_OnMenuActivate_Invoke_CallsMenuActivate(EventArgs eventArgs)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -574,7 +574,7 @@ public class MenuStripTests
     [NewAndDefaultData<EventArgs>]
     public void MenuStrip_OnMenuActivate_InvokeWithHandle_CallsMenuActivate(EventArgs eventArgs)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -614,7 +614,7 @@ public class MenuStripTests
     [NewAndDefaultData<EventArgs>]
     public void MenuStrip_OnMenuDeactivate_Invoke_CallsMenuDeactivate(EventArgs eventArgs)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -640,7 +640,7 @@ public class MenuStripTests
     [NewAndDefaultData<EventArgs>]
     public void MenuStrip_OnMenuDeactivate_InvokeWithHandle_CallsMenuDeactivate(EventArgs eventArgs)
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -680,8 +680,8 @@ public class MenuStripTests
     [InlineData(Keys.A)]
     public void MenuStirp_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
     {
-        using var control = new SubMenuStrip();
-        var m = new Message();
+        using SubMenuStrip control = new();
+        Message m = new();
         Assert.False(control.ProcessCmdKey(ref m, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -694,12 +694,12 @@ public class MenuStripTests
     [InlineData(Keys.Control & Keys.Tab)]
     public void MenuStirp_ProcessCmdKey_InvokeWithParent_ReturnsFalse(Keys keyData)
     {
-        using var parent = new Control();
-        using var control = new SubMenuStrip
+        using Control parent = new();
+        using SubMenuStrip control = new()
         {
             Parent = parent
         };
-        var msg = new Message();
+        Message msg = new();
         Assert.False(control.ProcessCmdKey(ref msg, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -717,8 +717,8 @@ public class MenuStripTests
     [InlineData(Keys.Control & Keys.Tab, false)]
     public void MenuStirp_ProcessCmdKey_InvokeWithCustomParent_ReturnsExpected(Keys keyData, bool result)
     {
-        using var control = new SubMenuStrip();
-        var msg = new Message
+        using SubMenuStrip control = new();
+        Message msg = new()
         {
             Msg = 1
         };
@@ -731,7 +731,7 @@ public class MenuStripTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessCmdKeyAction = action
         };
@@ -745,8 +745,8 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_WndProc_InvokeMouseActivate_Success()
     {
-        using var control = new SubMenuStrip();
-        var m = new Message
+        using SubMenuStrip control = new();
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
@@ -759,7 +759,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_WndProc_InvokeMouseActivateWithHandle_Success()
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -768,7 +768,7 @@ public class MenuStripTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
@@ -784,7 +784,7 @@ public class MenuStripTests
     [WinFormsFact]
     public void MenuStrip_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubMenuStrip();
+        using SubMenuStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -800,7 +800,7 @@ public class MenuStripTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250

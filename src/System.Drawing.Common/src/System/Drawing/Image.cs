@@ -129,7 +129,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
-        using var stream = new MemoryStream();
+        using MemoryStream stream = new();
 
         Save(stream);
         si.AddValue("Data", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
@@ -713,7 +713,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
             // "size" is total byte size:
             // sizeof(ColorPalette) + (pal->Count-1)*sizeof(ARGB)
 
-            ColorPalette palette = new ColorPalette(size);
+            ColorPalette palette = new(size);
 
             // Memory layout is:
             //    UINT Flags
@@ -841,7 +841,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
     {
         fixed (byte *propItemValue = propitem.Value)
         {
-            var propItemInternal = new PropertyItemInternal
+            PropertyItemInternal propItemInternal = new()
             {
                 id = propitem.Id,
                 len = propitem.Len,

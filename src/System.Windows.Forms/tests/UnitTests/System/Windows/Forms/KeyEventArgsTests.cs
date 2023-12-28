@@ -21,7 +21,7 @@ public class KeyEventArgsTests
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift | (Keys)(0x5D))]
     public void Ctor_Keys(Keys keyData)
     {
-        var e = new KeyEventArgs(keyData);
+        KeyEventArgs e = new(keyData);
         Assert.Equal(keyData, e.KeyData);
         Assert.Equal((keyData & Keys.Control) == Keys.Control, e.Control);
         Assert.Equal((keyData & Keys.Alt) == Keys.Alt, e.Alt);
@@ -46,7 +46,7 @@ public class KeyEventArgsTests
     [InlineData(false)]
     public void Handled_Set_GetReturnsExpected(bool value)
     {
-        var e = new KeyEventArgs(Keys.A)
+        KeyEventArgs e = new(Keys.A)
         {
             SuppressKeyPress = !value,
             Handled = value
@@ -60,7 +60,7 @@ public class KeyEventArgsTests
     [InlineData(false)]
     public void SuppressKeyPress_Set_GetReturnsExpected(bool value)
     {
-        var e = new KeyEventArgs(Keys.A)
+        KeyEventArgs e = new(Keys.A)
         {
             Handled = !value,
             SuppressKeyPress = value

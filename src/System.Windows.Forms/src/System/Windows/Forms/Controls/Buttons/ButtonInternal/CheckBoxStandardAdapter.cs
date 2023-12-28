@@ -89,14 +89,14 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonStandardAdapter adapter = new ButtonStandardAdapter(Control);
+            ButtonStandardAdapter adapter = new(Control);
             return adapter.GetPreferredSizeCore(proposedSize);
         }
         else
         {
             LayoutOptions? options = default;
             using (var screen = GdiCache.GetScreenHdc())
-            using (PaintEventArgs pe = new PaintEventArgs(screen, clipRect: default))
+            using (PaintEventArgs pe = new(screen, clipRect: default))
             {
                 options = Layout(pe);
             }

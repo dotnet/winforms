@@ -11,7 +11,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
     [WinFormsFact]
     public void DataGridViewComboBoxEditingControlAccessibleObject_Ctor_Default()
     {
-        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        using DataGridViewComboBoxEditingControl control = new();
 
         DataGridViewComboBoxEditingControlAccessibleObject accessibleObject =
             new DataGridViewComboBoxEditingControlAccessibleObject(control);
@@ -25,7 +25,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void DataGridViewComboBoxEditingControlAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        using DataGridViewComboBoxEditingControl control = new();
         // AccessibleRole is not set = Default
 
         if (createControl)
@@ -42,7 +42,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
     [WinFormsFact]
     public void DataGridViewComboBoxEditingControlAccessibleObject_ControlType_IsComboBox_IfAccessibleRoleIsDefault()
     {
-        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        using DataGridViewComboBoxEditingControl control = new();
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -70,7 +70,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
     [MemberData(nameof(DataGridViewComboBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void DataGridViewComboBoxEditingControlAccessibleObjectTest_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        using DataGridViewComboBoxEditingControl control = new();
         control.AccessibleRole = role;
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

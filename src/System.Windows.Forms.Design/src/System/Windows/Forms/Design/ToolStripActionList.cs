@@ -148,7 +148,7 @@ internal class ToolStripActionList : DesignerActionList
     /// </summary>
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        DesignerActionItemCollection items = new();
         if (!IsReadOnly)
         {
             items.Add(new DesignerActionMethodItem(this, "InvokeEmbedVerb", SR.ToolStripDesignerEmbedVerb, "", SR.ToolStripDesignerEmbedVerbDesc, true));

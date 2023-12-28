@@ -161,7 +161,7 @@ public class AnchorLayoutTests : ControlTestBase
         (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
         try
         {
-            using var container = new ContainerControl();
+            using ContainerControl container = new();
             container.Dock = DockStyle.Fill;
             container.SuspendLayout();
             container.Controls.Add(button);
@@ -192,7 +192,7 @@ public class AnchorLayoutTests : ControlTestBase
         (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
         try
         {
-            using var container = new ContainerControl();
+            using ContainerControl container = new();
             container.Dock = DockStyle.Fill;
             container.SuspendLayout();
             container.Controls.Add(button);

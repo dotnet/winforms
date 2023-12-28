@@ -10,8 +10,8 @@ public class StartupEventArgsTests
     [Fact]
     public void Ctor_ReadOnlyCollection()
     {
-        var collection = new ReadOnlyCollection<string>(new string[] { "a" });
-        var args = new StartupEventArgs(collection);
+        ReadOnlyCollection<string> collection = new(new string[] { "a" });
+        StartupEventArgs args = new(collection);
         Assert.Same(collection, args.CommandLine);
     }
 

@@ -166,7 +166,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
                 InitialDragPoint = DetermineInitialDragPoint(mouseLoc);
             }
 
-            Size delta = new Size(Math.Abs(mouseLoc.X - InitialDragPoint.X), Math.Abs(mouseLoc.Y - InitialDragPoint.Y));
+            Size delta = new(Math.Abs(mouseLoc.X - InitialDragPoint.X), Math.Abs(mouseLoc.Y - InitialDragPoint.Y));
             if (delta.Width >= DesignerUtils.MinDragSize.Width / 2 || delta.Height >= DesignerUtils.MinDragSize.Height / 2)
             {
                 // start our drag!
@@ -239,7 +239,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
                 controlOrigin = initialMouseLocation;
             }
 
-            DropSourceBehavior dsb = new DropSourceBehavior(dragControls, _containerControl.Parent, controlOrigin);
+            DropSourceBehavior dsb = new(dragControls, _containerControl.Parent, controlOrigin);
             try
             {
                 _behaviorService.DoDragDrop(dsb);

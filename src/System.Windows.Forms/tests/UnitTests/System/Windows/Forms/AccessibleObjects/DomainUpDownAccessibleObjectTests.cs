@@ -11,7 +11,7 @@ public class DomainUpDownAccessibleObjectTests
     [WinFormsFact]
     public void DomainUpDownAccessibleObject_Ctor_Default()
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
         Assert.NotNull(accessibleObject);
         Assert.False(domainUpDown.IsHandleCreated);
@@ -20,7 +20,7 @@ public class DomainUpDownAccessibleObjectTests
     [WinFormsFact]
     public void DomainUpDownAccessibleObject_ControlType_IsSpinner_IfAccessibleRoleIsDefault()
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -32,7 +32,7 @@ public class DomainUpDownAccessibleObjectTests
     [WinFormsFact]
     public void DomainUpDownAccessibleObject_Role_IsSpinButton_ByDefault()
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = domainUpDown.AccessibilityObject.Role;
@@ -44,7 +44,7 @@ public class DomainUpDownAccessibleObjectTests
     [WinFormsFact]
     public void DomainUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_ReturnsTrue()
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
 
         bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId);
@@ -54,7 +54,7 @@ public class DomainUpDownAccessibleObjectTests
     [WinFormsFact]
     public void DomainUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_WhenDisabled_ReturnsFalse()
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
 
         domainUpDown.Enabled = false;
@@ -82,7 +82,7 @@ public class DomainUpDownAccessibleObjectTests
     [MemberData(nameof(DomainUpDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void DomainUpDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         domainUpDown.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -98,7 +98,7 @@ public class DomainUpDownAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void DomainUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
-        using DomainUpDown domainUpDown = new DomainUpDown();
+        using DomainUpDown domainUpDown = new();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
         VARIANT actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
         if (expected is null)

@@ -275,7 +275,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
                 }
                 else
                 {
-                    MemoryStream memoryStream = new MemoryStream();
+                    MemoryStream memoryStream = new();
                     using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(memoryStream));
                     psi.Save(pStream, fClearDirty: false);
                     return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
@@ -324,8 +324,8 @@ public unsafe partial class WebBrowser : WebBrowserBase
 
             // string length is a good initial guess for capacity --
             // if it needs more room, it'll take it.
-            MemoryStream ms = new MemoryStream(value.Length);
-            StreamWriter sw = new StreamWriter(ms, Encoding.UTF8);
+            MemoryStream ms = new(value.Length);
+            StreamWriter sw = new(ms, Encoding.UTF8);
             sw.Write(value);
             sw.Flush();
             ms.Position = 0;

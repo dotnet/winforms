@@ -697,7 +697,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         }
 
         // Create a new instance of a tray control.
-        TrayControl trayctl = new TrayControl(this, component);
+        TrayControl trayctl = new(this, component);
         SuspendLayout();
         try
         {
@@ -1448,7 +1448,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                             c.BackColor = SystemColors.Highlight;
                         }
 
-                        NoResizeHandleGlyph glyph = new NoResizeHandleGlyph(innerRect, SelectionRules.None, first, null);
+                        NoResizeHandleGlyph glyph = new(innerRect, SelectionRules.None, first, null);
                         gr.FillRectangle(selectionBorderBrush, DesignerUtils.GetBoundsForNoResizeSelectionType(innerRect, SelectionBorderGlyphType.Top));
                         gr.FillRectangle(selectionBorderBrush, DesignerUtils.GetBoundsForNoResizeSelectionType(innerRect, SelectionBorderGlyphType.Bottom));
                         gr.FillRectangle(selectionBorderBrush, DesignerUtils.GetBoundsForNoResizeSelectionType(innerRect, SelectionBorderGlyphType.Left));
@@ -1815,7 +1815,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         if (prevCtl is null)
         {
             Rectangle display = DisplayRectangle;
-            Point newLoc = new Point(display.X + whiteSpace.X, display.Y + whiteSpace.Y);
+            Point newLoc = new(display.X + whiteSpace.X, display.Y + whiteSpace.Y);
             if (!c.Location.Equals(newLoc))
             {
                 c.Location = newLoc;
@@ -1843,7 +1843,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         {
             // Calculate the next location for this control.
             Rectangle bounds = prevCtl.Bounds;
-            Point newLoc = new Point(bounds.X + bounds.Width + whiteSpace.X, bounds.Y);
+            Point newLoc = new(bounds.X + bounds.Width + whiteSpace.X, bounds.Y);
 
             // Check to see if it goes over the edge of our window.  If it does, then wrap it.
             if (newLoc.X + c.Size.Width > Size.Width)
@@ -2261,7 +2261,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             rc.Y += _borderWidth;
             rc.Width -= (2 * _borderWidth + WhiteSpace);
             rc.Height -= 2 * _borderWidth;
-            StringFormat format = new StringFormat();
+            StringFormat format = new();
             Brush foreBrush = new SolidBrush(ForeColor);
             try
             {
@@ -2624,7 +2624,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         /// </summary>
         public GlyphCollection GetGlyphsForComponent(IComponent comp)
         {
-            GlyphCollection glyphs = new GlyphCollection();
+            GlyphCollection glyphs = new();
             if (_behaviorSvc is not null && comp is not null)
             {
                 if (_behaviorSvc.DesignerActionUI is not null)

@@ -10,7 +10,7 @@ public class PrinterResolutionTests
     [Fact]
     public void Ctor_Default()
     {
-        var resolution = new PrinterResolution();
+        PrinterResolution resolution = new();
         Assert.Equal(PrinterResolutionKind.Custom, resolution.Kind);
         Assert.Equal(0, resolution.X);
         Assert.Equal(0, resolution.Y);
@@ -24,7 +24,7 @@ public class PrinterResolutionTests
     [InlineData(int.MinValue)]
     public void X_Value_ReturnsExpected(int value)
     {
-        var resolution = new PrinterResolution
+        PrinterResolution resolution = new()
         {
             X = value
         };
@@ -43,7 +43,7 @@ public class PrinterResolutionTests
     [InlineData(int.MinValue)]
     public void Y_Value_ReturnsExpected(int value)
     {
-        var resolution = new PrinterResolution
+        PrinterResolution resolution = new()
         {
             Y = value
         };
@@ -62,7 +62,7 @@ public class PrinterResolutionTests
     [InlineData(PrinterResolutionKind.Medium)]
     public void Kind_Set_GetReturnsExpected(PrinterResolutionKind value)
     {
-        var resolution = new PrinterResolution
+        PrinterResolution resolution = new()
         {
             Kind = value
         };
@@ -78,7 +78,7 @@ public class PrinterResolutionTests
     [InlineData(PrinterResolutionKind.High - 1)]
     public void Kind_SetInvalid_ThrowsInvalidEnumArgumentException(PrinterResolutionKind value)
     {
-        var resolution = new PrinterResolution();
+        PrinterResolution resolution = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => resolution.Kind = value);
     }
 

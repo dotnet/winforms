@@ -12,7 +12,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_Ctor_Default()
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         Assert.Null(control.ActiveControl);
         Assert.False(control.AllowDrop);
         Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -141,7 +141,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -173,7 +173,7 @@ public class DomainUpDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void DomainUpDown_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new DomainUpDown
+        using DomainUpDown control = new()
         {
             Padding = value
         };
@@ -190,7 +190,7 @@ public class DomainUpDownTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void DomainUpDown_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -218,7 +218,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -229,7 +229,7 @@ public class DomainUpDownTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -240,7 +240,7 @@ public class DomainUpDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -255,7 +255,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_SelectedIndex_SetEmpty_Nop()
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             SelectedIndex = -1
         };
@@ -282,7 +282,7 @@ public class DomainUpDownTests
     [InlineData(-1, null, "", false)]
     public void DomainUpDown_SelectedIndex_SetNotEmpty_GetReturnsExpected(int value, object expected, string expectedText, bool expectedUserEdit)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item2");
 
@@ -319,7 +319,7 @@ public class DomainUpDownTests
     [InlineData(-1, null, "", false)]
     public void DomainUpDown_SelectedIndex_SetUserEdit_GetReturnsExpected(int value, object expected, string expectedText, bool expectedUserEdit)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = true
         };
@@ -356,7 +356,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_SelectedIndex_SetWithHandler_CallsSelectedItemChanged()
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item2");
 
@@ -417,7 +417,7 @@ public class DomainUpDownTests
     [InlineData(1)]
     public void DomainUpDown_SelectedIndex_SetInvalidValueEmpty_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectedIndex = value);
     }
 
@@ -427,7 +427,7 @@ public class DomainUpDownTests
     [InlineData(2)]
     public void DomainUpDown_SelectedIndex_SetInvalidValueNotEmpty_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         control.Items.Add("Item");
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectedIndex = value);
     }
@@ -437,7 +437,7 @@ public class DomainUpDownTests
     [InlineData("NoSuchItem")]
     public void DomainUpDown_SelectedItem_SetEmpty_Nop(object value)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             SelectedItem = value
         };
@@ -465,7 +465,7 @@ public class DomainUpDownTests
     [InlineData(null, -1, null, "", false)]
     public void DomainUpDown_SelectedItem_SetNotEmpty_GetReturnsExpected(object value, int expectedSelectedIndex, object expected, string expectedText, bool expectedUserEdit)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item2");
 
@@ -512,7 +512,7 @@ public class DomainUpDownTests
     [InlineData(null, -1, null, "", false)]
     public void DomainUpDown_SelectedItem_SetUserEdit_GetReturnsExpected(object value, int expectedSelectedIndex, object expected, string expectedText, bool expectedUserEdit)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = true
         };
@@ -558,7 +558,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_SelectedItem_SetWithHandler_CallsSelectedItemChanged()
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item2");
 
@@ -626,7 +626,7 @@ public class DomainUpDownTests
     [MemberData(nameof(Sorted_Set_TestData))]
     public void DomainUpDown_Sorted_Set_GetReturnsExpected(bool userEdit, bool value)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Sorted = value
@@ -667,7 +667,7 @@ public class DomainUpDownTests
     [MemberData(nameof(Sorted_WithItems_TestData))]
     public void DomainUpDown_Sorted_SetWithItems_GetReturnsExpected(bool userEdit, bool value, string[] expectedItems)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("c");
         control.Items.Add("B");
         control.Items.Add("a");
@@ -710,7 +710,7 @@ public class DomainUpDownTests
     [MemberData(nameof(Sorted_WithItemsWithSelection_TestData))]
     public void DomainUpDown_Sorted_SetWithItemsWithSelection_GetReturnsExpected(bool userEdit, bool value, string[] expectedItems, int expectedSelectedIndex)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("c");
         control.Items.Add("B");
         control.Items.Add("a");
@@ -746,7 +746,7 @@ public class DomainUpDownTests
     [MemberData(nameof(Sorted_Set_TestData))]
     public void DomainUpDown_Sorted_SetWithHandle_GetReturnsExpected(bool userEdit, bool value)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit
         };
@@ -795,7 +795,7 @@ public class DomainUpDownTests
     [MemberData(nameof(Sorted_WithItems_TestData))]
     public void DomainUpDown_Sorted_SetWithItemsWithHandle_GetReturnsExpected(bool userEdit, bool value, string[] expectedItems)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("c");
         control.Items.Add("B");
         control.Items.Add("a");
@@ -846,7 +846,7 @@ public class DomainUpDownTests
     [MemberData(nameof(Sorted_WithItemsWithSelection_TestData))]
     public void DomainUpDown_Sorted_SetWithItemsWithSelectionWithHandle_GetReturnsExpected(bool userEdit, bool value, string[] expectedItems, int expectedSelectedIndex)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("c");
         control.Items.Add("B");
         control.Items.Add("a");
@@ -898,7 +898,7 @@ public class DomainUpDownTests
     [BoolData]
     public void DomainUpDown_Wrap_Set_GetReturnsExpected(bool value)
     {
-        using var control = new DomainUpDown
+        using DomainUpDown control = new()
         {
             Wrap = value
         };
@@ -920,7 +920,7 @@ public class DomainUpDownTests
     [BoolData]
     public void DomainUpDown_Wrap_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -956,7 +956,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
@@ -968,7 +968,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -995,7 +995,7 @@ public class DomainUpDownTests
     [MemberData(nameof(DownButton_TestData))]
     public void DomainUpDown_DownButton_InvokeWithoutItems_Nop(bool userEdit, bool wrap)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Wrap = wrap
@@ -1015,7 +1015,7 @@ public class DomainUpDownTests
     [MemberData(nameof(DownButton_TestData))]
     public void DomainUpDown_DownButton_InvokeEmpty_Nop(bool userEdit, bool wrap)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Wrap = wrap
@@ -1044,7 +1044,7 @@ public class DomainUpDownTests
     [MemberData(nameof(DownButton_WithItems_TestData))]
     public void DomainUpDown_DownButton_InvokeWithItems_Nop(bool userEdit, bool wrap, int expectedWrapSelectedIndex)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Wrap = wrap
@@ -1076,7 +1076,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1091,7 +1091,7 @@ public class DomainUpDownTests
     [InlineData((-1), false)]
     public void DomainUpDown_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -1118,7 +1118,7 @@ public class DomainUpDownTests
     [InlineData((ControlStyles)(-1), false)]
     public void DomainUpDown_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1128,7 +1128,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1148,7 +1148,7 @@ public class DomainUpDownTests
     [InlineData("", 0, -1)]
     public void DomainUpDown_MatchIndex(string text, int start, int expected)
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         control.Items.Add("foo1");
         control.Items.Add("foo2");
         control.Items.Add("foo3");
@@ -1160,7 +1160,7 @@ public class DomainUpDownTests
     [WinFormsFact]
     public void DomainUpDown_MatchIndex_NullText_ThrowsNullReferenceException()
     {
-        using var control = new DomainUpDown();
+        using DomainUpDown control = new();
         control.Items.Add("item1");
         Assert.Throws<NullReferenceException>(() => control.MatchIndex(null, false, 0));
     }
@@ -1175,7 +1175,7 @@ public class DomainUpDownTests
     [MemberData(nameof(OnChanged_TestData))]
     public void DomainUpDown_OnChanged_Invoke_CallsSelectedItemChanged(object source, EventArgs eventArgs)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1199,7 +1199,7 @@ public class DomainUpDownTests
     [MemberData(nameof(OnChanged_TestData))]
     public void DomainUpDown_OnSelectedItemChanged_Invoke_CallsSelectedItemChanged(object source, EventArgs eventArgs)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1234,7 +1234,7 @@ public class DomainUpDownTests
     [MemberData(nameof(UpButton_TestData))]
     public void DomainUpDown_UpButton_InvokeWithoutItems_Nop(bool userEdit, bool wrap)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Wrap = wrap
@@ -1254,7 +1254,7 @@ public class DomainUpDownTests
     [MemberData(nameof(UpButton_TestData))]
     public void DomainUpDown_UpButton_InvokeEmpty_Nop(bool userEdit, bool wrap)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Wrap = wrap
@@ -1283,7 +1283,7 @@ public class DomainUpDownTests
     [MemberData(nameof(UpButton_WithItems_TestData))]
     public void DomainUpDown_UpButton_InvokeWithItems_Nop(bool userEdit, bool wrap, int expectedWrapSelectedIndex1, int expectedWrapSelectedIndex2)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             Wrap = wrap
@@ -1320,7 +1320,7 @@ public class DomainUpDownTests
     [InlineData(false, false)]
     public void DomainUpDown_UpdateEditText_InvokeEmpty_Success(bool userEdit, bool changingText)
     {
-        using var control = new SubDomainUpDown
+        using SubDomainUpDown control = new()
         {
             UserEdit = userEdit,
             ChangingText = changingText
@@ -1346,7 +1346,7 @@ public class DomainUpDownTests
     [InlineData(false, false)]
     public void DomainUpDown_UpdateEditText_InvokeNotEmpty_Success(bool userEdit, bool changingText)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item2");
         control.UserEdit = userEdit;
@@ -1373,7 +1373,7 @@ public class DomainUpDownTests
     [InlineData(false, false)]
     public void DomainUpDown_UpdateEditText_InvokeNotEmptyWithSelection_Success(bool userEdit, bool changingText)
     {
-        using var control = new SubDomainUpDown();
+        using SubDomainUpDown control = new();
         control.Items.Add("Item1");
         control.Items.Add("Item2");
         control.SelectedIndex = 0;

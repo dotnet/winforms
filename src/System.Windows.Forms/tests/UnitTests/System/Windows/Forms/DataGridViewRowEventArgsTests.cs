@@ -9,8 +9,8 @@ public class DataGridViewRowEventArgsTests
     [Fact]
     public void Ctor_DataGridViewRow()
     {
-        using var dataGridViewRow = new DataGridViewRow();
-        var e = new DataGridViewRowEventArgs(dataGridViewRow);
+        using DataGridViewRow dataGridViewRow = new();
+        DataGridViewRowEventArgs e = new(dataGridViewRow);
         Assert.Equal(dataGridViewRow, e.Row);
     }
 

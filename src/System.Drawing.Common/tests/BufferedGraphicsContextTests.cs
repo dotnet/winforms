@@ -10,7 +10,7 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Ctor_Default()
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         {
             Assert.Equal(new Size(225, 96), context.MaximumBuffer);
         }
@@ -19,8 +19,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_ValidTargetGraphics_Success()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         using (BufferedGraphics bufferedGraphics = context.Allocate(graphics, Rectangle.Empty))
         {
@@ -33,8 +33,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_SmallRectWithTargetGraphics_Success()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         using (BufferedGraphics bufferedGraphics = context.Allocate(graphics, new Rectangle(0, 0, context.MaximumBuffer.Width - 1, context.MaximumBuffer.Height - 1)))
         {
@@ -47,8 +47,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_LargeRectWithTargetGraphics_Success()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         using (BufferedGraphics bufferedGraphics = context.Allocate(graphics, new Rectangle(0, 0, context.MaximumBuffer.Width + 1, context.MaximumBuffer.Height + 1)))
         {
@@ -61,8 +61,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_ValidTargetHdc_Success()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             try
@@ -85,8 +85,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_SmallRectWithTargetHdc_Success()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             try
@@ -109,8 +109,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_LargeRectWithTargetHdc_Success()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             try
@@ -133,7 +133,7 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_InvalidHdc_ThrowsArgumentException()
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => context.Allocate((IntPtr)(-1), new Rectangle(0, 0, 10, 10)));
         }
@@ -142,7 +142,7 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_NullGraphicsZeroSize_Success()
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         using (BufferedGraphics graphics = context.Allocate(null, Rectangle.Empty))
         {
             Assert.NotNull(graphics.Graphics);
@@ -152,8 +152,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_NullGraphicsNonZeroSize_ThrowsArgumentNullException()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         {
             Assert.Throws<ArgumentNullException>("hdc", () => context.Allocate(null, new Rectangle(0, 0, 10, 10)));
         }
@@ -162,13 +162,13 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_DisposedGraphics_ThrowsArgumentException()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
 
-            Rectangle largeRectangle = new Rectangle(0, 0, context.MaximumBuffer.Width + 1, context.MaximumBuffer.Height + 1);
+            Rectangle largeRectangle = new(0, 0, context.MaximumBuffer.Width + 1, context.MaximumBuffer.Height + 1);
             AssertExtensions.Throws<ArgumentException>(null, () => context.Allocate(graphics, largeRectangle));
             AssertExtensions.Throws<ArgumentException>(null, () => context.Allocate(graphics, Rectangle.Empty));
         }
@@ -177,15 +177,15 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Allocate_BusyGraphics_ThrowsInvalidOperationException()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             try
             {
                 graphics.GetHdc();
 
-                Rectangle largeRectangle = new Rectangle(0, 0, context.MaximumBuffer.Width + 1, context.MaximumBuffer.Height + 1);
+                Rectangle largeRectangle = new(0, 0, context.MaximumBuffer.Width + 1, context.MaximumBuffer.Height + 1);
                 Assert.Throws<InvalidOperationException>(() => context.Allocate(graphics, largeRectangle));
                 Assert.Throws<InvalidOperationException>(() => context.Allocate(graphics, Rectangle.Empty));
             }
@@ -199,7 +199,7 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Invalidate_CallMultipleTimes_Success()
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         {
             context.Invalidate();
             context.Invalidate();
@@ -209,7 +209,7 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void MaximumBuffer_SetValid_ReturnsExpected()
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         {
             context.MaximumBuffer = new Size(10, 10);
             Assert.Equal(new Size(10, 10), context.MaximumBuffer);
@@ -224,7 +224,7 @@ public class BufferedGraphicsContextTests
     [InlineData(-1)]
     public void MaximumBuffer_SetInvalidWidth_ThrowsArgumentException(int width)
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         {
             AssertExtensions.Throws<ArgumentException>("value", null, () => context.MaximumBuffer = new Size(width, 1));
         }
@@ -235,7 +235,7 @@ public class BufferedGraphicsContextTests
     [InlineData(-1)]
     public void MaximumBuffer_SetInvalidHeight_ThrowsArgumentException(int height)
     {
-        using (var context = new BufferedGraphicsContext())
+        using (BufferedGraphicsContext context = new())
         {
             AssertExtensions.Throws<ArgumentException>("value", null, () => context.MaximumBuffer = new Size(1, height));
         }
@@ -257,8 +257,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Dispose_BusyAndValidated_ThrowsInvalidOperationException()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             using (context.Allocate(graphics, Rectangle.Empty))
@@ -271,8 +271,8 @@ public class BufferedGraphicsContextTests
     [Fact]
     public void Dispose_BusyAndInvalidated_ThrowsInvalidOperationException()
     {
-        using (var context = new BufferedGraphicsContext())
-        using (var image = new Bitmap(10, 10))
+        using (BufferedGraphicsContext context = new())
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             using (context.Allocate(graphics, Rectangle.Empty))

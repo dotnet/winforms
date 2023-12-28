@@ -32,7 +32,7 @@ public class MarginsTests
     [Fact]
     public void Ctor_Default()
     {
-        var margins = new Margins();
+        Margins margins = new();
         Assert.Equal(100, margins.Left);
         Assert.Equal(100, margins.Top);
         Assert.Equal(100, margins.Right);
@@ -45,7 +45,7 @@ public class MarginsTests
     [InlineData(0, 0, 0, 0)]
     public void Ctor_Bounds(int left, int right, int top, int bottom)
     {
-        var margins = new Margins(left, right, top, bottom);
+        Margins margins = new(left, right, top, bottom);
         Assert.Equal(left, margins.Left);
         Assert.Equal(right, margins.Right);
         Assert.Equal(top, margins.Top);
@@ -78,7 +78,7 @@ public class MarginsTests
 
     public static IEnumerable<object[]> Equals_Object_TestData()
     {
-        var margins = new Margins(1, 2, 3, 4);
+        Margins margins = new(1, 2, 3, 4);
         yield return new object[] { margins, margins, true };
         yield return new object[] { margins, new Margins(1, 2, 3, 4), true };
         yield return new object[] { margins, new Margins(2, 2, 3, 4), false };
@@ -103,7 +103,7 @@ public class MarginsTests
 
     public static IEnumerable<object[]> Equals_Margin_TestData()
     {
-        var margins = new Margins(1, 2, 3, 4);
+        Margins margins = new(1, 2, 3, 4);
         yield return new object[] { margins, margins, true };
         yield return new object[] { margins, new Margins(1, 2, 3, 4), true };
         yield return new object[] { margins, new Margins(2, 2, 3, 4), false };
@@ -140,7 +140,7 @@ public class MarginsTests
     [Fact]
     public void Clone_Invoke_ReturnsExpected()
     {
-        var margins = new Margins(1, 2, 3, 4);
+        Margins margins = new(1, 2, 3, 4);
         Margins clonedMargins = Assert.IsType<Margins>(margins.Clone());
         Assert.NotSame(margins, clonedMargins);
         Assert.Equal(1, clonedMargins.Left);
@@ -160,7 +160,7 @@ public class MarginsTests
     [MemberData(nameof(Bounds_Set_TestData))]
     public void Left_Set_GetReturnsExpected(int value)
     {
-        var margins = new Margins
+        Margins margins = new()
         {
             Left = value
         };
@@ -174,7 +174,7 @@ public class MarginsTests
     [Fact]
     public void Left_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        var margins = new Margins();
+        Margins margins = new();
         AssertExtensions.Throws<ArgumentOutOfRangeException, ArgumentException>("value", null, () => margins.Left = -1);
     }
 
@@ -182,7 +182,7 @@ public class MarginsTests
     [MemberData(nameof(Bounds_Set_TestData))]
     public void Right_Set_GetReturnsExpected(int value)
     {
-        var margins = new Margins
+        Margins margins = new()
         {
             Right = value
         };
@@ -196,7 +196,7 @@ public class MarginsTests
     [Fact]
     public void Right_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        var margins = new Margins();
+        Margins margins = new();
         AssertExtensions.Throws<ArgumentOutOfRangeException, ArgumentException>("value", null, () => margins.Right = -1);
     }
 
@@ -204,7 +204,7 @@ public class MarginsTests
     [MemberData(nameof(Bounds_Set_TestData))]
     public void Top_Set_GetReturnsExpected(int value)
     {
-        var margins = new Margins
+        Margins margins = new()
         {
             Top = value
         };
@@ -218,7 +218,7 @@ public class MarginsTests
     [Fact]
     public void Top_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        var margins = new Margins();
+        Margins margins = new();
         AssertExtensions.Throws<ArgumentOutOfRangeException, ArgumentException>("value", null, () => margins.Top = -1);
     }
 
@@ -226,7 +226,7 @@ public class MarginsTests
     [MemberData(nameof(Bounds_Set_TestData))]
     public void Bottom_Set_GetReturnsExpected(int value)
     {
-        var margins = new Margins
+        Margins margins = new()
         {
             Bottom = value
         };
@@ -240,7 +240,7 @@ public class MarginsTests
     [Fact]
     public void Bottom_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        var margins = new Margins();
+        Margins margins = new();
         AssertExtensions.Throws<ArgumentOutOfRangeException, ArgumentException>("value", null, () => margins.Bottom = -1);
     }
 }

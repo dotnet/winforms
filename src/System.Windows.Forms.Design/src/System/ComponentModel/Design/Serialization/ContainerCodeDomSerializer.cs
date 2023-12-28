@@ -46,12 +46,12 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
     /// </summary>
     public override object Serialize(IDesignerSerializationManager manager, object value)
     {
-        CodeStatementCollection statements = new CodeStatementCollection();
+        CodeStatementCollection statements = new();
         CodeExpression lhs;
 
         if (manager.TryGetContext(out CodeTypeDeclaration? typeDecl) && manager.TryGetContext(out RootContext? rootCtx))
         {
-            CodeMemberField field = new CodeMemberField(typeof(IContainer), _containerName)
+            CodeMemberField field = new(typeof(IContainer), _containerName)
             {
                 Attributes = MemberAttributes.Private
             };
@@ -60,7 +60,7 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
         }
         else
         {
-            CodeVariableDeclarationStatement var = new CodeVariableDeclarationStatement(typeof(IContainer), _containerName);
+            CodeVariableDeclarationStatement var = new(typeof(IContainer), _containerName);
 
             statements.Add(var);
             lhs = new CodeVariableReferenceExpression(_containerName);
@@ -68,8 +68,8 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
 
         // Now create the container
         SetExpression(manager, value, lhs);
-        CodeObjectCreateExpression objCreate = new CodeObjectCreateExpression(typeof(Container));
-        CodeAssignStatement assign = new CodeAssignStatement(lhs, objCreate);
+        CodeObjectCreateExpression objCreate = new(typeof(Container));
+        CodeAssignStatement assign = new(lhs, objCreate);
 
         assign.UserData[nameof(IContainer)] = nameof(IContainer);
 

@@ -138,7 +138,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
     {
         int count = PointCount;
 
-        PathData pathData = new PathData()
+        PathData pathData = new()
         {
             Types = new byte[count],
             Points = new PointF[count]

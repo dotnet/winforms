@@ -12,7 +12,7 @@ public class ToolStripItemAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripItemAccessibleObject_Ctor_ToolStripItem()
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AccessibleDefaultActionDescription = "DefaultActionDescription",
             AccessibleDescription = "Description",
@@ -111,7 +111,7 @@ public class ToolStripItemAccessibleObjectTests
     [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
     public void ToolStripHostedControlAccessibleObject_GetPropertyValue_IsOffscreenPropertyId_ReturnExpected(Type type)
     {
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         toolStrip.CreateControl();
         using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
         item.Size = new Size(0, 0);

@@ -112,7 +112,7 @@ public sealed class StringFormat : MarshalByRefObject, ICloneable, IDisposable
         if (status != Gdip.Ok)
             throw Gdip.StatusException(status);
 
-        StringFormat newCloneStringFormat = new StringFormat(cloneFormat);
+        StringFormat newCloneStringFormat = new(cloneFormat);
 
         return newCloneStringFormat;
     }

@@ -131,7 +131,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         }
 
         ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-        using var sw = new StringWriter(CultureInfo.InvariantCulture);
+        using StringWriter sw = new(CultureInfo.InvariantCulture);
 
         try
         {
@@ -143,7 +143,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         }
 
         // spit this line by line so it respects the indent.
-        StringReader sr = new StringReader(sw.ToString());
+        StringReader sr = new(sw.ToString());
 
         for (string? line = sr.ReadLine(); line is not null; line = sr.ReadLine())
         {
@@ -346,7 +346,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
                 if (failures is not null)
                 {
-                    StringBuilder builder = new StringBuilder(Environment.NewLine);
+                    StringBuilder builder = new(Environment.NewLine);
                     builder.AppendJoin(Environment.NewLine, failures);
 
                     ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder));
@@ -577,7 +577,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         base.Initialize();
 
-        ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
+        ServiceCreatorCallback callback = new(OnCreateService);
 
         LoaderHost.AddService<ComponentSerializationService>(callback);
         LoaderHost.AddService<INameCreationService>(this);

@@ -19,10 +19,10 @@ public class PaintEventArgsTests
     [MemberData(nameof(Ctor_Rectangle_TestData))]
     public void Ctor_Graphics_Rectangle(Rectangle clipRect)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
-        using var e = new PaintEventArgs(graphics, clipRect);
+        using PaintEventArgs e = new(graphics, clipRect);
         Assert.Equal(graphics, e.Graphics);
         Assert.Equal(clipRect, e.ClipRectangle);
     }
@@ -36,9 +36,9 @@ public class PaintEventArgsTests
     [Fact]
     public void Dispose_Invoke_Success()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        PaintEventArgs e = new(graphics, new Rectangle(1, 2, 3, 4));
         e.Dispose();
         e.Dispose();
     }
@@ -48,9 +48,9 @@ public class PaintEventArgsTests
     [InlineData(false)]
     public void Dispose_InvokeDisposing_Success(bool disposing)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var e = new SubPaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using SubPaintEventArgs e = new(graphics, new Rectangle(1, 2, 3, 4));
         e.DisposeEntry(disposing);
         e.DisposeEntry(disposing);
     }
@@ -60,7 +60,7 @@ public class PaintEventArgsTests
     {
         // https://github.com/dotnet/winforms/issues/3910
         using var hdc = GdiCache.GetScreenHdc();
-        using PaintEventArgs args = new PaintEventArgs(hdc, default);
+        using PaintEventArgs args = new(hdc, default);
         Graphics g1 = args.Graphics;
         Graphics g2 = args.Graphics;
         Assert.Same(g1, g2);

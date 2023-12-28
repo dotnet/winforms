@@ -429,7 +429,7 @@ internal sealed class DragAssistanceManager
 
         Control rootControl = host.RootComponent as Control;
         // the clipping bounds will be used to ignore all controls that are completely outside of our rootcomponent's bounds -this way we won't end up snapping to controls that are not visible on the form's surface
-        Rectangle clipBounds = new Rectangle(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
+        Rectangle clipBounds = new(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
         clipBounds.Inflate(-1, -1);
         // determine the screen offset from our rootComponent to the AdornerWindow (since all drag notification coords will be in adorner window coords)
         if (targetControl is not null)
@@ -564,7 +564,7 @@ internal sealed class DragAssistanceManager
     internal Point OffsetToNearestSnapLocation(Control targetControl, Point directionOffset)
     {
         Point offset = Point.Empty;
-        Rectangle currentBounds = new Rectangle(_behaviorService.ControlToAdornerWindow(targetControl), targetControl.Size);
+        Rectangle currentBounds = new(_behaviorService.ControlToAdornerWindow(targetControl), targetControl.Size);
         if (directionOffset.X != 0)
         {// movement somewhere in the x dir
             // first, build up our distance array
@@ -951,7 +951,7 @@ internal sealed class DragAssistanceManager
     /// </summary>
     internal Point OnMouseMove(Control targetControl, SnapLine[] snapLines, ref bool didSnap, bool shouldSnapHorizontally)
     {
-        Rectangle dragBounds = new Rectangle(_behaviorService.ControlToAdornerWindow(targetControl), targetControl.Size);
+        Rectangle dragBounds = new(_behaviorService.ControlToAdornerWindow(targetControl), targetControl.Size);
         didSnap = false;
         return OnMouseMove(dragBounds, snapLines, ref didSnap, shouldSnapHorizontally);
     }
@@ -1003,8 +1003,8 @@ internal sealed class DragAssistanceManager
             didSnap = true;
         }
 
-        Point snapPoint = new Point(_snapPointX != INVALID_VALUE ? _snapPointX : 0, _snapPointY != INVALID_VALUE ? _snapPointY : 0);
-        Rectangle tempDragRect = new Rectangle(dragBounds.Left + snapPoint.X, dragBounds.Top + snapPoint.Y, dragBounds.Width, dragBounds.Height);
+        Point snapPoint = new(_snapPointX != INVALID_VALUE ? _snapPointX : 0, _snapPointY != INVALID_VALUE ? _snapPointY : 0);
+        Rectangle tempDragRect = new(dragBounds.Left + snapPoint.X, dragBounds.Top + snapPoint.Y, dragBounds.Width, dragBounds.Height);
         // out with the old...
         _vertLines = EraseOldSnapLines(_vertLines, _tempVertLines);
         _horzLines = EraseOldSnapLines(_horzLines, _tempHorzLines);

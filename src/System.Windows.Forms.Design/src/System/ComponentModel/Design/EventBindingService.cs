@@ -173,7 +173,7 @@ public abstract partial class EventBindingService : IEventBindingService
     {
         ArgumentNullException.ThrowIfNull(events);
 
-        List<PropertyDescriptor> props = new List<PropertyDescriptor>(events.Count);
+        List<PropertyDescriptor> props = new(events.Count);
 
         // We cache the property descriptors here for speed.  Create those for
         // events that we don't have yet.

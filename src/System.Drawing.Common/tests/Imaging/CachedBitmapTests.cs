@@ -9,7 +9,7 @@ public class CachedBitmapTests
     [Fact]
     public void Ctor_Throws_ArgumentNullException()
     {
-        using var bitmap = new Bitmap(10, 10);
+        using Bitmap bitmap = new(10, 10);
         using var graphics = Graphics.FromImage(bitmap);
 
         Assert.Throws<ArgumentNullException>(() => new CachedBitmap(bitmap, null));

@@ -46,7 +46,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteString(Stream stream, string value)
     {
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
         new BinaryObjectString(1, value).Write(writer);
     }
 
@@ -58,7 +58,7 @@ internal static class BinaryFormatWriter
         Span<int> ints = stackalloc int[4];
         decimal.TryGetBits(value, ints, out _);
 
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(decimal).FullName!, DecimalMemberNames),
@@ -78,7 +78,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteDateTime(Stream stream, DateTime value)
     {
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
 
         // We could use ISerializable here to get the data, but it is pretty
         // heavy weight, and the internals of DateTime should never change.
@@ -97,7 +97,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteTimeSpan(Stream stream, TimeSpan value)
     {
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(TimeSpan).FullName!, new string[] { "_ticks" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
@@ -109,7 +109,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteNativeInt(Stream stream, nint value)
     {
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nint).FullName!, new string[] { "value" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
@@ -121,7 +121,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteNativeUInt(Stream stream, nuint value)
     {
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nuint).FullName!, new string[] { "value" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.UInt64)),
@@ -217,7 +217,7 @@ internal static class BinaryFormatWriter
                 return;
         }
 
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, type.FullName!, s_primitiveMemberName),
             new MemberTypeInfo((BinaryType.Primitive, primitiveType)),
@@ -264,7 +264,7 @@ internal static class BinaryFormatWriter
             throw new NotSupportedException($"{nameof(T)} is not primitive.");
         }
 
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(
@@ -456,7 +456,7 @@ internal static class BinaryFormatWriter
         object[] keys = info.GetValue<object[]>("Keys")!;
         object?[] values = info.GetValue<object?[]>("Values")!;
 
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, TypeInfo.HashtableType, HashtableMemberNames),
@@ -494,7 +494,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteNotSupportedException(Stream stream, NotSupportedException exception)
     {
-        using var writer = new BinaryFormatWriterScope(stream);
+        using BinaryFormatWriterScope writer = new(stream);
 
         // We only serialize the message to avoid binary serialization risks.
         new SystemClassWithMembersAndTypes(

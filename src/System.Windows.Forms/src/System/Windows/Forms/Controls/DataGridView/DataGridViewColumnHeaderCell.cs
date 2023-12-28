@@ -894,7 +894,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         }
 
         bool displaySortGlyph = false;
-        Point sortGlyphLocation = new Point(0, 0);
+        Point sortGlyphLocation = new(0, 0);
         string? formattedValueStr = formattedValue as string;
 
         // Font independent margins

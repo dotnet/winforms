@@ -20,7 +20,7 @@ public static class TextRenderer
 
     internal static FONT_QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
 
-    internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
+    internal static Size MaxSize { get; } = new(int.MaxValue, int.MaxValue);
 
     public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
         => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);

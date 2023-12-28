@@ -394,7 +394,7 @@ public partial class TaskDialog : IWin32Window
     {
         ArgumentNullException.ThrowIfNull(page);
 
-        TaskDialog dialog = new TaskDialog();
+        TaskDialog dialog = new();
         return dialog.ShowDialogInternal(hwndOwner, page, startupLocation);
     }
 #pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters

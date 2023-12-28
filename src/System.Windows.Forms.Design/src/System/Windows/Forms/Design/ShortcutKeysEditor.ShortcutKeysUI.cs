@@ -115,7 +115,7 @@ public partial class ShortcutKeysEditor
         [MemberNotNull(nameof(_resetButton))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(ShortcutKeysEditor));
+            ComponentResourceManager resources = new(typeof(ShortcutKeysEditor));
 
             _outerPanel = new TableLayoutPanel();
             _modifiersLabel = new Label();
@@ -227,7 +227,7 @@ public partial class ShortcutKeysEditor
 
         private void AdjustSize()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(ShortcutKeysEditor));
+            ComponentResourceManager resources = new(typeof(ShortcutKeysEditor));
             Size resetButtonSize = (Size)resources.GetObject("btnReset.Size")!;
             Size = new Size(Size.Width + _resetButton.Size.Width - resetButtonSize.Width, Size.Height);
         }

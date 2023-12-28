@@ -17,7 +17,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Attributes_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -33,7 +33,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Attributes_GetWithDispIdAttribute_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdProperty)];
@@ -49,7 +49,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Attributes_GetWithDispIdAttributeNotBrowsable_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdNotBrowsableProperty)];
@@ -65,7 +65,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Attributes_GetWithDispIdAttributeReadOnly_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdReadOnlyProperty)];
@@ -81,7 +81,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Attributes_GetWithDispIdAttributeNotBrowsableReadOnly_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdNotBrowsableReadOnlyProperty)];
@@ -97,7 +97,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Category_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -108,7 +108,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Category_GetWithCategoryAttribute_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CategoryProperty)];
@@ -119,7 +119,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_ComponentType_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -130,7 +130,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Converter_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -141,7 +141,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Converter_GetDispId_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdProperty)];
@@ -152,7 +152,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Converter_GetDispIdWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -182,7 +182,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Converter_GetCustomConverter_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomConverterProperty)];
@@ -193,7 +193,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Converter_GetDispIdCustomConverter_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdCustomConverterProperty)];
@@ -204,7 +204,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Description_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -215,7 +215,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_Description_GetWithDescriptionAttribute_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DescriptionProperty)];
@@ -226,7 +226,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_IsReadOnly_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -237,7 +237,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_IsReadOnly_GetWithoutSetter_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.GetOnlyProperty)];
@@ -248,7 +248,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_IsBrowsable_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -259,7 +259,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_IsBrowsable_GetBrowsableAttribute_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.NotBrowsableProperty)];
@@ -270,7 +270,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_IsReadOnly_GetReadOnlyAttribute_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.ReadOnlyProperty)];
@@ -281,7 +281,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_PropertyType_Get_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.CustomProperty)];
@@ -292,7 +292,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_CanResetValue_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomValue"
         };
@@ -306,7 +306,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_CanResetValue_InvokeReadOnly_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.ReadOnlyProperty)];
@@ -318,7 +318,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomValue"
         };
@@ -332,7 +332,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeWithEditor_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.EditorProperty)];
@@ -346,7 +346,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeWithUITypeEditor_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.UITypeEditorProperty)];
@@ -361,7 +361,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeDispId_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdProperty)];
@@ -372,7 +372,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeDispIdWithEditor_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdEditorProperty)];
@@ -386,7 +386,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeDispIdWithUITypeEditor_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdUITypeEditorProperty)];
@@ -400,7 +400,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeDispIdWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -423,7 +423,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeDispIdWithOcxWithEditor_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -449,7 +449,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_InvokeDispIdWithOcxWithUITypeEditor_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -476,7 +476,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetEditor_NullEditorBaseType_ThrowsArgumentNullException()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomValue"
         };
@@ -490,7 +490,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetValue_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -511,7 +511,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetValue_InvokeDataSource_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             DataSourceProperty = new DataSource
             {
@@ -530,7 +530,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetValue_InvokeDispatchIdWithDataSource_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             DispIdDataSourceProperty = new DataSource
             {
@@ -549,7 +549,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetValue_InvokeWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -582,7 +582,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetValue_InvokeDataSourceWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             DataSourceProperty = new DataSource
             {
@@ -613,7 +613,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_GetValue_InvokeDispatchIdWithDataSourceWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             DispIdDataSourceProperty = new DataSource
             {
@@ -646,7 +646,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_GetValue_NullComponent_ReturnsExpected(string propertyName)
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -664,7 +664,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_GetValue_NullComponentWithOcx_ThrowsArgumentNullException(string propertyName)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -694,7 +694,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_GetValueInvalidComponent_ReturnsExpected(string propertyName)
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -712,7 +712,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_GetValueInvalidComponentWithOcx_ThrowsTargetInvocationException(string propertyName)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -747,7 +747,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_ResetValue_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomValue"
         };
@@ -762,7 +762,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_ResetValue_InvokeReadOnly_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.ReadOnlyProperty)];
@@ -774,7 +774,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -796,7 +796,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeDataSource_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DataSourceProperty)];
@@ -813,7 +813,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeDispatchIdWithDataSource_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.DispIdDataSourceProperty)];
@@ -830,7 +830,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -864,7 +864,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeWithOcxDataSource_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -893,7 +893,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeWithOcxDispatchIdWithDataSource_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -922,7 +922,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeEnumWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -951,7 +951,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValue_InvokeEnumNotEnumTypeWithOcx_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             CustomProperty = "CustomProperty"
         };
@@ -982,7 +982,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_SetValue_NullComponent_ReturnsExpected(string propertyName)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[propertyName];
@@ -997,7 +997,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_SetValue_NullComponentWithOcx_ThrowsArgumentNullException(string propertyName)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1025,7 +1025,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_SetValueInvalidComponent_ReturnsExpected(string propertyName)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[propertyName];
@@ -1041,7 +1041,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_SetValueInvalidComponentWithOcx_ThrowsTargetException(string propertyName)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1077,7 +1077,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_SetValueInvalidValue_ReturnsExpected(string propertyName)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[propertyName];
@@ -1093,7 +1093,7 @@ public class AxHostPropertyDescriptorTests
     [InlineData(nameof(CustomAxHost.DispIdProperty))]
     public void AxPropertyDescriptor_SetValueInvalidValueWithOcx_ThrowsArgumentException(string propertyName)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1127,7 +1127,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueInvalidValueInt_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.IntProperty)];
@@ -1141,7 +1141,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueInvalidValueIntWithOcx_ThrowsArgumentException()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1175,7 +1175,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueInvalidValueEnum_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.EnumProperty)];
@@ -1189,7 +1189,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueInvalidValueEnumWithOcx_ThrowsArgumentException()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1223,7 +1223,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueNullValueInt_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             IntProperty = 1
         };
@@ -1240,7 +1240,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueNullValueIntWithOcx_ThrowsArgumentException()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             IntProperty = 1
         };
@@ -1277,7 +1277,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueNullValueEnum_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             EnumProperty = ConsoleColor.Blue
         };
@@ -1295,7 +1295,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_SetValueNullValueEnumWithOcx_ThrowsArgumentException()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString)
+        using CustomAxHost control = new(WebBrowserClsidString)
         {
             EnumProperty = ConsoleColor.Blue
         };
@@ -1333,7 +1333,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_ShouldSerializeValue_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString)
+        using CustomAxHost control = new(EmptyClsidString)
         {
             CustomProperty = "CustomValue"
         };
@@ -1347,7 +1347,7 @@ public class AxHostPropertyDescriptorTests
     [WinFormsFact]
     public void AxPropertyDescriptor_ShouldSerializeValue_InvokeReadOnly_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         PropertyDescriptor property = events[nameof(CustomAxHost.ReadOnlyProperty)];

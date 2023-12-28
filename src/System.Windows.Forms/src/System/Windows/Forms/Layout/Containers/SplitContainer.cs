@@ -991,7 +991,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                     Rectangle r = CalcSplitLine(_splitterDistance, 0);
                     int xSplit = r.X;
                     int ySplit = r.Y;
-                    SplitterCancelEventArgs se = new SplitterCancelEventArgs(Left + SplitterRectangle.X + SplitterRectangle.Width / 2, Top + SplitterRectangle.Y + SplitterRectangle.Height / 2, xSplit, ySplit);
+                    SplitterCancelEventArgs se = new(Left + SplitterRectangle.X + SplitterRectangle.Width / 2, Top + SplitterRectangle.Y + SplitterRectangle.Height / 2, xSplit, ySplit);
                     OnSplitterMoving(se);
                     if (se.Cancel)
                     {
@@ -1104,7 +1104,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 Rectangle r = CalcSplitLine(GetSplitterDistance(e.X, e.Y), 0);
                 int xSplit = r.X;
                 int ySplit = r.Y;
-                SplitterCancelEventArgs se = new SplitterCancelEventArgs(x, y, xSplit, ySplit);
+                SplitterCancelEventArgs se = new(x, y, xSplit, ySplit);
                 OnSplitterMoving(se);
                 if (se.Cancel)
                 {
@@ -1565,7 +1565,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
             Graphics g = CreateGraphicsInternal();
             if (BackgroundImage is not null)
             {
-                using TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile);
+                using TextureBrush textureBrush = new(BackgroundImage, WrapMode.Tile);
                 g.FillRectangle(textureBrush, ClientRectangle);
             }
             else

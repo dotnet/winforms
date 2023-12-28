@@ -446,7 +446,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                 return columnStyle;
             }
 
-            DataGridViewCellStyle inheritedCellStyleTmp = new DataGridViewCellStyle();
+            DataGridViewCellStyle inheritedCellStyleTmp = new();
             DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
             Debug.Assert(dataGridViewStyle is not null);
 

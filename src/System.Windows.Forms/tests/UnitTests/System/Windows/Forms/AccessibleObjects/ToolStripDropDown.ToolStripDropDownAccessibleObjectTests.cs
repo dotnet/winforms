@@ -11,8 +11,8 @@ public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripDropDownAccessibleObject_ctor_default()
     {
-        using ToolStripDropDown toolStripDropDown = new ToolStripDropDown();
-        ToolStripDropDownAccessibleObject accessibleObject = new ToolStripDropDownAccessibleObject(toolStripDropDown);
+        using ToolStripDropDown toolStripDropDown = new();
+        ToolStripDropDownAccessibleObject accessibleObject = new(toolStripDropDown);
 
         Assert.Equal(toolStripDropDown, accessibleObject.Owner);
         Assert.False(toolStripDropDown.IsHandleCreated);
@@ -21,7 +21,7 @@ public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripDropDownAccessibleObject_ControlType_IsMenu_IfAccessibleRoleIsDefault()
     {
-        using ToolStripDropDown toolStripDropDown = new ToolStripDropDown();
+        using ToolStripDropDown toolStripDropDown = new();
         // AccessibleRole is not set = Default
 
         AccessibleObject accessibleObject = toolStripDropDown.AccessibilityObject;
@@ -34,7 +34,7 @@ public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripDropDownAccessibleObject_Role_IsMenuPopup_ByDefault()
     {
-        using ToolStripDropDown toolStripDropDown = new ToolStripDropDown();
+        using ToolStripDropDown toolStripDropDown = new();
         // AccessibleRole is not set = Default
 
         AccessibleObject accessibleObject = toolStripDropDown.AccessibilityObject;
@@ -63,7 +63,7 @@ public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests
     [MemberData(nameof(ToolStripDropDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripDropDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripDropDown toolStripDropDown = new ToolStripDropDown();
+        using ToolStripDropDown toolStripDropDown = new();
         toolStripDropDown.AccessibleRole = role;
 
         AccessibleObject accessibleObject = toolStripDropDown.AccessibilityObject;

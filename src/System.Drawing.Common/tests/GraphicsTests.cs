@@ -15,7 +15,7 @@ public partial class GraphicsTests
     [Fact]
     public void GetHdc_FromHdc_Roundtrips()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             IntPtr hdc = graphics.GetHdc();
@@ -38,7 +38,7 @@ public partial class GraphicsTests
     [Fact]
     public void GetHdc_SameImage_ReturnsSame()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         using (Graphics graphics1 = Graphics.FromImage(bitmap))
         using (Graphics graphics2 = Graphics.FromImage(bitmap))
         {
@@ -57,7 +57,7 @@ public partial class GraphicsTests
     [Fact]
     public void GetHdc_NotReleased_ThrowsInvalidOperationException()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             graphics.GetHdc();
@@ -75,7 +75,7 @@ public partial class GraphicsTests
     [Fact]
     public void GetHdc_Disposed_ThrowsObjectDisposedException()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(bitmap);
             graphics.Dispose();
@@ -159,7 +159,7 @@ public partial class GraphicsTests
     [Fact]
     public void ReleaseHdc_ValidHdc_ResetsHdc()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             IntPtr hdc = graphics.GetHdc();
@@ -182,7 +182,7 @@ public partial class GraphicsTests
     [Fact]
     public void ReleaseHdc_NoSuchHdc_ResetsHdc()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             IntPtr hdc = graphics.GetHdc();
@@ -198,8 +198,8 @@ public partial class GraphicsTests
     [Fact]
     public void ReleaseHdc_OtherGraphicsHdc_Success()
     {
-        using (var bitmap1 = new Bitmap(10, 10))
-        using (var bitmap2 = new Bitmap(10, 10))
+        using (Bitmap bitmap1 = new(10, 10))
+        using (Bitmap bitmap2 = new(10, 10))
         using (Graphics graphics1 = Graphics.FromImage(bitmap1))
         using (Graphics graphics2 = Graphics.FromImage(bitmap2))
         {
@@ -218,7 +218,7 @@ public partial class GraphicsTests
     [Fact]
     public void ReleaseHdc_NoHdc_ThrowsArgumentException()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
@@ -230,7 +230,7 @@ public partial class GraphicsTests
     [Fact]
     public void ReleaseHdc_Disposed_ThrowsObjectDisposedException()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(bitmap);
             graphics.Dispose();
@@ -288,7 +288,7 @@ public partial class GraphicsTests
     [InlineData(PixelFormat.Format64bppPArgb)]
     public void FromImage_Bitmap_Success(PixelFormat format)
     {
-        using (var image = new Bitmap(10, 10, format))
+        using (Bitmap image = new(10, 10, format))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             VerifyGraphics(graphics, new Rectangle(Point.Empty, image.Size));
@@ -307,7 +307,7 @@ public partial class GraphicsTests
     [InlineData(PixelFormat.Format8bppIndexed)]
     public void FromImage_IndexedImage_ThrowsException(PixelFormat format)
     {
-        using (var image = new Bitmap(10, 10, format))
+        using (Bitmap image = new(10, 10, format))
         {
             Exception exception = AssertExtensions.Throws<ArgumentException,Exception>(() => Graphics.FromImage(image));
             if (exception is ArgumentException argumentException)
@@ -318,7 +318,7 @@ public partial class GraphicsTests
     [Fact]
     public void FromImage_DisposedImage_ThrowsArgumentException()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         image.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => Graphics.FromImage(image));
@@ -327,7 +327,7 @@ public partial class GraphicsTests
     [Fact]
     public void FromImage_Metafile_ThrowsOutOfMemoryException()
     {
-        using (var image = new Metafile(Helpers.GetTestBitmapPath("telescope_01.wmf")))
+        using (Metafile image = new(Helpers.GetTestBitmapPath("telescope_01.wmf")))
         {
             Assert.Throws<OutOfMemoryException>(() => Graphics.FromImage(image));
         }
@@ -338,7 +338,7 @@ public partial class GraphicsTests
     [InlineData(PixelFormat.Format16bppGrayScale)]
     public void FromImage_Invalid16BitFormat_ThrowsOutOfMemoryException(PixelFormat format)
     {
-        using (var image = new Bitmap(10, 10, format))
+        using (Bitmap image = new(10, 10, format))
         {
             Assert.Throws<OutOfMemoryException>(() => Graphics.FromImage(image));
         }
@@ -357,11 +357,11 @@ public partial class GraphicsTests
         Color transparentBlack = Color.FromArgb(160, 0, 0, 0);
         Color transparentWhite = Color.FromArgb(160, 255, 255, 255);
 
-        using (var transparentBlackBrush = new SolidBrush(transparentBlack))
-        using (var transparentWhiteBrush = new SolidBrush(transparentWhite))
-        using (var image = new Bitmap(3, 3))
+        using (SolidBrush transparentBlackBrush = new(transparentBlack))
+        using (SolidBrush transparentWhiteBrush = new(transparentWhite))
+        using (Bitmap image = new(3, 3))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var targetImage = new Bitmap(3, 3))
+        using (Bitmap targetImage = new(3, 3))
         using (Graphics targetGraphics = Graphics.FromImage(targetImage))
         {
             graphics.CompositingMode = mode;
@@ -385,7 +385,7 @@ public partial class GraphicsTests
     [InlineData(CompositingMode.SourceCopy + 1)]
     public void CompositingMode_SetInvalid_ThrowsInvalidEnumArgumentException(CompositingMode compositingMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.CompositingMode = compositingMode);
@@ -395,7 +395,7 @@ public partial class GraphicsTests
     [Fact]
     public void CompositingMode_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -414,7 +414,7 @@ public partial class GraphicsTests
     [Fact]
     public void CompositingMode_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -457,9 +457,9 @@ public partial class GraphicsTests
         Color transparentBlack = Color.FromArgb(160, 0, 0, 0);
         Color transparentWhite = Color.FromArgb(160, 255, 255, 255);
 
-        using (var transparentBlackBrush = new SolidBrush(transparentBlack))
-        using (var transparentWhiteBrush = new SolidBrush(transparentWhite))
-        using (var image = new Bitmap(3, 3))
+        using (SolidBrush transparentBlackBrush = new(transparentBlack))
+        using (SolidBrush transparentWhiteBrush = new(transparentWhite))
+        using (Bitmap image = new(3, 3))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.CompositingQuality = quality;
@@ -477,7 +477,7 @@ public partial class GraphicsTests
     [InlineData(CompositingQuality.AssumeLinear + 1)]
     public void CompositingQuality_SetInvalid_ThrowsInvalidEnumArgumentException(CompositingQuality compositingQuality)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.CompositingQuality = compositingQuality);
@@ -487,7 +487,7 @@ public partial class GraphicsTests
     [Fact]
     public void CompositingQuality_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -506,7 +506,7 @@ public partial class GraphicsTests
     [Fact]
     public void CompositingQuality_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -519,7 +519,7 @@ public partial class GraphicsTests
     [Fact]
     public void Dispose_MultipleTimesWithoutHdc_Success()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         {
             var graphics = Graphics.FromImage(bitmap);
             graphics.Dispose();
@@ -533,7 +533,7 @@ public partial class GraphicsTests
     [Fact]
     public void Dispose_MultipleTimesWithHdc_Success()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         {
             var graphics = Graphics.FromImage(bitmap);
             graphics.GetHdc();
@@ -549,7 +549,7 @@ public partial class GraphicsTests
     [Fact]
     public void DpiX_GetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -567,7 +567,7 @@ public partial class GraphicsTests
     [Fact]
     public void DpiX_GetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -579,7 +579,7 @@ public partial class GraphicsTests
     [Fact]
     public void DpiY_GetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -597,7 +597,7 @@ public partial class GraphicsTests
     [Fact]
     public void DpiY_GetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -613,7 +613,7 @@ public partial class GraphicsTests
     [InlineData(FlushIntention.Sync + 1)] // Not in the range of valid values of FlushIntention.
     public void Flush_MultipleTimes_Success(FlushIntention intention)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             if (intention == FlushIntention.Flush)
@@ -630,7 +630,7 @@ public partial class GraphicsTests
     [Fact]
     public void Flush_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -649,7 +649,7 @@ public partial class GraphicsTests
     [Fact]
     public void Flush_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -670,7 +670,7 @@ public partial class GraphicsTests
     [InlineData(InterpolationMode.NearestNeighbor, InterpolationMode.NearestNeighbor)]
     public void InterpolationMode_SetValid_GetReturnsExpected(InterpolationMode interpolationMode, InterpolationMode expectedInterpolationMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.InterpolationMode = interpolationMode;
@@ -683,7 +683,7 @@ public partial class GraphicsTests
     [InlineData(InterpolationMode.HighQualityBicubic + 1)]
     public void InterpolationMode_SetInvalid_ThrowsInvalidEnumArgumentException(InterpolationMode interpolationMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.InterpolationMode = interpolationMode);
@@ -693,7 +693,7 @@ public partial class GraphicsTests
     [Fact]
     public void InterpolationMode_SetToInvalid_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.InterpolationMode = InterpolationMode.Invalid);
@@ -703,7 +703,7 @@ public partial class GraphicsTests
     [Fact]
     public void InterpolationMode_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -722,7 +722,7 @@ public partial class GraphicsTests
     [Fact]
     public void InterpolationMode_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -738,7 +738,7 @@ public partial class GraphicsTests
     [InlineData(float.NaN)]
     public void PageScale_SetValid_GetReturnsExpected(float pageScale)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.PageScale = pageScale;
@@ -754,7 +754,7 @@ public partial class GraphicsTests
     [InlineData(float.PositiveInfinity)]
     public void PageScale_SetInvalid_ThrowsArgumentException(float pageScale)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.PageScale = pageScale);
@@ -764,7 +764,7 @@ public partial class GraphicsTests
     [Fact]
     public void PageScale_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -783,7 +783,7 @@ public partial class GraphicsTests
     [Fact]
     public void PageScale_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -802,7 +802,7 @@ public partial class GraphicsTests
     [InlineData(GraphicsUnit.Point)]
     public void PageUnit_SetValid_GetReturnsExpected(GraphicsUnit pageUnit)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.PageUnit = pageUnit;
@@ -815,7 +815,7 @@ public partial class GraphicsTests
     [InlineData(GraphicsUnit.Millimeter + 1)]
     public void PageUnit_SetInvalid_ThrowsInvalidEnumArgumentException(GraphicsUnit pageUnit)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.PageUnit = pageUnit);
@@ -825,7 +825,7 @@ public partial class GraphicsTests
     [Fact]
     public void PageUnit_SetWorld_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.PageUnit = GraphicsUnit.World);
@@ -835,7 +835,7 @@ public partial class GraphicsTests
     [Fact]
     public void PageUnit_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -854,7 +854,7 @@ public partial class GraphicsTests
     [Fact]
     public void PageUnit_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -872,7 +872,7 @@ public partial class GraphicsTests
     [InlineData(PixelOffsetMode.None)]
     public void PixelOffsetMode_SetValid_GetReturnsExpected(PixelOffsetMode pixelOffsetMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.PixelOffsetMode = pixelOffsetMode;
@@ -885,7 +885,7 @@ public partial class GraphicsTests
     [InlineData(PixelOffsetMode.Half + 1)]
     public void PixelOffsetMode_SetInvalid_ThrowsInvalidEnumArgumentException(PixelOffsetMode pixelOffsetMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.PixelOffsetMode = pixelOffsetMode);
@@ -895,7 +895,7 @@ public partial class GraphicsTests
     [Fact]
     public void PixelOffsetMode_SetToInvalid_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.PixelOffsetMode = PixelOffsetMode.Invalid);
@@ -905,7 +905,7 @@ public partial class GraphicsTests
     [Fact]
     public void PixelOffsetMode_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -924,7 +924,7 @@ public partial class GraphicsTests
     [Fact]
     public void PixelOffsetMode_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -978,9 +978,9 @@ public partial class GraphicsTests
     {
         Color red = Color.FromArgb(Color.Red.ToArgb());
 
-        using (var image = new Bitmap(3, 3))
+        using (Bitmap image = new(3, 3))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var brush = new HatchBrush(HatchStyle.Cross, red))
+        using (HatchBrush brush = new(HatchStyle.Cross, red))
         {
             graphics.RenderingOrigin = renderingOrigin;
             Assert.Equal(renderingOrigin, graphics.RenderingOrigin);
@@ -993,7 +993,7 @@ public partial class GraphicsTests
     [Fact]
     public void RenderingOrigin_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1012,7 +1012,7 @@ public partial class GraphicsTests
     [Fact]
     public void RenderingOrigin_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1030,7 +1030,7 @@ public partial class GraphicsTests
     [InlineData(SmoothingMode.None, SmoothingMode.None)]
     public void SmoothingMode_SetValid_GetReturnsExpected(SmoothingMode smoothingMode, SmoothingMode expectedSmoothingMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.SmoothingMode = smoothingMode;
@@ -1043,7 +1043,7 @@ public partial class GraphicsTests
     [InlineData(SmoothingMode.AntiAlias + 1)]
     public void SmoothingMode_SetInvalid_ThrowsInvalidEnumArgumentException(SmoothingMode smoothingMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.SmoothingMode = smoothingMode);
@@ -1053,7 +1053,7 @@ public partial class GraphicsTests
     [Fact]
     public void SmoothingMode_SetToInvalid_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.SmoothingMode = SmoothingMode.Invalid);
@@ -1063,7 +1063,7 @@ public partial class GraphicsTests
     [Fact]
     public void SmoothingMode_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1082,7 +1082,7 @@ public partial class GraphicsTests
     [Fact]
     public void SmoothingMode_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1098,7 +1098,7 @@ public partial class GraphicsTests
     [InlineData(12)]
     public void TextContrast_SetValid_GetReturnsExpected(int textContrast)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.TextContrast = textContrast;
@@ -1111,7 +1111,7 @@ public partial class GraphicsTests
     [InlineData(13)]
     public void TextContrast_SetInvalid_ThrowsArgumentException(int textContrast)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.TextContrast = textContrast);
@@ -1121,7 +1121,7 @@ public partial class GraphicsTests
     [Fact]
     public void TextContrast_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1140,7 +1140,7 @@ public partial class GraphicsTests
     [Fact]
     public void TextContrast_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1159,7 +1159,7 @@ public partial class GraphicsTests
     [InlineData(TextRenderingHint.SystemDefault)]
     public void TextRenderingHint_SetValid_GetReturnsExpected(TextRenderingHint textRenderingHint)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.TextRenderingHint = textRenderingHint;
@@ -1172,7 +1172,7 @@ public partial class GraphicsTests
     [InlineData(TextRenderingHint.ClearTypeGridFit + 1)]
     public void TextRenderingHint_SetInvalid_ThrowsInvalidEnumArgumentException(TextRenderingHint textRenderingHint)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<InvalidEnumArgumentException>("value", () => graphics.TextRenderingHint = textRenderingHint);
@@ -1182,7 +1182,7 @@ public partial class GraphicsTests
     [Fact]
     public void TextRenderingHint_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1201,7 +1201,7 @@ public partial class GraphicsTests
     [Fact]
     public void TextRenderingHint_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1217,10 +1217,10 @@ public partial class GraphicsTests
         Color empty = Helpers.EmptyColor;
         Color red = Color.FromArgb(Color.Red.ToArgb());
 
-        using (var image = new Bitmap(5, 5))
+        using (Bitmap image = new(5, 5))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var brush = new SolidBrush(red))
-        using (var matrix = new Matrix())
+        using (SolidBrush brush = new(red))
+        using (Matrix matrix = new())
         {
             matrix.Scale(1f / 3, 2);
             matrix.Translate(2, 1);
@@ -1242,7 +1242,7 @@ public partial class GraphicsTests
     [Fact]
     public void Transform_SetNull_ThrowsNullReferenceException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.Throws<NullReferenceException>(() => graphics.Transform = null);
@@ -1252,10 +1252,10 @@ public partial class GraphicsTests
     [Fact]
     public void Transform_SetDisposedMatrix_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             matrix.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.Transform = matrix);
@@ -1265,9 +1265,9 @@ public partial class GraphicsTests
     [Fact]
     public void Transform_SetNonInvertibleMatrix_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(5, 5))
+        using (Bitmap image = new(5, 5))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var matrix = new Matrix(123, 24, 82, 16, 47, 30))
+        using (Matrix matrix = new(123, 24, 82, 16, 47, 30))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.Transform = matrix);
         }
@@ -1276,9 +1276,9 @@ public partial class GraphicsTests
     [Fact]
     public void Transform_GetSetWhenBusy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var matrix = new Matrix())
+        using (Matrix matrix = new())
         {
             graphics.GetHdc();
             try
@@ -1296,8 +1296,8 @@ public partial class GraphicsTests
     [Fact]
     public void Transform_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1310,9 +1310,9 @@ public partial class GraphicsTests
     [Fact]
     public void ResetTransform_Invoke_SetsTransformToIdentity()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Assert.False(graphics.Transform.IsIdentity);
@@ -1325,7 +1325,7 @@ public partial class GraphicsTests
     [Fact]
     public void ResetTransform_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1343,7 +1343,7 @@ public partial class GraphicsTests
     [Fact]
     public void ResetTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1355,10 +1355,10 @@ public partial class GraphicsTests
     [Fact]
     public void MultiplyTransform_NoOrder_Success()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
-        using (var matrix = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
+        using (Matrix matrix = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1374,10 +1374,10 @@ public partial class GraphicsTests
     [InlineData(MatrixOrder.Append)]
     public void MultiplyTransform_Order_Success(MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
-        using (var matrix = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
+        using (Matrix matrix = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1391,7 +1391,7 @@ public partial class GraphicsTests
     [Fact]
     public void MultiplyTransform_NullMatrix_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("matrix", () => graphics.MultiplyTransform(null));
@@ -1402,10 +1402,10 @@ public partial class GraphicsTests
     [Fact]
     public void MultiplyTransform_DisposedMatrix_Nop()
     {
-        var brush = new LinearGradientBrush(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
         Matrix transform = brush.Transform;
 
-        var matrix = new Matrix();
+        Matrix matrix = new();
         matrix.Dispose();
 
         brush.MultiplyTransform(matrix);
@@ -1417,9 +1417,9 @@ public partial class GraphicsTests
     [Fact]
     public void MultiplyTransform_NonInvertibleMatrix_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var matrix = new Matrix(123, 24, 82, 16, 47, 30))
+        using (Matrix matrix = new(123, 24, 82, 16, 47, 30))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.MultiplyTransform(matrix));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.MultiplyTransform(matrix, MatrixOrder.Append));
@@ -1431,9 +1431,9 @@ public partial class GraphicsTests
     [InlineData(MatrixOrder.Append + 1)]
     public void MultiplyTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var matrix = new Matrix())
+        using (Matrix matrix = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.MultiplyTransform(matrix, order));
         }
@@ -1442,9 +1442,9 @@ public partial class GraphicsTests
     [Fact]
     public void MultiplyTransform_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var matrix = new Matrix())
+        using (Matrix matrix = new())
         {
             graphics.GetHdc();
             try
@@ -1462,8 +1462,8 @@ public partial class GraphicsTests
     [Fact]
     public void MultiplyTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1479,9 +1479,9 @@ public partial class GraphicsTests
     [InlineData(1, 2)]
     public void TranslateTransform_NoOrder_Success(float dx, float dy)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1501,9 +1501,9 @@ public partial class GraphicsTests
     [InlineData(-1, -1, MatrixOrder.Append)]
     public void TranslateTransform_Order_Success(float dx, float dy, MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1519,7 +1519,7 @@ public partial class GraphicsTests
     [InlineData(MatrixOrder.Append + 1)]
     public void TranslateTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.TranslateTransform(0, 0, order));
@@ -1529,7 +1529,7 @@ public partial class GraphicsTests
     [Fact]
     public void TranslateTransform_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1548,7 +1548,7 @@ public partial class GraphicsTests
     [Fact]
     public void TranslateTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1563,9 +1563,9 @@ public partial class GraphicsTests
     [InlineData(1, 2)]
     public void ScaleTransform_NoOrder_Success(float sx, float sy)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1583,9 +1583,9 @@ public partial class GraphicsTests
     [InlineData(-1, -1, MatrixOrder.Append)]
     public void ScaleTransform_Order_Success(float sx, float sy, MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1599,7 +1599,7 @@ public partial class GraphicsTests
     [Fact]
     public void ScaleTransform_ZeroZero_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.ScaleTransform(0, 0));
@@ -1612,7 +1612,7 @@ public partial class GraphicsTests
     [InlineData(MatrixOrder.Append + 1)]
     public void ScaleTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.ScaleTransform(0, 0, order));
@@ -1622,7 +1622,7 @@ public partial class GraphicsTests
     [Fact]
     public void ScaleTransform_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1641,7 +1641,7 @@ public partial class GraphicsTests
     [Fact]
     public void ScaleTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1658,9 +1658,9 @@ public partial class GraphicsTests
     [InlineData(360)]
     public void RotateTransform_NoOrder_Success(float angle)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1680,9 +1680,9 @@ public partial class GraphicsTests
     [InlineData(-1, MatrixOrder.Append)]
     public void RotateTransform_Order_Success(float angle, MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
             Matrix expectedTransform = graphics.Transform;
@@ -1698,7 +1698,7 @@ public partial class GraphicsTests
     [InlineData(MatrixOrder.Append + 1)]
     public void RotateTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.RotateTransform(0, order));
@@ -1708,7 +1708,7 @@ public partial class GraphicsTests
     [Fact]
     public void RotateTransform_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -1727,7 +1727,7 @@ public partial class GraphicsTests
     [Fact]
     public void RotateTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1752,7 +1752,7 @@ public partial class GraphicsTests
     [MemberData(nameof(CopyFromScreen_TestData))]
     public void CopyFromScreen_OutOfRange_DoesNotAffectGraphics(int sourceX, int sourceY, int destinationX, int destinationY, Size size)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Color plum = Color.FromArgb(Color.Plum.ToArgb());
@@ -1778,7 +1778,7 @@ public partial class GraphicsTests
         graphics.FillRectangle(brush, new Rectangle(0, 0, 10, 10));
         graphics.CopyFromScreen(sourceX, sourceY, destinationX, destinationY, new Size(width, height));
 
-        Rectangle drawnRect = new Rectangle(destinationX, destinationY, width, height);
+        Rectangle drawnRect = new(destinationX, destinationY, width, height);
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)
@@ -1823,7 +1823,7 @@ public partial class GraphicsTests
     [MemberData(nameof(CopyPixelOperation_TestData))]
     public void CopyFromScreen_IntsAndValidCopyPixelOperation_Success(CopyPixelOperation copyPixelOperation)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             // We don't know what the screen looks like at this point in time, so
@@ -1836,7 +1836,7 @@ public partial class GraphicsTests
     [MemberData(nameof(CopyPixelOperation_TestData))]
     public void CopyFromScreen_PointsAndValidCopyPixelOperation_Success(CopyPixelOperation copyPixelOperation)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             // We don't know what the screen looks like at this point in time, so
@@ -1866,7 +1866,7 @@ public partial class GraphicsTests
     [InlineData(CopyPixelOperation.CaptureBlt + 1)]
     public void CopyFromScreen_InvalidCopyPixelOperation_ThrowsInvalidEnumArgumentException(CopyPixelOperation copyPixelOperation)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.ThrowsAny<ArgumentException>(() => graphics.CopyFromScreen(1, 2, 3, 4, Size.Empty, copyPixelOperation));
@@ -1896,7 +1896,7 @@ public partial class GraphicsTests
     [Fact]
     public void CopyFromScreen_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -1963,9 +1963,9 @@ public partial class GraphicsTests
     [MemberData(nameof(TransformPoints_TestData))]
     public void TransformPoints_Points_Success(CoordinateSpace destSpace, CoordinateSpace srcSpace, Point[] points, Point[] expected)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.PageScale = 10;
             graphics.Transform = transform;
@@ -2030,9 +2030,9 @@ public partial class GraphicsTests
     [MemberData(nameof(TransformPointFs_TestData))]
     public void TransformPoints_PointFs_Success(CoordinateSpace destSpace, CoordinateSpace srcSpace, PointF[] points, PointF[] expected)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.PageScale = 10;
             graphics.Transform = transform;
@@ -2048,9 +2048,9 @@ public partial class GraphicsTests
     [InlineData(CoordinateSpace.Page)]
     public void TransformPoints_PointsAndSameCoordinateSpace_DoesNothing(CoordinateSpace space)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
 
@@ -2066,9 +2066,9 @@ public partial class GraphicsTests
     [InlineData(CoordinateSpace.Page)]
     public void TransformPoints_PointFsAndSameCoordinateSpace_DoesNothing(CoordinateSpace space)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             graphics.Transform = transform;
 
@@ -2083,7 +2083,7 @@ public partial class GraphicsTests
     [InlineData(CoordinateSpace.Device + 1)]
     public void TransformPoints_InvalidDestSpace_ThrowsArgumentException(CoordinateSpace destSpace)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new Point[] { new(1, 1) }));
@@ -2096,7 +2096,7 @@ public partial class GraphicsTests
     [InlineData(CoordinateSpace.Device + 1)]
     public void TransformPoints_InvalidSourceSpace_ThrowsArgumentException(CoordinateSpace srcSpace)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new Point[] { new(1, 1) }));
@@ -2107,7 +2107,7 @@ public partial class GraphicsTests
     [Fact]
     public void TransformPoints_NullPoints_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pts", () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, (Point[])null));
@@ -2118,7 +2118,7 @@ public partial class GraphicsTests
     [Fact]
     public void TransformPoints_EmptyPoints_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new Point[0]));
@@ -2129,7 +2129,7 @@ public partial class GraphicsTests
     [Fact]
     public void TransformPoints_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -2148,7 +2148,7 @@ public partial class GraphicsTests
     [Fact]
     public void TransformPoints_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2168,7 +2168,7 @@ public partial class GraphicsTests
     [MemberData(nameof(GetNearestColor_TestData))]
     public void GetNearestColor_Color_ReturnsExpected(PixelFormat pixelFormat, Color color, Color expected)
     {
-        using (var image = new Bitmap(10, 10, pixelFormat))
+        using (Bitmap image = new(10, 10, pixelFormat))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.Equal(expected, graphics.GetNearestColor(color));
@@ -2178,7 +2178,7 @@ public partial class GraphicsTests
     [Fact]
     public void GetNearestColor_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
@@ -2196,7 +2196,7 @@ public partial class GraphicsTests
     [Fact]
     public void GetNearestColor_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2208,7 +2208,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawArc_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawArc(null, new Rectangle(0, 0, 1, 1), 0, 90));
@@ -2221,10 +2221,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawArc_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, new Rectangle(0, 0, 1, 1), 0, 90));
@@ -2237,9 +2237,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawArc_ZeroWidth_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, new Rectangle(0, 0, 0, 1), 0, 90));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, 0, 0, 0, 1, 0, 90));
@@ -2251,9 +2251,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawArc_ZeroHeight_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, new Rectangle(0, 0, 1, 0), 0, 90));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, 0, 0, 1, 0, 0, 90));
@@ -2265,9 +2265,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawArc_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2287,8 +2287,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawArc_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2303,7 +2303,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangle_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawRectangle(null, new Rectangle(0, 0, 1, 1)));
@@ -2315,10 +2315,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangle_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangle(pen, new Rectangle(0, 0, 1, 1)));
@@ -2330,9 +2330,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangle_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2351,8 +2351,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangle_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2366,7 +2366,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangles_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawRectangles(null, new Rectangle[2]));
@@ -2377,10 +2377,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangles_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new Rectangle[2]));
@@ -2391,9 +2391,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangles_NullRectangles_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("rects", () => graphics.DrawRectangles(pen, (Rectangle[])null));
             AssertExtensions.Throws<ArgumentNullException>("rects", () => graphics.DrawRectangles(pen, (RectangleF[])null));
@@ -2403,9 +2403,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangles_EmptyRectangles_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new Rectangle[0]));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new RectangleF[0]));
@@ -2415,9 +2415,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangles_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2435,8 +2435,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawRectangles_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2449,7 +2449,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawEllipse_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawEllipse(null, new Rectangle(0, 0, 1, 1)));
@@ -2462,10 +2462,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawEllipse_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawEllipse(pen, new Rectangle(0, 0, 1, 1)));
@@ -2478,9 +2478,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawEllipse_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2500,8 +2500,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawEllipse_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2516,7 +2516,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPie_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawPie(null, new Rectangle(0, 0, 1, 1), 0, 90));
@@ -2529,10 +2529,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPie_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPie(pen, new Rectangle(0, 0, 1, 1), 0, 90));
@@ -2545,9 +2545,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPie_ZeroWidth_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPie(pen, new Rectangle(0, 0, 0, 1), 0, 90));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPie(pen, 0, 0, 0, 1, 0, 90));
@@ -2559,9 +2559,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPie_ZeroHeight_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, new Rectangle(0, 0, 1, 0), 0, 90));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawArc(pen, 0, 0, 1, 0, 0, 90));
@@ -2573,9 +2573,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPie_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2595,8 +2595,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPie_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2611,7 +2611,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPolygon_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawPolygon(null, new Point[2]));
@@ -2622,10 +2622,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPolygon_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPolygon(pen, new Point[2]));
@@ -2636,9 +2636,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPolygon_NullPoints_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawPolygon(pen, (Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawPolygon(pen, (PointF[])null));
@@ -2650,9 +2650,9 @@ public partial class GraphicsTests
     [InlineData(1)]
     public void DrawPolygon_InvalidPointsLength_ThrowsArgumentException(int length)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPolygon(pen, new Point[length]));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPolygon(pen, new PointF[length]));
@@ -2662,9 +2662,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPolygon_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2682,8 +2682,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPolygon_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2696,9 +2696,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPath_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var graphicsPath = new GraphicsPath())
+        using (GraphicsPath graphicsPath = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawPath(null, graphicsPath));
         }
@@ -2707,11 +2707,11 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPath_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var graphicsPath = new GraphicsPath())
+        using (GraphicsPath graphicsPath = new())
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPath(pen, graphicsPath));
@@ -2721,9 +2721,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPath_NullPath_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("path", () => graphics.DrawPath(pen, null));
         }
@@ -2732,11 +2732,11 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPath_DisposedPath_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
-            var graphicsPath = new GraphicsPath();
+            GraphicsPath graphicsPath = new();
             graphicsPath.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawPath(pen, graphicsPath));
@@ -2746,10 +2746,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPath_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
-        using (var graphicsPath = new GraphicsPath())
+        using (Pen pen = new(Color.Red))
+        using (GraphicsPath graphicsPath = new())
         {
             graphics.GetHdc();
             try
@@ -2766,9 +2766,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawPath_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
-        using (var graphicsPath = new GraphicsPath())
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
+        using (GraphicsPath graphicsPath = new())
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2780,7 +2780,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawCurve_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawCurve(null, new Point[2]));
@@ -2796,10 +2796,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawCurve_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawCurve(pen, new Point[2]));
@@ -2815,9 +2815,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawCurve_NullPoints_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawCurve(pen, (Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawCurve(pen, (PointF[])null));
@@ -2834,9 +2834,9 @@ public partial class GraphicsTests
     [InlineData(1)]
     public void DrawCurve_InvalidPointsLength_ThrowsArgumentException(int length)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawCurve(pen, new Point[length]));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawCurve(pen, new PointF[length]));
@@ -2856,9 +2856,9 @@ public partial class GraphicsTests
     [InlineData(4, 3, 2)]
     public void DrawCurve_InvalidOffsetCount_ThrowsArgumentException(int length, int offset, int numberOfSegments)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawCurve(pen, new PointF[length], offset, numberOfSegments));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawCurve(pen, new Point[length], offset, numberOfSegments, 1));
@@ -2869,9 +2869,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawCurve_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2894,8 +2894,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawCurve_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -2913,7 +2913,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawClosedCurve_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawClosedCurve(null, new Point[3]));
@@ -2926,10 +2926,10 @@ public partial class GraphicsTests
     [Fact]
     public void DrawClosedCurve_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawClosedCurve(pen, new Point[3]));
@@ -2942,9 +2942,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawClosedCurve_NullPoints_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawClosedCurve(pen, (Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawClosedCurve(pen, (Point[])null, 1, FillMode.Winding));
@@ -2959,9 +2959,9 @@ public partial class GraphicsTests
     [InlineData(2)]
     public void DrawClosedCurve_InvalidPointsLength_ThrowsArgumentException(int length)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawClosedCurve(pen, new Point[length]));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawClosedCurve(pen, new Point[length], 1, FillMode.Winding));
@@ -2973,9 +2973,9 @@ public partial class GraphicsTests
     [Fact]
     public void DrawClosedCurve_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -2995,8 +2995,8 @@ public partial class GraphicsTests
     [Fact]
     public void DrawClosedCurve_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -3011,7 +3011,7 @@ public partial class GraphicsTests
     [Fact]
     public void FillPie_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("brush", () => graphics.FillPie(null, new Rectangle(0, 0, 1, 1), 0, 90));
@@ -3023,10 +3023,10 @@ public partial class GraphicsTests
     [Fact]
     public void FillPie_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var brush = new SolidBrush(Color.Red);
+            SolidBrush brush = new(Color.Red);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.FillPie(brush, new Rectangle(0, 0, 1, 1), 0, 90));
@@ -3038,9 +3038,9 @@ public partial class GraphicsTests
     [Fact]
     public void FillPie_ZeroWidth_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var brush = new SolidBrush(Color.Red))
+        using (SolidBrush brush = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.FillPie(brush, new Rectangle(0, 0, 0, 1), 0, 90));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.FillPie(brush, 0, 0, 0, 1, 0, 90));
@@ -3051,9 +3051,9 @@ public partial class GraphicsTests
     [Fact]
     public void FillPie_ZeroHeight_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var brush = new SolidBrush(Color.Red))
+        using (SolidBrush brush = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.FillPie(brush, new Rectangle(0, 0, 1, 0), 0, 90));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.FillPie(brush, 0, 0, 1, 0, 0, 90));
@@ -3064,9 +3064,9 @@ public partial class GraphicsTests
     [Fact]
     public void FillPie_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var brush = new SolidBrush(Color.Red))
+        using (SolidBrush brush = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -3085,8 +3085,8 @@ public partial class GraphicsTests
     [Fact]
     public void FillPie_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new SolidBrush(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (SolidBrush brush = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -3102,9 +3102,9 @@ public partial class GraphicsTests
     {
         Color color = Color.FromArgb(Color.Plum.ToArgb());
 
-        using (var image = new Bitmap(2, 2))
+        using (Bitmap image = new(2, 2))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var brush = new SolidBrush(color))
+        using (SolidBrush brush = new(color))
         {
             graphics.FillRectangle(brush, new Rectangle(0, 0, 2, 2));
 
@@ -3120,9 +3120,9 @@ public partial class GraphicsTests
     [Fact]
     public void Clear_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -3139,8 +3139,8 @@ public partial class GraphicsTests
     [Fact]
     public void Clear_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -3152,7 +3152,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawString_DefaultFont_Succeeds()
     {
-        using (var image = new Bitmap(50, 50))
+        using (Bitmap image = new(50, 50))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, new Point());
@@ -3163,7 +3163,7 @@ public partial class GraphicsTests
     [Fact]
     public void DrawString_CompositingModeSourceCopy_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.CompositingMode = CompositingMode.SourceCopy;

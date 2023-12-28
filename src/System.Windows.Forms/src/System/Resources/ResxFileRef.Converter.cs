@@ -112,7 +112,7 @@ public partial class ResXFileRef
                     parts.Length > 2
                         ? Encoding.GetEncoding(parts[2])
                         : Encoding.Default;
-                using (StreamReader sr = new StreamReader(fileName, textFileEncoding))
+                using (StreamReader sr = new(fileName, textFileEncoding))
                 {
                     return sr.ReadToEnd();
                 }
@@ -134,7 +134,7 @@ public partial class ResXFileRef
                 return temp;
             }
 
-            MemoryStream memoryStream = new MemoryStream(temp);
+            MemoryStream memoryStream = new(temp);
             if (toCreate == typeof(MemoryStream))
             {
                 return memoryStream;
@@ -144,7 +144,7 @@ public partial class ResXFileRef
             {
                 // We special case the .ico bitmaps because GDI+ destroy the alpha channel component and
                 // we don't want that to happen.
-                Icon ico = new Icon(memoryStream);
+                Icon ico = new(memoryStream);
                 return ico.ToBitmap();
             }
 

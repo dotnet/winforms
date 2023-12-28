@@ -10,7 +10,7 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_Ctor_Default()
     {
-        using var column = new SubDataGridViewColumn();
+        using SubDataGridViewColumn column = new();
         Assert.Equal(DataGridViewAutoSizeColumnMode.NotSet, column.AutoSizeMode);
         Assert.Null(column.CellTemplate);
         Assert.Null(column.CellType);
@@ -61,7 +61,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(Ctor_DataGridViewCell_TestData))]
     public void DataGridViewColumn_Ctor_DataGridViewCell(DataGridViewCell cellTemplate)
     {
-        using var column = new SubDataGridViewColumn(cellTemplate);
+        using SubDataGridViewColumn column = new(cellTemplate);
         Assert.Equal(DataGridViewAutoSizeColumnMode.NotSet, column.AutoSizeMode);
         Assert.Same(cellTemplate, column.CellTemplate);
         Assert.Equal(cellTemplate?.GetType(), column.CellType);
@@ -102,7 +102,7 @@ public class DataGridViewColumnTests
     [EnumData<DataGridViewAutoSizeColumnMode>]
     public void DataGridViewColumn_AutoSizeMode_Set_GetReturnsExpected(DataGridViewAutoSizeColumnMode value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = value
         };
@@ -121,7 +121,7 @@ public class DataGridViewColumnTests
     [EnumData<DataGridViewAutoSizeColumnMode>]
     public void DataGridViewColumn_AutoSizeMode_SetNotVisible_GetReturnsExpected(DataGridViewAutoSizeColumnMode value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = value,
             Visible = false
@@ -178,12 +178,12 @@ public class DataGridViewColumnTests
     [MemberData(nameof(AutoSizeMode_SetWithDataGridView_TestData))]
     public void DataGridViewColumn_AutoSizeMode_SetWithDataGridView_GetReturnsExpected(DataGridViewAutoSizeColumnsMode parentMode, bool columnHeadersVisible, bool frozen, DataGridViewAutoSizeColumnMode value, DataGridViewAutoSizeColumnMode expectedInherited)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = parentMode,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             CellTemplate = new SubDataGridViewCell(),
             Frozen = frozen
@@ -226,12 +226,12 @@ public class DataGridViewColumnTests
     [MemberData(nameof(AutoSizeMode_SetWithDataGridViewNotVisible_TestData))]
     public void DataGridViewColumn_AutoSizeMode_SetWithDataGridViewNotVisible_GetReturnsExpected(DataGridViewAutoSizeColumnsMode parentMode, bool columnHeadersVisible, bool frozen, DataGridViewAutoSizeColumnMode value, DataGridViewAutoSizeColumnMode expectedInherited)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = parentMode,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             CellTemplate = new SubDataGridViewCell(),
             Visible = false,
@@ -254,12 +254,12 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_AutoSizeMode_SetColumnHeaderWithDataGridViewColumnHeadersNotVisible_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnHeadersVisible = false
         };
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -273,11 +273,11 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_AutoSizeMode_SetNotSetWithDataGridViewColumnHeadersNotVisible_GetReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnHeadersVisible = false
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
             CellTemplate = new SubDataGridViewCell()
@@ -292,12 +292,12 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_AutoSizeMode_SetNotSetWithDataGridViewColumnHeadersNotVisible_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader,
             ColumnHeadersVisible = false
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
             CellTemplate = new SubDataGridViewCell()
@@ -312,8 +312,8 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_AutoSizeMode_SetFillWithDataGridViewFrozen_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = new SubDataGridViewCell(),
             Frozen = true
@@ -328,8 +328,8 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_AutoSizeMode_SetNotSetWithDataGridViewFrozen_GetReturnsExpected()
     {
-        using var control = new DataGridView();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
             CellTemplate = new SubDataGridViewCell(),
@@ -345,11 +345,11 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_AutoSizeMode_SetNotSetWithDataGridViewFrozen_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
             CellTemplate = new SubDataGridViewCell(),
@@ -377,7 +377,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(AutoSizeMode_SetWithOldValue_TestData))]
     public void DataGridViewColumn_AutoSizeMode_SetWithOldValue_GetReturnsExpected(DataGridViewAutoSizeColumnMode oldValue, DataGridViewAutoSizeColumnMode value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = oldValue
         };
@@ -416,7 +416,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(AutoSizeMode_SetWithWidth_TestData))]
     public void DataGridViewColumn_AutoSizeMode_SetWithWidth_GetReturnsExpected(DataGridViewAutoSizeColumnMode oldValue, DataGridViewAutoSizeColumnMode value, int expectedWidth)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Width = 10,
             AutoSizeMode = oldValue
@@ -438,12 +438,12 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void ToolStripItem_AutoSizeMode_SetWithHandler_CallsAutoSizeModeChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         };
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -487,7 +487,7 @@ public class DataGridViewColumnTests
     [InvalidEnumData<DataGridViewAutoSizeColumnMode>]
     public void DataGridViewColumn_AutoSizeMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DataGridViewAutoSizeColumnMode value)
     {
-        using var column = new DataGridViewColumn();
+        using DataGridViewColumn column = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => column.AutoSizeMode = value);
     }
 
@@ -501,7 +501,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(CellTemplate_Set_TestData))]
     public void DataGridViewColumn_CellTemplate_Set_GetReturnsExpected(DataGridViewCell value)
     {
-        using var column = new SubDataGridViewColumn
+        using SubDataGridViewColumn column = new()
         {
             CellTemplate = value
         };
@@ -524,7 +524,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewColumn_ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             ContextMenuStrip = value
         };
@@ -539,8 +539,8 @@ public class DataGridViewColumnTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewColumn_ContextMenuStrip_SetWithCustomOldValue_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var oldValue = new ContextMenuStrip();
-        using var column = new DataGridViewColumn
+        using ContextMenuStrip oldValue = new();
+        using DataGridViewColumn column = new()
         {
             ContextMenuStrip = oldValue
         };
@@ -557,9 +557,9 @@ public class DataGridViewColumnTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewColumn_ContextMenuStrip_SetWithDataGridView_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -578,8 +578,8 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_ContextMenuStrip_SetDisposeNew_RemovesContextMenuStrip()
     {
-        using var menu = new ContextMenuStrip();
-        using var control = new DataGridViewColumn
+        using ContextMenuStrip menu = new();
+        using DataGridViewColumn control = new()
         {
             ContextMenuStrip = menu
         };
@@ -592,9 +592,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_ContextMenuStrip_SetDisposeOld_RemovesContextMenuStrip()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridViewColumn
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridViewColumn control = new()
         {
             ContextMenuStrip = menu1
         };
@@ -610,9 +610,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_ContextMenuStrip_SetWithHandler_CallsContextMenuStripChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -627,7 +627,7 @@ public class DataGridViewColumnTests
         control.ColumnContextMenuStripChanged += handler;
 
         // Set different.
-        using var menu1 = new ContextMenuStrip();
+        using ContextMenuStrip menu1 = new();
         column.ContextMenuStrip = menu1;
         Assert.Same(menu1, column.ContextMenuStrip);
         Assert.Equal(1, callCount);
@@ -638,7 +638,7 @@ public class DataGridViewColumnTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var menu2 = new ContextMenuStrip();
+        using ContextMenuStrip menu2 = new();
         column.ContextMenuStrip = menu2;
         Assert.Same(menu2, column.ContextMenuStrip);
         Assert.Equal(2, callCount);
@@ -659,7 +659,7 @@ public class DataGridViewColumnTests
     [NormalizedStringData]
     public void DataGridViewColumn_DataPropertyName_SetWithoutDataGridView_GetReturnsExpected(string value, string expected)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             DataPropertyName = value
         };
@@ -674,9 +674,9 @@ public class DataGridViewColumnTests
     [NormalizedStringData]
     public void DataGridViewColumn_DataPropertyName_SetWithDataGridView_GetReturnsExpected(string value, string expected)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -695,9 +695,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_DataPropertyName_SetWithHandler_CallsColumnDataPropertyNameChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -737,8 +737,8 @@ public class DataGridViewColumnTests
     {
         yield return new object[] { null, new DataGridViewCellStyle() };
 
-        var style1 = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter };
-        var style2 = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomLeft };
+        DataGridViewCellStyle style1 = new() { Alignment = DataGridViewContentAlignment.MiddleCenter };
+        DataGridViewCellStyle style2 = new() { Alignment = DataGridViewContentAlignment.BottomLeft };
         yield return new object[] { style1, style1 };
         yield return new object[] { style2, style2 };
     }
@@ -747,7 +747,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewColumn_DefaultCellStyle_Set_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             DefaultCellStyle = value
         };
@@ -764,11 +764,11 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewColumn_DefaultCellStyle_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        var oldValue = new DataGridViewCellStyle
+        DataGridViewCellStyle oldValue = new()
         {
             Alignment = DataGridViewContentAlignment.MiddleCenter
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             DefaultCellStyle = oldValue
         };
@@ -787,9 +787,9 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewColumn_DefaultCellStyle_SetWithDataGridView_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -811,13 +811,13 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewColumn_DefaultCellStyle_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        var oldValue = new DataGridViewCellStyle
+        DataGridViewCellStyle oldValue = new()
         {
             Alignment = DataGridViewContentAlignment.MiddleCenter
         };
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             DefaultCellStyle = oldValue
@@ -839,9 +839,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_DefaultCellStyle_SetWithDataGridView_CallsColumnDefaultCellStyleChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -856,7 +856,7 @@ public class DataGridViewColumnTests
         };
         control.ColumnDefaultCellStyleChanged += handler;
 
-        var style1 = new DataGridViewCellStyle
+        DataGridViewCellStyle style1 = new()
         {
             Alignment = DataGridViewContentAlignment.MiddleCenter
         };
@@ -874,7 +874,7 @@ public class DataGridViewColumnTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var style2 = new DataGridViewCellStyle
+        DataGridViewCellStyle style2 = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter
         };
@@ -920,7 +920,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
     public void DataGridViewColumn_DefaultHeaderCellType_Set_GetReturnsExpected(Type value, Type expected)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             DefaultHeaderCellType = value
         };
@@ -937,7 +937,7 @@ public class DataGridViewColumnTests
     [InlineData(typeof(DataGridViewHeaderCell))]
     public void DataGridViewColumn_DefaultHeaderCellType_SetWithNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var column = new SubDataGridViewColumn
+        using SubDataGridViewColumn column = new()
         {
             DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
         };
@@ -953,9 +953,9 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
     public void DataGridViewColumn_DefaultHeaderCellType_SetWithDataGridView_GetReturnsExpected(Type value, Type expected)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -975,9 +975,9 @@ public class DataGridViewColumnTests
     [InlineData(typeof(DataGridViewHeaderCell))]
     public void DataGridViewColumn_DefaultHeaderCellType_SetWithDataGridViewNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -996,7 +996,7 @@ public class DataGridViewColumnTests
     [InlineData(typeof(int))]
     public void DataGridViewColumn_DefaultHeaderCellType_SetInvalidWithNullOldValue_GetReturnsExpected(Type value)
     {
-        using var column = new DataGridViewRow();
+        using DataGridViewRow column = new();
         Assert.Throws<ArgumentException>("value", () => column.DefaultHeaderCellType = value);
     }
 
@@ -1005,7 +1005,7 @@ public class DataGridViewColumnTests
     [InlineData(typeof(int))]
     public void DataGridViewColumn_DefaultHeaderCellType_SetInvalidWithNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
         };
@@ -1015,9 +1015,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_Displayed_Get_ReturnsExpected()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1036,7 +1036,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DividerWidth_Set_TestData))]
     public void DataGridViewColumn_DividerWidth_Set_GetReturnsExpected(int value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             DividerWidth = value
         };
@@ -1051,7 +1051,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(DividerWidth_Set_TestData))]
     public void DataGridViewColumn_DividerWidth_SetWithDataGridView_GetReturnsExpected(int value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1071,9 +1071,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_DividerWidth_SetWithDataGridView_CallsColumnDividerWidthChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1115,7 +1115,7 @@ public class DataGridViewColumnTests
     [InlineData(65537)]
     public void DataGridViewColumn_DividerWidth_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var column = new DataGridViewColumn();
+        using DataGridViewColumn column = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => column.DividerWidth = value);
     }
 
@@ -1126,7 +1126,7 @@ public class DataGridViewColumnTests
     [InlineData(DataGridViewElementStates.Frozen | DataGridViewElementStates.Selected, true)]
     public void DataGridViewColumn_Frozen_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var row = new CustomStateDataGridViewColumn
+        using CustomStateDataGridViewColumn row = new()
         {
             StateResult = state
         };
@@ -1136,9 +1136,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_Frozen_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1162,7 +1162,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(Frozen_Set_TestData))]
     public void DataGridViewColumn_Frozen_Set_GetReturnsExpected(bool visible, DataGridViewAutoSizeColumnMode autoSizeMode, bool value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Visible = visible,
             AutoSizeMode = autoSizeMode,
@@ -1208,11 +1208,11 @@ public class DataGridViewColumnTests
     [MemberData(nameof(Frozen_SetWithDataGridView_TestData))]
     public void DataGridViewColumn_Frozen_SetWithDataGridView_GetReturnsExpected(bool visible, DataGridViewAutoSizeColumnMode autoSizeMode, bool value, DataGridViewAutoSizeColumnMode expectedAutoSizeMode1, DataGridViewAutoSizeColumnMode expectedAutoSizeMode2)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader
         };
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Visible = visible,
             AutoSizeMode = autoSizeMode,
@@ -1239,21 +1239,21 @@ public class DataGridViewColumnTests
     [BoolData]
     public void DataGridViewColumn_Frozen_SetWithPreviousColumns_SetsToFrozen(bool previousVisible)
     {
-        using var control = new DataGridView();
-        using var column1 = new DataGridViewColumn
+        using DataGridView control = new();
+        using DataGridViewColumn column1 = new()
         {
             CellTemplate = new SubDataGridViewCell()
         };
-        using var column2 = new DataGridViewColumn
+        using DataGridViewColumn column2 = new()
         {
             CellTemplate = new SubDataGridViewCell(),
             Visible = previousVisible
         };
-        using var column3 = new DataGridViewColumn
+        using DataGridViewColumn column3 = new()
         {
             CellTemplate = new SubDataGridViewCell()
         };
-        using var column4 = new DataGridViewColumn
+        using DataGridViewColumn column4 = new()
         {
             CellTemplate = new SubDataGridViewCell()
         };
@@ -1301,9 +1301,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_Frozen_SetWithDataGridView_CallsColumnStateChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Frozen = true
@@ -1345,7 +1345,7 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_HeaderCell_Get_ReturnsExpected()
     {
-        using var column = new SubDataGridViewColumn();
+        using SubDataGridViewColumn column = new();
         Assert.IsType<DataGridViewColumnHeaderCell>(column.HeaderCell);
         Assert.Same(column, column.HeaderCell.OwningColumn);
         Assert.Null(column.HeaderCell.OwningRow);
@@ -1357,7 +1357,7 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_HeaderCellCore_Get_ReturnsExpected()
     {
-        using var column = new SubDataGridViewColumn();
+        using SubDataGridViewColumn column = new();
         Assert.IsType<DataGridViewColumnHeaderCell>(column.HeaderCellCore);
         Assert.Same(column, column.HeaderCellCore.OwningColumn);
         Assert.Null(column.HeaderCellCore.OwningRow);
@@ -1376,12 +1376,12 @@ public class DataGridViewColumnTests
     [InlineData(DataGridViewAutoSizeColumnsMode.None, DataGridViewAutoSizeColumnMode.None)]
     public void DataGridViewColumn_InheritedAutoSizeMode_GetWithDataGridView_ReturnsExpected(DataGridViewAutoSizeColumnsMode mode, DataGridViewAutoSizeColumnMode expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = mode
         };
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1396,7 +1396,7 @@ public class DataGridViewColumnTests
     [InlineData(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected, true)]
     public void DataGridViewColumn_ReadOnly_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var column = new CustomStateDataGridViewColumn
+        using CustomStateDataGridViewColumn column = new()
         {
             StateResult = state
         };
@@ -1407,12 +1407,12 @@ public class DataGridViewColumnTests
     [BoolData]
     public void DataGridViewRow_ReadOnly_GetWithDataGridView_ReturnsExpected(bool dataGridViewReadOnly)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ReadOnly = dataGridViewReadOnly
         };
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1424,7 +1424,7 @@ public class DataGridViewColumnTests
     [BoolData]
     public void DataGridViewColumn_ReadOnly_Set_GetReturnsExpected(bool value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             ReadOnly = value
         };
@@ -1449,9 +1449,9 @@ public class DataGridViewColumnTests
     [InlineData(false, false)]
     public void DataGridViewColumn_ReadOnly_SetWithDataGridView_GetReturnsExpected(bool controlReadOnly, bool value)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1476,9 +1476,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_ReadOnly_SetWithDataGridView_CallsColumnStateChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1523,7 +1523,7 @@ public class DataGridViewColumnTests
     [InlineData(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, true)]
     public void DataGridViewColumn_Visible_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var row = new CustomStateDataGridViewColumn
+        using CustomStateDataGridViewColumn row = new()
         {
             StateResult = state
         };
@@ -1534,12 +1534,12 @@ public class DataGridViewColumnTests
     [BoolData]
     public void DataGridViewColumn_Visible_GetWithDataGridView_ReturnsExpected(bool visible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = visible
         };
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1563,7 +1563,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(Visible_Set_TestData))]
     public void DataGridViewColumn_Visible_Set_GetReturnsExpected(DataGridViewAutoSizeColumnMode autoSizeMode, bool frozen, bool value)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = autoSizeMode,
             Frozen = frozen,
@@ -1607,14 +1607,14 @@ public class DataGridViewColumnTests
     [MemberData(nameof(Visible_SetWithDataGridView_TestData))]
     public void DataGridViewColumn_Visible_SetWithDataGridView_GetReturnsExpected(bool visible, bool columnHeadersVisible, DataGridViewAutoSizeColumnMode autoSizeMode, bool value, DataGridViewAutoSizeColumnMode expectedAutoSizeMode1, DataGridViewAutoSizeColumnMode expectedAutoSizeMode2)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = visible,
             ColumnHeadersVisible = columnHeadersVisible,
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader
         };
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             AutoSizeMode = autoSizeMode,
             CellTemplate = cellTemplate
@@ -1640,21 +1640,21 @@ public class DataGridViewColumnTests
     [BoolData]
     public void DataGridViewColumn_Visible_SetWithPreviousColumns_SetsToVisible(bool previousVisible)
     {
-        using var control = new DataGridView();
-        using var column1 = new DataGridViewColumn
+        using DataGridView control = new();
+        using DataGridViewColumn column1 = new()
         {
             CellTemplate = new SubDataGridViewCell()
         };
-        using var column2 = new DataGridViewColumn
+        using DataGridViewColumn column2 = new()
         {
             CellTemplate = new SubDataGridViewCell(),
             Visible = previousVisible
         };
-        using var column3 = new DataGridViewColumn
+        using DataGridViewColumn column3 = new()
         {
             CellTemplate = new SubDataGridViewCell()
         };
-        using var column4 = new DataGridViewColumn
+        using DataGridViewColumn column4 = new()
         {
             CellTemplate = new SubDataGridViewCell()
         };
@@ -1702,9 +1702,9 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_Visible_SetWithDataGridView_CallsColumnStateChanged()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var column = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = true
@@ -1759,7 +1759,7 @@ public class DataGridViewColumnTests
     [MemberData(nameof(GetPreferred_WithoutDataGridView_TestData))]
     public void DataGridViewColumn_GetPreferredWidth_InvokeWithoutDataGridView_ReturnsExpected(DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight)
     {
-        using var column = new SubDataGridViewColumn();
+        using SubDataGridViewColumn column = new();
         Assert.Equal(-1, column.GetPreferredWidth(autoSizeColumnMode, fixedHeight));
     }
 
@@ -1769,7 +1769,7 @@ public class DataGridViewColumnTests
     [InlineData(DataGridViewAutoSizeColumnMode.Fill)]
     public void DataGridViewColumn_GetPreferredWidth_NotApplicableAutoSizeColumnMode_ThrowsArgumentException(DataGridViewAutoSizeColumnMode autoSizeColumnMode)
     {
-        using var column = new SubDataGridViewColumn();
+        using SubDataGridViewColumn column = new();
         Assert.Throws<ArgumentException>(() => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: true));
         Assert.Throws<ArgumentException>(() => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: false));
     }
@@ -1778,7 +1778,7 @@ public class DataGridViewColumnTests
     [InvalidEnumData<DataGridViewAutoSizeColumnMode>]
     public void DataGridViewColumn_GetPreferredWidth_NotApplicableAutoSizeColumnMode_ThrowsInvalidEnumArgumentException(DataGridViewAutoSizeColumnMode autoSizeColumnMode)
     {
-        using var column = new SubDataGridViewColumn();
+        using SubDataGridViewColumn column = new();
         Assert.Throws<InvalidEnumArgumentException>("autoSizeColumnMode", () => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: true));
         Assert.Throws<InvalidEnumArgumentException>("autoSizeColumnMode", () => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: false));
     }
@@ -1786,14 +1786,14 @@ public class DataGridViewColumnTests
     [WinFormsFact]
     public void DataGridViewColumn_ToString_Invoke_ReturnsExpected()
     {
-        using var column = new DataGridViewColumn();
+        using DataGridViewColumn column = new();
         Assert.Equal("DataGridViewColumn { Name=, Index=-1 }", column.ToString());
     }
 
     [WinFormsFact]
     public void DataGridViewColumn_ToString_InvokeWithName_ReturnsExpected()
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Name = "name"
         };

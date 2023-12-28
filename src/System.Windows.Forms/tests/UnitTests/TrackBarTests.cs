@@ -17,7 +17,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Ctor_Default()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -114,7 +114,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("msctls_trackbar32", createParams.ClassName);
@@ -138,7 +138,7 @@ public class TrackBarTests
     [InlineData(TickStyle.TopLeft, 0x56010005)]
     public void TrackBar_CreateParams_GetTickStyle_ReturnsExpected(TickStyle tickStyle, int expectedStyle)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             TickStyle = tickStyle
         };
@@ -164,7 +164,7 @@ public class TrackBarTests
     [InlineData(Orientation.Vertical, 0x56010003)]
     public void TrackBar_CreateParams_GetOrientation_ReturnsExpected(Orientation orientation, int expectedStyle)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Orientation = orientation
         };
@@ -194,7 +194,7 @@ public class TrackBarTests
     [InlineData(RightToLeft.Yes, false, 0x7000)]
     public void TrackBar_CreateParams_GetRightToLeft_ReturnsExpected(RightToLeft rightToLeft, bool rightToLeftLayout, int expectedExStyle)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             RightToLeft = rightToLeft,
             RightToLeftLayout = rightToLeftLayout
@@ -220,7 +220,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -255,7 +255,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_AutoSize_SetWithOrientation_GetReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Orientation = Orientation.Vertical
         };
@@ -293,7 +293,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_AutoSize_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -344,7 +344,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_AutoSize_SetWithOrientationWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Orientation = Orientation.Vertical
         };
@@ -397,7 +397,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void ToolStrip_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AutoSize = true
         };
@@ -436,7 +436,7 @@ public class TrackBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void TrackBar_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             BackgroundImage = value
         };
@@ -452,7 +452,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -463,7 +463,7 @@ public class TrackBarTests
         control.BackgroundImageChanged += handler;
 
         // Set different.
-        using var image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         control.BackgroundImage = image1;
         Assert.Same(image1, control.BackgroundImage);
         Assert.Equal(1, callCount);
@@ -474,7 +474,7 @@ public class TrackBarTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new(10, 10);
         control.BackgroundImage = image2;
         Assert.Same(image2, control.BackgroundImage);
         Assert.Equal(2, callCount);
@@ -495,7 +495,7 @@ public class TrackBarTests
     [EnumData<ImageLayout>]
     public void TrackBar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             BackgroundImageLayout = value
         };
@@ -513,7 +513,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -549,7 +549,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_DoubleBuffered_Get_ReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
         Assert.Equal(value, control.DoubleBuffered);
     }
@@ -558,7 +558,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_DoubleBuffered_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             DoubleBuffered = value
         };
@@ -583,7 +583,7 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -623,7 +623,7 @@ public class TrackBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void TrackBar_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Font = value
         };
@@ -641,7 +641,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -652,7 +652,7 @@ public class TrackBarTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -693,7 +693,7 @@ public class TrackBarTests
     [MemberData(nameof(ForeColor_Set_TestData))]
     public void TrackBar_ForeColor_Set_Nop(Color value)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             ForeColor = value
         };
@@ -710,7 +710,7 @@ public class TrackBarTests
     [MemberData(nameof(ForeColor_Set_TestData))]
     public void TrackBar_ForeColor_SetWithHandle_Nop(Color value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -738,7 +738,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_ForeColor_SetWithHandler_DoesNotCallForeColorChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -773,7 +773,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Handle_GetWithMaximum_Success()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Maximum = 11
         };
@@ -784,7 +784,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Handle_GetWithMinimum_Success()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Minimum = 11
         };
@@ -801,7 +801,7 @@ public class TrackBarTests
     [InlineData(RightToLeft.Yes, false, 5)]
     public void TrackBar_Handle_GetWithValue_Success(RightToLeft rightToLeft, bool rightToLeftLayout, int expected)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Value = 5,
             RightToLeft = rightToLeft,
@@ -814,7 +814,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Handle_GetWithValueVertical_Success()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Orientation = Orientation.Vertical,
             Value = 5
@@ -826,7 +826,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Handle_GetWithLargeChange_Success()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             LargeChange = 11
         };
@@ -837,7 +837,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Handle_GetWithSmallChange_Success()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             SmallChange = 11
         };
@@ -857,7 +857,7 @@ public class TrackBarTests
     [MemberData(nameof(Handle_GetSize_TestData))]
     public void TrackBar_Handle_GetSize_Success(bool autoSize, Orientation orientation, Size expected)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             AutoSize = autoSize,
             Orientation = orientation
@@ -888,7 +888,7 @@ public class TrackBarTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void TrackBar_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             ImeMode = value
         };
@@ -905,7 +905,7 @@ public class TrackBarTests
     [MemberData(nameof(ImeMode_Set_TestData))]
     public void TrackBar_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -933,7 +933,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_ImeMode_SetWithHandler_CallsImeModeChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -969,7 +969,7 @@ public class TrackBarTests
     [InvalidEnumData<ImeMode>]
     public void TrackBar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
     }
 
@@ -980,7 +980,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_LargeChange_Set_GetReturnsExpected(int value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             LargeChange = value
         };
@@ -1000,7 +1000,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_LargeChange_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1030,7 +1030,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_LargeChange_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.LargeChange = -1);
         Assert.Equal(5, control.LargeChange);
     }
@@ -1042,7 +1042,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_Maximum_Set_GetReturnsExpected(int value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Maximum = value
         };
@@ -1070,7 +1070,7 @@ public class TrackBarTests
     [InlineData(11, 1)]
     public void TrackBar_Maximum_SetWithHandle_GetReturnsExpected(int value, int expectedInvalidatedCallCount)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1112,7 +1112,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Maximum_SetLessThanValueAndMinimum_SetsValueAndMinimum()
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 10,
             Minimum = 8,
@@ -1129,7 +1129,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Maximum_SetLessThanValueAndMinimumWithHandle_SetsValueAndMinimum()
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 10,
             Minimum = 8
@@ -1160,7 +1160,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Maximum_SetNegative_SetsValueAndMinimum()
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Maximum = -1
         };
@@ -1178,7 +1178,7 @@ public class TrackBarTests
     [InlineData(5)]
     public void TrackBar_Minimum_Set_GetReturnsExpected(int value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 5,
             Minimum = value
@@ -1206,7 +1206,7 @@ public class TrackBarTests
     [InlineData(5, 1)]
     public void TrackBar_Minimum_SetWithHandle_GetReturnsExpected(int value, int expectedInvalidatedCallCount)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 5
         };
@@ -1250,7 +1250,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Minimum_SetGreaterThanValueAndMaximum_SetsValueAndMinimum()
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 10,
             Maximum = 8,
@@ -1267,7 +1267,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Minimum_SetGreaterThanValueAndMaximumWithHandle_SetsValueAndMinimum()
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 10,
             Maximum = 8
@@ -1307,7 +1307,7 @@ public class TrackBarTests
     [MemberData(nameof(Orientation_Set_TestData))]
     public void TrackBar_Orientation_Set_GetReturnsExpected(bool autoSize, Orientation value, Size expectedSize, bool expectedFixedWidth)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             AutoSize = autoSize,
             Orientation = value
@@ -1339,7 +1339,7 @@ public class TrackBarTests
     [MemberData(nameof(Orientation_SetWithCustomOldValue_TestData))]
     public void TrackBar_Orientation_SetWithCustomOldValue_GetReturnsExpected(bool autoSize, Orientation value, Size expectedSize, bool expectedFixedWidth, bool expectedFixedHeight)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             AutoSize = autoSize,
             Orientation = Orientation.Vertical
@@ -1373,7 +1373,7 @@ public class TrackBarTests
     [MemberData(nameof(Orientation_SetWithHandle_TestData))]
     public void TrackBar_Orientation_SetWithHandle_GetReturnsExpected(bool autoSize, Orientation value, Size expectedSize, bool expectedFixedWidth, bool expectedFixedHeight, int expectedCreatedCallCount)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             AutoSize = autoSize
         };
@@ -1419,7 +1419,7 @@ public class TrackBarTests
     [MemberData(nameof(Orientation_SetWithCustomOldValueWithHandle_TestData))]
     public void TrackBar_Orientation_SetWithCustomOldValueWithHandle_GetReturnsExpected(bool autoSize, Orientation value, Size expectedSize, bool expectedFixedWidth, bool expectedFixedHeight, int expectedCreatedCallCount)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             AutoSize = autoSize,
             Orientation = Orientation.Vertical
@@ -1458,7 +1458,7 @@ public class TrackBarTests
     [InvalidEnumData<Orientation>]
     public void TrackBar_Orientation_SetInvalidValue_ThrowsInvalidEnumArgumentException(Orientation value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Orientation = value);
     }
 
@@ -1466,7 +1466,7 @@ public class TrackBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void TrackBar_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Padding = value
         };
@@ -1483,7 +1483,7 @@ public class TrackBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void TrackBar_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1511,7 +1511,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1522,7 +1522,7 @@ public class TrackBarTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -1533,7 +1533,7 @@ public class TrackBarTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -1554,7 +1554,7 @@ public class TrackBarTests
     [InlineData(RightToLeft.Inherit, false, 0)]
     public void TrackBar_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -1594,7 +1594,7 @@ public class TrackBarTests
     [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
     public void TrackBar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -1644,7 +1644,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             RightToLeftLayout = true
         };
@@ -1682,7 +1682,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             RightToLeft = RightToLeft.Yes
         };
@@ -1714,7 +1714,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_SmallChange_Set_GetReturnsExpected(int value)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             SmallChange = value
         };
@@ -1734,7 +1734,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_SmallChange_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1764,7 +1764,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_SmallChange_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SmallChange = -1);
         Assert.Equal(1, control.SmallChange);
     }
@@ -1773,7 +1773,7 @@ public class TrackBarTests
     [NormalizedStringData]
     public void TrackBar_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Text = value
         };
@@ -1790,7 +1790,7 @@ public class TrackBarTests
     [NormalizedStringData]
     public void TrackBar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1818,7 +1818,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1858,7 +1858,7 @@ public class TrackBarTests
     [InlineData(int.MaxValue)]
     public void TrackBar_TickFrequency_Set_GetReturnsExpected(int value)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             TickFrequency = value
         };
@@ -1879,7 +1879,7 @@ public class TrackBarTests
     [InlineData(int.MaxValue, 1)]
     public void TrackBar_TickFrequency_SetWithHandle_GetReturnsExpected(int value, int expectedInvalidatedCallCount)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1908,7 +1908,7 @@ public class TrackBarTests
     [EnumData<TickStyle>]
     public void TrackBar_TickStyle_Set_GetReturnsExpected(TickStyle value)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             TickStyle = value
         };
@@ -1928,7 +1928,7 @@ public class TrackBarTests
     [InlineData(TickStyle.TopLeft, 1)]
     public void TrackBar_TickStyle_SetWithHandle_GetReturnsExpected(TickStyle value, int expectedCreatedCallCount)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1957,7 +1957,7 @@ public class TrackBarTests
     [InvalidEnumData<TickStyle>]
     public void TrackBar_TickStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(TickStyle value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.TickStyle = value);
     }
 
@@ -1983,7 +1983,7 @@ public class TrackBarTests
     [MemberData(nameof(Value_Set_TestData))]
     public void TrackBar_Value_Set_GetReturnsExpected(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout, int value)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Orientation = orientation,
             RightToLeft = rightToLeft,
@@ -2017,7 +2017,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_Value_SetInitialising_GetReturnsExpected(int value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         control.BeginInit();
 
         control.Value = value;
@@ -2110,7 +2110,7 @@ public class TrackBarTests
     [MemberData(nameof(Value_SetWithHandle_TestData))]
     public void TrackBar_Value_SetWithHandle_GetReturnsExpected(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout, int value, int expectedPos)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Orientation = orientation,
             RightToLeft = rightToLeft,
@@ -2153,7 +2153,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_Value_SetWithHandler_CallsValueChanged()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         int callCount = 0;
         EventHandler valueChangedHandler = (sender, e) =>
         {
@@ -2190,7 +2190,7 @@ public class TrackBarTests
     [InlineData(11)]
     public void TrackBar_Value_SetOutOfRange_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
         Assert.Equal(0, control.Value);
     }
@@ -2198,7 +2198,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_BeginInit_InvokeMultipleTimes_Success()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         control.BeginInit();
 
         // Call again.
@@ -2208,7 +2208,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_CreateHandle_Invoke_Success()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         control.CreateHandle();
         Assert.True(control.Created);
         Assert.True(control.IsHandleCreated);
@@ -2223,7 +2223,7 @@ public class TrackBarTests
     [InlineData(10)]
     public void TrackBar_EndInit_InvokeNotInitializing_Nop(int value)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         control.Value = value;
         Assert.Equal(value, control.Value);
 
@@ -2247,7 +2247,7 @@ public class TrackBarTests
     [InlineData(11, 10)]
     public void TrackBar_EndInit_InvokeInitializing_Success(int value, int expectedValue)
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         control.BeginInit();
         control.Value = value;
         Assert.Equal(value, control.Value);
@@ -2265,7 +2265,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -2292,7 +2292,7 @@ public class TrackBarTests
     [InlineData((ControlStyles)(-1), false)]
     public void TrackBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -2302,7 +2302,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -2316,7 +2316,7 @@ public class TrackBarTests
     [InlineData(Keys.A, false)]
     public void TrackBar_IsInputKey_Invoke_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Equal(expected, control.IsInputKey(keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -2325,7 +2325,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2351,7 +2351,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2391,7 +2391,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2415,7 +2415,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2439,7 +2439,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2465,7 +2465,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -2492,7 +2492,7 @@ public class TrackBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void TrackBar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2516,7 +2516,7 @@ public class TrackBarTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void TrackBar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2553,7 +2553,7 @@ public class TrackBarTests
     [MemberData(nameof(MouseEventArgs_TestData))]
     public void TrackBar_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2577,8 +2577,8 @@ public class TrackBarTests
     [BoolData]
     public void TrackBar_OnMouseWheel_InvokeHandledMouseEventArgs_SetsHandled(bool handled)
     {
-        using var control = new SubTrackBar();
-        var eventArgs = new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4, handled);
+        using SubTrackBar control = new();
+        HandledMouseEventArgs eventArgs = new(MouseButtons.Left, 1, 2, 3, 4, handled);
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -2597,7 +2597,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_OnMouseWheel_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.Throws<NullReferenceException>(() => control.OnMouseWheel(null));
     }
 
@@ -2615,7 +2615,7 @@ public class TrackBarTests
     [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
     public void TrackBar_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -2654,7 +2654,7 @@ public class TrackBarTests
     [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
     public void TrackBar_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -2695,7 +2695,7 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             RightToLeft = RightToLeft.Yes
         };
@@ -2723,7 +2723,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnScroll_Invoke_CallsScroll(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2747,7 +2747,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnSystemColorsChanged_Invoke_CallsSystemColorsChanged(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2773,7 +2773,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnSystemColorsChanged_InvokeWithHandle_CallsSystemColorsChanged(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2812,7 +2812,7 @@ public class TrackBarTests
     [NewAndDefaultData<EventArgs>]
     public void TrackBar_OnValueChanged_Invoke_CallsValueChanged(EventArgs eventArgs)
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2922,7 +2922,7 @@ public class TrackBarTests
     [MemberData(nameof(SetBoundsCore_TestData))]
     public void TrackBar_SetBoundsCore_Invoke_Success(bool autoSize, Orientation orientation, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             AutoSize = autoSize,
             Orientation = orientation
@@ -3052,7 +3052,7 @@ public class TrackBarTests
     [MemberData(nameof(SetRange_TestData))]
     public void TrackBar_SetRange_Invoke_Success(int minValue, int maxValue, int expectedMinimum, int expectedMaximum, int expectedValue)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Value = 5
         };
@@ -3081,7 +3081,7 @@ public class TrackBarTests
     [MemberData(nameof(SetRange_WithRange_TestData))]
     public void TrackBar_SetRange_InvokeWithHandle_Success(int minValue, int maxValue, int expectedMinimum, int expectedMaximum, int expectedValue, int expectedInvalidatedCallCount)
     {
-        using var control = new TrackBar
+        using TrackBar control = new()
         {
             Value = 5
         };
@@ -3109,14 +3109,14 @@ public class TrackBarTests
     [WinFormsFact]
     public void TrackBar_ToString_Invoke_ReturnsExpected()
     {
-        using var control = new TrackBar();
+        using TrackBar control = new();
         Assert.Equal("System.Windows.Forms.TrackBar, Minimum: 0, Maximum: 10, Value: 0", control.ToString());
     }
 
     [WinFormsFact]
     public void TrackBar_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubTrackBar();
+        using SubTrackBar control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3132,7 +3132,7 @@ public class TrackBarTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
@@ -3179,7 +3179,7 @@ public class TrackBarTests
     [MemberData(nameof(WndProc_Scroll_TestData))]
     public void TrackBar_WndProc_InvokeScrollWithHandle_Success(int msg, IntPtr wParam)
     {
-        using var control = new SubTrackBar
+        using SubTrackBar control = new()
         {
             Value = 10
         };
@@ -3195,7 +3195,7 @@ public class TrackBarTests
         control.Scroll += (sender, e) => scrollCallCount++;
         int valueChangedCallCount = 0;
         control.ValueChanged += (sender, e) => valueChangedCallCount++;
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = wParam,

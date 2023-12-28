@@ -481,7 +481,7 @@ internal abstract class SelectionUIHandler
                 // If you are tempted to hoist this "new" out of the loop, don't.  The undo
                 // unit below just holds a reference to it.
                 //
-                Size size = new Size(Math.Max(MinControlWidth, newBounds.Width), Math.Max(MinControlHeight, newBounds.Height));
+                Size size = new(Math.Max(MinControlWidth, newBounds.Width), Math.Max(MinControlHeight, newBounds.Height));
 
                 PropertyDescriptor? widthProp = TypeDescriptor.GetProperties(components[i])["Width"];
                 PropertyDescriptor? heightProp = TypeDescriptor.GetProperties(components[i])["Height"];

@@ -19,10 +19,10 @@ public class DrawTreeNodeEventArgsTests
     [MemberData(nameof(Ctor_Graphics_TreeNode_Rectangle_TreeNodeStates_TestData))]
     public void Ctor_Graphics_TreeNode_Rectangle_TreeNodeStates(TreeNode node, Rectangle bounds, TreeNodeStates state)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawTreeNodeEventArgs(graphics, node, bounds, state);
+            DrawTreeNodeEventArgs e = new(graphics, node, bounds, state);
             Assert.Equal(graphics, e.Graphics);
             Assert.Equal(node, e.Node);
             Assert.Equal(bounds, e.Bounds);
@@ -35,10 +35,10 @@ public class DrawTreeNodeEventArgsTests
     [InlineData(false)]
     public void DrawDefault_Set_GetReturnsExpected(bool value)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawTreeNodeEventArgs(graphics, new TreeNode(), new Rectangle(1, 2, 3, 4), TreeNodeStates.Checked)
+            DrawTreeNodeEventArgs e = new(graphics, new TreeNode(), new Rectangle(1, 2, 3, 4), TreeNodeStates.Checked)
             {
                 DrawDefault = value
             };

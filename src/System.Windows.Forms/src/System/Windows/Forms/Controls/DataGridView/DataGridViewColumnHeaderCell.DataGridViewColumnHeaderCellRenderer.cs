@@ -29,7 +29,7 @@ public partial class DataGridViewColumnHeaderCell
             {
                 // Workaround for a
                 VisualStyleRenderer.SetParameters(s_headerElement);
-                Rectangle cornerClip = new Rectangle(bounds.Left, bounds.Bottom - 2, 2, 2);
+                Rectangle cornerClip = new(bounds.Left, bounds.Bottom - 2, 2, 2);
                 cornerClip.Intersect(rectClip);
                 VisualStyleRenderer.DrawBackground(g, bounds, cornerClip);
                 cornerClip = new Rectangle(bounds.Right - 2, bounds.Bottom - 2, 2, 2);

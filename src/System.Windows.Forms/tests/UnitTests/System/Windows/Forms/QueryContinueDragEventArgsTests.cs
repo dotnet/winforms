@@ -11,7 +11,7 @@ public class QueryContinueDragEventArgsTests
     [InlineData(0, true, DragAction.Drop)]
     public void Ctor_Int_Bool_DragAction(int keyState, bool escapePressed, DragAction action)
     {
-        var e = new QueryContinueDragEventArgs(keyState, escapePressed, action);
+        QueryContinueDragEventArgs e = new(keyState, escapePressed, action);
         Assert.Equal(keyState, e.KeyState);
         Assert.Equal(escapePressed, e.EscapePressed);
         Assert.Equal(action, e.Action);
@@ -22,7 +22,7 @@ public class QueryContinueDragEventArgsTests
     [InlineData(DragAction.Drop)]
     public void Action_Set_GetReturnsExpected(DragAction value)
     {
-        var e = new QueryContinueDragEventArgs(1, false, DragAction.Continue)
+        QueryContinueDragEventArgs e = new(1, false, DragAction.Continue)
         {
             Action = value
         };

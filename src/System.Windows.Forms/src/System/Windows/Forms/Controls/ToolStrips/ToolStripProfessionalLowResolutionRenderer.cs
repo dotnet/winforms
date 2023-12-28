@@ -50,11 +50,11 @@ internal class ToolStripProfessionalLowResolutionRenderer : ToolStripProfessiona
 
     private static void RenderToolStripBorderInternal(ToolStripRenderEventArgs e)
     {
-        Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
+        Rectangle bounds = new(Point.Empty, e.ToolStrip.Size);
         Graphics g = e.Graphics;
 
         // have to create a pen here because we're not allowed to modify the SystemPens.
-        using Pen p = new Pen(SystemColors.ButtonShadow)
+        using Pen p = new(SystemColors.ButtonShadow)
         {
             DashStyle = DashStyle.Dot
         };

@@ -46,10 +46,10 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
     {
         if (value is string valueAsString)
         {
-            XmlDocument tableLayoutSettingsXml = new XmlDocument();
+            XmlDocument tableLayoutSettingsXml = new();
             tableLayoutSettingsXml.LoadXml(valueAsString);
 
-            TableLayoutSettings settings = new TableLayoutSettings();
+            TableLayoutSettings settings = new();
 
             ParseControls(settings, tableLayoutSettingsXml.GetElementsByTagName("Control"));
             ParseStyles(settings, tableLayoutSettingsXml.GetElementsByTagName("Columns"), /*isColumn=*/true);
@@ -64,7 +64,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
     {
         if (value is TableLayoutSettings tableLayoutSettings && (destinationType == typeof(string)))
         {
-            StringBuilder xmlStringBuilder = new StringBuilder();
+            StringBuilder xmlStringBuilder = new();
             XmlWriter xmlWriter = XmlWriter.Create(xmlStringBuilder);
             xmlWriter.WriteStartElement("TableLayoutSettings");
 
@@ -93,7 +93,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
 
             // write columns
             xmlWriter.WriteStartElement("Columns");
-            StringBuilder columnStyles = new StringBuilder();
+            StringBuilder columnStyles = new();
             foreach (ColumnStyle colStyle in tableLayoutSettings.ColumnStyles)
             {
                 columnStyles.Append($"{colStyle.SizeType},{colStyle.Width},");
@@ -109,7 +109,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
 
             // write rows
             xmlWriter.WriteStartElement("Rows");
-            StringBuilder rowStyles = new StringBuilder();
+            StringBuilder rowStyles = new();
             foreach (RowStyle rowStyle in tableLayoutSettings.RowStyles)
             {
                 rowStyles.Append($"{rowStyle.SizeType},{rowStyle.Height},");
@@ -204,7 +204,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
                     }
 
                     // Append digits left of the decimal delimiter(s)
-                    StringBuilder floatStringBuilder = new StringBuilder();
+                    StringBuilder floatStringBuilder = new();
                     while ((nextIndex < styleString.Length) && (char.IsDigit(styleString[nextIndex])))
                     {
                         floatStringBuilder.Append(styleString[nextIndex]);

@@ -66,15 +66,15 @@ public class PreviewPrintController : PrintController
         // they are added to the dual-mode EMF. However, GDI+ breaks during this process if the image
         // is sufficiently large and has more than 254 colors. This code path can easily be avoided by requesting
         // an EmfPlusOnly EMF.
-        Metafile metafile = new Metafile(
+        Metafile metafile = new(
             _dc!.Hdc,
             new Rectangle(0, 0, metafileSize.Width, metafileSize.Height),
             MetafileFrameUnit.GdiCompatible,
             EmfType.EmfPlusOnly);
 
-        PreviewPageInfo info = new PreviewPageInfo(metafile, size);
+        PreviewPageInfo info = new(metafile, size);
         _list.Add(info);
-        PrintPreviewGraphics printGraphics = new PrintPreviewGraphics(document, e);
+        PrintPreviewGraphics printGraphics = new(document, e);
         _graphics = Graphics.FromImage(metafile);
 
         if (document.OriginAtMargins)

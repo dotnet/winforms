@@ -20,7 +20,7 @@ public class FileDialogCustomPlacesCollectionTests
     [MemberData(nameof(GetStringWithNullTheoryData))]
     public void FileDialogCustomPlacesCollection_Add_String_Success(string? path)
     {
-        var collection = new FileDialogCustomPlacesCollection
+        FileDialogCustomPlacesCollection collection = new()
         {
             path
         };
@@ -31,7 +31,7 @@ public class FileDialogCustomPlacesCollectionTests
 
     public static TheoryData<Guid> GetGuidTheoryData()
     {
-        var data = new TheoryData<Guid>
+        TheoryData<Guid> data = new()
         {
             Guid.Empty,
             Guid.NewGuid()
@@ -43,7 +43,7 @@ public class FileDialogCustomPlacesCollectionTests
     [MemberData(nameof(GetGuidTheoryData))]
     public void FileDialogCustomPlacesCollection_Add_Guid_Success(Guid knownFolderGuid)
     {
-        var collection = new FileDialogCustomPlacesCollection
+        FileDialogCustomPlacesCollection collection = new()
         {
             knownFolderGuid
         };

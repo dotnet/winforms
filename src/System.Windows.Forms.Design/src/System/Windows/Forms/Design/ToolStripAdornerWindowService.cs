@@ -108,7 +108,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
             return Point.Empty;
         }
 
-        var pt = new Point(c.Left, c.Top);
+        Point pt = new(c.Left, c.Top);
         PInvoke.MapWindowPoints(c.Parent, _toolStripAdornerWindow, ref pt);
         return pt;
     }

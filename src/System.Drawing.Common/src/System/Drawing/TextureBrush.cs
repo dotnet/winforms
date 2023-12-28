@@ -142,7 +142,7 @@ public sealed class TextureBrush : Brush
     {
         get
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             int status = Gdip.GdipGetTextureTransform(new HandleRef(this, NativeBrush), new HandleRef(matrix, matrix.NativeMatrix));
             Gdip.CheckStatus(status);
 

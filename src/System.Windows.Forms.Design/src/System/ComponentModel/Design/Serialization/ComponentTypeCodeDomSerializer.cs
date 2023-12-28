@@ -36,7 +36,7 @@ internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
             typeDecl.UserData[_initMethodKey] = method;
 
             // Now create a ctor that calls this method.
-            CodeConstructor ctor = new CodeConstructor();
+            CodeConstructor ctor = new();
 
             ctor.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), _initMethodName));
             typeDecl.Members.Add(ctor);

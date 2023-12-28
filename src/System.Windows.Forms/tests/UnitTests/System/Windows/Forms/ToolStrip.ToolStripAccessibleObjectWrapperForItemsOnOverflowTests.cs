@@ -12,7 +12,7 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
     [WinFormsFact]
     public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_Ctor_Default()
     {
-        using ToolStripButton toolStripItem = new ToolStripButton();
+        using ToolStripButton toolStripItem = new();
 
         Type type = typeof(ToolStrip)
             .GetNestedType("ToolStripAccessibleObjectWrapperForItemsOnOverflow", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -24,8 +24,8 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
     [WinFormsFact]
     public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        using ToolStripButton toolStripItem = new ToolStripButton();
+        using ToolStrip toolStrip = new();
+        using ToolStripButton toolStripItem = new();
         toolStrip.Items.Add(toolStripItem);
         toolStripItem.SetPlacement(ToolStripItemPlacement.Overflow);
         // AccessibleRole is not set = Default
@@ -40,8 +40,8 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
     [WinFormsFact]
     public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_Role_IsPushButton_ByDefault()
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        using ToolStripButton toolStripItem = new ToolStripButton();
+        using ToolStrip toolStrip = new();
+        using ToolStripButton toolStripItem = new();
         toolStrip.Items.Add(toolStripItem);
         toolStripItem.SetPlacement(ToolStripItemPlacement.Overflow);
         // AccessibleRole is not set = Default
@@ -72,8 +72,8 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
     [MemberData(nameof(ToolStripAccessibleObjectWrapperForItemsOnOverflow_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStrip toolStrip = new ToolStrip();
-        using ToolStripButton toolStripItem = new ToolStripButton();
+        using ToolStrip toolStrip = new();
+        using ToolStripButton toolStripItem = new();
         toolStrip.Items.Add(toolStripItem);
         toolStripItem.SetPlacement(ToolStripItemPlacement.Overflow);
         toolStripItem.AccessibleRole = role;

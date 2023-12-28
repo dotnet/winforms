@@ -38,7 +38,7 @@ public partial class ControlTests
     [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_TestData))]
     public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntWithoutHandle_Nop(AccessibleEvents accEvent, int childID)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.AccessibilityNotifyClients(accEvent, childID);
         Assert.False(control.IsHandleCreated);
 
@@ -51,7 +51,7 @@ public partial class ControlTests
     [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_TestData))]
     public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntWithHandle_Success(AccessibleEvents accEvent, int childID)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         control.AccessibilityNotifyClients(accEvent, childID);
@@ -85,7 +85,7 @@ public partial class ControlTests
     [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData))]
     public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntIntWithoutHandle_Nop(AccessibleEvents accEvent, int objectID, int childID)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.AccessibilityNotifyClients(accEvent, objectID, childID);
         Assert.False(control.IsHandleCreated);
 
@@ -98,7 +98,7 @@ public partial class ControlTests
     [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData))]
     public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntIntWithHandle_Success(AccessibleEvents accEvent, int objectID, int childID)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         control.AccessibilityNotifyClients(accEvent, objectID, childID);
@@ -113,7 +113,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_BringToFront_InvokeWithoutHandleWithoutParent_Nop(bool topLevel)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetTopLevel(topLevel);
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
@@ -133,9 +133,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BringToFront_InvokeWithoutHandleWithParent_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control parent = new();
+        using Control child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -175,9 +175,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BringToFront_InvokeWithHandleWithParentWithoutHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control parent = new();
+        using Control child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -230,9 +230,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BringToFront_InvokeWithHandleWithParentWithHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control parent = new();
+        using Control child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -297,9 +297,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BringToFront_InvokeWithoutHandleWithParentWithHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new SubControl();
-        using var child2 = new Control();
+        using Control parent = new();
+        using SubControl child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -357,7 +357,7 @@ public partial class ControlTests
     [InlineData(false, false)]
     public void Control_BringToFront_InvokeWithHandleWithoutParent_Success(bool enabled, bool topLevel)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Enabled = enabled
         };
@@ -396,7 +396,7 @@ public partial class ControlTests
     [InlineData(false, AccessibleRole.None)]
     public void Control_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createHandle, AccessibleRole expectedAccessibleRole)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         if (createHandle)
         {
             control.CreateHandle();
@@ -415,7 +415,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.True(control.GetStyle(ControlStyles.UserPaint));
 
         control.CreateControl();
@@ -436,7 +436,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeNoUserPaint_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, false);
         Assert.False(control.GetStyle(ControlStyles.UserPaint));
 
@@ -456,7 +456,7 @@ public partial class ControlTests
     [MemberData(nameof(CreateControl_Region_TestData))]
     public void Control_CreateControl_InvokeWithRegion_Success(Region region)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Region = region
         };
@@ -472,7 +472,7 @@ public partial class ControlTests
     [NormalizedStringData]
     public void Control_CreateControl_InvokeWithText_Success(string text, string expectedText)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Text = text
         };
@@ -487,7 +487,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeAllowDrop_Success()
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             AllowDrop = true
         };
@@ -502,8 +502,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeWithParent_Success()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -519,7 +519,7 @@ public partial class ControlTests
     [NormalizedStringData]
     public void Control_CreateControl_InvokeWithHandleWithText_Success(string text, string expectedText)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Text = text
         };
@@ -546,8 +546,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeWithChildren_Success()
     {
-        using var parent = new SubControl();
-        using var control = new SubControl
+        using SubControl parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -563,7 +563,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeNotVisible_Nop()
     {
-        using var control = new Control
+        using Control control = new()
         {
             Visible = false
         };
@@ -574,7 +574,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeWithHandler_CallsHandleCreated()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -594,14 +594,14 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControl_InvokeCantCreate_ThrowsWin32Exception()
     {
-        using var control = new NoCreateControl();
+        using NoCreateControl control = new();
         Assert.Throws<Win32Exception>(() => control.CreateControl());
     }
 
     [WinFormsFact]
     public void Control_CreateControl_InvokeDisposed_ThrowsObjectDisposedException()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Dispose();
         Assert.Throws<ObjectDisposedException>(() => control.CreateControl());
     }
@@ -609,7 +609,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateControlsInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Control.ControlCollection controls = Assert.IsType<Control.ControlCollection>(control.CreateControlsInstance());
         Assert.Empty(controls);
         Assert.Same(control, controls.Owner);
@@ -621,7 +621,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_CreateHandle_Invoke_Success(bool resizeRedraw)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, resizeRedraw);
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
@@ -643,7 +643,7 @@ public partial class ControlTests
     [MemberData(nameof(CreateHandle_Region_TestData))]
     public void Control_CreateHandle_InvokeWithRegion_Success(Region region)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Region = region
         };
@@ -659,7 +659,7 @@ public partial class ControlTests
     [NormalizedStringData]
     public void Control_CreateHandle_InvokeWithText_Success(string text, string expectedText)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Text = text
         };
@@ -674,7 +674,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeAllowDrop_Success()
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             AllowDrop = true
         };
@@ -689,8 +689,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeWithParent_Success()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -705,8 +705,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeWithChildren_Success()
     {
-        using var parent = new SubControl();
-        using var control = new SubControl
+        using SubControl parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -722,7 +722,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeNotVisible_Nop()
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = false
         };
@@ -734,7 +734,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeWithHandler_CallsHandleCreated()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -754,14 +754,14 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeCantCreate_ThrowsWin32Exception()
     {
-        using var control = new NoCreateControl();
+        using NoCreateControl control = new();
         Assert.Throws<Win32Exception>(() => control.CreateHandle());
     }
 
     [WinFormsFact]
     public void Control_CreateHandle_InvokeDisposed_ThrowsObjectDisposedException()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Dispose();
         Assert.Throws<ObjectDisposedException>(() => control.CreateHandle());
     }
@@ -769,7 +769,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_CreateHandle_InvokeAlreadyCreated_ThrowsInvalidOperationException()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.CreateHandle();
         Assert.Throws<InvalidOperationException>(() => control.CreateHandle());
     }
@@ -777,29 +777,29 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_ReturnsExpected()
     {
-        using var parent = new Control();
-        using var control = new Control
+        using Control parent = new();
+        using Control control = new()
         {
             Parent = parent
         };
-        using var child1 = new Control
+        using Control child1 = new()
         {
             Parent = control
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Parent = control
         };
-        using var grandchild1 = new Control
+        using Control grandchild1 = new()
         {
             Parent = child1
         };
-        using var otherParent = new Control();
-        using var otherControl = new Control
+        using Control otherParent = new();
+        using Control otherControl = new()
         {
             Parent = otherParent
         };
-        using var emptyControl = new Control();
+        using Control emptyControl = new();
 
         Assert.True(parent.Contains(control));
         Assert.True(parent.Contains(child1));
@@ -822,7 +822,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DestroyHandle_InvokeWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         IntPtr handle1 = control.Handle;
         Assert.True(control.Created);
         Assert.True(control.IsHandleCreated);
@@ -842,8 +842,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DestroyHandle_InvokeWithHandleWithParent_Success()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -865,7 +865,7 @@ public partial class ControlTests
     [MemberData(nameof(CreateHandle_Region_TestData))]
     public void Control_DestroyHandle_InvokeWithRegion_Success(Region region)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Region = region
         };
@@ -892,7 +892,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DestroyHandle_InvokeWithHandleAllowDrop_Success()
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             AllowDrop = true
         };
@@ -919,7 +919,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DestroyHandle_InvokeWithoutHandle_Nop()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.DestroyHandle();
         Assert.False(control.Created);
         Assert.False(control.IsHandleCreated);
@@ -928,7 +928,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DestroyHandle_InvokeWithHandler_CallsHandleDestroyed()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -972,7 +972,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_Invoke_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -1017,10 +1017,10 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeWithParent_Success()
     {
-        using var parent = new Control();
+        using Control parent = new();
         int controlRemovedCallCount = 0;
         parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
-        using var control = new Control
+        using Control control = new()
         {
             Parent = parent
         };
@@ -1070,9 +1070,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeWithChildren_Success()
     {
-        using var control = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control control = new();
+        using Control child1 = new();
+        using Control child2 = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         int controlRemovedCallCount = 0;
@@ -1148,7 +1148,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeWithBindings_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.DataBindings.Add(new Binding("Text", new object(), "member"));
 
         int callCount = 0;
@@ -1195,7 +1195,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeWithHandle_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1258,7 +1258,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeInDisposing_Nop()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         int disposedCallCount = 0;
         control.Disposed += (sender, e) =>
@@ -1274,7 +1274,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposing_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -1319,7 +1319,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeNotDisposing_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e) => callCount++;
         control.Disposed += handler;
@@ -1354,10 +1354,10 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposingWithParent_Success()
     {
-        using var parent = new SubControl();
+        using SubControl parent = new();
         int controlRemovedCallCount = 0;
         parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -1407,10 +1407,10 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeNotDisposingWithParent_Success()
     {
-        using var parent = new SubControl();
+        using SubControl parent = new();
         int controlRemovedCallCount = 0;
         parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -1450,9 +1450,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposingWithChildren_Success()
     {
-        using var control = new SubControl();
-        using var child1 = new SubControl();
-        using var child2 = new SubControl();
+        using SubControl control = new();
+        using SubControl child1 = new();
+        using SubControl child2 = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         int controlRemovedCallCount = 0;
@@ -1528,9 +1528,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeNotDisposingWithChildren_Success()
     {
-        using var control = new SubControl();
-        using var child1 = new SubControl();
-        using var child2 = new SubControl();
+        using SubControl control = new();
+        using SubControl child1 = new();
+        using SubControl child2 = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         int controlRemovedCallCount = 0;
@@ -1596,7 +1596,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposingWithBindings_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.DataBindings.Add(new Binding("Text", new object(), "member"));
 
         int callCount = 0;
@@ -1643,8 +1643,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeNotDisposingWithBindings_Success()
     {
-        using var control = new SubControl();
-        var binding = new Binding("Text", new object(), "member");
+        using SubControl control = new();
+        Binding binding = new("Text", new object(), "member");
         control.DataBindings.Add(binding);
 
         int callCount = 0;
@@ -1681,7 +1681,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposingWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1744,7 +1744,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeNotDisposingWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1797,7 +1797,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposingInDisposing_Nop()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         int disposedCallCount = 0;
         control.Disposed += (sender, e) =>
@@ -1827,7 +1827,7 @@ public partial class ControlTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void Control_DoDragDrop_Invoke_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Equal(DragDropEffects.None, control.DoDragDrop(data, allowedEffects));
         Assert.False(control.IsHandleCreated);
     }
@@ -1837,7 +1837,7 @@ public partial class ControlTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void Control_DoDragDrop_InvokeWithHandle_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1856,7 +1856,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null, DragDropEffects.All));
     }
 
@@ -1873,12 +1873,12 @@ public partial class ControlTests
     [MemberData(nameof(DrawToBitmap_TestData))]
     public void Control_DrawToBitmap_Invoke_Success(Rectangle targetBounds)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Width = 20,
             Height = 20,
         };
-        using var bitmap = new Bitmap(20, 20);
+        using Bitmap bitmap = new(20, 20);
         control.DrawToBitmap(bitmap, targetBounds);
         Assert.True(control.IsHandleCreated);
     }
@@ -1887,7 +1887,7 @@ public partial class ControlTests
     [MemberData(nameof(DrawToBitmap_TestData))]
     public void Control_DrawToBitmap_InvokeWithHandle_Success(Rectangle rectangle)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Width = 20,
             Height = 20,
@@ -1900,7 +1900,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var bitmap = new Bitmap(20, 20);
+        using Bitmap bitmap = new(20, 20);
         control.DrawToBitmap(bitmap, rectangle);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1911,7 +1911,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_DrawToBitmap_NullBitmap_ThrowsArgumentNullException()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Throws<ArgumentNullException>("bitmap", () => control.DrawToBitmap(null, new Rectangle(1, 2, 3, 4)));
     }
 
@@ -1924,12 +1924,12 @@ public partial class ControlTests
     [InlineData(0, 0, 1, 0)]
     public void Control_DrawToBitmap_InvalidTargetBounds_ThrowsArgumentException(int x, int y, int width, int height)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Width = 20,
             Height = 20
         };
-        using var bitmap = new Bitmap(10, 10);
+        using Bitmap bitmap = new(10, 10);
         Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(x, y, width, height)));
     }
 
@@ -1938,12 +1938,12 @@ public partial class ControlTests
     [InlineData(0)]
     public void Control_DrawToBitmap_InvokeZeroWidth_ThrowsArgumentException(int width)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Width = width,
             Height = 20
         };
-        using var bitmap = new Bitmap(10, 10);
+        using Bitmap bitmap = new(10, 10);
         Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
     }
 
@@ -1952,20 +1952,20 @@ public partial class ControlTests
     [InlineData(0)]
     public void Control_DrawToBitmap_InvokeZeroHeight_ThrowsArgumentException(int height)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Width = 20,
             Height = height
         };
-        using var bitmap = new Bitmap(10, 10);
+        using Bitmap bitmap = new(10, 10);
         Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
     }
 
     [WinFormsFact]
     public void Control_FindFormWithParent_ReturnsForm()
     {
-        using var control = new Control();
-        var form = new Form();
+        using Control control = new();
+        Form form = new();
         control.Parent = form;
         Assert.Equal(form, control.FindForm());
     }
@@ -1973,14 +1973,14 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_FindFormWithoutParent_ReturnsNull()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Null(control.FindForm());
     }
 
     [WinFormsFact]
     public void Control_FromChildHandle_InvokeControlHandle_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         IntPtr handle = control.Handle;
         Assert.NotEqual(IntPtr.Zero, handle);
         Assert.Same(control, Control.FromChildHandle(handle));
@@ -1993,7 +1993,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_FromChildHandle_InvokeNativeWindowHandle_ReturnsExpected()
     {
-        var window = new NativeWindow();
+        NativeWindow window = new();
         window.CreateHandle(new CreateParams());
         IntPtr handle = window.Handle;
         Assert.NotEqual(IntPtr.Zero, handle);
@@ -2007,8 +2007,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_FromChildHandle_InvokeChildHandle_ReturnsExpected()
     {
-        using var parent = new SubControl();
-        using var control = new SubControl
+        using SubControl parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -2016,7 +2016,7 @@ public partial class ControlTests
         Assert.NotEqual(IntPtr.Zero, parentHandle);
         Assert.True(control.IsHandleCreated);
 
-        var window = new NativeWindow();
+        NativeWindow window = new();
         window.CreateHandle(control.CreateParams);
         Assert.Same(parent, Control.FromChildHandle(window.Handle));
 
@@ -2035,7 +2035,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_FromHandle_InvokeControlHandle_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         IntPtr handle = control.Handle;
         Assert.NotEqual(IntPtr.Zero, handle);
         Assert.Same(control, Control.FromHandle(handle));
@@ -2048,7 +2048,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_FromHandle_InvokeNativeWindowHandle_ReturnsExpected()
     {
-        var window = new NativeWindow();
+        NativeWindow window = new();
         window.CreateHandle(new CreateParams());
         IntPtr handle = window.Handle;
         Assert.NotEqual(IntPtr.Zero, handle);
@@ -2062,8 +2062,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_FromHandle_InvokeChildHandle_ReturnsExpected()
     {
-        using var parent = new SubControl();
-        using var control = new SubControl
+        using SubControl parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -2071,7 +2071,7 @@ public partial class ControlTests
         Assert.NotEqual(IntPtr.Zero, parentHandle);
         Assert.True(control.IsHandleCreated);
 
-        var window = new NativeWindow();
+        NativeWindow window = new();
         window.CreateHandle(control.CreateParams);
         Assert.Null(Control.FromHandle(window.Handle));
 
@@ -2091,7 +2091,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Focus_InvokeWithoutHandle_Nop()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.False(control.Focus());
         Assert.False(control.Focused);
         Assert.False(control.IsHandleCreated);
@@ -2100,7 +2100,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
 
         // Call again to test caching.
@@ -2111,7 +2111,7 @@ public partial class ControlTests
     [EnumData<GetChildAtPointSkip>]
     public void Control_GetChildAtPoint_Invoke_ReturnsExpected(GetChildAtPointSkip skipValue)
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Null(control.GetChildAtPoint(new Point(5, 5), skipValue));
         Assert.True(control.IsHandleCreated);
 
@@ -2125,19 +2125,19 @@ public partial class ControlTests
     [InlineData((GetChildAtPointSkip)8)]
     public void Control_GetChildAtPoint_InvokeInvalidSkipValue_ThrowsInvalidEnumArgumentException(GetChildAtPointSkip skipValue)
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Throws<InvalidEnumArgumentException>("skipValue", () => control.GetChildAtPoint(new Point(5, 5), skipValue));
     }
 
     [WinFormsFact]
     public void Control_GetContainerControl_GetWithParent_ReturnsNull()
     {
-        using var grandparent = new Control();
-        using var parent = new Control
+        using Control grandparent = new();
+        using Control parent = new()
         {
             Parent = grandparent
         };
-        using var control = new Control
+        using Control control = new()
         {
             Parent = parent
         };
@@ -2149,16 +2149,16 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetContainerControl_GetWithContainerControlParent_ReturnsExpected()
     {
-        using var greatGrandparent = new ContainerControl();
-        using var grandparent = new ContainerControl
+        using ContainerControl greatGrandparent = new();
+        using ContainerControl grandparent = new()
         {
             Parent = greatGrandparent
         };
-        using var parent = new Control
+        using Control parent = new()
         {
             Parent = grandparent
         };
-        using var control = new Control
+        using Control control = new()
         {
             Parent = parent
         };
@@ -2170,12 +2170,12 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetContainerControl_GetWithSplitContainerParent_ReturnsExpected()
     {
-        using var greatGrandparent = new ContainerControl();
-        using var grandparent = new SplitContainer
+        using ContainerControl greatGrandparent = new();
+        using SplitContainer grandparent = new()
         {
             Parent = greatGrandparent
         };
-        using var control = new Control
+        using Control control = new()
         {
             Parent = grandparent.Panel1
         };
@@ -2187,17 +2187,17 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetContainerControl_GetWithInvalidContainerControlParent_ReturnsExpected()
     {
-        using var greatGrandparent = new ContainerControl();
-        using var grandparent = new SubContainerControl
+        using ContainerControl greatGrandparent = new();
+        using SubContainerControl grandparent = new()
         {
             Parent = greatGrandparent
         };
         grandparent.SetStyle(ControlStyles.ContainerControl, false);
-        using var parent = new Control
+        using Control parent = new()
         {
             Parent = grandparent
         };
-        using var control = new Control
+        using Control control = new()
         {
             Parent = parent
         };
@@ -2209,17 +2209,17 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetContainerControl_GetWithFakeContainerControlParent_ReturnsExpected()
     {
-        using var greatGrandparent = new ContainerControl();
-        using var grandparent = new SubControl
+        using ContainerControl greatGrandparent = new();
+        using SubControl grandparent = new()
         {
             Parent = greatGrandparent
         };
         grandparent.SetStyle(ControlStyles.ContainerControl, true);
-        using var parent = new Control
+        using Control parent = new()
         {
             Parent = grandparent
         };
-        using var control = new Control
+        using Control control = new()
         {
             Parent = parent
         };
@@ -2236,16 +2236,16 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetNextControl()
     {
-        using var cont = new Control();
-        using var first = new Control
+        using Control cont = new();
+        using Control first = new()
         {
             TabIndex = 0
         };
-        using var second = new Control
+        using Control second = new()
         {
             TabIndex = 1
         };
-        using var third = new Control
+        using Control third = new()
         {
             TabIndex = 2
         };
@@ -2264,16 +2264,16 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetNextControlReverse()
     {
-        using var cont = new Control();
-        using var first = new Control
+        using Control cont = new();
+        using Control first = new()
         {
             TabIndex = 0
         };
-        using var second = new Control
+        using Control second = new()
         {
             TabIndex = 1
         };
-        using var third = new Control
+        using Control third = new()
         {
             TabIndex = 2
         };
@@ -2292,16 +2292,16 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetNextControlNoNext()
     {
-        using var cont = new Control();
-        using var first = new Control
+        using Control cont = new();
+        using Control first = new()
         {
             TabIndex = 0
         };
-        using var second = new Control
+        using Control second = new()
         {
             TabIndex = 1
         };
-        using var third = new Control
+        using Control third = new()
         {
             TabIndex = 2
         };
@@ -2320,16 +2320,16 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetNextControlNoNextReverse()
     {
-        using var cont = new Control();
-        using var first = new Control
+        using Control cont = new();
+        using Control first = new()
         {
             TabIndex = 0
         };
-        using var second = new Control
+        using Control second = new()
         {
             TabIndex = 1
         };
-        using var third = new Control
+        using Control third = new()
         {
             TabIndex = 2
         };
@@ -2358,7 +2358,7 @@ public partial class ControlTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void Control_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
         Assert.False(control.IsHandleCreated);
 
@@ -2371,7 +2371,7 @@ public partial class ControlTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void Control_GetPreferredSize_InvokeWithBounds_ReturnsExpected(Size proposedSize)
     {
-        using var control = new Control
+        using Control control = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
@@ -2410,7 +2410,7 @@ public partial class ControlTests
     [MemberData(nameof(GetPreferredSize_WithConstrainedSize_TestData))]
     public void Control_GetPreferredSize_InvokeWithConstrainedSize_ReturnsExpected(Size minimumSize, Size maximumSize, Size proposedSize, Size expected)
     {
-        using var control = new Control
+        using Control control = new()
         {
             MinimumSize = minimumSize,
             MaximumSize = maximumSize,
@@ -2462,7 +2462,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_TestData))]
     public void Control_GetScaledBounds_Invoke_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
         Assert.False(control.IsHandleCreated);
 
@@ -2508,7 +2508,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_WithStyles_TestData))]
     public void Control_GetScaledBounds_InvokeWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
         Assert.False(control.IsHandleCreated);
 
@@ -2521,7 +2521,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_TestData))]
     public void Control_GetScaledBounds_InvokeWithSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
@@ -2531,7 +2531,7 @@ public partial class ControlTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Site = mockSite.Object
         };
@@ -2550,13 +2550,13 @@ public partial class ControlTests
             yield return new object[] { testData[0], testData[1], testData[2], testData[3], null };
             yield return new object[] { testData[0], testData[1], testData[2], testData[3], new object() };
 
-            var mockNullDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            Mock<IDesignerHost> mockNullDesignerHost = new(MockBehavior.Strict);
             mockNullDesignerHost
                 .Setup(s => s.RootComponent)
                 .Returns((IComponent)null);
             yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockNullDesignerHost.Object };
 
-            var mockUnknownDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            Mock<IDesignerHost> mockUnknownDesignerHost = new(MockBehavior.Strict);
             mockUnknownDesignerHost
                 .Setup(s => s.RootComponent)
                 .Returns(new Control());
@@ -2568,7 +2568,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_InvalidDesignModeSite_TestData))]
     public void Control_GetScaledBounds_InvokeWithInvalidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected, object designerHost)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
@@ -2582,7 +2582,7 @@ public partial class ControlTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Site = mockSite.Object
         };
@@ -2635,8 +2635,8 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
     public void Control_GetScaledBounds_InvokeWithValidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
@@ -2650,7 +2650,7 @@ public partial class ControlTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Site = mockSite.Object
         };
@@ -2674,7 +2674,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
     public void Control_GetScaledBounds_InvokeTopLevel_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetTopLevel(true);
 
         Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
@@ -2724,7 +2724,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_FixedWidth_TestData))]
     public void Control_GetScaledBounds_InvokeFixedWidth_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.FixedWidth, true);
 
         Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
@@ -2774,7 +2774,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_FixedHeight_TestData))]
     public void Control_GetScaledBounds_InvokeFixedHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.FixedHeight, true);
 
         Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
@@ -2824,7 +2824,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
     public void Control_GetScaledBounds_InvokeFixedWidthAndHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.FixedWidth, true);
         control.SetStyle(ControlStyles.FixedHeight, true);
 
@@ -2840,7 +2840,7 @@ public partial class ControlTests
     [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
     public void Control_GetScaledBounds_InvokeFixedWidthAndHeightWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         control.SetStyle(ControlStyles.FixedWidth, true);
         control.SetStyle(ControlStyles.FixedHeight, true);
 
@@ -2875,7 +2875,7 @@ public partial class ControlTests
     [InlineData((ControlStyles)(-1), false)]
     public void Control_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -2885,7 +2885,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.False(control.GetTopLevel());
 
         // Call again to test caching.
@@ -2895,7 +2895,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Hide_Invoke_SetsInvisible()
     {
-        using var control = new Control
+        using Control control = new()
         {
             Visible = true
         };
@@ -2910,7 +2910,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Hide_InvokeWithHandler_CallsVisibleChanged()
     {
-        using var control = new Control
+        using Control control = new()
         {
             Visible = true
         };
@@ -2943,7 +2943,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InitLayout_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.InitLayout();
         Assert.False(control.IsHandleCreated);
 
@@ -2955,8 +2955,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InitLayout_InvokeMocked_Success()
     {
-        using var control = new CustomLayoutEngineControl();
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        using CustomLayoutEngineControl control = new();
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.InitLayout(control, BoundsSpecified.All))
             .Verifiable();
@@ -2975,7 +2975,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InitLayout_NullLayoutEngine_ThrowsNullReferenceException()
     {
-        using var control = new CustomLayoutEngineControl();
+        using CustomLayoutEngineControl control = new();
         control.SetLayoutEngine(null);
         Assert.Throws<NullReferenceException>(() => control.InitLayout());
     }
@@ -3003,7 +3003,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_Invalidate_Invoke_Success(bool opaque)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.Opaque, opaque);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3021,7 +3021,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_Invalidate_InvokeWithHandle_Success(bool opaque)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3057,11 +3057,11 @@ public partial class ControlTests
     [BoolData]
     public void Control_Invalidate_InvokeWithChildrenWithHandle_Success(bool opaque)
     {
-        using var child = new SubControl
+        using SubControl child = new()
         {
             Size = new Size(10, 20)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3115,7 +3115,7 @@ public partial class ControlTests
     [InlineData(false, false)]
     public void Control_Invalidate_InvokeBool_Success(bool opaque, bool invalidateChildren)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.Opaque, opaque);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3136,7 +3136,7 @@ public partial class ControlTests
     [InlineData(false, false)]
     public void Control_Invalidate_InvokeBoolWithHandle_Success(bool opaque, bool invalidateChildren)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3175,11 +3175,11 @@ public partial class ControlTests
     [InlineData(false, false)]
     public void Control_Invalidate_InvokeBoolWithChildrenWithHandle_Success(bool opaque, bool invalidateChildren)
     {
-        using var child = new SubControl
+        using SubControl child = new()
         {
             Size = new Size(10, 20)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3243,7 +3243,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Rectangle_TestData))]
     public void Control_Invalidate_InvokeRectangle_Success(bool opaque, Rectangle rc)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.Opaque, opaque);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3274,7 +3274,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Rectangle_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRectangleWithHandle_Success(bool opaque, Rectangle rc, Rectangle expectedInvalidRect)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3310,11 +3310,11 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Rectangle_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRectangleWithChildrenWithHandle_Success(bool opaque, Rectangle rc, Rectangle expectedInvalidRect)
     {
-        using var child = new SubControl
+        using SubControl child = new()
         {
             Size = new Size(10, 20)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3381,7 +3381,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Rectangle_Bool_TestData))]
     public void Control_Invalidate_InvokeRectangleBool_Success(bool opaque, Rectangle rc, bool invalidateChildren)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.Opaque, opaque);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3415,7 +3415,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Rectangle_Bool_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRectangleBoolWithHandle_Success(bool opaque, Rectangle rc, bool invalidateChildren, Rectangle expectedInvalidRect)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3451,11 +3451,11 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Rectangle_Bool_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRectangleBoolWithChildrenWithHandle_Success(bool opaque, Rectangle rc, bool invalidateChildren, Rectangle expectedInvalidRect)
     {
-        using var child = new SubControl
+        using SubControl child = new()
         {
             Size = new Size(10, 20)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3520,7 +3520,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Region_TestData))]
     public void Control_Invalidate_InvokeRegion_Success(bool opaque, Region region)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.Opaque, opaque);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3552,7 +3552,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Region_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRegionWithHandle_Success(bool opaque, Region region, Rectangle expectedInvalidRect)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3588,11 +3588,11 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Region_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRegionWithChildrenWithHandle_Success(bool opaque, Region region, Rectangle expectedInvalidRect)
     {
-        using var child = new SubControl
+        using SubControl child = new()
         {
             Size = new Size(10, 20)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3660,7 +3660,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Region_Bool_TestData))]
     public void Control_Invalidate_InvokeRegionBool_Success(bool opaque, Region region, bool invalidateChildren)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.Opaque, opaque);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3695,7 +3695,7 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Region_Bool_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRegionBoolWithHandle_Success(bool opaque, Region region, bool invalidateChildren, Rectangle expectedInvalidRect)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3731,11 +3731,11 @@ public partial class ControlTests
     [MemberData(nameof(Invalidate_Region_Bool_WithHandle_TestData))]
     public void Control_Invalidate_InvokeRegionBoolWithChildrenWithHandle_Success(bool opaque, Region region, bool invalidateChildren, Rectangle expectedInvalidRect)
     {
-        using var child = new SubControl
+        using SubControl child = new()
         {
             Size = new Size(10, 20)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = new Size(10, 20)
         };
@@ -3785,7 +3785,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokeDelegateSameThread_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3810,7 +3810,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokeDelegateThrowsExceptionSameThread_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3836,7 +3836,7 @@ public partial class ControlTests
     [WinFormsFact]
     public async Task Control_InvokeDelegateThrowsExceptionDifferentThread_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3865,7 +3865,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_Action_calls_correct_method()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke(() => FaultingMethod()));
@@ -3899,7 +3899,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_Delegate_Func_calls_correct_method()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() =>
@@ -3935,7 +3935,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_Delegate_MethodInvoker_calls_correct_method()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
@@ -3968,7 +3968,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_Func_calls_correct_method()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() =>
@@ -4001,7 +4001,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokeDelegateObjectSameThread_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4027,7 +4027,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokeDelegateObjectThrowsExceptionSameThread_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4054,7 +4054,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
@@ -4089,7 +4089,7 @@ public partial class ControlTests
     [WinFormsFact]
     public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4119,7 +4119,7 @@ public partial class ControlTests
     [WinFormsFact]
     public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         await Task.Run(() =>
@@ -4161,7 +4161,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_InvokeWithoutHandle_ThrowsInvalidOperationException()
     {
-        using var control = new Control();
+        using Control control = new();
         Action method = () => { };
         Assert.Throws<InvalidOperationException>(() => control.Invoke(method));
         Assert.Throws<InvalidOperationException>(() => control.Invoke(method, Array.Empty<object>()));
@@ -4170,7 +4170,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_InvokeInvalidParameters_ThrowsTargetParameterCountException()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Action<int> method = (i) => { };
         Assert.Throws<TargetParameterCountException>(() => control.Invoke(method));
@@ -4182,8 +4182,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_InvokeGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
     {
-        using var otherControl = new Control();
-        using var control = new SubControl();
+        using Control otherControl = new();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4222,8 +4222,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_InvokeLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
     {
-        using var otherControl = new SubControl();
-        using var control = new SubControl();
+        using SubControl otherControl = new();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4262,8 +4262,8 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void Control_InvokePaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
     {
-        using var otherControl = new SubControl();
-        using var control = new SubControl();
+        using SubControl otherControl = new();
+        using SubControl control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) => callCount++;
         int otherCallCount = 0;
@@ -4292,28 +4292,28 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokePaint_NullToInvoke_ThrowsNullReferenceException()
     {
-        using var control = new SubControl();
-        using var image = new Bitmap(10, 10);
+        using SubControl control = new();
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
         Assert.Throws<NullReferenceException>(() => control.InvokePaint(null, eventArgs));
     }
 
     [WinFormsFact]
     public void Control_InvokePaintBackground_Invoke_CallsPaint()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var otherControlParent = new Control();
-        using var otherControl = new SubControl
+        using Control otherControlParent = new();
+        using SubControl otherControl = new()
         {
             Parent = otherControlParent
         };
         otherControl.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         otherControl.BackColor = Color.FromArgb(100, 50, 100, 150);
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) => callCount++;
         int otherCallCount = 0;
@@ -4348,18 +4348,18 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_InvokePaintBackground_NullToInvoke_ThrowsNullReferenceException()
     {
-        using var control = new SubControl();
-        using var image = new Bitmap(10, 10);
+        using SubControl control = new();
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
         Assert.Throws<NullReferenceException>(() => control.InvokePaintBackground(null, eventArgs));
     }
 
     [WinFormsFact]
     public void Control_InvokePaintBackground_NullEventArgs_ThrowsArgumentNullException()
     {
-        using var otherControl = new Control();
-        using var control = new SubControl();
+        using Control otherControl = new();
+        using SubControl control = new();
         Assert.Throws<ArgumentNullException>(() => control.InvokePaintBackground(otherControl, null));
     }
 
@@ -4367,7 +4367,7 @@ public partial class ControlTests
     [MemberData(nameof(IsInputKey_TestData))]
     public void Control_IsInputChar_InvokeWithoutHandle_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Equal(expected, control.IsInputChar((char)keyData));
         Assert.True(control.IsHandleCreated);
     }
@@ -4376,7 +4376,7 @@ public partial class ControlTests
     [MemberData(nameof(IsInputKey_TestData))]
     public void Control_IsInputChar_InvokeWithHandle_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.IsInputChar((char)keyData));
         Assert.True(control.IsHandleCreated);
@@ -4479,7 +4479,7 @@ public partial class ControlTests
     [MemberData(nameof(IsInputKey_TestData))]
     public void Control_IsInputKey_InvokeWithoutHandle_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Equal(expected, control.IsInputKey(keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -4488,7 +4488,7 @@ public partial class ControlTests
     [MemberData(nameof(IsInputKey_TestData))]
     public void Control_IsInputKey_InvokeWithHandle_ReturnsExpected(Keys keyData, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(expected, control.IsInputKey(keyData));
         Assert.True(control.IsHandleCreated);
@@ -4533,7 +4533,7 @@ public partial class ControlTests
     [MemberData(nameof(NotifyInvalidated_TestData))]
     public void Control_NotifyInvalidate_Invoke_CallsInvalidated(Rectangle invalidatedArea)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         InvalidateEventHandler handler = (sender, e) =>
         {
@@ -4584,15 +4584,15 @@ public partial class ControlTests
     [MemberData(nameof(NotifyInvalidate_WithChildren_TestData))]
     public void Control_NotifyInvalidate_InvokeWithChildren_CallsInvalidated(bool supportsTransparentBackgroundColor, Color backColor, Rectangle invalidatedArea)
     {
-        using var child1 = new SubControl
+        using SubControl child1 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var child2 = new SubControl
+        using SubControl child2 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         child1.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
@@ -4629,7 +4629,7 @@ public partial class ControlTests
     [MemberData(nameof(NotifyInvalidated_TestData))]
     public void Control_NotifyInvalidate_InvokeWithHandle_CallsInvalidated(Rectangle invalidatedArea)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         InvalidateEventHandler handler = (sender, e) =>
         {
@@ -4684,15 +4684,15 @@ public partial class ControlTests
     [MemberData(nameof(NotifyInvalidate_WithChildrenWithHandle_TestData))]
     public void Control_NotifyInvalidate_InvokeWithChildrenWithHandle_CallsInvalidated(bool supportsTransparentBackgroundColor, Color backColor, Rectangle invalidatedArea, int expectedChildInvalidatedCallCount)
     {
-        using var child1 = new SubControl
+        using SubControl child1 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var child2 = new SubControl
+        using SubControl child2 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         child1.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
@@ -4761,7 +4761,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_Invoke_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -4784,8 +4784,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_InvokeCustomLayoutEngine_Success()
     {
-        using var control = new CustomLayoutEngineControl();
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        using CustomLayoutEngineControl control = new();
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.Layout(control, It.IsAny<LayoutEventArgs>()))
             .Returns(false)
@@ -4815,8 +4815,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_InvokeWithParent_Success()
     {
-        using var parent = new Control();
-        using var control = new Control
+        using Control parent = new();
+        using Control control = new()
         {
             Parent = parent
         };
@@ -4850,12 +4850,12 @@ public partial class ControlTests
     [InlineData(false, 0)]
     public void Control_PerformLayout_InvokeWithParentCustomLayoutEngine_Success(bool parentNeedsLayout, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new CustomLayoutEngineControl
+        using Control parent = new();
+        using CustomLayoutEngineControl control = new()
         {
             Parent = parent
         };
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.Layout(control, It.IsAny<LayoutEventArgs>()))
             .Returns(parentNeedsLayout)
@@ -4903,7 +4903,7 @@ public partial class ControlTests
     [InlineData(false, 0)]
     public void Control_PerformLayout_InvokeSuspended_DoesNotCallLayout(bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -4930,7 +4930,7 @@ public partial class ControlTests
     [InlineData(false, 0)]
     public void Control_PerformLayout_InvokeSuspendedMultipleTimes_DoesNotCallLayout(bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -4967,7 +4967,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_InvokeSetTextInLayout_CachesText()
     {
-        using var control = new Control();
+        using Control control = new();
 
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -4987,7 +4987,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_InvokeInDisposing_DoesNotCallLayout()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         control.Layout += (sender, e) => callCount++;
 
@@ -5014,7 +5014,7 @@ public partial class ControlTests
     [MemberData(nameof(PerformLayout_Control_String_TestData))]
     public void Control_PerformLayout_InvokeControlString_Success(Control affectedControl, string affectedProperty)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -5038,8 +5038,8 @@ public partial class ControlTests
     [MemberData(nameof(PerformLayout_Control_String_TestData))]
     public void Control_PerformLayout_InvokeControlStringCustomLayoutEngine_Success(Control affectedControl, string affectedProperty)
     {
-        using var control = new CustomLayoutEngineControl();
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        using CustomLayoutEngineControl control = new();
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.Layout(control, It.IsAny<LayoutEventArgs>()))
             .Returns(false)
@@ -5070,8 +5070,8 @@ public partial class ControlTests
     [MemberData(nameof(PerformLayout_Control_String_TestData))]
     public void Control_PerformLayout_InvokeControlStringWithParent_Success(Control affectedControl, string affectedProperty)
     {
-        using var parent = new Control();
-        using var control = new Control
+        using Control parent = new();
+        using Control control = new()
         {
             Parent = parent
         };
@@ -5115,12 +5115,12 @@ public partial class ControlTests
     [MemberData(nameof(PerformLayout_Control_String_WithParent_TestData))]
     public void Control_PerformLayout_InvokeControlStringWithParentCustomLayoutEngine_Success(bool parentNeedsLayout, Control affectedControl, string affectedProperty, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new CustomLayoutEngineControl
+        using Control parent = new();
+        using CustomLayoutEngineControl control = new()
         {
             Parent = parent
         };
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.Layout(control, It.IsAny<LayoutEventArgs>()))
             .Returns(parentNeedsLayout)
@@ -5178,7 +5178,7 @@ public partial class ControlTests
     [MemberData(nameof(PerformLayout_Control_String_Suspended_TestData))]
     public void Control_PerformLayout_InvokeControlStringSuspended_DoesNotCallLayout(bool performLayout, Control affectedControl, string affectedProperty, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -5204,7 +5204,7 @@ public partial class ControlTests
     [MemberData(nameof(PerformLayout_Control_String_Suspended_TestData))]
     public void Control_PerformLayout_InvokeControlStringSuspendedMultipleTimes_DoesNotCallLayout(bool performLayout, Control affectedControl, string affectedProperty, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -5241,7 +5241,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_InvokeControlStringSetTextInLayout_CachesText()
     {
-        using var control = new Control();
+        using Control control = new();
 
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -5261,7 +5261,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_InvokeControlStringInDisposing_DoesNotCallLayout()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         control.Layout += (sender, e) => callCount++;
 
@@ -5280,7 +5280,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_PerformLayout_NullLayoutEngine_ThrowsNullReferenceException()
     {
-        using var control = new CustomLayoutEngineControl();
+        using CustomLayoutEngineControl control = new();
         control.SetLayoutEngine(null);
         Assert.Throws<NullReferenceException>(() => control.PerformLayout());
         Assert.Throws<NullReferenceException>(() => control.PerformLayout(new Control(), "AffectedProperty"));
@@ -5347,8 +5347,8 @@ public partial class ControlTests
     [MemberData(nameof(PreProcessMessage_TestData))]
     public void Control_PreProcessMessage_Invoke_ReturnsExpected(int windowMsg, Keys keys, bool expectedIsHandleCreated)
     {
-        using var control = new SubControl();
-        var msg = new Message
+        using SubControl control = new();
+        Message msg = new()
         {
             Msg = windowMsg,
             WParam = (IntPtr)keys
@@ -5361,12 +5361,12 @@ public partial class ControlTests
     [MemberData(nameof(PreProcessMessage_TestData))]
     public void Control_PreProcessMessage_InvokeWithParent_ReturnsExpected(int windowMsg, Keys keys, bool expectedIsHandleCreated)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
-        var msg = new Message
+        Message msg = new()
         {
             Msg = windowMsg,
             WParam = (IntPtr)keys
@@ -5468,19 +5468,19 @@ public partial class ControlTests
             return processDialogCharResult;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessCmdKeyAction = processCmdKeyAction,
             ProcessDialogKeyAction = processDialogKeyAction,
             ProcessDialogCharAction = processDialogCharAction
         };
-        using var control = new CustomIsInputControl
+        using CustomIsInputControl control = new()
         {
             Parent = parent,
             IsInputKeyAction = isInputKeyAction,
             IsInputCharAction = isInputCharAction
         };
-        var msg = new Message
+        Message msg = new()
         {
             Msg = windowMsg,
             WParam = (IntPtr)keys
@@ -5528,8 +5528,8 @@ public partial class ControlTests
     [InlineData(Keys.A)]
     public void Control_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
     {
-        using var control = new SubControl();
-        var m = new Message();
+        using SubControl control = new();
+        Message m = new();
         Assert.False(control.ProcessCmdKey(ref m, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5538,12 +5538,12 @@ public partial class ControlTests
     [InlineData(Keys.A)]
     public void Control_ProcessCmdKey_InvokeWithParent_ReturnsFalse(Keys keyData)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
-        var msg = new Message();
+        Message msg = new();
         Assert.False(control.ProcessCmdKey(ref msg, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5553,8 +5553,8 @@ public partial class ControlTests
     [InlineData(Keys.A, false)]
     public void Control_ProcessCmdKey_InvokeWithCustomParent_ReturnsExpected(Keys keyData, bool result)
     {
-        using var control = new SubControl();
-        var msg = new Message
+        using SubControl control = new();
+        Message msg = new()
         {
             Msg = 1
         };
@@ -5567,7 +5567,7 @@ public partial class ControlTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessCmdKeyAction = action
         };
@@ -5582,7 +5582,7 @@ public partial class ControlTests
     [InlineData('a')]
     public void Control_ProcessDialogChar_InvokeWithoutParent_ReturnsFalse(char charCode)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.False(control.ProcessDialogChar(charCode));
         Assert.False(control.IsHandleCreated);
     }
@@ -5591,8 +5591,8 @@ public partial class ControlTests
     [InlineData('a')]
     public void Control_ProcessDialogChar_InvokeWithParent_ReturnsFalse(char charCode)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -5613,11 +5613,11 @@ public partial class ControlTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessDialogCharAction = action
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -5630,7 +5630,7 @@ public partial class ControlTests
     [InlineData(Keys.A)]
     public void Control_ProcessDialogKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.False(control.ProcessDialogKey(keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5639,8 +5639,8 @@ public partial class ControlTests
     [InlineData(Keys.A)]
     public void Control_ProcessDialogKey_InvokeWithParent_ReturnsFalse(Keys keyData)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -5661,11 +5661,11 @@ public partial class ControlTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessDialogKeyAction = action
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -5696,7 +5696,7 @@ public partial class ControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void Control_ProcessKeyEventArgs_InvokeWithoutParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -5722,7 +5722,7 @@ public partial class ControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = (IntPtr)2
@@ -5739,8 +5739,8 @@ public partial class ControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void Control_ProcessKeyEventArgs_InvokeWithParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -5769,7 +5769,7 @@ public partial class ControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = (IntPtr)2
@@ -5793,11 +5793,11 @@ public partial class ControlTests
             return true;
         }
 
-        using var parent = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl parent = new()
         {
             ProcessKeyEventArgsAction = action
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -5826,7 +5826,7 @@ public partial class ControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = (IntPtr)2
@@ -5845,7 +5845,7 @@ public partial class ControlTests
     [InlineData((int)PInvoke.WM_SYSCHAR)]
     public void Control_ProcessKeyEventArgs_InvokeCharAfterImeChar_Success(int msg)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -5854,11 +5854,11 @@ public partial class ControlTests
             e.Handled = true;
             keyPressCallCount++;
         };
-        var charM = new Message
+        Message charM = new()
         {
             Msg = msg
         };
-        var imeM = new Message
+        Message imeM = new()
         {
             Msg = (int)PInvoke.WM_IME_CHAR
         };
@@ -5904,7 +5904,7 @@ public partial class ControlTests
     [InlineData((int)PInvoke.WM_SYSKEYUP)]
     public void Control_ProcessKeyEventArgs_InvokeNonCharAfterImeChar_Success(int msg)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -5922,11 +5922,11 @@ public partial class ControlTests
             e.Handled = true;
             keyCallCount++;
         };
-        var charM = new Message
+        Message charM = new()
         {
             Msg = msg
         };
-        var imeM = new Message
+        Message imeM = new()
         {
             Msg = (int)PInvoke.WM_IME_CHAR
         };
@@ -5987,7 +5987,7 @@ public partial class ControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void Control_ProcessKeyMessage_InvokeWithoutParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int keyPressCallCount = 0;
         control.KeyPress += (sender, e) =>
         {
@@ -6013,7 +6013,7 @@ public partial class ControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = (IntPtr)2
@@ -6030,8 +6030,8 @@ public partial class ControlTests
     [MemberData(nameof(ProcessKeyEventArgs_TestData))]
     public void Control_ProcessKeyMessage_InvokeWithParent_ReturnsFalse(int msg, char newChar, bool handled, int expectedKeyPressCallCount, int expectedKeyDownCallCount, int expectedKeyUpCallCount, IntPtr expectedWParam)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -6060,7 +6060,7 @@ public partial class ControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = (IntPtr)2
@@ -6084,11 +6084,11 @@ public partial class ControlTests
             return true;
         }
 
-        using var parent = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl parent = new()
         {
             ProcessKeyEventArgsAction = action
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -6117,7 +6117,7 @@ public partial class ControlTests
             e.Handled = handled;
             keyUpCallCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             WParam = (IntPtr)2
@@ -6143,15 +6143,15 @@ public partial class ControlTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessKeyPreviewAction = action
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };
@@ -6172,11 +6172,11 @@ public partial class ControlTests
             return result;
         }
 
-        using var control = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl control = new()
         {
             ProcessKeyEventArgsAction = action
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };
@@ -6200,7 +6200,7 @@ public partial class ControlTests
             return parentResult;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessKeyPreviewAction = parentAction
         };
@@ -6212,12 +6212,12 @@ public partial class ControlTests
             return result;
         }
 
-        using var control = new CustomProcessKeyEventArgsControl
+        using CustomProcessKeyEventArgsControl control = new()
         {
             Parent = parent,
             ProcessKeyEventArgsAction = action
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };
@@ -6230,20 +6230,20 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ProcessKeyPreview_InvokeWithoutParent_ReturnsFalse()
     {
-        using var control = new SubControl();
-        var m = new Message();
+        using SubControl control = new();
+        Message m = new();
         Assert.False(control.ProcessKeyPreview(ref m));
     }
 
     [WinFormsFact]
     public void Control_ProcessKeyPreview_InvokeWithParent_ReturnsFalse()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
-        var m = new Message();
+        Message m = new();
         Assert.False(control.ProcessKeyPreview(ref m));
         Assert.False(control.IsHandleCreated);
     }
@@ -6260,15 +6260,15 @@ public partial class ControlTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessKeyPreviewAction = action
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = 1
         };
@@ -6282,7 +6282,7 @@ public partial class ControlTests
     [InlineData(char.MinValue)]
     public void Control_ProcessMnemonic_Invoke_ReturnsFalse(char charCode)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.False(control.ProcessMnemonic(charCode));
         Assert.False(control.IsHandleCreated);
     }
@@ -6290,7 +6290,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_RecreateHandle_InvokeWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         IntPtr handle1 = control.Handle;
         Assert.NotEqual(IntPtr.Zero, handle1);
         Assert.True(control.IsHandleCreated);
@@ -6312,7 +6312,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_RecreateHandle_InvokeWithoutHandle_Nop()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.RecreateHandle();
         Assert.False(control.IsHandleCreated);
 
@@ -6324,7 +6324,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Refresh_InvokeWithoutHandle_Nop()
     {
-        using var control = new Control();
+        using Control control = new();
         control.Refresh();
         Assert.False(control.IsHandleCreated);
 
@@ -6336,7 +6336,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Refresh_InvokeWithHandle_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6365,7 +6365,7 @@ public partial class ControlTests
     [InlineData(-1, -2)]
     public void Control_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         Assert.False(control.IsHandleCreated);
 
@@ -6377,7 +6377,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetBackColor_Invoke_Success()
     {
-        using var control = new Control();
+        using Control control = new();
 
         // Reset without value.
         control.ResetBackColor();
@@ -6396,7 +6396,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetBindings_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         // Reset without value.
         control.ResetBindings();
@@ -6415,8 +6415,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetCursor_Invoke_Success()
     {
-        using var control = new SubControl();
-        using var cursor = new Cursor((IntPtr)1);
+        using SubControl control = new();
+        using Cursor cursor = new((IntPtr)1);
 
         // Reset without value.
         control.ResetCursor();
@@ -6435,8 +6435,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetFont_Invoke_Success()
     {
-        using var control = new Control();
-        using var font = new Font("Arial", 8.25f);
+        using Control control = new();
+        using Font font = new("Arial", 8.25f);
 
         // Reset without value.
         control.ResetFont();
@@ -6455,7 +6455,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetForeColor_Invoke_Success()
     {
-        using var control = new Control();
+        using Control control = new();
 
         // Reset without value.
         control.ResetForeColor();
@@ -6474,7 +6474,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetImeMode_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         // Reset without value.
         control.ResetImeMode();
@@ -6493,7 +6493,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetMouseEventArgs_InvokeWithoutHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.ResetMouseEventArgs();
         Assert.False(control.IsHandleCreated);
 
@@ -6505,7 +6505,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetMouseEventArgs_InvokeWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6531,7 +6531,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetRightToLeft_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         // Reset without value.
         control.ResetRightToLeft();
@@ -6550,7 +6550,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ResetText_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         // Reset without value.
         control.ResetText();
@@ -6581,7 +6581,7 @@ public partial class ControlTests
     [MemberData(nameof(ResumeLayout_TestData))]
     public void Control_ResumeLayout_InvokeSuspendedWithLayoutRequest_Success(Control affectedControl, string affectedProperty, bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -6609,7 +6609,7 @@ public partial class ControlTests
     [MemberData(nameof(ResumeLayout_TestData))]
     public void Control_ResumeLayout_InvokeSuspendedWithMultipleLayoutRequests_Success(Control affectedControl, string affectedProperty, bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -6639,7 +6639,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_ResumeLayout_InvokeSuspendedWithoutLayoutRequests_Success(bool performLayout)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -6659,7 +6659,7 @@ public partial class ControlTests
     [MemberData(nameof(ResumeLayout_TestData))]
     public void Control_ResumeLayout_InvokeSuspendedMultipleTimesWithLayoutRequest_Success(Control affectedControl, string affectedProperty, bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -6689,7 +6689,7 @@ public partial class ControlTests
     [MemberData(nameof(ResumeLayout_TestData))]
     public void Control_ResumeLayout_InvokeSuspendedMultipleTimesWithMultipleLayoutRequests_Success(Control affectedControl, string affectedProperty, bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -6720,7 +6720,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_ResumeLayout_InvokeSuspendedMultipleTimesWithoutLayoutRequests_Success(bool performLayout)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -6743,12 +6743,12 @@ public partial class ControlTests
     [InlineData(false, 1)]
     public void Control_ResumeLayout_InvokeSuspendedWithChildren_Nop(bool performLayout, int expectedInitLayoutCallCount)
     {
-        using var child = new Control();
-        using var control = new CustomLayoutEngineControl();
+        using Control child = new();
+        using CustomLayoutEngineControl control = new();
         control.Controls.Add(child);
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.InitLayout(child, BoundsSpecified.All))
             .Verifiable();
@@ -6772,7 +6772,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_ResumeLayout_InvokeNotSuspended_Nop(bool performLayout)
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -6791,12 +6791,12 @@ public partial class ControlTests
     [InlineData(false, 1)]
     public void Control_ResumeLayout_InvokeNotSuspendedWithChildren_Nop(bool performLayout, int expectedInitLayoutCallCount)
     {
-        using var child = new Control();
-        using var control = new CustomLayoutEngineControl();
+        using Control child = new();
+        using CustomLayoutEngineControl control = new();
         control.Controls.Add(child);
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
-        var mockLayoutEngine = new Mock<LayoutEngine>(MockBehavior.Strict);
+        Mock<LayoutEngine> mockLayoutEngine = new(MockBehavior.Strict);
         mockLayoutEngine
             .Setup(e => e.InitLayout(child, BoundsSpecified.All))
             .Verifiable();
@@ -6818,7 +6818,7 @@ public partial class ControlTests
     [MemberData(nameof(ResumeLayout_TestData))]
     public void Control_ResumeLayout_InvokeSuspendedWithLayoutRequestWithHandle_Success(Control affectedControl, string affectedProperty, bool performLayout, int expectedLayoutCallCount)
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6859,7 +6859,7 @@ public partial class ControlTests
     [MemberData(nameof(RtlTranslateContent_TestData))]
     public void Control_RtlTranslateAlignment_InvokeContentAlignment_ReturnsExpected(RightToLeft rightToLeft, ContentAlignment align, ContentAlignment expected)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6875,7 +6875,7 @@ public partial class ControlTests
     [MemberData(nameof(RtlTranslateLeftRight_TestData))]
     public void Control_RtlTranslateAlignment_InvokeLeftRightAlignment_ReturnsExpected(RightToLeft rightToLeft, LeftRightAlignment align, LeftRightAlignment expected)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6891,7 +6891,7 @@ public partial class ControlTests
     [MemberData(nameof(RtlTranslateHorizontal_TestData))]
     public void Control_RtlTranslateAlignment_InvokeHorizontalAlignment_ReturnsExpected(RightToLeft rightToLeft, HorizontalAlignment align, HorizontalAlignment expected)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6926,7 +6926,7 @@ public partial class ControlTests
     [MemberData(nameof(RtlTranslateContent_TestData))]
     public void Control_RtlTranslateContent_Invoke_ReturnsExpected(RightToLeft rightToLeft, ContentAlignment align, ContentAlignment expected)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6954,7 +6954,7 @@ public partial class ControlTests
     [MemberData(nameof(RtlTranslateLeftRight_TestData))]
     public void Control_RtlTranslateLeftRight_Invoke_ReturnsExpected(RightToLeft rightToLeft, LeftRightAlignment align, LeftRightAlignment expected)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6983,7 +6983,7 @@ public partial class ControlTests
     [MemberData(nameof(RtlTranslateHorizontal_TestData))]
     public void Control_RtlTranslateHorizontal_Invoke_ReturnsExpected(RightToLeft rightToLeft, HorizontalAlignment align, HorizontalAlignment expected)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6999,7 +6999,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_SendToBack_InvokeWithoutHandleWithoutParent_Nop(bool topLevel)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetTopLevel(topLevel);
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
@@ -7019,9 +7019,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SendToBack_InvokeWithoutHandleWithParent_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control parent = new();
+        using Control child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -7061,9 +7061,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SendToBack_InvokeWithHandleWithParentWithoutHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control parent = new();
+        using Control child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -7116,9 +7116,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SendToBack_InvokeWithHandleWithParentWithHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
+        using Control parent = new();
+        using Control child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -7183,9 +7183,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SendToBack_InvokeWithoutHandleWithParentWithHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new SubControl();
-        using var child2 = new Control();
+        using Control parent = new();
+        using SubControl child1 = new();
+        using Control child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
         Assert.Equal(new Control[] { child1, child2 }, parent.Controls.Cast<Control>());
@@ -7243,7 +7243,7 @@ public partial class ControlTests
     [InlineData(false, false)]
     public void Control_SendToBack_InvokeWithHandleWithoutParent_Success(bool enabled, bool topLevel)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Enabled = enabled
         };
@@ -7289,7 +7289,7 @@ public partial class ControlTests
     [MemberData(nameof(SetAutoSizeMode_TestData))]
     public void Control_SetAutoSizeMode_Invoke_GetAutoSizeModeReturnsExpected(AutoSizeMode mode, AutoSizeMode expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetAutoSizeMode(mode);
         Assert.Equal(expected, control.GetAutoSizeMode());
         Assert.False(control.IsHandleCreated);
@@ -7304,8 +7304,8 @@ public partial class ControlTests
     [MemberData(nameof(SetAutoSizeMode_TestData))]
     public void Control_SetAutoSizeMode_InvokeWithParent_GetAutoSizeModeReturnsExpected(AutoSizeMode mode, AutoSizeMode expected)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -7328,7 +7328,7 @@ public partial class ControlTests
     [MemberData(nameof(SetAutoSizeMode_TestData))]
     public void Control_SetAutoSizeMode_InvokeWithHandle_GetAutoSizeModeReturnsExpected(AutoSizeMode mode, AutoSizeMode expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -7370,7 +7370,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_TestData))]
     public void Control_SetBounds_InvokeIntIntIntInt_Success(int x, int y, int width, int height, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -7477,7 +7477,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_WithConstrainedSize_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntWithConstrainedSize_Success(Size minimumSize, Size maximumSize, int x, int y, int width, int height, int expectedWidth, int expectedHeight, int expectedLayoutCallCount)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             MinimumSize = minimumSize,
             MaximumSize = maximumSize
@@ -7579,7 +7579,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_WithCustomStyle_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntWithCustomStyle_Success(int x, int y, int width, int height, int expectedClientWidth, int expectedClientHeight, int expectedLayoutCallCount)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -7677,8 +7677,8 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_WithParent_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntWithParent_Success(int x, int y, int width, int height, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -7812,7 +7812,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_WithHandle_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int layoutCallCount = 0;
         int resizeCallCount = 0;
@@ -7934,8 +7934,8 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_WithParentWithHandle_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -8157,7 +8157,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_BoundsSpecified_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntBoundsSpecified_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedX, int expectedY, int expectedWidth, int expectedHeight, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -8264,7 +8264,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_BoundsSpecified_WithConstrainedSize_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntBoundsSpecifiedWithConstrainedSize_Success(Size minimumSize, Size maximumSize, int x, int y, int width, int height, BoundsSpecified specified, int expectedX, int expectedY, int expectedWidth, int expectedHeight, int expectedLayoutCallCount)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             MinimumSize = minimumSize,
             MaximumSize = maximumSize
@@ -8366,7 +8366,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_BoundsSpecified_WithCustomStyle_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntBoundsSpecifiedWithCustomStyle_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedX, int expectedY, int expectedWidth, int expectedHeight, int expectedClientWidth, int expectedClientHeight, int expectedLayoutCallCount)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -8534,8 +8534,8 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_BoundsSpecified_WithParent_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntBoundsSpecifiedWithParent_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedX, int expectedY, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -8669,7 +8669,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_BoundsSpecified_WithHandle_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntBoundsSpecifiedWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedX, int expectedY, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int layoutCallCount = 0;
         int resizeCallCount = 0;
@@ -8791,8 +8791,8 @@ public partial class ControlTests
     [MemberData(nameof(SetBounds_Int_Int_Int_Int_BoundsSpecified_WithParentWithHandle_TestData))]
     public void Control_SetBounds_InvokeIntIntIntIntBoundsSpecifiedWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedX, int expectedY, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -8947,7 +8947,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBoundsCore_TestData))]
     public void Control_SetBoundsCore_Invoke_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int moveCallCount = 0;
         int locationChangedCallCount = 0;
         int layoutCallCount = 0;
@@ -9085,7 +9085,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBoundsCore_WithConstrainedSize_TestData))]
     public void Control_SetBoundsCore_InvokeWithConstrainedSize_Success(Size minimumSize, Size maximumSize, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             MinimumSize = minimumSize,
             MaximumSize = maximumSize
@@ -9218,7 +9218,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBoundsCore_WithCustomStyle_TestData))]
     public void Control_SetBoundsCore_InvokeWithCustomStyle_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedClientWidth, int expectedClientHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         int moveCallCount = 0;
         int locationChangedCallCount = 0;
         int layoutCallCount = 0;
@@ -9331,8 +9331,8 @@ public partial class ControlTests
     [MemberData(nameof(SetBoundsCore_TestData))]
     public void Control_SetBoundsCore_InvokeWithParent_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -9501,7 +9501,7 @@ public partial class ControlTests
     [MemberData(nameof(SetBoundsCore_WithHandle_TestData))]
     public void Control_SetBoundsCore_InvokeWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -9629,8 +9629,8 @@ public partial class ControlTests
     [MemberData(nameof(SetBoundsCore_WithHandle_TestData))]
     public void Control_SetBoundsCore_InvokeWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -9802,7 +9802,7 @@ public partial class ControlTests
     [MemberData(nameof(ClientSize_Set_TestData))]
     public void Control_SetClientSizeCore_Invoke_GetReturnsExpected(Size value, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -9836,7 +9836,7 @@ public partial class ControlTests
     [MemberData(nameof(ClientSize_SetWithCustomStyle_TestData))]
     public void Control_SetClientSizeCore_InvokeWithCustomStyle_GetReturnsExpected(Size value, Size expectedSize)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -9882,7 +9882,7 @@ public partial class ControlTests
     [MemberData(nameof(ClientSize_SetWithHandle_TestData))]
     public void Control_SetClientSizeCore_InvokeWithHandle_GetReturnsExpected(bool resizeRedraw, Size value, Size expectedSize, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
@@ -9935,7 +9935,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SetClientSizeCore_InvokeWithHandler_CallsClientSizeChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -9991,7 +9991,7 @@ public partial class ControlTests
     [MemberData(nameof(SetStyle_TestData))]
     public void Control_SetStyle_Invoke_GetStyleReturnsExpected(ControlStyles flag, bool value, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(flag, value);
         Assert.Equal(expected, control.GetStyle(flag));
         Assert.False(control.IsHandleCreated);
@@ -10005,7 +10005,7 @@ public partial class ControlTests
     [MemberData(nameof(SetStyle_TestData))]
     public void Control_SetStyle_InvokeWithHandle_GetStyleReturnsExpected(ControlStyles flag, bool value, bool expected)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -10036,7 +10036,7 @@ public partial class ControlTests
     [InlineData(false, false, false, 0, 0, 0)]
     public void Control_SetTopLevel_Invoke_GetTopLevelReturnsExpected(bool visible, bool value, bool expectedHandleCreated1, int expectedStyleChangedCallCount1, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = visible
         };
@@ -10076,7 +10076,7 @@ public partial class ControlTests
     [InlineData(false, false, 0)]
     public void Control_SetTopLevel_InvokeWithHandle_GetTopLevelReturnsExpected(bool visible, bool value, int expectedStyleChangedCallCount)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = visible
         };
@@ -10115,8 +10115,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SetTopLevel_InvokeWithParent_ThrowsArgumentException()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -10136,7 +10136,7 @@ public partial class ControlTests
     [MemberData(nameof(SizeFromClientSize_TestData))]
     public void Control_SizeFromClientSize_Invoke_ReturnsExpected(Size clientSize)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Equal(clientSize, control.SizeFromClientSize(clientSize));
         Assert.False(control.IsHandleCreated);
 
@@ -10149,8 +10149,8 @@ public partial class ControlTests
     [MemberData(nameof(SizeFromClientSize_TestData))]
     public void Control_SizeFromClientSize_InvokeWithStyles_ReturnsExpected(Size clientSize)
     {
-        using var control = new BorderedControl();
-        var expected = new Size(clientSize.Width + 4, clientSize.Height + 4);
+        using BorderedControl control = new();
+        Size expected = new(clientSize.Width + 4, clientSize.Height + 4);
         Assert.Equal(expected, control.SizeFromClientSize(clientSize));
         Assert.False(control.IsHandleCreated);
 
@@ -10191,7 +10191,7 @@ public partial class ControlTests
     [MemberData(nameof(SizeFromClientSize_TestData))]
     public void Control_SizeFromClientSize_InvokeWithHandle_ReturnsExpected(Size clientSize)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -10218,7 +10218,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_Show_Invoke_Success(bool visible)
     {
-        using var control = new Control
+        using Control control = new()
         {
             Visible = visible
         };
@@ -10236,7 +10236,7 @@ public partial class ControlTests
     [BoolData]
     public void Control_Show_InvokeWithHandle_Success(bool visible)
     {
-        using var control = new Control
+        using Control control = new()
         {
             Visible = visible
         };
@@ -10267,7 +10267,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SuspendLayout_Invoke_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -10284,7 +10284,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_SuspendLayout_InvokeWithHandle_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -10314,14 +10314,14 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_ToString_Invoke_ReturnsExpected()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.Equal("System.Windows.Forms.Control", control.ToString());
     }
 
     [WinFormsFact]
     public void Control_Update_InvokeWithoutHandle_Nop()
     {
-        using var control = new Control();
+        using Control control = new();
         control.Update();
         Assert.False(control.IsHandleCreated);
 
@@ -10333,7 +10333,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Update_InvokeWithHandle_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -10359,7 +10359,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_Invoke_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int resizeCallCount = 0;
@@ -10410,7 +10410,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_InvokeTopLevel_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int resizeCallCount = 0;
@@ -10497,7 +10497,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_InvokeWithBounds_Success()
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Bounds = new Rectangle(1, 2, 3, 4)
         };
@@ -10584,11 +10584,11 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_InvokeWithParentWithBounds_Success()
     {
-        using var parent = new SubControl
+        using SubControl parent = new()
         {
             Bounds = new Rectangle(10, 20, 30, 40)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Bounds = new Rectangle(1, 2, 3, 4),
             Parent = parent
@@ -10676,7 +10676,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_InvokeWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -10773,7 +10773,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_InvokeWithBoundsWithHandle_Success()
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Bounds = new Rectangle(1, 2, 3, 4)
         };
@@ -10840,11 +10840,11 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateBounds_InvokeWithParentWithBoundsWithHandle_Success()
     {
-        using var parent = new SubControl
+        using SubControl parent = new()
         {
             Bounds = new Rectangle(10, 20, 30, 40)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Bounds = new Rectangle(1, 2, 3, 4),
             Parent = parent
@@ -10940,7 +10940,7 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntInt_Success(int x, int y, int width, int height, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -11047,7 +11047,7 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_WithConstrainedSize_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntWithConstrainedSize_Success(Size minimumSize, Size maximumSize, int x, int y, int width, int height, int expectedLayoutCallCount)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             MinimumSize = minimumSize,
             MaximumSize = maximumSize
@@ -11149,7 +11149,7 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_WithCustomStyle_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntWithCustomStyle_Success(int x, int y, int width, int height, int expectedClientWidth, int expectedClientHeight)
     {
-        using var control = new BorderedControl();
+        using BorderedControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -11234,8 +11234,8 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntWithParent_Success(int x, int y, int width, int height, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -11373,7 +11373,7 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_WithHandle_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int layoutCallCount = 0;
         int resizeCallCount = 0;
@@ -11472,8 +11472,8 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_WithHandle_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -11635,7 +11635,7 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_Int_Int_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntIntInt_Success(int x, int y, int width, int height, int clientWidth, int clientHeight, int expectedLayoutCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         int resizeCallCount = 0;
         int sizeChangedCallCount = 0;
@@ -11720,8 +11720,8 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_Int_Int_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntIntIntWithParent_Success(int x, int y, int width, int height, int clientWidth, int clientHeight, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -11871,7 +11871,7 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_Int_Int_WithHandle_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntIntIntWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, int clientWidth, int clientHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int layoutCallCount = 0;
         int resizeCallCount = 0;
@@ -11970,8 +11970,8 @@ public partial class ControlTests
     [MemberData(nameof(UpdateBounds_Int_Int_Int_Int_Int_Int_WithHandle_TestData))]
     public void Control_UpdateBounds_InvokeIntIntIntIntIntIntWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, int clientWidth, int clientHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -12113,7 +12113,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateStyles_InvokeWithoutHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12138,7 +12138,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateStyles_InvokeWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         IntPtr handle = control.Handle;
         Assert.NotEqual(IntPtr.Zero, handle);
         int callCount = 0;
@@ -12167,7 +12167,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithoutParent_Nop()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.UpdateZOrder();
         Assert.False(control.IsHandleCreated);
 
@@ -12179,8 +12179,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithoutHandleWithParentWithoutHandle_Nop()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -12198,8 +12198,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithHandleWithParentWithoutHandle_Nop()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -12230,8 +12230,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithoutHandleWithParentWithHandle_Success()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -12263,8 +12263,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithHandleWithParentWithHandleOnlyChild_Success()
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -12307,9 +12307,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithHandleWithParentWithHandleMultipleChildren_Success()
     {
-        using var parent = new Control();
-        using var child1 = new Control();
-        using var child2 = new SubControl();
+        using Control parent = new();
+        using Control child1 = new();
+        using SubControl child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
 
@@ -12354,9 +12354,9 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_UpdateZOrder_InvokeWithHandleWithParentWithHandleMultipleChildrenWithoutHandle_Success()
     {
-        using var parent = new Control();
-        using var child1 = new SubControl();
-        using var child2 = new SubControl();
+        using Control parent = new();
+        using SubControl child1 = new();
+        using SubControl child2 = new();
         parent.Controls.Add(child1);
         parent.Controls.Add(child2);
 
@@ -12404,7 +12404,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             int callCount = 0;
             control.MouseCaptureChanged += (sender, e) =>
             {
@@ -12412,7 +12412,7 @@ public partial class ControlTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_CAPTURECHANGED,
                 Result = (IntPtr)250
@@ -12427,7 +12427,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeCaptureChangedWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -12443,7 +12443,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_CAPTURECHANGED,
             Result = (IntPtr)250
@@ -12462,11 +12462,11 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             int callCount = 0;
             control.LostFocus += (sender, e) => callCount++;
 
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_CANCELMODE,
                 Result = (IntPtr)250
@@ -12481,7 +12481,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeCancelModeWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -12492,7 +12492,7 @@ public partial class ControlTests
         int callCount = 0;
         control.LostFocus += (sender, e) => callCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_CANCELMODE,
             Result = (IntPtr)250
@@ -12525,11 +12525,11 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl
+            using SubControl control = new()
             {
                 Size = size
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
@@ -12543,7 +12543,7 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> WndProc_ContextMenuWithContextMenuStripWithoutHandle_TestData()
     {
-        using var control = new Control();
+        using Control control = new();
         Point p = control.PointToScreen(new Point(5, 5));
 
         yield return new object[] { new Size(10, 20), (IntPtr)(-1), (IntPtr)250, true };
@@ -12565,13 +12565,13 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var menu = new ContextMenuStrip();
-            using var control = new SubControl
+            using ContextMenuStrip menu = new();
+            using SubControl control = new()
             {
                 ContextMenuStrip = menu,
                 Size = size
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
@@ -12589,7 +12589,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_ContextMenuWithoutContextMenuStrip_TestData))]
     public void Control_WndProc_InvokeContextMenuWithoutContextMenuStripWithHandle_Success(Size size, IntPtr lParam)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Size = size
         };
@@ -12601,7 +12601,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
@@ -12617,7 +12617,7 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> WndProc_ContextMenuWithContextMenuStripWithHandle_TestData()
     {
-        using var control = new Control();
+        using Control control = new();
         Point p = control.PointToScreen(new Point(5, 5));
 
         yield return new object[] { new Size(10, 20), (IntPtr)(-1), (IntPtr)250 };
@@ -12637,8 +12637,8 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_ContextMenuWithContextMenuStripWithHandle_TestData))]
     public void Control_WndProc_InvokeContextMenuWithContextMenuStripWithHandle_Success(Size size, IntPtr lParam, IntPtr expectedResult)
     {
-        using var menu = new ContextMenuStrip();
-        using var control = new SubControl
+        using ContextMenuStrip menu = new();
+        using SubControl control = new()
         {
             ContextMenuStrip = menu,
             Size = size
@@ -12651,7 +12651,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
@@ -12685,7 +12685,7 @@ public partial class ControlTests
                     Assert.Same(EventArgs.Empty, e);
                     callCount++;
                 };
-                var m = new Message
+                Message m = new()
                 {
                     Msg = (int)PInvoke.WM_DPICHANGED_AFTERPARENT,
                     WParam = PARAM.FromLowHigh(192, 192),
@@ -12712,7 +12712,7 @@ public partial class ControlTests
 
         try
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             Assert.NotEqual(0, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -12728,7 +12728,7 @@ public partial class ControlTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_DPICHANGED_AFTERPARENT,
                 WParam = PARAM.FromLowHigh(192, 192),
@@ -12759,7 +12759,7 @@ public partial class ControlTests
         {
             using (new NoAssertContext())
             {
-                using var control = new SubControl();
+                using SubControl control = new();
                 int callCount = 0;
                 control.DpiChangedBeforeParent += (sender, e) =>
                 {
@@ -12767,7 +12767,7 @@ public partial class ControlTests
                     Assert.Same(EventArgs.Empty, e);
                     callCount++;
                 };
-                var m = new Message
+                Message m = new()
                 {
                     Msg = (int)PInvoke.WM_DPICHANGED_BEFOREPARENT,
                     WParam = PARAM.FromLowHigh(192, 192),
@@ -12794,7 +12794,7 @@ public partial class ControlTests
 
         try
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             Assert.NotEqual(0, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -12810,7 +12810,7 @@ public partial class ControlTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_DPICHANGED_BEFOREPARENT,
                 WParam = PARAM.FromLowHigh(192, 192),
@@ -12848,14 +12848,14 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
             control.SetStyle(ControlStyles.Opaque, opaque);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 Result = (IntPtr)250
@@ -12884,19 +12884,19 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
             control.SetStyle(ControlStyles.Opaque, opaque);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            using var image = new Bitmap(10, 10);
+            using Bitmap image = new(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
             IntPtr hdc = graphics.GetHdc();
             try
             {
-                var m = new Message
+                Message m = new()
                 {
                     Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
@@ -12929,7 +12929,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_EraseBkgndWithHandleWithoutWParam_TestData))]
     public void Control_WndProc_InvokeEraseBkgndWithHandleWithoutWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
@@ -12943,7 +12943,7 @@ public partial class ControlTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_ERASEBKGND,
             Result = (IntPtr)250
@@ -12972,7 +12972,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_EraseBkgndWithHandleWithWParam_TestData))]
     public void Control_WndProc_InvokeEraseBkgndWithHandleWithWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
@@ -12986,12 +12986,12 @@ public partial class ControlTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
@@ -13016,8 +13016,8 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
-            var m = new Message
+            using SubControl control = new();
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_GETDLGCODE,
                 Result = (IntPtr)250
@@ -13031,7 +13031,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeGetDlgCodeWithHandle_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -13040,7 +13040,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_GETDLGCODE,
             Result = (IntPtr)250
@@ -13058,10 +13058,10 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             int imeModeChangedCallCount = 0;
             control.ImeModeChanged += (sender, e) => imeModeChangedCallCount++;
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_IME_NOTIFY,
                 Result = (IntPtr)250
@@ -13076,7 +13076,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeImeNotifyCallCountWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -13087,7 +13087,7 @@ public partial class ControlTests
 
         int imeModeChangedCallCount = 0;
         control.ImeModeChanged += (sender, e) => imeModeChangedCallCount++;
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_IME_NOTIFY,
             Result = (IntPtr)250
@@ -13106,7 +13106,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             int callCount = 0;
             control.LostFocus += (sender, e) =>
             {
@@ -13114,7 +13114,7 @@ public partial class ControlTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_KILLFOCUS,
                 Result = (IntPtr)250
@@ -13129,7 +13129,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeKillFocusWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -13145,7 +13145,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_KILLFOCUS,
             Result = (IntPtr)250
@@ -13172,13 +13172,13 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             control.SetStyle(ControlStyles.Opaque, opaque);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
                 Result = (IntPtr)250
@@ -13195,13 +13195,13 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserPaint, true);
             control.SetStyle(ControlStyles.Opaque, false);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
                 Result = (IntPtr)250
@@ -13227,18 +13227,18 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             control.SetStyle(ControlStyles.Opaque, opaque);
             int paintCallCount = 0;
             control.Paint += (sender, e) => paintCallCount++;
 
-            using var image = new Bitmap(10, 10);
+            using Bitmap image = new(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
             IntPtr hdc = graphics.GetHdc();
             try
             {
-                var m = new Message
+                Message m = new()
                 {
                     Msg = (int)PInvoke.WM_PRINTCLIENT,
                     WParam = hdc,
@@ -13267,7 +13267,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_PrintClientWithHandleWithoutWParam_TestData))]
     public void Control_WndProc_InvokePrintClientWithHandleWithoutWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
         int paintCallCount = 0;
@@ -13280,7 +13280,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_PRINTCLIENT,
             Result = (IntPtr)250
@@ -13297,7 +13297,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokePrintClientWithHandleWithoutWParamUserPaint_DoesNotThrow()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, true);
         control.SetStyle(ControlStyles.Opaque, false);
         int paintCallCount = 0;
@@ -13310,7 +13310,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_PRINTCLIENT,
             Result = (IntPtr)250
@@ -13337,7 +13337,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_PrintClientWithHandleWithWParam_TestData))]
     public void Control_WndProc_InvokePrintClientWithHandleWithWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
         int paintCallCount = 0;
@@ -13350,12 +13350,12 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
                 WParam = hdc,
@@ -13468,7 +13468,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserMouse, userMouse);
             int callCount = 0;
             control.MouseDown += (sender, e) =>
@@ -13481,7 +13481,7 @@ public partial class ControlTests
                 Assert.Equal(0, e.Delta);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 LParam = lParam,
@@ -13503,7 +13503,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserMouse, userMouse);
             control.SetStyle(ControlStyles.Selectable, false);
             int callCount = 0;
@@ -13517,7 +13517,7 @@ public partial class ControlTests
                 Assert.Equal(0, e.Delta);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 LParam = lParam,
@@ -13546,13 +13546,13 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl
+            using SubControl control = new()
             {
                 Enabled = false
             };
             int callCount = 0;
             control.MouseDown += (sender, e) => callCount++;
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 Result = (IntPtr)250
@@ -13570,7 +13570,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_MouseDown_TestData))]
     public void Control_WndProc_InvokeMouseDownWithHandle_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserMouse, userMouse);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -13591,7 +13591,7 @@ public partial class ControlTests
             Assert.Equal(0, e.Delta);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             LParam = lParam,
@@ -13613,7 +13613,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_MouseDown_TestData))]
     public void Control_WndProc_InvokeMouseDownWithHandleNotSelectable_DoesNotCallMouseDown(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserMouse, userMouse);
         control.SetStyle(ControlStyles.Selectable, false);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -13635,7 +13635,7 @@ public partial class ControlTests
             Assert.Equal(0, e.Delta);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             LParam = lParam,
@@ -13664,7 +13664,7 @@ public partial class ControlTests
     [InlineData((int)PInvoke.WM_XBUTTONDBLCLK)]
     public void Control_WndProc_InvokeMouseDownWithHandleNotEnabled_DoesNotCallMouseDown(int msg)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Enabled = false
         };
@@ -13678,7 +13678,7 @@ public partial class ControlTests
 
         int callCount = 0;
         control.MouseDown += (sender, e) => callCount++;
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             Result = (IntPtr)250
@@ -13699,7 +13699,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             int callCount = 0;
             control.MouseHover += (sender, e) =>
             {
@@ -13707,7 +13707,7 @@ public partial class ControlTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_MOUSEHOVER,
                 Result = (IntPtr)250
@@ -13722,7 +13722,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -13738,7 +13738,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
@@ -13803,7 +13803,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserMouse, userMouse);
             int callCount = 0;
             control.MouseUp += (sender, e) =>
@@ -13816,7 +13816,7 @@ public partial class ControlTests
                 Assert.Equal(0, e.Delta);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 LParam = lParam,
@@ -13838,7 +13838,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             control.SetStyle(ControlStyles.UserMouse, userMouse);
             control.SetStyle(ControlStyles.Selectable, false);
             int callCount = 0;
@@ -13852,7 +13852,7 @@ public partial class ControlTests
                 Assert.Equal(0, e.Delta);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 LParam = lParam,
@@ -13877,13 +13877,13 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl
+            using SubControl control = new()
             {
                 Enabled = false
             };
             int callCount = 0;
             control.MouseUp += (sender, e) => callCount++;
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 Result = (IntPtr)250
@@ -13901,7 +13901,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_MouseUp_TestData))]
     public void Control_WndProc_InvokeMouseUpWithHandle_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserMouse, userMouse);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -13922,7 +13922,7 @@ public partial class ControlTests
             Assert.Equal(0, e.Delta);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             LParam = lParam,
@@ -13944,7 +13944,7 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_MouseUp_TestData))]
     public void Control_WndProc_InvokeMouseUpWithHandleNotSelectable_DoesNotCallMouseUp(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserMouse, userMouse);
         control.SetStyle(ControlStyles.Selectable, false);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -13966,7 +13966,7 @@ public partial class ControlTests
             Assert.Equal(0, e.Delta);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             LParam = lParam,
@@ -13991,7 +13991,7 @@ public partial class ControlTests
     [InlineData((int)PInvoke.WM_XBUTTONUP)]
     public void Control_WndProc_InvokeMouseUpWithHandleNotEnabled_CallsMouseUp(int msg)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Enabled = false
         };
@@ -14005,7 +14005,7 @@ public partial class ControlTests
 
         int callCount = 0;
         control.MouseUp += (sender, e) => callCount++;
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             Result = (IntPtr)250
@@ -14026,7 +14026,7 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
+            using SubControl control = new();
             int callCount = 0;
             control.GotFocus += (sender, e) =>
             {
@@ -14034,7 +14034,7 @@ public partial class ControlTests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_SETFOCUS,
                 Result = (IntPtr)250
@@ -14049,7 +14049,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFocusWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -14065,7 +14065,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14082,8 +14082,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithHandle_Success()
     {
-        using var parent = new ContainerControl();
-        using var control = new SubControl
+        using ContainerControl parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -14103,7 +14103,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14130,9 +14130,9 @@ public partial class ControlTests
     [MemberData(nameof(WndProc_SetFocusWithParentIContainer_TestData))]
     public void Control_WndProc_InvokeSetFocusWithParentIContainerControlWithHandle_Success(bool containerControl, bool enabled, IntPtr expectedResult, int expectedActivateControlCallCount, int expectedCallCount)
     {
-        using var parent = new CustomContainerControl();
+        using CustomContainerControl parent = new();
         parent.SetStyle(ControlStyles.ContainerControl, containerControl);
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -14159,7 +14159,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14193,12 +14193,12 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentContainerControlWithHandle_Success()
     {
-        using var grandparent = new ContainerControl();
-        using var parent = new ContainerControl
+        using ContainerControl grandparent = new();
+        using ContainerControl parent = new()
         {
             Parent = grandparent
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -14219,7 +14219,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14238,12 +14238,12 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentControlWithHandle_Success()
     {
-        using var grandparent = new Control();
-        using var parent = new ContainerControl
+        using Control grandparent = new();
+        using ContainerControl parent = new()
         {
             Parent = grandparent
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -14263,7 +14263,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14281,12 +14281,12 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentContainerControlAlreadyActiveWithHandle_Success()
     {
-        using var grandparent = new ContainerControl();
-        using var parent = new ContainerControl
+        using ContainerControl grandparent = new();
+        using ContainerControl parent = new()
         {
             Parent = grandparent
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -14307,7 +14307,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14326,12 +14326,12 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentWithHandle_Success()
     {
-        using var grandparent = new Control();
-        using var parent = new ContainerControl
+        using Control grandparent = new();
+        using ContainerControl parent = new()
         {
             Parent = grandparent
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -14351,7 +14351,7 @@ public partial class ControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -14371,8 +14371,8 @@ public partial class ControlTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubControl();
-            var m = new Message
+            using SubControl control = new();
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_SETFONT,
                 Result = (IntPtr)250
@@ -14386,7 +14386,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_WndProc_InvokeSetFontWithHandle_ReturnsExpected()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -14395,7 +14395,7 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFONT,
             Result = (IntPtr)250

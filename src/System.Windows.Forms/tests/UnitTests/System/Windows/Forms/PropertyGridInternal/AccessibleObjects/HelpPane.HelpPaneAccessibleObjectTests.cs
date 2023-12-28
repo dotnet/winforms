@@ -10,8 +10,8 @@ public class HelpPane_HelpPaneAccessibleObjectTests
     [WinFormsFact]
     public void HelpPaneAccessibleObject_Ctor_Default()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using HelpPane helpPane = new HelpPane(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using HelpPane helpPane = new(propertyGrid);
         HelpPane.HelpPaneAccessibleObject accessibleObject =
             new HelpPane.HelpPaneAccessibleObject(helpPane, propertyGrid);
 
@@ -23,8 +23,8 @@ public class HelpPane_HelpPaneAccessibleObjectTests
     [WinFormsFact]
     public void HelpPaneAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using HelpPane helpPane = new HelpPane(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using HelpPane helpPane = new(propertyGrid);
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)helpPane.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -39,8 +39,8 @@ public class HelpPane_HelpPaneAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void HelpPaneAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using HelpPane helpPane = new HelpPane(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using HelpPane helpPane = new(propertyGrid);
         // AccessibleRole is not set = Default
 
         if (createControl)

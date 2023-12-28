@@ -10,7 +10,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void Ctor_Default()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             Assert.Empty(fontCollection.Families);
         }
@@ -25,7 +25,7 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             fontCollection.AddFontFile(Helpers.GetTestBitmapPath("empty.file"));
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
@@ -44,7 +44,7 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             string relativePath = Path.Combine("fonts", "CodeNewRoman.ttf");
             fontCollection.AddFontFile(relativePath);
@@ -63,7 +63,7 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
@@ -82,7 +82,7 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
@@ -99,7 +99,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_NullFileName_ThrowsArgumentNullException()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("filename", "path", () => fontCollection.AddFontFile(null));
         }
@@ -108,7 +108,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_InvalidPath_ThrowsArgumentException()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             AssertExtensions.Throws<ArgumentException>("path", null, () => fontCollection.AddFontFile(string.Empty));
         }
@@ -117,7 +117,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_NoSuchFilePath_ThrowsFileNotFoundException()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             Assert.Throws<FileNotFoundException>(() => fontCollection.AddFontFile("fileName"));
         }
@@ -126,7 +126,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_LongFilePath_ThrowsException()
     {
-        using var fontCollection = new PrivateFontCollection();
+        using PrivateFontCollection fontCollection = new();
         Assert.Throws<FileNotFoundException>(
             () => fontCollection.AddFontFile(new string('a', 261)));
     }
@@ -134,7 +134,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_Directory_ThrowsFileNotFoundException()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             AssertExtensions.Throws<FileNotFoundException, ExternalException>(() => fontCollection.AddFontFile(AppContext.BaseDirectory));
         }
@@ -143,7 +143,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_Disposed_ThrowsArgumentException()
     {
-        var fontCollection = new PrivateFontCollection();
+        PrivateFontCollection fontCollection = new();
         fontCollection.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddFontFile("fileName"));
@@ -152,7 +152,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddMemoryFont_ValidMemory_Success()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             byte[] data = File.ReadAllBytes(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
@@ -175,7 +175,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddMemoryFont_ZeroMemory_ThrowsArgumentException()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont(IntPtr.Zero, 100));
         }
@@ -192,7 +192,7 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             byte[] data = File.ReadAllBytes(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
@@ -212,7 +212,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddMemoryFont_Disposed_ThrowsArgumentException()
     {
-        var fontCollection = new PrivateFontCollection();
+        PrivateFontCollection fontCollection = new();
         fontCollection.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont((IntPtr)10, 100));
@@ -221,7 +221,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void Families_GetWhenDisposed_ThrowsArgumentException()
     {
-        var fontCollection = new PrivateFontCollection();
+        PrivateFontCollection fontCollection = new();
         fontCollection.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.Families);
@@ -230,7 +230,7 @@ public class PrivateFontCollectionTests
     [Fact]
     public void Dispose_MultipleTimes_Nop()
     {
-        var fontCollection = new PrivateFontCollection();
+        PrivateFontCollection fontCollection = new();
         fontCollection.Dispose();
         fontCollection.Dispose();
     }

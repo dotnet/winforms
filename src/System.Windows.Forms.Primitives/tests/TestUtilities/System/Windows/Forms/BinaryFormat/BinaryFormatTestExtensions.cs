@@ -20,7 +20,7 @@ internal static class BinaryFormatTestExtensions
     public static Stream Serialize(this object source)
     {
         MemoryStream stream = new();
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
 #pragma warning restore SYSLIB0011

@@ -343,7 +343,7 @@ public sealed partial class BehaviorService
         /// </summary>
         private bool WndProcProxy(ref Message m, int x, int y)
         {
-            Point mouseLoc = new Point(x, y);
+            Point mouseLoc = new(x, y);
             _behaviorService.PropagateHitTest(mouseLoc);
             switch (m.MsgInternal)
             {

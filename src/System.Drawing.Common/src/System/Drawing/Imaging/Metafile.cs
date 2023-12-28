@@ -566,7 +566,7 @@ public sealed class Metafile : Image
         // Called in order to emulate exception behavior from .NET Framework related to invalid file paths.
         Path.GetFullPath(fileName);
 
-        MetafileHeader header = new MetafileHeader();
+        MetafileHeader header = new();
 
         IntPtr memory = Marshal.AllocHGlobal(Marshal.SizeOf<MetafileHeaderEmf>());
 
@@ -574,7 +574,7 @@ public sealed class Metafile : Image
         {
             Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromFile(fileName, memory));
 
-            int[] type = new int[] { 0 };
+            int[] type = [0];
 
             Marshal.Copy(memory, type, 0, 1);
 
@@ -616,7 +616,7 @@ public sealed class Metafile : Image
             using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream));
             Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromStream(streamWrapper.Ptr, memory));
 
-            int[] type = new int[] { 0 };
+            int[] type = [0];
 
             Marshal.Copy(memory, type, 0, 1);
 
@@ -659,7 +659,7 @@ public sealed class Metafile : Image
         {
             Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromMetafile(new HandleRef(this, _nativeImage), memory));
 
-            int[] type = new int[] { 0 };
+            int[] type = [0];
 
             Marshal.Copy(memory, type, 0, 1);
 

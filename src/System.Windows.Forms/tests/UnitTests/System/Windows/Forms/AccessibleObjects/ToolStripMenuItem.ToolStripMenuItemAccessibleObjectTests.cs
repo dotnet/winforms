@@ -12,8 +12,8 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripMenuItemAccessibleObject_Ctor_Default()
     {
-        using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
-        ToolStripMenuItemAccessibleObject accessibleObject = new ToolStripMenuItemAccessibleObject(toolStripMenuItem);
+        using ToolStripMenuItem toolStripMenuItem = new();
+        ToolStripMenuItemAccessibleObject accessibleObject = new(toolStripMenuItem);
 
         Assert.Equal(toolStripMenuItem, accessibleObject.Owner);
     }
@@ -21,7 +21,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripMenuItemAccessibleObject_ControlType_IsMenuItem_IfAccessibleRoleIsDefault()
     {
-        using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
+        using ToolStripMenuItem toolStripMenuItem = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -32,7 +32,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripMenuItemAccessibleObject_Role_IsMenuItem_ByDefault()
     {
-        using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
+        using ToolStripMenuItem toolStripMenuItem = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripMenuItem.AccessibilityObject.Role;
@@ -59,7 +59,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     [MemberData(nameof(ToolStripMenuItemAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripMenuItemAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
+        using ToolStripMenuItem toolStripMenuItem = new();
         toolStripMenuItem.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

@@ -38,7 +38,7 @@ public abstract class WindowsFormsComponentEditor : ComponentEditor
             return false;
         }
 
-        ComponentEditorForm form = new ComponentEditorForm(component, pageControlTypes);
+        ComponentEditorForm form = new(component, pageControlTypes);
         return form.ShowForm(owner, GetInitialComponentEditorPageIndex()) == DialogResult.OK;
     }
 

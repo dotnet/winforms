@@ -23,7 +23,7 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
     [MemberData(nameof(DataGridViewComboBoxCellAccessibleObject_SupportExpandCollapsePattern_TestData))]
     public void DataGridViewComboBoxCellAccessibleObject_SupportExpandCollapsePattern_ReturnExpected(DataGridViewComboBoxDisplayStyle displayStyle, bool cellIsEdited, bool expectedValue)
     {
-        using var dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewComboBoxColumn() { DisplayStyle = displayStyle });
         dataGridView.Rows.Add();
         dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
@@ -57,7 +57,7 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
     [MemberData(nameof(DataGridViewComboBoxCellAccessibleObject_ControlType_TestData))]
     public void DataGridViewComboBoxCellAccessibleObject_ControlType_ReturnExpected(DataGridViewComboBoxDisplayStyle displayStyle, bool cellIsEdited, int expectedControlType)
     {
-        using var dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewComboBoxColumn() { DisplayStyle = displayStyle });
         dataGridView.Rows.Add();
         dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];

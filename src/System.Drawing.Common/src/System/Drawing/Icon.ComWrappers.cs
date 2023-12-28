@@ -39,7 +39,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 using DrawingCom.IPicture picture = (DrawingCom.IPicture)DrawingCom.Instance
                     .GetOrCreateObjectForComInstance(lpPicture, CreateObjectFlags.UniqueInstance);
 
-                var gpStream = new GPStream(outputStream, makeSeekable: false);
+                GPStream gpStream = new(outputStream, makeSeekable: false);
                 streamPtr = DrawingCom.Instance.GetOrCreateComInterfaceForObject(gpStream, CreateComInterfaceFlags.None);
 
                 DrawingCom.ThrowExceptionForHR(picture.SaveAsFile(streamPtr, -1, null));

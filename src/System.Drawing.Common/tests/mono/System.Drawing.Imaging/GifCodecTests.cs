@@ -38,7 +38,7 @@ public class GifCodecTest
     /* Checks bitmap features on a known 1bbp bitmap */
     private void Bitmap8bitsFeatures(string filename)
     {
-        using (Bitmap bmp = new Bitmap(filename))
+        using (Bitmap bmp = new(filename))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -71,7 +71,7 @@ public class GifCodecTest
 
     private void Bitmap8bitsPixels(string filename)
     {
-        using (Bitmap bmp = new Bitmap(filename))
+        using (Bitmap bmp = new(filename))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-10644802, bmp.GetPixel(0, 0).ToArgb());
@@ -109,7 +109,7 @@ public class GifCodecTest
     public void Bitmap8bitsData()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature24bits.gif");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -170,7 +170,7 @@ public class GifCodecTest
     public void Interlaced()
     {
         string sInFile = Helpers.GetTestBitmapPath("81773-interlaced.gif");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             for (int i = 0; i < 255; i++)
             {
@@ -188,10 +188,10 @@ public class GifCodecTest
         string sOutFile = $"linerect-{expected}.gif";
 
         // Save
-        Bitmap bmp = new Bitmap(100, 100, original);
+        Bitmap bmp = new(100, 100, original);
         Graphics gr = Graphics.FromImage(bmp);
 
-        using (Pen p = new Pen(Color.Red, 2))
+        using (Pen p = new(Color.Red, 2))
         {
             gr.DrawLine(p, 10.0F, 10.0F, 90.0F, 90.0F);
             gr.DrawRectangle(p, 10.0F, 10.0F, 80.0F, 80.0F);
@@ -202,7 +202,7 @@ public class GifCodecTest
             bmp.Save(sOutFile, ImageFormat.Gif);
 
             // Load
-            using (Bitmap bmpLoad = new Bitmap(sOutFile))
+            using (Bitmap bmpLoad = new(sOutFile))
             {
                 Assert.Equal(expected, bmpLoad.PixelFormat);
                 Color color = bmpLoad.GetPixel(10, 10);

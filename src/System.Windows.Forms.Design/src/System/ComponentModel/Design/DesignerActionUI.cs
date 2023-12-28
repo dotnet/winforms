@@ -185,7 +185,7 @@ internal partial class DesignerActionUI : IDisposable
         {
             if (!_componentToGlyph.TryGetValue(comp, out DesignerActionGlyph? designerActionGlyph))
             {
-                DesignerActionBehavior dab = new DesignerActionBehavior(_serviceProvider, comp, dalColl, this);
+                DesignerActionBehavior dab = new(_serviceProvider, comp, dalColl, this);
 
                 // if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
                 if (comp is not Control or ToolStripDropDown)
@@ -633,7 +633,7 @@ internal partial class DesignerActionUI : IDisposable
         }
 
         Point glyphLocationScreenCoord = GetGlyphLocationScreenCoord(component, glyph);
-        Rectangle rectGlyph = new Rectangle(glyphLocationScreenCoord, glyph.Bounds.Size);
+        Rectangle rectGlyph = new(glyphLocationScreenCoord, glyph.Bounds.Size);
         Point pt = DesignerActionPanel.ComputePreferredDesktopLocation(rectGlyph, designerActionHost.Size, out DockStyle edgeToDock);
         glyph.DockEdge = edgeToDock;
         designerActionHost.Location = pt;
@@ -642,7 +642,7 @@ internal partial class DesignerActionUI : IDisposable
 
     private Point GetGlyphLocationScreenCoord(IComponent relatedComponent, Glyph glyph)
     {
-        Point glyphLocationScreenCoord = new Point(0, 0);
+        Point glyphLocationScreenCoord = new(0, 0);
         if (relatedComponent is Control and not ToolStripDropDown)
         {
             glyphLocationScreenCoord = _behaviorService.AdornerWindowPointToScreen(glyph.Bounds.Location);

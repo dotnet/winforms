@@ -11,7 +11,7 @@ public class FileDialogTests
     [WinFormsFact]
     public void FileDialog_Ctor_Default()
     {
-        using var dialog = new SubFileDialog();
+        using SubFileDialog dialog = new();
         Assert.True(dialog.AddExtension);
         Assert.True(dialog.AddToRecent);
         Assert.True(dialog.AutoUpgradeEnabled);
@@ -49,7 +49,7 @@ public class FileDialogTests
     [WinFormsFact]
     public void FileDialog_Ctor_Default_OverridenReset()
     {
-        using var dialog = new EmptyResetFileDialog();
+        using EmptyResetFileDialog dialog = new();
         Assert.False(dialog.AddExtension);
         Assert.True(dialog.AddToRecent);
         Assert.True(dialog.AutoUpgradeEnabled);
@@ -95,7 +95,7 @@ public class FileDialogTests
     [BoolData]
     public void FileDialog_AddExtension_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             AddExtension = value
         };
@@ -118,7 +118,7 @@ public class FileDialogTests
     [InlineData(false, 33556484, 2052)]
     public void FileDialog_AddToRecent_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             AddToRecent = value
         };
@@ -140,7 +140,7 @@ public class FileDialogTests
     [BoolData]
     public void FileDialog_AutoUpgradeEnabled_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             AutoUpgradeEnabled = value
         };
@@ -162,7 +162,7 @@ public class FileDialogTests
     [BoolData]
     public void FileDialog_CheckFileExists_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             CheckFileExists = value
         };
@@ -185,7 +185,7 @@ public class FileDialogTests
     [InlineData(false, 4, 2052)]
     public void FileDialog_CheckPathExists_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             CheckPathExists = value
         };
@@ -208,7 +208,7 @@ public class FileDialogTests
     [InlineData("1d5a0215-fa19-4e3b-8ab9-06da88c28ae7")]
     public void FileDialog_ClientGuid_Set_GetReturnsExpected(Guid value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             ClientGuid = value
         };
@@ -227,7 +227,7 @@ public class FileDialogTests
     [InlineData("ext", "ext")]
     public void FileDialog_DefaultExt_Set_GetReturnsExpected(string value, string expected)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             DefaultExt = value
         };
@@ -245,7 +245,7 @@ public class FileDialogTests
     [InlineData(false, 1050628, 2052)]
     public void FileDialog_DereferenceLinks_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             DereferenceLinks = value
         };
@@ -269,7 +269,7 @@ public class FileDialogTests
     [InlineData("fileName", new string[] { "fileName" })]
     public void FileDialog_FileName_Set_GetReturnsExpected(string value, string[] expectedFileNames)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             FileName = value
         };
@@ -310,7 +310,7 @@ public class FileDialogTests
     [InlineData("filter|filter|filter|filter")]
     public void FileDialog_Filter_Set_GetReturnsExpected(string value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             Filter = value
         };
@@ -328,7 +328,7 @@ public class FileDialogTests
     [InlineData("filter|filter|filter")]
     public void FileDialog_Filter_SetInvalid_ThrowsArgumentException(string value)
     {
-        using var dialog = new SubFileDialog();
+        using SubFileDialog dialog = new();
         Assert.Throws<ArgumentException>("value", () => dialog.Filter = value);
     }
 
@@ -336,7 +336,7 @@ public class FileDialogTests
     [IntegerData<int>]
     public void FileDialog_FilterIndex_Set_GetReturnsExpected(int value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             FilterIndex = value
         };
@@ -353,7 +353,7 @@ public class FileDialogTests
     [IntegerData<int>]
     public void FileDialog_InitialDirectory_Set_GetReturnsExpected(string value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             InitialDirectory = value
         };
@@ -371,7 +371,7 @@ public class FileDialogTests
     [InlineData(false, 2052, 2099204)]
     public void FileDialog_OkRequiresInteraction_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             OkRequiresInteraction = value
         };
@@ -394,7 +394,7 @@ public class FileDialogTests
     [InlineData(false, 2052, 2060)]
     public void FileDialog_RestoreDirectory_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             RestoreDirectory = value
         };
@@ -417,7 +417,7 @@ public class FileDialogTests
     [InlineData(false, 2052, 2068)]
     public void FileDialog_ShowHelp_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             ShowHelp = value
         };
@@ -440,7 +440,7 @@ public class FileDialogTests
     [InlineData(false, 2052, 268437508)]
     public void FileDialog_ShowHiddenFiles_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             ShowHiddenFiles = value
         };
@@ -463,7 +463,7 @@ public class FileDialogTests
     [InlineData(false, 264196, 2052)]
     public void FileDialog_ShowPinnedPlaces_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             ShowPinnedPlaces = value
         };
@@ -485,7 +485,7 @@ public class FileDialogTests
     [BoolData]
     public void FileDialog_SupportMultiDottedExtensions_Set_GetReturnsExpected(bool value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             SupportMultiDottedExtensions = value
         };
@@ -507,7 +507,7 @@ public class FileDialogTests
     [StringWithNullData]
     public void FileDialog_Title_Set_GetReturnsExpected(string value)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             Title = value
         };
@@ -525,7 +525,7 @@ public class FileDialogTests
     [InlineData(false, 2308, 2052)]
     public void FileDialog_ValidateNames_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             ValidateNames = value
         };
@@ -553,7 +553,7 @@ public class FileDialogTests
     [MemberData(nameof(CancelEventArgs_TestData))]
     public void FileDialog_OnFileOk_Invoke_Success(CancelEventArgs eventArgs)
     {
-        using var dialog = new SubFileDialog();
+        using SubFileDialog dialog = new();
 
         // No handler.
         dialog.OnFileOk(eventArgs);
@@ -580,7 +580,7 @@ public class FileDialogTests
     [WinFormsFact]
     public void FileDialog_Reset_Invoke_Success()
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             AddExtension = false,
             AddToRecent = false,
@@ -644,7 +644,7 @@ public class FileDialogTests
     [BoolData]
     public unsafe void FileDialog_RunDialog_NonVista_Success(bool result)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             AutoUpgradeEnabled = false
         };
@@ -683,7 +683,7 @@ public class FileDialogTests
     [BoolData]
     public unsafe void FileDialog_RunDialog_NonVistaAdvanced_Success(bool result)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             AddExtension = result,
             AddToRecent = false,
@@ -740,7 +740,7 @@ public class FileDialogTests
     [BoolData]
     public unsafe void FileDialog_RunDialog_ShowHelp_Success(bool result)
     {
-        using var dialog = new SubFileDialog
+        using SubFileDialog dialog = new()
         {
             ShowHelp = true
         };

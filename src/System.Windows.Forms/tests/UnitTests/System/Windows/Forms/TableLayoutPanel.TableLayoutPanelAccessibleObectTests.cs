@@ -10,7 +10,7 @@ public class TableLayoutPanel_TableLayoutPanelAccessibilityObjectTests
     [WinFormsFact]
     public void TableLayoutPanelAccessibilityObject_Ctor_Default()
     {
-        using TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
+        using TableLayoutPanel tableLayoutPanel = new();
         tableLayoutPanel.CreateControl();
 
         Assert.NotNull(tableLayoutPanel.AccessibilityObject);
@@ -20,7 +20,7 @@ public class TableLayoutPanel_TableLayoutPanelAccessibilityObjectTests
     [WinFormsFact]
     public void TableLayoutPanelAccessibilityObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
+        using TableLayoutPanel tableLayoutPanel = new();
         tableLayoutPanel.CreateControl();
         // AccessibleRole is not set = Default
 
@@ -33,7 +33,7 @@ public class TableLayoutPanel_TableLayoutPanelAccessibilityObjectTests
     [WinFormsFact]
     public void TableLayoutPanelAccessibilityObject_Role_IsClient_ByDefault()
     {
-        using TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
+        using TableLayoutPanel tableLayoutPanel = new();
         tableLayoutPanel.CreateControl();
         // AccessibleRole is not set = Default
 
@@ -62,7 +62,7 @@ public class TableLayoutPanel_TableLayoutPanelAccessibilityObjectTests
     [MemberData(nameof(TableLayoutPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void TableLayoutPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
+        using TableLayoutPanel tableLayoutPanel = new();
         tableLayoutPanel.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)tableLayoutPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

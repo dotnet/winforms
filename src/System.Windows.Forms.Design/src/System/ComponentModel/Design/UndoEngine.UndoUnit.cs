@@ -330,7 +330,7 @@ public abstract partial class UndoEngine
 
             try
             {
-                AddRemoveUndoEvent evt = new AddRemoveUndoEvent(UndoEngine, e.Component, false);
+                AddRemoveUndoEvent evt = new(UndoEngine, e.Component, false);
                 AddEvent(evt);
                 _removeEvents.Add(evt);
             }

@@ -2026,7 +2026,7 @@ public partial class RichTextBox : TextBoxBase
         };
 
         // Characters we have slurped into memory in order to search
-        var charBuffer = new UnicodeCharBuffer(CHAR_BUFFER_LEN + 1);
+        UnicodeCharBuffer charBuffer = new(CHAR_BUFFER_LEN + 1);
         txrg.lpstrText = charBuffer.AllocCoTaskMem();
         if (txrg.lpstrText == IntPtr.Zero)
         {

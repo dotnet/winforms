@@ -447,7 +447,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnPaintBackground(PaintEventArgs e)
     {
-        ToolStripPanelRenderEventArgs rea = new ToolStripPanelRenderEventArgs(e.Graphics, this);
+        ToolStripPanelRenderEventArgs rea = new(e.Graphics, this);
         Renderer.DrawToolStripPanelBackground(rea);
 
         if (!rea.Handled)

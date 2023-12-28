@@ -40,7 +40,7 @@ public sealed class EncoderParameters : IDisposable
         }
 
         var nativeParameters = native->Parameters;
-        EncoderParameters parameters = new EncoderParameters(nativeParameters.Length);
+        EncoderParameters parameters = new(nativeParameters.Length);
         for (int i = 0; i < nativeParameters.Length; i++)
         {
             parameters.Param[i] = new EncoderParameter(

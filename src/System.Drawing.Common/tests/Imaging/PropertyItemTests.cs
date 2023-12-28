@@ -13,7 +13,7 @@ public class PropertyItemTests
     [InlineData(-1)]
     public void Id_Set_GetReturnsExpected(int value)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item = bitmap.GetPropertyItem(PropertyTagLuminanceTable);
         item.Id = value;
         Assert.Equal(value, item.Id);
@@ -25,7 +25,7 @@ public class PropertyItemTests
     [InlineData(-1)]
     public void Len_Set_GetReturnsExpected(int value)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item = bitmap.GetPropertyItem(PropertyTagLuminanceTable);
         item.Len = value;
         Assert.Equal(value, item.Len);
@@ -37,7 +37,7 @@ public class PropertyItemTests
     [InlineData(-1)]
     public void Type_Set_GetReturnsExpected(short value)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item = bitmap.GetPropertyItem(PropertyTagLuminanceTable);
         item.Type = value;
         Assert.Equal(value, item.Type);
@@ -54,7 +54,7 @@ public class PropertyItemTests
     [MemberData(nameof(Value_Set_TestData))]
     public void Value_Set_GetReturnsExpected(byte[] value)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item = bitmap.GetPropertyItem(PropertyTagLuminanceTable);
         item.Value = value;
         Assert.Same(value, item.Value);
@@ -71,7 +71,7 @@ public class PropertyItemTests
     [MemberData(nameof(Properties_TestData))]
     public void Properties_SetValues_ReturnsExpected(int id, int len, short type, byte[] value)
     {
-        using var image = new Bitmap(Helpers.GetTestBitmapPath("16x16_nonindexed_24bit.png"));
+        using Bitmap image = new(Helpers.GetTestBitmapPath("16x16_nonindexed_24bit.png"));
         using Image clone = (Image)image.Clone();
 
         PropertyItem[] propItems = clone.PropertyItems;

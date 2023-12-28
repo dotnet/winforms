@@ -20,7 +20,7 @@ public class MixedDpiHostingTests
 
         try
         {
-            using Form form = new Form();
+            using Form form = new();
             using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 using Control control = new();

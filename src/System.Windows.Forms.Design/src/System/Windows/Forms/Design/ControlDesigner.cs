@@ -362,7 +362,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     internal IList SnapLinesInternal(Padding margin)
     {
-        ArrayList snapLines = new ArrayList(4);
+        ArrayList snapLines = new(4);
         int width = Control.Width;
         int height = Control.Height;
 
@@ -744,7 +744,7 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     public virtual GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
     {
-        GlyphCollection glyphs = new GlyphCollection();
+        GlyphCollection glyphs = new();
 
         if (selectionType == GlyphSelectionType.NotSelected)
         {
@@ -1244,7 +1244,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        DragEventHandler handler = new DragEventHandler(OnDragEnter);
+        DragEventHandler handler = new(OnDragEnter);
         control.DragEnter -= handler;
         ((IDropTarget)Control).OnDragEnter(de);
         control.DragEnter += handler;
@@ -1265,7 +1265,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        DragEventHandler handler = new DragEventHandler(OnDragDrop);
+        DragEventHandler handler = new(OnDragDrop);
         control.DragDrop -= handler;
         ((IDropTarget)Control).OnDragDrop(de);
         control.DragDrop += handler;
@@ -1279,7 +1279,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        EventHandler handler = new EventHandler(OnDragLeave);
+        EventHandler handler = new(OnDragLeave);
         control.DragLeave -= handler;
         ((IDropTarget)Control).OnDragLeave(e);
         control.DragLeave += handler;
@@ -1292,7 +1292,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // unhook our events - we don't want to create an infinite loop.
         Control control = Control;
-        DragEventHandler handler = new DragEventHandler(OnDragOver);
+        DragEventHandler handler = new(OnDragOver);
         control.DragOver -= handler;
         ((IDropTarget)Control).OnDragOver(de);
         control.DragOver += handler;
@@ -1451,7 +1451,7 @@ public partial class ControlDesigner : ComponentDesigner
             if (dragControls.Count > 0)
             {
                 using Graphics adornerGraphics = BehaviorService.AdornerWindowGraphics;
-                DropSourceBehavior dsb = new DropSourceBehavior(dragControls, Control.Parent, _mouseDragLast);
+                DropSourceBehavior dsb = new(dragControls, Control.Parent, _mouseDragLast);
                 BehaviorService.DoDragDrop(dsb);
             }
         }
@@ -1626,7 +1626,7 @@ public partial class ControlDesigner : ComponentDesigner
         PropertyDescriptor prop;
 
         // Handle shadowed properties
-        string[] shadowProps = new string[] { "Visible", "Enabled", "AllowDrop", "Location", "Name" };
+        string[] shadowProps = ["Visible", "Enabled", "AllowDrop", "Location", "Name"];
 
         Attribute[] empty = Array.Empty<Attribute>();
         for (int i = 0; i < shadowProps.Length; i++)
@@ -2043,7 +2043,7 @@ public partial class ControlDesigner : ComponentDesigner
             case PInvoke.WM_PRINTCLIENT:
                 {
                     using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-                    using PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle);
+                    using PaintEventArgs e = new(g, Control.ClientRectangle);
                     DefWndProc(ref m);
                     OnPaintAdornments(e);
                 }
@@ -2134,10 +2134,10 @@ public partial class ControlDesigner : ComponentDesigner
                     if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is not null)
                     {
                         // we have a non-client region to invalidate
-                        Rectangle controlScreenBounds = new Rectangle(Control.Parent.PointToScreen(Control.Location), Control.Size);
-                        Rectangle clientAreaScreenBounds = new Rectangle(Control.PointToScreen(Point.Empty), Control.ClientSize);
+                        Rectangle controlScreenBounds = new(Control.Parent.PointToScreen(Control.Location), Control.Size);
+                        Rectangle clientAreaScreenBounds = new(Control.PointToScreen(Point.Empty), Control.ClientSize);
 
-                        using Region nonClient = new Region(controlScreenBounds);
+                        using Region nonClient = new(controlScreenBounds);
                         nonClient.Exclude(clientAreaScreenBounds);
                         OverlayService.InvalidateOverlays(nonClient);
                     }
@@ -2267,14 +2267,14 @@ public partial class ControlDesigner : ComponentDesigner
         borderRectangle.Width -= 2;
         borderRectangle.Height -= 2;
 
-        Rectangle imageRect = new Rectangle(marginX, marginY, glyphSize.Width, glyphSize.Height);
+        Rectangle imageRect = new(marginX, marginY, glyphSize.Width, glyphSize.Height);
         Rectangle textRect = clientRectangle;
         textRect.X = imageRect.X + imageRect.Width + 2 * marginX;
         textRect.Y = imageRect.Y;
         textRect.Width -= (textRect.X + marginX + penThickness);
         textRect.Height -= (textRect.Y + marginY + penThickness);
 
-        using (Font errorFont = new Font(
+        using (Font errorFont = new(
             Control.Font.FontFamily,
             Math.Max(SystemInformation.ToolWindowCaptionHeight - SystemInformation.BorderSize.Height - 2, Control.Font.Height),
             GraphicsUnit.Pixel))
@@ -2294,7 +2294,7 @@ public partial class ControlDesigner : ComponentDesigner
                 e.Graphics.Clip = originalClip;
             }
 
-            using (Pen pen = new Pen(Color.Red, penThickness))
+            using (Pen pen = new(Color.Red, penThickness))
             {
                 e.Graphics.DrawRectangle(pen, borderRectangle);
             }
@@ -2504,7 +2504,7 @@ public partial class ControlDesigner : ComponentDesigner
         string typeName = owner.GetType().FullName;
         string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
 
-        Exception wrapper = new Exception(
+        Exception wrapper = new(
             string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
             exception);
         DisplayError(wrapper);

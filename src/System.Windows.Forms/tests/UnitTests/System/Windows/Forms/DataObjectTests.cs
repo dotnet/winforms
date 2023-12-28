@@ -52,7 +52,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_ContainsAudio_InvokeDefault_ReturnsFalse()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.ContainsAudio());
     }
 
@@ -60,7 +60,7 @@ public class DataObjectTests
     [BoolData]
     public void DataObject_ContainsAudio_InvokeMocked_CallsGetDataPresent(bool result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.ContainsAudio())
             .CallBase();
@@ -75,7 +75,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_ContainsFileDropList_InvokeDefault_ReturnsFalse()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.ContainsFileDropList());
     }
 
@@ -83,7 +83,7 @@ public class DataObjectTests
     [BoolData]
     public void DataObject_ContainsFileDropList_InvokeMocked_CallsGetDataPresent(bool result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.ContainsFileDropList())
             .CallBase();
@@ -98,7 +98,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_ContainsImage_InvokeDefault_ReturnsFalse()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.ContainsImage());
     }
 
@@ -106,7 +106,7 @@ public class DataObjectTests
     [BoolData]
     public void DataObject_ContainsImage_InvokeMocked_CallsGetDataPresent(bool result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.ContainsImage())
             .CallBase();
@@ -121,7 +121,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_ContainsText_InvokeDefault_ReturnsFalse()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.ContainsText());
     }
 
@@ -129,7 +129,7 @@ public class DataObjectTests
     [BoolData]
     public void DataObject_ContainsText_InvokeMocked_CallsGetDataPresent(bool result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.ContainsText())
             .CallBase();
@@ -145,7 +145,7 @@ public class DataObjectTests
     [EnumData<TextDataFormat>]
     public void DataObject_ContainsText_InvokeTextDataFormat_ReturnsFalse(TextDataFormat format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.ContainsText(format));
     }
 
@@ -165,7 +165,7 @@ public class DataObjectTests
     [MemberData(nameof(ContainsText_TextDataFormat_TestData))]
     public void DataObject_ContainsText_InvokeTextDataFormatMocked_CallsGetDataPresent(TextDataFormat format, string expectedFormat, bool result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.ContainsText(format))
             .CallBase();
@@ -181,14 +181,14 @@ public class DataObjectTests
     [InvalidEnumData<TextDataFormat>]
     public void DataObject_ContainsText_InvokeInvalidTextDataFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.ContainsText(format));
     }
 
     [Fact]
     public void DataObject_GetAudioStream_InvokeDefault_ReturnsNull()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Null(dataObject.GetAudioStream());
     }
 
@@ -197,7 +197,7 @@ public class DataObjectTests
         yield return new object[] { null, null };
         yield return new object[] { new object(), null };
 
-        var stream = new MemoryStream();
+        MemoryStream stream = new();
         yield return new object[] { stream, stream };
     }
 
@@ -205,7 +205,7 @@ public class DataObjectTests
     [MemberData(nameof(GetAudioStream_TestData))]
     public void DataObject_GetAudioStream_InvokeWithData_ReturnsExpected(object result, Stream expected)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(DataFormats.WaveAudio, result);
         Assert.Same(expected, dataObject.GetAudioStream());
     }
@@ -214,7 +214,7 @@ public class DataObjectTests
     [MemberData(nameof(GetAudioStream_TestData))]
     public void DataObject_GetAudioStream_InvokeMocked_ReturnsExpected(object result, Stream expected)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetAudioStream())
             .CallBase();
@@ -247,7 +247,7 @@ public class DataObjectTests
     [MemberData(nameof(GetData_String_TestData))]
     public void DataObject_GetData_InvokeStringDefault_ReturnsNull(string format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Null(dataObject.GetData(format));
     }
 
@@ -266,7 +266,7 @@ public class DataObjectTests
     [MemberData(nameof(GetData_InvokeStringMocked_TestData))]
     public void DataObject_GetData_InvokeStringMocked_CallsGetData(string format, object result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetData(format))
             .CallBase();
@@ -293,12 +293,12 @@ public class DataObjectTests
     [MemberData(nameof(GetData_StringIDataObject_TestData))]
     public void DataObject_GetData_InvokeStringIDataObject_ReturnsExpected(string format, object result)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetData(format, true))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         Assert.Same(result, dataObject.GetData(format));
         mockDataObject.Verify(o => o.GetData(format, true), Times.Once());
     }
@@ -327,7 +327,7 @@ public class DataObjectTests
     [MemberData(nameof(GetData_StringBool_TestData))]
     public void DataObject_GetData_InvokeStringBoolDefault_ReturnsNull(string format, bool autoConvert)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Null(dataObject.GetData(format, autoConvert));
     }
 
@@ -349,12 +349,12 @@ public class DataObjectTests
     [MemberData(nameof(GetData_StringBoolIDataObject_TestData))]
     public void DataObject_GetData_InvokeStringBoolIDataObject_ReturnsExpected(string format, bool autoConvert, object result)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetData(format, autoConvert))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         Assert.Same(result, dataObject.GetData(format, autoConvert));
         mockDataObject.Verify(o => o.GetData(format, autoConvert), Times.Once());
     }
@@ -364,7 +364,7 @@ public class DataObjectTests
     [InlineData(null)]
     public void DataObject_GetData_InvokeTypeDefault_ReturnsNull(Type format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Null(dataObject.GetData(format));
     }
 
@@ -381,7 +381,7 @@ public class DataObjectTests
     [MemberData(nameof(GetData_InvokeTypeMocked_TestData))]
     public void DataObject_GetData_InvokeTypeMocked_CallsGetData(Type format, object result, int expectedCallCount, object expectedResult)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetData(It.IsAny<Type>()))
             .CallBase();
@@ -415,7 +415,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataPresent_String_TestData))]
     public void DataObject_GetDataPresent_InvokeStringDefault_ReturnsFalse(string format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.GetDataPresent(format));
     }
 
@@ -434,7 +434,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataPresent_StringMocked_TestData))]
     public void DataObject_GetDataPresent_InvokeStringMocked_CallsGetDataPresent(string format, bool result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetDataPresent(format))
             .CallBase();
@@ -461,12 +461,12 @@ public class DataObjectTests
     [MemberData(nameof(GetDataPresent_StringIDataObject_TestData))]
     public void DataObject_GetDataPresent_InvokeStringIDataObject_ReturnsExpected(string format, bool result)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetDataPresent(format, true))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         Assert.Equal(result, dataObject.GetDataPresent(format));
         mockDataObject.Verify(o => o.GetDataPresent(format, true), Times.Once());
     }
@@ -495,7 +495,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataPresent_StringBool_TestData))]
     public void DataObject_GetDataPresent_InvokeStringBoolDefault_ReturnsFalse(string format, bool autoConvert)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.GetDataPresent(format, autoConvert));
     }
 
@@ -517,12 +517,12 @@ public class DataObjectTests
     [MemberData(nameof(GetDataPresent_StringBoolIDataObject_TestData))]
     public void DataObject_GetDataPresent_InvokeStringBoolIDataObject_ReturnsExpected(string format, bool autoConvert, bool result)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetDataPresent(format, autoConvert))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         Assert.Equal(result, dataObject.GetDataPresent(format, autoConvert));
         mockDataObject.Verify(o => o.GetDataPresent(format, autoConvert), Times.Once());
     }
@@ -532,7 +532,7 @@ public class DataObjectTests
     [InlineData(null)]
     public void DataObject_GetDataPresentPresent_InvokeTypeDefault_ReturnsFalse(Type format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.False(dataObject.GetDataPresent(format));
     }
 
@@ -549,7 +549,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataPresent_InvokeTypeMocked_TestData))]
     public void DataObject_GetDataPresent_InvokeTypeMocked_CallsGetDataPresent(Type format, bool result, int expectedCallCount, bool expectedResult, string expectedFormatName)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetDataPresent(It.IsAny<Type>()))
             .CallBase();
@@ -564,7 +564,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_GetFileDropList_InvokeDefault_ReturnsEmpty()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Empty(dataObject.GetFileDropList());
     }
 
@@ -581,7 +581,7 @@ public class DataObjectTests
     [MemberData(nameof(GetFileDropList_TestData))]
     public void DataObject_GetFileDropList_InvokeWithData_ReturnsExpected(object result, string[] expected)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(DataFormats.FileDrop, result);
         Assert.Equal(expected, dataObject.GetFileDropList().Cast<string>());
     }
@@ -590,7 +590,7 @@ public class DataObjectTests
     [MemberData(nameof(GetFileDropList_TestData))]
     public void DataObject_GetFileDropList_InvokeMocked_ReturnsExpected(object result, string[] expected)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFileDropList())
             .CallBase();
@@ -605,25 +605,25 @@ public class DataObjectTests
     [Fact]
     public void DataObject_GetFormats_InvokeDefault_ReturnsEmpty()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Empty(dataObject.GetFormats());
     }
 
     [WinFormsFact]
     public void DataObject_GetFormats_InvokeWithValues_ReturnsExpected()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData("format1", "data1");
         Assert.Equal(new string[] { "format1" }, dataObject.GetFormats());
 
         dataObject.SetText("data2");
         Assert.Equal(new string[] { "format1", "UnicodeText" }, dataObject.GetFormats());
 
-        using var bitmap1 = new Bitmap(10, 10);
+        using Bitmap bitmap1 = new(10, 10);
         dataObject.SetData("format2", bitmap1);
         Assert.Equal(new string[] { "format1", "format2", "UnicodeText" }, dataObject.GetFormats().OrderBy(s => s));
 
-        using var bitmap2 = new Bitmap(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
         dataObject.SetData(bitmap2);
         Assert.Equal(new string[] { "Bitmap", "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "WindowsForms10PersistentObject" }, dataObject.GetFormats().OrderBy(s => s));
     }
@@ -639,7 +639,7 @@ public class DataObjectTests
     [MemberData(nameof(GetFormats_Mocked_TestData))]
     public void DataObject_GetFormats_InvokeMocked_ReturnsExpected(string[] result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats())
             .CallBase();
@@ -663,12 +663,12 @@ public class DataObjectTests
     [MemberData(nameof(GetFormats_IDataObject_TestData))]
     public void DataObject_GetFormats_InvokeIDataObject_ReturnsExpected(string[] result)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(true))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         Assert.Same(result, dataObject.GetFormats());
         mockDataObject.Verify(o => o.GetFormats(true), Times.Once());
     }
@@ -677,14 +677,14 @@ public class DataObjectTests
     [BoolData]
     public void DataObject_GetFormats_InvokeBoolDefault_ReturnsEmpty(bool autoConvert)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Empty(dataObject.GetFormats(autoConvert));
     }
 
     [WinFormsFact]
     public void DataObject_GetFormats_InvokeBoolWithValues_ReturnsExpected()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData("format1", "data1");
         Assert.Equal(new string[] { "format1" }, dataObject.GetFormats(autoConvert: true));
         Assert.Equal(new string[] { "format1" }, dataObject.GetFormats(autoConvert: false));
@@ -693,12 +693,12 @@ public class DataObjectTests
         Assert.Equal(new string[] { "format1", "UnicodeText" }, dataObject.GetFormats(autoConvert: true));
         Assert.Equal(new string[] { "format1", "UnicodeText" }, dataObject.GetFormats(autoConvert: false));
 
-        using var bitmap1 = new Bitmap(10, 10);
+        using Bitmap bitmap1 = new(10, 10);
         dataObject.SetData("format2", bitmap1);
         Assert.Equal(new string[] { "format1", "format2", "UnicodeText" }, dataObject.GetFormats(autoConvert: true).OrderBy(s => s));
         Assert.Equal(new string[] { "format1", "format2", "UnicodeText" }, dataObject.GetFormats(autoConvert: false).OrderBy(s => s));
 
-        using var bitmap2 = new Bitmap(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
         dataObject.SetData(bitmap2);
         Assert.Equal(new string[] { "Bitmap", "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "WindowsForms10PersistentObject" }, dataObject.GetFormats(autoConvert: true).OrderBy(s => s));
         Assert.Equal(new string[] { "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "WindowsForms10PersistentObject" }, dataObject.GetFormats(autoConvert: false).OrderBy(s => s));
@@ -718,12 +718,12 @@ public class DataObjectTests
     [MemberData(nameof(GetFormats_BoolIDataObject_TestData))]
     public void DataObject_GetFormats_InvokeBoolIDataObject_ReturnsExpected(bool autoConvert, string[] result)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(autoConvert))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         Assert.Same(result, dataObject.GetFormats(autoConvert));
         mockDataObject.Verify(o => o.GetFormats(autoConvert), Times.Once());
     }
@@ -731,7 +731,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_GetImage_InvokeDefault_ReturnsNull()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Null(dataObject.GetImage());
     }
 
@@ -740,7 +740,7 @@ public class DataObjectTests
         yield return new object[] { null, null };
         yield return new object[] { new object(), null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         yield return new object[] { image, image };
     }
 
@@ -748,7 +748,7 @@ public class DataObjectTests
     [MemberData(nameof(GetImage_TestData))]
     public void DataObject_GetImage_InvokeWithData_ReturnsExpected(object result, Image expected)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(DataFormats.Bitmap, result);
         Assert.Same(expected, dataObject.GetImage());
     }
@@ -757,7 +757,7 @@ public class DataObjectTests
     [MemberData(nameof(GetImage_TestData))]
     public void DataObject_GetImage_InvokeMocked_ReturnsExpected(object result, Image expected)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetImage())
             .CallBase();
@@ -772,7 +772,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_GetText_InvokeDefault_ReturnsEmpty()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Empty(dataObject.GetText());
     }
 
@@ -788,7 +788,7 @@ public class DataObjectTests
     [MemberData(nameof(GetText_TestData))]
     public void DataObject_GetText_InvokeWithData_ReturnsExpected(object result, string expected)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(DataFormats.UnicodeText, result);
         Assert.Equal(expected, dataObject.GetText());
     }
@@ -797,7 +797,7 @@ public class DataObjectTests
     [StringWithNullData]
     public void DataObject_GetText_InvokeMocked_ReturnsExpected(string result)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetText())
             .CallBase();
@@ -813,7 +813,7 @@ public class DataObjectTests
     [EnumData<TextDataFormat>]
     public void DataObject_GetText_InvokeTextDataFormatDefault_ReturnsEmpty(TextDataFormat format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Empty(dataObject.GetText(format));
     }
 
@@ -854,7 +854,7 @@ public class DataObjectTests
     [MemberData(nameof(GetText_TextDataFormat_TestData))]
     public void DataObject_GetText_InvokeTextDataFormatWithData_ReturnsExpected(TextDataFormat format, string expectedFormat, object result, string expected)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(expectedFormat, result);
         Assert.Same(expected, dataObject.GetText(format));
     }
@@ -863,7 +863,7 @@ public class DataObjectTests
     [MemberData(nameof(GetText_TextDataFormat_TestData))]
     public void DataObject_GetText_InvokeTextDataFormatMocked_ReturnsExpected(TextDataFormat format, string expectedFormat, object result, string expected)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetText(format))
             .CallBase();
@@ -879,7 +879,7 @@ public class DataObjectTests
     [InvalidEnumData<TextDataFormat>]
     public void DataObject_GetText_InvokeInvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.GetText(format));
     }
 
@@ -893,7 +893,7 @@ public class DataObjectTests
     [MemberData(nameof(SetAudio_ByteArray_TestData))]
     public void DataObject_SetAudio_InvokeByteArray_GetReturnsExpected(byte[] audioBytes)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetAudio(audioBytes);
         Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(dataObject.GetAudioStream()).ToArray());
         Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(dataObject.GetData(DataFormats.WaveAudio, autoConvert: true)).ToArray());
@@ -907,7 +907,7 @@ public class DataObjectTests
     [MemberData(nameof(SetAudio_ByteArray_TestData))]
     public void DataObject_SetAudio_InvokeByteArrayMocked_CallsSetAudio(byte[] audioBytes)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetAudio(audioBytes))
             .CallBase();
@@ -922,11 +922,11 @@ public class DataObjectTests
     [MemberData(nameof(SetAudio_ByteArray_TestData))]
     public void DataObject_SetAudio_InvokeByteArrayIDataObject_CallsSetData(byte[] audioBytes)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(DataFormats.WaveAudio, false, It.IsAny<MemoryStream>()))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetAudio(audioBytes);
         mockDataObject.Verify(o => o.SetData(DataFormats.WaveAudio, false, It.IsAny<MemoryStream>()), Times.Once());
     }
@@ -934,7 +934,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetAudio_NullAudioBytes_ThrowsArgumentNullException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("audioBytes", () => dataObject.SetAudio((byte[])null));
     }
 
@@ -948,7 +948,7 @@ public class DataObjectTests
     [MemberData(nameof(SetAudio_Stream_TestData))]
     public void DataObject_SetAudio_InvokeStream_GetReturnsExpected(Stream audioStream)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetAudio(audioStream);
         Assert.Same(audioStream, dataObject.GetAudioStream());
         Assert.Same(audioStream, dataObject.GetData(DataFormats.WaveAudio, autoConvert: true));
@@ -962,7 +962,7 @@ public class DataObjectTests
     [MemberData(nameof(SetAudio_Stream_TestData))]
     public void DataObject_SetAudio_InvokeStreamMocked_CallsSetAudio(Stream audioStream)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetAudio(audioStream))
             .CallBase();
@@ -977,11 +977,11 @@ public class DataObjectTests
     [MemberData(nameof(SetAudio_Stream_TestData))]
     public void DataObject_SetAudio_InvokeStreamIDataObject_CallsSetData(Stream audioStream)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(DataFormats.WaveAudio, false, audioStream))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetAudio(audioStream);
         mockDataObject.Verify(o => o.SetData(DataFormats.WaveAudio, false, audioStream), Times.Once());
     }
@@ -989,7 +989,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetAudio_NullAudioStream_ThrowsArgumentNullException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("audioStream", () => dataObject.SetAudio((Stream)null));
     }
 
@@ -1004,7 +1004,7 @@ public class DataObjectTests
     [MemberData(nameof(SetData_Object_TestData))]
     public void SetData_Object_GetDataReturnsExpected(object data, string expectedFormat)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(data);
         Assert.Same(data, dataObject.GetData(expectedFormat, autoConvert: false));
         Assert.Same(data, dataObject.GetData(expectedFormat, autoConvert: true));
@@ -1015,10 +1015,10 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_MultipleNonSerializable_GetDataReturnsExpected()
     {
-        var data1 = new object();
-        var data2 = new object();
+        object data1 = new();
+        object data2 = new();
 
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(data1);
         dataObject.SetData(data2);
         Assert.Same(data2, dataObject.GetData(data1.GetType().FullName, autoConvert: false));
@@ -1033,7 +1033,7 @@ public class DataObjectTests
         var data1 = new Mock<ISerializable>(MockBehavior.Strict).Object;
         var data2 = new Mock<ISerializable>(MockBehavior.Strict).Object;
 
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(data1);
         dataObject.SetData(data2);
         Assert.Same(data1, dataObject.GetData(DataFormats.Serializable, autoConvert: false));
@@ -1056,11 +1056,11 @@ public class DataObjectTests
     [MemberData(nameof(SetData_ObjectIDataObject_TestData))]
     public void DataObject_SetData_InvokeObjectIDataObject_CallsSetData(object data)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(data))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetData(data);
         mockDataObject.Verify(o => o.SetData(data), Times.Once());
     }
@@ -1068,7 +1068,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_NullData_ThrowsArgumentNullException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("data", () => dataObject.SetData(null));
     }
 
@@ -1094,7 +1094,7 @@ public class DataObjectTests
     [MemberData(nameof(SetData_StringObject_TestData))]
     private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, object input, bool expectedContainsFileDropList, bool expectedContainsImage)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(format, input);
         Assert.True(dataObject.GetDataPresent(format));
         Assert.True(dataObject.GetDataPresent(format, autoConvert: false));
@@ -1116,8 +1116,8 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_InvokeStringObjectDibBitmapAutoConvert_GetDataReturnsExpected()
     {
-        var image = new Bitmap(10, 10);
-        var dataObject = new DataObject();
+        Bitmap image = new(10, 10);
+        DataObject dataObject = new();
         dataObject.SetData(DataFormats.Dib, true, image);
         Assert.Same(image, dataObject.GetImage());
         Assert.Same(image, dataObject.GetData(DataFormats.Bitmap, autoConvert: true));
@@ -1149,11 +1149,11 @@ public class DataObjectTests
     [MemberData(nameof(SetData_StringObjectIDataObject_TestData))]
     public void DataObject_SetData_InvokeStringObjectIDataObject_CallsSetData(string format, object data)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(format, data))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetData(format, data);
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
@@ -1189,7 +1189,7 @@ public class DataObjectTests
     [MemberData(nameof(SetData_StringBoolObject_TestData))]
     private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, object input, bool expectedContainsFileDropList, bool expectedContainsImage)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetData(format, autoConvert, input);
         Assert.Same(input, dataObject.GetData(format, autoConvert: false));
         Assert.Same(input, dataObject.GetData(format, autoConvert: true));
@@ -1209,8 +1209,8 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_InvokeStringBoolObjectDibBitmapAutoConvert_GetDataReturnsExpected()
     {
-        var image = new Bitmap(10, 10);
-        var dataObject = new DataObject();
+        Bitmap image = new(10, 10);
+        DataObject dataObject = new();
         dataObject.SetData(DataFormats.Dib, true, image);
         Assert.Same(image, dataObject.GetImage());
         Assert.Same(image, dataObject.GetData(DataFormats.Bitmap, autoConvert: true));
@@ -1245,11 +1245,11 @@ public class DataObjectTests
     [MemberData(nameof(SetData_StringBoolObjectIDataObject_TestData))]
     public void DataObject_SetData_InvokeStringBoolObjectIDataObject_CallsSetData(string format, bool autoConvert, object data)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(format, autoConvert, data))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetData(format, autoConvert, data);
         mockDataObject.Verify(o => o.SetData(format, autoConvert, data), Times.Once());
     }
@@ -1267,11 +1267,11 @@ public class DataObjectTests
     [MemberData(nameof(SetData_TypeObjectIDataObject_TestData))]
     public void DataObject_SetData_InvokeTypeObjectIDataObject_CallsSetData(Type format, object data)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(format, data))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetData(format, data);
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
@@ -1279,7 +1279,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_NullFormat_ThrowsArgumentNullException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("format", () => dataObject.SetData((string)null, new object()));
         Assert.Throws<ArgumentNullException>("format", () => dataObject.SetData(null, true, new object()));
         Assert.Throws<ArgumentNullException>("format", () => dataObject.SetData(null, false, new object()));
@@ -1291,7 +1291,7 @@ public class DataObjectTests
     [InlineData("  ")]
     public void DataObject_SetData_WhitespaceOrEmptyFormat_ThrowsArgumentException(string format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentException>("format", () => dataObject.SetData(format, new object()));
         Assert.Throws<ArgumentException>("format", () => dataObject.SetData(format, true, new object()));
         Assert.Throws<ArgumentException>("format", () => dataObject.SetData(format, false, new object()));
@@ -1300,7 +1300,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_DibBitmapNoAutoConvert_ThrowsNotSupportedException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<NotSupportedException>(() => dataObject.SetData(DataFormats.Dib, false, new Bitmap(10, 10)));
     }
 
@@ -1314,7 +1314,7 @@ public class DataObjectTests
     [MemberData(nameof(SetFileDropList_TestData))]
     public void DataObject_SetFileDropList_Invoke_GetReturnsExpected(StringCollection filePaths)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetFileDropList(filePaths);
         Assert.Equal(filePaths, dataObject.GetFileDropList());
         Assert.Equal(filePaths.Cast<string>(), dataObject.GetData(DataFormats.FileDrop, autoConvert: true));
@@ -1337,7 +1337,7 @@ public class DataObjectTests
     [MemberData(nameof(SetFileDropList_TestData))]
     public void DataObject_SetFileDropList_InvokeMocked_CallsSetFileDropList(StringCollection filePaths)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetFileDropList(filePaths))
             .CallBase();
@@ -1352,11 +1352,11 @@ public class DataObjectTests
     [MemberData(nameof(SetFileDropList_TestData))]
     public void DataObject_SetFileDropList_InvokeIDataObject_CallsSetData(StringCollection filePaths)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(DataFormats.FileDrop, true, It.IsAny<string[]>()))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetFileDropList(filePaths);
         mockDataObject.Verify(o => o.SetData(DataFormats.FileDrop, true, It.IsAny<string[]>()), Times.Once());
     }
@@ -1364,7 +1364,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("filePaths", () => dataObject.SetFileDropList(null));
     }
 
@@ -1377,7 +1377,7 @@ public class DataObjectTests
     [MemberData(nameof(SetImage_TestData))]
     public void DataObject_SetImage_Invoke_GetReturnsExpected(Image image)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetImage(image);
         Assert.Same(image, dataObject.GetImage());
         Assert.Same(image, dataObject.GetData(DataFormats.Bitmap, autoConvert: true));
@@ -1400,7 +1400,7 @@ public class DataObjectTests
     [MemberData(nameof(SetImage_TestData))]
     public void DataObject_SetImage_InvokeMocked_CallsSetImage(Image image)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetImage(image))
             .CallBase();
@@ -1415,11 +1415,11 @@ public class DataObjectTests
     [MemberData(nameof(SetImage_TestData))]
     public void DataObject_SetImage_InvokeIDataObject_CallsSetData(Image image)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(DataFormats.Bitmap, true, image))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetImage(image);
         mockDataObject.Verify(o => o.SetData(DataFormats.Bitmap, true, image), Times.Once());
     }
@@ -1427,7 +1427,7 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetImage_NullImage_ThrowsArgumentNullException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("image", () => dataObject.SetImage(null));
     }
 
@@ -1441,7 +1441,7 @@ public class DataObjectTests
     [MemberData(nameof(SetText_String_TestData))]
     public void DataObject_SetText_InvokeString_GetReturnsExpected(string textData)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetText(textData);
         Assert.Same(textData, dataObject.GetText());
         Assert.Same(textData, dataObject.GetData(DataFormats.UnicodeText, autoConvert: true));
@@ -1476,7 +1476,7 @@ public class DataObjectTests
     [MemberData(nameof(SetText_String_TestData))]
     public void DataObject_SetText_InvokeStringMocked_CallsSetText(string textData)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetText(textData))
             .CallBase();
@@ -1491,11 +1491,11 @@ public class DataObjectTests
     [MemberData(nameof(SetText_String_TestData))]
     public void DataObject_SetText_InvokeStringIDataObject_CallsSetData(string textData)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(DataFormats.UnicodeText, false, textData))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetText(textData);
         mockDataObject.Verify(o => o.SetData(DataFormats.UnicodeText, false, textData), Times.Once());
     }
@@ -1516,7 +1516,7 @@ public class DataObjectTests
     [MemberData(nameof(SetText_StringTextDataFormat_TestData))]
     public void DataObject_SetText_InvokeStringTextDataFormat_GetReturnsExpected(string textData, TextDataFormat format, string expectedUnicodeText, string expectedRtfText, string expectedHtmlText, string expectedCsvText)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetText(textData, format);
         Assert.Equal(textData, dataObject.GetText(format));
         Assert.Equal(expectedUnicodeText, dataObject.GetData(DataFormats.UnicodeText, autoConvert: true));
@@ -1563,7 +1563,7 @@ public class DataObjectTests
     [MemberData(nameof(SetText_StringTextDataFormatMocked_TestData))]
     public void DataObject_SetText_InvokeStringTextDataFormatMocked_CallsSetText(string textData, TextDataFormat format, string expectedFormat)
     {
-        var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetText(textData, format))
             .CallBase();
@@ -1578,11 +1578,11 @@ public class DataObjectTests
     [MemberData(nameof(SetText_StringTextDataFormatMocked_TestData))]
     public void DataObject_SetText_InvokeStringTextDataFormatIDataObject_CallsSetData(string textData, TextDataFormat format, string expectedFormat)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.SetData(expectedFormat, false, textData))
             .Verifiable();
-        var dataObject = new DataObject((object)mockDataObject.Object);
+        DataObject dataObject = new((object)mockDataObject.Object);
         dataObject.SetText(textData, format);
         mockDataObject.Verify(o => o.SetData(expectedFormat, false, textData), Times.Once());
     }
@@ -1591,7 +1591,7 @@ public class DataObjectTests
     [NullAndEmptyStringData]
     public void DataObject_SetText_NullOrEmptyTextData_ThrowsArgumentNullException(string textData)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<ArgumentNullException>("textData", () => dataObject.SetText(textData));
         Assert.Throws<ArgumentNullException>("textData", () => dataObject.SetText(textData, TextDataFormat.Text));
     }
@@ -1600,14 +1600,14 @@ public class DataObjectTests
     [InvalidEnumData<TextDataFormat>]
     public void DataObject_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.SetText("text", format));
     }
 
     [WinFormsFact]
     public void DataObject_GetData_EnhancedMetafile_DoesNotTerminateProcess()
     {
-        var data = new DataObject(new DataObjectIgnoringStorageMediumForEnhancedMetafile());
+        DataObject data = new(new DataObjectIgnoringStorageMediumForEnhancedMetafile());
 
         // Office ignores the storage medium in GetData(EnhancedMetafile) and always returns a handle,
         // even when asked for a stream. This used to crash the process when DataObject interpreted the
@@ -1652,7 +1652,7 @@ public class DataObjectTests
     {
         yield return new object[] { ADVF.ADVF_DATAONSTOP, null };
 
-        var mockAdviseSink = new Mock<IAdviseSink>(MockBehavior.Strict);
+        Mock<IAdviseSink> mockAdviseSink = new(MockBehavior.Strict);
         yield return new object[] { ADVF.ADVF_DATAONSTOP, mockAdviseSink.Object };
     }
 
@@ -1660,9 +1660,9 @@ public class DataObjectTests
     [MemberData(nameof(DAdvise_TestData))]
     public void DataObject_DAdvise_InvokeDefault_Success(ADVF advf, IAdviseSink adviseSink)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
-        var formatetc = new FORMATETC();
+        FORMATETC formatetc = new();
         Assert.Equal(HRESULT.E_NOTIMPL, (HRESULT)comDataObject.DAdvise(ref formatetc, advf, adviseSink, out int connection));
         Assert.Equal(0, connection);
     }
@@ -1673,7 +1673,7 @@ public class DataObjectTests
     [MemberData(nameof(DAdvise_TestData))]
     public void DataObject_DAdvise_InvokeCustomComDataObject_Success(ADVF advf, IAdviseSink adviseSink)
     {
-        var mockComDataObject = new Mock<IComDataObject>(MockBehavior.Strict);
+        Mock<IComDataObject> mockComDataObject = new(MockBehavior.Strict);
         mockComDataObject
             .Setup(o => o.DAdvise(ref It.Ref<FORMATETC>.IsAny, advf, adviseSink, out It.Ref<int>.IsAny))
             .Callback((DAdviseCallback)((ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) =>
@@ -1682,9 +1682,9 @@ public class DataObjectTests
                 connection = 2;
             }))
             .Returns(1);
-        var dataObject = new DataObject(mockComDataObject.Object);
+        DataObject dataObject = new(mockComDataObject.Object);
         IComDataObject comDataObject = dataObject;
-        var formatetc = new FORMATETC();
+        FORMATETC formatetc = new();
         Assert.Equal(1, comDataObject.DAdvise(ref formatetc, advf, adviseSink, out int connection));
         Assert.Equal(2, connection);
         Assert.Equal(3, formatetc.cfFormat);
@@ -1696,7 +1696,7 @@ public class DataObjectTests
     [InlineData(0)]
     public void DataObject_DUnadvise_InvokeDefault_Success(int connection)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
         Assert.Throws<NotImplementedException>(() => comDataObject.DUnadvise(connection));
     }
@@ -1706,11 +1706,11 @@ public class DataObjectTests
     [InlineData(0)]
     public void DataObject_DUnadvise_InvokeCustomComDataObject_Success(int connection)
     {
-        var mockComDataObject = new Mock<IComDataObject>(MockBehavior.Strict);
+        Mock<IComDataObject> mockComDataObject = new(MockBehavior.Strict);
         mockComDataObject
             .Setup(o => o.DUnadvise(connection))
             .Verifiable();
-        var dataObject = new DataObject(mockComDataObject.Object);
+        DataObject dataObject = new(mockComDataObject.Object);
         IComDataObject comDataObject = dataObject;
         comDataObject.DUnadvise(connection);
         mockComDataObject.Verify(o => o.DUnadvise(connection), Times.Once());
@@ -1719,7 +1719,7 @@ public class DataObjectTests
     [WinFormsFact]
     public void DataObject_EnumDAdvise_InvokeDefault_Success()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
         Assert.Equal(HRESULT.OLE_E_ADVISENOTSUPPORTED, (HRESULT)comDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise));
         Assert.Null(enumAdvise);
@@ -1731,7 +1731,7 @@ public class DataObjectTests
     {
         yield return new object[] { null };
 
-        var mockEnumStatData = new Mock<IEnumSTATDATA>(MockBehavior.Strict);
+        Mock<IEnumSTATDATA> mockEnumStatData = new(MockBehavior.Strict);
         yield return new object[] { mockEnumStatData.Object };
     }
 
@@ -1739,7 +1739,7 @@ public class DataObjectTests
     [MemberData(nameof(EnumDAdvise_CustomComDataObject_TestData))]
     public void DataObject_EnumDAdvise_InvokeCustomComDataObject_Success(IEnumSTATDATA result)
     {
-        var mockComDataObject = new Mock<IComDataObject>(MockBehavior.Strict);
+        Mock<IComDataObject> mockComDataObject = new(MockBehavior.Strict);
         mockComDataObject
             .Setup(o => o.EnumDAdvise(out It.Ref<IEnumSTATDATA>.IsAny))
             .Callback((EnumDAdviseCallback)((out IEnumSTATDATA enumAdvise) =>
@@ -1747,7 +1747,7 @@ public class DataObjectTests
                 enumAdvise = result;
             }))
             .Returns(1);
-        var dataObject = new DataObject(mockComDataObject.Object);
+        DataObject dataObject = new(mockComDataObject.Object);
         IComDataObject comDataObject = dataObject;
         Assert.Equal(1, comDataObject.EnumDAdvise(out IEnumSTATDATA enumStatData));
         Assert.Same(result, enumStatData);
@@ -1766,7 +1766,7 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_Default_TestData))]
     public void DataObject_EnumFormatEtc_InvokeDefault_Success(int celt)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         Assert.NotNull(enumerator);
@@ -1817,11 +1817,11 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_TestData))]
     public void DataObject_EnumFormatEtc_InvokeWithValues_Success(string format1, TYMED expectedTymed)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(true))
             .Returns(new string[] { format1, "Format2" });
-        var dataObject = new DataObject(mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         Assert.NotNull(enumerator);
@@ -1879,11 +1879,11 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_Default_TestData))]
     public void DataObject_EnumFormatEtc_InvokeNullFormats_Success(int celt)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(true))
             .Returns((string[])null);
-        var dataObject = new DataObject(mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         Assert.NotNull(enumerator);
@@ -1908,7 +1908,7 @@ public class DataObjectTests
     [InlineData(1)]
     public void DataObject_EnumFormatEtc_SkipDefault_Success(int celt)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         Assert.NotNull(enumerator);
@@ -1926,11 +1926,11 @@ public class DataObjectTests
     [WinFormsFact]
     public void DataObject_EnumFormatEtc_SkipCustom_Success()
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(true))
             .Returns(new string[] { "Format1", DataFormats.Bitmap, "Format2" });
-        var dataObject = new DataObject(mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         Assert.NotNull(enumerator);
@@ -1978,7 +1978,7 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_Default_TestData))]
     public void DataObject_EnumFormatEtc_CloneDefault_Success(int celt)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC source = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         source.Clone(out IEnumFORMATETC enumerator);
@@ -2003,11 +2003,11 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_TestData))]
     public void DataObject_EnumFormatEtc_CloneWithValues_Success(string format1, TYMED expectedTymed)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(true))
             .Returns(new string[] { format1, "Format2" });
-        var dataObject = new DataObject(mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC source = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         source.Clone(out IEnumFORMATETC enumerator);
@@ -2066,11 +2066,11 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_Default_TestData))]
     public void DataObject_EnumFormatEtc_CloneNullFormats_Success(int celt)
     {
-        var mockDataObject = new Mock<IDataObject>(MockBehavior.Strict);
+        Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
             .Setup(o => o.GetFormats(true))
             .Returns((string[])null);
-        var dataObject = new DataObject(mockDataObject.Object);
+        DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC source = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
         source.Clone(out IEnumFORMATETC enumerator);
@@ -2097,7 +2097,7 @@ public class DataObjectTests
     [InlineData(DATADIR.DATADIR_SET + 1)]
     public void DataObject_EnumFormatEtc_InvokeNotGet_ThrowsExternalException(DATADIR dwDirection)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
         Assert.Throws<ExternalException>(() => comDataObject.EnumFormatEtc(dwDirection));
     }
@@ -2109,7 +2109,7 @@ public class DataObjectTests
         yield return new object[] { DATADIR.DATADIR_GET - 1, null };
         yield return new object[] { DATADIR.DATADIR_SET + 1, null };
 
-        var mockEnumFormatEtc = new Mock<IEnumFORMATETC>(MockBehavior.Strict);
+        Mock<IEnumFORMATETC> mockEnumFormatEtc = new(MockBehavior.Strict);
         yield return new object[] { DATADIR.DATADIR_GET, mockEnumFormatEtc.Object };
         yield return new object[] { DATADIR.DATADIR_SET, mockEnumFormatEtc.Object };
         yield return new object[] { DATADIR.DATADIR_GET - 1, mockEnumFormatEtc.Object };
@@ -2120,12 +2120,12 @@ public class DataObjectTests
     [MemberData(nameof(EnumFormatEtc_CustomComDataObject_TestData))]
     public void DataObject_EnumFormatEtc_InvokeCustomComDataObject_Success(DATADIR dwDirection, IEnumFORMATETC result)
     {
-        var mockComDataObject = new Mock<IComDataObject>(MockBehavior.Strict);
+        Mock<IComDataObject> mockComDataObject = new(MockBehavior.Strict);
         mockComDataObject
             .Setup(o => o.EnumFormatEtc(dwDirection))
             .Returns(result)
             .Verifiable();
-        var dataObject = new DataObject(mockComDataObject.Object);
+        DataObject dataObject = new(mockComDataObject.Object);
         IComDataObject comDataObject = dataObject;
         Assert.Same(result, comDataObject.EnumFormatEtc(dwDirection));
         mockComDataObject.Verify(o => o.EnumFormatEtc(dwDirection), Times.Once());
@@ -2141,7 +2141,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataHere_Text_TestData))]
     public unsafe void IComDataObjectGetDataHere_Text_Success(TextDataFormat textDataFormat, short cfFormat)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
@@ -2184,7 +2184,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataHere_UnicodeText_TestData))]
     public unsafe void IComDataObjectGetDataHere_UnicodeText_Success(TextDataFormat textDataFormat, short cfFormat)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
@@ -2221,7 +2221,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataHere_Text_TestData))]
     public unsafe void IComDataObjectGetDataHere_TextNoData_ThrowsArgumentException(TextDataFormat textDataFormat, short cfFormat)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
@@ -2243,7 +2243,7 @@ public class DataObjectTests
     [MemberData(nameof(GetDataHere_UnicodeText_TestData))]
     public unsafe void IComDataObjectGetDataHere_UnicodeTextNoData_ThrowsArgumentException(TextDataFormat textDataFormat, short cfFormat)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
@@ -2264,7 +2264,7 @@ public class DataObjectTests
     [WinFormsFact]
     public unsafe void IComDataObjectGetDataHere_FileNames_Success()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
         IComDataObject iComDataObject = dataObject;
 
@@ -2305,7 +2305,7 @@ public class DataObjectTests
     [WinFormsFact]
     public unsafe void IComDataObjectGetDataHere_EmptyFileNames_Success()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetFileDropList(new StringCollection());
         IComDataObject iComDataObject = dataObject;
 
@@ -2344,16 +2344,16 @@ public class DataObjectTests
     [WinFormsFact]
     public unsafe void IComDataObjectGetDataHere_FileNamesNoData_ThrowsArgumentException()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
         };
-        var stgMedium = new STGMEDIUM
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
@@ -2363,16 +2363,16 @@ public class DataObjectTests
     [WinFormsFact]
     public unsafe void IComDataObjectGetDataHere_EmptyFileNamesNoData_Success()
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         dataObject.SetFileDropList(new StringCollection());
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
         };
-        var stgMedium = new STGMEDIUM
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
@@ -2387,14 +2387,14 @@ public class DataObjectTests
     [InlineData(TYMED.TYMED_NULL, TYMED.TYMED_NULL)]
     public void IComDataObjectGetDataHere_InvalidTymed_ThrowsCOMException(TYMED formatetcTymed, TYMED stgMediumTymed)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = formatetcTymed
         };
-        var stgMedium = new STGMEDIUM
+        STGMEDIUM stgMedium = new()
         {
             tymed = stgMediumTymed
         };
@@ -2411,15 +2411,15 @@ public class DataObjectTests
     [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CLIPBOARD_FORMAT.CF_HDROP)]
     public void IComDataObjectGetDataHere_NoDataPresentNoData_ThrowsCOMException(TYMED formatetcTymed, TYMED stgMediumTymed, short cfFormat)
     {
-        var dataObject = new DataObject();
+        DataObject dataObject = new();
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = formatetcTymed,
             cfFormat = cfFormat
         };
-        var stgMedium = new STGMEDIUM
+        STGMEDIUM stgMedium = new()
         {
             tymed = stgMediumTymed
         };

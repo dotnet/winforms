@@ -8,14 +8,14 @@ public class NetworkTests
     [Fact]
     public void IsAvailable()
     {
-        var network = new Network();
+        Network network = new();
         Assert.Equal(System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable(), network.IsAvailable);
     }
 
     [Fact]
     public void Ping()
     {
-        var network = new Network();
+        Network network = new();
         Assert.True(network.Ping("127.0.0.1"));
     }
 

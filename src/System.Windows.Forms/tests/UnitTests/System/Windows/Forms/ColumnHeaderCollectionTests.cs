@@ -11,7 +11,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Ctor_ListView()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Empty(collection);
     }
@@ -25,7 +25,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IList_GetProperties_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Equal(0, collection.Count);
         Assert.False(collection.IsFixedSize);
@@ -37,10 +37,10 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Item_GetValidIndex_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
 
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.Same(header, collection[0]);
     }
@@ -50,8 +50,8 @@ public class ColumnHeaderCollectionTests
     [InlineData(1)]
     public void ColumnHeaderCollection_Item_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             header
@@ -62,10 +62,10 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListItem_GetValidIndex_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
 
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.Same(header, collection[0]);
     }
@@ -75,8 +75,8 @@ public class ColumnHeaderCollectionTests
     [InlineData(1)]
     public void ColumnHeaderCollection_IListItem_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         IList collection = new ListView.ColumnHeaderCollection(listView)
         {
             header
@@ -89,8 +89,8 @@ public class ColumnHeaderCollectionTests
     [InlineData(1)]
     public void ColumnHeaderCollection_IListItem_Set_ThrowsNotSupportedException(int index)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         IList collection = new ListView.ColumnHeaderCollection(listView)
         {
             header
@@ -108,10 +108,10 @@ public class ColumnHeaderCollectionTests
     [InlineData("TEXT", 1)]
     public void ColumnHeaderCollection_Item_GetString_ReturnsExpected(string key, int expectedIndex)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new()
         {
             Name = "text"
         };
@@ -124,9 +124,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Add_ColumnHeader_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.Same(header, Assert.Single(collection));
         Assert.Equal(listView, header.ListView);
@@ -137,9 +137,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Add_ExistsInSameCollection_ThrowsArgumentException()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.Throws<ArgumentException>("ch", () => collection.Add(header));
     }
@@ -147,11 +147,11 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Add_ExistsInOtherCollection_ThrowsArgumentException()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var otherListView = new ListView();
+        using ListView otherListView = new();
         var otherCollection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         otherCollection.Add(header);
         Assert.Throws<ArgumentException>("ch", () => collection.Add(header));
     }
@@ -160,7 +160,7 @@ public class ColumnHeaderCollectionTests
     [NormalizedStringData]
     public void ColumnHeaderCollection_Add_String_Success(string text, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             text
@@ -181,7 +181,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_Int_TestData))]
     public void ColumnHeaderCollection_Add_String_Int_Success(string text, int width, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             { text, width }
@@ -203,7 +203,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_Int_HorizontalAlignment_TestData))]
     public void ColumnHeaderCollection_Add_String_Int_HorizontalAlignment_Success(string text, int width, HorizontalAlignment textAlign, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             { text, width, textAlign }
@@ -226,7 +226,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_TestData))]
     public void ColumnHeaderCollection_Add_String_String_Success(string name, string text, string expectedName, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             { name, text }
@@ -248,7 +248,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_Int_TestData))]
     public void ColumnHeaderCollection_Add_String_String_Int_Success(string name, string text, int width, string expectedName, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             { name, text, width }
@@ -271,7 +271,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_Int_TestData))]
     public void ColumnHeaderCollection_Add_String_String_Int_HorizontalAlignment_Int_Success(string name, string text, int width, HorizontalAlignment textAlign, int imageIndex, string expectedName, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             { name, text, width, textAlign, imageIndex }
@@ -296,7 +296,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_String_TestData))]
     public void ColumnHeaderCollection_Add_String_String_Int_HorizontalAlignment_String_Success(string name, string text, int width, HorizontalAlignment textAlign, string imageKey, string expectedName, string expectedText, string expectedImageKey)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             { name, text, width, textAlign, imageKey }
@@ -313,7 +313,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Add_NullItem_ThrowsArgumentNullException()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentNullException>("ch", () => collection.Add((ColumnHeader)null));
     }
@@ -322,7 +322,7 @@ public class ColumnHeaderCollectionTests
     [InvalidEnumData<HorizontalAlignment>]
     public void ColumnHeaderCollection_Add_InvalidTextAlign_ThrowsInvalidEnumArgumentException(HorizontalAlignment textAlign)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<InvalidEnumArgumentException>("value", () => collection.Add("text", 1, textAlign));
         Assert.Throws<InvalidEnumArgumentException>("value", () => collection.Add("name", "text", 1, textAlign, "imageKey"));
@@ -332,9 +332,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IList_Add_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.Same(header, Assert.Single(collection));
         Assert.Equal(listView, header.ListView);
@@ -345,7 +345,7 @@ public class ColumnHeaderCollectionTests
     [InlineData("text")]
     public void ColumnHeaderCollection_IListAdd_InvalidValue_ThrowsArgumentException(object value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentException>("value", () => collection.Add(value));
     }
@@ -353,10 +353,10 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_AddRange_ColumnHeaderArray_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header1 = new ColumnHeader("text1");
-        using var header2 = new ColumnHeader("text2");
+        using ColumnHeader header1 = new("text1");
+        using ColumnHeader header2 = new("text2");
         var items = new ColumnHeader[] { header1, header2 };
         collection.AddRange(items);
 
@@ -371,25 +371,25 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_AddRange_ColumnHeaderArrayWithDisplayIndex_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header1 = new ColumnHeader("text1")
+        using ColumnHeader header1 = new("text1")
         {
             DisplayIndex = 1
         };
-        using var header2 = new ColumnHeader("text2")
+        using ColumnHeader header2 = new("text2")
         {
             DisplayIndex = 0
         };
-        using var header3 = new ColumnHeader("text3")
+        using ColumnHeader header3 = new("text3")
         {
             DisplayIndex = 2
         };
-        using var header4 = new ColumnHeader("text4")
+        using ColumnHeader header4 = new("text4")
         {
             DisplayIndex = 2
         };
-        using var header5 = new ColumnHeader("text5")
+        using ColumnHeader header5 = new("text5")
         {
             DisplayIndex = 10
         };
@@ -413,7 +413,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_AddRange_NullValues_ThrowsArgumentNullException()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentNullException>("values", () => collection.AddRange(null));
     }
@@ -421,7 +421,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_AddRange_NullValueInValues_ThrowsArgumentNullException()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentNullException>("values", () => collection.AddRange(new ColumnHeader[] { null }));
     }
@@ -429,9 +429,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Clear_Invoke_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         collection.Clear();
@@ -451,9 +451,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Clear_InvokeWithHandle_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
@@ -474,12 +474,12 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Clear_InvokeTile_Success()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = View.Tile
         };
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         collection.Clear();
@@ -499,12 +499,12 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Clear_InvokeTileWithHandle_Success()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = View.Tile
         };
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
@@ -525,7 +525,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Clear_Empty_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
 
         collection.Clear();
@@ -535,9 +535,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Contains_Invoke_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         Assert.True(collection.Contains(header));
@@ -548,7 +548,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Contains_Empty_ReturnsFalse()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
 
         Assert.False(collection.Contains(new ColumnHeader()));
@@ -565,10 +565,10 @@ public class ColumnHeaderCollectionTests
     [InlineData("TEXT", true)]
     public void ColumnHeaderCollection_ContainsKey_Invoke_ReturnsExpected(string key, bool expected)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new()
         {
             Name = "text"
         };
@@ -581,7 +581,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_ContainsKey_Empty_ReturnsFalse()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
 
         Assert.False(collection.ContainsKey("text"));
@@ -591,9 +591,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListContains_Invoke_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         Assert.True(collection.Contains(header));
@@ -605,7 +605,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListContains_Empty_ReturnsFalse()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
 
         Assert.False(collection.Contains(new ColumnHeader()));
@@ -616,9 +616,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IndexOf_Invoke_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         Assert.Equal(0, collection.IndexOf(header));
@@ -629,7 +629,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IndexOf_Empty_ReturnsFalse()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
 
         Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
@@ -646,10 +646,10 @@ public class ColumnHeaderCollectionTests
     [InlineData("TEXT", 1)]
     public void ColumnHeaderCollection_IndexOfKey_Invoke_ReturnsExpected(string key, int expected)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header1 = new ColumnHeader();
-        using var header2 = new ColumnHeader
+        using ColumnHeader header1 = new();
+        using ColumnHeader header2 = new()
         {
             Name = "text"
         };
@@ -666,7 +666,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IndexOfKey_Empty_ReturnsFalse()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
 
         Assert.Equal(-1, collection.IndexOfKey("text"));
@@ -676,9 +676,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListIndexOf_Invoke_ReturnsExpected()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         Assert.Equal(0, collection.IndexOf(header));
@@ -690,7 +690,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListIndexOf_Empty_ReturnsMinusOne()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
 
         Assert.Equal(-1, collection.IndexOf(new ColumnHeader()));
@@ -701,9 +701,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Insert_ColumnHeader_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(new ColumnHeader());
         collection.Insert(1, header);
         Assert.Equal(2, collection.Count);
@@ -715,7 +715,7 @@ public class ColumnHeaderCollectionTests
     [NormalizedStringData]
     public void ColumnHeaderCollection_Insert_String_Success(string text, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, text);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -727,7 +727,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_Int_TestData))]
     public void ColumnHeaderCollection_Insert_String_Int_Success(string text, int width, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, text, width);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -740,7 +740,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_Int_HorizontalAlignment_TestData))]
     public void ColumnHeaderCollection_Insert_String_Int_HorizontalAlignment_Success(string text, int width, HorizontalAlignment textAlign, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, text, width, textAlign);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -754,7 +754,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_TestData))]
     public void ColumnHeaderCollection_Insert_String_String_Success(string name, string text, string expectedName, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, name, text);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -767,7 +767,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_Int_TestData))]
     public void ColumnHeaderCollection_Insert_String_String_Int_Success(string name, string text, int width, string expectedName, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, name, text, width);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -781,7 +781,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_Int_TestData))]
     public void ColumnHeaderCollection_Insert_String_String_Int_HorizontalAlignment_Int_Success(string name, string text, int width, HorizontalAlignment textAlign, int imageIndex, string expectedName, string expectedText)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, name, text, width, textAlign, imageIndex);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -797,7 +797,7 @@ public class ColumnHeaderCollectionTests
     [MemberData(nameof(Add_String_String_Int_HorizontalAlignment_String_TestData))]
     public void ColumnHeaderCollection_Insert_String_String_Int_HorizontalAlignment_String_Success(string name, string text, int width, HorizontalAlignment textAlign, string imageKey, string expectedName, string expectedText, string expectedImageKey)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, name, text, width, textAlign, imageKey);
         using ColumnHeader header = Assert.Single(collection.Cast<ColumnHeader>());
@@ -812,8 +812,8 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Insert_NullItem_ThrowsArgumentNullException()
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             header
@@ -826,7 +826,7 @@ public class ColumnHeaderCollectionTests
     [InlineData(1)]
     public void ColumnHeaderCollection_Insert_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, (ColumnHeader)null));
     }
@@ -834,9 +834,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListInsert_ColumnHeader_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(new ColumnHeader());
         collection.Insert(1, header);
         Assert.Equal(2, collection.Count);
@@ -849,7 +849,7 @@ public class ColumnHeaderCollectionTests
     [InlineData("text")]
     public void ColumnHeaderCollection_IListInsert_InvalidItem_Nop(object value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
         collection.Insert(0, value);
         Assert.Empty(collection);
@@ -860,7 +860,7 @@ public class ColumnHeaderCollectionTests
     [InlineData(1)]
     public void ColumnHeaderCollection_IListInsert_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, new ColumnHeader()));
     }
@@ -868,9 +868,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_Remove_ColumnHeader_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         // Remove null.
@@ -894,9 +894,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_IListRemove_ColumnHeader_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         collection.Remove(header);
@@ -918,9 +918,9 @@ public class ColumnHeaderCollectionTests
     [InlineData("text")]
     public void ColumnHeaderCollection_IListRemove_InvalidItem_Nop(object value)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         collection.Remove(value);
@@ -930,9 +930,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_RemoveAt_ValidIndex_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         collection.Add(new ColumnHeader());
         collection.Add(new ColumnHeader());
@@ -965,9 +965,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_RemoveAt_HasHandle_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         collection.Add(new ColumnHeader());
         collection.Add(new ColumnHeader());
@@ -1001,12 +1001,12 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_RemoveAt_HasHandleWithTile_Success()
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = View.Tile
         };
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
         collection.Add(new ColumnHeader());
         collection.Add(new ColumnHeader());
@@ -1042,8 +1042,8 @@ public class ColumnHeaderCollectionTests
     [InlineData(2)]
     public void ColumnHeaderCollection_RemoveAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var listView = new ListView();
-        using var header = new ColumnHeader();
+        using ListView listView = new();
+        using ColumnHeader header = new();
         var collection = new ListView.ColumnHeaderCollection(listView)
         {
             header
@@ -1056,7 +1056,7 @@ public class ColumnHeaderCollectionTests
     [InlineData(1)]
     public void ColumnHeaderCollection_RemoveAt_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
@@ -1071,9 +1071,9 @@ public class ColumnHeaderCollectionTests
     [InlineData("TEXT", 0)]
     public void ColumnHeaderCollection_RemoveByKey_Invoke_Success(string key, int expectedCount)
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         var collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader
+        using ColumnHeader header = new()
         {
             Name = "text"
         };
@@ -1094,9 +1094,9 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_CopyTo_NonEmpty_Success()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        using var header = new ColumnHeader();
+        using ColumnHeader header = new();
         collection.Add(header);
 
         var array = new object[] { 1, 2, 3 };
@@ -1107,7 +1107,7 @@ public class ColumnHeaderCollectionTests
     [WinFormsFact]
     public void ColumnHeaderCollection_CopyTo_Empty_Nop()
     {
-        using var listView = new ListView();
+        using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
         var array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 0);

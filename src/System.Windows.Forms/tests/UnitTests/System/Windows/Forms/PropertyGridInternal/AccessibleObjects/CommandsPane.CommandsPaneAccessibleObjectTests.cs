@@ -10,8 +10,8 @@ public class CommandsPane_CommandsPaneAccessibleObjectTests
     [WinFormsFact]
     public void CommandsPaneAccessibleObject_Ctor_Default()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using CommandsPane commandsPane = new CommandsPane(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using CommandsPane commandsPane = new(propertyGrid);
         CommandsPane.CommandsPaneAccessibleObject accessibleObject =
             new CommandsPane.CommandsPaneAccessibleObject(commandsPane, propertyGrid);
 
@@ -23,8 +23,8 @@ public class CommandsPane_CommandsPaneAccessibleObjectTests
     [WinFormsFact]
     public void CommandsPaneAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using CommandsPane commandsPane = new CommandsPane(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using CommandsPane commandsPane = new(propertyGrid);
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)commandsPane.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -38,8 +38,8 @@ public class CommandsPane_CommandsPaneAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void CommandsPaneAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using CommandsPane commandsPane = new CommandsPane(propertyGrid);
+        using PropertyGrid propertyGrid = new();
+        using CommandsPane commandsPane = new(propertyGrid);
         // AccessibleRole is not set = Default
 
         if (createControl)

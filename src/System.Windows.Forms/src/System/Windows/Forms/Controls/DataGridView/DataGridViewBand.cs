@@ -60,7 +60,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
             ContextMenuStrip? oldValue = (ContextMenuStrip?)Properties.GetObject(s_propContextMenuStrip);
             if (oldValue != value)
             {
-                EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
+                EventHandler disposedHandler = new(DetachContextMenuStrip);
                 if (oldValue is not null)
                 {
                     oldValue.Disposed -= disposedHandler;
@@ -424,7 +424,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     /// <summary>
     ///  Contains all properties that are not always set.
     /// </summary>
-    private protected PropertyStore Properties { get; private set; } = new PropertyStore();
+    private protected PropertyStore Properties { get; private set; } = new();
 
     [DefaultValue(false)]
     public virtual bool ReadOnly

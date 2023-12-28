@@ -18,7 +18,7 @@ public class UICuesEventArgsTests
     [InlineData(UICues.Changed | UICues.Shown)]
     public void Ctor_UICues(UICues uicues)
     {
-        var e = new UICuesEventArgs(uicues);
+        UICuesEventArgs e = new(uicues);
         Assert.Equal((uicues & UICues.ShowFocus) != 0, e.ShowFocus);
         Assert.Equal((uicues & UICues.ShowKeyboard) != 0, e.ShowKeyboard);
         Assert.Equal((uicues & UICues.ChangeFocus) != 0, e.ChangeFocus);

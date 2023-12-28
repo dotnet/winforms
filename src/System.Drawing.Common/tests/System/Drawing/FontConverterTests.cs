@@ -13,7 +13,7 @@ public class FontNameConverterTest
     [Fact]
     public void TestConvertFrom()
     {
-        FontConverter.FontNameConverter converter = new FontConverter.FontNameConverter();
+        FontConverter.FontNameConverter converter = new();
         // returns "Times" under Linux and "Times New Roman" under Windows
         if (PlatformDetection.IsWindows)
         {
@@ -31,7 +31,7 @@ public class FontNameConverterTest
     [Fact]
     public void ExTestConvertFrom_ThrowsNotSupportedException()
     {
-        FontConverter.FontNameConverter converter = new FontConverter.FontNameConverter();
+        FontConverter.FontNameConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(null));
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(1));
     }
@@ -45,7 +45,7 @@ public class FontConverterTest
     [MemberData(nameof(TestConvertFormData))]
     public void TestConvertFrom(string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Font font = (Font)converter.ConvertFrom(input);
 
         // Unix fonts
@@ -59,7 +59,7 @@ public class FontConverterTest
     [MemberData(nameof(ArgumentExceptionFontConverterData))]
     public void InvalidInputThrowsArgumentException(string input, string paramName, string netfxParamName)
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         AssertExtensions.Throws<ArgumentException>(paramName, netfxParamName, () => converter.ConvertFrom(input));
     }
 
@@ -67,14 +67,14 @@ public class FontConverterTest
     [MemberData(nameof(InvalidEnumArgumentExceptionFontConverterData))]
     public void InvalidInputThrowsInvalidEnumArgumentException(string input, string paramName)
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Assert.Throws<InvalidEnumArgumentException>(paramName, () => converter.ConvertFrom(input));
     }
 
     [Fact]
     public void EmptyStringInput()
     {
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Font font = (Font)converter.ConvertFrom(string.Empty);
         Assert.Null(font);
     }
@@ -96,7 +96,7 @@ public class FontConverterTest
             nameof(Font.Underline),
         };
 
-        FontConverter converter = new FontConverter();
+        FontConverter converter = new();
         Font font = new($"Courier New", 8.25f, FontStyle.Regular, GraphicsUnit.Point);
 
         PropertyDescriptorCollection props = converter.GetProperties(font);
@@ -189,7 +189,7 @@ public class FontConverterTest
     {
         get
         {
-            using (var installedFonts = new InstalledFontCollection())
+            using (InstalledFontCollection installedFonts = new())
             {
                 return installedFonts.Families.Select(t => t.Name).Contains(string.Empty);
             }
@@ -222,7 +222,7 @@ public class FontUnitConverterTest
     [Fact]
     public void GetStandardValuesTest()
     {
-        FontUnitConverter converter = new FontUnitConverter();
+        FontUnitConverter converter = new();
         var values = converter.GetStandardValues();
         Assert.Equal(6, values.Count); // The six supported values of Graphics unit: World, Pixel, Point, Inch, Document, Millimeter.
 
@@ -242,7 +242,7 @@ public class FontUnitConverterTest
     [InlineData("World", GraphicsUnit.World)]
     public void CanConvertFrom(string input, GraphicsUnit expected)
     {
-        FontUnitConverter converter = new FontUnitConverter();
+        FontUnitConverter converter = new();
         GraphicsUnit value = (GraphicsUnit)converter.ConvertFrom(input);
         Assert.Equal(expected, value);
     }

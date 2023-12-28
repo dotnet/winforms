@@ -72,7 +72,7 @@ public class SystemPensTests
         AssertExtensions.Throws<ArgumentException>(null, () => pen.LineJoin = LineJoin.MiterClipped);
         AssertExtensions.Throws<ArgumentException>(null, () => pen.MiterLimit = 10);
         AssertExtensions.Throws<ArgumentException>(null, () => pen.StartCap = LineCap.RoundAnchor);
-        using (var matrix = new Matrix())
+        using (Matrix matrix = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => pen.Transform = matrix);
         }

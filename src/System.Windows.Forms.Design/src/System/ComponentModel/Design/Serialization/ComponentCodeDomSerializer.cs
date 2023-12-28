@@ -222,7 +222,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                             {
                                 // We need to generate the field declaration.  See if there is a modifiers property on
                                 // the object.  If not, look for a DefaultModifies, and finally assume it's private.
-                                CodeMemberField field = new CodeMemberField(typeName, name);
+                                CodeMemberField field = new(typeName, name);
                                 PropertyDescriptor? modifiersProp = props["Modifiers"];
 
                                 modifiersProp ??= props["DefaultModifiers"];
@@ -246,7 +246,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                         {
                             if (inheritanceLevel == InheritanceLevel.NotInherited)
                             {
-                                CodeVariableDeclarationStatement local = new CodeVariableDeclarationStatement(typeName, name);
+                                CodeVariableDeclarationStatement local = new(typeName, name);
 
                                 statements.Add(local);
                                 Trace(TraceLevel.Verbose, $"Local {typeName} {name} created.");
@@ -308,7 +308,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                             }
                             else
                             {
-                                CodeAssignStatement assign = new CodeAssignStatement(assignLhs, assignRhs);
+                                CodeAssignStatement assign = new(assignLhs, assignRhs);
                                 statements.Add(assign);
                             }
                         }
@@ -529,15 +529,15 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
     {
         Trace(TraceLevel.Verbose, "Emitting LoadComponentSettings");
 
-        CodeTypeReference type = new CodeTypeReference(typeof(IPersistComponentSettings));
-        CodeCastExpression castExp = new CodeCastExpression(type, valueExpression);
-        CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(castExp, "LoadComponentSettings");
+        CodeTypeReference type = new(typeof(IPersistComponentSettings));
+        CodeCastExpression castExp = new(type, valueExpression);
+        CodeMethodReferenceExpression method = new(castExp, "LoadComponentSettings");
         CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
         {
             Method = method
         };
 
-        CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
+        CodeExpressionStatement statement = new(methodInvoke);
         statement.UserData["statement-ordering"] = "end";
 
         statements.Add(statement);
@@ -550,15 +550,15 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
     {
         Trace(TraceLevel.Verbose, $"Emitting {methodName}");
 
-        CodeTypeReference type = new CodeTypeReference(typeof(ISupportInitialize));
-        CodeCastExpression castExp = new CodeCastExpression(type, valueExpression);
-        CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(castExp, methodName);
+        CodeTypeReference type = new(typeof(ISupportInitialize));
+        CodeCastExpression castExp = new(type, valueExpression);
+        CodeMethodReferenceExpression method = new(castExp, methodName);
         CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
         {
             Method = method
         };
 
-        CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
+        CodeExpressionStatement statement = new(methodInvoke);
 
         if (methodName == "BeginInit")
         {

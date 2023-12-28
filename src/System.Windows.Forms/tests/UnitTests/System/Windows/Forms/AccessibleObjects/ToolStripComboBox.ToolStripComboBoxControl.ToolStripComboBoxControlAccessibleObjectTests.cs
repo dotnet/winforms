@@ -12,10 +12,10 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
     [WinFormsFact]
     public void ToolStripComboBoxControlAccessibleObject_ctor_default()
     {
-        using ToolStripComboBox toolStripComboBox = new ToolStripComboBox();
+        using ToolStripComboBox toolStripComboBox = new();
         ToolStripComboBoxControl control = (ToolStripComboBoxControl)toolStripComboBox.ComboBox;
         control.CreateControl();
-        ToolStripComboBoxControlAccessibleObject accessibleObject = new ToolStripComboBoxControlAccessibleObject(control);
+        ToolStripComboBoxControlAccessibleObject accessibleObject = new(control);
 
         Assert.Equal(control, accessibleObject.Owner);
         Assert.True(control.IsHandleCreated);
@@ -24,7 +24,7 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
     [WinFormsFact]
     public void ToolStripComboBoxControlAccessibleObject_ControlType_IsComboBox_IfAccessibleRoleIsDefault()
     {
-        using ToolStripComboBox toolStripComboBox = new ToolStripComboBox();
+        using ToolStripComboBox toolStripComboBox = new();
         // AccessibleRole is not set = Default
         ToolStripComboBoxControl control = (ToolStripComboBoxControl)toolStripComboBox.ComboBox;
         control.CreateControl();
@@ -56,7 +56,7 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
     [MemberData(nameof(ToolStripComboBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripComboBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripComboBox toolStripComboBox = new ToolStripComboBox();
+        using ToolStripComboBox toolStripComboBox = new();
         toolStripComboBox.AccessibleRole = role;
         ToolStripComboBoxControl control = (ToolStripComboBoxControl)toolStripComboBox.ComboBox;
         control.CreateControl();

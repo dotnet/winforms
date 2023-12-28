@@ -9,7 +9,7 @@ public class BindingMemberInfoTests
     [Fact]
     public void Ctor_Default()
     {
-        var info = new BindingMemberInfo();
+        BindingMemberInfo info = new();
         Assert.Empty(info.BindingPath);
         Assert.Empty(info.BindingField);
         Assert.Empty(info.BindingMember);
@@ -26,7 +26,7 @@ public class BindingMemberInfoTests
     [InlineData(".", "", "", "")]
     public void Ctor_String(string dataMember, string expectedPath, string expectedField, string expectedMember)
     {
-        var info = new BindingMemberInfo(dataMember);
+        BindingMemberInfo info = new(dataMember);
         Assert.Equal(expectedPath, info.BindingPath);
         Assert.Equal(expectedField, info.BindingField);
         Assert.Equal(expectedMember, info.BindingMember);

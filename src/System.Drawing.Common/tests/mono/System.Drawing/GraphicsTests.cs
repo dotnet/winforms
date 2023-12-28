@@ -103,9 +103,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DefaultProperties()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (Region r = new Region())
+        using (Region r = new())
         {
             Assert.Equal(r.GetBounds(g), g.ClipBounds);
             Assert.Equal(CompositingMode.SourceOver, g.CompositingMode);
@@ -123,7 +123,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void SetGetProperties()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.CompositingMode = CompositingMode.SourceCopy;
@@ -154,7 +154,7 @@ public class GraphicsTest : IDisposable
     public void Clip()
     {
         RectangleF[] rects;
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.Clip = new Region(new Rectangle(50, 40, 210, 220));
@@ -171,7 +171,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Clip_NotAReference()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.True(g.Clip.IsInfinite(g));
@@ -184,7 +184,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ExcludeClip()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.Clip = new Region(new RectangleF(10, 10, 100, 100));
@@ -213,7 +213,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void IntersectClip()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.Clip = new Region(new RectangleF(260, 30, 60, 80));
@@ -232,7 +232,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ResetClip()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.Clip = new Region(new RectangleF(260, 30, 60, 80));
@@ -253,7 +253,7 @@ public class GraphicsTest : IDisposable
     public void SetClip()
     {
         RectangleF[] rects;
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -296,7 +296,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void SetSaveReset()
     {
-        using (Bitmap bmp = new Bitmap(200, 200))
+        using (Bitmap bmp = new(200, 200))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             GraphicsState state_default, state_modified;
@@ -353,7 +353,7 @@ public class GraphicsTest : IDisposable
             Assert.Equal(SmoothingMode.None, g.SmoothingMode);
             Assert.Equal(TextRenderingHint.SystemDefault, g.TextRenderingHint);
 
-            Region r = new Region();
+            Region r = new();
             Assert.Equal(r.GetBounds(g), g.ClipBounds);
         }
     }
@@ -398,7 +398,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Clip_GetBounds()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             RectangleF bounds = g.Clip.GetBounds(g);
@@ -413,7 +413,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Clip_TranslateTransform()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.TranslateTransform(12.22f, 10.10f);
@@ -445,8 +445,8 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Transform_NonInvertibleMatrix()
     {
-        using (Matrix matrix = new Matrix(123, 24, 82, 16, 47, 30))
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (Matrix matrix = new(123, 24, 82, 16, 47, 30))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             Assert.False(matrix.IsInvertible);
 
@@ -458,8 +458,8 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Multiply_NonInvertibleMatrix()
     {
-        using (Matrix matrix = new Matrix(123, 24, 82, 16, 47, 30))
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (Matrix matrix = new(123, 24, 82, 16, 47, 30))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             Assert.False(matrix.IsInvertible);
 
@@ -479,7 +479,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             CheckBounds("graphics.ClipBounds", g.ClipBounds, 0, 0, 16, 16);
@@ -494,7 +494,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds_Rotate()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Clip = new Region(new Rectangle(0, 0, 8, 8));
@@ -512,7 +512,7 @@ public class GraphicsTest : IDisposable
     public void ClipBounds_Scale()
     {
         RectangleF clip = new Rectangle(0, 0, 8, 8);
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Clip = new Region(clip);
@@ -529,7 +529,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds_Translate()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Clip = new Region(new Rectangle(0, 0, 8, 8));
@@ -549,7 +549,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds_Transform_Translation()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Clip = new Region(new Rectangle(0, 0, 8, 8));
@@ -566,7 +566,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds_Transform_Scale()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Clip = new Region(new Rectangle(0, 0, 8, 8));
@@ -584,7 +584,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds_Multiply()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Clip = new Region(new Rectangle(0, 0, 8, 8));
@@ -602,7 +602,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ClipBounds_Cumulative_Effects()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             CheckBounds("graphics.ClipBounds", g.ClipBounds, 0, 0, 16, 16);
@@ -637,7 +637,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Clip_TranslateTransform_BoundsChange()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             CheckBounds("graphics.ClipBounds", g.ClipBounds, 0, 0, 16, 16);
@@ -661,7 +661,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Clip_RotateTransform_BoundsChange()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             CheckBounds("graphics.ClipBounds", g.ClipBounds, 0, 0, 16, 16);
@@ -686,7 +686,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Clip_ScaleTransform_NoBoundsChange()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             CheckBounds("graphics.ClipBounds", g.ClipBounds, 0, 0, 16, 16);
@@ -709,7 +709,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ScaleTransform_X0()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             Assert.Throws<ArgumentException>(() => g.ScaleTransform(0, 1));
@@ -719,7 +719,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ScaleTransform_Y0()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             Assert.Throws<ArgumentException>(() => g.ScaleTransform(1, 0));
@@ -729,7 +729,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void TranslateTransform_Order()
     {
-        using (var b = new BitmapAndGraphics(16, 16))
+        using (BitmapAndGraphics b = new(16, 16))
         {
             var g = b.Graphics;
             g.Transform = new Matrix(1, 2, 3, 4, 5, 6);
@@ -772,7 +772,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_NotEnoughPoints()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             CheckForEmptyBitmap(bitmap);
@@ -788,7 +788,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_SinglePoint()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, new Point[1] { new(10, 10) }, 0.5f));
@@ -799,7 +799,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve3_NotEnoughPoints()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, TooSmallCurve, 0, 2, 0.5f));
@@ -810,7 +810,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_NegativeTension()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             // documented as bigger (or equals) to 0
@@ -824,7 +824,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_PositiveTension()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.DrawCurve(Pens.Black, SmallCurveF, 0.9f);
@@ -838,7 +838,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_ZeroSegments()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, SmallCurveF, 0, 0));
@@ -848,7 +848,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_NegativeSegments()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, SmallCurveF, 0, -1));
@@ -858,7 +858,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_OffsetTooLarge()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             // starting offset 1 doesn't give 3 points to make a curve
@@ -870,7 +870,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_Offset_0()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.DrawCurve(Pens.Black, LargeCurveF, 0, 2, 0.5f);
@@ -883,7 +883,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_Offset_1()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.DrawCurve(Pens.Black, LargeCurveF, 1, 2, 0.5f);
@@ -896,7 +896,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawCurve_Offset_2()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             // it works even with two points because we know the previous ones
@@ -910,9 +910,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawRectangle_Negative()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (Pen pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             g.DrawRectangle(pen, 5, 5, -10, -10);
             g.DrawRectangle(pen, 0.0f, 0.0f, 5.0f, -10.0f);
@@ -927,9 +927,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawRectangles_Negative()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (Pen pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             Rectangle[] rects = [
                 new(5, 5, -10, -10),
@@ -951,9 +951,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangle_Negative()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (SolidBrush brush = new SolidBrush(Color.Red))
+        using (SolidBrush brush = new(Color.Red))
         {
             g.FillRectangle(brush, 5, 5, -10, -10);
             g.FillRectangle(brush, 0.0f, 0.0f, 5.0f, -10.0f);
@@ -968,9 +968,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangles_Negative()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (SolidBrush brush = new SolidBrush(Color.Red))
+        using (SolidBrush brush = new(Color.Red))
         {
             Rectangle[] rects = [
                 new(5, 5, -10, -10),
@@ -1036,7 +1036,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void BeginContainer()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             CheckDefaultProperties("default", g);
@@ -1071,7 +1071,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void BeginContainer_Rect()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             CheckDefaultProperties("default", g);
@@ -1107,7 +1107,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void BeginContainer_RectF()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             CheckDefaultProperties("default", g);
@@ -1141,7 +1141,7 @@ public class GraphicsTest : IDisposable
 
     private void BeginContainer_GraphicsUnit(GraphicsUnit unit)
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.BeginContainer(new RectangleF(40, 30, 20, 10), new RectangleF(10, 20, 30, 40), unit);
@@ -1179,7 +1179,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void EndContainer_Null()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.EndContainer(null));
@@ -1189,7 +1189,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Save()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             CheckDefaultProperties("default", g);
@@ -1231,7 +1231,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Restore_Null()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<NullReferenceException>(() => g.Restore(null));
@@ -1241,7 +1241,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangles_BrushNull_Rectangle()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.FillRectangles(null, new Rectangle[1]));
@@ -1251,7 +1251,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangles_Rectangle_Null()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.FillRectangles(Brushes.Red, (Rectangle[])null));
@@ -1261,7 +1261,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectanglesZeroRectangle()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.FillRectangles(Brushes.Red, new Rectangle[0]));
@@ -1271,7 +1271,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangles_BrushNull_RectangleF()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.FillRectangles(null, new RectangleF[1]));
@@ -1281,7 +1281,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangles_RectangleF_Null()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.FillRectangles(Brushes.Red, (RectangleF[])null));
@@ -1291,7 +1291,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectanglesZeroRectangleF()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.FillRectangles(Brushes.Red, new RectangleF[0]));
@@ -1301,12 +1301,12 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillRectangles_NormalBehavior()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.Clear(Color.Fuchsia);
-                Rectangle rect = new Rectangle(5, 5, 10, 10);
+                Rectangle rect = new(5, 5, 10, 10);
                 g.Clip = new Region(rect);
                 g.FillRectangle(Brushes.Red, rect);
             }
@@ -1324,15 +1324,15 @@ public class GraphicsTest : IDisposable
 
     private Bitmap FillDrawRectangle(float width)
     {
-        Bitmap bitmap = new Bitmap(20, 20);
+        Bitmap bitmap = new(20, 20);
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.Clear(Color.Red);
-            Rectangle rect = new Rectangle(5, 5, 10, 10);
+            Rectangle rect = new(5, 5, 10, 10);
             g.FillRectangle(Brushes.Green, rect);
             if (width >= 0)
             {
-                using (Pen pen = new Pen(Color.Blue, width))
+                using (Pen pen = new(Color.Blue, width))
                 {
                     g.DrawRectangle(pen, rect);
                 }
@@ -1496,14 +1496,14 @@ public class GraphicsTest : IDisposable
     // reverse, draw the fill over
     private Bitmap DrawFillRectangle(float width)
     {
-        Bitmap bitmap = new Bitmap(20, 20);
+        Bitmap bitmap = new(20, 20);
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.Clear(Color.Red);
-            Rectangle rect = new Rectangle(5, 5, 10, 10);
+            Rectangle rect = new(5, 5, 10, 10);
             if (width >= 0)
             {
-                using (Pen pen = new Pen(Color.Blue, width))
+                using (Pen pen = new(Color.Blue, width))
                 {
                     g.DrawRectangle(pen, rect);
                 }
@@ -1650,14 +1650,14 @@ public class GraphicsTest : IDisposable
 
     private Bitmap DrawLines(float width)
     {
-        Bitmap bitmap = new Bitmap(20, 20);
+        Bitmap bitmap = new(20, 20);
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.Clear(Color.Red);
             Point[] pts = [new(5, 5), new(15, 5), new(15, 15)];
             if (width >= 0)
             {
-                using (Pen pen = new Pen(Color.Blue, width))
+                using (Pen pen = new(Color.Blue, width))
                 {
                     g.DrawLines(pen, pts);
                 }
@@ -1707,7 +1707,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureString_StringFont()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -1732,7 +1732,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureString_StringFont_Null()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.MeasureString("a", null));
@@ -1743,7 +1743,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureString_StringFontSizeF()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             SizeF size = g.MeasureString("a", font, SizeF.Empty);
@@ -1762,7 +1762,7 @@ public class GraphicsTest : IDisposable
 
     private void MeasureString_StringFontInt(string s, bool useSpan)
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             SizeF size0 = useSpan ? g.MeasureString(s.AsSpan(), font, 0) : g.MeasureString(s, font, 0);
@@ -1796,8 +1796,8 @@ public class GraphicsTest : IDisposable
     {
         string text = "Hello Mono::";
 
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.Alignment = StringAlignment.Near;
@@ -1829,8 +1829,8 @@ public class GraphicsTest : IDisposable
     public void MeasureString_StringFormat_Alignment_DirectionVertical(bool useSpan)
     {
         string text = "Hello Mono::";
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.FormatFlags = StringFormatFlags.DirectionVertical;
@@ -1864,8 +1864,8 @@ public class GraphicsTest : IDisposable
     public void MeasureString_StringFormat_LineAlignment(bool useSpan)
     {
         string text = "Hello Mono::";
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.LineAlignment = StringAlignment.Near;
@@ -1897,8 +1897,8 @@ public class GraphicsTest : IDisposable
     public void MeasureString_StringFormat_LineAlignment_DirectionVertical(bool useSpan)
     {
         string text = "Hello Mono::";
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.FormatFlags = StringFormatFlags.DirectionVertical;
@@ -1931,7 +1931,7 @@ public class GraphicsTest : IDisposable
     [InlineData(false)]
     public void MeasureString_CharactersFitted(bool useSpan)
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string s = "aaa aa aaaa a aaa";
@@ -1957,7 +1957,7 @@ public class GraphicsTest : IDisposable
     [InlineData(false)]
     public void MeasureString_Whitespace(bool useSpan)
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string s = string.Empty;
@@ -2003,7 +2003,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureCharacterRanges_NullOrEmptyText()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Region[] regions = g.MeasureCharacterRanges(null, font, new RectangleF(), null);
@@ -2028,7 +2028,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureCharacterRanges_EmptyStringFormat()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             // string format without character ranges
@@ -2043,7 +2043,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureCharacterRanges_FontNull()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a", null, new RectangleF(), null));
@@ -2059,15 +2059,15 @@ public class GraphicsTest : IDisposable
         ranges[0] = new CharacterRange(0, 5);
         ranges[1] = new CharacterRange(5, 9);
 
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.FormatFlags = StringFormatFlags.NoClip;
             string_format.SetMeasurableCharacterRanges(ranges);
 
             SizeF size = g.MeasureString(text, font, new Point(0, 0), string_format);
-            RectangleF layout_rect = new RectangleF(0.0f, 0.0f, size.Width, size.Height);
+            RectangleF layout_rect = new(0.0f, 0.0f, size.Width, size.Height);
             Region[] regions = g.MeasureCharacterRanges(text, font, layout_rect, string_format);
 
             Assert.Equal(2, regions.Length);
@@ -2085,8 +2085,8 @@ public class GraphicsTest : IDisposable
         CharacterRange[] ranges = new CharacterRange[1];
         ranges[0] = new CharacterRange(first, length);
 
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.FormatFlags = StringFormatFlags.NoClip;
@@ -2095,7 +2095,7 @@ public class GraphicsTest : IDisposable
             SizeF size = useSpan
                 ? g.MeasureString(text.AsSpan(), font, new Point(0, 0), string_format)
                 : g.MeasureString(text, font, new Point(0, 0), string_format);
-            RectangleF layout_rect = new RectangleF(0.0f, 0.0f, size.Width, size.Height);
+            RectangleF layout_rect = new(0.0f, 0.0f, size.Width, size.Height);
             if (useSpan)
             {
                 g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
@@ -2132,14 +2132,14 @@ public class GraphicsTest : IDisposable
         CharacterRange[] ranges = new CharacterRange[1];
         ranges[0] = new CharacterRange(5, 4);
 
-        using (StringFormat string_format = new StringFormat())
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (StringFormat string_format = new())
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             string_format.SetMeasurableCharacterRanges(ranges);
 
             SizeF size = g.MeasureString(text, font, new Point(0, 0), string_format);
-            RectangleF layout_rect = new RectangleF(0.0f, 0.0f, size.Width, size.Height);
+            RectangleF layout_rect = new(0.0f, 0.0f, size.Width, size.Height);
 
             // here & is part of the measure and visible
             string_format.HotkeyPrefix = HotkeyPrefix.None;
@@ -2171,7 +2171,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void MeasureCharacterRanges_NullStringFormat()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono", font, new RectangleF(), null));
@@ -2191,7 +2191,7 @@ public class GraphicsTest : IDisposable
         {
             format.SetMeasurableCharacterRanges(ranges);
 
-            using (Font font = new Font(FontFamily.GenericSerif, 11.0f))
+            using (Font font = new(FontFamily.GenericSerif, 11.0f))
             {
                 return useSpan
                     ? gfx.MeasureCharacterRanges("abc".AsSpan(), font, rect, format)
@@ -2270,9 +2270,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawString_EndlessLoop()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (StringFormat fmt = new StringFormat())
+        using (StringFormat fmt = new())
         {
             Rectangle rect = Rectangle.Empty;
             rect.Location = new Point(10, 10);
@@ -2289,9 +2289,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawString_EndlessLoop_Wrapping()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (StringFormat fmt = new StringFormat())
+        using (StringFormat fmt = new())
         {
             Rectangle rect = Rectangle.Empty;
             rect.Location = new Point(10, 10);
@@ -2308,9 +2308,9 @@ public class GraphicsTest : IDisposable
     public void MeasureString_Wrapping_Dots()
     {
         string text = "this is really long text........................................... with a lot o periods.";
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
-        using (StringFormat format = new StringFormat())
+        using (StringFormat format = new())
         {
             format.Alignment = StringAlignment.Center;
             SizeF sz = g.MeasureString(text, font, 80, format);
@@ -2326,7 +2326,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void GetReleaseHdcInternal()
     {
-        using (Bitmap b = new Bitmap(10, 10))
+        using (Bitmap b = new(10, 10))
         using (Graphics g = Graphics.FromImage(b))
         {
             IntPtr hdc1 = g.GetHdc();
@@ -2340,7 +2340,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ReleaseHdcInternal_IntPtrZero()
     {
-        using (Bitmap b = new Bitmap(10, 10))
+        using (Bitmap b = new(10, 10))
         using (Graphics g = Graphics.FromImage(b))
         {
             Assert.Throws<ArgumentException>(() => g.ReleaseHdcInternal(IntPtr.Zero));
@@ -2350,7 +2350,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void ReleaseHdcInternal_TwoTimes()
     {
-        using (Bitmap b = new Bitmap(10, 10))
+        using (Bitmap b = new(10, 10))
         using (Graphics g = Graphics.FromImage(b))
         {
             IntPtr hdc = g.GetHdc();
@@ -2362,7 +2362,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void TestReleaseHdc()
     {
-        using (Bitmap b = new Bitmap(10, 10))
+        using (Bitmap b = new(10, 10))
         using (Graphics g = Graphics.FromImage(b))
         {
             IntPtr hdc1 = g.GetHdc();
@@ -2376,7 +2376,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void TestReleaseHdcException()
     {
-        using (Bitmap b = new Bitmap(10, 10))
+        using (Bitmap b = new(10, 10))
         using (Graphics g = Graphics.FromImage(b))
         {
             Assert.Throws<ArgumentException>(() => g.ReleaseHdc());
@@ -2386,7 +2386,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void TestReleaseHdcException2()
     {
-        using (Bitmap b = new Bitmap(10, 10))
+        using (Bitmap b = new(10, 10))
         using (Graphics g = Graphics.FromImage(b))
         {
             g.GetHdc();
@@ -2405,7 +2405,7 @@ public class GraphicsTest : IDisposable
         }
 
         // see #78958
-        using (Bitmap bmp = new Bitmap(100, 100))
+        using (Bitmap bmp = new(100, 100))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             RectangleF noclip = g.VisibleClipBounds;
@@ -2440,7 +2440,7 @@ public class GraphicsTest : IDisposable
             throw new SkipTestException("Precision on float numbers");
         }
 
-        using (Bitmap bmp = new Bitmap(100, 100))
+        using (Bitmap bmp = new(100, 100))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             RectangleF noclip = g.VisibleClipBounds;
@@ -2487,7 +2487,7 @@ public class GraphicsTest : IDisposable
             throw new SkipTestException("Precision on float numbers");
         }
 
-        using (Bitmap bmp = new Bitmap(100, 50))
+        using (Bitmap bmp = new(100, 50))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             RectangleF vcb = g.VisibleClipBounds;
@@ -2508,7 +2508,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Scale()
     {
-        using (Bitmap bmp = new Bitmap(100, 50))
+        using (Bitmap bmp = new(100, 50))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             RectangleF vcb = g.VisibleClipBounds;
@@ -2529,7 +2529,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Translate()
     {
-        using (Bitmap bmp = new Bitmap(100, 50))
+        using (Bitmap bmp = new(100, 50))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             RectangleF vcb = g.VisibleClipBounds;
@@ -2550,7 +2550,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawIcon_NullRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawIcon(null, new Rectangle(0, 0, 32, 32)));
@@ -2560,7 +2560,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawIcon_IconRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawIcon(SystemIcons.Application, new Rectangle(0, 0, 40, 20));
@@ -2578,7 +2578,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawIcon_NullIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawIcon(null, 4, 2));
@@ -2588,7 +2588,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawIcon_IconIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawIcon(SystemIcons.Exclamation, 4, 2);
@@ -2599,7 +2599,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawIconUnstretched_NullRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawIconUnstretched(null, new Rectangle(0, 0, 40, 20)));
@@ -2609,7 +2609,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawIconUnstretched_IconRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawIconUnstretched(SystemIcons.Information, new Rectangle(0, 0, 40, 20));
@@ -2627,7 +2627,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullRectangleF()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new RectangleF(0, 0, 0, 0)));
@@ -2637,7 +2637,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImageRectangleF()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new RectangleF(0, 0, 0, 0));
@@ -2650,7 +2650,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullPointF()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new PointF(0, 0)));
@@ -2660,7 +2660,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointF()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new PointF(0, 0));
@@ -2670,7 +2670,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullPointFArray()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new PointF[0]));
@@ -2680,7 +2680,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointFArrayNull()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -2692,7 +2692,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointFArrayEmpty()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentException>(() => g.DrawImage(bmp, new PointF[0]));
@@ -2702,7 +2702,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointFArray()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new PointF[]
@@ -2715,7 +2715,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new Rectangle(0, 0, 0, 0)));
@@ -2725,7 +2725,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImageRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             // Rectangle is empty when X, Y, Width and Height == 0
@@ -2742,7 +2742,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullPoint()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new Point(0, 0)));
@@ -2752,7 +2752,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePoint()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new Point(0, 0));
@@ -2762,7 +2762,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullPointArray()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new Point[0]));
@@ -2772,7 +2772,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointArrayNull()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(bmp, (Point[])null));
@@ -2782,7 +2782,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointArrayEmpty()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentException>(() => g.DrawImage(bmp, new Point[0]));
@@ -2792,7 +2792,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointArray()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new Point[]
@@ -2805,7 +2805,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, int.MaxValue, int.MinValue));
@@ -2815,7 +2815,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImageIntInt_Overflow()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<OverflowException>(() => g.DrawImage(bmp, int.MaxValue, int.MinValue));
@@ -2825,7 +2825,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImageIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, -40, -40);
@@ -2835,7 +2835,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullFloat()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, float.MaxValue, float.MinValue));
@@ -2845,7 +2845,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImageFloatFloat_Overflow()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<OverflowException>(() => g.DrawImage(bmp, float.MaxValue, float.MinValue));
@@ -2855,7 +2855,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImageFloatFloat()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, -40.0f, -40.0f);
@@ -2865,7 +2865,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullRectangleRectangleGraphicsUnit()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new Rectangle(), new Rectangle(), GraphicsUnit.Display));
@@ -2874,10 +2874,10 @@ public class GraphicsTest : IDisposable
 
     private void DrawImage_ImageRectangleRectangleGraphicsUnit(GraphicsUnit unit)
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
-            Rectangle r = new Rectangle(0, 0, 40, 40);
+            Rectangle r = new(0, 0, 40, 40);
             g.DrawImage(bmp, r, r, unit);
         }
     }
@@ -2904,9 +2904,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_NullPointRectangleGraphicsUnit()
     {
-        Rectangle r = new Rectangle(1, 2, 3, 4);
+        Rectangle r = new(1, 2, 3, 4);
         Point[] pts = [new(1, 1), new(2, 2), new(3, 3)];
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, pts, r, GraphicsUnit.Pixel));
@@ -2915,8 +2915,8 @@ public class GraphicsTest : IDisposable
 
     private void DrawImage_ImagePointRectangleGraphicsUnit(Point[] pts)
     {
-        Rectangle r = new Rectangle(1, 2, 3, 4);
-        using (Bitmap bmp = new Bitmap(40, 40))
+        Rectangle r = new(1, 2, 3, 4);
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, pts, r, GraphicsUnit.Pixel);
@@ -2938,37 +2938,37 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePoint1RectangleGraphicsUnit()
     {
-        Point p = new Point(1, 1);
+        Point p = new(1, 1);
         Assert.Throws<ArgumentException>(() => DrawImage_ImagePointRectangleGraphicsUnit(new Point[1] { p }));
     }
 
     [Fact]
     public void DrawImage_ImagePoint2RectangleGraphicsUnit()
     {
-        Point p = new Point(1, 1);
+        Point p = new(1, 1);
         Assert.Throws<ArgumentException>(() => DrawImage_ImagePointRectangleGraphicsUnit(new Point[2] { p, p }));
     }
 
     [Fact]
     public void DrawImage_ImagePoint3RectangleGraphicsUnit()
     {
-        Point p = new Point(1, 1);
+        Point p = new(1, 1);
         DrawImage_ImagePointRectangleGraphicsUnit(new Point[3] { p, p, p });
     }
 
     [Fact]
     public void DrawImage_ImagePoint4RectangleGraphicsUnit()
     {
-        Point p = new Point(1, 1);
+        Point p = new(1, 1);
         Assert.Throws<NotImplementedException>(() => DrawImage_ImagePointRectangleGraphicsUnit(new Point[4] { p, p, p, p }));
     }
 
     [Fact]
     public void DrawImage_NullPointFRectangleGraphicsUnit()
     {
-        Rectangle r = new Rectangle(1, 2, 3, 4);
+        Rectangle r = new(1, 2, 3, 4);
         PointF[] pts = [new(1, 1), new(2, 2), new(3, 3)];
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, pts, r, GraphicsUnit.Pixel));
@@ -2977,8 +2977,8 @@ public class GraphicsTest : IDisposable
 
     private void DrawImage_ImagePointFRectangleGraphicsUnit(PointF[] pts)
     {
-        Rectangle r = new Rectangle(1, 2, 3, 4);
-        using (Bitmap bmp = new Bitmap(40, 40))
+        Rectangle r = new(1, 2, 3, 4);
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, pts, r, GraphicsUnit.Pixel);
@@ -3000,38 +3000,38 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointF1RectangleGraphicsUnit()
     {
-        PointF p = new PointF(1, 1);
+        PointF p = new(1, 1);
         Assert.Throws<ArgumentException>(() => DrawImage_ImagePointFRectangleGraphicsUnit(new PointF[1] { p }));
     }
 
     [Fact]
     public void DrawImage_ImagePointF2RectangleGraphicsUnit()
     {
-        PointF p = new PointF(1, 1);
+        PointF p = new(1, 1);
         Assert.Throws<ArgumentException>(() => DrawImage_ImagePointFRectangleGraphicsUnit(new PointF[2] { p, p }));
     }
 
     [Fact]
     public void DrawImage_ImagePointF3RectangleGraphicsUnit()
     {
-        PointF p = new PointF(1, 1);
+        PointF p = new(1, 1);
         DrawImage_ImagePointFRectangleGraphicsUnit(new PointF[3] { p, p, p });
     }
 
     [Fact]
     public void DrawImage_ImagePointF4RectangleGraphicsUnit()
     {
-        PointF p = new PointF(1, 1);
+        PointF p = new(1, 1);
         Assert.Throws<NotImplementedException>(() => DrawImage_ImagePointFRectangleGraphicsUnit(new PointF[4] { p, p, p, p }));
     }
 
     [Fact]
     public void DrawImage_ImagePointRectangleGraphicsUnitNull()
     {
-        Point p = new Point(1, 1);
+        Point p = new(1, 1);
         Point[] pts = new Point[3] { p, p, p };
-        Rectangle r = new Rectangle(1, 2, 3, 4);
-        using (Bitmap bmp = new Bitmap(40, 40))
+        Rectangle r = new(1, 2, 3, 4);
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, pts, r, GraphicsUnit.Pixel, null);
@@ -3041,12 +3041,12 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImage_ImagePointRectangleGraphicsUnitAttributes()
     {
-        Point p = new Point(1, 1);
+        Point p = new(1, 1);
         Point[] pts = new Point[3] { p, p, p };
-        Rectangle r = new Rectangle(1, 2, 3, 4);
-        using (Bitmap bmp = new Bitmap(40, 40))
+        Rectangle r = new(1, 2, 3, 4);
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (ImageAttributes ia = new ImageAttributes())
+        using (ImageAttributes ia = new())
         {
             g.DrawImage(bmp, pts, r, GraphicsUnit.Pixel, ia);
         }
@@ -3055,7 +3055,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_NullPoint()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImageUnscaled(null, new Point(0, 0)));
@@ -3065,7 +3065,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_ImagePoint()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImageUnscaled(bmp, new Point(0, 0));
@@ -3075,7 +3075,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_NullRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImageUnscaled(null, new Rectangle(0, 0, -1, -1)));
@@ -3085,7 +3085,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_ImageRectangle()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImageUnscaled(bmp, new Rectangle(0, 0, -1, -1));
@@ -3095,7 +3095,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_NullIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImageUnscaled(null, 0, 0));
@@ -3105,7 +3105,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_ImageIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImageUnscaled(bmp, 0, 0);
@@ -3115,7 +3115,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_NullIntIntIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImageUnscaled(null, 0, 0, -1, -1));
@@ -3125,7 +3125,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaled_ImageIntIntIntInt()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImageUnscaled(bmp, 0, 0, -1, -1);
@@ -3135,7 +3135,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaledAndClipped_Null()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawImageUnscaledAndClipped(null, new Rectangle(0, 0, 0, 0)));
@@ -3145,7 +3145,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawImageUnscaledAndClipped()
     {
-        using (Bitmap bmp = new Bitmap(40, 40))
+        using (Bitmap bmp = new(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             // Rectangle is empty when X, Y, Width and Height == 0
@@ -3166,9 +3166,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawPath_Pen_Null()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawPath(null, path));
         }
@@ -3177,7 +3177,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawPath_Path_Null()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.DrawPath(Pens.Black, null));
@@ -3187,13 +3187,13 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void DrawPath_Arcs()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             int d = 5;
-            Rectangle baserect = new Rectangle(0, 0, 19, 19);
-            Rectangle arcrect = new Rectangle(baserect.Location, new Size(d, d));
+            Rectangle baserect = new(0, 0, 19, 19);
+            Rectangle arcrect = new(baserect.Location, new Size(d, d));
 
             path.AddArc(arcrect, 180, 90);
             arcrect.X = baserect.Right - d;
@@ -3214,9 +3214,9 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillPath_Brush_Null()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             Assert.Throws<ArgumentNullException>(() => g.FillPath(null, path));
         }
@@ -3225,7 +3225,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillPath_Path_Null()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Assert.Throws<ArgumentNullException>(() => g.FillPath(Brushes.Black, null));
@@ -3235,13 +3235,13 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void FillPath_Arcs()
     {
-        using (Bitmap bmp = new Bitmap(20, 20))
+        using (Bitmap bmp = new(20, 20))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             int d = 5;
-            Rectangle baserect = new Rectangle(0, 0, 19, 19);
-            Rectangle arcrect = new Rectangle(baserect.Location, new Size(d, d));
+            Rectangle baserect = new(0, 0, 19, 19);
+            Rectangle arcrect = new(baserect.Location, new Size(d, d));
 
             path.AddArc(arcrect, 180, 90);
             arcrect.X = baserect.Right - d;
@@ -3262,7 +3262,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void TransformPoints()
     {
-        using (Bitmap bmp = new Bitmap(10, 10))
+        using (Bitmap bmp = new(10, 10))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             Point[] pts = new Point[5];
@@ -3290,7 +3290,7 @@ public class GraphicsTest : IDisposable
     public void Dpi()
     {
         float x, y;
-        using (Bitmap bmp = new Bitmap(10, 10))
+        using (Bitmap bmp = new(10, 10))
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -3310,7 +3310,7 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void GetReleaseHdc()
     {
-        using (Bitmap b = new Bitmap(100, 100))
+        using (Bitmap b = new(100, 100))
         {
             using (Graphics g = Graphics.FromImage(b))
             {

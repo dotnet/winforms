@@ -18,7 +18,7 @@ public class DataGridViewCellParsingEventArgsTests
     [MemberData(nameof(Ctor_Int_Int_Object_Type_DataGridViewCellStyle_TestData))]
     public void Ctor_Int_Int_Object_Type_DataGridViewCellStyle(int rowIndex, int columnIndex, object value, Type desiredType, DataGridViewCellStyle inheritedCellStyle)
     {
-        var e = new DataGridViewCellParsingEventArgs(rowIndex, columnIndex, value, desiredType, inheritedCellStyle);
+        DataGridViewCellParsingEventArgs e = new(rowIndex, columnIndex, value, desiredType, inheritedCellStyle);
         Assert.Equal(rowIndex, e.RowIndex);
         Assert.Equal(columnIndex, e.ColumnIndex);
         Assert.Equal(value, e.Value);
@@ -37,7 +37,7 @@ public class DataGridViewCellParsingEventArgsTests
     [MemberData(nameof(InheritedCellStyle_TestData))]
     public void InheritedCellStyle_Set_GetReturnsExpected(DataGridViewCellStyle value)
     {
-        var e = new DataGridViewCellParsingEventArgs(1, 2, "value", typeof(string), new DataGridViewCellStyle())
+        DataGridViewCellParsingEventArgs e = new(1, 2, "value", typeof(string), new DataGridViewCellStyle())
         {
             InheritedCellStyle = value
         };
@@ -49,7 +49,7 @@ public class DataGridViewCellParsingEventArgsTests
     [InlineData(false)]
     public void ParsingApplied_Set_GetReturnsExpected(bool value)
     {
-        var e = new DataGridViewCellParsingEventArgs(1, 2, "value", typeof(string), new DataGridViewCellStyle())
+        DataGridViewCellParsingEventArgs e = new(1, 2, "value", typeof(string), new DataGridViewCellStyle())
         {
             ParsingApplied = value
         };

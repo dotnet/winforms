@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -167,7 +167,7 @@ public sealed class PathGradientBrush : Brush
 
             // Return the result in a managed array
 
-            Blend blend = new Blend(count)
+            Blend blend = new(count)
             {
                 Factors = factors,
                 Positions = positions
@@ -268,7 +268,7 @@ public sealed class PathGradientBrush : Brush
             int[] colors = new int[count];
             float[] positions = new float[count];
 
-            ColorBlend blend = new ColorBlend(count);
+            ColorBlend blend = new(count);
 
             // status would fail if we ask points or types with a < 2 count
             if (count < 2)
@@ -316,7 +316,7 @@ public sealed class PathGradientBrush : Brush
     {
         get
         {
-            Matrix matrix = new Matrix();
+            Matrix matrix = new();
             Gdip.CheckStatus(Gdip.GdipGetPathGradientTransform(new HandleRef(this, NativeBrush), new HandleRef(matrix, matrix.NativeMatrix)));
             return matrix;
         }
@@ -376,8 +376,8 @@ public sealed class PathGradientBrush : Brush
     {
         get
         {
-            float[] scaleX = new float[] { 0.0f };
-            float[] scaleY = new float[] { 0.0f };
+            float[] scaleX = [0.0f];
+            float[] scaleY = [0.0f];
 
             Gdip.CheckStatus(Gdip.GdipGetPathGradientFocusScales(new HandleRef(this, NativeBrush), scaleX, scaleY));
             return new PointF(scaleX[0], scaleY[0]);

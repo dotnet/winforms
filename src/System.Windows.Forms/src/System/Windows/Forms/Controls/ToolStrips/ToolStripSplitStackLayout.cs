@@ -334,7 +334,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
                 item.ParentInternal = ToolStrip;
 
-                Point itemLocation = new Point(x, y);
+                Point itemLocation = new(x, y);
                 if (!clientRectangle.Contains(x, y))
                 {
                     item.SetPlacement(ToolStripItemPlacement.None);
@@ -474,7 +474,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 }
 
                 item.ParentInternal = ToolStrip;
-                Point itemLocation = new Point(x, y);
+                Point itemLocation = new(x, y);
 
                 if (!clientRectangle.Contains(x, y))
                 {
@@ -519,7 +519,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // overflow buttons can be placed outside the display rect.
             bool horizontal = (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow);
             Rectangle displayRect = displayRectangle;
-            Rectangle itemBounds = new Rectangle(itemLocation, itemSize);
+            Rectangle itemBounds = new(itemLocation, itemSize);
 
             // in horizontal if something bleeds over the top/bottom that's ok - its left/right we care about
             // same in vertical.

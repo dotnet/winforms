@@ -103,7 +103,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 
     public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
     {
-        var m = new Message
+        Message m = new()
         {
             HWnd = hWnd,
             Msg = msg,

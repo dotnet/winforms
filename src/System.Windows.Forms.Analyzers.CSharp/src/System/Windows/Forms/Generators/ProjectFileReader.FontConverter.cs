@@ -152,7 +152,7 @@ internal static partial class ProjectFileReader
                     }
                 }
 
-                char[] trimChars = new char[] { separator, ' ' };
+                char[] trimChars = [separator, ' '];
 
                 if (splitPoint > 0)
                 {

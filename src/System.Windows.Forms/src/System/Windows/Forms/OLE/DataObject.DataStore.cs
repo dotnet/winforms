@@ -211,7 +211,7 @@ public partial class DataObject
 
                 // Since we are only adding elements to the HashSet, the order will be preserved.
                 int baseVarLength = baseVar.Length;
-                HashSet<string> distinctFormats = new HashSet<string>(baseVarLength);
+                HashSet<string> distinctFormats = new(baseVarLength);
                 for (int i = 0; i < baseVarLength; i++)
                 {
                     Debug.Assert(_data[baseVar[i]] is not null, $"Null item in data collection with key '{baseVar[i]}'");

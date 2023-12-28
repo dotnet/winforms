@@ -12,7 +12,7 @@ public class ProgressBarAccessibleObject
     [WinFormsFact]
     public void ProgressBarAccessibilityObject_Properties_ReturnsExpected_IfHandleIsCreated()
     {
-        using var ownerControl = new ProgressBar
+        using ProgressBar ownerControl = new()
         {
             Value = 5,
         };
@@ -39,7 +39,7 @@ public class ProgressBarAccessibleObject
     [WinFormsFact]
     public void ProgressBarAccessibilityObject_Properties_ReturnsExpected_IfHandleIsNotCreated()
     {
-        using var ownerControl = new ProgressBar
+        using ProgressBar ownerControl = new()
         {
             Value = 5,
         };
@@ -74,7 +74,7 @@ public class ProgressBarAccessibleObject
     [InlineData("INVALID", false, "")]
     public void ProgressBarAccessibilityObject_Value_Set_GetReturnsExpected(string value, bool createControl, string expectedValue)
     {
-        using var ownerControl = new ProgressBar();
+        using ProgressBar ownerControl = new();
         if (createControl)
         {
             ownerControl.CreateControl();
@@ -97,7 +97,7 @@ public class ProgressBarAccessibleObject
     [WinFormsFact]
     public void ProgressBarAccessibilityObject_GetChildCount_ReturnsExpected()
     {
-        using var ownerControl = new ProgressBar
+        using ProgressBar ownerControl = new()
         {
             Value = 5
         };
@@ -110,7 +110,7 @@ public class ProgressBarAccessibleObject
     [WinFormsFact]
     public void ProgressBarAccessibleObject_ControlType_IsProgressBar_IfAccessibleRoleIsDefault()
     {
-        using ProgressBar progressBar = new ProgressBar();
+        using ProgressBar progressBar = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -138,7 +138,7 @@ public class ProgressBarAccessibleObject
     [MemberData(nameof(ProgressBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ProgressBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ProgressBar progressBar = new ProgressBar();
+        using ProgressBar progressBar = new();
         progressBar.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

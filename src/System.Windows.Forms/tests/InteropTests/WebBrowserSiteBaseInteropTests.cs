@@ -10,7 +10,7 @@ public class WebBrowserSiteBaseInteropTests : InteropTestBase
     [WinFormsFact]
     public void WebBrowserSiteBase_RunInteropTests()
     {
-        var browser = new SubWebBrowser();
+        SubWebBrowser browser = new();
         WebBrowserSiteBase site = browser.CreateWebBrowserSiteBase();
         AssertSuccess(Test_WebBrowserSiteBase(site));
     }

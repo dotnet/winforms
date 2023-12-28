@@ -15,7 +15,7 @@ public partial class DataControls : Form
 
     private void DataControls_Load(object sender, EventArgs e)
     {
-        DataTable dataTable = new DataTable();
+        DataTable dataTable = new();
         dataTable.Columns.Add("Name");
         dataTable.Columns.Add("Id");
         dataTable.Columns.Add("Desc");

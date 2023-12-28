@@ -17,7 +17,7 @@ public class SplitContainerTests : ControlTestBase
     [WinFormsFact]
     public void SplitContainer_Constructor()
     {
-        using var sc = new SplitContainer();
+        using SplitContainer sc = new();
 
         Assert.NotNull(sc);
         Assert.NotNull(sc.Panel1);
@@ -42,7 +42,7 @@ public class SplitContainerTests : ControlTestBase
         typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             using SplitContainer splitContainer = new()
             {
                 FixedPanel = FixedPanel.Panel1,

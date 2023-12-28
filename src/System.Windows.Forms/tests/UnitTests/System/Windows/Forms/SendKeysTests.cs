@@ -10,7 +10,7 @@ public class SendKeysTests
     {
         // Regression https://github.com/dotnet/winforms/issues/6666
 
-        using var form = new CaptureForm();
+        using CaptureForm form = new();
         form.Show();
         form.Focus();
         SendKeys.SendWait("^(a)^(c)");

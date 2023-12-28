@@ -8,7 +8,7 @@ public class BitmapDataTests
     [Fact]
     public void Ctor_Default()
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         Assert.Equal(0, bd.Height);
         Assert.Equal(0, bd.Width);
         Assert.Equal(0, bd.Reserved);
@@ -23,7 +23,7 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Height_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         bd.Height = value;
         Assert.Equal(value, bd.Height);
     }
@@ -34,7 +34,7 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Width_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         bd.Width = value;
         Assert.Equal(value, bd.Width);
     }
@@ -45,7 +45,7 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Reserved_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         bd.Reserved = value;
         Assert.Equal(value, bd.Reserved);
     }
@@ -56,7 +56,7 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Scan0_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         bd.Scan0 = new IntPtr(value);
         Assert.Equal(new IntPtr(value), bd.Scan0);
     }
@@ -67,7 +67,7 @@ public class BitmapDataTests
     [InlineData(int.MinValue)]
     public void Stride_SetValid_ReturnsExpected(int value)
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         bd.Stride = value;
         Assert.Equal(value, bd.Stride);
     }
@@ -97,7 +97,7 @@ public class BitmapDataTests
     [InlineData(PixelFormat.Format64bppArgb)]
     public void PixelFormat_SetValid_ReturnsExpected(PixelFormat pixelFormat)
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         bd.PixelFormat = pixelFormat;
         Assert.Equal(pixelFormat, bd.PixelFormat);
     }
@@ -105,7 +105,7 @@ public class BitmapDataTests
     [Fact]
     public void PixelFormat_SetInvalid_ThrowsInvalidEnumException()
     {
-        BitmapData bd = new BitmapData();
+        BitmapData bd = new();
         Assert.ThrowsAny<ArgumentException>(() => bd.PixelFormat = (PixelFormat)(-1));
     }
 }

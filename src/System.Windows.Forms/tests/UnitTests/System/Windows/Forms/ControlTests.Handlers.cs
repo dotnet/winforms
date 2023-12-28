@@ -14,7 +14,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnAutoSizeChanged_Invoke_CallsAutoSizeChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -38,7 +38,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -64,7 +64,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -103,7 +103,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnBackColorChanged_InvokeInDisposing_DoesNotCallBackColorChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -128,9 +128,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackColorChanged_InvokeWithChildren_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -175,15 +175,15 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackColorChanged_InvokeWithChildrenWithBackColor_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control
+        using Control child1 = new()
         {
             BackColor = Color.Yellow
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             BackColor = Color.YellowGreen
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -228,7 +228,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageChanged_Invoke_CallsBackgroundImageChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -254,7 +254,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageChanged_InvokeWithHandle_CallsBackgroundImageChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -298,7 +298,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnBackgroundImageChanged_InvokeInDisposing_DoesNotCallBackgroundImageChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -323,9 +323,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageChanged_InvokeWithChildren_CallsBackgroundImageChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -374,15 +374,15 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageChanged_InvokeWithChildrenWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control
+        using Control child1 = new()
         {
             BackgroundImage = new Bitmap(10, 10)
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             BackgroundImage = new Bitmap(10, 10)
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -431,7 +431,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageLayoutChanged_Invoke_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -457,7 +457,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageLayoutChanged_InvokeWithHandle_CallsBackgroundImageLayoutChangedAndInvalidated(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.True(control.GetStyle(ControlStyles.UserPaint));
 
@@ -504,9 +504,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildren_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -551,15 +551,15 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildrenWithBackgroundImageLayout_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control
+        using Control child1 = new()
         {
             BackgroundImageLayout = ImageLayout.Center
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             BackgroundImageLayout = ImageLayout.Center
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -603,7 +603,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnBackgroundImageLayoutChanged_InvokeInDisposing_DoesNotCallBackgroundImageLayoutChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -628,7 +628,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -652,9 +652,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBindingContextChanged_InvokeWithChildren_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -699,17 +699,17 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnBindingContextChanged_InvokeWithChildrenWithBindingContext_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        var childContext1 = new BindingContext();
-        var childContext2 = new BindingContext();
-        using var child1 = new Control
+        BindingContext childContext1 = new();
+        BindingContext childContext2 = new();
+        using Control child1 = new()
         {
             BindingContext = childContext1
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             BindingContext = childContext2
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -754,7 +754,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCausesValidationChanged_Invoke_CallsCausesValidationChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -785,7 +785,7 @@ public partial class ControlTests
     [MemberData(nameof(UICuesEventArgs_TestData))]
     public void Control_OnChangeUICues_Invoke_CallsChangeUICues(UICuesEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         UICuesEventHandler handler = (sender, e) =>
         {
@@ -809,7 +809,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -833,7 +833,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnClientSizeChanged_Invoke_CallsClientSizeChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -871,7 +871,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnClientSizeChanged_InvokeWithHandle_CallsClientSizeChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -928,7 +928,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnClientSizeChanged_InvokeWithResizeRedraw_CallsClientSizeChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, true);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
@@ -986,7 +986,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnContextMenuStripChanged_Invoke_CallsContextMenuStripChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1017,7 +1017,7 @@ public partial class ControlTests
     [MemberData(nameof(ControlEventArgs_TestData))]
     public void Control_OnControlAdded_Invoke_CallsControlAdded(ControlEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         ControlEventHandler handler = (sender, e) =>
         {
@@ -1041,7 +1041,7 @@ public partial class ControlTests
     [MemberData(nameof(ControlEventArgs_TestData))]
     public void Control_OnControlRemoved_Invoke_CallsControlRemoved(ControlEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         ControlEventHandler handler = (sender, e) =>
         {
@@ -1064,7 +1064,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnCreateControl_Invoke_Nop()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.OnCreateControl();
         Assert.False(control.Created);
         Assert.False(control.IsHandleCreated);
@@ -1078,7 +1078,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCursorChanged_Invoke_CallsCursorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1102,9 +1102,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCursorChanged_InvokeWithChildren_CallsCursorChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -1149,17 +1149,17 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnCursorChanged_InvokeWithChildrenWithCursor_CallsCursorChanged(EventArgs eventArgs)
     {
-        var childCursor1 = new Cursor((IntPtr)1);
-        var childCursor2 = new Cursor((IntPtr)1);
-        using var child1 = new Control
+        Cursor childCursor1 = new((IntPtr)1);
+        Cursor childCursor2 = new((IntPtr)1);
+        using Control child1 = new()
         {
             Cursor = childCursor1
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Cursor = childCursor2
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -1204,7 +1204,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1228,7 +1228,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1252,7 +1252,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnDpiChangedBeforeParent_Invoke_CallsDpiChangedAfterParent(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1276,7 +1276,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnDpiChangedBeforeParent_Invoke_CallsDpiChangedBeforeParent(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1306,7 +1306,7 @@ public partial class ControlTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void Control_OnDragDrop_Invoke_CallsDragDrop(DragEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
@@ -1330,7 +1330,7 @@ public partial class ControlTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void Control_OnDragEnter_Invoke_CallsDragEnter(DragEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
@@ -1354,7 +1354,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnDragLeave_Invoke_CallsDragLeave(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1378,7 +1378,7 @@ public partial class ControlTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void Control_OnDragOver_Invoke_CallsDragOver(DragEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
@@ -1402,7 +1402,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnEnabledChanged_Invoke_CallsEnabledChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1432,7 +1432,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnEnabledChanged_InvokeWithHandle_CallsEnabledChangedCallsInvalidated(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.True(control.GetStyle(ControlStyles.UserPaint));
 
@@ -1465,7 +1465,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnEnabledChanged_InvokeWithHandleNoUserPaint_CallsEnabledChangedDoesNotCallInvalidated(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, false);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.False(control.GetStyle(ControlStyles.UserPaint));
@@ -1499,9 +1499,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnEnabledChanged_InvokeWithChildren_CallsEnabledChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -1546,15 +1546,15 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnEnabledChanged_InvokeWithChildrenDisabled_CallsEnabledChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control
+        using Control child1 = new()
         {
             Enabled = false
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Enabled = false
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -1599,7 +1599,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1623,7 +1623,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1651,7 +1651,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnFontChanged_InvokeWithFontHeight_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             FontHeight = 10
         };
@@ -1691,7 +1691,7 @@ public partial class ControlTests
     [MemberData(nameof(OnFontChanged_WithHandle_TestData))]
     public void Control_OnFontChanged_InvokeWithHandle_CallsFontChangedAndInvalidated(bool userPaint, EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -1734,9 +1734,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnFontChanged_InvokeWithChildren_CallsFontChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -1781,17 +1781,17 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnFontChanged_InvokeWithChildrenWithFont_CallsFontChanged(EventArgs eventArgs)
     {
-        using var childFont1 = new Font("Arial", 1);
-        using var childFont2 = new Font("Arial", 2);
-        using var child1 = new Control
+        using Font childFont1 = new("Arial", 1);
+        using Font childFont2 = new("Arial", 2);
+        using Control child1 = new()
         {
             Font = childFont1
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Font = childFont2
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -1835,7 +1835,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnFontChanged_InvokeInDisposing_DoesNotCallFontChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -1860,7 +1860,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1886,7 +1886,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnForeColorChanged_InvokeWithHandle_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -1930,7 +1930,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnForeColorChanged_InvokeInDisposing_DoesNotCallForeColorChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -1955,9 +1955,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnForeColorChanged_InvokeWithChildren_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -2002,15 +2002,15 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnForeColorChanged_InvokeWithChildrenWithForeColor_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control
+        using Control child1 = new()
         {
             ForeColor = Color.Yellow
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             ForeColor = Color.YellowGreen
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -2061,7 +2061,7 @@ public partial class ControlTests
     [MemberData(nameof(GiveFeedbackEventArgs_TestData))]
     public void Control_OnGiveFeedback_Invoke_CallsGiveFeedback(GiveFeedbackEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         GiveFeedbackEventHandler handler = (sender, e) =>
         {
@@ -2085,7 +2085,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2111,7 +2111,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2148,7 +2148,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleCreated_WithHandle_TestData))]
     public void Control_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(bool userPaint, EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -2188,7 +2188,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleCreated_Region_TestData))]
     public void Control_OnHandleCreated_InvokeWithRegion_CallsHandleCreated(EventArgs eventArgs, Region region)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Region = region
         };
@@ -2233,7 +2233,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleCreated_Text_TestData))]
     public void Control_OnHandleCreated_InvokeWithText_CallsHandleCreated(EventArgs eventArgs, string text, string expectedText)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Text = text
         };
@@ -2268,7 +2268,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnHandleCreated_InvokeWithHandleAllowDrop_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             AllowDrop = true
         };
@@ -2303,7 +2303,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2340,7 +2340,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleDestroyed_Region_TestData))]
     public void Control_OnHandleDestroyed_InvokeWithRegion_CallsHandleDestroyed(EventArgs eventArgs, Region region)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Region = region
         };
@@ -2383,7 +2383,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleDestroyed_Text_TestData))]
     public void Control_OnHandleDestroyed_InvokeWithText_CallsHandleDestroyed(EventArgs eventArgs, string text, string expectedText)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Text = text
         };
@@ -2416,7 +2416,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnHandleDestroyed_InvokeAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             AllowDrop = true
         };
@@ -2449,7 +2449,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -2479,7 +2479,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleDestroyed_Region_TestData))]
     public void Control_OnHandleDestroyed_InvokeWithHandleWithRegion_CallsHandleDestroyed(EventArgs eventArgs, Region region)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Region = region
         };
@@ -2514,7 +2514,7 @@ public partial class ControlTests
     [MemberData(nameof(OnHandleDestroyed_Text_TestData))]
     public void Control_OnHandleDestroyed_InvokeWithHandleWithText_CallsHandleDestroyed(EventArgs eventArgs, string text, string expectedText)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Text = text
         };
@@ -2549,7 +2549,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnHandleDestroyed_InvokeWithHandleAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             AllowDrop = true
         };
@@ -2590,7 +2590,7 @@ public partial class ControlTests
     [MemberData(nameof(HelpEventArgs_TestData))]
     public void Control_OnHelpRequested_Invoke_CallsHelpRequested(HelpEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         HelpEventHandler handler = (sender, e) =>
         {
@@ -2614,12 +2614,12 @@ public partial class ControlTests
     [MemberData(nameof(HelpEventArgs_TestData))]
     public void Control_OnHelpRequested_InvokeWithParent_CallsHelpRequested(HelpEventArgs eventArgs)
     {
-        var parent = new Control();
+        Control parent = new();
         int parentCallCount = 0;
         HelpEventHandler parentHandler = (sender, e) => parentCallCount++;
         parent.HelpRequested += parentHandler;
 
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -2647,8 +2647,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnHelpRequested_InvokeWithHandler_SetsHandled()
     {
-        var eventArgs = new HelpEventArgs(new Point(1, 2));
-        using var control = new SubControl();
+        HelpEventArgs eventArgs = new(new Point(1, 2));
+        using SubControl control = new();
         int callCount = 0;
         HelpEventHandler handler = (sender, e) =>
         {
@@ -2674,13 +2674,13 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnHelpRequested_InvokeWithParentHandler_SetsHandled()
     {
-        var parent = new Control();
+        Control parent = new();
         int parentCallCount = 0;
         HelpEventHandler parentHandler = (sender, e) => parentCallCount++;
         parent.HelpRequested += parentHandler;
 
-        var eventArgs = new HelpEventArgs(new Point(1, 2));
-        using var control = new SubControl
+        HelpEventArgs eventArgs = new(new Point(1, 2));
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -2701,8 +2701,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnHelpRequested_InvokeWithoutHandler_DoesNotSetHandled()
     {
-        var eventArgs = new HelpEventArgs(new Point(1, 2));
-        using var control = new SubControl();
+        HelpEventArgs eventArgs = new(new Point(1, 2));
+        using SubControl control = new();
         control.OnHelpRequested(eventArgs);
         Assert.False(eventArgs.Handled);
     }
@@ -2711,7 +2711,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnImeModeChanged_Invoke_CallsImeModeChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2741,7 +2741,7 @@ public partial class ControlTests
     [MemberData(nameof(InvalidateEventArgs_TestData))]
     public void Control_OnInvalidated_Invoke_CallsInvalidated(InvalidateEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         InvalidateEventHandler handler = (sender, e) =>
         {
@@ -2792,15 +2792,15 @@ public partial class ControlTests
     [MemberData(nameof(OnInvalidated_WithChildren_TestData))]
     public void Control_OnInvalidated_InvokeWithChildren_CallsInvalidated(bool supportsTransparentBackgroundColor, Color backColor, InvalidateEventArgs eventArgs)
     {
-        using var child1 = new SubControl
+        using SubControl child1 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var child2 = new SubControl
+        using SubControl child2 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         child1.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
@@ -2837,7 +2837,7 @@ public partial class ControlTests
     [MemberData(nameof(InvalidateEventArgs_TestData))]
     public void Control_OnInvalidated_InvokeWithHandle_CallsInvalidated(InvalidateEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         InvalidateEventHandler handler = (sender, e) =>
         {
@@ -2892,15 +2892,15 @@ public partial class ControlTests
     [MemberData(nameof(OnInvalidated_WithChildrenWithHandle_TestData))]
     public void Control_OnInvalidated_InvokeWithChildrenWithHandle_CallsInvalidated(bool supportsTransparentBackgroundColor, Color backColor, InvalidateEventArgs eventArgs, int expectedChildInvalidatedCallCount)
     {
-        using var child1 = new SubControl
+        using SubControl child1 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var child2 = new SubControl
+        using SubControl child2 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         child1.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
@@ -2969,15 +2969,15 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnInvalidated_NullEventArgsWithChildren_ThrowsNullReferenceException()
     {
-        using var child1 = new SubControl
+        using SubControl child1 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var child2 = new SubControl
+        using SubControl child2 = new()
         {
             ClientSize = new Size(10, 20)
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         child1.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
@@ -2991,7 +2991,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void Control_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -3017,7 +3017,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void Control_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         KeyPressEventHandler handler = (sender, e) =>
         {
@@ -3043,7 +3043,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void Control_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -3069,7 +3069,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void Control_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         LayoutEventHandler handler = (sender, e) =>
         {
@@ -3093,7 +3093,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void Control_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3132,8 +3132,8 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void Control_OnLayout_InvokeWithParent_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent
         };
@@ -3160,7 +3160,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void Control_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3184,7 +3184,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnLocationChanged_Invoke_CallsLocationChangedAndMove(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int locationChangedCallCount = 0;
         EventHandler locationChangedHandler = (sender, e) =>
         {
@@ -3219,7 +3219,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnLocationChanged_InvokeWithHandle_CallsLocationChangedAndMove(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int locationChangedCallCount = 0;
@@ -3271,7 +3271,7 @@ public partial class ControlTests
     [MemberData(nameof(OnLocationChanged_HandleWithTransparentBackColor_TestData))]
     public void Control_OnLocationChanged_InvokeWithHandleWithTransparentBackColor_CallsLocationChangedAndMoveAndInvalidated(bool supportsTransparentBackgroundColor, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         control.BackColor = Color.FromArgb(254, 255, 255, 255);
         control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
@@ -3317,7 +3317,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3341,7 +3341,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMarginChanged_Invoke_CallsMarginChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3365,7 +3365,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMouseCaptureChanged_Invoke_CallsMouseCaptureChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3391,7 +3391,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Control_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3417,7 +3417,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Control_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3443,7 +3443,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Control_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3469,7 +3469,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3495,7 +3495,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMouseHover_Invoke_CallsMouseHover(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3521,7 +3521,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3547,7 +3547,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Control_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3573,7 +3573,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Control_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3599,7 +3599,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void Control_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3624,8 +3624,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnMouseWheel_InvokeHandledMouseEventArgs_DoesNotSetHandled()
     {
-        using var control = new SubControl();
-        var eventArgs = new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4);
+        using SubControl control = new();
+        HandledMouseEventArgs eventArgs = new(MouseButtons.Left, 1, 2, 3, 4);
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -3646,7 +3646,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMove_Invoke_CallsMove(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int moveCallCount = 0;
         EventHandler moveHandler = (sender, e) =>
         {
@@ -3670,7 +3670,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnMove_InvokeWithHandle_CallsMove(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int moveCallCount = 0;
@@ -3702,7 +3702,7 @@ public partial class ControlTests
     [MemberData(nameof(OnLocationChanged_HandleWithTransparentBackColor_TestData))]
     public void Control_OnMove_InvokeWithHandleWithTransparentBackColor_CallsMoveAndInvalidated(bool supportsTransparentBackgroundColor, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         control.BackColor = Color.FromArgb(254, 255, 255, 255);
         control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackgroundColor);
@@ -3737,7 +3737,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3771,7 +3771,7 @@ public partial class ControlTests
     [MemberData(nameof(OnPaddingChanged_WithHandle_TestData))]
     public void Control_OnPaddingChanged_InvokeWithHandle_CallsPaddingChanged(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -3811,7 +3811,7 @@ public partial class ControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void Control_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -3851,11 +3851,11 @@ public partial class ControlTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void Control_OnPaintBackground_Invoke_Success(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
         control.BackColor = backColor;
         control.BackgroundImage = backgroundImage;
@@ -3886,11 +3886,11 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> OnPaintBackground_VisualStyles_off_WithParent_TestData()
     {
-        var control = new Control
+        Control control = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        var tabPage = new TabPage
+        TabPage tabPage = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
@@ -3927,11 +3927,11 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> OnPaintBackground_VisualStyles_on_WithParent_TestData()
     {
-        var control = new Control
+        Control control = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        var tabPage = new TabPage
+        TabPage tabPage = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
@@ -3973,11 +3973,11 @@ public partial class ControlTests
     [MemberData(nameof(OnPaintBackground_VisualStyles_on_WithParent_TestData))]
     public void Control_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Bounds = new Rectangle(1, 2, 10, 20),
             Parent = parent
@@ -4023,11 +4023,11 @@ public partial class ControlTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void Control_OnPaintBackground_InvokeWithHandle_Success(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
         control.BackColor = backColor;
         control.BackgroundImage = backgroundImage;
@@ -4100,15 +4100,15 @@ public partial class ControlTests
     [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
     public void Control_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var parent = new Control
+        using Control parent = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Bounds = new Rectangle(1, 2, 10, 20),
             Parent = parent
@@ -4166,7 +4166,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
     }
 
@@ -4174,7 +4174,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4198,7 +4198,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4222,7 +4222,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBackColorChanged_InvokeWithBackColor_DoesNotCallBackColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             BackColor = Color.Red
         };
@@ -4250,7 +4250,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBackgroundImageChanged_Invoke_CallsBackgroundImageChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4274,8 +4274,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBackgroundImageChanged_InvokeWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
     {
-        var image = new Bitmap(10, 10);
-        using var control = new SubControl
+        Bitmap image = new(10, 10);
+        using SubControl control = new()
         {
             BackgroundImage = image
         };
@@ -4303,7 +4303,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4327,8 +4327,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentBindingContextChanged_InvokeWithBindingContext_DoesNotCallBindingContextChanged(EventArgs eventArgs)
     {
-        var context = new BindingContext();
-        using var control = new SubControl
+        BindingContext context = new();
+        using SubControl control = new()
         {
             BindingContext = context
         };
@@ -4356,7 +4356,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentCursorChanged_Invoke_CallsCursorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4380,8 +4380,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentCursorChanged_InvokeWithCursor_DoesNotCallCursorChanged(EventArgs eventArgs)
     {
-        var cursor = new Cursor((IntPtr)1);
-        using var control = new SubControl
+        Cursor cursor = new((IntPtr)1);
+        using SubControl control = new()
         {
             Cursor = cursor
         };
@@ -4409,7 +4409,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentEnabledChanged_Invoke_CallsEnabledChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4433,7 +4433,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentEnabledChanged_InvokeDisabled_DoesNotCallEnabledChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Enabled = false
         };
@@ -4461,7 +4461,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4485,8 +4485,8 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentFontChanged_InvokeWithFont_DoesNotCallFontChanged(EventArgs eventArgs)
     {
-        var font = new Font("Arial", 8.25f);
-        using var control = new SubControl
+        Font font = new("Arial", 8.25f);
+        using SubControl control = new()
         {
             Font = font
         };
@@ -4514,7 +4514,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4538,7 +4538,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentForeColorChanged_InvokeWithForeColor_DoesNotCallForeColorChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             ForeColor = Color.Red
         };
@@ -4566,7 +4566,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentVisibleChanged_Invoke_CallsVisibleChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4590,7 +4590,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnParentVisibleChanged_InvokeDisabled_DoesNotCallVisibleChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = false
         };
@@ -4627,15 +4627,15 @@ public partial class ControlTests
     [MemberData(nameof(OnPrint_WithoutHandle_TestData))]
     public void Control_OnPrint_InvokeWithoutHandle_Success(bool userPaint, bool opaque, int expectedPaintCallCount, bool expectedIsHandleCreated)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
         control.OnPrint(eventArgs);
         Assert.Equal(expectedPaintCallCount, paintCallCount);
         Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -4644,7 +4644,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnPrint_InvokeExceptionThrownInOnPaintWithoutHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int paintCallCount = 0;
         control.Paint += (sender, e) =>
         {
@@ -4652,9 +4652,9 @@ public partial class ControlTests
             throw new DivideByZeroException();
         };
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
         Assert.Throws<DivideByZeroException>(() => control.OnPrint(eventArgs));
         Assert.Equal(1, paintCallCount);
         Assert.False(control.IsHandleCreated);
@@ -4678,7 +4678,7 @@ public partial class ControlTests
     [MemberData(nameof(OnPrint_WithHandle_TestData))]
     public void Control_OnPrint_InvokeWithHandle_Success(bool userPaint, bool opaque, int expectedPaintCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         control.SetStyle(ControlStyles.Opaque, opaque);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4691,9 +4691,9 @@ public partial class ControlTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
         control.OnPrint(eventArgs);
         Assert.Equal(expectedPaintCallCount, paintCallCount);
         Assert.True(control.IsHandleCreated);
@@ -4705,7 +4705,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnPrint_InvokeExceptionThrownInOnPaintWithHandle_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int paintCallCount = 0;
         control.Paint += (sender, e) =>
         {
@@ -4720,9 +4720,9 @@ public partial class ControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
         Assert.Throws<DivideByZeroException>(() => control.OnPrint(eventArgs));
         Assert.Equal(1, paintCallCount);
         Assert.True(control.IsHandleCreated);
@@ -4742,7 +4742,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnPrint_InvokeSetTextInPrint_CachesText()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
 
         int printCallCount = 0;
         control.Paint += (sender, e) =>
@@ -4756,9 +4756,9 @@ public partial class ControlTests
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Empty(control.Text);
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
         control.OnPrint(eventArgs);
         Assert.Equal(1, printCallCount);
         Assert.Empty(control.Text);
@@ -4767,7 +4767,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnPrint_InvokeNullE_ThrowsArgumentNullException()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.Throws<ArgumentNullException>("e", () => control.OnPrint(null));
     }
 
@@ -4781,7 +4781,7 @@ public partial class ControlTests
     [MemberData(nameof(QueryContinueDragEventArgs_TestData))]
     public void Control_OnQueryContinueDrag_Invoke_CallsQueryContinueDrag(QueryContinueDragEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         QueryContinueDragEventHandler handler = (sender, e) =>
         {
@@ -4805,7 +4805,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnRegionChanged_Invoke_CallsRegionChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -4834,7 +4834,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnResize_Invoke_CallsResize(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4878,7 +4878,7 @@ public partial class ControlTests
     [MemberData(nameof(OnResize_WithHandle_TestData))]
     public void Control_OnResize_InvokeWithHandle_CallsResize(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -4928,7 +4928,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int callCount = 0;
@@ -4958,7 +4958,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5001,7 +5001,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_OnRightToLeftChanged_InvokeInDisposing_DoesNotCallRightToLeftChanged()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         int callCount = 0;
@@ -5026,12 +5026,12 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnRightToLeftChanged_InvokeWithChildren_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control
+        using Control child1 = new();
+        using Control child2 = new()
         {
             RightToLeft = RightToLeft.Inherit
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -5076,15 +5076,15 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnRightToLeftChanged_InvokeWithChildrenWithRightToLeft_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control
+        using Control child1 = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             RightToLeft = RightToLeft.No
         };
-        using var control = new SubControl();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -5129,7 +5129,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnSizeChanged_Invoke_CallsSizeChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5155,7 +5155,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnSizeChanged_Invoke_CallsSizeChangedAndResize(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -5211,7 +5211,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnSizeChanged_InvokeWithResizeRedraw_CallsSizeChangedAndResizeAndInvalidate(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, true);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
@@ -5268,7 +5268,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnStyleChanged_Invoke_CallsStyleChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5292,7 +5292,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnSystemColorsChanged_Invoke_CallsSystemColorsChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5318,7 +5318,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnSystemColorsChanged_InvokeWithHandle_CallsSystemColorsChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5357,9 +5357,9 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnSystemColorsChanged_InvokeWithChildren_CallsSystemColorsChanged(EventArgs eventArgs)
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -5410,7 +5410,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnTabIndexChanged_Invoke_CallsTabIndexChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5434,7 +5434,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnTabStopChanged_Invoke_CallsTabStopChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5458,7 +5458,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5482,7 +5482,7 @@ public partial class ControlTests
     [NewAndDefaultData<EventArgs>]
     public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5513,7 +5513,7 @@ public partial class ControlTests
     [MemberData(nameof(OnValidating_TestData))]
     public void Control_OnValidating_Invoke_CallsValidating(CancelEventArgs eventArgs)
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         int callCount = 0;
         CancelEventHandler handler = (sender, e) =>
         {
@@ -5546,7 +5546,7 @@ public partial class ControlTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void Control_OnVisibleChanged_Invoke_CallsVisibleChanged(bool visible, EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = visible
         };
@@ -5575,8 +5575,8 @@ public partial class ControlTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void Control_OnVisibleChanged_InvokeWithParent_CallsVisibleChanged(bool visible, EventArgs eventArgs)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent,
             Visible = visible
@@ -5618,7 +5618,7 @@ public partial class ControlTests
     [MemberData(nameof(OnVisibleChanged_WithHandle_TestData))]
     public void Control_OnVisibleChanged_InvokeWithHandle_CallsVisibleChangedCallsInvalidated(bool visible, bool userPaint, EventArgs eventArgs)
     {
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = visible
         };
@@ -5662,8 +5662,8 @@ public partial class ControlTests
     [MemberData(nameof(OnVisibleChanged_WithHandle_TestData))]
     public void Control_OnVisibleChanged_InvokeWithParentWithHandle_CallsVisibleChanged(bool visible, bool userPaint, EventArgs eventArgs)
     {
-        using var parent = new Control();
-        using var control = new SubControl
+        using Control parent = new();
+        using SubControl control = new()
         {
             Parent = parent,
             Visible = visible
@@ -5716,10 +5716,10 @@ public partial class ControlTests
     [MemberData(nameof(OnVisibleChanged_WithChildren_TestData))]
     public void Control_OnVisibleChanged_InvokeWithChildren_CallsVisibleChanged(bool visible, EventArgs eventArgs, int expectedChildCallCount)
     {
-        using var grandchild1 = new Control();
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubControl
+        using Control grandchild1 = new();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubControl control = new()
         {
             Visible = visible
         };
@@ -5792,16 +5792,16 @@ public partial class ControlTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void Control_OnVisibleChanged_InvokeWithChildrenNotVisible_CallsVisibleChanged(bool visible, EventArgs eventArgs)
     {
-        using var grandchild1 = new Control();
-        using var child1 = new Control
+        using Control grandchild1 = new();
+        using Control child1 = new()
         {
             Visible = false
         };
-        using var child2 = new Control
+        using Control child2 = new()
         {
             Visible = false
         };
-        using var control = new SubControl
+        using SubControl control = new()
         {
             Visible = visible
         };

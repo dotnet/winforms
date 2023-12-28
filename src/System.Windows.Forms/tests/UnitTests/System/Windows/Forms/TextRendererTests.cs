@@ -32,7 +32,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Point_Color_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontPointColor_Success(TextRenderingHint textRenderingHint, string text, Font font, Point pt, Color foreColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, pt, foreColor);
@@ -66,7 +66,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Point_Color_Color_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontPointColorColor_Success(TextRenderingHint textRenderingHint, string text, Font font, Point pt, Color foreColor, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, pt, foreColor, backColor);
@@ -103,7 +103,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Point_Color_TextFormatFlags_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontPointColorTextFormatFlags_Success(TextRenderingHint textRenderingHint, string text, Font font, Point pt, Color foreColor, TextFormatFlags flags)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, pt, foreColor, flags);
@@ -144,7 +144,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Point_Color_Color_TextFormatFlags_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontPointColorColorTextFormatFlags_Success(TextRenderingHint textRenderingHint, string text, Font font, Point pt, Color foreColor, Color backColor, TextFormatFlags flags)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, pt, foreColor, backColor, flags);
@@ -176,7 +176,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Rectangle_Color_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontRectangleColor_Success(TextRenderingHint textRenderingHint, string text, Font font, Rectangle bounds, Color foreColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, bounds, foreColor);
@@ -212,7 +212,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Rectangle_Color_Color_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontRectangleColorColor_Success(TextRenderingHint textRenderingHint, string text, Font font, Rectangle rectangle, Color foreColor, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, backColor);
@@ -252,7 +252,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Rectangle_Color_TextFormatFlags_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontRectangleColorTextFormatFlags_Success(TextRenderingHint textRenderingHint, string text, Font font, Rectangle rectangle, Color foreColor, TextFormatFlags flags)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, flags);
@@ -296,7 +296,7 @@ public class TextRendererTests
     [MemberData(nameof(DrawText_IDeviceContext_String_Font_Rectangle_Color_Color_TextFormatFlags_TestData))]
     public void TextRenderer_DrawText_InvokeIDeviceContextStringFontRectangleColorColorTextFormatFlags_Success(TextRenderingHint textRenderingHint, string text, Font font, Rectangle rectangle, Color foreColor, Color backColor, TextFormatFlags flags)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         graphics.TextRenderingHint = textRenderingHint;
         TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, backColor, flags);
@@ -308,9 +308,9 @@ public class TextRendererTests
     [WinFormsFact]
     public void TextRenderer_DrawText_Mocked_Success()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var mockDeviceContext = new Mock<IDeviceContext>(MockBehavior.Strict);
+        Mock<IDeviceContext> mockDeviceContext = new(MockBehavior.Strict);
         mockDeviceContext
             .Setup(c => c.GetHdc())
             .Returns(() => graphics.GetHdc())
@@ -469,7 +469,7 @@ public class TextRendererTests
     [MemberData(nameof(MeasureText_String_Font_TestData))]
     public void TextRenderer_MeasureText_InvokeIDeviceContextStringFont_ReturnsExpected(string text, Font font)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
         Size result = TextRenderer.MeasureText(graphics, text, font);
@@ -484,7 +484,7 @@ public class TextRendererTests
     [MemberData(nameof(MeasureText_String_Font_Size_TestData))]
     public void TextRenderer_MeasureText_InvokeIDeviceContextStringFontSize_ReturnsExpected(string text, Font font, Size proposedSize)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
         Size result = TextRenderer.MeasureText(graphics, text, font, proposedSize);
@@ -499,7 +499,7 @@ public class TextRendererTests
     [MemberData(nameof(MeasureText_String_Font_Size_TextFormatFlags_TestData))]
     public void TextRenderer_MeasureText_InvokeIDeviceContextStringFontSizeTextFormatFlags_ReturnsExpected(string text, Font font, Size proposedSize, TextFormatFlags flags)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
         Size result = TextRenderer.MeasureText(graphics, text, font, proposedSize, flags);
@@ -514,7 +514,7 @@ public class TextRendererTests
     [NullAndEmptyStringData]
     public void TextRenderer_MeasureText_NullOrEmptyString_ReturnsEmpty(string text)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Equal(Size.Empty, TextRenderer.MeasureText(text, SystemFonts.MenuFont));
         Assert.Equal(Size.Empty, TextRenderer.MeasureText(text, SystemFonts.MenuFont, new Size(300, 400)));
@@ -533,9 +533,9 @@ public class TextRendererTests
     [WinFormsFact]
     public void TextRenderer_MeasureText_Mocked_Success()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var mockDeviceContext = new Mock<IDeviceContext>(MockBehavior.Strict);
+        Mock<IDeviceContext> mockDeviceContext = new(MockBehavior.Strict);
         mockDeviceContext
             .Setup(c => c.GetHdc())
             .Returns(() => graphics.GetHdc())
@@ -570,8 +570,8 @@ public class TextRendererTests
     [MemberData(nameof(TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData))]
     public unsafe void TextRenderer_DrawText_DefaultBackground_RendersTransparent(Func<IDeviceContext, Action> func)
     {
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
         func(new HdcDeviceContextAdapter(emf)).Invoke();
 
         emf.Validate(
@@ -658,7 +658,7 @@ public class TextRendererTests
 
     private class MockDC : IDeviceContext
     {
-        public static MockDC Instance { get; } = new MockDC();
+        public static MockDC Instance { get; } = new();
         public void Dispose() { }
         public IntPtr GetHdc() => IntPtr.Zero;
         public void ReleaseHdc() { }
@@ -668,8 +668,8 @@ public class TextRendererTests
     [MemberData(nameof(TextRenderer_DrawText_Padding_TestData))]
     public unsafe void TextRenderer_DrawText_Padding_Point(TextFormatFlags flags, Rectangle expectedBounds)
     {
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
         TextRenderer.DrawText(
             new HdcDeviceContextAdapter(emf),
             "Sparkling Cider",
@@ -691,8 +691,8 @@ public class TextRendererTests
     [MemberData(nameof(TextRenderer_DrawText_Padding_TestData))]
     public unsafe void TextRenderer_DrawText_Padding_Rectangle(TextFormatFlags flags, Rectangle expectedBounds)
     {
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
         TextRenderer.DrawText(
             new HdcDeviceContextAdapter(emf),
             "Sparkling Cider",
@@ -722,7 +722,7 @@ public class TextRendererTests
     [MemberData(nameof(TextRenderer_MeasureText_Padding_TestData))]
     public void TextRenderer_MeasureText_Padding(TextFormatFlags flags, Size expectedSize)
     {
-        using var image = new Bitmap(200, 50);
+        using Bitmap image = new(200, 50);
         using Graphics graphics = Graphics.FromImage(image);
         Size size = TextRenderer.MeasureText(
             graphics,
@@ -747,13 +747,13 @@ public class TextRendererTests
     public void TextRenderer_DrawText_ApplyState(TextFormatFlags flags, Rectangle expectedBounds)
     {
         using var hdc = new PInvoke.CreateDcScope(default);
-        DeviceContextState state = new DeviceContextState(hdc);
+        DeviceContextState state = new(hdc);
 
-        using MemoryStream stream = new MemoryStream(1024);
-        using (Metafile metafileRecorder = new Metafile(stream, hdc.HDC, EmfType.EmfOnly))
+        using MemoryStream stream = new(1024);
+        using (Metafile metafileRecorder = new(stream, hdc.HDC, EmfType.EmfOnly))
         using (Graphics graphics = Graphics.FromImage(metafileRecorder))
         {
-            using Matrix matrix = new Matrix();
+            using Matrix matrix = new();
             matrix.Translate(5, 10);
             graphics.Transform = matrix;
             using Region region = new(new Rectangle(1, 2, 6, 8));
@@ -774,8 +774,8 @@ public class TextRendererTests
 
         // Need to queue the stream back to the beginning for the reader
         stream.Position = 0;
-        using Metafile metafile = new Metafile(stream);
-        using var emf = new EmfScope((HENHMETAFILE)metafile.GetHenhmetafile());
+        using Metafile metafile = new(stream);
+        using EmfScope emf = new((HENHMETAFILE)metafile.GetHenhmetafile());
 
         emf.Validate(
             state,
@@ -799,9 +799,9 @@ public class TextRendererTests
     [MemberData(nameof(TextRenderer_MeasureText_ApplyState_TestData))]
     public void TextRenderer_MeasureText_ApplyState(TextFormatFlags flags, Size expectedSize)
     {
-        using var image = new Bitmap(200, 50);
+        using Bitmap image = new(200, 50);
         using Graphics graphics = Graphics.FromImage(image);
-        using Matrix matrix = new Matrix();
+        using Matrix matrix = new();
         matrix.Translate(5, 10);
         graphics.Transform = matrix;
         using Region region = new(new Rectangle(1, 2, 6, 8));

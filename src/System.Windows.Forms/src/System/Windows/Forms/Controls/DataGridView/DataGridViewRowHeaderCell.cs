@@ -699,7 +699,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                     }
 
                     // Flip the column header background
-                    using (Bitmap bmFlipXPThemes = new Bitmap(backgroundBounds.Height, backgroundBounds.Width))
+                    using (Bitmap bmFlipXPThemes = new(backgroundBounds.Height, backgroundBounds.Width))
                     {
                         using (Graphics gFlip = Graphics.FromImage(bmFlipXPThemes))
                         {
@@ -858,7 +858,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                     if (DataGridView.ShowRowErrors && valBounds.Width > s_iconsWidth + 2 * RowHeaderIconMarginWidth)
                     {
                         // Check if the text fits if we remove the room required for the row error icon
-                        Size maxBounds = new Size(valBounds.Width - s_iconsWidth - 2 * RowHeaderIconMarginWidth, valBounds.Height);
+                        Size maxBounds = new(valBounds.Width - s_iconsWidth - 2 * RowHeaderIconMarginWidth, valBounds.Height);
                         if (DataGridViewCell.TextFitsInBounds(
                             graphics,
                             formattedString,
@@ -1042,7 +1042,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         s_colorMap[0].NewColor = foreColor;
         s_colorMap[0].OldColor = Color.Black;
 
-        ImageAttributes attr = new ImageAttributes();
+        ImageAttributes attr = new();
         attr.SetRemapTable(s_colorMap, ColorAdjustType.Bitmap);
 
         if (SystemInformation.HighContrast &&

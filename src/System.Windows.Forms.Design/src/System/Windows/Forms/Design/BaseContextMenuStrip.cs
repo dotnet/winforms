@@ -27,7 +27,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddCodeMenuItem()
     {
-        StandardCommandToolStripMenuItem codeMenuItem = new StandardCommandToolStripMenuItem(StandardCommands.ViewCode, SR.ContextMenuViewCode, "viewcode", serviceProvider);
+        StandardCommandToolStripMenuItem codeMenuItem = new(StandardCommands.ViewCode, SR.ContextMenuViewCode, "viewcode", serviceProvider);
         Groups[StandardGroups.Code].Items.Add(codeMenuItem);
     }
 
@@ -36,7 +36,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddZorderMenuItem()
     {
-        StandardCommandToolStripMenuItem ZOrderMenuItem = new StandardCommandToolStripMenuItem(MenuCommands.BringToFront, SR.ContextMenuBringToFront, "bringToFront", serviceProvider);
+        StandardCommandToolStripMenuItem ZOrderMenuItem = new(MenuCommands.BringToFront, SR.ContextMenuBringToFront, "bringToFront", serviceProvider);
         Groups[StandardGroups.ZORder].Items.Add(ZOrderMenuItem);
         ZOrderMenuItem = new StandardCommandToolStripMenuItem(MenuCommands.SendToBack, SR.ContextMenuSendToBack, "sendToBack", serviceProvider);
         Groups[StandardGroups.ZORder].Items.Add(ZOrderMenuItem);
@@ -47,7 +47,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddGridMenuItem()
     {
-        StandardCommandToolStripMenuItem gridMenuItem = new StandardCommandToolStripMenuItem(MenuCommands.AlignToGrid, SR.ContextMenuAlignToGrid, "alignToGrid", serviceProvider);
+        StandardCommandToolStripMenuItem gridMenuItem = new(MenuCommands.AlignToGrid, SR.ContextMenuAlignToGrid, "alignToGrid", serviceProvider);
         Groups[StandardGroups.Grid].Items.Add(gridMenuItem);
     }
 
@@ -56,7 +56,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddLockMenuItem()
     {
-        StandardCommandToolStripMenuItem lockMenuItem = new StandardCommandToolStripMenuItem(MenuCommands.LockControls, SR.ContextMenuLockControls, "lockControls", serviceProvider);
+        StandardCommandToolStripMenuItem lockMenuItem = new(MenuCommands.LockControls, SR.ContextMenuLockControls, "lockControls", serviceProvider);
         Groups[StandardGroups.Lock].Items.Add(lockMenuItem);
     }
 
@@ -155,7 +155,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             DesignerVerbCollection verbCollection = menuCommandService.Verbs;
             foreach (DesignerVerb verb in verbCollection)
             {
-                DesignerVerbToolStripMenuItem verbItem = new DesignerVerbToolStripMenuItem(verb);
+                DesignerVerbToolStripMenuItem verbItem = new(verb);
                 Groups[StandardGroups.Verbs].Items.Add(verbItem);
             }
         }
@@ -166,7 +166,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddEditMenuItem()
     {
-        StandardCommandToolStripMenuItem stdMenuItem = new StandardCommandToolStripMenuItem(StandardCommands.Cut, SR.ContextMenuCut, "cut", serviceProvider);
+        StandardCommandToolStripMenuItem stdMenuItem = new(StandardCommands.Cut, SR.ContextMenuCut, "cut", serviceProvider);
         Groups[StandardGroups.Edit].Items.Add(stdMenuItem);
         stdMenuItem = new StandardCommandToolStripMenuItem(StandardCommands.Copy, SR.ContextMenuCopy, "copy", serviceProvider);
         Groups[StandardGroups.Edit].Items.Add(stdMenuItem);
@@ -181,7 +181,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void AddPropertiesMenuItem()
     {
-        StandardCommandToolStripMenuItem stdMenuItem = new StandardCommandToolStripMenuItem(StandardCommands.DocumentOutline, SR.ContextMenuDocumentOutline, "", serviceProvider);
+        StandardCommandToolStripMenuItem stdMenuItem = new(StandardCommands.DocumentOutline, SR.ContextMenuDocumentOutline, "", serviceProvider);
         Groups[StandardGroups.Properties].Items.Add(stdMenuItem);
         stdMenuItem = new StandardCommandToolStripMenuItem(MenuCommands.DesignerProperties, SR.ContextMenuProperties, "properties", serviceProvider);
         Groups[StandardGroups.Properties].Items.Add(stdMenuItem);

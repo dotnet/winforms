@@ -12,7 +12,7 @@ public class SplitterEventArgsTests
     [InlineData(1, 2, 3, 4)]
     public void Ctor_Int_Int_Int_Int(int x, int y, int splitX, int splitY)
     {
-        var e = new SplitterEventArgs(x, y, splitX, splitY);
+        SplitterEventArgs e = new(x, y, splitX, splitY);
         Assert.Equal(x, e.X);
         Assert.Equal(y, e.Y);
         Assert.Equal(splitX, e.SplitX);
@@ -25,7 +25,7 @@ public class SplitterEventArgsTests
     [InlineData(1)]
     public void SplitX_Set_GetReturnsExpected(int value)
     {
-        var e = new SplitterEventArgs(1, 2, 3, 4)
+        SplitterEventArgs e = new(1, 2, 3, 4)
         {
             SplitX = value
         };
@@ -38,7 +38,7 @@ public class SplitterEventArgsTests
     [InlineData(1)]
     public void SplitY_Set_GetReturnsExpected(int value)
     {
-        var e = new SplitterEventArgs(1, 2, 3, 4)
+        SplitterEventArgs e = new(1, 2, 3, 4)
         {
             SplitY = value
         };

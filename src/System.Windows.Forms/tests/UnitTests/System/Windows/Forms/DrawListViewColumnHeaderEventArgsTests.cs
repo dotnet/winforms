@@ -20,10 +20,10 @@ public class DrawListViewColumnHeaderEventArgsTests
     [MemberData(nameof(Ctor_Graphics_Rectangle_Int_ColumnHeader_ListViewItemStates_Color_Color_Font_TestData))]
     public void DrawListViewColumnHeaderEventArgs_Ctor_Graphics_Rectangle_Int_ColumnHeader_ListViewItemStates_Color_Color_Font(Rectangle bounds, int columnIndex, ColumnHeader header, ListViewItemStates state, Color foreColor, Color backColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewColumnHeaderEventArgs(graphics, bounds, columnIndex, header, state, foreColor, backColor, font);
+            DrawListViewColumnHeaderEventArgs e = new(graphics, bounds, columnIndex, header, state, foreColor, backColor, font);
             Assert.Same(graphics, e.Graphics);
             Assert.Equal(bounds, e.Bounds);
             Assert.Equal(columnIndex, e.ColumnIndex);
@@ -46,10 +46,10 @@ public class DrawListViewColumnHeaderEventArgsTests
     [BoolData]
     public void DrawListViewColumnHeaderEventArgs_DrawDefault_Set_GetReturnsExpected(bool value)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewColumnHeaderEventArgs(graphics, new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont)
+            DrawListViewColumnHeaderEventArgs e = new(graphics, new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont)
             {
                 DrawDefault = value
             };
@@ -76,10 +76,10 @@ public class DrawListViewColumnHeaderEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewColumnHeaderEventArgs_DrawBackground_Invoke_Success(Rectangle bounds, ColumnHeader header, ListViewItemStates state, Color foreColor, Color backColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewColumnHeaderEventArgs(graphics, bounds, -1, header, state, foreColor, backColor, font);
+            DrawListViewColumnHeaderEventArgs e = new(graphics, bounds, -1, header, state, foreColor, backColor, font);
             e.DrawBackground();
         }
     }
@@ -90,11 +90,11 @@ public class DrawListViewColumnHeaderEventArgsTests
     [InlineData(HorizontalAlignment.Right)]
     public void DrawListViewColumnHeaderEventArgs_DrawText_Invoke_Success(HorizontalAlignment textAlign)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var header = new ColumnHeader { TextAlign = textAlign };
-            var e = new DrawListViewColumnHeaderEventArgs(graphics, new Rectangle(1, 2, 3, 4), -1, header, ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
+            ColumnHeader header = new() { TextAlign = textAlign };
+            DrawListViewColumnHeaderEventArgs e = new(graphics, new Rectangle(1, 2, 3, 4), -1, header, ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
             e.DrawText();
         }
     }
@@ -102,10 +102,10 @@ public class DrawListViewColumnHeaderEventArgsTests
     [Fact]
     public void DrawListViewColumnHeaderEventArgs_DrawText_InvokeTextFormatFlags_Success()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewColumnHeaderEventArgs(graphics, new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
+            DrawListViewColumnHeaderEventArgs e = new(graphics, new Rectangle(1, 2, 3, 4), -1, new ColumnHeader(), ListViewItemStates.Checked, Color.Red, Color.Blue, SystemFonts.DefaultFont);
             e.DrawText(TextFormatFlags.Bottom);
         }
     }
@@ -120,10 +120,10 @@ public class DrawListViewColumnHeaderEventArgsTests
     [MemberData(nameof(NullHeader_TestData))]
     public void DrawListViewColumnHeaderEventArgs_DrawText_NullHeader_Success(Rectangle bounds, int columnIndex, ListViewItemStates state, Color foreColor, Color backColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewColumnHeaderEventArgs(graphics, bounds, columnIndex, null, state, foreColor, backColor, font);
+            DrawListViewColumnHeaderEventArgs e = new(graphics, bounds, columnIndex, null, state, foreColor, backColor, font);
             e.DrawText();
             e.DrawText(TextFormatFlags.Left);
         }

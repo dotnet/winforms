@@ -1451,7 +1451,7 @@ public partial class DateTimePicker : Control
         // The upDown control doesn't repaint correctly.
         if (ShowUpDown)
         {
-            EnumChildren c = new EnumChildren();
+            EnumChildren c = new();
             PInvoke.EnumChildWindows(this, c.enumChildren);
             if (!c.hwndFound.IsNull)
             {

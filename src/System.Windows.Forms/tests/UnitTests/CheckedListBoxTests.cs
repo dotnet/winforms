@@ -12,7 +12,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_Constructor()
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         Assert.NotNull(box);
     }
@@ -21,7 +21,7 @@ public class CheckedListBoxTests
     [BoolData]
     public void CheckedListBox_CheckOnClick(bool expected)
     {
-        using var box = new CheckedListBox
+        using CheckedListBox box = new()
         {
             CheckOnClick = expected
         };
@@ -32,7 +32,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_CheckedIndexCollectionNotNull()
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         CheckedListBox.CheckedIndexCollection collection = box.CheckedIndices;
 
@@ -42,7 +42,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_CheckedItemCollectionNotNull()
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         CheckedListBox.CheckedItemCollection collection = box.CheckedItems;
 
@@ -53,7 +53,7 @@ public class CheckedListBoxTests
     [StringData]
     public void CheckedListBox_DisplayMember(string expected)
     {
-        using var box = new CheckedListBox
+        using CheckedListBox box = new()
         {
             DisplayMember = expected
         };
@@ -64,7 +64,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_DrawModeReturnsNormalOnly()
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         DrawMode result = box.DrawMode;
 
@@ -76,7 +76,7 @@ public class CheckedListBoxTests
     [InlineData(SelectionMode.One)]
     public void CheckedListBox_SelectionModeGetSet(SelectionMode expected)
     {
-        using var box = new CheckedListBox
+        using CheckedListBox box = new()
         {
             SelectionMode = expected
         };
@@ -89,7 +89,7 @@ public class CheckedListBoxTests
     [InlineData(SelectionMode.MultiExtended)]
     public void CheckedListBox_SelectionModeGetSetInvalidFromEnum(SelectionMode expected)
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         ArgumentException ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
     }
@@ -98,7 +98,7 @@ public class CheckedListBoxTests
     [InvalidEnumData<SelectionMode>]
     public void CheckedListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
     {
-        using var control = new CheckedListBox();
+        using CheckedListBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.SelectionMode = value);
     }
 
@@ -106,7 +106,7 @@ public class CheckedListBoxTests
     [BoolData]
     public void CheckedListBox_ThreeDCheckBoxes(bool expected)
     {
-        using var box = new CheckedListBox
+        using CheckedListBox box = new()
         {
             ThreeDCheckBoxes = expected
         };
@@ -118,7 +118,7 @@ public class CheckedListBoxTests
     [StringData]
     public void CheckedListBox_ValueMember(string expected)
     {
-        using var box = new CheckedListBox
+        using CheckedListBox box = new()
         {
             ValueMember = expected
         };
@@ -130,7 +130,7 @@ public class CheckedListBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void CheckedListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var control = new CheckedListBox
+        using CheckedListBox control = new()
         {
             Padding = value
         };
@@ -155,7 +155,7 @@ public class CheckedListBoxTests
     [MemberData(nameof(Padding_SetWithHandle_TestData))]
     public void CheckedListBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
-        using var control = new CheckedListBox();
+        using CheckedListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -183,7 +183,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_Padding_SetWithHandler_CallsPaddingChanged()
     {
-        using var control = new CheckedListBox();
+        using CheckedListBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -194,7 +194,7 @@ public class CheckedListBoxTests
         control.PaddingChanged += handler;
 
         // Set different.
-        var padding1 = new Padding(1);
+        Padding padding1 = new(1);
         control.Padding = padding1;
         Assert.Equal(padding1, control.Padding);
         Assert.Equal(1, callCount);
@@ -205,7 +205,7 @@ public class CheckedListBoxTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var padding2 = new Padding(2);
+        Padding padding2 = new(2);
         control.Padding = padding2;
         Assert.Equal(padding2, control.Padding);
         Assert.Equal(2, callCount);
@@ -223,7 +223,7 @@ public class CheckedListBoxTests
     [InlineData(int.MaxValue)]
     public void CheckedListBox_GetItemCheckStateOutOfRange(int index)
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.GetItemCheckState(index));
         Assert.Equal("index", ex.ParamName);
@@ -232,7 +232,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_RefreshItems_InvokeEmpty_Success()
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         control.RefreshItems();
         Assert.Empty(control.Items);
         Assert.False(control.IsHandleCreated);
@@ -246,7 +246,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_RefreshItems_InvokeNotEmpty_Success()
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
 
@@ -263,7 +263,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_RefreshItems_InvokeEmptyWithHandle_Success()
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -291,7 +291,7 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_RefreshItems_InvokeNotEmptyWithHandle_Success()
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -324,7 +324,7 @@ public class CheckedListBoxTests
     [InlineData(int.MaxValue)]
     public void CheckedListBox_SetItemCheckStateOutOfRange(int index)
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
 
         ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.SetItemCheckState(index, CheckState.Checked));
         Assert.Equal("index", ex.ParamName);
@@ -334,7 +334,7 @@ public class CheckedListBoxTests
     [EnumData<CheckState>]
     public void CheckedListBox_SetItemCheckState_Invoke_GetReturnsExpected(CheckState value)
     {
-        using var control = new CheckedListBox();
+        using CheckedListBox control = new();
         control.Items.Add(new CheckBox(), false);
 
         control.SetItemCheckState(0, value);
@@ -351,7 +351,7 @@ public class CheckedListBoxTests
     [InvalidEnumData<CheckState>]
     public void CheckedListBox_SetItemCheckState_InvokeInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
     {
-        using var control = new CheckedListBox();
+        using CheckedListBox control = new();
         control.Items.Add(new CheckBox(), false);
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.SetItemCheckState(0, value));
     }
@@ -361,7 +361,7 @@ public class CheckedListBoxTests
     [InlineData(false, CheckState.Unchecked)]
     public void CheckedListBox_SetItemChecked(bool send, CheckState expected)
     {
-        using var box = new CheckedListBox();
+        using CheckedListBox box = new();
         box.Items.Add(new CheckBox(), false);
 
         box.SetItemChecked(0, send);
@@ -381,13 +381,13 @@ public class CheckedListBoxTests
     [MemberData(nameof(OnDrawItem_TestData))]
     public void CheckedListBox_OnDrawItem_Invoke_Success(Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new DrawItemEventArgs(graphics, font, rect, index, state, foreColor, backColor);
+        DrawItemEventArgs e = new(graphics, font, rect, index, state, foreColor, backColor);
         control.OnDrawItem(e);
         Assert.False(control.IsHandleCreated);
     }
@@ -396,7 +396,7 @@ public class CheckedListBoxTests
     [MemberData(nameof(OnDrawItem_TestData))]
     public void CheckedListBox_OnDrawItem_InvokeWithHandle_Success(Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
         control.Items.Add("item2");
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -407,9 +407,9 @@ public class CheckedListBoxTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new DrawItemEventArgs(graphics, font, rect, index, state, foreColor, backColor);
+        DrawItemEventArgs e = new(graphics, font, rect, index, state, foreColor, backColor);
         control.OnDrawItem(e);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -420,17 +420,17 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_OnDrawItem_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         Assert.Throws<NullReferenceException>(() => control.OnDrawItem(null));
     }
 
     [WinFormsFact]
     public void CheckedListBox_OnDrawItem_NegativeEIndex_Success()
     {
-        using var control = new SubCheckedListBox();
-        using var image = new Bitmap(10, 10);
+        using SubCheckedListBox control = new();
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), -1, DrawItemState.Default);
+        DrawItemEventArgs e = new(graphics, null, new Rectangle(1, 2, 3, 4), -1, DrawItemState.Default);
         control.OnDrawItem(e);
         Assert.False(control.IsHandleCreated);
     }
@@ -438,10 +438,10 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_OnDrawItem_LargeEIndexEmpty_Success()
     {
-        using var control = new SubCheckedListBox();
-        using var image = new Bitmap(10, 10);
+        using SubCheckedListBox control = new();
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Default);
+        DrawItemEventArgs e = new(graphics, null, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Default);
         control.OnDrawItem(e);
         Assert.True(control.IsHandleCreated);
     }
@@ -449,12 +449,12 @@ public class CheckedListBoxTests
     [WinFormsFact]
     public void CheckedListBox_OnDrawItem_LargeEIndexNotEmpty_Success()
     {
-        using var control = new SubCheckedListBox();
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        var e = new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 2, DrawItemState.Default);
+        DrawItemEventArgs e = new(graphics, null, new Rectangle(1, 2, 3, 4), 2, DrawItemState.Default);
         control.OnDrawItem(e);
         Assert.True(control.IsHandleCreated);
     }

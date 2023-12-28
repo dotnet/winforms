@@ -18,7 +18,7 @@ public class ResXResourceSetTests
     {
         Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
 
-        using (ResXResourceSet resxSet = new ResXResourceSet(resxFileName))
+        using (ResXResourceSet resxSet = new(resxFileName))
         {
             Assert.NotNull(resxSet);
 
@@ -40,9 +40,9 @@ public class ResXResourceSetTests
     {
         Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
 
-        using (FileStream fs = new FileStream(resxFileName, FileMode.Open))
+        using (FileStream fs = new(resxFileName, FileMode.Open))
         {
-            using (ResXResourceSet resxSet = new ResXResourceSet(fs))
+            using (ResXResourceSet resxSet = new(fs))
             {
                 Assert.NotNull(resxSet);
 

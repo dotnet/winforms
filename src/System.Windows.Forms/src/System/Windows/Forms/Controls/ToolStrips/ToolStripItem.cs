@@ -3655,7 +3655,7 @@ public abstract partial class ToolStripItem :
 
     IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
     {
-        List<Rectangle> neighbors = new List<Rectangle>(3);
+        List<Rectangle> neighbors = new(3);
         if (_parent is not null)
         {
             ToolStripItemCollection items = _parent.DisplayedItems;

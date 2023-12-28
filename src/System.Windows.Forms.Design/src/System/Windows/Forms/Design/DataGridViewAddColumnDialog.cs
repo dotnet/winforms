@@ -258,7 +258,7 @@ internal class DataGridViewAddColumnDialog : Form
     [MemberNotNull(nameof(_headerTextBox))]
     private void InitializeComponent()
     {
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(DataGridViewAddColumnDialog));
+        ComponentResourceManager resources = new(typeof(DataGridViewAddColumnDialog));
         _dataBoundColumnRadioButton = new RadioButton();
         _overarchingTableLayoutPanel = new TableLayoutPanel();
         _checkBoxesTableLayoutPanel = new TableLayoutPanel();

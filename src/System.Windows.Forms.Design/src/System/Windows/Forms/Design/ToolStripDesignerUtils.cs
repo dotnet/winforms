@@ -319,7 +319,7 @@ internal sealed class ToolStripDesignerUtils
         ToolStripItem[] items = new ToolStripItem[standardTypes.Length];
         for (int i = 0; i < standardTypes.Length; i++)
         {
-            ItemTypeToolStripMenuItem item = new ItemTypeToolStripMenuItem(standardTypes[i])
+            ItemTypeToolStripMenuItem item = new(standardTypes[i])
             {
                 ConvertTo = convertTo
             };
@@ -343,7 +343,7 @@ internal sealed class ToolStripDesignerUtils
         ToolStripItem[] items = new ToolStripItem[customTypes.Length];
         for (int i = 0; i < customTypes.Length; i++)
         {
-            ItemTypeToolStripMenuItem item = new ItemTypeToolStripMenuItem(customTypes[i])
+            ItemTypeToolStripMenuItem item = new(customTypes[i])
             {
                 ConvertTo = convertTo
             };
@@ -363,7 +363,7 @@ internal sealed class ToolStripDesignerUtils
     /// </summary>
     public static NewItemsContextMenuStrip GetNewItemDropDown(IComponent component, ToolStripItem currentItem, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider, bool populateCustom)
     {
-        NewItemsContextMenuStrip contextMenu = new NewItemsContextMenuStrip(component, currentItem, onClick, convertTo, serviceProvider);
+        NewItemsContextMenuStrip contextMenu = new(component, currentItem, onClick, convertTo, serviceProvider);
         contextMenu.GroupOrdering.Add("StandardList");
         contextMenu.GroupOrdering.Add("CustomList");
         // plumb through the standard and custom items.

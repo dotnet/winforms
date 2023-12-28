@@ -15,7 +15,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_Ctor_Default()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.False(control.AcceptsReturn);
         Assert.False(control.AcceptsTab);
         Assert.Null(control.AccessibleDefaultActionDescription);
@@ -126,7 +126,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("Edit", createParams.ClassName);
@@ -146,7 +146,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_CanEnableIme_GetWithoutHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.True(control.CanEnableIme);
         Assert.True(control.IsHandleCreated);
 
@@ -158,7 +158,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_CanEnableIme_GetWithHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -184,7 +184,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_ImeMode_GetWithoutHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.Equal(ImeMode.NoControl, control.ImeMode);
         Assert.True(control.IsHandleCreated);
 
@@ -196,7 +196,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_ImeMode_GetWithHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -222,7 +222,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_ImeModeBase_GetWithoutHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
         Assert.True(control.IsHandleCreated);
 
@@ -234,7 +234,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_ImeModeBase_GetWithHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -260,7 +260,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PasswordChar_GetWithoutHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.Equal('\0', control.PasswordChar);
         Assert.True(control.IsHandleCreated);
 
@@ -272,7 +272,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PasswordChar_GetWithHandle_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -298,7 +298,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PlaceholderText()
     {
-        using var tb = new TextBox
+        using TextBox tb = new()
         {
             PlaceholderText = "Enter your name"
         };
@@ -308,14 +308,14 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PlaceholderText_DefaultValue()
     {
-        using var tb = new TextBox();
+        using TextBox tb = new();
         Assert.Equal(string.Empty, tb.PlaceholderText);
     }
 
     [WinFormsFact]
     public void TextBox_PlaceholderText_When_InAccessibility_Doesnot_Raise_TextChanged()
     {
-        using var tb = new SubTextBox();
+        using SubTextBox tb = new();
         bool eventRaised = false;
         EventHandler handler = (o, e) => eventRaised = true;
         tb.TextChanged += handler;
@@ -347,7 +347,7 @@ public partial class TextBoxTests
     [MemberData(nameof(TextBox_ShouldRenderPlaceHolderText_TestData))]
     public void TextBox_ShouldRenderPlaceHolderText(string text, bool isUserPaint, bool isIsFocused, int textCount, bool expected)
     {
-        using var textBox = new SubTextBox() { PlaceholderText = text, IsUserPaint = isUserPaint, IsFocused = isIsFocused, TextCount = textCount };
+        using SubTextBox textBox = new() { PlaceholderText = text, IsUserPaint = isUserPaint, IsFocused = isIsFocused, TextCount = textCount };
 
         bool result = textBox.TestAccessor().Dynamic.ShouldRenderPlaceHolderText();
         Assert.Equal(expected, result);
@@ -356,7 +356,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PlaceholderText_NullValue_CoercedTo_StringEmpty()
     {
-        using var tb = new TextBox()
+        using TextBox tb = new()
         {
             PlaceholderText = "Text"
         };
@@ -368,7 +368,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PlaceholderText_Overriden()
     {
-        using var tb = new SubTextBox();
+        using SubTextBox tb = new();
 
         Assert.NotNull(tb);
     }
@@ -376,7 +376,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PlaceholderTextAlignments()
     {
-        using var tb = new TextBox
+        using TextBox tb = new()
         {
             PlaceholderText = "Enter your name"
         };
@@ -394,7 +394,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_PlaceholderTextAlignmentsInRightToLeft()
     {
-        using var tb = new TextBox
+        using TextBox tb = new()
         {
             PlaceholderText = "Enter your name",
             RightToLeft = RightToLeft.Yes
@@ -415,7 +415,7 @@ public partial class TextBoxTests
     [InlineData(false, AccessibleRole.None)]
     public void TextBox_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         if (createControl)
         {
             control.CreateControl();
@@ -435,7 +435,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubTextBox
+        using SubTextBox control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -451,7 +451,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -478,7 +478,7 @@ public partial class TextBoxTests
     [InlineData((ControlStyles)(-1), false)]
     public void TextBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -488,7 +488,7 @@ public partial class TextBoxTests
     [WinFormsFact]
     public void TextBox_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -496,7 +496,7 @@ public partial class TextBoxTests
     [NewAndDefaultData<EventArgs>]
     public void TextBox_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -524,7 +524,7 @@ public partial class TextBoxTests
     [NewAndDefaultData<EventArgs>]
     public void TextBox_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -553,7 +553,7 @@ public partial class TextBoxTests
     [NewAndDefaultData<EventArgs>]
     public void TextBox_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubTextBox();
+        using SubTextBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -588,7 +588,7 @@ public partial class TextBoxTests
     [MemberData(nameof(OnHandleDestroyed_TestData))]
     public void TextBox_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(bool modified, EventArgs eventArgs)
     {
-        using var control = new SubTextBox
+        using SubTextBox control = new()
         {
             Text = "Text",
             SelectionStart = 1,

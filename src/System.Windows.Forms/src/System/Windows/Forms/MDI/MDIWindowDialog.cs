@@ -74,7 +74,7 @@ internal sealed partial class MdiWindowDialog : Form
     [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
     private void InitializeComponent()
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MdiWindowDialog));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(MdiWindowDialog));
         _itemList = new ListBox();
         _okButton = new Button();
         _cancelButton = new Button();

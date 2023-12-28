@@ -145,7 +145,7 @@ public partial class ComboBox
 
             Brush brush = (comboBox.Enabled) ? SystemBrushes.ControlText : SystemBrushes.ControlDark;
 
-            Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
+            Point middle = new(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
             if (_origRightToLeft == RightToLeft.Yes)
             {
                 // if the width is odd - favor pushing it over one pixel left.

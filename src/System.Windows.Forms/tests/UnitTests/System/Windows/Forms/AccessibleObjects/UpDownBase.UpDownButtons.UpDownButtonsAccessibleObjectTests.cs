@@ -15,8 +15,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
     public void UpDownButtonsAccessibleObject_Ctor_Default()
     {
         using UpDownBase upDownBase = new SubUpDownBase();
-        using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
-        UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
+        using UpDownButtons upDownButtons = new(upDownBase);
+        UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
 
         Assert.Equal(upDownButtons, accessibleObject.Owner);
         Assert.False(upDownBase.IsHandleCreated);
@@ -171,8 +171,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
     public void UpDownButtonsAccessibleObject_FragmentNavigate_Parent_ReturnsNull()
     {
         using UpDownBase upDownBase = new SubUpDownBase();
-        using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
-        UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
+        using UpDownButtons upDownButtons = new(upDownBase);
+        UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
 
         Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(upDownBase.IsHandleCreated);
@@ -183,8 +183,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
     public void UpDownButtonsAccessibleObject_FragmentNavigate_Sibling_ReturnsNull()
     {
         using UpDownBase upDownBase = new SubUpDownBase();
-        using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
-        UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
+        using UpDownButtons upDownButtons = new(upDownBase);
+        UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
 
         Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));

@@ -30,7 +30,7 @@ public partial class ProjectFileReaderTests
         {
             foreach (string cultureName in s_locales)
             {
-                CultureInfo culture = new CultureInfo(cultureName);
+                CultureInfo culture = new(cultureName);
 
                 yield return new object[] { culture, $"Courier New", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
                 yield return new object[] { culture, $"Courier New{s_separator} 11", "Courier New", 11f, (int)GraphicsUnit.Point, (int)FontStyle.Regular };

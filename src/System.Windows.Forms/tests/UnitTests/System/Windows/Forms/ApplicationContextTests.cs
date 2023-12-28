@@ -11,7 +11,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Ctor_Default()
     {
-        using var context = new ApplicationContext();
+        using ApplicationContext context = new();
 
         Assert.Null(context.MainForm);
         Assert.Null(context.Tag);
@@ -27,7 +27,7 @@ public class ApplicationContextTests
     [MemberData(nameof(Ctor_Form_TestData))]
     public void Ctor_Form(Form mainForm)
     {
-        using var context = new ApplicationContext(mainForm);
+        using ApplicationContext context = new(mainForm);
 
         Assert.Same(mainForm, context.MainForm);
         Assert.Null(context.Tag);
@@ -37,7 +37,7 @@ public class ApplicationContextTests
     [MemberData(nameof(Ctor_Form_TestData))]
     public void MainForm_Set_GetReturnsExpected(Form value)
     {
-        using var context = new ApplicationContext
+        using ApplicationContext context = new()
         {
             MainForm = value
         };
@@ -52,7 +52,7 @@ public class ApplicationContextTests
     [MemberData(nameof(Ctor_Form_TestData))]
     public void MainForm_SetWithNonNullOldValue_GetReturnsExpected(Form value)
     {
-        using var context = new ApplicationContext
+        using ApplicationContext context = new()
         {
             MainForm = new Form()
         };
@@ -68,8 +68,8 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void MainForm_DestroyHandleWithThreadExit_CallsHandler()
     {
-        using var mainForm = new SubForm();
-        using var context = new ApplicationContext(mainForm);
+        using SubForm mainForm = new();
+        using ApplicationContext context = new(mainForm);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -93,9 +93,9 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void MainForm_DestroyOldHandleWithThreadExit_CallsHandler()
     {
-        using var mainForm = new SubForm();
-        using var newMainForm = new SubForm();
-        using var context = new ApplicationContext(mainForm)
+        using SubForm mainForm = new();
+        using SubForm newMainForm = new();
+        using ApplicationContext context = new(mainForm)
         {
             MainForm = newMainForm
         };
@@ -131,8 +131,8 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void MainForm_RecreateHandleWithThreadExit_DoesNotCallHandler()
     {
-        using var mainForm = new SubForm();
-        using var context = new ApplicationContext(mainForm);
+        using SubForm mainForm = new();
+        using ApplicationContext context = new(mainForm);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -157,7 +157,7 @@ public class ApplicationContextTests
     [StringWithNullData]
     public void Tag_Set_GetReturnsExpected(string value)
     {
-        using var context = new ApplicationContext
+        using ApplicationContext context = new()
         {
             Tag = value
         };
@@ -171,8 +171,8 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Dispose_InvokeWithForm_Success()
     {
-        using var mainForm = new Form();
-        using var context = new ApplicationContext(mainForm);
+        using Form mainForm = new();
+        using ApplicationContext context = new(mainForm);
         context.Dispose();
         Assert.Null(context.MainForm);
         Assert.True(mainForm.IsDisposed);
@@ -185,8 +185,8 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Dispose_InvokeWithDisposedForm_Success()
     {
-        using var mainForm = new Form();
-        using var context = new ApplicationContext(mainForm);
+        using Form mainForm = new();
+        using ApplicationContext context = new(mainForm);
         mainForm.Dispose();
         Assert.True(mainForm.IsDisposed);
 
@@ -202,7 +202,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Dispose_InvokeWithoutForm_Success()
     {
-        using var context = new ApplicationContext();
+        using ApplicationContext context = new();
         context.Dispose();
         Assert.Null(context.MainForm);
 
@@ -213,7 +213,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Dispose_Invoke_CallsDisposeDisposing()
     {
-        var mockContext = new Mock<ApplicationContext>(MockBehavior.Strict);
+        Mock<ApplicationContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Protected()
             .Setup("Dispose", true)
@@ -229,8 +229,8 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Dispose_InvokeDisposingWithForm_Success()
     {
-        using var mainForm = new Form();
-        using var context = new SubApplicationContext(mainForm);
+        using Form mainForm = new();
+        using SubApplicationContext context = new(mainForm);
         context.Dispose(true);
         Assert.Null(context.MainForm);
         Assert.True(mainForm.IsDisposed);
@@ -243,8 +243,8 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void Dispose_InvokeNotDisposingWithForm_Nop()
     {
-        using var mainForm = new Form();
-        using var context = new SubApplicationContext(mainForm);
+        using Form mainForm = new();
+        using SubApplicationContext context = new(mainForm);
         context.Dispose(false);
         Assert.Same(mainForm, context.MainForm);
         Assert.False(mainForm.IsDisposed);
@@ -258,7 +258,7 @@ public class ApplicationContextTests
     [BoolData]
     public void Dispose_InvokeDisposingNoForm_Nop(bool disposing)
     {
-        using var context = new SubApplicationContext();
+        using SubApplicationContext context = new();
         context.Dispose(disposing);
         Assert.Null(context.MainForm);
 
@@ -269,7 +269,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void ExitThread_InvokeWithThreadExit_CallsHandler()
     {
-        using var context = new ApplicationContext();
+        using ApplicationContext context = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -296,7 +296,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void ExitThread_Invoke_CallsExitThreadCore()
     {
-        var mockContext = new Mock<ApplicationContext>(MockBehavior.Strict);
+        Mock<ApplicationContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Protected()
             .Setup("ExitThreadCore")
@@ -315,7 +315,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void ExitThreadCore_InvokeWithThreadExit_CallsHandler()
     {
-        using var context = new SubApplicationContext();
+        using SubApplicationContext context = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -349,7 +349,7 @@ public class ApplicationContextTests
     [MemberData(nameof(OnMainFormClosed_TestData))]
     public void OnMainFormClosed_InvokeWithThreadExit_CallsHandler(object sender, EventArgs e)
     {
-        using var context = new SubApplicationContext();
+        using SubApplicationContext context = new();
         int callCount = 0;
         EventHandler handler = (actualSender, actualE) =>
         {

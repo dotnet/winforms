@@ -918,7 +918,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     previousModes[dataGridViewColumn.Index] = dataGridViewColumn.InheritedAutoSizeMode;
                 }
 
-                DataGridViewAutoSizeColumnsModeEventArgs dgvcasme = new DataGridViewAutoSizeColumnsModeEventArgs(previousModes);
+                DataGridViewAutoSizeColumnsModeEventArgs dgvcasme = new(previousModes);
                 _autoSizeColumnsMode = value;
                 OnAutoSizeColumnsModeChanged(dgvcasme);
             }
@@ -966,7 +966,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
             if (_autoSizeRowsMode != value)
             {
-                DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None);
+                DataGridViewAutoSizeModeEventArgs dgvasme = new(_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None);
                 _autoSizeRowsMode = value;
                 OnAutoSizeRowsModeChanged(dgvasme);
             }
@@ -1638,7 +1638,7 @@ public partial class DataGridView : Control, ISupportInitialize
             SourceGenerated.EnumValidator.Validate(value);
             if (_columnHeadersHeightSizeMode != value)
             {
-                DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(_columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize);
+                DataGridViewAutoSizeModeEventArgs dgvasme = new(_columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize);
                 _columnHeadersHeightSizeMode = value;
                 OnColumnHeadersHeightSizeModeChanged(dgvasme);
             }
@@ -2002,7 +2002,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 || _defaultCellStyle.Alignment == DataGridViewContentAlignment.NotSet
                 || _defaultCellStyle.WrapMode == DataGridViewTriState.NotSet)
             {
-                DataGridViewCellStyle defaultCellStyleTmp = new DataGridViewCellStyle(_defaultCellStyle)
+                DataGridViewCellStyle defaultCellStyleTmp = new(_defaultCellStyle)
                 {
                     Scope = DataGridViewCellStyleScopes.None
                 };
@@ -2354,7 +2354,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            Point ptFirstDisplayedCellAddress = new Point(-1, -1)
+            Point ptFirstDisplayedCellAddress = new(-1, -1)
             {
                 Y = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
             };
@@ -2905,7 +2905,7 @@ public partial class DataGridView : Control, ISupportInitialize
             }
             else
             {
-                QuestionEventArgs qe = new QuestionEventArgs(_dataGridViewState1[State1_EditedRowChanged] || IsCurrentCellDirty);
+                QuestionEventArgs qe = new(_dataGridViewState1[State1_EditedRowChanged] || IsCurrentCellDirty);
                 OnRowDirtyStateNeeded(qe);
                 return qe.Response;
             }
@@ -3256,7 +3256,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 if (Columns.Count == 0)
                 {
                     // There are no columns yet, we simply create a single DataGridViewTextBoxColumn.
-                    DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+                    DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new();
                     Columns.Add(dataGridViewTextBoxColumn);
                 }
 
@@ -3697,7 +3697,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            DataGridViewSelectedCellCollection stcc = new DataGridViewSelectedCellCollection();
+            DataGridViewSelectedCellCollection stcc = new();
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:
@@ -3757,7 +3757,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            DataGridViewSelectedColumnCollection strc = new DataGridViewSelectedColumnCollection();
+            DataGridViewSelectedColumnCollection strc = new();
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:
@@ -3783,7 +3783,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            DataGridViewSelectedRowCollection strc = new DataGridViewSelectedRowCollection();
+            DataGridViewSelectedRowCollection strc = new();
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:

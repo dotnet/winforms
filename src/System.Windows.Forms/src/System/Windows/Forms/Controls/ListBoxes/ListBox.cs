@@ -1961,7 +1961,7 @@ public partial class ListBox : ListControl
             {
                 for (int i = 0; i < cnt; i++)
                 {
-                    MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, i, ItemHeight);
+                    MeasureItemEventArgs mie = new(graphics, i, ItemHeight);
                     OnMeasureItem(mie);
                 }
             }
@@ -2336,7 +2336,7 @@ public partial class ListBox : ListControl
         if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-            Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
+            Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);
             using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             g.DrawRectangle(pen, rect);
             rect.Inflate(-1, -1);

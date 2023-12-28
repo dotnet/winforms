@@ -39,11 +39,11 @@ public class DeviceContextScopeTests
         Assert.True(oldRegion.IsInfinite(graphics));
 
         // Add a new region and transform
-        using Region region = new Region(new Rectangle(1, 1, 2, 3));
+        using Region region = new(new Rectangle(1, 1, 2, 3));
         graphics.Clip = region;
         graphics.Transform = new Matrix(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f);
 
-        using var hdcScope = new DeviceContextHdcScope(graphics);
+        using DeviceContextHdcScope hdcScope = new(graphics);
         using var regionScope = new PInvoke.RegionScope(hdcScope);
         Assert.False(regionScope.IsNull);
         RECT rect = default;

@@ -57,7 +57,7 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBezier_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawBezier(null, 1, 2, 3, 4, 5, 6, 7, 8));
@@ -69,10 +69,10 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBezier_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBezier(pen, 1, 2, 3, 4, 5, 6, 7, 8));
@@ -84,9 +84,9 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBezier_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -105,8 +105,8 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBezier_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -121,7 +121,7 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBeziers_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawBeziers(null, new Point[2]));
@@ -132,10 +132,10 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBeziers_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, new Point[2]));
@@ -146,9 +146,9 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBeziers_NullPoints_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawBeziers(pen, (Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawBeziers(pen, (PointF[])null));
@@ -158,9 +158,9 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBeziers_EmptyPoints_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, new Point[0]));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, new PointF[0]));
@@ -170,9 +170,9 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBeziers_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -190,8 +190,8 @@ public class Graphics_DrawBezierTests : DrawingTest
     [Fact]
     public void DrawBeziers_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();

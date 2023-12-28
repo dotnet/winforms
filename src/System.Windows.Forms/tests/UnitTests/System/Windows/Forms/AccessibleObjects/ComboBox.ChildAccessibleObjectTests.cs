@@ -14,7 +14,7 @@ public class ComboBox_ChildAccessibleObjectTests
     [WinFormsFact]
     public void ChildAccessibleObject_Ctor_Default()
     {
-        using var control = new ComboBox();
+        using ComboBox control = new();
         control.CreateControl();
 
         var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
@@ -29,7 +29,7 @@ public class ComboBox_ChildAccessibleObjectTests
     [InlineData(null)]
     public void ChildAccessibleObject_Name_Default(string testName)
     {
-        using var control = new ComboBox();
+        using ComboBox control = new();
         control.AccessibilityObject.Name = testName;
         control.CreateControl();
 

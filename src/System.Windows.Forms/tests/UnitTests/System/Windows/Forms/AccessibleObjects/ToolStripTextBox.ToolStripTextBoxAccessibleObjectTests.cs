@@ -10,7 +10,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripTextBoxAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
     {
-        using var toolStripTextBox = new ToolStripTextBox()
+        using ToolStripTextBox toolStripTextBox = new()
         {
             Name = "Name1",
             AccessibleName = "Test Name"
@@ -25,7 +25,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripTextBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
     {
-        using var toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
 
         bool supportsLegacyIAccessiblePatternId = toolStripTextBoxAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
@@ -36,7 +36,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
     {
-        using var toolStripTextBox = new ToolStripTextBox()
+        using ToolStripTextBox toolStripTextBox = new()
         {
             AccessibleRole = AccessibleRole.Link
         };
@@ -50,7 +50,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
     {
-        using var toolStripTextBox = new ToolStripTextBox()
+        using ToolStripTextBox toolStripTextBox = new()
         {
             AccessibleDescription = "Test Description"
         };

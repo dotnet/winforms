@@ -1895,7 +1895,7 @@ internal partial class CommandSet : IDisposable
                 {
                     if (data is byte[] bytes)
                     {
-                        MemoryStream s = new MemoryStream(bytes);
+                        MemoryStream s = new(bytes);
                         // CF_DESIGNER was put on the clipboard by us using the designer
                         // serialization service.
                         //
@@ -3352,7 +3352,7 @@ internal partial class CommandSet : IDisposable
         // control at 0, 0, to whatever parent we eventually
         // get.
         //
-        Point offset = new Point(-min.X, -min.Y);
+        Point offset = new(-min.X, -min.Y);
 
         // Look to ensure that we're not going to paste this control over
         // the top of another control.  We only do this for the first
@@ -3365,7 +3365,7 @@ internal partial class CommandSet : IDisposable
             bool wrapped = false;
             Size parentSize = parentControl.ClientSize;
             Size gridSize = Size.Empty;
-            Point parentOffset = new Point(parentSize.Width / 2, parentSize.Height / 2);
+            Point parentOffset = new(parentSize.Width / 2, parentSize.Height / 2);
             parentOffset.X -= (max.X - min.X) / 2;
             parentOffset.Y -= (max.Y - min.Y) / 2;
 

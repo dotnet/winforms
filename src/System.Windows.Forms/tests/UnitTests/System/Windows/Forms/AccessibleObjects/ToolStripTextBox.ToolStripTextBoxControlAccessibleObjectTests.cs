@@ -12,7 +12,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripTextBoxControlAccessibleObject_ctor_default()
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         TextBox textBox = toolStripTextBox.TextBox;
         Type type = toolStripTextBox.GetType().GetNestedType("ToolStripTextBoxControlAccessibleObject", BindingFlags.NonPublic);
         Assert.NotNull(type);
@@ -23,7 +23,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripTextBoxControlAccessibleObject_ctor_ThrowsException_IfOwnerIsNull()
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         TextBox textBox = toolStripTextBox.TextBox;
         Type type = toolStripTextBox.GetType().GetNestedType("ToolStripTextBoxControlAccessibleObject", BindingFlags.NonPublic);
         Assert.NotNull(type);
@@ -35,7 +35,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [InlineData(false)]
     public void ToolStripTextBoxControlAccessibleObject_IsReadOnly_IsExpected(bool readOnly)
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         TextBox textBox = toolStripTextBox.TextBox;
         textBox.ReadOnly = readOnly;
         AccessibleObject accessibleObject = textBox.AccessibilityObject;
@@ -48,7 +48,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId)]
     public void ToolStripTextBoxControlAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         TextBox textBox = toolStripTextBox.TextBox;
         AccessibleObject accessibleObject = textBox.AccessibilityObject;
         Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID));
@@ -60,7 +60,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
     public void ToolStripTextBoxControlAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         TextBox textBox = toolStripTextBox.TextBox;
         AccessibleObject accessibleObject = textBox.AccessibilityObject;
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
@@ -71,7 +71,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
     public void ToolStripTextBoxControlAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         // AccessibleRole is not set = Default
         TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
 
@@ -91,7 +91,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void ToolStripTextBoxControlAccessibleObject_Default_Role_IsExpected(bool createControl, AccessibleRole expectedRole)
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         // AccessibleRole is not set = Default
         TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
 
@@ -125,7 +125,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     [MemberData(nameof(ToolStripTextBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripTextBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+        using ToolStripTextBox toolStripTextBox = new();
         toolStripTextBox.AccessibleRole = role;
 
         TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;

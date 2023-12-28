@@ -34,8 +34,8 @@ public class PathGradientBrushTests
     [Fact]
     public void Ctor_Points_ReturnsExpected()
     {
-        using (PathGradientBrush bi = new PathGradientBrush(_defaultIntPoints))
-        using (PathGradientBrush bf = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush bi = new(_defaultIntPoints))
+        using (PathGradientBrush bf = new(_defaultFloatPoints))
         {
             AssertDefaults(bi);
             Assert.Equal(WrapMode.Clamp, bi.WrapMode);
@@ -57,8 +57,8 @@ public class PathGradientBrushTests
     [MemberData(nameof(WrapMode_TestData))]
     public void Ctor_PointsWrapMode_ReturnsExpected(WrapMode wrapMode)
     {
-        using (PathGradientBrush brushInt = new PathGradientBrush(_defaultIntPoints, wrapMode))
-        using (PathGradientBrush brushFloat = new PathGradientBrush(_defaultFloatPoints, wrapMode))
+        using (PathGradientBrush brushInt = new(_defaultIntPoints, wrapMode))
+        using (PathGradientBrush brushFloat = new(_defaultFloatPoints, wrapMode))
         {
             AssertDefaults(brushInt);
             Assert.Equal(wrapMode, brushInt.WrapMode);
@@ -98,8 +98,8 @@ public class PathGradientBrushTests
     [Fact]
     public void Ctor_Path_ReturnsExpected()
     {
-        using (GraphicsPath path = new GraphicsPath(_defaultFloatPoints, new byte[] { 0, 1 }))
-        using (PathGradientBrush brush = new PathGradientBrush(path))
+        using (GraphicsPath path = new(_defaultFloatPoints, new byte[] { 0, 1 }))
+        using (PathGradientBrush brush = new(path))
         {
             AssertDefaults(brush);
             Assert.Equal(WrapMode.Clamp, brush.WrapMode);
@@ -115,7 +115,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Ctor_PathWithLessThenTwoPoints_ThrowsOutOfMemoryException()
     {
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             Assert.Throws<OutOfMemoryException>(() => new PathGradientBrush(path));
             path.AddLines(new PointF[] { new(1, 1) });
@@ -126,8 +126,8 @@ public class PathGradientBrushTests
     [Fact]
     public void Clone_ReturnsExpected()
     {
-        using (GraphicsPath path = new GraphicsPath(_defaultFloatPoints, new byte[] { 0, 1 }))
-        using (PathGradientBrush brush = new PathGradientBrush(path))
+        using (GraphicsPath path = new(_defaultFloatPoints, new byte[] { 0, 1 }))
+        using (PathGradientBrush brush = new(path))
         using (PathGradientBrush clone = Assert.IsType<PathGradientBrush>(brush.Clone()))
         {
             AssertDefaults(clone);
@@ -138,7 +138,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Clone_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
@@ -147,7 +147,7 @@ public class PathGradientBrushTests
     [Fact]
     public void CenterColor_ReturnsExpected()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             Assert.Equal(Color.Black.ToArgb(), brush.CenterColor.ToArgb());
             brush.CenterColor = Color.Blue;
@@ -160,7 +160,7 @@ public class PathGradientBrushTests
     [Fact]
     public void CenterColor_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.CenterColor = Color.Blue);
@@ -173,7 +173,7 @@ public class PathGradientBrushTests
         Color[] sameColors = new Color[2] { Color.FromArgb(255, 255, 255, 0), Color.FromArgb(255, 255, 255, 0) };
         Color[] expectedSameColors = new Color[1] { Color.FromArgb(255, 255, 255, 0) };
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.SurroundColors = expectedColors;
             Assert.Equal(expectedColors, brush.SurroundColors);
@@ -188,7 +188,7 @@ public class PathGradientBrushTests
         Color[] colors = new Color[2] { Color.FromArgb(255, 0, 0, 255), Color.FromArgb(255, 255, 0, 0) };
         Color[] defaultColors = new Color[1] { Color.FromArgb(255, 255, 255, 255) };
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.SurroundColors.ToList().AddRange(colors);
             Assert.Equal(defaultColors, brush.SurroundColors);
@@ -202,7 +202,7 @@ public class PathGradientBrushTests
     public void SurroundColors_Disposed_ThrowsArgumentException()
     {
         Color[] colors = new Color[2] { Color.FromArgb(255, 0, 0, 255), Color.FromArgb(255, 255, 0, 0) };
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.SurroundColors = colors);
@@ -218,7 +218,7 @@ public class PathGradientBrushTests
     [MemberData(nameof(SurroundColors_InvalidColorsLength_TestData))]
     public void SurroundColors_InvalidColorsLength_ThrowsArgumentException(Point[] points, Color[] colors)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(points))
+        using (PathGradientBrush brush = new(points))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.SurroundColors = colors);
         }
@@ -227,7 +227,7 @@ public class PathGradientBrushTests
     [Fact]
     public void SurroundColors_Null_ThrowsNullReferenceException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<NullReferenceException>(() => brush.SurroundColors = null);
         }
@@ -236,10 +236,10 @@ public class PathGradientBrushTests
     [Fact]
     public void CenterPoint_ReturnsExpected()
     {
-        PointF centralPoint = new PointF(float.MaxValue, float.MinValue);
-        PointF defaultCentralPoint = new PointF(10.5f, 16f);
+        PointF centralPoint = new(float.MaxValue, float.MinValue);
+        PointF defaultCentralPoint = new(10.5f, 16f);
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints, WrapMode.TileFlipXY))
+        using (PathGradientBrush brush = new(_defaultFloatPoints, WrapMode.TileFlipXY))
         {
             Assert.Equal(defaultCentralPoint, brush.CenterPoint);
             brush.CenterPoint = centralPoint;
@@ -256,7 +256,7 @@ public class PathGradientBrushTests
     [Fact]
     public void CenterPoint_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.CenterPoint);
@@ -276,7 +276,7 @@ public class PathGradientBrushTests
     {
         int expectedSize = factors.Length;
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints, WrapMode.TileFlipXY))
+        using (PathGradientBrush brush = new(_defaultFloatPoints, WrapMode.TileFlipXY))
         {
             brush.Blend = new Blend { Factors = factors, Positions = positions };
             Assert.Equal(factors, brush.Blend.Factors);
@@ -297,7 +297,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Blend_CannotChange()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints, WrapMode.TileFlipXY))
+        using (PathGradientBrush brush = new(_defaultFloatPoints, WrapMode.TileFlipXY))
         {
             brush.Blend.Factors = new float[0];
             Assert.Equal(1, brush.Blend.Factors.Length);
@@ -313,7 +313,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Blend_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Blend);
@@ -332,7 +332,7 @@ public class PathGradientBrushTests
     [MemberData(nameof(Blend_InvalidFactorsPositions_TestData))]
     public void Blend_InvalidFactorPositions_ThrowsArgumentException(Blend blend)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Blend = blend);
         }
@@ -341,9 +341,9 @@ public class PathGradientBrushTests
     [Fact]
     public void Blend_InvalidFactorPositionsLengthMismatch_ThrowsArgumentOutOfRangeException()
     {
-        Blend invalidBlend = new Blend() { Factors = new float[2], Positions = new float[1] };
+        Blend invalidBlend = new () { Factors = new float[2], Positions = new float[1] };
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentOutOfRangeException>("value", null, () => brush.Blend = invalidBlend);
         }
@@ -352,7 +352,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Blend_Null_ThrowsNullReferenceException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             Assert.Throws<NullReferenceException>(() => brush.Blend = null);
             Assert.Throws<NullReferenceException>(() => brush.Blend = new Blend() { Factors = null, Positions = null});
@@ -363,7 +363,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Blend_NullBlendProperites_ThrowsArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException, ArgumentNullException>("value", "source", () =>
                 brush.Blend = new Blend() { Factors = new float[0], Positions = null });
@@ -378,7 +378,7 @@ public class PathGradientBrushTests
     {
         float defaultScale = 1f;
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.SetSigmaBellShape(focus);
             Assert.True(brush.Transform.IsIdentity);
@@ -412,7 +412,7 @@ public class PathGradientBrushTests
     [InlineData(0.5f)]
     public void SetSigmaBellShape_FocusScale_Success(float focus)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.SetSigmaBellShape(focus);
             Assert.True(brush.Transform.IsIdentity);
@@ -451,7 +451,7 @@ public class PathGradientBrushTests
     [Fact]
     public void SetSigmaBellShape_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.SetSigmaBellShape(1f));
@@ -463,7 +463,7 @@ public class PathGradientBrushTests
     [InlineData(1.1f)]
     public void SetSigmaBellShape_InvalidFocus_ThrowsArgumentException(float focus)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetSigmaBellShape(focus));
             AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetSigmaBellShape(focus, 1f));
@@ -475,7 +475,7 @@ public class PathGradientBrushTests
     [InlineData(1.1f)]
     public void SetSigmaBellShape_InvalidScale_ThrowsArgumentException(float scale)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>("scale", null, () => brush.SetSigmaBellShape(1f, scale));
         }
@@ -489,7 +489,7 @@ public class PathGradientBrushTests
     {
         float defaultScale = 1f;
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.SetBlendTriangularShape(focus);
             Assert.True(brush.Transform.IsIdentity);
@@ -517,7 +517,7 @@ public class PathGradientBrushTests
     [InlineData(0.5f)]
     public void SetBlendTriangularShape_FocusScale_Success(float focus)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.SetBlendTriangularShape(focus);
             Assert.True(brush.Transform.IsIdentity);
@@ -543,7 +543,7 @@ public class PathGradientBrushTests
     [Fact]
     public void SetBlendTriangularShape_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.SetBlendTriangularShape(1f));
@@ -555,7 +555,7 @@ public class PathGradientBrushTests
     [InlineData(1.1f)]
     public void SetBlendTriangularShape_InvalidFocus_ThrowsArgumentException(float focus)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetBlendTriangularShape(focus));
             AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetBlendTriangularShape(focus, 1f));
@@ -567,7 +567,7 @@ public class PathGradientBrushTests
     [InlineData(1.1f)]
     public void SetBlendTriangularShape_InvalidScale_ThrowsArgumentException(float scale)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>("scale", null, () => brush.SetBlendTriangularShape(1f, scale));
         }
@@ -577,10 +577,10 @@ public class PathGradientBrushTests
     public void InterpolationColors_ReturnsExpected()
     {
         Color[] expectedColors = new Color[2] { Color.FromArgb(255, 0, 0, 255), Color.FromArgb(255, 255, 0, 0) };
-        float[] expectedPositions = new float[] { 0, 1 };
+        float[] expectedPositions = [0, 1];
         Color[] sameColors = new Color[2] { Color.FromArgb(255, 255, 255, 0), Color.FromArgb(255, 255, 255, 0) };
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.InterpolationColors = new ColorBlend() { Colors = expectedColors, Positions = expectedPositions };
             Assert.Equal(expectedColors, brush.InterpolationColors.Colors);
@@ -598,7 +598,7 @@ public class PathGradientBrushTests
         Color[] colors = new Color[2] { Color.FromArgb(255, 0, 0, 255), Color.FromArgb(255, 255, 0, 0) };
         Color[] defaultColors = new Color[1] { Color.Empty };
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.InterpolationColors.Colors.ToList().AddRange(colors);
             Assert.Equal(defaultColors, brush.InterpolationColors.Colors);
@@ -617,7 +617,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
@@ -626,7 +626,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_Null_ThrowsNullReferenceException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             Assert.Throws<NullReferenceException>(() => brush.InterpolationColors = null);
         }
@@ -635,7 +635,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_NullColors_ThrowsNullReferenceException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             Assert.Throws<NullReferenceException>(() =>
                 brush.InterpolationColors = new ColorBlend() { Colors = null, Positions = null });
@@ -648,7 +648,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_NullPoints_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException, ArgumentNullException>("value", "source", () =>
                 brush.InterpolationColors = new ColorBlend() { Colors = new Color[1], Positions = null });
@@ -658,7 +658,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_Empty_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors = new ColorBlend());
         }
@@ -667,7 +667,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_EmptyColors_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>(null, () =>
                 brush.InterpolationColors = new ColorBlend() { Colors = new Color[0], Positions = new float[0] });
@@ -677,7 +677,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_PointsLengthGreaterThenColorsLength_ArgumentOutOfRangeException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentOutOfRangeException, ArgumentException>("value", null, () =>
                 brush.InterpolationColors = new ColorBlend() { Colors = new Color[1], Positions = new float[2] });
@@ -687,7 +687,7 @@ public class PathGradientBrushTests
     [Fact]
     public void InterpolationColors_ColorsLengthGreaterThenPointsLength_ThrowsArgumentOutOfRangeException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 brush.InterpolationColors = new ColorBlend() { Colors = new Color[2], Positions = new float[1] });
@@ -697,9 +697,9 @@ public class PathGradientBrushTests
     [Fact]
     public void Transform_ReturnsExpected()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix defaultMatrix = new Matrix(1, 0, 0, 1, 0, 0))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 1, 1))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix defaultMatrix = new(1, 0, 0, 1, 0, 0))
+        using (Matrix matrix = new(1, 0, 0, 1, 1, 1))
         {
             Assert.Equal(defaultMatrix, brush.Transform);
             brush.Transform = matrix;
@@ -710,8 +710,8 @@ public class PathGradientBrushTests
     [Fact]
     public void Transform_EmptyMatrix_ReturnsExpected()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix())
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new())
         {
             brush.Transform = matrix;
             Assert.True(brush.Transform.IsIdentity);
@@ -721,7 +721,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Transform_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Transform);
@@ -730,7 +730,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Transform_Null_ArgumentNullException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentNullException>("value", "matrix", () => brush.Transform = null);
         }
@@ -739,8 +739,8 @@ public class PathGradientBrushTests
     [Fact]
     public void Transform_NonInvertible_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix nonInvertible = new Matrix(123, 24, 82, 16, 47, 30))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix nonInvertible = new(123, 24, 82, 16, 47, 30))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Transform = nonInvertible);
         }
@@ -749,9 +749,9 @@ public class PathGradientBrushTests
     [Fact]
     public void ResetTransform_Success()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix defaultMatrix = new Matrix(1, 0, 0, 1, 0, 0))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 1, 1))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix defaultMatrix = new(1, 0, 0, 1, 0, 0))
+        using (Matrix matrix = new(1, 0, 0, 1, 1, 1))
         {
             Assert.Equal(defaultMatrix, brush.Transform);
             brush.Transform = matrix;
@@ -764,7 +764,7 @@ public class PathGradientBrushTests
     [Fact]
     public void ResetTransform_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.ResetTransform());
@@ -773,9 +773,9 @@ public class PathGradientBrushTests
     [Fact]
     public void MultiplyTransform_Matrix_Success()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix defaultMatrix = new Matrix(1, 0, 0, 1, 0, 0))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 1, 1))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix defaultMatrix = new(1, 0, 0, 1, 0, 0))
+        using (Matrix matrix = new(1, 0, 0, 1, 1, 1))
         {
             defaultMatrix.Multiply(matrix, MatrixOrder.Prepend);
             brush.MultiplyTransform(matrix);
@@ -788,9 +788,9 @@ public class PathGradientBrushTests
     [InlineData(MatrixOrder.Prepend)]
     public void MultiplyTransform_MatrixMatrixOrder_Success(MatrixOrder matrixOrder)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix defaultMatrix = new Matrix(1, 0, 0, 1, 0, 0))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 1, 1))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix defaultMatrix = new(1, 0, 0, 1, 0, 0))
+        using (Matrix matrix = new(1, 0, 0, 1, 1, 1))
         {
             defaultMatrix.Multiply(matrix, matrixOrder);
             brush.MultiplyTransform(matrix, matrixOrder);
@@ -801,9 +801,9 @@ public class PathGradientBrushTests
     [Fact]
     public void MultiplyTransform_Disposed_ThrowsArgumentException()
     {
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 1, 1))
+        using (Matrix matrix = new(1, 0, 0, 1, 1, 1))
         {
-            PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+            PathGradientBrush brush = new(_defaultFloatPoints);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(matrix, MatrixOrder.Append));
@@ -813,7 +813,7 @@ public class PathGradientBrushTests
     [Fact]
     public void MultiplyTransform_NullMatrix_ThrowsArgumentNullException()
     {
-        using (var brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentNullException>("matrix", () => brush.MultiplyTransform(null));
             AssertExtensions.Throws<ArgumentNullException>("matrix", () => brush.MultiplyTransform(null, MatrixOrder.Append));
@@ -823,10 +823,10 @@ public class PathGradientBrushTests
     [Fact]
     public void MultiplyTransform_DisposedMatrix_Nop()
     {
-        using (var brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         using (Matrix transform = brush.Transform)
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             matrix.Dispose();
 
             brush.MultiplyTransform(matrix);
@@ -839,8 +839,8 @@ public class PathGradientBrushTests
     [Fact]
     public void MultiplyTransform_InvalidMatrixOrder_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 1, 1, 1, 1, 1))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 1, 1, 1, 1, 1))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(matrix, (MatrixOrder)int.MinValue));
         }
@@ -849,8 +849,8 @@ public class PathGradientBrushTests
     [Fact]
     public void MultiplyTransform_NonInvertible_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix nonInvertible = new Matrix(123, 24, 82, 16, 47, 30))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix nonInvertible = new(123, 24, 82, 16, 47, 30))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(nonInvertible));
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(nonInvertible, MatrixOrder.Append));
@@ -860,8 +860,8 @@ public class PathGradientBrushTests
     [Fact]
     public void TranslateTransform_Offset_Success()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 0, 0))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 0, 0, 1, 0, 0))
         {
             matrix.Translate(20f, 30f, MatrixOrder.Prepend);
             brush.TranslateTransform(20f, 30f);
@@ -874,8 +874,8 @@ public class PathGradientBrushTests
     [InlineData(MatrixOrder.Prepend)]
     public void TranslateTransform_OffsetMatrixOrder_Success(MatrixOrder matrixOrder)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 0, 0))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 0, 0, 1, 0, 0))
         {
             matrix.Translate(20f, 30f, matrixOrder);
             brush.TranslateTransform(20f, 30f, matrixOrder);
@@ -886,7 +886,7 @@ public class PathGradientBrushTests
     [Fact]
     public void TranslateTransform_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.TranslateTransform(20f, 30f, MatrixOrder.Append));
@@ -895,7 +895,7 @@ public class PathGradientBrushTests
     [Fact]
     public void TranslateTransform_InvalidMatrixOrder_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.TranslateTransform(20f, 30f, (MatrixOrder)int.MinValue));
         }
@@ -904,8 +904,8 @@ public class PathGradientBrushTests
     [Fact]
     public void ScaleTransform_Scale_Success()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 0, 0))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 0, 0, 1, 0, 0))
         {
             matrix.Scale(2, 4, MatrixOrder.Prepend);
             brush.ScaleTransform(2, 4);
@@ -930,8 +930,8 @@ public class PathGradientBrushTests
     [InlineData(MatrixOrder.Prepend)]
     public void ScaleTransform_ScaleMatrixOrder_Success(MatrixOrder matrixOrder)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 0, 0))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 0, 0, 1, 0, 0))
         {
             matrix.Scale(0.25f, 2, matrixOrder);
             brush.ScaleTransform(0.25f, 2, matrixOrder);
@@ -942,7 +942,7 @@ public class PathGradientBrushTests
     [Fact]
     public void ScaleTransform_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.ScaleTransform(0.25f, 2, MatrixOrder.Append));
@@ -951,7 +951,7 @@ public class PathGradientBrushTests
     [Fact]
     public void ScaleTransform_InvalidMatrixOrder_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.ScaleTransform(1, 1, (MatrixOrder)int.MinValue));
         }
@@ -960,8 +960,8 @@ public class PathGradientBrushTests
     [Fact]
     public void RotateTransform_Angle_Success()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 0, 0))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 0, 0, 1, 0, 0))
         {
             matrix.Rotate(90, MatrixOrder.Prepend);
             brush.RotateTransform(90);
@@ -977,8 +977,8 @@ public class PathGradientBrushTests
     [InlineData(MatrixOrder.Prepend)]
     public void RotateTransform_AngleMatrixOrder_Success(MatrixOrder matrixOrder)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
-        using (Matrix matrix = new Matrix(1, 0, 0, 1, 0, 0))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
+        using (Matrix matrix = new(1, 0, 0, 1, 0, 0))
         {
             matrix.Rotate(45, matrixOrder);
             brush.RotateTransform(45, matrixOrder);
@@ -989,7 +989,7 @@ public class PathGradientBrushTests
     [Fact]
     public void RotateTransform_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.RotateTransform(45, MatrixOrder.Append));
@@ -998,7 +998,7 @@ public class PathGradientBrushTests
     [Fact]
     public void RotateTransform_InvalidMatrixOrder_ArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.RotateTransform(45, (MatrixOrder)int.MinValue));
         }
@@ -1007,9 +1007,9 @@ public class PathGradientBrushTests
     [Fact]
     public void FocusScales_ReturnsExpected()
     {
-        var point = new PointF(2.5f, 3.4f);
+        PointF point = new(2.5f, 3.4f);
 
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.FocusScales = point;
             Assert.Equal(point, brush.FocusScales);
@@ -1019,7 +1019,7 @@ public class PathGradientBrushTests
     [Fact]
     public void FocusScales_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.FocusScales);
@@ -1029,7 +1029,7 @@ public class PathGradientBrushTests
     [MemberData(nameof(WrapMode_TestData))]
     public void WrapMode_ReturnsExpected(WrapMode wrapMode)
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             brush.WrapMode = wrapMode;
             Assert.Equal(wrapMode, brush.WrapMode);
@@ -1039,7 +1039,7 @@ public class PathGradientBrushTests
     [Fact]
     public void WrapMode_Disposed_ThrowsArgumentException()
     {
-        PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints);
+        PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.WrapMode);
@@ -1048,7 +1048,7 @@ public class PathGradientBrushTests
     [Fact]
     public void WrapMode_Invalid_InvalidEnumArgumentException()
     {
-        using (PathGradientBrush brush = new PathGradientBrush(_defaultFloatPoints))
+        using (PathGradientBrush brush = new(_defaultFloatPoints))
         {
             Assert.ThrowsAny<ArgumentException>(() => brush.WrapMode = (WrapMode)int.MinValue);
         }

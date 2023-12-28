@@ -452,7 +452,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             TreeView? tv = TreeView;
             if (tv is not null)
             {
-                StringBuilder path = new StringBuilder();
+                StringBuilder path = new();
                 GetFullPath(path, tv.PathSeparator);
                 return path.ToString();
             }
@@ -1476,7 +1476,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         if ((State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0)
         {
-            TreeViewCancelEventArgs e = new TreeViewCancelEventArgs(this, false, TreeViewAction.Collapse);
+            TreeViewCancelEventArgs e = new(this, false, TreeViewAction.Collapse);
             tv.OnBeforeCollapse(e);
             if (!e.Cancel)
             {
@@ -1692,7 +1692,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal List<TreeNode> GetSelfAndChildNodes()
     {
-        List<TreeNode> nodes = new List<TreeNode>() { this };
+        List<TreeNode> nodes = new() { this };
         AggregateChildNodesToList(this);
         return nodes;
 

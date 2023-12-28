@@ -46,7 +46,7 @@ internal partial class ItemArray : IComparer<Entry>
     /// </summary>
     public object? Add(object item)
     {
-        Entry entry = new Entry(item);
+        Entry entry = new(item);
         _entries.Add(entry);
         Version++;
         return entry;

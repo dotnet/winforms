@@ -16,7 +16,7 @@ public class MaskInputRejectedEventArgsTests
     [InlineData(1, MaskedTextResultHint.Unknown)]
     public void Ctor_Int_Int_Bool(int position, MaskedTextResultHint rejectionHint)
     {
-        var e = new MaskInputRejectedEventArgs(position, rejectionHint);
+        MaskInputRejectedEventArgs e = new(position, rejectionHint);
         Assert.Equal(position, e.Position);
         Assert.Equal(rejectionHint, e.RejectionHint);
     }

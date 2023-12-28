@@ -14,7 +14,7 @@ public class ListViewVirtualItemsSelectionRangeChangedEventArgsTests
     [InlineData(1, 1, false)]
     public void Ctor_Int_Int_Bool(int startIndex, int endIndex, bool isSelected)
     {
-        var e = new ListViewVirtualItemsSelectionRangeChangedEventArgs(startIndex, endIndex, isSelected);
+        ListViewVirtualItemsSelectionRangeChangedEventArgs e = new(startIndex, endIndex, isSelected);
         Assert.Equal(startIndex, e.StartIndex);
         Assert.Equal(endIndex, e.EndIndex);
         Assert.Equal(isSelected, e.IsSelected);

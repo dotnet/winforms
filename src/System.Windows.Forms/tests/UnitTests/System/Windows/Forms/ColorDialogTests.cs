@@ -11,7 +11,7 @@ public class ColorDialogTests
     [WinFormsFact]
     public void ColorDialog_Ctor_Default()
     {
-        using var dialog = new SubColorDialog();
+        using SubColorDialog dialog = new();
         Assert.True(dialog.AllowFullOpen);
         Assert.False(dialog.AnyColor);
         Assert.True(dialog.CanRaiseEvents);
@@ -35,7 +35,7 @@ public class ColorDialogTests
     [WinFormsFact]
     public void ColorDialog_Ctor_Default_OverridenReset()
     {
-        using var dialog = new EmptyResetColorDialog();
+        using EmptyResetColorDialog dialog = new();
         Assert.True(dialog.AllowFullOpen);
         Assert.False(dialog.AnyColor);
         Assert.True(dialog.CanRaiseEvents);
@@ -61,7 +61,7 @@ public class ColorDialogTests
     [InlineData(false, 0x4, 0)]
     public void ColorDialog_AllowFullOpen_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubColorDialog
+        using SubColorDialog dialog = new()
         {
             AllowFullOpen = value
         };
@@ -84,7 +84,7 @@ public class ColorDialogTests
     [InlineData(false, 0, 0x100)]
     public void ColorDialog_AnyColor_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubColorDialog
+        using SubColorDialog dialog = new()
         {
             AnyColor = value
         };
@@ -112,7 +112,7 @@ public class ColorDialogTests
     [MemberData(nameof(Color_Set_TestData))]
     public void ColorDialog_Color_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var dialog = new ColorDialog
+        using ColorDialog dialog = new()
         {
             Color = value
         };
@@ -127,7 +127,7 @@ public class ColorDialogTests
     [MemberData(nameof(Color_Set_TestData))]
     public void ColorDialog_Color_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
     {
-        using var dialog = new ColorDialog
+        using ColorDialog dialog = new()
         {
             Color = Color.Blue
         };
@@ -144,7 +144,7 @@ public class ColorDialogTests
     public void ColorDialog_Color_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColorDialog))[nameof(ColorDialog.Color)];
-        using var dialog = new ColorDialog();
+        using ColorDialog dialog = new();
         Assert.False(property.CanResetValue(dialog));
 
         dialog.Color = Color.Red;
@@ -160,7 +160,7 @@ public class ColorDialogTests
     public void ColorDialog_Color_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColorDialog))[nameof(ColorDialog.Color)];
-        using var dialog = new ColorDialog();
+        using ColorDialog dialog = new();
         Assert.False(property.ShouldSerializeValue(dialog));
 
         dialog.Color = Color.Red;
@@ -175,7 +175,7 @@ public class ColorDialogTests
     [WinFormsFact]
     public void ColorDialog_CustomColors_Get_ReturnsClone()
     {
-        using var dialog = new ColorDialog();
+        using ColorDialog dialog = new();
         int[] value1 = dialog.CustomColors;
         int[] value2 = dialog.CustomColors;
         Assert.NotSame(value1, value2);
@@ -200,7 +200,7 @@ public class ColorDialogTests
     [MemberData(nameof(CustomColors_Set_TestData))]
     public void ColorDialog_CustomColors_Set_GetReturnsExpected(int[] value, int[] expected)
     {
-        using var dialog = new ColorDialog
+        using ColorDialog dialog = new()
         {
             CustomColors = value
         };
@@ -219,7 +219,7 @@ public class ColorDialogTests
     [MemberData(nameof(CustomColors_Set_TestData))]
     public void ColorDialog_CustomColors_SetWithCustomOldValue_GetReturnsExpected(int[] value, int[] expected)
     {
-        using var dialog = new ColorDialog
+        using ColorDialog dialog = new()
         {
             CustomColors = new int[1]
         };
@@ -240,7 +240,7 @@ public class ColorDialogTests
     public void ColorDialog_CustomColors_Set_GetReturnsClone()
     {
         int[] value = Enumerable.Repeat(1, 16).ToArray();
-        using var dialog = new ColorDialog
+        using ColorDialog dialog = new()
         {
             CustomColors = value
         };
@@ -253,7 +253,7 @@ public class ColorDialogTests
     [InlineData(false, 0, 0x2)]
     public void ColorDialog_FullOpen_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubColorDialog
+        using SubColorDialog dialog = new()
         {
             FullOpen = value
         };
@@ -276,7 +276,7 @@ public class ColorDialogTests
     [InlineData(false, 0, 0x8)]
     public void ColorDialog_ShowHelp_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubColorDialog
+        using SubColorDialog dialog = new()
         {
             ShowHelp = value
         };
@@ -299,7 +299,7 @@ public class ColorDialogTests
     [InlineData(false, 0, 0x80)]
     public void ColorDialog_SolidColorOnly_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
     {
-        using var dialog = new SubColorDialog
+        using SubColorDialog dialog = new()
         {
             SolidColorOnly = value
         };
@@ -320,7 +320,7 @@ public class ColorDialogTests
     [WinFormsFact]
     public void ColorDialog_Reset_Invoke_Success()
     {
-        using var dialog = new SubColorDialog
+        using SubColorDialog dialog = new()
         {
             AllowFullOpen = false,
             AnyColor = true,
@@ -356,7 +356,7 @@ public class ColorDialogTests
     [WinFormsFact]
     public void ColorDialog_ToString_Invoke_ReturnsExpected()
     {
-        using var dialog = new SubColorDialog();
+        using SubColorDialog dialog = new();
         Assert.Equal("System.Windows.Forms.Tests.ColorDialogTests+SubColorDialog,  Color: Color [Black]", dialog.ToString());
     }
 

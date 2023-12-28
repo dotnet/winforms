@@ -16,7 +16,7 @@ public class BindingManagerDataErrorEventArgsTests
     [MemberData(nameof(Ctor_Exception_TestData))]
     public void Ctor_Exception(Exception exception)
     {
-        var e = new BindingManagerDataErrorEventArgs(exception);
+        BindingManagerDataErrorEventArgs e = new(exception);
         Assert.Equal(exception, e.Exception);
     }
 }

@@ -193,7 +193,7 @@ public partial class CollectionEditor
             }
 
             Graphics g = pevent.Graphics;
-            Rectangle bounds = new Rectangle(0, 0, Width, Height);
+            Rectangle bounds = new(0, 0, Width, Height);
             TextFormatFlags formatFlags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
 
             ButtonRenderer.DrawButton(g, bounds, State);
@@ -241,7 +241,7 @@ public partial class CollectionEditor
 
         private static void PaintArrow(IDeviceContext deviceContext, Rectangle dropDownRect)
         {
-            Point middle = new Point(
+            Point middle = new(
                 Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2),
                 Convert.ToInt32(dropDownRect.Top + dropDownRect.Height / 2));
 

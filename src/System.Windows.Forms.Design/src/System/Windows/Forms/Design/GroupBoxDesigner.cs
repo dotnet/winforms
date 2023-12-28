@@ -48,7 +48,7 @@ internal class GroupBoxDesigner : ParentControlDesigner
     private void OnGetUIValueItem(object component, PropertyDescriptor propDesc, ArrayList valueUIItemList){
     
         if (propDesc.PropertyType == typeof(string)) {
-            Bitmap bmp = new Bitmap(typeof(GroupBoxDesigner), "BoundProperty.bmp");
+            Bitmap bmp = new(typeof(GroupBoxDesigner), "BoundProperty.bmp");
             bmp.MakeTransparent();
             valueUIItemList.Add(new LocalUIItem(bmp, new PropertyValueUIItemInvokeHandler(this.OnPropertyValueUIItemInvoke), "Data Can"));
             

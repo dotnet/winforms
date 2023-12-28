@@ -552,7 +552,7 @@ public partial class LinkLabel : Label, IButtonControl
         {
             // Use TextRenderer.MeasureText to see the size of the text
             Rectangle clientRectWithPadding = ClientRectWithPadding;
-            Size clientSize = new Size(clientRectWithPadding.Width, clientRectWithPadding.Height);
+            Size clientSize = new(clientRectWithPadding.Width, clientRectWithPadding.Height);
             TextFormatFlags flags = CreateTextFormatFlags(clientSize);
             Size textSize = TextRenderer.MeasureText(text, alwaysUnderlined, clientSize, flags);
 
@@ -583,7 +583,7 @@ public partial class LinkLabel : Label, IButtonControl
 
             visualRectangle = CalcTextRenderBounds(visualRectangle, clientRectWithPadding, RtlTranslateContent(TextAlign));
 
-            Region visualRegion = new Region(visualRectangle);
+            Region visualRegion = new(visualRectangle);
             if (_links is not null && _links.Count == 1)
             {
                 Links[0].VisualRegion = visualRegion;
@@ -621,9 +621,9 @@ public partial class LinkLabel : Label, IButtonControl
             return Array.Empty<CharacterRange>();
         }
 
-        StringInfo stringInfo = new StringInfo(text);
+        StringInfo stringInfo = new(text);
         int textLen = stringInfo.LengthInTextElements;
-        List<CharacterRange> ranges = new List<CharacterRange>(Links.Count + 1);
+        List<CharacterRange> ranges = new(Links.Count + 1);
 
         foreach (Link link in Links)
         {
@@ -652,7 +652,7 @@ public partial class LinkLabel : Label, IButtonControl
             return false;
         }
 
-        StringInfo stringInfo = new StringInfo(Text);
+        StringInfo stringInfo = new(Text);
         if (LinkArea.Start == 0 && LinkArea.Length == stringInfo.LengthInTextElements)
         {
             return true;
@@ -1372,7 +1372,7 @@ public partial class LinkLabel : Label, IButtonControl
 
     private void PaintLinkBackground(Graphics g)
     {
-        using (PaintEventArgs e = new PaintEventArgs(g, ClientRectangle))
+        using (PaintEventArgs e = new(g, ClientRectangle))
         {
             InvokePaintBackground(this, e);
         }

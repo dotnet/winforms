@@ -26,7 +26,7 @@ public class AxHostTests
     [InlineData(EmptyClsidString)]
     public void AxHost_Ctor_String(string clsid)
     {
-        using var control = new SubAxHost(clsid);
+        using SubAxHost control = new(clsid);
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -120,7 +120,7 @@ public class AxHostTests
     [InlineData(EmptyClsidString, 0)]
     public void AxHost_Ctor_String_Int(string clsid, int flags)
     {
-        using var control = new SubAxHost(clsid, flags);
+        using SubAxHost control = new(clsid, flags);
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -228,7 +228,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -248,7 +248,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_CreateParams_GetWithSite_ReturnsExpected()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -264,7 +264,7 @@ public class AxHostTests
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Site = mockSite.Object
         };
@@ -289,7 +289,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void AxHost_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             BackColor = value
         };
@@ -304,7 +304,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
     public void AxHost_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             BackgroundImage = value
         };
@@ -321,7 +321,7 @@ public class AxHostTests
     [EnumData<ImageLayout>]
     public void AxHost_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             BackgroundImageLayout = value
         };
@@ -338,19 +338,19 @@ public class AxHostTests
     [InvalidEnumData<ImageLayout>]
     public void AxHost_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
     }
 
     [WinFormsFact]
     public static void AxHost_ContainingControl_GetWithContainerControlGrandparent_ReturnsExpected()
     {
-        var grandparent = new ContainerControl();
-        var parent = new Control
+        ContainerControl grandparent = new();
+        Control parent = new()
         {
             Parent = grandparent
         };
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             Parent = parent
         };
@@ -367,8 +367,8 @@ public class AxHostTests
     [WinFormsFact]
     public static void AxHost_ContainingControl_GetWithContainerControlParent_ReturnsExpected()
     {
-        var parent = new ContainerControl();
-        using var control = new SubAxHost(EmptyClsidString)
+        ContainerControl parent = new();
+        using SubAxHost control = new(EmptyClsidString)
         {
             Parent = parent
         };
@@ -385,8 +385,8 @@ public class AxHostTests
     [WinFormsFact]
     public static void AxHost_ContainingControl_GetWithNonContainerControlParent_ReturnsExpected()
     {
-        var parent = new Control();
-        using var control = new SubAxHost(EmptyClsidString)
+        Control parent = new();
+        using SubAxHost control = new(EmptyClsidString)
         {
             Parent = parent
         };
@@ -396,7 +396,7 @@ public class AxHostTests
         Assert.Null(control.ContainingControl);
 
         // Modify.
-        var grandparent = new ContainerControl();
+        ContainerControl grandparent = new();
         parent.Parent = grandparent;
         Assert.Same(grandparent, control.ContainingControl);
 
@@ -418,7 +418,7 @@ public class AxHostTests
     [MemberData(nameof(ContainingControl_Set_TestData))]
     public void AxHost_ContainingControl_Set_GetReturnsExpected(ContainerControl value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             ContainingControl = value
         };
@@ -433,7 +433,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void AxHost_Cursor_Set_GetReturnsExpected(Cursor value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             Cursor = value
         };
@@ -448,7 +448,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void AxHost_Cursor_SetWithHandle_GetReturnsExpected(Cursor value)
     {
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         control.Cursor = value;
@@ -463,9 +463,9 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void AxHost_Cursor_SetWithChildren_GetReturnsExpected(Cursor value)
     {
-        var child1 = new Control();
-        var child2 = new Control();
-        using var control = new SubAxHost(EmptyClsidString);
+        Control child1 = new();
+        Control child2 = new();
+        using SubAxHost control = new(EmptyClsidString);
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -485,17 +485,17 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void AxHost_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
     {
-        var cursor1 = new Cursor((IntPtr)1);
-        var cursor2 = new Cursor((IntPtr)1);
-        var child1 = new Control
+        Cursor cursor1 = new((IntPtr)1);
+        Cursor cursor2 = new((IntPtr)1);
+        Control child1 = new()
         {
             Cursor = cursor1
         };
-        var child2 = new Control
+        Control child2 = new()
         {
             Cursor = cursor2
         };
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.Controls.Add(child1);
         control.Controls.Add(child2);
 
@@ -515,7 +515,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void AxHost_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             Font = value
         };
@@ -534,7 +534,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void AxHost_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             ForeColor = value
         };
@@ -549,7 +549,7 @@ public class AxHostTests
     [EnumData<ImageLayout>]
     public void AxHost_ImeMode_Set_GetReturnsExpected(ImeMode value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             ImeMode = value
         };
@@ -564,7 +564,7 @@ public class AxHostTests
     [InvalidEnumData<ImeMode>]
     public void AxHost_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
     }
 
@@ -572,7 +572,7 @@ public class AxHostTests
     [BoolData]
     public void AxHost_Enabled_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             Enabled = value
         };
@@ -591,7 +591,7 @@ public class AxHostTests
     [BoolData]
     public void AxHost_Site_SetDesignMode_CreatesOcx(bool otherDesignMode)
     {
-        var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite1 = new(MockBehavior.Strict);
         mockSite1
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -607,7 +607,7 @@ public class AxHostTests
         mockSite1
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Site = mockSite1.Object
         };
@@ -624,7 +624,7 @@ public class AxHostTests
         Assert.Same(ocx, control.GetOcx());
 
         // Set another.
-        var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite2 = new(MockBehavior.Strict);
         mockSite2
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -655,7 +655,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_Site_SetNonDesignModeThenDesignMode_CreatesOcx()
     {
-        var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite1 = new(MockBehavior.Strict);
         mockSite1
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -671,7 +671,7 @@ public class AxHostTests
         mockSite1
             .Setup(s => s.DesignMode)
             .Returns(false);
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Site = mockSite1.Object
         };
@@ -686,7 +686,7 @@ public class AxHostTests
         Assert.Null(control.GetOcx());
 
         // Set another.
-        var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite2 = new(MockBehavior.Strict);
         mockSite2
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -719,7 +719,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_Site_SetNonDesignModeThenNonDesignMode_DoesNotCreateOcx()
     {
-        var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite1 = new(MockBehavior.Strict);
         mockSite1
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -735,7 +735,7 @@ public class AxHostTests
         mockSite1
             .Setup(s => s.DesignMode)
             .Returns(false);
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Site = mockSite1.Object
         };
@@ -750,7 +750,7 @@ public class AxHostTests
         Assert.Null(control.GetOcx());
 
         // Set another.
-        var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite2 = new(MockBehavior.Strict);
         mockSite2
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -785,7 +785,7 @@ public class AxHostTests
     [InlineData(false, false, 0, 0)]
     public void AxHost_Site_SetWithHandle_CreatesOcx(bool designMode1, bool designMode2, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
     {
-        var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite1 = new(MockBehavior.Strict);
         mockSite1
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -804,7 +804,7 @@ public class AxHostTests
         mockSite1
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -833,7 +833,7 @@ public class AxHostTests
         Assert.Same(ocx, control.GetOcx());
 
         // Set another.
-        var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite2 = new(MockBehavior.Strict);
         mockSite2
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -881,7 +881,7 @@ public class AxHostTests
     [MemberData(nameof(Text_Set_TestData))]
     public void AxHost_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new SubAxHost(EmptyClsidString)
+        using SubAxHost control = new(EmptyClsidString)
         {
             Text = value
         };
@@ -898,7 +898,7 @@ public class AxHostTests
     [MemberData(nameof(Text_Set_TestData))]
     public void AxHost_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -926,7 +926,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_BackColorChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.BackColorChanged += handler);
         control.BackColorChanged -= handler;
@@ -935,7 +935,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_BackgroundImageChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.BackgroundImageChanged += handler);
         control.BackgroundImageChanged -= handler;
@@ -944,7 +944,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_BackgroundImageLayoutChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.BackgroundImageLayoutChanged += handler);
         control.BackgroundImageLayoutChanged -= handler;
@@ -953,7 +953,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_BindingContextChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.BindingContextChanged += handler);
         control.BindingContextChanged -= handler;
@@ -962,7 +962,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ChangeUICues_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         UICuesEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.ChangeUICues += handler);
         control.ChangeUICues -= handler;
@@ -971,7 +971,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_Click_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.Click += handler);
         control.Click -= handler;
@@ -980,7 +980,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_CursorChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.CursorChanged += handler);
         control.CursorChanged -= handler;
@@ -989,7 +989,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_DoubleClick_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.DoubleClick += handler);
         control.DoubleClick -= handler;
@@ -998,7 +998,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_DragDrop_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         DragEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.DragDrop += handler);
         control.DragDrop -= handler;
@@ -1007,7 +1007,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_DragEnter_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         DragEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.DragEnter += handler);
         control.DragEnter -= handler;
@@ -1016,7 +1016,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_DragLeave_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.DragLeave += handler);
         control.DragLeave -= handler;
@@ -1025,7 +1025,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_DragOver_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         DragEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.DragOver += handler);
         control.DragOver -= handler;
@@ -1034,7 +1034,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_EnabledChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.EnabledChanged += handler);
         control.EnabledChanged -= handler;
@@ -1043,7 +1043,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_FontChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.FontChanged += handler);
         control.FontChanged -= handler;
@@ -1052,7 +1052,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ForeColorChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.ForeColorChanged += handler);
         control.ForeColorChanged -= handler;
@@ -1061,7 +1061,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GiveFeedback_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         GiveFeedbackEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.GiveFeedback += handler);
         control.GiveFeedback -= handler;
@@ -1070,7 +1070,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_HelpRequested_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         HelpEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.HelpRequested += handler);
         control.HelpRequested -= handler;
@@ -1079,7 +1079,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ImeModeChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.ImeModeChanged += handler);
         control.ImeModeChanged -= handler;
@@ -1088,7 +1088,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_KeyDown_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         KeyEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.KeyDown += handler);
         control.KeyDown -= handler;
@@ -1097,7 +1097,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_KeyPress_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         KeyPressEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.KeyPress += handler);
         control.KeyPress -= handler;
@@ -1106,7 +1106,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_KeyUp_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         KeyEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.KeyUp += handler);
         control.KeyUp -= handler;
@@ -1115,7 +1115,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_Layout_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         LayoutEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.Layout += handler);
         control.Layout -= handler;
@@ -1124,7 +1124,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseClick_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseClick += handler);
         control.MouseClick -= handler;
@@ -1133,7 +1133,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseDoubleClick_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseDoubleClick += handler);
         control.MouseDoubleClick -= handler;
@@ -1142,7 +1142,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseDown_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         MouseEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseDown += handler);
         control.MouseDown -= handler;
@@ -1151,7 +1151,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseEnter_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseEnter += handler);
         control.MouseEnter -= handler;
@@ -1160,7 +1160,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseHover_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseHover += handler);
         control.MouseHover -= handler;
@@ -1169,7 +1169,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseLeave_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseLeave += handler);
         control.MouseLeave -= handler;
@@ -1178,7 +1178,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseMove_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         MouseEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseMove += handler);
         control.MouseMove -= handler;
@@ -1187,7 +1187,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseUp_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         MouseEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseUp += handler);
         control.MouseUp -= handler;
@@ -1196,7 +1196,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_MouseWheel_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         MouseEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.MouseWheel += handler);
         control.MouseWheel -= handler;
@@ -1205,7 +1205,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_Paint_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         PaintEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.Paint += handler);
         control.Paint -= handler;
@@ -1214,7 +1214,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_QueryAccessibilityHelp__AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         QueryAccessibilityHelpEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.QueryAccessibilityHelp += handler);
         control.QueryAccessibilityHelp -= handler;
@@ -1223,7 +1223,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_QueryContinueDrag__AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         QueryContinueDragEventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.QueryContinueDrag += handler);
         control.QueryContinueDrag -= handler;
@@ -1232,7 +1232,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_RightToLeftChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.RightToLeftChanged += handler);
         control.RightToLeftChanged -= handler;
@@ -1241,7 +1241,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_StyleChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.StyleChanged += handler);
         control.StyleChanged -= handler;
@@ -1250,7 +1250,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_TextChanged_AddRemove_ThrowsNotSupportedException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         EventHandler handler = (sender, e) => { };
         Assert.Throws<NotSupportedException>(() => control.TextChanged += handler);
         control.TextChanged -= handler;
@@ -1259,7 +1259,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_AttachInterfaces_Invoke_Nop()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.AttachInterfaces();
         control.AttachInterfaces();
     }
@@ -1267,7 +1267,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_BeginInit_Invoke_Nop()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.BeginInit();
         control.BeginInit();
         Assert.False(control.Created);
@@ -1331,14 +1331,14 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithoutHandle_ThrowsNullReferenceException(int verb)
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         Assert.Throws<NullReferenceException>(() => control.DoVerb(verb));
     }
 
     [WinFormsFact]
     public void AxHost_EndInit_Invoke_Nop()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.EndInit();
         control.EndInit();
         Assert.False(control.Created);
@@ -1347,8 +1347,8 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_EndInit_InvokeWithParent_CreatesControl()
     {
-        var parent = new Control();
-        using var control = new SubAxHost(WebBrowserClsidString)
+        Control parent = new();
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent
         };
@@ -1367,7 +1367,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_CreateControl_ValidClsid_Success()
     {
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using SubAxHost control = new(WebBrowserClsidString);
         control.CreateControl();
         Assert.True(control.Created);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1379,14 +1379,14 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_CreateControl_InvalidClsid_ThrowsCOMException()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         Assert.Throws<COMException>(() => control.CreateControl());
     }
 
     [WinFormsFact]
     public void AxHost_CreateSink_Invoke_Nop()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.CreateSink();
         control.CreateSink();
         Assert.False(control.Created);
@@ -1395,7 +1395,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_DetachSink_Invoke_Nop()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.DetachSink();
         control.DetachSink();
         Assert.False(control.Created);
@@ -1404,14 +1404,14 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetOcx_NotCreated_ReturnsNull()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         Assert.Null(control.GetOcx());
     }
 
     [WinFormsFact]
     public void AxHost_GetOcx_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1443,7 +1443,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetIFontDispFromFont_InvokeSimpleStyle_Roundtrips()
     {
-        using var font = new Font("Arial", 10);
+        using Font font = new("Arial", 10);
         object disp = SubAxHost.GetIFontDispFromFont(font);
         IFont.Interface iFont = (IFont.Interface)disp;
         Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
@@ -1472,7 +1472,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetIFontDispFromFont_InvokeComplexStyle_Roundtrips()
     {
-        using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
+        using Font font = new("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
         object disp = SubAxHost.GetIFontDispFromFont(font);
 
         IFont.Interface iFont = (IFont.Interface)disp;
@@ -1506,7 +1506,7 @@ public class AxHostTests
     [InlineData(GraphicsUnit.World)]
     public void AxHost_GetIFontDispFromFont_InvalidFontUnit_ThrowsArgumentException(GraphicsUnit unit)
     {
-        using var font = new Font("Arial", 10, unit);
+        using Font font = new("Arial", 10, unit);
         Assert.Throws<ArgumentException>("font", () => SubAxHost.GetIFontDispFromFont(font));
     }
 
@@ -1519,7 +1519,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetIFontFromFont_InvokeSimpleStyle_Roundtrips()
     {
-        using var font = new Font("Arial", 10);
+        using Font font = new("Arial", 10);
         IFont.Interface iFont = (IFont.Interface)SubAxHost.GetIFontFromFont(font);
         Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
         Assert.Equal(97500, iFont.Size.int64);
@@ -1541,7 +1541,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetIFontFromFont_InvokeComplexStyle_Roundtrips()
     {
-        using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
+        using Font font = new("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
         IFont.Interface iFont = (IFont.Interface)SubAxHost.GetIFontFromFont(font);
         Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
         Assert.Equal(97500, iFont.Size.int64);
@@ -1567,7 +1567,7 @@ public class AxHostTests
     [InlineData(GraphicsUnit.World)]
     public void AxHost_GetIFontFromFont_InvalidFontUnit_ThrowsArgumentException(GraphicsUnit unit)
     {
-        using var font = new Font("Arial", 10, unit);
+        using Font font = new("Arial", 10, unit);
         Assert.Throws<ArgumentException>("font", () => SubAxHost.GetIFontFromFont(font));
     }
 
@@ -1580,7 +1580,7 @@ public class AxHostTests
     [WinFormsFact]
     public unsafe void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
     {
-        using var original = new Cursor("bitmaps/cursor.cur");
+        using Cursor original = new("bitmaps/cursor.cur");
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
         Assert.NotNull(iPicture);
 
@@ -1604,7 +1604,7 @@ public class AxHostTests
     [WinFormsFact]
     public unsafe void AxHost_GetIPictureDispFromPicture_InvokeBitmap_Roundtrips()
     {
-        var original = new Bitmap(10, 11);
+        Bitmap original = new(10, 11);
         original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
         object disp = SubAxHost.GetIPictureDispFromPicture(original);
         using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
@@ -1629,7 +1629,7 @@ public class AxHostTests
     [WinFormsFact]
     public unsafe void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
     {
-        var original = new Metafile("bitmaps/milkmateya01.emf");
+        Metafile original = new("bitmaps/milkmateya01.emf");
         object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
         using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
@@ -1651,7 +1651,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetIPictureDispFromPicture_InvokeMetafile_ThrowsCOMException()
     {
-        var original = new Metafile("bitmaps/telescope_01.wmf");
+        Metafile original = new("bitmaps/telescope_01.wmf");
         Assert.Throws<COMException>(() => SubAxHost.GetIPictureDispFromPicture(original));
     }
 
@@ -1664,7 +1664,7 @@ public class AxHostTests
     [WinFormsFact]
     public unsafe void AxHost_GetIPictureFromPicture_InvokeBitmap_Roundtrips()
     {
-        var original = new Bitmap(10, 11);
+        Bitmap original = new(10, 11);
         original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
         Assert.NotNull(iPicture);
@@ -1694,7 +1694,7 @@ public class AxHostTests
     [WinFormsFact]
     public unsafe void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
     {
-        var original = new Metafile("bitmaps/milkmateya01.emf");
+        Metafile original = new("bitmaps/milkmateya01.emf");
         IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
         Assert.NotNull(iPicture);
 
@@ -1719,7 +1719,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_GetIPictureFromPicture_InvokeMetafile_ThrowsCOMException()
     {
-        var original = new Metafile("bitmaps/telescope_01.wmf");
+        Metafile original = new("bitmaps/telescope_01.wmf");
         Assert.Throws<COMException>(() => SubAxHost.GetIPictureFromPicture(original));
     }
 
@@ -1744,7 +1744,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_InvokeEditMode_Invoke_Success()
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         control.InvokeEditMode();
         Assert.Null(control.GetOcx());
 
@@ -1767,7 +1767,7 @@ public class AxHostTests
     [MemberData(nameof(InvokeEditMode_Site_TestData))]
     public void AxHost_InvokeEditMode_InvokeWithSite_Success(bool designMode, object selectionService, int expectedCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1790,7 +1790,7 @@ public class AxHostTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Site = mockSite.Object
         };
@@ -1871,13 +1871,13 @@ public class AxHostTests
     [BoolData]
     public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedNoSelectionStyleProperty_Success(bool componentSelected)
     {
-        using var control = new SubAxHost(WebBrowserClsidString);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+        using SubAxHost control = new(WebBrowserClsidString);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
         mockSelectionService
             .Setup(s => s.GetComponentSelected(control))
             .Returns(componentSelected)
             .Verifiable();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1926,13 +1926,13 @@ public class AxHostTests
     [BoolData]
     public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedInvalidSelectionStyleProperty_Success(bool componentSelected)
     {
-        using var control = new InvalidSelectionStyleAxHost(WebBrowserClsidString);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+        using InvalidSelectionStyleAxHost control = new(WebBrowserClsidString);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
         mockSelectionService
             .Setup(s => s.GetComponentSelected(control))
             .Returns(componentSelected)
             .Verifiable();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1983,13 +1983,13 @@ public class AxHostTests
     [BoolData]
     public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStyleProperty_Success(bool componentSelected)
     {
-        using var control = new ValidSelectionStyleAxHost(WebBrowserClsidString);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+        using ValidSelectionStyleAxHost control = new(WebBrowserClsidString);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
         mockSelectionService
             .Setup(s => s.GetComponentSelected(control))
             .Returns(componentSelected)
             .Verifiable();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2051,7 +2051,7 @@ public class AxHostTests
     [MemberData(nameof(InvokeEditMode_SiteWithHandle_TestData))]
     public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2083,7 +2083,7 @@ public class AxHostTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Site = mockSite.Object
         };
@@ -2115,8 +2115,8 @@ public class AxHostTests
     [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
     public void AxHost_InvokeEditMode_InvokeWithSiteWithParentWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
     {
-        using var parent = new Control();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using Control parent = new();
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2148,7 +2148,7 @@ public class AxHostTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent,
             Site = mockSite.Object
@@ -2184,13 +2184,13 @@ public class AxHostTests
     [InlineData(false, 0)]
     public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStylePropertyWithHandle_Success(bool componentSelected, int expectedSelectionStyle)
     {
-        using var control = new ValidSelectionStyleAxHost(WebBrowserClsidString);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+        using ValidSelectionStyleAxHost control = new(WebBrowserClsidString);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
         mockSelectionService
             .Setup(s => s.GetComponentSelected(control))
             .Returns(componentSelected)
             .Verifiable();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -2255,7 +2255,7 @@ public class AxHostTests
     [NewAndDefaultData<EventArgs>]
     public void AxHost_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2279,7 +2279,7 @@ public class AxHostTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void AxHost_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2303,7 +2303,7 @@ public class AxHostTests
     [NewAndDefaultData<EventArgs>]
     public void AxHost_OnMouseCaptureChanged_Invoke_CallsMouseCaptureChanged(EventArgs eventArgs)
     {
-        using var control = new SubAxHost(EmptyClsidString);
+        using SubAxHost control = new(EmptyClsidString);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2326,7 +2326,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetAttributes_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         AttributeCollection attributes = customTypeDescriptor.GetAttributes();
         Assert.NotNull(attributes[typeof(CustomAttribute)]);
@@ -2341,7 +2341,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetAttributes_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2370,7 +2370,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetClassName_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         Assert.Null(customTypeDescriptor.GetClassName());
         Assert.False(control.IsHandleCreated);
@@ -2383,7 +2383,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetClassName_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2410,7 +2410,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetComponentName_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         Assert.Null(customTypeDescriptor.GetComponentName());
         Assert.False(control.IsHandleCreated);
@@ -2423,7 +2423,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetComponentName_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2450,7 +2450,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetConverter_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         Assert.Null(customTypeDescriptor.GetConverter());
         Assert.False(control.IsHandleCreated);
@@ -2463,7 +2463,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetConverter_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2490,7 +2490,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetDefaultEvent_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         EventDescriptor eventDescriptor = customTypeDescriptor.GetDefaultEvent();
         Assert.Equal(nameof(AxHost.Enter), eventDescriptor.Name);
@@ -2505,7 +2505,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetDefaultEvent_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2534,7 +2534,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetDefaultProperty_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptor propertyDescriptor = customTypeDescriptor.GetDefaultProperty();
         Assert.Equal(nameof(AxHost.Text), propertyDescriptor.Name);
@@ -2549,7 +2549,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetDefaultProperty_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2582,7 +2582,7 @@ public class AxHostTests
     [InlineData(typeof(SubComponentEditor))]
     public void AxHost_ICustomTypeDescriptorGetEditor_typeInvoke_ReturnsExpected(Type editorBaseType)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         Assert.Null(customTypeDescriptor.GetEditor(editorBaseType));
         Assert.False(control.IsHandleCreated);
@@ -2599,7 +2599,7 @@ public class AxHostTests
     [InlineData(typeof(SubComponentEditor))]
     public void AxHost_ICustomTypeDescriptorGetEditor_typeInvokeWithHandle_ReturnsExpected(Type editorBaseType)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2626,7 +2626,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetEvents_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         EventDescriptorCollection events = customTypeDescriptor.GetEvents();
         Assert.True(events.Count > 1);
@@ -2643,7 +2643,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2682,7 +2682,7 @@ public class AxHostTests
     [MemberData(nameof(GetEvents_AttributeArray_TestData))]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeAttributeArray_ReturnsExpected(Attribute[] attributes)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         EventDescriptorCollection events = customTypeDescriptor.GetEvents(attributes);
         Assert.True(events.Count > 1);
@@ -2700,7 +2700,7 @@ public class AxHostTests
     [MemberData(nameof(GetEvents_AttributeArray_TestData))]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeAttributeArrayWithHandle_ReturnsExpected(Attribute[] attributes)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2731,7 +2731,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeAttributeArrayCustom_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         EventDescriptorCollection events = customTypeDescriptor.GetEvents(new Attribute[] { new CustomAttribute() });
         Assert.True(events.Count > 1);
@@ -2748,7 +2748,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeAttributeArrayCustomWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2779,7 +2779,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeAttributeArrayNoSuch_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         EventDescriptorCollection events = customTypeDescriptor.GetEvents(new Attribute[] { new NoSuchAttribute() });
         Assert.True(events.Count > 1);
@@ -2796,7 +2796,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetEvents_InvokeAttributeArrayNoSuchWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2827,7 +2827,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetProperties_Invoke_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
         Assert.NotNull(events[nameof(CustomAxHost.CustomProperty)]);
@@ -2842,7 +2842,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2881,7 +2881,7 @@ public class AxHostTests
     [MemberData(nameof(GetProperties_AttributeArray_TestData))]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeAttributeArray_ReturnsExpected(Attribute[] attributes)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(attributes);
         Assert.True(properties.Count > 1);
@@ -2899,7 +2899,7 @@ public class AxHostTests
     [MemberData(nameof(GetProperties_AttributeArray_TestData))]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeAttributeArrayWithHandle_ReturnsExpected(Attribute[] attributes)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2930,7 +2930,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeAttributeArrayCustom_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(new Attribute[] { new CustomAttribute() });
         Assert.True(properties.Count > 1);
@@ -2947,7 +2947,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeAttributeArrayCustomWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2978,7 +2978,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeAttributeArrayNoSuch_ReturnsExpected()
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         PropertyDescriptorCollection properties = customTypeDescriptor.GetProperties(new Attribute[] { new NoSuchAttribute() });
         Assert.True(properties.Count > 1);
@@ -2995,7 +2995,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_ICustomTypeDescriptorGetProperties_InvokeAttributeArrayNoSuchWithHandle_ReturnsExpected()
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3035,7 +3035,7 @@ public class AxHostTests
     [MemberData(nameof(GetPropertyOwner_TestData))]
     public void AxHost_ICustomTypeDescriptorGetPropertyOwner_Invoke_ReturnsExpected(PropertyDescriptor pd)
     {
-        using var control = new CustomAxHost(EmptyClsidString);
+        using CustomAxHost control = new(EmptyClsidString);
         ICustomTypeDescriptor customTypeDescriptor = control;
         Assert.Same(control, customTypeDescriptor.GetPropertyOwner(pd));
         Assert.False(control.IsHandleCreated);
@@ -3049,7 +3049,7 @@ public class AxHostTests
     [MemberData(nameof(GetPropertyOwner_TestData))]
     public void AxHost_ICustomTypeDescriptorGetPropertyOwner_InvokeWithHandle_ReturnsExpected(PropertyDescriptor pd)
     {
-        using var control = new CustomAxHost(WebBrowserClsidString);
+        using CustomAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;

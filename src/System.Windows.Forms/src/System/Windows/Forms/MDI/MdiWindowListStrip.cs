@@ -110,7 +110,7 @@ internal class MdiWindowListStrip : MenuStrip
                             // there's always room for activeMdiChild
                             string? text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
                             text ??= string.Empty;
-                            ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i])
+                            ToolStripMenuItem windowListItem = new(mdiParent.MdiChildren[i])
                             {
                                 Text = $"&{accel} {text}",
                                 MergeAction = MergeAction.Append,
@@ -160,7 +160,7 @@ internal class MdiWindowListStrip : MenuStrip
 
         if (forms is not null)
         {
-            using (MdiWindowDialog dialog = new MdiWindowDialog())
+            using (MdiWindowDialog dialog = new())
             {
                 dialog.SetItems(_mdiParent?.ActiveMdiChild, forms);
                 DialogResult result = dialog.ShowDialog();

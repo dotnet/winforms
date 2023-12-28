@@ -16,8 +16,8 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     [WinFormsFact]
     public void ListViewGroupAccessibleObject_Ctor_ThrowsArgumentNullException()
     {
-        using ListView list = new ListView();
-        ListViewGroup listGroup = new ListViewGroup("Group1");
+        using ListView list = new();
+        ListViewGroup listGroup = new("Group1");
         listGroup.Items.Add(new ListViewItem());
         list.Groups.Add(listGroup);
 
@@ -27,15 +27,15 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { null, false }));
 
         // group without parent ListView
-        ListViewGroup listGroupWithoutList = new ListViewGroup("Group2");
+        ListViewGroup listGroupWithoutList = new("Group2");
         Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { listGroupWithoutList, false }));
     }
 
     [WinFormsFact]
     public void ListViewGroupAccessibleObject_Ctor_Default()
     {
-        using ListView list = new ListView();
-        ListViewGroup listGroup = new ListViewGroup("Group1");
+        using ListView list = new();
+        ListViewGroup listGroup = new("Group1");
         listGroup.Items.Add(new ListViewItem());
         list.Groups.Add(listGroup);
 
@@ -49,8 +49,8 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     [WinFormsFact]
     public void ListViewGroupAccessibleObject_GetPropertyValue_ReturnsExpected_WithoutDefaultGroup()
     {
-        using ListView list = new ListView();
-        ListViewGroup listGroup = new ListViewGroup("Group1");
+        using ListView list = new();
+        ListViewGroup listGroup = new("Group1");
         listGroup.Items.Add(new ListViewItem());
         list.Groups.Add(listGroup);
 
@@ -80,8 +80,8 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             return;
         }
 
-        using ListView list = new ListView();
-        ListViewGroup listGroup = new ListViewGroup("Group1");
+        using ListView list = new();
+        ListViewGroup listGroup = new("Group1");
         listGroup.Items.Add(new ListViewItem());
         list.Items.Add(new ListViewItem());
         list.Groups.Add(listGroup);
@@ -111,10 +111,10 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     [WinFormsFact]
     public void ListViewGroupAccessibleObject_GetPropertyValue_ReturnsExpected_WithSubtitle()
     {
-        using ListView list = new ListView();
+        using ListView list = new();
         const string name = "Group1";
         const string subtitle = "Subtitle";
-        ListViewGroup listGroup = new ListViewGroup(name) { Subtitle = subtitle };
+        ListViewGroup listGroup = new(name) { Subtitle = subtitle };
         listGroup.Items.Add(new ListViewItem());
         list.Groups.Add(listGroup);
 
@@ -272,12 +272,12 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
         {
             Control.CheckForIllegalCrossThreadCalls = true;
-            using Form form = new Form();
+            using Form form = new();
 
-            using ListView list = new ListView();
-            ListViewGroup listGroup = new ListViewGroup("Group1");
-            ListViewItem listItem1 = new ListViewItem("Item1");
-            ListViewItem listItem2 = new ListViewItem("Item2");
+            using ListView list = new();
+            ListViewGroup listGroup = new("Group1");
+            ListViewItem listItem1 = new("Item1");
+            ListViewItem listItem2 = new("Item2");
             list.Groups.Add(listGroup);
             listItem1.Group = listGroup;
             listItem2.Group = listGroup;
@@ -291,7 +291,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             AccessibleObject group1AccObj = listGroup.AccessibilityObject;
             Assert.True(list.IsHandleCreated);
 
-            RECT groupRect = new RECT();
+            RECT groupRect = new();
             PInvoke.SendMessage(list, PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
             int actualWidth = group1AccObj.Bounds.Width;
@@ -327,7 +327,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         listView.Groups.Add(group);
         listView.Items.Add(new ListViewItem("a", group));
 
-        RECT groupRect = new RECT();
+        RECT groupRect = new();
         PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
 
         AccessibleObject groupAccObj = group.AccessibilityObject;
@@ -654,7 +654,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     [MemberData(nameof(ListViewGroup_GroupAddedWithItem_AccessibleObject_TestData))]
     public void ListViewGroup_GroupAddedWithItem_AccessibleObject_DoesntThrowException(View view, bool showGroups, bool createHandle, bool virtualMode)
     {
-        using var listView = new ListView
+        using ListView listView = new()
         {
             View = view,
             ShowGroups = showGroups,
@@ -662,8 +662,8 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             VirtualMode = virtualMode
         };
 
-        var listViewGroup = new ListViewGroup("Test Group");
-        var listViewItem = new ListViewItem("Test item", listViewGroup);
+        ListViewGroup listViewGroup = new("Test Group");
+        ListViewItem listViewItem = new("Test item", listViewGroup);
 
         if (virtualMode)
         {
@@ -703,7 +703,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             ShowGroups = showGroups,
         };
 
-        var lvgroup1 = new ListViewGroup
+        ListViewGroup lvgroup1 = new()
         {
             Header = "CollapsibleGroup1",
             CollapsedState = ListViewGroupCollapsedState.Expanded
@@ -712,7 +712,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         listView.Groups.Add(lvgroup1);
         listView.Items.Add(new ListViewItem("Item1", lvgroup1));
 
-        var lvgroup2 = new ListViewGroup
+        ListViewGroup lvgroup2 = new()
         {
             Header = "CollapsibleGroup2",
             CollapsedState = ListViewGroupCollapsedState.Collapsed
@@ -1213,7 +1213,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             return;
         }
 
-        using ListView listView = new ListView() { View = view, ShowGroups = true };
+        using ListView listView = new() { View = view, ShowGroups = true };
         listView.Columns.Add(new ColumnHeader());
         listView.CreateControl();
         listView.Groups.Add(new ListViewGroup());
@@ -1226,7 +1226,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
     private ListView GetListViewItemWithEmptyGroups(View view)
     {
-        ListView listView = new ListView() { View = view };
+        ListView listView = new() { View = view };
         listView.CreateControl();
         ListViewGroup listViewGroupWithoutItems = new("Group without items");
         ListViewGroup listViewGroupWithItems1 = new("Group with item 1");
@@ -1259,11 +1259,11 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             Size = new Size(200, 200)
         };
 
-        ListViewGroup listGroup1 = new ListViewGroup("Group1");
-        ListViewGroup listGroup2 = new ListViewGroup("Group2");
-        ListViewItem listItem1 = new ListViewItem(listGroup1);
-        ListViewItem listItem2 = new ListViewItem(listGroup1);
-        ListViewItem listItem3 = new ListViewItem();
+        ListViewGroup listGroup1 = new("Group1");
+        ListViewGroup listGroup2 = new("Group2");
+        ListViewItem listItem1 = new(listGroup1);
+        ListViewItem listItem2 = new(listGroup1);
+        ListViewItem listItem3 = new();
         listView.Groups.Add(listGroup1);
         listView.Groups.Add(listGroup2);
 
@@ -1394,13 +1394,13 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
     private ListView GetListViewItemWithInvisibleItems(View view)
     {
-        ListView listView = new ListView() { View = view };
+        ListView listView = new() { View = view };
         listView.CreateControl();
         ListViewGroup listViewGroup = new("Test group");
-        ListViewItem listViewInvisibleItem1 = new ListViewItem("Invisible item 1");
-        ListViewItem listViewVisibleItem1 = new ListViewItem("Visible item 1");
-        ListViewItem listViewInvisibleItem2 = new ListViewItem("Invisible item 1");
-        ListViewItem listViewVisibleItem2 = new ListViewItem("Visible item 1");
+        ListViewItem listViewInvisibleItem1 = new("Invisible item 1");
+        ListViewItem listViewVisibleItem1 = new("Visible item 1");
+        ListViewItem listViewInvisibleItem2 = new("Invisible item 1");
+        ListViewItem listViewVisibleItem2 = new("Visible item 1");
 
         listView.Groups.Add(listViewGroup);
         listView.Items.AddRange(new ListViewItem[] { listViewVisibleItem1, listViewVisibleItem2 });
@@ -1426,15 +1426,15 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         listView.Columns.Add(new ColumnHeader());
 
-        ListViewItem listViewItem1 = new ListViewItem("Test item 1");
+        ListViewItem listViewItem1 = new("Test item 1");
         if (!virtualMode)
         {
-            var listViewGroup = new ListViewGroup("Test Group");
+            ListViewGroup listViewGroup = new("Test Group");
             listView.Groups.Add(listViewGroup);
             listViewItem1.Group = listViewGroup;
         }
 
-        var listViewItem2 = new ListViewItem("Test item 2");
+        ListViewItem listViewItem2 = new("Test item 2");
 
         if (virtualMode)
         {

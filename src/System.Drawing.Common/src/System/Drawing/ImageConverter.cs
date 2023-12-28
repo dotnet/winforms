@@ -62,7 +62,7 @@ public class ImageConverter : TypeConverter
             }
             else if (value is Image image)
             {
-                using var ms = new MemoryStream();
+                using MemoryStream ms = new();
 
                 ImageFormat dest = image.RawFormat;
                 // Jpeg loses data, so we don't want to use it to serialize.

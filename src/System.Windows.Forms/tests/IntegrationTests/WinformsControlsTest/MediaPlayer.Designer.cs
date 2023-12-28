@@ -33,7 +33,7 @@ partial class MediaPlayer
     /// </summary>
     private void InitializeComponent()
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MediaPlayer));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(MediaPlayer));
         this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
         ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
         this.SuspendLayout();

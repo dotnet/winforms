@@ -9,7 +9,7 @@ public class QuestionEventArgsTests
     [Fact]
     public void Ctor_Default()
     {
-        var e = new QuestionEventArgs();
+        QuestionEventArgs e = new();
         Assert.False(e.Response);
     }
 
@@ -18,7 +18,7 @@ public class QuestionEventArgsTests
     [InlineData(false)]
     public void Ctor_Bool(bool response)
     {
-        var e = new QuestionEventArgs(response);
+        QuestionEventArgs e = new(response);
         Assert.Equal(response, e.Response);
     }
 
@@ -27,7 +27,7 @@ public class QuestionEventArgsTests
     [InlineData(false)]
     public void Response_Set_GetReturnsExpected(bool value)
     {
-        var e = new QuestionEventArgs(!value)
+        QuestionEventArgs e = new(!value)
         {
             Response = value
         };

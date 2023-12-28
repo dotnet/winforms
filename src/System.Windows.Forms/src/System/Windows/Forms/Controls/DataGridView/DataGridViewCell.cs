@@ -119,7 +119,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             ContextMenuStrip? oldValue = (ContextMenuStrip?)Properties.GetObject(s_propCellContextMenuStrip);
             if (oldValue != value)
             {
-                EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
+                EventHandler disposedHandler = new(DetachContextMenuStrip);
                 if (oldValue is not null)
                 {
                     oldValue.Disposed -= disposedHandler;
@@ -998,7 +998,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         Debug.Assert(DataGridView is not null);
         bool singleVerticalBorderAdded = !DataGridView.RowHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
         bool singleHorizontalBorderAdded = !DataGridView.ColumnHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
-        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new();
 
         if (rowIndex > -1 && OwningColumn is not null)
         {
@@ -1056,7 +1056,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         if (cellValueBounds.Width >= IconMarginWidth * 2 + s_iconsWidth &&
             cellValueBounds.Height >= IconMarginHeight * 2 + s_iconsHeight)
         {
-            Rectangle bmpRect = new Rectangle(DataGridView!.RightToLeftInternal ?
+            Rectangle bmpRect = new(DataGridView!.RightToLeftInternal ?
                                   cellValueBounds.Left + IconMarginWidth :
                                   cellValueBounds.Right - IconMarginWidth - s_iconsWidth,
                                   cellValueBounds.Y + (cellValueBounds.Height - s_iconsHeight) / 2,
@@ -1348,7 +1348,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             formattedValue = GetEditedFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.ClipboardContent);
         }
 
-        StringBuilder sb = new StringBuilder(64);
+        StringBuilder sb = new(64);
 
         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
         {

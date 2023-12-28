@@ -12,7 +12,7 @@ public class TextBoxAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
     public void TextBoxAccessibleObject_TextPatternAvailable(int propertyId)
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         AccessibleObject textBoxAccessibleObject = textBox.AccessibilityObject;
 
         // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
@@ -27,7 +27,7 @@ public class TextBoxAccessibleObjectTests
     [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
     public void TextBoxAccessibleObject_PatternSupported(int patternId)
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         AccessibleObject textBoxAccessibleObject = textBox.AccessibilityObject;
 
         // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
@@ -38,7 +38,7 @@ public class TextBoxAccessibleObjectTests
     [WinFormsFact]
     public void TextBoxAccessibilityObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.CreateControl();
         // AccessibleRole is not set = Default
 
@@ -51,7 +51,7 @@ public class TextBoxAccessibleObjectTests
     [WinFormsFact]
     public void TextBoxAccessibilityObject_Role_IsText_ByDefault()
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.CreateControl();
         // AccessibleRole is not set = Default
 
@@ -80,7 +80,7 @@ public class TextBoxAccessibleObjectTests
     [MemberData(nameof(TextBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void TextBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -93,7 +93,7 @@ public class TextBoxAccessibleObjectTests
     [WinFormsFact]
     public void TextBoxAccessibleObject_GetPropertyValue_Value_AccessDenied_WithUseSystemPasswordChar()
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.UseSystemPasswordChar = true;
         textBox.Text = "some text";
 
@@ -108,7 +108,7 @@ public class TextBoxAccessibleObjectTests
     [InlineData(false)]
     public void TextBoxAccessibleObject_IsPassword_IsExpected_WithUseSystemPasswordChar(bool useSystemPasswordChar)
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.UseSystemPasswordChar = useSystemPasswordChar;
 
         var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
@@ -136,7 +136,7 @@ public class TextBoxAccessibleObjectTests
     [InlineData('*')]
     public void TextBoxAccessibleObject_IsPassword_IsExpected_WithPasswordChar(char passwordChar)
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.PasswordChar = passwordChar;
 
         bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
@@ -150,7 +150,7 @@ public class TextBoxAccessibleObjectTests
     [WinFormsFact]
     public void TextBoxAccessibleObject_IsPassword_IsFalse_ForMultilineTextBox_WithUseSystemPasswordChar()
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.Multiline = true;
         textBox.UseSystemPasswordChar = true;
 
@@ -166,7 +166,7 @@ public class TextBoxAccessibleObjectTests
     [InlineData('*')]
     public void TextBoxAccessibleObject_IsPassword_IsExpected_ForMultilineTextBox_WithPasswordChar(char passwordChar)
     {
-        using TextBox textBox = new TextBox();
+        using TextBox textBox = new();
         textBox.PasswordChar = passwordChar;
         textBox.Multiline = true;
 

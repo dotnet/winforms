@@ -52,9 +52,9 @@ internal sealed class DesignerActionBehavior : Behavior
     internal DesignerActionPanel CreateDesignerActionPanel(IComponent relatedComponent)
     {
         // BUILD AND SHOW THE CHROME UI
-        DesignerActionListCollection lists = new DesignerActionListCollection();
+        DesignerActionListCollection lists = new();
         lists.AddRange(ActionLists);
-        DesignerActionPanel dap = new DesignerActionPanel(_serviceProvider);
+        DesignerActionPanel dap = new(_serviceProvider);
         dap.UpdateTasks(lists, new DesignerActionListCollection(), string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name), null);
         return dap;
     }

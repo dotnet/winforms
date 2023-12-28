@@ -128,7 +128,7 @@ public sealed class LinearGradientBrush : Brush
     {
         get
         {
-            int[] colors = new int[] { 0, 0 };
+            int[] colors = [0, 0];
             Gdip.CheckStatus(Gdip.GdipGetLineColors(new HandleRef(this, NativeBrush), colors));
 
             return new Color[]

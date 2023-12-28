@@ -633,7 +633,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         borderAndPaddingWidths.Width += cellStyle.Padding.Right;
         borderAndPaddingWidths.Height += cellStyle.Padding.Bottom;
         Size size = GetSize(rowIndex);
-        Size adjustedSize = new Size(size.Width - borderAndPaddingWidths.X - borderAndPaddingWidths.Width,
+        Size adjustedSize = new(size.Width - borderAndPaddingWidths.X - borderAndPaddingWidths.Width,
                                      size.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height);
 
         int dropHeight;
@@ -1455,7 +1455,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
             else
             {
-                BindingMemberInfo displayBindingMember = new BindingMemberInfo(displayMember);
+                BindingMemberInfo displayBindingMember = new(displayMember);
 
                 // make the DataManager point to the sublist inside this.DataSource
                 // We already check inside GetDataManager in DataManager property if these are null.
@@ -1485,7 +1485,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
             else
             {
-                BindingMemberInfo valueBindingMember = new BindingMemberInfo(valueMember);
+                BindingMemberInfo valueBindingMember = new(valueMember);
 
                 // make the DataManager point to the sublist inside this.DataSource
                 // We already check inside GetDataManager in DataManager property if these are null.
@@ -2259,7 +2259,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     {
                         if (paintFlat)
                         {
-                            Point middle = new Point(dropRect.Left + dropRect.Width / 2, dropRect.Top + dropRect.Height / 2);
+                            Point middle = new(dropRect.Left + dropRect.Width / 2, dropRect.Top + dropRect.Height / 2);
                             // if the width is odd - favor pushing it over one pixel right.
                             middle.X += (dropRect.Width % 2);
                             // if the height is odd - favor pushing it over one pixel down.
@@ -2280,14 +2280,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                             dropRect.X--;
                             dropRect.Width++;
 
-                            Point middle = new Point(dropRect.Left + (dropRect.Width - 1) / 2,
+                            Point middle = new(dropRect.Left + (dropRect.Width - 1) / 2,
                                     dropRect.Top + (dropRect.Height + s_nonXPTriangleHeight) / 2);
                             // if the width is event - favor pushing it over one pixel right.
                             middle.X += ((dropRect.Width + 1) % 2);
                             // if the height is odd - favor pushing it over one pixel down.
                             middle.Y += (dropRect.Height % 2);
-                            Point pt1 = new Point(middle.X - (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
-                            Point pt2 = new Point(middle.X + (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
+                            Point pt1 = new(middle.X - (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
+                            Point pt2 = new(middle.X + (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
                             g.FillPolygon(SystemBrushes.ControlText, new Point[] { pt1, pt2, middle });
                             // quirk in GDI+ : if we don't draw the line below then the top right most pixel of the DropDown triangle will not paint
                             // Would think that g.FillPolygon would have painted that...

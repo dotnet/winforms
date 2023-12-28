@@ -1091,7 +1091,7 @@ public sealed partial class Application
             currentStartInfo.FileName = ExecutablePath;
             if (arguments.Length >= 2)
             {
-                StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
+                StringBuilder sb = new((arguments.Length - 1) * 16);
                 for (int argumentIndex = 1; argumentIndex < arguments.Length; argumentIndex++)
                 {
                     sb.Append($"\"{arguments[argumentIndex]}\" ");

@@ -8,19 +8,19 @@ public class PreviewPrintControllerTests
     [Fact]
     public void Ctor_Default()
     {
-        var controller = new PreviewPrintController();
+        PreviewPrintController controller = new();
         Assert.True(controller.IsPreview);
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPage_InvokeWithPrint_ReturnsNull()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             controller.OnStartPrint(document, new PrintEventArgs());
 
-            var printEventArgs = new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, new PageSettings());
+            PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, new PageSettings());
             Assert.NotNull(controller.OnStartPage(document, printEventArgs));
 
             // Call OnEndPage.
@@ -34,17 +34,17 @@ public class PreviewPrintControllerTests
     [Fact]
     public void OnStartPage_InvokeNullDocument_ThrowsNullReferenceException()
     {
-        var controller = new PreviewPrintController();
-        var e = new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null);
+        PreviewPrintController controller = new();
+        PrintPageEventArgs e = new(null, Rectangle.Empty, Rectangle.Empty, null);
         Assert.Throws<NullReferenceException>(() => controller.OnStartPage(null, e));
     }
 
     [Fact]
     public void OnStartPage_InvokeNullEventArgs_ThrowsNullReferenceException()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, null));
         }
     }
@@ -52,12 +52,12 @@ public class PreviewPrintControllerTests
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPage_InvokeNullEventArgsPageSettings_ReturnsNull()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             controller.OnStartPrint(document, new PrintEventArgs());
 
-            var printEventArgs = new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null);
+            PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, null);
             Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, printEventArgs));
         }
     }
@@ -65,10 +65,10 @@ public class PreviewPrintControllerTests
     [Fact]
     public void OnStartPage_PrintNotStarted_ThrowsNullReferenceException()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
-            var e = new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null);
+            PreviewPrintController controller = new();
+            PrintPageEventArgs e = new(null, Rectangle.Empty, Rectangle.Empty, null);
             Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, e));
         }
     }
@@ -76,9 +76,9 @@ public class PreviewPrintControllerTests
     [Fact]
     public void OnEndPage_InvokeWithoutStarting_Nop()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             controller.OnEndPage(document, new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null));
             controller.OnEndPage(null, null);
         }
@@ -94,9 +94,9 @@ public class PreviewPrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnStartPrint_InvokeWithDocument_Success(PrintEventArgs e)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             controller.OnStartPrint(document, e);
 
             // Call OnEndPrint
@@ -107,9 +107,9 @@ public class PreviewPrintControllerTests
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPrint_InvokeMultipleTimes_Success()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             controller.OnStartPrint(document, new PrintEventArgs());
             controller.OnStartPrint(document, new PrintEventArgs());
 
@@ -121,7 +121,7 @@ public class PreviewPrintControllerTests
     [Fact]
     public void OnStartPrint_InvokeNullDocument_ThrowsNullReferenceException()
     {
-        var controller = new PreviewPrintController();
+        PreviewPrintController controller = new();
         Assert.Throws<NullReferenceException>(() => controller.OnStartPrint(null, new PrintEventArgs()));
     }
 
@@ -129,9 +129,9 @@ public class PreviewPrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnEndPrint_InvokeWithoutStarting_Nop(PrintEventArgs e)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new PreviewPrintController();
+            PreviewPrintController controller = new();
             controller.OnEndPrint(document, e);
             controller.OnEndPrint(null, e);
         }

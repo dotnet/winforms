@@ -46,7 +46,7 @@ public class IconCodecTest
             Assert.Equal(PixelFormat.Format32bppArgb, image.PixelFormat);
             Assert.Equal(73746, image.Flags);
 
-            using (Bitmap bmp = new Bitmap(image))
+            using (Bitmap bmp = new(image))
             {
                 Assert.True(bmp.RawFormat.Equals(ImageFormat.MemoryBmp));
                 Assert.Equal(PixelFormat.Format32bppArgb, bmp.PixelFormat);
@@ -71,7 +71,7 @@ public class IconCodecTest
     public void Bitmap16Features()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -104,7 +104,7 @@ public class IconCodecTest
     public void Bitmap16Features_Palette_Entries()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(0, bmp.Palette.Entries.Length);
         }
@@ -114,7 +114,7 @@ public class IconCodecTest
     public void Bitmap16Pixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(0, bmp.GetPixel(0, 0).ToArgb());
@@ -140,7 +140,7 @@ public class IconCodecTest
     public void Bitmap16Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -228,7 +228,7 @@ public class IconCodecTest
     public void Bitmap32Features()
     {
         string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -260,7 +260,7 @@ public class IconCodecTest
     public void Bitmap32Features_PaletteEntries()
     {
         string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(0, bmp.Palette.Entries.Length);
         }
@@ -270,7 +270,7 @@ public class IconCodecTest
     public void Bitmap32Pixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(0, bmp.GetPixel(0, 0).ToArgb());
@@ -344,7 +344,7 @@ public class IconCodecTest
     public void Bitmap32Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -441,7 +441,7 @@ public class IconCodecTest
     public void Bitmap48Features()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -473,7 +473,7 @@ public class IconCodecTest
     public void Bitmap48Features_Palette_Entries()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(0, bmp.Palette.Entries.Length);
         }
@@ -483,7 +483,7 @@ public class IconCodecTest
     public void Bitmap48Pixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-16777216, bmp.GetPixel(0, 0).ToArgb());
@@ -570,7 +570,7 @@ public class IconCodecTest
     public void Bitmap48Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -671,7 +671,7 @@ public class IconCodecTest
     public void Bitmap64Features()
     {
         string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -703,7 +703,7 @@ public class IconCodecTest
     public void Bitmap64Features_Palette_Entries()
     {
         string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(0, bmp.Palette.Entries.Length);
         }
@@ -713,7 +713,7 @@ public class IconCodecTest
     public void Bitmap64Pixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-65383, bmp.GetPixel(0, 0).ToArgb());
@@ -782,7 +782,7 @@ public class IconCodecTest
     public void Bitmap64Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -937,7 +937,7 @@ public class IconCodecTest
     public void Bitmap96Features()
     {
         string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -969,7 +969,7 @@ public class IconCodecTest
     public void Bitmap96Features_Palette_Entries()
     {
         string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(0, bmp.Palette.Entries.Length);
         }
@@ -979,7 +979,7 @@ public class IconCodecTest
     public void Bitmap96Pixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(0, bmp.GetPixel(0, 0).ToArgb());
@@ -1565,7 +1565,7 @@ public class IconCodecTest
     public void Bitmap96Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -1878,7 +1878,7 @@ public class IconCodecTest
     public void Xp32bppIconFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_32bit.ico");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -1912,10 +1912,10 @@ public class IconCodecTest
         string sOutFile = $"linerect-{expected}.ico";
 
         // Save
-        Bitmap bmp = new Bitmap(100, 100, original);
+        Bitmap bmp = new(100, 100, original);
         Graphics gr = Graphics.FromImage(bmp);
 
-        using (Pen p = new Pen(Color.Red, 2))
+        using (Pen p = new(Color.Red, 2))
         {
             gr.DrawLine(p, 10.0F, 10.0F, 90.0F, 90.0F);
             gr.DrawRectangle(p, 10.0F, 10.0F, 80.0F, 80.0F);
@@ -1928,7 +1928,7 @@ public class IconCodecTest
             bmp.Save(sOutFile, ImageFormat.Icon);
 
             // Load
-            using (Bitmap bmpLoad = new Bitmap(sOutFile))
+            using (Bitmap bmpLoad = new(sOutFile))
             {
                 Assert.Equal(ImageFormat.Png, bmpLoad.RawFormat);
                 Assert.Equal(expected, bmpLoad.PixelFormat);

@@ -16,8 +16,8 @@ public class ResxDataNodeTests
     public void ResxDataNode_ResXFileRefConstructor()
     {
         var nodeName = "Node";
-        var fileRef = new ResXFileRef(string.Empty, string.Empty);
-        var dataNode = new ResXDataNode(nodeName, fileRef);
+        ResXFileRef fileRef = new(string.Empty, string.Empty);
+        ResXDataNode dataNode = new(nodeName, fileRef);
 
         Assert.Equal(nodeName, dataNode.Name);
         Assert.Same(fileRef, dataNode.FileRef);
@@ -78,7 +78,7 @@ public class ResxDataNodeTests
     [MemberData(nameof(RoundTrip_BinaryFormatted_TestData))]
     public void ResxDataNode_RoundTrip_BinaryFormatted(object? value)
     {
-        using var formatterScope = new BinaryFormatterScope(enable: false);
+        using BinaryFormatterScope formatterScope = new(enable: false);
         ResXDataNode dataNode = new("Test", value);
         DataNodeInfo nodeInfo = dataNode.GetDataNodeInfo();
 

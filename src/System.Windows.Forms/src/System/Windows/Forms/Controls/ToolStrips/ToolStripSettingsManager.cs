@@ -32,7 +32,7 @@ internal partial class ToolStripSettingsManager
         {
             if (!string.IsNullOrEmpty(toolStrip.Name))
             {
-                ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
+                ToolStripSettings toolStripSettings = new(GetSettingsKey(toolStrip));
 
                 // Check if we have settings saved out for this toolstrip. If so, add it to our apply list.
                 if (!toolStripSettings.IsDefault)
@@ -54,8 +54,8 @@ internal partial class ToolStripSettingsManager
         {
             if (!string.IsNullOrEmpty(toolStrip.Name))
             {
-                ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
-                SettingsStub stub = new SettingsStub(toolStrip);
+                ToolStripSettings toolStripSettings = new(GetSettingsKey(toolStrip));
+                SettingsStub stub = new(toolStrip);
 
                 toolStripSettings.ItemOrder = stub.ItemOrder;
                 toolStripSettings.Name = stub.Name;
@@ -76,7 +76,7 @@ internal partial class ToolStripSettingsManager
             return string.Empty;
         }
 
-        StringBuilder itemNames = new StringBuilder(toolStrip.Items.Count);
+        StringBuilder itemNames = new(toolStrip.Items.Count);
 
         for (int i = 0; i < toolStrip.Items.Count; i++)
         {
@@ -101,7 +101,7 @@ internal partial class ToolStripSettingsManager
         Dictionary<string, ToolStrip> itemLocationHash = BuildItemOriginationHash();
 
         // build up a hash of where we want the ToolStrips to go
-        Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = new Dictionary<object, List<SettingsStub>>();
+        Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = new();
 
         foreach (SettingsStub toolStripSettings in toolStripSettingsToApply)
         {
@@ -209,7 +209,7 @@ internal partial class ToolStripSettingsManager
 
     private Dictionary<string, ToolStrip> BuildItemOriginationHash()
     {
-        Dictionary<string, ToolStrip> itemLocationHash = new Dictionary<string, ToolStrip>();
+        Dictionary<string, ToolStrip> itemLocationHash = new();
 
         List<ToolStrip> toolStripControls = new();
         FindControls(true, form.Controls, toolStripControls);

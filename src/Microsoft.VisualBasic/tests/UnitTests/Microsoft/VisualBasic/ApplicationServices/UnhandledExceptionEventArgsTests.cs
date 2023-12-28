@@ -15,7 +15,7 @@ public class UnhandledExceptionEventArgsTests
     [MemberData(nameof(Ctor_Bool_Exception_TestData))]
     public void Ctor_Bool_Exception(bool exitApplication, Exception exception)
     {
-        var args = new UnhandledExceptionEventArgs(exitApplication, exception);
+        UnhandledExceptionEventArgs args = new(exitApplication, exception);
         Assert.Same(exception, args.Exception);
         Assert.Equal(exitApplication, args.ExitApplication);
     }
@@ -25,7 +25,7 @@ public class UnhandledExceptionEventArgsTests
     [InlineData(false)]
     public void ExitApplication_Set_GetReturnsExpected(bool value)
     {
-        var args = new UnhandledExceptionEventArgs(true, null);
+        UnhandledExceptionEventArgs args = new(true, null);
         args.ExitApplication = value;
         Assert.Equal(value, args.ExitApplication);
     }

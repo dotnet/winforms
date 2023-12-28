@@ -12,7 +12,7 @@ public class ProfessionalColorTableTests
     [WinFormsFact]
     public void ProfessionalColorTable_Ctor_Default()
     {
-        var table = new ProfessionalColorTable();
+        ProfessionalColorTable table = new();
         Assert.False(table.UseSystemColors);
     }
 
@@ -82,7 +82,7 @@ public class ProfessionalColorTableTests
     [MemberData(nameof(Properties_TestData))]
     public void ProfessionalColorTable_Properties_Get_ReturnsExpected(Func<ProfessionalColorTable, Color> factory)
     {
-        var table = new ProfessionalColorTable();
+        ProfessionalColorTable table = new();
         Color result = factory(table);
         Assert.Equal(result, factory(table));
     }
@@ -91,7 +91,7 @@ public class ProfessionalColorTableTests
     [MemberData(nameof(Properties_TestData))]
     public void ProfessionalColorTable_Properties_GetUseSystemColors_ReturnsExpected(Func<ProfessionalColorTable, Color> factory)
     {
-        var table = new ProfessionalColorTable
+        ProfessionalColorTable table = new()
         {
             UseSystemColors = true
         };
@@ -108,7 +108,7 @@ public class ProfessionalColorTableTests
         {
             ToolStripManager.VisualStylesEnabled = true;
 
-            var table = new ProfessionalColorTable();
+            ProfessionalColorTable table = new();
             Color result = factory(table);
             Assert.Equal(result, factory(table));
         }
@@ -122,7 +122,7 @@ public class ProfessionalColorTableTests
     [BoolData]
     public void ProfessionalColorTable_ImageMarginGradientEnd_Get_ReturnsExpected(bool useSystemColors)
     {
-        var table = new ProfessionalColorTable
+        ProfessionalColorTable table = new()
         {
             UseSystemColors = useSystemColors
         };
@@ -133,7 +133,7 @@ public class ProfessionalColorTableTests
     [BoolData]
     public void ProfessionalColorTable_UseSystemColors_Set_GetReturnsExpected(bool value)
     {
-        var table = new ProfessionalColorTable
+        ProfessionalColorTable table = new()
         {
             UseSystemColors = value
         };
@@ -152,7 +152,7 @@ public class ProfessionalColorTableTests
     [BoolData]
     public void ProfessionalColorTable_UseSystemColors_SetWithKnownColor_GetReturnsExpected(bool value)
     {
-        var table = new ProfessionalColorTable
+        ProfessionalColorTable table = new()
         {
             UseSystemColors = !value
         };
@@ -189,7 +189,7 @@ public class ProfessionalColorTableTests
         using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
         {
             // Simulate a SystemEvents.UserPreferenceChanged event.
-            var table = new ProfessionalColorTable();
+            ProfessionalColorTable table = new();
             Color color = table.ButtonSelectedHighlight;
             SystemEventsHelper.SendMessageOnUserPreferenceChanged(category);
             Assert.Equal(color, table.ButtonSelectedHighlight);

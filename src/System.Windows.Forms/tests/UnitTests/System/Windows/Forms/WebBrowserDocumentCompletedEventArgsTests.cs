@@ -9,8 +9,8 @@ public class WebBrowserDocumentCompletedEventArgsTests
     [Fact]
     public void Ctor_Uri()
     {
-        var url = new Uri("http://google.com");
-        var e = new WebBrowserDocumentCompletedEventArgs(url);
+        Uri url = new("http://google.com");
+        WebBrowserDocumentCompletedEventArgs e = new(url);
         Assert.Equal(url, e.Url);
     }
 }

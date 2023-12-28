@@ -139,7 +139,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
                     {
                         // we gotta make sure that we don't collide with the existing menu.
                         Rectangle bounds = GetDropDownBounds(dropDownDirection);
-                        Rectangle ownerItemBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
+                        Rectangle ownerItemBounds = new(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
                         Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
 
                         // grab the intersection
@@ -377,12 +377,12 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
     private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
     {
-        Rectangle dropDownBounds = new Rectangle(Point.Empty, DropDown.GetSuggestedSize());
+        Rectangle dropDownBounds = new(Point.Empty, DropDown.GetSuggestedSize());
         // calculate the offset from the upper left hand corner of the item.
         dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
 
         // we should make sure we don't obscure the owner item.
-        Rectangle itemScreenBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
+        Rectangle itemScreenBounds = new(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
 
         if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
         {

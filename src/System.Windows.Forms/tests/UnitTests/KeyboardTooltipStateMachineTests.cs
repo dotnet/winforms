@@ -11,7 +11,7 @@ public class KeyboardTooltipStateMachineTests
     public void HookToolTip()
     {
         using ToolTip toolTip = new();
-        var mock = new Mock<IKeyboardToolTip>(MockBehavior.Strict);
+        Mock<IKeyboardToolTip> mock = new(MockBehavior.Strict);
         IKeyboardToolTip keyboardToolTip = mock.Object;
 
         // Validate we don't get OnHooked if AllowsToolTip is false

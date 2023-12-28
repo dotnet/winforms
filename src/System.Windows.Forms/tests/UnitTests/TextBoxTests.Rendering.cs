@@ -13,7 +13,7 @@ public partial class TextBoxTests
     {
         // Regression test for https://github.com/dotnet/winforms/issues/3706
 
-        using Form form = new Form();
+        using Form form = new();
         using TextBox textBox = new TextBox
         {
             Size = new Size(80, 23),
@@ -26,8 +26,8 @@ public partial class TextBoxTests
         Assert.NotEqual(IntPtr.Zero, form.Handle);
         Assert.NotEqual(IntPtr.Zero, textBox.Handle);
 
-        using var emf = new EmfScope();
-        DeviceContextState state = new DeviceContextState(emf);
+        using EmfScope emf = new();
+        DeviceContextState state = new(emf);
 
         textBox.TestAccessor().Dynamic.DrawPlaceholderText(emf.HDC);
 

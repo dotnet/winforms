@@ -176,7 +176,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
                     CodeDomSerializer.TraceIf(TraceLevel.Warning, extended is null, $"Extended object {manager.GetName(value)} could not be serialized.");
                     if (extender is not null && extended is not null)
                     {
-                        CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, $"Get{property.Name}");
+                        CodeMethodReferenceExpression methodRef = new(extender, $"Get{property.Name}");
                         CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
                         {
                             Method = methodRef
@@ -192,7 +192,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
 
                 if (propertyRef is not null)
                 {
-                    ExpressionContext tree = new ExpressionContext(propertyRef, property.PropertyType, value, propertyValue);
+                    ExpressionContext tree = new(propertyRef, property.PropertyType, value, propertyValue);
                     manager.Context.Push(tree);
 
                     object? result = null;
@@ -253,7 +253,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             CodeDomSerializer.TraceIf(TraceLevel.Warning, extended is null, $"Extended object {manager.GetName(value)} could not be serialized.");
             if (extender is not null && extended is not null)
             {
-                CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, $"Set{property.Name}");
+                CodeMethodReferenceExpression methodRef = new(extender, $"Set{property.Name}");
                 object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
                 CodeExpression? serializedPropertyValue = null;
 
@@ -373,7 +373,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
 
                 if (serializedPropertyValue is not null)
                 {
-                    CodeAssignStatement assign = new CodeAssignStatement(propertyRef, serializedPropertyValue);
+                    CodeAssignStatement assign = new(propertyRef, serializedPropertyValue);
                     statements.Add(assign);
                 }
             }

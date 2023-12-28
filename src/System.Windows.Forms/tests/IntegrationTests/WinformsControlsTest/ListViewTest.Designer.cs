@@ -32,7 +32,7 @@ partial class ListViewTest
     private void InitializeComponent()
     {
         this.components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListViewTest));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(ListViewTest));
         this.imageList1 = new System.Windows.Forms.ImageList(this.components);
         this.listView1 = new System.Windows.Forms.ListView();
         this.columnHeader1 = (System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader());

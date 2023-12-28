@@ -50,7 +50,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     {
         foreach (string cultureName in s_locales)
         {
-            CultureInfo culture = new CultureInfo(cultureName);
+            CultureInfo culture = new(cultureName);
 
             // EnableVisualStyles: false, true
             yield return new object[]

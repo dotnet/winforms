@@ -14,7 +14,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Ctor_Default()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
         Assert.Null(list.Container);
         Assert.Empty(list.Images);
@@ -31,8 +31,8 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Ctor_IContainer()
     {
-        var container = new Container();
-        using var list = new ImageList(container);
+        Container container = new();
+        using ImageList list = new(container);
         Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
         Assert.Same(container, list.Container);
         Assert.Empty(list.Images);
@@ -56,7 +56,7 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ColorDepth_SetWithoutHandle_GetReturnsExpected(ColorDepth value)
     {
-        using var list = new ImageList
+        using ImageList list = new()
         {
             ColorDepth = value
         };
@@ -72,7 +72,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ColorDepth_SetWithoutHandleWithHandler_DoesNotCallRecreateHandle()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         list.RecreateHandle += handler;
@@ -106,7 +106,7 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ColorDepth_SetWithHandle_GetReturnsExpected(ColorDepth value)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         list.ColorDepth = value;
@@ -122,7 +122,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ColorDepth_SetWithHandleWithHandler_CallsRecreateHandle()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         int callCount = 0;
@@ -168,7 +168,7 @@ public class ImageListTests
     public void ImageList_ColorDepth_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.ColorDepth)];
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
         Assert.True(property.CanResetValue(list));
 
@@ -185,7 +185,7 @@ public class ImageListTests
     public void ImageList_ColorDepth_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.ColorDepth)];
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
         Assert.True(property.ShouldSerializeValue(list));
 
@@ -206,7 +206,7 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_Handle_Get_CreatesHandle(ColorDepth colorDepth)
     {
-        using var list = new ImageList
+        using ImageList list = new()
         {
             ColorDepth = colorDepth
         };
@@ -220,7 +220,7 @@ public class ImageListTests
     [InvalidEnumData<ColorDepth>]
     public void ImageList_ColorDepth_SetInvalid_ThrowsInvalidEnumArgumentException(ColorDepth value)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => list.ColorDepth = value);
     }
 
@@ -237,7 +237,7 @@ public class ImageListTests
     [MemberData(nameof(ImageSize_TestData))]
     public void ImageList_ImageSize_SetWithoutHandle_GetReturnsExpected(Size value)
     {
-        using var list = new ImageList
+        using ImageList list = new()
         {
             ImageSize = value
         };
@@ -253,7 +253,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ImageSize_SetWithoutHandleWithHandler_DoesNotCallRecreateHandle()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         list.RecreateHandle += handler;
@@ -287,7 +287,7 @@ public class ImageListTests
     [MemberData(nameof(ImageSize_TestData))]
     public void ImageList_ImageSize_SetWithHandle_GetReturnsExpected(Size value)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         list.ImageSize = value;
@@ -303,7 +303,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ImageSize_SetWithHandleWithHandler_CallsRecreateHandle()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         int callCount = 0;
@@ -362,7 +362,7 @@ public class ImageListTests
     public void ImageList_ImageSize_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.ImageSize)];
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(new Size(16, 16), list.ImageSize);
         Assert.True(property.CanResetValue(list));
 
@@ -379,7 +379,7 @@ public class ImageListTests
     public void ImageList_ImageSize_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.ImageSize)];
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(new Size(16, 16), list.ImageSize);
         Assert.True(property.ShouldSerializeValue(list));
 
@@ -399,7 +399,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ImageSize_SetEmpty__ThrowsArgumentException()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Throws<ArgumentException>("value", () => list.ImageSize = Size.Empty);
     }
 
@@ -414,7 +414,7 @@ public class ImageListTests
     [MemberData(nameof(ImageSize_SetInvalidDimension_TestData))]
     public void ImageList_ImageSize_SetInvalidWidth_ThrowsArgumentOutOfRangeException(int width)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => list.ImageSize = new Size(width, 1));
     }
 
@@ -422,14 +422,14 @@ public class ImageListTests
     [MemberData(nameof(ImageSize_SetInvalidDimension_TestData))]
     public void ImageList_ImageSize_SetInvalidHeight_ThrowsArgumentOutOfRangeException(int height)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => list.ImageSize = new Size(1, height));
     }
 
     [WinFormsFact]
     public void ImageList_ImageStream_GetWithImages_ReturnsExpected()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         list.Images.Add(new Bitmap(10, 10));
         Assert.NotNull(list.ImageStream);
         Assert.NotSame(list.ImageStream, list.ImageStream);
@@ -438,10 +438,10 @@ public class ImageListTests
 
     private static T RoundtripSerialize<T>(T source)
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        using var stream = new MemoryStream();
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        var formatter = new BinaryFormatter();
+        BinaryFormatter formatter = new();
         formatter.Serialize(stream, source);
         stream.Position = 0;
         return (T)formatter.Deserialize(stream);
@@ -452,17 +452,17 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ImageStream_SetStreamerSerialized_UpdatesImages(ColorDepth colorDepth)
     {
-        using var sourceList = new ImageList
+        using ImageList sourceList = new()
         {
             ColorDepth = colorDepth,
             ImageSize = new Size(32, 32)
         };
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         sourceList.Images.Add(image);
         using ImageListStreamer stream = RoundtripSerialize(sourceList.ImageStream);
         Assert.True(sourceList.HandleCreated);
 
-        using var list = new ImageList();
+        using ImageList list = new();
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         list.RecreateHandle += handler;
@@ -489,19 +489,19 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ImageStream_SetStreamerSerializedDisposed_Nop(ColorDepth colorDepth)
     {
-        using var sourceList = new ImageList
+        using ImageList sourceList = new()
         {
             ColorDepth = colorDepth,
             ImageSize = new Size(32, 32)
         };
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         sourceList.Images.Add(image);
         ImageListStreamer stream = RoundtripSerialize(sourceList.ImageStream);
         Assert.True(sourceList.HandleCreated);
         stream.Dispose();
         Assert.True(sourceList.HandleCreated);
 
-        using var list = new ImageList
+        using ImageList list = new()
         {
             ImageStream = stream
         };
@@ -516,17 +516,17 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ImageStream_SetStreamerHasHandleNotSerialized_UpdatesImages(ColorDepth colorDepth)
     {
-        using var sourceList = new ImageList
+        using ImageList sourceList = new()
         {
             ColorDepth = colorDepth,
             ImageSize = new Size(32, 32)
         };
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         sourceList.Images.Add(image);
         Assert.NotEqual(IntPtr.Zero, sourceList.Handle);
         ImageListStreamer stream = sourceList.ImageStream;
 
-        using var list = new ImageList
+        using ImageList list = new()
         {
             ImageStream = stream
         };
@@ -541,17 +541,17 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ImageStream_SetWithHandleStreamerHasHandleNotSerialized_Nop(ColorDepth colorDepth)
     {
-        using var sourceList = new ImageList
+        using ImageList sourceList = new()
         {
             ColorDepth = colorDepth,
             ImageSize = new Size(32, 32)
         };
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         sourceList.Images.Add(image);
         Assert.NotEqual(IntPtr.Zero, sourceList.Handle);
         ImageListStreamer stream = sourceList.ImageStream;
 
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         list.ImageStream = stream;
@@ -566,16 +566,16 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ImageStream_SetStreamerHasNoHandleNotSerialized_Nop(ColorDepth colorDepth)
     {
-        using var sourceList = new ImageList
+        using ImageList sourceList = new()
         {
             ColorDepth = colorDepth,
             ImageSize = new Size(32, 32)
         };
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         sourceList.Images.Add(image);
         ImageListStreamer stream = sourceList.ImageStream;
 
-        using var list = new ImageList
+        using ImageList list = new()
         {
             ImageStream = stream
         };
@@ -590,16 +590,16 @@ public class ImageListTests
     [EnumData<ColorDepth>]
     public void ImageList_ImageStream_SetWithHandleStreamerHasNoHandleNotSerialized_Nop(ColorDepth colorDepth)
     {
-        using var sourceList = new ImageList
+        using ImageList sourceList = new()
         {
             ColorDepth = colorDepth,
             ImageSize = new Size(32, 32)
         };
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         sourceList.Images.Add(image);
         ImageListStreamer stream = sourceList.ImageStream;
 
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         list.ImageStream = stream;
@@ -613,7 +613,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ImageStream_SetNull_ClearsImages()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
 
         // Set null without images.
         list.ImageStream = null;
@@ -630,7 +630,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_ImageStream_SetNullWithHandle_ClearsImages()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         // Set null without images.
@@ -650,7 +650,7 @@ public class ImageListTests
     [StringWithNullData]
     public void ImageList_Tag_Set_GetReturnsExpected(object value)
     {
-        using var list = new ImageList
+        using ImageList list = new()
         {
             Tag = value
         };
@@ -675,7 +675,7 @@ public class ImageListTests
     [MemberData(nameof(TransparentColor_Set_TestData))]
     public void ImageList_TransparentColor_SetWithoutHandle_GetReturnsExpected(Color value)
     {
-        using var list = new ImageList
+        using ImageList list = new()
         {
             TransparentColor = value
         };
@@ -691,7 +691,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_TransparentColor_SetWithoutHandleWithHandler_DoesNotCallRecreateHandle()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
         list.RecreateHandle += handler;
@@ -725,7 +725,7 @@ public class ImageListTests
     [MemberData(nameof(TransparentColor_Set_TestData))]
     public void ImageList_TransparentColor_SetWithHandle_GetReturnsExpected(Color value)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         list.TransparentColor = value;
@@ -741,7 +741,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_TransparentColor_SetWithHandleWithHandler_DoesNotCallRecreateHandle()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
@@ -776,7 +776,7 @@ public class ImageListTests
     public void ImageList_TransparentColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.TransparentColor)];
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(Color.Transparent, list.TransparentColor);
         Assert.True(property.CanResetValue(list));
 
@@ -793,7 +793,7 @@ public class ImageListTests
     public void ImageList_TransparentColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.TransparentColor)];
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.Equal(Color.Transparent, list.TransparentColor);
         Assert.True(property.ShouldSerializeValue(list));
 
@@ -813,7 +813,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Dispose_InvokeEmptyWithoutHandle_Nop()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         list.Dispose();
         Assert.Empty(list.Images);
         Assert.False(list.HandleCreated);
@@ -826,9 +826,9 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Dispose_InvokeWithIconsWithoutHandle_Success()
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var bitmap = new Bitmap(10, 10);
-        using var list = new ImageList();
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using Bitmap bitmap = new(10, 10);
+        using ImageList list = new();
         list.Images.Add(icon);
         list.Images.Add(bitmap);
 
@@ -848,9 +848,9 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Dispose_InvokeWithoutIconsWithoutHandle_Success()
     {
-        using var bitmap1 = new Bitmap(10, 10);
-        using var bitmap2 = new Bitmap(10, 10);
-        using var list = new ImageList();
+        using Bitmap bitmap1 = new(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
+        using ImageList list = new();
         list.Images.Add(bitmap1);
         list.Images.Add(bitmap2);
 
@@ -867,7 +867,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Dispose_InvokeEmptyWithHandle_Nop()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
         list.Dispose();
@@ -882,9 +882,9 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Dispose_InvokeNotEmptyWithHandle_Success()
     {
-        using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
-        using var bitmap = new Bitmap(10, 10);
-        using var list = new ImageList();
+        using Icon icon = new("bitmaps/10x16_one_entry_32bit.ico");
+        using Bitmap bitmap = new(10, 10);
+        using ImageList list = new();
         list.Images.Add(icon);
         list.Images.Add(bitmap);
         Assert.NotEqual(IntPtr.Zero, list.Handle);
@@ -903,7 +903,7 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Dispose_SetsIsDisposed()
     {
-        using var list = new ImageList();
+        using ImageList list = new();
         Assert.False(list.IsDisposed);
 
         list.Dispose();
@@ -922,11 +922,11 @@ public class ImageListTests
     [MemberData(nameof(Draw_Point_TestData))]
     public void ImageList_Draw_InvokeGraphicsPointIntWithoutHandle_Success(Point pt)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         list.Draw(graphics, pt, 0);
         Assert.True(list.HandleCreated);
@@ -936,12 +936,12 @@ public class ImageListTests
     [MemberData(nameof(Draw_Point_TestData))]
     public void ImageList_Draw_InvokeGraphicsPointIntWithHandle_Success(Point pt)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         list.Draw(graphics, pt, 0);
         Assert.True(list.HandleCreated);
@@ -951,11 +951,11 @@ public class ImageListTests
     [MemberData(nameof(Draw_Point_TestData))]
     public void ImageList_Draw_InvokeGraphicsIntIntIntWithoutHandle_Success(Point pt)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         list.Draw(graphics, pt, 0);
         Assert.True(list.HandleCreated);
@@ -965,12 +965,12 @@ public class ImageListTests
     [MemberData(nameof(Draw_Point_TestData))]
     public void ImageList_Draw_InvokeGraphicsIntIntIntWithHandle_Success(Point pt)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         list.Draw(graphics, pt.X, pt.Y, 0);
         Assert.True(list.HandleCreated);
@@ -989,11 +989,11 @@ public class ImageListTests
     [MemberData(nameof(Draw_WithSize_TestData))]
     public void ImageList_Draw_InvokeGraphicsIntIntIntIntIntWithoutHandle_Success(int x, int y, int width, int height)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         list.Draw(graphics, x, y, width, height, 0);
         Assert.True(list.HandleCreated);
@@ -1003,12 +1003,12 @@ public class ImageListTests
     [MemberData(nameof(Draw_WithSize_TestData))]
     public void ImageList_Draw_InvokeGraphicsIntIntIntIntIntWithHandle_Success(int x, int y, int width, int height)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
         Assert.NotEqual(IntPtr.Zero, list.Handle);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         list.Draw(graphics, x, y, width, height, 0);
         Assert.True(list.HandleCreated);
@@ -1017,8 +1017,8 @@ public class ImageListTests
     [WinFormsFact]
     public void ImageList_Draw_NullG_ThrowsNullReferenceException()
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
         Assert.Throws<NullReferenceException>(() => list.Draw(null, Point.Empty, 0));
         Assert.Throws<NullReferenceException>(() => list.Draw(null, 0, 0, 0));
@@ -1031,9 +1031,9 @@ public class ImageListTests
     [InlineData(1)]
     public void ImageList_Draw_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var list = new ImageList();
+        using ImageList list = new();
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => list.Draw(graphics, Point.Empty, index));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => list.Draw(graphics, 0, 0, index));
@@ -1045,11 +1045,11 @@ public class ImageListTests
     [InlineData(1)]
     public void ImageList_Draw_InvalidIndexNonEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var list = new ImageList();
-        using var image = new Bitmap(10, 10);
+        using ImageList list = new();
+        using Bitmap image = new(10, 10);
         list.Images.Add(image);
 
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => list.Draw(graphics, Point.Empty, index));
         Assert.Throws<ArgumentOutOfRangeException>("index", () => list.Draw(graphics, 0, 0, index));

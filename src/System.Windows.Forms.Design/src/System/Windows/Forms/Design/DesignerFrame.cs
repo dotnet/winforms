@@ -316,7 +316,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         List<ThemedScrollbarWindow> windows = new(Controls.Count);
         foreach (Control c in Controls)
         {
-            ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow { Handle = c.Handle };
+            ThemedScrollbarWindow windowInfo = new() { Handle = c.Handle };
             if (c is OverlayControl)
             {
                 windowInfo.Mode = ThemedScrollbarMode.OnlyTopLevel;
@@ -461,7 +461,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             for (int i = _overlayList.Count - 1; i >= 0; i--)
             {
                 Control overlayControl = _overlayList[i];
-                Rectangle invalidateRect = new Rectangle(overlayControl.PointToClient(screenRectangle.Location), screenRectangle.Size);
+                Rectangle invalidateRect = new(overlayControl.PointToClient(screenRectangle.Location), screenRectangle.Size);
                 if (overlayControl.ClientRectangle.IntersectsWith(invalidateRect))
                 {
                     overlayControl.Invalidate(invalidateRect);
