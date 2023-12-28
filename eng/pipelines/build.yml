@@ -30,7 +30,7 @@ jobs:
             _SignType: test
             # Code coverage uploads fail on internal PRs
             ${{ if eq(variables['System.TeamProject'], 'public') }}:
-              _Coverage: false
+              _Coverage: true
         Release:
           _BuildConfig: Release
           _Coverage: false
@@ -134,6 +134,21 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish-${{ parameters.targetArchitecture }}.binlog
       displayName: Pack, Sign, and Publish
 
+    # Merge code coverage data
+    - pwsh: eng\MergeCoverageData.ps1 -configuration $(_BuildConfig) -artifactsDir '$(Build.SourcesDirectory)\artifacts'
+      displayName: Merge Coverage Data
+      condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
+
+    #Publish code coverage results
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)\Cobertura.xml'
+        pathToSources: '$(Build.SourcesDirectory)'
+        reportDirectory: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)'
+      displayName: PublishCodeCoverageResults
+      condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
+
     # Upload code coverage data
     - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
         eng/CodeCoverage.proj
@@ -141,7 +156,7 @@ jobs:
         $(_InternalRuntimeDownloadArgs)
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage-${{ parameters.targetArchitecture }}.binlog
       displayName: Upload coverage to codecov.io
-      condition: and(succeeded(), eq(variables._Coverage, 'true'))
+      condition: and(succeeded(), eq(variables._Coverage, 'true'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
     # Generate SBOM for the internal leg only
     - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
