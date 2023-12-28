@@ -5849,11 +5849,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">このコントロールで実行されている動作は、間違ったスレッドから呼び出されています。この動作を実行するには、Control.Invoke または Control.BeginInvoke を使って正しいスレッドにマーシャリングしてください。</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">'{1}' の値は '{0}' に対して有効ではありません。'{0}' は {2} より大きく、{3} より小さくなければなりません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">ファイル形式が有効ではありません。</target>
@@ -5872,26 +5867,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">無効な HDC の種類: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">'{1}' の値は '{0}' に対して有効ではありません。'{0}' は {2} 未満でなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">'{1}' の値は '{0}' に対して有効ではありません。'{0}' は {2} 以下でなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">'{1}' の値は '{0}' に対して有効ではありません。'{0}' は {2} より大きくなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">'{1}' の値は '{0}' に対して有効ではありません。'{0}' は {2} 以上でなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">

@@ -5849,11 +5849,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">L'azione da eseguire sul controllo è stata chiamata dal thread sbagliato. Per eseguire l'operazione, è necessario eseguire il marshalling del thread appropriato, utilizzando Control.Invoke o Control.BeginInvoke.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere maggiore di {2} e minore di {3}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">Formato di file non valido.</target>
@@ -5872,26 +5867,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">Tipo HDC non valido: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere minore di {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere minore o uguale a {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere maggiore di {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere maggiore o uguale a {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">

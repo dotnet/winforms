@@ -585,10 +585,8 @@ public partial class ListBox : ListControl
 
         set
         {
-            if (value < 1 || value > 255)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 255);
 
             if (_itemHeight != value)
             {
@@ -849,12 +847,8 @@ public partial class ListBox : ListControl
         }
         set
         {
-            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
-
-            if (value < -1 || value >= itemCount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, _itemsCollection?.Count ?? 0);
 
             if (_selectionMode == SelectionMode.None)
             {

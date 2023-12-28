@@ -593,13 +593,7 @@ public partial class DateTimePicker : Control
                 return;
             }
 
-            if (value < EffectiveMinDate(_minDateTime))
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDateTime(value), nameof(MinDate)));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, EffectiveMinDate(_minDateTime));
 
             if (value > MaximumDateTime)
             {
@@ -655,13 +649,7 @@ public partial class DateTimePicker : Control
                 return;
             }
 
-            if (value > EffectiveMaxDate(_maxDateTime))
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDateTime(value), nameof(MaxDate)));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, EffectiveMaxDate(_maxDateTime));
 
             if (value < MinimumDateTime)
             {

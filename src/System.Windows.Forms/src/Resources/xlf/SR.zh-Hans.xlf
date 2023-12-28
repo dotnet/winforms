@@ -5849,11 +5849,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">在该控件上执行的操作正从错误的线程调用。使用 Control.Invoke 或 Control.BeginInvoke 封送到正确的线程才能执行此操作。</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">“{1}”的值对于“{0}”无效。“{0}”应该大于 {2} 且小于 {3}。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">文件格式无效。</target>
@@ -5872,26 +5867,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">HDC 类型无效: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">“{1}”的值对于“{0}”无效。“{0}”必须小于 {2}。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">“{1}”的值对于“{0}”无效。“{0}”必须小于或等于 {2}。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">“{1}”的值对于“{0}”无效。“{0}”必须大于 {2}。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">“{1}”的值对于“{0}”无效。“{0}”必须大于或等于 {2}。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">

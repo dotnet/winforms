@@ -105,10 +105,8 @@ public partial class DomainUpDown : UpDownBase
 
         set
         {
-            if (value < -1 || value >= Items.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, Items.Count);
 
             if (value != SelectedIndex)
             {

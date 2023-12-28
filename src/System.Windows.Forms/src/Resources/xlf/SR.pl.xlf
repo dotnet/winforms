@@ -5849,11 +5849,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Akcja wykonywana na formancie jest wywoływana z niewłaściwego wątku. Aby wykonać tę akcję, zorganizuj poprawny wątek przy użyciu elementu Control.Invoke lub Control.BeginInvoke.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">Wartość '{1}' nie jest prawidłową wartością dla '{0}'. Wartość '{0}' powinna być większa od {2} i mniejsza od {3}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">Format pliku nie jest prawidłowy.</target>
@@ -5872,26 +5867,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">Nieprawidłowy typ HDC: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">Wartość '{1}' nie jest prawidłową wartością dla '{0}'. Wartość '{0}' musi być mniejsza od {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">Wartość '{1}' nie jest prawidłową wartością dla '{0}'. Wartość'{0}' musi być mniejsza od lub równa {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">Wartość '{1}' nie jest prawidłową wartością dla '{0}'. Wartość '{0}' musi być większa niż {2}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">Wartość „{1}” nie jest prawidłową wartością dla elementu „{0}”. Wartość „{0}” musi być większa od lub równa {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">

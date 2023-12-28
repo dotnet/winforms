@@ -480,11 +480,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
 
             ImageIndexer.Index = value;
 
@@ -736,10 +732,8 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex || value > 14)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 14);
 
             if (_listView is not null && _listView.IsHandleCreated)
             {

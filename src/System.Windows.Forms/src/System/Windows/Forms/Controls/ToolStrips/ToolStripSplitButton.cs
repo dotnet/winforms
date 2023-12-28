@@ -190,11 +190,7 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
         get => _dropDownButtonWidth;
         set
         {
-            if (value < 0)
-            {
-                // throw if less than 0.
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(DropDownButtonWidth), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (_dropDownButtonWidth != value)
             {

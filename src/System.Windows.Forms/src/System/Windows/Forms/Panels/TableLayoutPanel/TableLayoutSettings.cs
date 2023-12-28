@@ -100,10 +100,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             containerInfo.MaxColumns = value;
@@ -129,10 +126,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             containerInfo.MaxRows = value;

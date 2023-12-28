@@ -747,10 +747,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterIncrement), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _splitterInc = value;
         }
@@ -1255,10 +1252,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplyPanel1MinSize(int value)
     {
-        if (value < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel1MinSize), value));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         if (Orientation == Orientation.Vertical)
         {
@@ -1287,10 +1281,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplyPanel2MinSize(int value)
     {
-        if (value < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         if (Orientation == Orientation.Vertical)
         {
@@ -1319,10 +1310,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplySplitterWidth(int value)
     {
-        if (value < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterWidth), value, 1));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
         if (Orientation == Orientation.Vertical)
         {

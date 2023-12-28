@@ -141,10 +141,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_AUTOMATIC];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime((int)PInvoke.TTDT_AUTOMATIC, value);
         }
@@ -165,10 +162,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_AUTOPOP];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutoPopDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime(PInvoke.TTDT_AUTOPOP, value);
         }
@@ -339,10 +333,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_INITIAL];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(InitialDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime(PInvoke.TTDT_INITIAL, value);
         }
@@ -367,10 +358,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_RESHOW];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ReshowDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime(PInvoke.TTDT_RESHOW, value);
         }

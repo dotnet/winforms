@@ -1391,10 +1391,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => Columns.Count;
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (DataSource is not null)
             {
@@ -1589,15 +1586,8 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _columnHeadersHeight;
         set
         {
-            if (value < MinimumColumnHeadersHeight)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnHeadersHeight), value, MinimumColumnHeadersHeight));
-            }
-
-            if (value > MaxHeadersThickness)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(ColumnHeadersHeight), value, MaxHeadersThickness));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, MinimumColumnHeadersHeight);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxHeadersThickness);
 
             if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
             {
@@ -2813,17 +2803,14 @@ public partial class DataGridView : Control, ISupportInitialize
         set
         {
             // int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(HorizontalScrollingOffset), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             // Intentionally ignoring the out of range situation.
-            // else if (value > widthNotVisible && widthNotVisible > 0)
+            // if (value > widthNotVisible && widthNotVisible > 0)
             // {
             //     throw new ArgumentOutOfRangeException(string.Format(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
             // }
-            else if (value > 0 && (Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - _layout.Data.Width) <= 0)
+            if (value > 0 && (Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - _layout.Data.Width) <= 0)
             {
                 // Intentionally ignoring the case where dev tries to set value while there is no horizontal scrolling possible.
                 // throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), SR.DataGridView_PropertyMustBeZero);
@@ -3200,26 +3187,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => Rows.Count;
         set
         {
-            if (AllowUserToAddRowsInternal)
-            {
-                if (value < 1)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(value),
-                        value,
-                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 1));
-                }
-            }
-            else
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(value),
-                        value,
-                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
-                }
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, AllowUserToAddRowsInternal ? 1 : 0);
 
             if (DataSource is not null)
             {
@@ -3438,21 +3406,8 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _rowHeaderWidth;
         set
         {
-            if (value < MinimumRowHeadersWidth)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowHeadersWidth), value, MinimumRowHeadersWidth));
-            }
-
-            if (value > MaxHeadersThickness)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgumentEx, nameof(RowHeadersWidth), value, MaxHeadersThickness));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, MinimumRowHeadersWidth);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxHeadersThickness);
 
             if (RowHeadersWidthSizeMode is not DataGridViewRowHeadersWidthSizeMode.EnableResizing
                 and not DataGridViewRowHeadersWidthSizeMode.DisableResizing)
