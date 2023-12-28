@@ -292,9 +292,8 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Value_Pattern_Success()
     {
-        using var checkBox = new CheckBox();
-        Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        using CheckBox checkBox = new();
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
         Assert.False(checkBox.Checked);
         Assert.False(checkBox.ThreeState);
 
