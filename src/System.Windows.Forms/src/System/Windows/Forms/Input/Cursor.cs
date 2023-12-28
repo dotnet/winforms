@@ -33,7 +33,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
 
     internal unsafe Cursor(PCWSTR nResourceId, string cursorsProperty)
     {
-        GC.SuppressFinalize(this);    
+        GC.SuppressFinalize(this);
         _freeHandle = false;
         CursorsProperty = cursorsProperty;
         _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
