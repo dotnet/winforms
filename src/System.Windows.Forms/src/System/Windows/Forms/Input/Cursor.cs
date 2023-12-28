@@ -56,7 +56,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     /// </summary>
     public Cursor(IntPtr handle)
     {
-        GC.SuppressFinalize(this);    
+        GC.SuppressFinalize(this);
         if (handle == 0)
         {
             throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name), nameof(handle));
