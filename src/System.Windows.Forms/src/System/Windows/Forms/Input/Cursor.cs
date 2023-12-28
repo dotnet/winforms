@@ -46,7 +46,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     internal Cursor(string resource, string cursorsProperty)
         : this(typeof(Cursors).Assembly.GetManifestResourceStream(typeof(Cursor), resource).OrThrowIfNull())
     {
-        GC.SuppressFinalize(this);    
+        GC.SuppressFinalize(this);
         CursorsProperty = cursorsProperty;
         _freeHandle = false;
     }
