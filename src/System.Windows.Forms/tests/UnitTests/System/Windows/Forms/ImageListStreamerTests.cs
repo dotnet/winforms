@@ -10,7 +10,7 @@ public class ImageListStreamerTests
     [WinFormsFact]
     public void ImageListStreamer_BinaryFormatter_Stream_BinaryFormatter_round_trip_equality()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 
         // Create an ImageListStreamer via BinaryFormatter
         using ImageListStreamer streamerFromBf = BinarySerialization.EnsureDeserialize<ImageListStreamer>(ClassicBfImageListStreamer);
@@ -42,7 +42,7 @@ public class ImageListStreamerTests
     [WinFormsFact]
     public void ImageListStreamer_Stream_BinaryFormatter_compatible()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 
         // Create a new ImageListStreamer from the stream
         byte[] bytes = Convert.FromBase64String(DevMsImageListStreamer);

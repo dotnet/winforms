@@ -16,7 +16,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [InlineData(false, false, true)]
     public void ListViewItemKeyboardToolTip_InvokeAllowsToolTip_ReturnsExpected(bool insideListView, bool virtualMode, bool showItemToolTips)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
@@ -38,7 +38,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool showItemToolTips,
         bool expectedResult)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
@@ -60,7 +60,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool showItemToolTips,
         bool expectedResult)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
@@ -82,8 +82,8 @@ public class ListViewItem_IKeyboardToolTipTests
         bool showItemToolTips,
         string toolTipText)
     {
-        using var toolTip = new ToolTip();
-        ListViewItem listViewItem = new ListViewItem() { ToolTipText = toolTipText };
+        using ToolTip toolTip = new();
+        ListViewItem listViewItem = new() { ToolTipText = toolTipText };
         using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
@@ -102,7 +102,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool virtualMode,
         bool rectangleIsEmpty)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode);
         if (insideListView)
         {
@@ -120,9 +120,9 @@ public class ListViewItem_IKeyboardToolTipTests
         ListViewGroupCollapsedState collapsedState,
         bool rectangleIsEmpty)
     {
-        using var listView = new ListView();
-        ListViewItem listViewItem = new ListViewItem();
-        ListViewGroup listViewGroup = new ListViewGroup();
+        using ListView listView = new();
+        ListViewItem listViewItem = new();
+        ListViewGroup listViewGroup = new();
         listView.Groups.Add(listViewGroup);
         listView.Items.Add(listViewItem);
         listViewGroup.Items.Add(listViewItem);
@@ -174,7 +174,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNativeScreenRectangle_ViewTile_LongListViewItemText_ReturnsExpected()
     {
-        ListViewItem listViewItem = new ListViewItem(new string('t', 20));
+        ListViewItem listViewItem = new(new string('t', 20));
 
         listViewItem.SubItems.Add(new ListViewSubItem(listViewItem, new string('t', 10)));
         using var listView = GetListView(virtualMode: false, view: View.Tile);
@@ -190,8 +190,8 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNativeScreenRectangle_ViewTile_LongListViewSubItemText_ReturnsExpected()
     {
-        ListViewItem listViewItem = new ListViewItem(new string('t', 10));
-        ListViewSubItem listViewSubItem = new ListViewSubItem(listViewItem, new string('t', 20));
+        ListViewItem listViewItem = new(new string('t', 10));
+        ListViewSubItem listViewSubItem = new(listViewItem, new string('t', 20));
         listViewItem.SubItems.Add(listViewSubItem);
         using var listView = GetListView(virtualMode: false, view: View.Tile);
         AssignItemToListView(listView, listViewItem);
@@ -206,7 +206,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_WithoutList_ReturnsEmptyList()
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
 
         Assert.Equal(0, ((IKeyboardToolTip)listViewItem).GetNeighboringToolsRectangles().Count);
     }
@@ -642,7 +642,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool insideListView,
         bool virtualMode)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode);
         IWin32Window expectedOwner = null;
 
@@ -669,7 +669,7 @@ public class ListViewItem_IKeyboardToolTipTests
         RightToLeft rightToLeft,
         bool expected)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode, rightToLeft: rightToLeft);
 
         if (insideListView)
@@ -695,7 +695,7 @@ public class ListViewItem_IKeyboardToolTipTests
         Point initialPosition = Cursor.Position;
         try
         {
-            ListViewItem listViewItem = new ListViewItem();
+            ListViewItem listViewItem = new();
             using var listView = GetListView(virtualMode);
 
             if (insideListView)
@@ -733,7 +733,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool showItemToolTips,
         bool expectedResult)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        ListViewItem listViewItem = new();
         using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
@@ -774,11 +774,11 @@ public class ListViewItem_IKeyboardToolTipTests
 
     private void AssignListItemsToListView(ListView listView, int count)
     {
-        List<ListViewItem> listViewItems = new List<ListViewItem>();
+        List<ListViewItem> listViewItems = new();
 
         for (int i = 0; i < count; i++)
         {
-            ListViewItem listViewItem = new ListViewItem(i.ToString());
+            ListViewItem listViewItem = new(i.ToString());
             listViewItem.SubItems.Add(i.ToString());
             listViewItems.Add(listViewItem);
         }

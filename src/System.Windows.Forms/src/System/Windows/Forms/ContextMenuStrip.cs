@@ -47,7 +47,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
     {
         // VERY limited support for cloning.
 
-        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+        ContextMenuStrip contextMenuStrip = new();
 
         // copy over events
         contextMenuStrip.Events.AddHandlers(Events);

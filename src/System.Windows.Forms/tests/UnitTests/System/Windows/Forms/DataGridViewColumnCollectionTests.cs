@@ -11,8 +11,8 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Ctor_DataGridView()
     {
-        using var control = new DataGridView();
-        var collection = new SubDataGridViewColumnCollection(control);
+        using DataGridView control = new();
+        SubDataGridViewColumnCollection collection = new(control);
         Assert.Empty(collection);
         Assert.Equal(0, collection.Count);
         Assert.Same(control, collection.DataGridView);
@@ -26,7 +26,7 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Ctor_NullOwner_ThrowsArgumentNullException()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
 #if false
         Assert.Throws<ArgumentNullException>("control", () => new SubDataGridViewColumnCollection(null));
 #endif
@@ -35,10 +35,10 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_Invoke_Success()
     {
-        using var control = new DataGridView();
-        var collection = new DataGridViewColumnCollection(control);
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell());
-        using var column2 = new DataGridViewColumn();
+        using DataGridView control = new();
+        DataGridViewColumnCollection collection = new(control);
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell());
+        using DataGridViewColumn column2 = new();
 
         // Add one.
         collection.Add(column1);
@@ -63,10 +63,10 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_InvokeColumns_Success()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewColumnCollection collection = control.Columns;
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell());
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell());
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell());
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell());
 
         // Add one.
         collection.Add(column1);
@@ -104,16 +104,16 @@ public class DataGridViewColumnCollectionTests
     [InlineData(DataGridViewSelectionMode.RowHeaderSelect, DataGridViewColumnSortMode.Programmatic)]
     public void DataGridViewColumnCollection_Add_CustomColumnSortModeAndSelectionMode_Success(DataGridViewSelectionMode selectionMode, DataGridViewColumnSortMode sortMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             SelectionMode = selectionMode
         };
         DataGridViewColumnCollection collection = control.Columns;
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell())
         {
             SortMode = sortMode
         };
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             SortMode = sortMode
         };
@@ -173,19 +173,19 @@ public class DataGridViewColumnCollectionTests
     [MemberData(nameof(Add_CustomAutoSizeMode_TestData))]
     public void DataGridViewColumnCollection_Add_CustomAutoSizeMode_Success(bool columnHeadersVisible, bool visible, bool frozen, DataGridViewAutoSizeColumnsMode columnsAutoSizeMode, DataGridViewAutoSizeColumnMode autoSizeMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = columnsAutoSizeMode,
             ColumnHeadersVisible = columnHeadersVisible
         };
         DataGridViewColumnCollection collection = control.Columns;
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell())
         {
             AutoSizeMode = autoSizeMode,
             Frozen = frozen,
             Visible = visible
         };
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             AutoSizeMode = autoSizeMode,
             Frozen = frozen,
@@ -215,13 +215,13 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_InvokeFrozen_Success()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewColumnCollection collection = control.Columns;
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell())
         {
             Frozen = true
         };
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             Frozen = true
         };
@@ -253,17 +253,17 @@ public class DataGridViewColumnCollectionTests
     [InlineData(2)]
     public void DataGridViewColumnCollection_Add_CustomDisplayIndex_Success(int displayIndex)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewColumnCollection collection = control.Columns;
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell())
         {
             DisplayIndex = displayIndex
         };
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             DisplayIndex = 0
         };
-        using var column3 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column3 = new(new SubDataGridViewCell())
         {
             DisplayIndex = 1
         };
@@ -305,10 +305,10 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_AddWithHeaderCell_Invoke_Success()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewColumnCollection collection = control.Columns;
-        using var headerCell = new DataGridViewColumnHeaderCell();
-        using var column = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumnHeaderCell headerCell = new();
+        using DataGridViewColumn column = new(new SubDataGridViewCell())
         {
             HeaderCell = headerCell
         };
@@ -325,20 +325,20 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_NullDataGridViewColumn_ThrowsArgumentNullException()
     {
-        using var control = new DataGridView();
-        var collection = new DataGridViewColumnCollection(control);
+        using DataGridView control = new();
+        DataGridViewColumnCollection collection = new(control);
         Assert.Throws<ArgumentNullException>("dataGridViewColumn", () => collection.Add(null));
     }
 
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_NoDimensionChangeAllowed_ThrowsInvalidOperationException()
     {
-        using var control = new SubDataGridView();
-        var collection = new DataGridViewColumnCollection(control);
+        using SubDataGridView control = new();
+        DataGridViewColumnCollection collection = new(control);
         int callCount = 0;
         control.RowValidating += (sender, e) =>
         {
-            var column = new DataGridViewColumn(new SubDataGridViewCell());
+            DataGridViewColumn column = new(new SubDataGridViewCell());
             Assert.Throws<InvalidOperationException>(() => collection.Add(null));
             Assert.Throws<InvalidOperationException>(() => collection.Add(column));
             callCount++;
@@ -350,17 +350,17 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_InDisplayIndexAdjustment_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        var collection = new DataGridViewColumnCollection(control);
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell());
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell());
+        using DataGridView control = new();
+        DataGridViewColumnCollection collection = new(control);
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell());
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell());
         control.Columns.Add(column1);
         control.Columns.Add(column2);
 
         int callCount = 0;
         control.ColumnDisplayIndexChanged += (sender, e) =>
         {
-            var column = new DataGridViewColumn(new SubDataGridViewCell());
+            DataGridViewColumn column = new(new SubDataGridViewCell());
             Assert.Throws<InvalidOperationException>(() => collection.Add(null));
             Assert.Throws<InvalidOperationException>(() => collection.Add(column));
             callCount++;
@@ -372,11 +372,11 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_ColumnHasDataGridView_ThrowsInvalidOperationException()
     {
-        using var control1 = new DataGridView();
-        using var control2 = new DataGridView();
-        var collection = new DataGridViewColumnCollection(control1);
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell());
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell());
+        using DataGridView control1 = new();
+        using DataGridView control2 = new();
+        DataGridViewColumnCollection collection = new(control1);
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell());
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell());
         control1.Columns.Add(column1);
         control2.Columns.Add(column2);
 
@@ -389,12 +389,12 @@ public class DataGridViewColumnCollectionTests
     [InlineData(DataGridViewSelectionMode.ColumnHeaderSelect)]
     public void DataGridViewColumnCollection_Add_ColumnAutomaticSortModeColumnSelectionMode_ThrowsInvalidOperationException(DataGridViewSelectionMode selectionMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             SelectionMode = selectionMode
         };
-        var collection = new DataGridViewColumnCollection(control);
-        using var column = new DataGridViewColumn(new SubDataGridViewCell())
+        DataGridViewColumnCollection collection = new(control);
+        using DataGridViewColumn column = new(new SubDataGridViewCell())
         {
             SortMode = DataGridViewColumnSortMode.Automatic
         };
@@ -406,13 +406,13 @@ public class DataGridViewColumnCollectionTests
     [InlineData(DataGridViewSelectionMode.ColumnHeaderSelect)]
     public void DataGridViewColumnCollection_Add_ColumnAutomaticSortModeColumnSelectionModeInInitialization_ThrowsInvalidOperationException(DataGridViewSelectionMode selectionMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             SelectionMode = selectionMode
         };
         ISupportInitialize iSupportInitialize = (ISupportInitialize)control;
         DataGridViewColumnCollection collection = control.Columns;
-        using var column = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column = new(new SubDataGridViewCell())
         {
             SortMode = DataGridViewColumnSortMode.Automatic
         };
@@ -429,13 +429,13 @@ public class DataGridViewColumnCollectionTests
     [InlineData(DataGridViewAutoSizeColumnsMode.ColumnHeader, DataGridViewAutoSizeColumnMode.NotSet)]
     public void DataGridViewColumnCollection_Add_VisibleColumnHeadersNotVisibleInvalidAutoSize_ThrowsInvalidOperationException(DataGridViewAutoSizeColumnsMode autoSizeColumnsMode, DataGridViewAutoSizeColumnMode autoSizeMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = autoSizeColumnsMode,
             ColumnHeadersVisible = false
         };
-        var collection = new DataGridViewColumnCollection(control);
-        using var column = new DataGridViewColumn(new SubDataGridViewCell())
+        DataGridViewColumnCollection collection = new(control);
+        using DataGridViewColumn column = new(new SubDataGridViewCell())
         {
             AutoSizeMode = autoSizeMode
         };
@@ -447,12 +447,12 @@ public class DataGridViewColumnCollectionTests
     [InlineData(DataGridViewAutoSizeColumnsMode.Fill, DataGridViewAutoSizeColumnMode.NotSet)]
     public void DataGridViewColumnCollection_Add_VisibleFrozenColumnInvalidAutoSize_ThrowsInvalidOperationException(DataGridViewAutoSizeColumnsMode autoSizeColumnsMode, DataGridViewAutoSizeColumnMode autoSizeMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeColumnsMode = autoSizeColumnsMode
         };
-        var collection = new DataGridViewColumnCollection(control);
-        using var column = new DataGridViewColumn(new SubDataGridViewCell())
+        DataGridViewColumnCollection collection = new(control);
+        using DataGridViewColumn column = new(new SubDataGridViewCell())
         {
             AutoSizeMode = autoSizeMode,
             Frozen = true
@@ -463,10 +463,10 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_FillWeightsOverflow_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell());
+        using DataGridView control = new();
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell());
         control.Columns.Add(column1);
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             FillWeight = ushort.MaxValue - 99
         };
@@ -476,10 +476,10 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_FrozenPreviousColumnNotFrozen_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell());
+        using DataGridView control = new();
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell());
         control.Columns.Add(column1);
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             Frozen = true
         };
@@ -489,19 +489,19 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_FrozenPreviousColumnNotFrozenDisplayIndex_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridView control = new();
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell())
         {
             DisplayIndex = 1
         };
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             Frozen = true,
             DisplayIndex = 0,
         };
         control.Columns.Add(column1);
         control.Columns.Add(column2);
-        using var column3 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column3 = new(new SubDataGridViewCell())
         {
             Frozen = true,
             DisplayIndex = 1
@@ -512,20 +512,20 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_NotFrozenPreviousColumnFrozenDisplayIndex_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var column1 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridView control = new();
+        using DataGridViewColumn column1 = new(new SubDataGridViewCell())
         {
             Frozen = true,
             DisplayIndex = 1
         };
-        using var column2 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column2 = new(new SubDataGridViewCell())
         {
             Frozen = true,
             DisplayIndex = 0
         };
         control.Columns.Add(column1);
         control.Columns.Add(column2);
-        using var column3 = new DataGridViewColumn(new SubDataGridViewCell())
+        using DataGridViewColumn column3 = new(new SubDataGridViewCell())
         {
             DisplayIndex = 1
         };
@@ -535,19 +535,19 @@ public class DataGridViewColumnCollectionTests
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_ColumnHasNoCellTemplateEmpty_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var column = new DataGridViewColumn();
+        using DataGridView control = new();
+        using DataGridViewColumn column = new();
         Assert.Throws<InvalidOperationException>(() => control.Columns.Add(column));
     }
 
     [WinFormsFact]
     public void DataGridViewColumnCollection_Add_ColumnHasNoCellTemplateNotEmpty_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowCount = 1
         };
-        using var column = new DataGridViewColumn();
+        using DataGridViewColumn column = new();
         Assert.Throws<InvalidOperationException>(() => control.Columns.Add(column));
     }
 

@@ -246,7 +246,7 @@ public class TreeViewAccessibleObjectTests
         control.CreateControl();
 
         AccessibleObject accessibleObject = control.AccessibilityObject;
-        Point point = new Point(accessibleObject.Bounds.X, accessibleObject.Bounds.Bottom - 1);
+        Point point = new(accessibleObject.Bounds.X, accessibleObject.Bounds.Bottom - 1);
 
         Assert.Equal(accessibleObject, accessibleObject.HitTest(point.X, point.Y));
         Assert.True(control.IsHandleCreated);

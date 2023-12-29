@@ -9,7 +9,7 @@ public class DataGridViewRowErrorTextNeededEventArgsTests
     [StringWithNullData]
     public void DataGridViewRowErrorTextNeededEventArgs_ErrorText_Set_GetReturnsExpected(string value)
     {
-        using var dataGridView = new DataGridView
+        using DataGridView dataGridView = new()
         {
             ColumnCount = 1,
             VirtualMode = true

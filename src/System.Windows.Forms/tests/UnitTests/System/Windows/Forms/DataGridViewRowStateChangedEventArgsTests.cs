@@ -16,7 +16,7 @@ public class DataGridViewRowStateChangedEventArgsTests
     [MemberData(nameof(Ctor_DataGridViewRow_DataGridViewElementStates_TestData))]
     public void Ctor_DataGridViewRow_DataGridViewElementStates(DataGridViewRow dataGridViewRow, DataGridViewElementStates stateChanged)
     {
-        var e = new DataGridViewRowStateChangedEventArgs(dataGridViewRow, stateChanged);
+        DataGridViewRowStateChangedEventArgs e = new(dataGridViewRow, stateChanged);
         Assert.Equal(dataGridViewRow, e.Row);
         Assert.Equal(stateChanged, e.StateChanged);
     }

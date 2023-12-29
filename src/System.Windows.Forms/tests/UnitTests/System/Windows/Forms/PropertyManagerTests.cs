@@ -12,7 +12,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_Ctor_Default()
     {
-        var manager = new PropertyManager();
+        PropertyManager manager = new();
         Assert.Equal(1, manager.Count);
         Assert.Equal(0, manager.Position);
         Assert.Null(manager.Current);
@@ -23,8 +23,8 @@ public class PropertyManagerTests
     [IntegerData<int>]
     public void PropertyManager_Position_Set_Nop(int value)
     {
-        var context = new BindingContext();
-        var source = new BindingSource();
+        BindingContext context = new();
+        BindingSource source = new();
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
         manager.Position = value;
         Assert.Equal(0, manager.Position);
@@ -33,8 +33,8 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_GetListName_Invoke_ReturnsEmpty()
     {
-        var context = new BindingContext();
-        var source = new BindingSource();
+        BindingContext context = new();
+        BindingSource source = new();
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
         Assert.Equal("System.Windows.Forms.Tests.PropertyManagerTests+DataSource.", manager.GetListName());
         Assert.Empty(manager.GetListName(null));
@@ -43,7 +43,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_GetListName_NoDataSource_ThrowsArgumentException()
     {
-        var manager = new PropertyManager();
+        PropertyManager manager = new();
         Assert.Throws<ArgumentException>(() => manager.GetListName());
     }
 
@@ -52,10 +52,10 @@ public class PropertyManagerTests
     {
         yield return new object[] { new PropertyManager(), Array.Empty<string>() };
 
-        var singleContext = new BindingContext();
+        BindingContext singleContext = new();
         yield return new object[] { singleContext[new DataSource()], new string[] { "Property" } };
 
-        var listContext = new BindingContext();
+        BindingContext listContext = new();
         yield return new object[] { listContext[new ListDataSource()], new string[] { "ListProperty" } };
     }
 
@@ -72,11 +72,11 @@ public class PropertyManagerTests
         yield return new object[] { new PropertyManager(), null, null, Array.Empty<string>() };
         yield return new object[] { new PropertyManager(), new ArrayList(), new ArrayList(), Array.Empty<string>() };
 
-        var singleContext = new BindingContext();
+        BindingContext singleContext = new();
         yield return new object[] { singleContext[new DataSource()], null, null, new string[] { "Property" } };
         yield return new object[] { singleContext[new DataSource()], null, new ArrayList(), new string[] { "Property" } };
 
-        var listContext = new BindingContext();
+        BindingContext listContext = new();
         yield return new object[] { listContext[new ListDataSource()], null, new ArrayList(), new string[] { "ListProperty" } };
         yield return new object[] { listContext[new ListDataSource()], null, new ArrayList(TypeDescriptor.GetProperties(typeof(ListDataSource))), new string[] { "Property" } };
     }
@@ -92,7 +92,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_CancelCurrentEdit_NullCurrent_Nop()
     {
-        var manager = new PropertyManager();
+        PropertyManager manager = new();
         manager.CancelCurrentEdit();
         manager.CancelCurrentEdit();
     }
@@ -100,12 +100,12 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_CancelCurrentEdit_IEditableObjectCurrent_CallsCancelEdit()
     {
-        var mockDataSource = new Mock<IEditableObject>(MockBehavior.Strict);
+        Mock<IEditableObject> mockDataSource = new(MockBehavior.Strict);
         mockDataSource
             .Setup(o => o.CancelEdit())
             .Verifiable();
 
-        var manager = new PropertyManager(mockDataSource.Object);
+        PropertyManager manager = new(mockDataSource.Object);
         manager.CancelCurrentEdit();
         mockDataSource.Verify(o => o.CancelEdit(), Times.Exactly(1));
 
@@ -116,7 +116,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_CancelCurrentEdit_NonNullCurrent_Nop()
     {
-        var manager = new PropertyManager(new DataSource());
+        PropertyManager manager = new(new DataSource());
         manager.CancelCurrentEdit();
         manager.CancelCurrentEdit();
     }
@@ -124,7 +124,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_EndCurrentEdit_NullCurrent_Nop()
     {
-        var manager = new PropertyManager();
+        PropertyManager manager = new();
         manager.EndCurrentEdit();
         manager.EndCurrentEdit();
     }
@@ -132,12 +132,12 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_EndCurrentEdit_IEditableObjectCurrent_CallsEndEdit()
     {
-        var mockDataSource = new Mock<IEditableObject>(MockBehavior.Strict);
+        Mock<IEditableObject> mockDataSource = new(MockBehavior.Strict);
         mockDataSource
             .Setup(o => o.EndEdit())
             .Verifiable();
 
-        var manager = new PropertyManager(mockDataSource.Object);
+        PropertyManager manager = new(mockDataSource.Object);
         manager.EndCurrentEdit();
         mockDataSource.Verify(o => o.EndEdit(), Times.Exactly(1));
 
@@ -151,7 +151,7 @@ public class PropertyManagerTests
     public void PropertyManager_EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)
     {
         int callCount = 0;
-        var dataSource = new EditableDataSource
+        EditableDataSource dataSource = new()
         {
             EndEditHandler = () =>
             {
@@ -159,11 +159,11 @@ public class PropertyManagerTests
             }
         };
 
-        var manager = new PropertyManager(dataSource);
-        using var control = new SubControl { Visible = true };
+        PropertyManager manager = new(dataSource);
+        using SubControl control = new() { Visible = true };
         control.CreateControl();
-        var controlBindings = new ControlBindingsCollection(control);
-        var cancelBinding = new Binding("Value", dataSource, "Property", true);
+        ControlBindingsCollection controlBindings = new(control);
+        Binding cancelBinding = new("Value", dataSource, "Property", true);
         BindingCompleteEventHandler bindingCompleteHandler = (sender, e) =>
         {
             e.Cancel = cancel;
@@ -182,7 +182,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_EndCurrentEdit_NonNullCurrent_Nop()
     {
-        var manager = new PropertyManager(new DataSource());
+        PropertyManager manager = new(new DataSource());
         manager.EndCurrentEdit();
         manager.EndCurrentEdit();
     }
@@ -190,7 +190,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_ResumeBinding_SuspendBinding_Success()
     {
-        var manager = new PropertyManager(new DataSource());
+        PropertyManager manager = new(new DataSource());
         manager.ResumeBinding();
         manager.SuspendBinding();
         manager.ResumeBinding();
@@ -200,7 +200,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_ResumeBinding_Invoke_CallsHandlers()
     {
-        var manager = new PropertyManager(new DataSource());
+        PropertyManager manager = new(new DataSource());
 
         // No handlers.
         manager.ResumeBinding();
@@ -246,12 +246,12 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_SuspendBinding_Invoke_CallsHandlers()
     {
-        var mockDataSource = new Mock<IEditableObject>(MockBehavior.Strict);
+        Mock<IEditableObject> mockDataSource = new(MockBehavior.Strict);
         mockDataSource
             .Setup(o => o.EndEdit())
             .Verifiable();
 
-        var manager = new PropertyManager(mockDataSource.Object);
+        PropertyManager manager = new(mockDataSource.Object);
 
         // No handlers.
         manager.SuspendBinding();
@@ -298,7 +298,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_OnCurrentChanged_Invoke_CallsHandlers()
     {
-        var manager = new PropertyManager(new DataSource());
+        PropertyManager manager = new(new DataSource());
 
         // No handlers.
         manager.OnCurrentChanged(null);
@@ -344,7 +344,7 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_OnCurrentItemChanged_Invoke_CallsHandlers()
     {
-        var manager = new PropertyManager(new DataSource());
+        PropertyManager manager = new(new DataSource());
 
         // No handlers.
         manager.OnCurrentChanged(null);
@@ -390,8 +390,8 @@ public class PropertyManagerTests
     [Fact]
     public void PropertyManager_AddNew_Invoke_ThrowsNotSupportedException()
     {
-        var context = new BindingContext();
-        var source = new BindingSource();
+        BindingContext context = new();
+        BindingSource source = new();
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
         Assert.Throws<NotSupportedException>(() => manager.AddNew());
     }
@@ -400,8 +400,8 @@ public class PropertyManagerTests
     [IntegerData<int>]
     public void PropertyManager_RemoveAt_Invoke_ThrowsNotSupportedException(int index)
     {
-        var context = new BindingContext();
-        var source = new BindingSource();
+        BindingContext context = new();
+        BindingSource source = new();
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
         Assert.Throws<NotSupportedException>(() => manager.RemoveAt(index));
     }

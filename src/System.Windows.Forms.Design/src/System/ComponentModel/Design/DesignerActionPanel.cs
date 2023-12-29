@@ -465,20 +465,20 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         Rectangle rect = Bounds;
         if (RightToLeft == RightToLeft.Yes)
         {
-            using (LinearGradientBrush gradientBrush = new LinearGradientBrush(rect, GradientDarkColor, GradientLightColor, LinearGradientMode.Horizontal))
+            using (LinearGradientBrush gradientBrush = new(rect, GradientDarkColor, GradientLightColor, LinearGradientMode.Horizontal))
             {
                 e.Graphics.FillRectangle(gradientBrush, ClientRectangle);
             }
         }
         else
         {
-            using (LinearGradientBrush gradientBrush = new LinearGradientBrush(rect, GradientLightColor, GradientDarkColor, LinearGradientMode.Horizontal))
+            using (LinearGradientBrush gradientBrush = new(rect, GradientLightColor, GradientDarkColor, LinearGradientMode.Horizontal))
             {
                 e.Graphics.FillRectangle(gradientBrush, ClientRectangle);
             }
         }
 
-        using (Pen borderPen = new Pen(BorderColor))
+        using (Pen borderPen = new(BorderColor))
         {
             e.Graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width - 1, Height - 1));
         }
@@ -619,7 +619,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             }
         }
 
-        List<StandardLineInfo> lineInfos = new List<StandardLineInfo>();
+        List<StandardLineInfo> lineInfos = new();
 
         if (relatedLists is not null)
         {
@@ -666,7 +666,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                 throw new InvalidOperationException(string.Format(SR.DesignerActionPanel_CouldNotFindProperty, pti.MemberName, list.GetType().FullName));
             }
 
-            TypeDescriptorContext context = new TypeDescriptorContext(_serviceProvider, pd, list);
+            TypeDescriptorContext context = new(_serviceProvider, pd, list);
             bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
             if (pd.TryGetEditor(out UITypeEditor? _))
             {
@@ -747,7 +747,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             return string.Empty;
         }
 
-        StringBuilder result = new StringBuilder(s.Length);
+        StringBuilder result = new(s.Length);
         for (int i = 0; i < s.Length; i++)
         {
             if (s[i] == '&')

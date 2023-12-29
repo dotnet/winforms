@@ -24,7 +24,7 @@ class Program
             // surface.GetView().Parent = frm;
             // frm.ShowDialog();
 
-            MainForm f = new MainForm();
+            MainForm f = new();
             f.ShowDialog();
 
             Console.WriteLine("Bye!");

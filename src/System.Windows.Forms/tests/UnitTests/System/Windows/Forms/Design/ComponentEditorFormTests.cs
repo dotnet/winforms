@@ -13,8 +13,8 @@ public class ComponentEditorFormTests
     [WinFormsFact]
     public void ComponentEditorComponentEditorForm_Ctor_Default()
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.NotNull(control.AcceptButton);
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
@@ -168,8 +168,8 @@ public class ComponentEditorFormTests
     [WinFormsFact]
     public void ComponentEditorComponentEditorForm_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         CreateParams createParams = control.CreateParams;
         Assert.Equal("Properties", createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -189,8 +189,8 @@ public class ComponentEditorFormTests
     [WinFormsFact]
     public void ComponentEditorComponentEditorForm_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -205,8 +205,8 @@ public class ComponentEditorFormTests
     [InlineData((-1), false)]
     public void ComponentEditorComponentEditorForm_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -233,8 +233,8 @@ public class ComponentEditorFormTests
     [InlineData((ControlStyles)(-1), false)]
     public void ComponentEditorComponentEditorForm_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -244,8 +244,8 @@ public class ComponentEditorFormTests
     [WinFormsFact]
     public void ComponentEditorComponentEditorForm_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.True(control.GetTopLevel());
     }
 
@@ -254,8 +254,8 @@ public class ComponentEditorFormTests
             [NewAndDefaultData<EventArgs>]
             public void ComponentEditorForm_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
             {
-                using var component = new Component();
-                using var control = new SubComponentEditorForm(component, new Type[0]);
+                using Component component = new();
+                using SubComponentEditorForm control = new(component, new Type[0]);
                 int callCount = 0;
                 EventHandler handler = (sender, e) =>
                 {
@@ -282,8 +282,8 @@ public class ComponentEditorFormTests
     [NewAndDefaultData<EventArgs>]
     public void ComponentEditorForm_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -310,8 +310,8 @@ public class ComponentEditorFormTests
     [NewAndDefaultData<EventArgs>]
     public void ComponentEditorForm_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -337,8 +337,8 @@ public class ComponentEditorFormTests
     [NewAndDefaultData<EventArgs>]
     public void ComponentEditorForm_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var component = new Component();
-        using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
+        using Component component = new();
+        using SubComponentEditorForm control = new(component, Array.Empty<Type>());
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>

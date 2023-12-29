@@ -41,7 +41,7 @@ public class BmpCodecTest
     public void Bitmap1bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver1bit.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -64,7 +64,7 @@ public class BmpCodecTest
     public void Bitmap1bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver1bit.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-1, bmp.GetPixel(0, 0).ToArgb());
@@ -111,7 +111,7 @@ public class BmpCodecTest
     public void Bitmap8bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver8bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -134,7 +134,7 @@ public class BmpCodecTest
     public void Bitmap8bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver8bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-1040, bmp.GetPixel(0, 0).ToArgb());
@@ -181,7 +181,7 @@ public class BmpCodecTest
     public void Bitmap24bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -204,7 +204,7 @@ public class BmpCodecTest
     public void Bitmap24bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-1645353, bmp.GetPixel(0, 32).ToArgb());
@@ -249,7 +249,7 @@ public class BmpCodecTest
     public void Bitmap24bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(-3355456, bmp.GetPixel(163, 1).ToArgb());
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
@@ -374,7 +374,7 @@ public class BmpCodecTest
     public void Bitmap32bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver32bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -396,7 +396,7 @@ public class BmpCodecTest
     public void Bitmap32bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver32bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             Assert.Equal(PixelFormat.Format32bppRgb, bmp.PixelFormat);
             // sampling values from a well known bitmap
@@ -444,10 +444,10 @@ public class BmpCodecTest
         string sOutFile = $"linerect-{expected}.bmp";
 
         // Save
-        Bitmap bmp = new Bitmap(100, 100, original);
+        Bitmap bmp = new(100, 100, original);
         Graphics gr = Graphics.FromImage(bmp);
 
-        using (Pen p = new Pen(Color.BlueViolet, 2))
+        using (Pen p = new(Color.BlueViolet, 2))
         {
             gr.DrawLine(p, 10.0F, 10.0F, 90.0F, 90.0F);
             gr.DrawRectangle(p, 10.0F, 10.0F, 80.0F, 80.0F);
@@ -458,7 +458,7 @@ public class BmpCodecTest
             bmp.Save(sOutFile, ImageFormat.Bmp);
 
             // Load
-            using (Bitmap bmpLoad = new Bitmap(sOutFile))
+            using (Bitmap bmpLoad = new(sOutFile))
             {
                 Assert.Equal(expected, bmpLoad.PixelFormat);
                 if (colorCheck)
@@ -511,7 +511,7 @@ public class BmpCodecTest
     {
         // regression check against http://bugzilla.ximian.com/show_bug.cgi?id=80751
         string sInFile = Helpers.GetTestBitmapPath("non-inverted.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);

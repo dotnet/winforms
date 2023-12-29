@@ -12,7 +12,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Ctor_Default()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Same(row.Cells, row.Cells);
         Assert.Empty(row.Cells);
         Assert.Null(row.ContextMenuStrip);
@@ -48,7 +48,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -63,9 +63,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_GetWithDataGridViewVirtualMode_CallsRowContextMenuStripNeeded()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridView
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -97,15 +97,15 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_GetWithDataGridViewDataSource_CallsRowContextMenuStripNeeded()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridView
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows[0];
@@ -134,7 +134,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -153,7 +153,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewRow_ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = value
         };
@@ -168,8 +168,8 @@ public class DataGridViewRowTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewRow_ContextMenuStrip_SetWithCustomOldValue_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var oldValue = new ContextMenuStrip();
-        using var row = new DataGridViewRow
+        using ContextMenuStrip oldValue = new();
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = oldValue
         };
@@ -186,7 +186,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewRow_ContextMenuStrip_SetWithDataGridView_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -207,7 +207,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewRow_ContextMenuStrip_SetShared_GetReturnsExpected(ContextMenuStrip value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -227,8 +227,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_SetDisposeNew_RemovesContextMenuStrip()
     {
-        using var menu = new ContextMenuStrip();
-        using var row = new DataGridViewRow
+        using ContextMenuStrip menu = new();
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = menu
         };
@@ -241,9 +241,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_SetDisposeOld_RemovesContextMenuStrip()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var row = new DataGridViewRow
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = menu1
         };
@@ -259,7 +259,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ContextMenuStrip_SetWithHandler_CallsContextMenuStripChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -275,7 +275,7 @@ public class DataGridViewRowTests
         control.RowContextMenuStripChanged += handler;
 
         // Set different.
-        using var menu1 = new ContextMenuStrip();
+        using ContextMenuStrip menu1 = new();
         row.ContextMenuStrip = menu1;
         Assert.Same(menu1, row.ContextMenuStrip);
         Assert.Equal(1, callCount);
@@ -286,7 +286,7 @@ public class DataGridViewRowTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var menu2 = new ContextMenuStrip();
+        using ContextMenuStrip menu2 = new();
         row.ContextMenuStrip = menu2;
         Assert.Same(menu2, row.ContextMenuStrip);
         Assert.Equal(2, callCount);
@@ -306,7 +306,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DataBoundItem_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -319,11 +319,11 @@ public class DataGridViewRowTests
     public void DataGridViewRow_DataBoundItem_GetWithDataGridViewWithDataSource_ReturnsExpected()
     {
         var boundObject = new { Name = "Name" };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             DataSource = new[] { boundObject }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows[0];
@@ -333,7 +333,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DataBoundItem_GetShared_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -346,11 +346,11 @@ public class DataGridViewRowTests
     public void DataGridViewRow_DataBoundItem_GetSharedWithDataSource_ReturnsExpected()
     {
         var boundObject = new { Name = "Name" };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             DataSource = new[] { boundObject }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows.SharedRow(0);
@@ -360,7 +360,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DefaultCellStyle_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -373,7 +373,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DefaultCellStyle_GetShared_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -387,8 +387,8 @@ public class DataGridViewRowTests
     {
         yield return new object[] { null, new DataGridViewCellStyle() };
 
-        var style1 = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter };
-        var style2 = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomLeft };
+        DataGridViewCellStyle style1 = new() { Alignment = DataGridViewContentAlignment.MiddleCenter };
+        DataGridViewCellStyle style2 = new() { Alignment = DataGridViewContentAlignment.BottomLeft };
         yield return new object[] { style1, style1 };
         yield return new object[] { style2, style2 };
     }
@@ -397,7 +397,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewRow_DefaultCellStyle_Set_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             DefaultCellStyle = value
         };
@@ -414,11 +414,11 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewRow_DefaultCellStyle_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        var oldValue = new DataGridViewCellStyle
+        DataGridViewCellStyle oldValue = new()
         {
             Alignment = DataGridViewContentAlignment.MiddleCenter
         };
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             DefaultCellStyle = oldValue
         };
@@ -437,7 +437,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewRow_DefaultCellStyle_SetWithDataGridView_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -460,11 +460,11 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultCellStyle_Set_TestData))]
     public void DataGridViewRow_DefaultCellStyle_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
     {
-        var oldValue = new DataGridViewCellStyle
+        DataGridViewCellStyle oldValue = new()
         {
             Alignment = DataGridViewContentAlignment.MiddleCenter
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -487,7 +487,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DefaultCellStyle_SetWithDataGridView_CallsRowDefaultCellStyleChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -503,7 +503,7 @@ public class DataGridViewRowTests
         };
         control.RowDefaultCellStyleChanged += handler;
 
-        var style1 = new DataGridViewCellStyle
+        DataGridViewCellStyle style1 = new()
         {
             Alignment = DataGridViewContentAlignment.MiddleCenter
         };
@@ -521,7 +521,7 @@ public class DataGridViewRowTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var style2 = new DataGridViewCellStyle
+        DataGridViewCellStyle style2 = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter
         };
@@ -559,7 +559,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DefaultCellStyle_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -571,7 +571,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DefaultHeaderCellType_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -583,7 +583,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DefaultHeaderCellType_GetShared_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -603,7 +603,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
     public void DataGridViewRow_DefaultHeaderCellType_Set_GetReturnsExpected(Type value, Type expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             DefaultHeaderCellType = value
         };
@@ -620,7 +620,7 @@ public class DataGridViewRowTests
     [InlineData(typeof(DataGridViewHeaderCell))]
     public void DataGridViewRow_DefaultHeaderCellType_SetWithNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var row = new SubDataGridViewRow
+        using SubDataGridViewRow row = new()
         {
             DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
         };
@@ -636,7 +636,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
     public void DataGridViewRow_DefaultHeaderCellType_SetWithDataGridView_GetReturnsExpected(Type value, Type expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -657,7 +657,7 @@ public class DataGridViewRowTests
     [InlineData(typeof(DataGridViewHeaderCell))]
     public void DataGridViewRow_DefaultHeaderCellType_SetWithDataGridViewNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -677,7 +677,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
     public void DataGridViewRow_DefaultHeaderCellType_SetShared_GetReturnsExpected(Type value, Type expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -698,7 +698,7 @@ public class DataGridViewRowTests
     [InlineData(typeof(DataGridViewHeaderCell))]
     public void DataGridViewRow_DefaultHeaderCellType_SetSharedNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -718,7 +718,7 @@ public class DataGridViewRowTests
     [InlineData(typeof(int))]
     public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNullOldValue_GetReturnsExpected(Type value)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentException>("value", () => row.DefaultHeaderCellType = value);
     }
 
@@ -727,7 +727,7 @@ public class DataGridViewRowTests
     [InlineData(typeof(int))]
     public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNonNullOldValue_GetReturnsExpected(Type value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
         };
@@ -737,7 +737,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Displayed_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -749,7 +749,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Displayed_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -761,7 +761,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DividerHeight_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -773,7 +773,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DividerHeight_GetShared_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -793,7 +793,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DividerHeight_Set_TestData))]
     public void DataGridViewRow_DividerHeight_Set_GetReturnsExpected(int value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             DividerHeight = value
         };
@@ -808,7 +808,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(DividerHeight_Set_TestData))]
     public void DataGridViewRow_DividerHeight_SetWithDataGridView_GetReturnsExpected(int value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -828,7 +828,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DividerHeight_SetWithDataGridView_CallsRowDividerHeightChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -871,14 +871,14 @@ public class DataGridViewRowTests
     [InlineData(65537)]
     public void DataGridViewRow_DividerHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => row.DividerHeight = value);
     }
 
     [WinFormsFact]
     public void DataGridViewRow_DividerHeight_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -890,7 +890,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ErrorText_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -902,7 +902,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ErrorText_GetNeedsErrorTextVirtualMode_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -933,13 +933,13 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ErrorText_GetNeedsErrorTextDataSource_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
 
@@ -968,7 +968,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ErrorText_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -981,7 +981,7 @@ public class DataGridViewRowTests
     [NormalizedStringData]
     public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(string value, string expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ErrorText = value
         };
@@ -996,7 +996,7 @@ public class DataGridViewRowTests
     [NormalizedStringData]
     public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ErrorText = "OldValue"
         };
@@ -1013,7 +1013,7 @@ public class DataGridViewRowTests
     [NormalizedStringData]
     public void DataGridViewRow_ErrorText_SetWithDataGridView_GetReturnsExpected(string value, string expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1034,7 +1034,7 @@ public class DataGridViewRowTests
     [NormalizedStringData]
     public void DataGridViewRow_ErrorText_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(string value, string expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1055,7 +1055,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ErrorText_SetWithDataGridView_CallsRowErrorTextChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1101,7 +1101,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ErrorText_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1117,7 +1117,7 @@ public class DataGridViewRowTests
     [InlineData(DataGridViewElementStates.Frozen | DataGridViewElementStates.Selected, false)]
     public void DataGridViewRow_Frozen_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var row = new CustomStateDataGridViewRow
+        using CustomStateDataGridViewRow row = new()
         {
             StateResult = state
         };
@@ -1127,9 +1127,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Frozen_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var row = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn row = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1141,9 +1141,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Frozen_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var row = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn row = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1165,7 +1165,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Frozen_Set_TestData))]
     public void DataGridViewRow_Frozen_Set_GetReturnsExpected(bool visible, bool value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Visible = visible,
             Frozen = value
@@ -1188,7 +1188,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_Frozen_SetWithDataGridView_GetReturnsExpected(bool value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1
         };
@@ -1218,7 +1218,7 @@ public class DataGridViewRowTests
     [InlineData(false, 0)]
     public void DataGridViewRow_Frozen_SetWithDataGridViewWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1
         };
@@ -1263,7 +1263,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_Frozen_SetWithPreviousRows_SetsToFrozen(bool previousVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1
         };
@@ -1316,7 +1316,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Frozen_SetWithDataGridView_CallsRowStateChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1358,9 +1358,9 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_Frozen_SetShared_ThrowsInvalidOperationException(bool value)
     {
-        using var control = new DataGridView();
-        using var cellTemplate = new SubDataGridViewCell();
-        using var row = new DataGridViewColumn
+        using DataGridView control = new();
+        using SubDataGridViewCell cellTemplate = new();
+        using DataGridViewColumn row = new()
         {
             CellTemplate = cellTemplate
         };
@@ -1372,7 +1372,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCell_Get_ReturnsExpected()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.IsType<DataGridViewRowHeaderCell>(row.HeaderCell);
         Assert.Same(row, row.HeaderCell.OwningRow);
         Assert.Null(row.HeaderCell.OwningColumn);
@@ -1383,8 +1383,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCell_GetWithDataGridView_ReturnsExpected()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -1401,8 +1401,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCell_GetShared_ReturnsExpected()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -1419,7 +1419,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCellCore_Get_ReturnsExpected()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.IsType<DataGridViewRowHeaderCell>(row.HeaderCellCore);
         Assert.Same(row, row.HeaderCellCore.OwningRow);
         Assert.Null(row.HeaderCellCore.OwningColumn);
@@ -1430,8 +1430,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCellCore_GetWithDataGridView_ReturnsExpected()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -1448,8 +1448,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCellCore_GetShared_ReturnsExpected()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -1473,7 +1473,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCell_Set_TestData))]
     public void DataGridViewRow_HeaderCell_Set_GetReturnsExpected(DataGridViewRowHeaderCell value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             HeaderCell = value
         };
@@ -1506,8 +1506,8 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCell_Set_TestData))]
     public void DataGridViewRow_HeaderCell_SetNonNullOldValue_GetReturnsExpected(DataGridViewRowHeaderCell value)
     {
-        using var oldValue = new DataGridViewRowHeaderCell();
-        using var row = new DataGridViewRow
+        using DataGridViewRowHeaderCell oldValue = new();
+        using DataGridViewRow row = new()
         {
             HeaderCell = oldValue
         };
@@ -1541,12 +1541,12 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCell_SetAlreadyHasBand_GetReturnsExpected()
     {
-        using var value = new DataGridViewRowHeaderCell();
-        using var otherRow = new DataGridViewRow
+        using DataGridViewRowHeaderCell value = new();
+        using DataGridViewRow otherRow = new()
         {
             HeaderCell = value
         };
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             HeaderCell = value
         };
@@ -1565,7 +1565,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCell_Set_TestData))]
     public void DataGridViewRow_HeaderCell_SetWithDataGridView_GetReturnsExpected(DataGridViewRowHeaderCell value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1602,13 +1602,13 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCell_Set_TestData))]
     public void DataGridViewRow_HeaderCell_SetWithDataGridViewNonNullOldValue_GetReturnsExpected(DataGridViewRowHeaderCell value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
         };
         DataGridViewRow row = control.Rows[0];
-        using var oldValue = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell oldValue = new();
         row.HeaderCell = oldValue;
 
         row.HeaderCell = value;
@@ -1642,7 +1642,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCell_Set_TestData))]
     public void DataGridViewRow_HeaderCell_SetShared_GetReturnsExpected(DataGridViewRowHeaderCell value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1679,13 +1679,13 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCell_Set_TestData))]
     public void DataGridViewRow_HeaderCell_SetSharedNonNullOldValue_GetReturnsExpected(DataGridViewRowHeaderCell value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
         };
         DataGridViewRow row = control.Rows.SharedRow(0);
-        using var oldValue = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell oldValue = new();
         row.HeaderCell = oldValue;
 
         row.HeaderCell = value;
@@ -1718,7 +1718,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_HeaderCell_SetWithDataGridView_CallsRowHeaderCellChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -1735,7 +1735,7 @@ public class DataGridViewRowTests
         control.RowHeaderCellChanged += handler;
 
         // Set non-null.
-        using var cell1 = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell1 = new();
         row.HeaderCell = cell1;
         Assert.Same(cell1, row.HeaderCell);
         Assert.Equal(1, callCount);
@@ -1746,7 +1746,7 @@ public class DataGridViewRowTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var cell2 = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell2 = new();
         row.HeaderCell = cell2;
         Assert.Same(cell2, row.HeaderCell);
         Assert.Equal(2, callCount);
@@ -1773,7 +1773,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(HeaderCellCore_SetInvalid_TestData))]
     public void DataGridViewRow_HeaderCellCore_SetInvalid_ThrowsArgumentException(DataGridViewHeaderCell value)
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Throws<ArgumentException>("value", () => row.HeaderCellCore = value);
     }
 
@@ -1781,7 +1781,7 @@ public class DataGridViewRowTests
     [EnumData<DataGridViewAutoSizeRowsMode>]
     public void DataGridViewRow_Height_GetWithDataGridView_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -1798,7 +1798,7 @@ public class DataGridViewRowTests
     [EnumData<DataGridViewAutoSizeRowsMode>]
     public void DataGridViewRow_Height_GetShared_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -1830,7 +1830,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Height_NeedsHeightInfo_TestData))]
     public void DataGridViewRow_Height_GetWithDataGridViewVirtualMode_CallsHeightInfoNeeded(DataGridViewAutoSizeRowsMode autoSizeRowsMode, int heightResult, int minimumHeightResult, int expectedHeight, int expectedCallCount)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -1864,12 +1864,12 @@ public class DataGridViewRowTests
     [MemberData(nameof(Height_NeedsHeightInfo_TestData))]
     public void DataGridViewRow_Height_GetWithDataGridViewDataSource_CallsHeightInfoNeeded(DataGridViewAutoSizeRowsMode autoSizeRowsMode, int heightResult, int minimumHeightResult, int expectedHeight, int expectedCallCount)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeRowsMode = autoSizeRowsMode,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows[0];
@@ -1909,7 +1909,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Height_Set_TestData))]
     public void DataGridViewRow_Height_Set_GetReturnsExpected(int value, int expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Height = value
         };
@@ -1949,7 +1949,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Height_SetWithDataGridView_TestData))]
     public void DataGridViewRow_Height_SetWithDataGridView_GetReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode, int value, int expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -1970,7 +1970,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Height_SetWithDataGridView_CallsRowHeightChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2012,7 +2012,7 @@ public class DataGridViewRowTests
     [InlineData(65537)]
     public void DataGridViewRow_Height_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => row.Height = value);
     }
 
@@ -2020,8 +2020,8 @@ public class DataGridViewRowTests
     public void DataGridViewRow_Height_IsEqualDefaultHeight_IfDefaultFontIsChanged()
     {
         var oldApplicationDefaultFont = Application.DefaultFont;
-        using var font = new Font("Times New Roman", 12);
-        using var row = new TestDataGridViewRow();
+        using Font font = new("Times New Roman", 12);
+        using TestDataGridViewRow row = new();
         var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
 
         try
@@ -2043,7 +2043,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Height_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2056,10 +2056,10 @@ public class DataGridViewRowTests
     {
         Font font1 = SystemFonts.DefaultFont;
         Font font2 = SystemFonts.MenuFont;
-        var provider1 = new NumberFormatInfo();
-        var provider2 = new NumberFormatInfo();
+        NumberFormatInfo provider1 = new();
+        NumberFormatInfo provider2 = new();
 
-        var complete1 = new DataGridViewCellStyle
+        DataGridViewCellStyle complete1 = new()
         {
             Alignment = DataGridViewContentAlignment.BottomCenter,
             BackColor = Color.Green,
@@ -2075,7 +2075,7 @@ public class DataGridViewRowTests
             Tag = "tag",
             WrapMode = DataGridViewTriState.True,
         };
-        var complete2 = new DataGridViewCellStyle
+        DataGridViewCellStyle complete2 = new()
         {
             Alignment = DataGridViewContentAlignment.BottomRight,
             BackColor = Color.Blue,
@@ -2147,7 +2147,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(InheritedStyle_GetWithDataGridView_TestData))]
     public void DataGridViewRow_InheritedStyle_Get_ReturnsExpected(int index, DataGridViewCellStyle rowDefaultCellStyle, DataGridViewCellStyle rowsDefaultCellStyle, DataGridViewCellStyle alternatingRowsDefaultCellStyle, DataGridViewCellStyle gridDefaultCellStyle, DataGridViewCellStyle expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 2
         };
@@ -2182,14 +2182,14 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_InheritedStyle_GetWithoutDataGridView_ThrowsInvalidOperationException()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.InheritedStyle);
     }
 
     [WinFormsFact]
     public void DataGridViewRow_InheritedStyle_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2201,7 +2201,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_IsNewRow_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -2213,7 +2213,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_IsNewRow_GetWithDataGridViewNewRow_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2225,7 +2225,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_IsNewRow_GetSharedNotNewRow_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -2237,7 +2237,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_IsNewRow_GetSharedNewRow_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2250,7 +2250,7 @@ public class DataGridViewRowTests
     [EnumData<DataGridViewAutoSizeRowsMode>]
     public void DataGridViewRow_MinimumHeight_GetWithDataGridView_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2267,7 +2267,7 @@ public class DataGridViewRowTests
     [EnumData<DataGridViewAutoSizeRowsMode>]
     public void DataGridViewRow_MinimumHeight_GetShared_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2299,7 +2299,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(MinimumHeight_NeedsHeightInfo_TestData))]
     public void DataGridViewRow_MinimumHeight_GetWithDataGridViewVirtualMode_CallsHeightInfoNeeded(DataGridViewAutoSizeRowsMode autoSizeRowsMode, int heightResult, int minimumHeightResult, int expectedMinimumHeight, int expectedCallCount)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2333,12 +2333,12 @@ public class DataGridViewRowTests
     [MemberData(nameof(MinimumHeight_NeedsHeightInfo_TestData))]
     public void DataGridViewRow_MinimumHeight_GetWithDataGridViewDataSource_CallsHeightInfoNeeded(DataGridViewAutoSizeRowsMode autoSizeRowsMode, int heightResult, int minimumHeightResult, int expectedMinimumHeight, int expectedCallCount)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             AutoSizeRowsMode = autoSizeRowsMode,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows[0];
@@ -2376,7 +2376,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(MinimumHeight_Set_TestData))]
     public void DataGridViewRow_MinimumHeight_Set_GetReturnsExpected(int value, int expectedMinimumHeight, int expectedHeight)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             MinimumHeight = value
         };
@@ -2414,7 +2414,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(MinimumHeight_SetWithDataGridView_TestData))]
     public void DataGridViewRow_MinimumHeight_SetWithDataGridView_GetReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode, int value, int expectedMinimumHeight, int expectedHeight)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2437,7 +2437,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_MinimumHeight_SetWithDataGridView_CallsRowMinimumHeightChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2482,7 +2482,7 @@ public class DataGridViewRowTests
     [InlineData(65537)]
     public void DataGridViewRow_MinimumHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => row.MinimumHeight = value);
         Assert.Equal(3, row.MinimumHeight);
         Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
@@ -2491,7 +2491,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_MinimumHeight_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2507,7 +2507,7 @@ public class DataGridViewRowTests
     [InlineData(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected, false)]
     public void DataGridViewRow_ReadOnly_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var row = new CustomStateDataGridViewRow
+        using CustomStateDataGridViewRow row = new()
         {
             StateResult = state
         };
@@ -2518,7 +2518,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_ReadOnly_GetWithDataGridView_ReturnsExpected(bool dataGridViewReadOnly)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2532,7 +2532,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_ReadOnly_GetShared_ThrowsInvalidOperationException(bool dataGridViewReadOnly)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2546,7 +2546,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_ReadOnly_Set_GetReturnsExpected(bool value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ReadOnly = value
         };
@@ -2571,7 +2571,7 @@ public class DataGridViewRowTests
     [InlineData(false, false)]
     public void DataGridViewRow_ReadOnly_SetWithDataGridView_GetReturnsExpected(bool dataGridViewReadOnly, bool value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2597,7 +2597,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ReadOnly_SetWithDataGridViewReadOnly_Nop()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2615,9 +2615,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ReadOnly_SetWithCells_Success()
     {
-        using var row = new DataGridViewRow();
-        using var cell1 = new SubDataGridViewCell();
-        using var cell2 = new SubDataGridViewCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewCell cell1 = new();
+        using SubDataGridViewCell cell2 = new();
         row.Cells.Add(cell1);
         row.Cells.Add(cell2);
         cell2.ReadOnly = true;
@@ -2644,7 +2644,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ReadOnly_SetWithCellsWithDataGridView_Success()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 2,
             RowCount = 1
@@ -2674,7 +2674,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ReadOnly_SetWithDataGridView_CallsRowStateChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2715,7 +2715,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_ReadOnly_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2729,7 +2729,7 @@ public class DataGridViewRowTests
     [InlineData(false, DataGridViewTriState.False)]
     public void DataGridViewRow_Resizable_GetWithDataGridView_ReturnsExpected(bool allowUserToResizeRows, DataGridViewTriState expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2743,7 +2743,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_Resizable_GetShared_ReturnsExpected(bool allowUserToResizeRows)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2756,7 +2756,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Resizable_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2769,7 +2769,7 @@ public class DataGridViewRowTests
     [EnumData<DataGridViewTriState>]
     public void DataGridViewRow_Resizable_Set_GetReturnsExpected(DataGridViewTriState value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Resizable = value
         };
@@ -2784,7 +2784,7 @@ public class DataGridViewRowTests
     [EnumData<DataGridViewTriState>]
     public void DataGridViewRow_Resizable_SetWithCustomOldValue_GetReturnsExpected(DataGridViewTriState value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Resizable = DataGridViewTriState.True
         };
@@ -2811,7 +2811,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Resizable_SetWithDataGridView_TestData))]
     public void DataGridViewRow_Resizable_SetWithDataGridView_GetReturnsExpected(bool allowUserToResizeRows, DataGridViewTriState value, DataGridViewTriState expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2832,7 +2832,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Resizable_SetWithDataGridView_CallsRowStateChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2874,7 +2874,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Resizable_SetWithDataGridView_TestData))]
     public void DataGridViewRow_Resizable_SetWithDataGridViewWithCustomOldValue_GetReturnsExpected(bool allowUserToResizeRows, DataGridViewTriState value, DataGridViewTriState expected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2897,14 +2897,14 @@ public class DataGridViewRowTests
     [InvalidEnumData<DataGridViewTriState>]
     public void DataGridViewRow_Resizable_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewTriState value)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => row.Resizable = value);
     }
 
     [WinFormsFact]
     public void DataGridViewRow_Selected_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2916,7 +2916,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Selected_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2928,7 +2928,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Selected_SetWithoutDataGridView_ThrowsInvalidOperationException()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.Selected = true);
         Assert.False(row.Selected);
 
@@ -2944,7 +2944,7 @@ public class DataGridViewRowTests
     [InlineData(DataGridViewSelectionMode.ColumnHeaderSelect, false)]
     public void DataGridViewRow_Selected_SetWithDataGridView_GetReturnsExpected(DataGridViewSelectionMode selectionMode, bool selected)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -2972,7 +2972,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Selected_SetMultipleNotMultiSelect_Success()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             MultiSelect = false
@@ -3006,7 +3006,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Selected_SetMultipleMultiSelect_Success()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             MultiSelect = true
@@ -3041,7 +3041,7 @@ public class DataGridViewRowTests
     [BoolData]
     public void DataGridViewRow_Selected_SetShared_ThrowsInvalidOperationException(bool value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3053,7 +3053,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_State_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3065,7 +3065,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_State_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3077,7 +3077,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Tag_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3089,7 +3089,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Tag_GetShared_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3102,7 +3102,7 @@ public class DataGridViewRowTests
     [StringWithNullData]
     public void DataGridViewRow_Tag_Set_GetReturnsExpected(string value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Tag = value
         };
@@ -3117,7 +3117,7 @@ public class DataGridViewRowTests
     [StringWithNullData]
     public void DataGridViewRow_Tag_SetWithNonNullOldValue_GetReturnsExpected(string value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Tag = "OldValue"
         };
@@ -3134,7 +3134,7 @@ public class DataGridViewRowTests
     [StringWithNullData]
     public void DataGridViewRow_Tag_SetWithDataGridView_GetReturnsExpected(string value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3155,7 +3155,7 @@ public class DataGridViewRowTests
     [StringWithNullData]
     public void DataGridViewRow_Tag_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(string value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3177,7 +3177,7 @@ public class DataGridViewRowTests
     [StringWithNullData]
     public void DataGridViewRow_Tag_SetShared_GetReturnsExpected(string value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3198,7 +3198,7 @@ public class DataGridViewRowTests
     [StringWithNullData]
     public void DataGridViewRow_Tag_SetSharedWithNonNullOldValue_GetReturnsExpected(string value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3219,7 +3219,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Visible_GetWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3231,7 +3231,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Visible_GetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3253,7 +3253,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Visible_Set_TestData))]
     public void DataGridViewRow_Visible_Set_GetReturnsExpected(bool frozen, bool value)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Frozen = frozen,
             Visible = value
@@ -3276,7 +3276,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(Visible_Set_TestData))]
     public void DataGridViewRow_Visible_SetWithDataGridView_GetReturnsExpected(bool frozen, bool value)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -3304,7 +3304,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Visible_SetWithDataGridView_CallsRowStateChanged()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -3345,7 +3345,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Visible_SetNewRowIndexDifferent_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3362,7 +3362,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Visible_SetShared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -3714,7 +3714,7 @@ public class DataGridViewRowTests
     [MemberData(nameof(AdjustRowHeaderBorderStyle_WithDataGridView_TestData))]
     public void DataGridViewRow_AdjustRowHeaderBorderStyle_InvokeWithDataGridView_ReturnsExpected(bool enableHeadersVisualStyles, bool rowHeadersVisible, RightToLeft rightToLeft, DataGridViewAdvancedCellBorderStyle all, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow, bool returnsAdvanced, DataGridViewAdvancedCellBorderStyle expectedLeft, DataGridViewAdvancedCellBorderStyle expectedRight, DataGridViewAdvancedCellBorderStyle expectedTop, DataGridViewAdvancedCellBorderStyle expectedBottom)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -3730,11 +3730,11 @@ public class DataGridViewRowTests
             return;
         }
 
-        var dataGridViewAdvancedBorderStyleInput = new DataGridViewAdvancedBorderStyle
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput = new()
         {
             All = all
         };
-        var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new();
         DataGridViewAdvancedBorderStyle result = row.AdjustRowHeaderBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
         Assert.Same(returnsAdvanced ? dataGridViewAdvancedBorderStylePlaceholder : dataGridViewAdvancedBorderStyleInput, result);
 
@@ -3881,13 +3881,13 @@ public class DataGridViewRowTests
     [MemberData(nameof(AdjustRowHeaderBorderStyle_WithoutDataGridView_TestData))]
     public void DataGridViewRow_AdjustRowHeaderBorderStyle_InvokeWithoutDataGridView_ReturnsExpected(DataGridViewAdvancedCellBorderStyle all, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow, bool returnsAdvanced, DataGridViewAdvancedCellBorderStyle expectedLeft, DataGridViewAdvancedCellBorderStyle expectedRight, DataGridViewAdvancedCellBorderStyle expectedTop, DataGridViewAdvancedCellBorderStyle expectedBottom)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
 
-        var dataGridViewAdvancedBorderStyleInput = new DataGridViewAdvancedBorderStyle
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput = new()
         {
             All = all
         };
-        var dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new();
         DataGridViewAdvancedBorderStyle result = row.AdjustRowHeaderBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
         Assert.Same(returnsAdvanced ? dataGridViewAdvancedBorderStylePlaceholder : dataGridViewAdvancedBorderStyleInput, result);
 
@@ -3900,7 +3900,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Clone_Empty_Success()
     {
-        using var source = new DataGridViewRow();
+        using DataGridViewRow source = new();
         using DataGridViewRow row = Assert.IsType<DataGridViewRow>(source.Clone());
         Assert.Null(row.ContextMenuStrip);
         Assert.Null(row.DataGridView);
@@ -3921,10 +3921,10 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Clone_NoDataGridView_Success()
     {
-        using var menu = new ContextMenuStrip();
-        var style = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
-        using var cell = new DataGridViewRowHeaderCell();
-        using var source = new DataGridViewRow
+        using ContextMenuStrip menu = new();
+        DataGridViewCellStyle style = new() { Alignment = DataGridViewContentAlignment.BottomRight };
+        using DataGridViewRowHeaderCell cell = new();
+        using DataGridViewRow source = new()
         {
             ContextMenuStrip = menu,
             DefaultCellStyle = style,
@@ -3961,13 +3961,13 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Clone_Subclass_Success()
     {
-        using var menu = new ContextMenuStrip();
-        var style = new DataGridViewCellStyle
+        using ContextMenuStrip menu = new();
+        DataGridViewCellStyle style = new()
         {
             Alignment = DataGridViewContentAlignment.BottomRight
         };
-        using var cell = new DataGridViewRowHeaderCell();
-        using var source = new SubDataGridViewRow
+        using DataGridViewRowHeaderCell cell = new();
+        using SubDataGridViewRow source = new()
         {
             ContextMenuStrip = menu,
             DefaultCellStyle = style,
@@ -4004,13 +4004,13 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Clone_WithDataGridView_Success()
     {
-        using var menu = new ContextMenuStrip();
-        var style = new DataGridViewCellStyle
+        using ContextMenuStrip menu = new();
+        DataGridViewCellStyle style = new()
         {
             Alignment = DataGridViewContentAlignment.BottomRight
         };
-        using var cell = new DataGridViewRowHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewRowHeaderCell cell = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -4053,9 +4053,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_CreateCells_InvokeNoColumns_Success()
     {
-        using var control = new DataGridView();
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewCell();
+        using DataGridView control = new();
+        using DataGridViewRow row = new();
+        using SubDataGridViewCell cell = new();
         row.Cells.Add(cell);
         row.CreateCells(control);
         Assert.Empty(row.Cells);
@@ -4064,12 +4064,12 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_CreateCells_InvokeWithColumns_Success()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1
         };
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewCell cell = new();
         row.Cells.Add(cell);
         row.CreateCells(control);
         Assert.Null(Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
@@ -4080,9 +4080,9 @@ public class DataGridViewRowTests
     [InlineData(new object[] { new object[] { 1, 2, 3 } })]
     public void DataGridViewRow_CreateCells_InvokeNoColumnsWithValues_Success(object[] values)
     {
-        using var control = new DataGridView();
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewCell();
+        using DataGridView control = new();
+        using DataGridViewRow row = new();
+        using SubDataGridViewCell cell = new();
         row.Cells.Add(cell);
         row.CreateCells(control, values);
         Assert.Empty(row.Cells);
@@ -4094,12 +4094,12 @@ public class DataGridViewRowTests
     [InlineData(new object[] { new object[] { 1, 2, 3 }, 1 })]
     public void DataGridViewRow_CreateCells_InvokeWithValues_Success(object[] values, object expectedValue)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1
         };
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewCell cell = new();
         row.Cells.Add(cell);
         row.CreateCells(control, values);
         Assert.Equal(expectedValue, Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
@@ -4108,7 +4108,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_CreateCells_NullDataGridView_ThrowsArgumentNullException()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentNullException>("dataGridView", () => row.CreateCells(null));
         Assert.Throws<ArgumentNullException>("dataGridView", () => row.CreateCells(null, Array.Empty<object>()));
     }
@@ -4116,12 +4116,12 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_CreateCells_HasDataGridView_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
         };
-        using var newControl = new DataGridView();
+        using DataGridView newControl = new();
         DataGridViewRow row = control.Rows[0];
         Assert.Throws<InvalidOperationException>(() => row.CreateCells(newControl));
         Assert.Throws<InvalidOperationException>(() => row.CreateCells(newControl, Array.Empty<object>()));
@@ -4130,10 +4130,10 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_CreateCells_ColumnHasNoCellTemplate_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add("Name", "Text");
         control.Columns[0].CellTemplate = null;
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.CreateCells(control));
         Assert.Throws<InvalidOperationException>(() => row.CreateCells(control, Array.Empty<object>()));
     }
@@ -4141,22 +4141,22 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_CreateCells_NullValues_ThrowsArgumentNullException()
     {
-        using var row = new DataGridViewRow();
-        using var control = new DataGridView();
+        using DataGridViewRow row = new();
+        using DataGridView control = new();
         Assert.Throws<ArgumentNullException>("values", () => row.CreateCells(control, null));
     }
 
     [WinFormsFact]
     public void DataGridViewRow_CreateCellsInstance_Invoke_ReturnsEmpty()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Empty(row.CreateCellsInstance());
     }
 
     [WinFormsFact]
     public void DataGridViewRow_Dispose_WithoutContextMenuStrip_Nop()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         row.Dispose();
         Assert.Null(row.ContextMenuStrip);
 
@@ -4168,7 +4168,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Dispose_WithContextMenuStrip_Success()
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = new ContextMenuStrip()
         };
@@ -4194,10 +4194,10 @@ public class DataGridViewRowTests
     [MemberData(nameof(DrawFocus_TestData))]
     public void DataGridViewRow_DrawFocus_Invoke_Success(Rectangle clipBounds, Rectangle bounds, int rowIndex, DataGridViewElementStates rowState, DataGridViewCellStyle cellStyle, bool cellsPaintSelectionBackground)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4210,17 +4210,17 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DrawFocus_NoDataGridView_ThrowsInvalidOperationException()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.DrawFocus(graphics, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), -1, DataGridViewElementStates.None, new DataGridViewCellStyle(), true));
     }
 
     [WinFormsFact]
     public void DataGridViewRow_DrawFocus_NullGraphics_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4233,10 +4233,10 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_DrawFocus_NullCellStyle_ThrowsArgumentNullException()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4252,11 +4252,11 @@ public class DataGridViewRowTests
     [InlineData(0)]
     public void DataGridViewRow_GetContextMenuStrip_Invoke_ReturnsExpected(int rowIndex)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Null(row.GetContextMenuStrip(rowIndex));
 
         // Set context menu.
-        using var menu = new ContextMenuStrip();
+        using ContextMenuStrip menu = new();
         row.ContextMenuStrip = menu;
         Assert.Same(menu, row.GetContextMenuStrip(rowIndex));
     }
@@ -4264,7 +4264,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetContextMenuStrip_InvokeWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -4272,10 +4272,10 @@ public class DataGridViewRowTests
         int callCount = 0;
         control.RowContextMenuStripNeeded += (sender, e) => callCount++;
         DataGridViewRow row1 = control.Rows[0];
-        using var menu1 = new ContextMenuStrip();
+        using ContextMenuStrip menu1 = new();
         row1.ContextMenuStrip = menu1;
         DataGridViewRow row2 = control.Rows[1];
-        using var menu2 = new ContextMenuStrip();
+        using ContextMenuStrip menu2 = new();
         row2.ContextMenuStrip = menu2;
         Assert.Same(menu1, row1.GetContextMenuStrip(0));
         Assert.Same(menu1, row1.GetContextMenuStrip(0));
@@ -4288,9 +4288,9 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetContextMenuStrip_InvokeWithDataGridViewVirtualMode_CallsRowContextMenuStripNeeded()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridView
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -4322,15 +4322,15 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetContextMenuStrip_InvokeWithDataGridViewDataSource_CallsRowContextMenuStripNeeded()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridView
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows[0];
@@ -4361,7 +4361,7 @@ public class DataGridViewRowTests
     [InlineData(1)]
     public void DataGridViewRow_GetContextMenuStrip_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -4373,7 +4373,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetContextMenuStrip_SharedRow_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -4388,7 +4388,7 @@ public class DataGridViewRowTests
     [InlineData(0)]
     public void DataGridViewRow_GetErrorText_Invoke_ReturnsExpected(int rowIndex)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Empty(row.GetErrorText(rowIndex));
 
         // Set context menu.
@@ -4399,7 +4399,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetErrorText_InvokeWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -4418,7 +4418,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetErrorText_InvokeWithDataGridViewVirtualMode_CallsRowErrorTextNeeded()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -4449,13 +4449,13 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetErrorText_InvokeWithDataGridViewDataSource_CallsRowErrorTextNeeded()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewRow row = control.Rows[0];
@@ -4485,7 +4485,7 @@ public class DataGridViewRowTests
     [InlineData(1)]
     public void DataGridViewRow_GetErrorText_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -4497,7 +4497,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetErrorText_SharedRow_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -4509,14 +4509,14 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetState_Invoke_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Equal(DataGridViewElementStates.Visible, row.GetState(-1));
     }
 
     [WinFormsFact]
     public void DataGridViewRow_GetState_InvokeWithDataGridView_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -4530,7 +4530,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_GetState_InvokeShared_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 2
@@ -4546,7 +4546,7 @@ public class DataGridViewRowTests
     [InlineData(1)]
     public void DataGridViewRow_GetState_NoDataGridViewInvalidRowIndex_ThrowsArgumentException(int rowIndex)
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentException>("rowIndex", () => row.GetState(rowIndex));
     }
 
@@ -4555,7 +4555,7 @@ public class DataGridViewRowTests
     [InlineData(1)]
     public void DataGridViewRow_GetState_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -4581,8 +4581,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4590,7 +4590,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4604,8 +4604,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4614,7 +4614,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4628,8 +4628,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4640,7 +4640,7 @@ public class DataGridViewRowTests
         control.Columns[0].Visible = true;
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4654,8 +4654,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4664,7 +4664,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4678,8 +4678,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4688,7 +4688,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4702,8 +4702,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4712,7 +4712,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4726,8 +4726,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4736,7 +4736,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4750,8 +4750,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4761,7 +4761,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4775,8 +4775,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4786,7 +4786,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.Paint(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow);
     }
@@ -4794,10 +4794,10 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_Invoke_CallsRowPrePaint()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4843,8 +4843,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_InvokeNullGraphics_DoesNotCallRowPrePaint()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4871,10 +4871,10 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_InvokeWithGraphics_CallsRowPostPaint()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4913,8 +4913,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_InvokeNullGraphics_DoesNotCallRowPostPaint()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4945,8 +4945,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_NullGraphicsEmptyRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4959,8 +4959,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_NullGraphicsNonEmptyRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4973,8 +4973,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_NullGraphicsNonEmptyClipRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -4987,7 +4987,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Paint_NoDataGridView_ThrowsInvalidOperationException()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.Paint(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true));
     }
 
@@ -4997,10 +4997,10 @@ public class DataGridViewRowTests
     [InlineData(2)]
     public void DataGridViewRow_Paint_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5027,8 +5027,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5036,7 +5036,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5050,8 +5050,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5060,7 +5060,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5074,8 +5074,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5086,7 +5086,7 @@ public class DataGridViewRowTests
         control.Columns[0].Visible = true;
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5100,8 +5100,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5110,7 +5110,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5124,8 +5124,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5134,7 +5134,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5148,8 +5148,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5158,7 +5158,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5172,8 +5172,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5182,7 +5182,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5196,8 +5196,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5207,7 +5207,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5221,8 +5221,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5232,7 +5232,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintCells(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5240,8 +5240,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintCells_NullGraphicsEmptyRectangle_Nop()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5254,8 +5254,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintCells_NullGraphicsNonEmptyRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5268,8 +5268,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintCells_NullGraphicsNoVisibleColumns_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5282,8 +5282,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintCells_NullGraphicsNonEmptyClipRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5296,7 +5296,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintCells_NoDataGridView_ThrowsInvalidOperationException()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.PaintCells(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
     }
 
@@ -5306,10 +5306,10 @@ public class DataGridViewRowTests
     [InlineData(2)]
     public void DataGridViewRow_PaintCells_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5325,10 +5325,10 @@ public class DataGridViewRowTests
     [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
     public void DataGridViewRow_PaintCells_InvalidPaintParts_ThrowsArgumentException(DataGridViewPaintParts paintParts)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5347,8 +5347,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5356,7 +5356,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5370,8 +5370,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5380,7 +5380,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5394,8 +5394,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5406,7 +5406,7 @@ public class DataGridViewRowTests
         control.Columns[0].Visible = true;
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5420,8 +5420,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5430,7 +5430,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5444,8 +5444,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5454,7 +5454,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5468,8 +5468,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5478,7 +5478,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5492,8 +5492,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5502,7 +5502,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5516,8 +5516,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5527,7 +5527,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5541,8 +5541,8 @@ public class DataGridViewRowTests
             return;
         }
 
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5552,7 +5552,7 @@ public class DataGridViewRowTests
         };
         SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         row.PaintHeader(graphics, clipBounds, rowBounds, rowIndex, rowState, isFirstDisplayedRow, isLastVisibleRow, paintParts);
     }
@@ -5560,8 +5560,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintHeader_NullGraphicsEmptyRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5575,8 +5575,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintHeader_NullGraphicsNonEmptyRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5590,8 +5590,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintHeader_NullGraphicsNonEmptyClipRectangle_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5605,8 +5605,8 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintHeader_NullGraphicsRowHeadersNotVisible_ThrowsArgumentNullException()
     {
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5620,7 +5620,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintHeader_NoDataGridView_ThrowsInvalidOperationException()
     {
-        using var row = new SubDataGridViewRow();
+        using SubDataGridViewRow row = new();
         Assert.Throws<InvalidOperationException>(() => row.PaintHeader(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
     }
 
@@ -5629,10 +5629,10 @@ public class DataGridViewRowTests
     [InlineData(2)]
     public void DataGridViewRow_PaintHeader_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5645,10 +5645,10 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_PaintHeader_SharedRowIndex_ThrowsInvalidOperationException()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5663,10 +5663,10 @@ public class DataGridViewRowTests
     [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
     public void DataGridViewRow_PaintHeader_InvalidPaintParts_ThrowsInvalidEnumArgumentException(DataGridViewPaintParts paintParts)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var rowTemplate = new SubDataGridViewRow();
-        using var control = new DataGridView
+        using SubDataGridViewRow rowTemplate = new();
+        using DataGridView control = new()
         {
             RowTemplate = rowTemplate,
             ColumnCount = 1,
@@ -5682,8 +5682,8 @@ public class DataGridViewRowTests
     [InlineData(new object[] { 1, 2 }, false, 1)]
     public void DataGridViewRow_SetValues_HasCellsWithoutDataGridView_Success(object[] values, bool expectedResult, object expectedValue)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(expectedResult, row.SetValues(values));
         Assert.Equal(expectedValue, Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
@@ -5695,7 +5695,7 @@ public class DataGridViewRowTests
     [InlineData(new object[] { 1, 2 }, false, 1)]
     public void DataGridViewRow_SetValues_HasCellsWithDataGridView_Success(object[] values, bool expectedResult, object expectedValue)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1
@@ -5708,7 +5708,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_SetValues_CantSet_ReturnsFalse()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         row.Cells.Add(new CantSetDataGridViewCell());
         Assert.False(row.SetValues(new object[] { 1 }));
         Assert.Null(Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
@@ -5722,14 +5722,14 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_SetValues_NullValue_ThrowsArgumentNullException()
     {
-        using var row = new DataGridViewRow();
+        using DataGridViewRow row = new();
         Assert.Throws<ArgumentNullException>("values", () => row.SetValues(null));
     }
 
     [WinFormsFact]
     public void DataGridViewRow_SetValues_VirtualDataGridView_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -5742,7 +5742,7 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_SetValues_Shared_ThrowsInvalidOperationException()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1

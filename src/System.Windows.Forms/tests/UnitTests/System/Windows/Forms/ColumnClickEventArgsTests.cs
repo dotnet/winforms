@@ -12,7 +12,7 @@ public class ColumnClickEventArgsTests
     [InlineData(1)]
     public void Ctor_Int(int column)
     {
-        var e = new ColumnClickEventArgs(column);
+        ColumnClickEventArgs e = new(column);
         Assert.Equal(column, e.Column);
     }
 }

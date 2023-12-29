@@ -60,7 +60,7 @@ public partial class WebBrowser
                 headers ??= string.Empty;
 
                 string urlString = urlObject is null ? string.Empty : (string)urlObject;
-                WebBrowserNavigatingEventArgs e = new WebBrowserNavigatingEventArgs(
+                WebBrowserNavigatingEventArgs e = new(
                     new Uri(urlString), targetFrameName is null ? string.Empty : (string)targetFrameName);
                 _parent.OnNavigating(e);
                 cancel = e.Cancel;
@@ -92,7 +92,7 @@ public partial class WebBrowser
             else
             {
                 string urlString = urlObject is null ? string.Empty : urlObject.ToString()!;
-                WebBrowserDocumentCompletedEventArgs e = new WebBrowserDocumentCompletedEventArgs(
+                WebBrowserDocumentCompletedEventArgs e = new(
                         new Uri(urlString));
                 _parent.OnDocumentCompleted(e);
             }
@@ -113,21 +113,21 @@ public partial class WebBrowser
         {
             Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
             string urlString = urlObject is null ? string.Empty : (string)urlObject;
-            WebBrowserNavigatedEventArgs e = new WebBrowserNavigatedEventArgs(
+            WebBrowserNavigatedEventArgs e = new(
                     new Uri(urlString));
             _parent.OnNavigated(e);
         }
 
         public void NewWindow2(ref object ppDisp, ref bool cancel)
         {
-            CancelEventArgs e = new CancelEventArgs();
+            CancelEventArgs e = new();
             _parent.OnNewWindow(e);
             cancel = e.Cancel;
         }
 
         public void ProgressChange(int progress, int progressMax)
         {
-            WebBrowserProgressChangedEventArgs e = new WebBrowserProgressChangedEventArgs(progress, progressMax);
+            WebBrowserProgressChangedEventArgs e = new(progress, progressMax);
             _parent.OnProgressChanged(e);
         }
 

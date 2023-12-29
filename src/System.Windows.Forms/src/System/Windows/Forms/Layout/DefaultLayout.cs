@@ -97,7 +97,7 @@ internal partial class DefaultLayout : LayoutEngine
             location.Y -= newSize.Height - oldBounds.Height;
         }
 
-        Rectangle newBounds = new Rectangle(location, newSize);
+        Rectangle newBounds = new(location, newSize);
 
         Debug.Assert(CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || newBounds.Contains(oldBounds), "How did we resize in such a way we no longer contain our old bounds?");
 
@@ -421,7 +421,7 @@ internal partial class DefaultLayout : LayoutEngine
                     case DockStyle.Top:
                         {
                             Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
-                            Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
+                            Rectangle newElementBounds = new(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
                             TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
@@ -434,7 +434,7 @@ internal partial class DefaultLayout : LayoutEngine
                     case DockStyle.Bottom:
                         {
                             Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
-                            Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Bottom - elementSize.Height, elementSize.Width, elementSize.Height);
+                            Rectangle newElementBounds = new(remainingBounds.X, remainingBounds.Bottom - elementSize.Height, elementSize.Width, elementSize.Height);
 
                             TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
@@ -447,7 +447,7 @@ internal partial class DefaultLayout : LayoutEngine
                     case DockStyle.Left:
                         {
                             Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
-                            Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
+                            Rectangle newElementBounds = new(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
                             TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
@@ -460,7 +460,7 @@ internal partial class DefaultLayout : LayoutEngine
                     case DockStyle.Right:
                         {
                             Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
-                            Rectangle newElementBounds = new Rectangle(remainingBounds.Right - elementSize.Width, remainingBounds.Y, elementSize.Width, elementSize.Height);
+                            Rectangle newElementBounds = new(remainingBounds.Right - elementSize.Width, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
                             TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
@@ -478,7 +478,7 @@ internal partial class DefaultLayout : LayoutEngine
                         else
                         {
                             Size elementSize = remainingBounds.Size;
-                            Rectangle newElementBounds = new Rectangle(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
+                            Rectangle newElementBounds = new(remainingBounds.X, remainingBounds.Y, elementSize.Width, elementSize.Height);
 
                             TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
                         }
@@ -508,7 +508,7 @@ internal partial class DefaultLayout : LayoutEngine
     {
         if (measureOnly)
         {
-            Size neededSize = new Size(
+            Size neededSize = new(
                 Math.Max(0, newElementBounds.Width - remainingBounds.Width),
                 Math.Max(0, newElementBounds.Height - remainingBounds.Height));
 

@@ -429,7 +429,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         Point location = Point.Empty;
         Size size = Size.Empty;
-        Size offset = new Size(0, 0);
+        Size offset = new(0, 0);
         bool hasLocation = (defaultValues is not null && defaultValues.Contains("Location"));
         bool hasSize = (defaultValues is not null && defaultValues.Contains("Size"));
 
@@ -569,7 +569,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 // above a while back. Not sure what will break if AddChildControl is moved down below, so let's just fix up things
                 // here.
 
-                Point pt = new Point(bounds.X, bounds.Y);
+                Point pt = new(bounds.X, bounds.Y);
                 ScrollableControl p = newChild.Parent as ScrollableControl;
                 if (p is not null)
                 {
@@ -1035,7 +1035,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         {
             // get the adornerwindow-relative coords for the container control
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
-            Rectangle translatedBounds = new Rectangle(loc, ((Control)Component).Size);
+            Rectangle translatedBounds = new(loc, ((Control)Component).Size);
 
             int glyphOffset = (int)(DesignerUtils.CONTAINERGRABHANDLESIZE * .5);
 
@@ -1045,8 +1045,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 glyphOffset = -1 * glyphOffset;
             }
 
-            ContainerSelectorBehavior behavior = new ContainerSelectorBehavior((Control)Component, Component.Site, true);
-            ContainerSelectorGlyph containerSelectorGlyph = new ContainerSelectorGlyph(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
+            ContainerSelectorBehavior behavior = new((Control)Component, Component.Site, true);
+            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
 
             glyphs.Insert(0, containerSelectorGlyph);
         }
@@ -1132,7 +1132,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         if (SnapToGrid)
         {
             Size gridSize = GridSize;
-            Point halfGrid = new Point(gridSize.Width / 2, gridSize.Height / 2);
+            Point halfGrid = new(gridSize.Width / 2, gridSize.Height / 2);
 
             updatedRect = dragRect;
             updatedRect.X = originalRect.X;
@@ -1231,7 +1231,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         if (defaultValues is not null && defaultValues["Size"] is not null && defaultValues["Location"] is not null && defaultValues["Parent"] is not null)
         {
             // build our rect that may have covered some child controls
-            Rectangle bounds = new Rectangle((Point)defaultValues["Location"], (Size)defaultValues["Size"]);
+            Rectangle bounds = new((Point)defaultValues["Location"], (Size)defaultValues["Size"]);
 
             // ask the parent to give us the comps within this rect
             IComponent parent = defaultValues["Parent"] as IComponent;
@@ -1784,14 +1784,14 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // Clear out the drag frame.
         if (!offset.IsEmpty && _graphics is not null)
         {
-            Rectangle frameRect = new Rectangle(offset.X - _adornerWindowToScreenOffset.X,
+            Rectangle frameRect = new(offset.X - _adornerWindowToScreenOffset.X,
                                                  offset.Y - _adornerWindowToScreenOffset.Y,
                                                  offset.Width, offset.Height);
 
             int frameWidth = FrameWidth(_mouseDragFrame);
             _graphics.SetClip(frameRect);
 
-            using (Region newRegion = new Region(frameRect))
+            using (Region newRegion = new(frameRect))
             {
                 newRegion.Exclude(Rectangle.Inflate(frameRect, -frameWidth, -frameWidth));
                 BehaviorService.Invalidate(newRegion);
@@ -1862,7 +1862,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             {
                 // avoid allowing the user creating a 1x1 sized control (for ex)
                 // by enforcing a min size 2xMinDragSize...
-                Size minControlSize = new Size(DesignerUtils.MinDragSize.Width * 2, DesignerUtils.MinDragSize.Height * 2);
+                Size minControlSize = new(DesignerUtils.MinDragSize.Width * 2, DesignerUtils.MinDragSize.Height * 2);
                 if (offset.Width < minControlSize.Width)
                 {
                     offset.Width = minControlSize.Width;
@@ -1939,7 +1939,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         {
             // here, we build up our new rect (offset by the adorner window)
             // and ask the snapline engine to adjust our coords
-            Rectangle r = new Rectangle(_mouseDragBase.X - _adornerWindowToScreenOffset.X,
+            Rectangle r = new(_mouseDragBase.X - _adornerWindowToScreenOffset.X,
                                    _mouseDragBase.Y - _adornerWindowToScreenOffset.Y,
                                    x - _mouseDragBase.X, y - _mouseDragBase.Y);
             Point offset = _dragManager.OnMouseMove(r, GenerateNewToolSnapLines(r));
@@ -1976,14 +1976,14 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         // And draw the new drag frame
         if (!_mouseDragOffset.IsEmpty && _graphics is not null)
         {
-            Rectangle frameRect = new Rectangle(_mouseDragOffset.X - _adornerWindowToScreenOffset.X,
+            Rectangle frameRect = new(_mouseDragOffset.X - _adornerWindowToScreenOffset.X,
                                                  _mouseDragOffset.Y - _adornerWindowToScreenOffset.Y,
                                                  _mouseDragOffset.Width, _mouseDragOffset.Height);
 
             // graphics.SetClip(frameRect);
 
             // draw the new border
-            using Region newRegion = new Region(frameRect);
+            using Region newRegion = new(frameRect);
             int frameWidth = FrameWidth(_mouseDragFrame);
             newRegion.Exclude(Rectangle.Inflate(frameRect, -frameWidth, -frameWidth));
 
@@ -2000,7 +2000,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 // updates.
 
                 // Since we invalidate and then immediately redraw, the flicker should be minimal.
-                using Region oldRegion = new Region(oldFrameRect);
+                using Region oldRegion = new(oldFrameRect);
                 oldRegion.Exclude(Rectangle.Inflate(oldFrameRect, -frameWidth, -frameWidth));
                 // oldRegion.Union(newRegion);
                 // oldRegion.Exclude(newRegion);

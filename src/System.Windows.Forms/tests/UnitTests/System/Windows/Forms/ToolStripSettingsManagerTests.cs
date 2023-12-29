@@ -8,15 +8,15 @@ public class ToolStripSettingsManagerTests : IClassFixture<UserConfigDisposableF
     [WinFormsFact]
     public void ToolStripSettingsManager_Save_Load_RoundTripExpected()
     {
-        using var mainForm = new Form();
+        using Form mainForm = new();
 
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         toolStrip.Name = "Child";
         toolStrip.Size = new Drawing.Size(10, 10);
         toolStrip.Visible = false;
         mainForm.Controls.Add(toolStrip);
 
-        var toolStripSettingsManager = new ToolStripSettingsManager(mainForm, "MainForm");
+        ToolStripSettingsManager toolStripSettingsManager = new(mainForm, "MainForm");
 
         toolStripSettingsManager.Save();
 

@@ -490,8 +490,8 @@ public partial class DataObject
 
             enumFORMATETC.Reset();
 
-            FORMATETC[] formatetc = new FORMATETC[] { default };
-            int[] retrieved = new int[] { 1 };
+            FORMATETC[] formatetc = [default];
+            int[] retrieved = [1];
 
             while (retrieved[0] > 0)
             {

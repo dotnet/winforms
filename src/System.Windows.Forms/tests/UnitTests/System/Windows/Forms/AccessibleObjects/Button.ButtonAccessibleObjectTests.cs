@@ -18,9 +18,9 @@ public class Button_ButtonAccessibleObjectTests
     [WinFormsFact]
     public void ButtonAccessibleObject_Ctor_InitializesOwner()
     {
-        using var button = new Button();
+        using Button button = new();
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new ButtonAccessibleObject(button);
+        ButtonAccessibleObject buttonAccessibleObject = new(button);
 
         Assert.Same(button, buttonAccessibleObject.Owner);
         Assert.False(button.IsHandleCreated);
@@ -31,7 +31,7 @@ public class Button_ButtonAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void ButtonAccessibleObject_AccessibleRole_Default_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
     {
-        using var button = new Button
+        using Button button = new()
         {
             AccessibleRole = AccessibleRole.Default
         };
@@ -41,7 +41,7 @@ public class Button_ButtonAccessibleObjectTests
             button.CreateControl();
         }
 
-        var buttonAccessibleObject = new ButtonAccessibleObject(button);
+        ButtonAccessibleObject buttonAccessibleObject = new(button);
 
         Assert.Equal(accessibleRole, buttonAccessibleObject.Role);
         Assert.Equal(createControl, button.IsHandleCreated);
@@ -50,13 +50,13 @@ public class Button_ButtonAccessibleObjectTests
     [WinFormsFact]
     public void ButtonAccessibleObject_AccessibleRole_Custom_ReturnsExpected()
     {
-        using var button = new Button
+        using Button button = new()
         {
             AccessibleRole = AccessibleRole.Link
         };
 
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new ButtonAccessibleObject(button);
+        ButtonAccessibleObject buttonAccessibleObject = new(button);
 
         Assert.Equal(AccessibleRole.Link, buttonAccessibleObject.Role);
         Assert.False(button.IsHandleCreated);
@@ -70,14 +70,14 @@ public class Button_ButtonAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "Button1")]
     public void ButtonAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
-        using var button = new Button
+        using Button button = new()
         {
             Name = "Button1",
             AccessibleName = "TestName"
         };
 
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new ButtonAccessibleObject(button);
+        ButtonAccessibleObject buttonAccessibleObject = new(button);
         using VARIANT value = buttonAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value.ToObject());
@@ -87,10 +87,10 @@ public class Button_ButtonAccessibleObjectTests
     [WinFormsFact]
     public void ButtonAccessibleObject_IsPatternSupported_Invoke_ReturnsTrue_ForLegacyIAccessiblePatternId()
     {
-        using var button = new Button();
+        using Button button = new();
 
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new ButtonAccessibleObject(button);
+        ButtonAccessibleObject buttonAccessibleObject = new(button);
 
         Assert.True(buttonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
         Assert.False(button.IsHandleCreated);
@@ -115,7 +115,7 @@ public class Button_ButtonAccessibleObjectTests
     [MemberData(nameof(ButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using Button button = new Button();
+        using Button button = new();
         button.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)button.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

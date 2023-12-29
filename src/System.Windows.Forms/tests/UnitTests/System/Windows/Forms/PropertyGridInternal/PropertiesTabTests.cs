@@ -12,7 +12,7 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_Ctor_Default()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.NotNull(tab.Bitmap);
         Assert.Same(tab.Bitmap, tab.Bitmap);
         Assert.Null(tab.Components);
@@ -24,42 +24,42 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetDefaultProperty_InvokeWithoutDefaultProperty_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Null(tab.GetDefaultProperty(new ClassWithoutDefaultProperty()));
     }
 
     [Fact]
     public void PropertiesTab_GetDefaultProperty_InvokeWithoutDefaultWithNameProperty_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Equal("Name", tab.GetDefaultProperty(new ClassWithNameProperty()).Name);
     }
 
     [Fact]
     public void PropertiesTab_GetDefaultProperty_InvokeWithDefaultProperty_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Equal("Value", tab.GetDefaultProperty(new ClassWithDefaultProperty()).Name);
     }
 
     [Fact]
     public void PropertiesTab_GetDefaultProperty_InvokeNullGetProperties_ReturnsExpected()
     {
-        var tab = new NullGetPropertiesPropertiesTab();
+        NullGetPropertiesPropertiesTab tab = new();
         Assert.Null(tab.GetDefaultProperty(new ClassWithNameProperty()));
     }
 
     [Fact]
     public void PropertiesTab_GetDefaultProperty_InvokeNullComponent_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Null(tab.GetDefaultProperty(null));
     }
 
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObject_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(new ClassWithDefaultProperty());
         Assert.Equal(2, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.Value)]);
@@ -69,14 +69,14 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeNullObject_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Empty(tab.GetProperties(null));
     }
 
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectNullAttributes_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(new ClassWithDefaultProperty(), null);
         Assert.Equal(2, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.Value)]);
@@ -86,7 +86,7 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectEmptyAttributes_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(new ClassWithDefaultProperty(), Array.Empty<Attribute>());
         Assert.Equal(3, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.Value)]);
@@ -97,7 +97,7 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectCustomAttributes_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(new ClassWithDefaultProperty(), new Attribute[] { new BrowsableAttribute(false) });
         Assert.Equal(1, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.NotBrowsableProperty)]);
@@ -106,14 +106,14 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeNullObjectAttributes_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Empty(tab.GetProperties(null, null));
     }
 
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectNullAttributesNullContext_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(null, new ClassWithDefaultProperty(), null);
         Assert.Equal(2, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.Value)]);
@@ -123,8 +123,8 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectNullAttributesNullPropertyContextPropertiesSupported_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
-        var mockTypeDescriptorContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        PropertiesTab tab = new();
+        Mock<ITypeDescriptorContext> mockTypeDescriptorContext = new(MockBehavior.Strict);
         mockTypeDescriptorContext
             .Setup(c => c.PropertyDescriptor)
             .Returns((PropertyDescriptor)null)
@@ -139,8 +139,8 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectNullAttributesCustomPropertyContext_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
-        var mockTypeDescriptorContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        PropertiesTab tab = new();
+        Mock<ITypeDescriptorContext> mockTypeDescriptorContext = new(MockBehavior.Strict);
         mockTypeDescriptorContext
             .Setup(c => c.PropertyDescriptor)
             .Returns(TypeDescriptor.GetProperties(typeof(ParentClass))[0])
@@ -155,8 +155,8 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectNullAttributesCustomContextCustomTypeConverter_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
-        var mockTypeDescriptorContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        PropertiesTab tab = new();
+        Mock<ITypeDescriptorContext> mockTypeDescriptorContext = new(MockBehavior.Strict);
         mockTypeDescriptorContext
             .Setup(c => c.PropertyDescriptor)
             .Returns(TypeDescriptor.GetProperties(typeof(CustomTypeConverterParentClass))[0])
@@ -170,7 +170,7 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectEmptyAttributesNullContext_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(null, new ClassWithDefaultProperty(), Array.Empty<Attribute>());
         Assert.Equal(3, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.Value)]);
@@ -181,7 +181,7 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeObjectCustomAttributesNullContext_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         PropertyDescriptorCollection properties = tab.GetProperties(null, new ClassWithDefaultProperty(), new Attribute[] { new BrowsableAttribute(false) });
         Assert.Equal(1, properties.Count);
         Assert.NotNull(properties[nameof(ClassWithDefaultProperty.NotBrowsableProperty)]);
@@ -190,7 +190,7 @@ public class PropertiesTabTests
     [Fact]
     public void PropertiesTab_GetProperties_InvokeNullObjectAttributesContext_ReturnsExpected()
     {
-        var tab = new PropertiesTab();
+        PropertiesTab tab = new();
         Assert.Empty(tab.GetProperties(null, null, null));
     }
 

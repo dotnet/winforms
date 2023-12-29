@@ -49,10 +49,10 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
                     TraceIf(TraceLevel.Warning, eventTarget is null, $"Object has no name and no property ref in context so we cannot serialize events: {value}");
                     if (eventTarget is not null)
                     {
-                        CodeTypeReference delegateTypeRef = new CodeTypeReference(eventToSerialize.EventType);
-                        CodeDelegateCreateExpression delegateCreate = new CodeDelegateCreateExpression(delegateTypeRef, s_thisRef, methodName);
-                        CodeEventReferenceExpression eventRef = new CodeEventReferenceExpression(eventTarget, eventToSerialize.Name);
-                        CodeAttachEventStatement attach = new CodeAttachEventStatement(eventRef, delegateCreate);
+                        CodeTypeReference delegateTypeRef = new(eventToSerialize.EventType);
+                        CodeDelegateCreateExpression delegateCreate = new(delegateTypeRef, s_thisRef, methodName);
+                        CodeEventReferenceExpression eventRef = new(eventTarget, eventToSerialize.Name);
+                        CodeAttachEventStatement attach = new(eventRef, delegateCreate);
 
                         attach.UserData[typeof(Delegate)] = eventToSerialize.EventType;
                         statements.Add(attach);

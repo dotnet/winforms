@@ -53,7 +53,7 @@ public class MetafileEditorTests
     public void MetafileEditor_LoadFromStream_BitmapStream_ThrowsExternalException()
     {
         SubMetafileEditor editor = new();
-        using (MemoryStream stream = new MemoryStream())
+        using (MemoryStream stream = new())
         using (Bitmap image = new(10, 10))
         {
             image.Save(stream, ImageFormat.Bmp);

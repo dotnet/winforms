@@ -15,7 +15,7 @@ public class HatchBrushTests
     [MemberData(nameof(Ctor_HatchStyle_ForeColor_TestData))]
     public void Ctor_HatchStyle_ForeColor(HatchStyle hatchStyle, Color foreColor)
     {
-        using (var brush = new HatchBrush(hatchStyle, foreColor))
+        using (HatchBrush brush = new(hatchStyle, foreColor))
         {
             Assert.Equal(hatchStyle, brush.HatchStyle);
 
@@ -36,7 +36,7 @@ public class HatchBrushTests
     [MemberData(nameof(Ctor_HatchStyle_ForeColor_BackColor_TestData))]
     public void Ctor_HatchStyle_ForeColor_BackColor(HatchStyle hatchStyle, Color foreColor, Color backColor)
     {
-        using (var brush = new HatchBrush(hatchStyle, foreColor, backColor))
+        using (HatchBrush brush = new(hatchStyle, foreColor, backColor))
         {
             Assert.Equal(hatchStyle, brush.HatchStyle);
 
@@ -60,7 +60,7 @@ public class HatchBrushTests
     [Fact]
     public void Clone_Brush_ReturnsClone()
     {
-        using (var brush = new HatchBrush(HatchStyle.DarkDownwardDiagonal, Color.Magenta, Color.Peru))
+        using (HatchBrush brush = new(HatchStyle.DarkDownwardDiagonal, Color.Magenta, Color.Peru))
         {
             HatchBrush clone = Assert.IsType<HatchBrush>(brush.Clone());
 
@@ -85,7 +85,7 @@ public class HatchBrushTests
     [Fact]
     public void Clone_Disposed_ThrowsArgumentException()
     {
-        var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
+        HatchBrush brush = new(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
@@ -94,7 +94,7 @@ public class HatchBrushTests
     [Fact]
     public void HatchStyle_EmptyAndGetDisposed_ThrowsArgumentException()
     {
-        var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
+        HatchBrush brush = new(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.HatchStyle);
@@ -103,7 +103,7 @@ public class HatchBrushTests
     [Fact]
     public void ForegroundColor_EmptyAndGetDisposed_ThrowsArgumentException()
     {
-        var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
+        HatchBrush brush = new(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.ForegroundColor);
@@ -112,7 +112,7 @@ public class HatchBrushTests
     [Fact]
     public void BackgroundColor_EmptyAndGetDisposed_ThrowsArgumentException()
     {
-        var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
+        HatchBrush brush = new(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.BackgroundColor);
@@ -121,7 +121,7 @@ public class HatchBrushTests
     [Fact]
     public void Dispose_MultipleTimes_Success()
     {
-        var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
+        HatchBrush brush = new(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
         brush.Dispose();
         brush.Dispose();
     }

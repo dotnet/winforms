@@ -12,7 +12,7 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Ctor_Default()
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
         Assert.Equal(Color.Empty, bag.BackColor);
         Assert.Null(bag.Font);
@@ -24,7 +24,7 @@ public class OwnerDrawPropertyBagTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void OwnerDrawPropertyBag_BackColor_Set_GetReturnsExpected(Color value)
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
         bag.BackColor = value;
@@ -41,7 +41,7 @@ public class OwnerDrawPropertyBagTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void OwnerDrawPropertyBag_Font_Set_GetReturnsExpected(Font value)
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
         bag.Font = value;
@@ -58,7 +58,7 @@ public class OwnerDrawPropertyBagTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void OwnerDrawPropertyBag_ForeColor_Set_GetReturnsExpected(Color value)
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
         bag.ForeColor = value;
@@ -74,7 +74,7 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Copy_CustomValue_ReturnsClone()
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag value = treeView.GetItemRenderStyles(null, 0);
         value.BackColor = Color.Blue;
         value.Font = SystemFonts.MenuFont;
@@ -91,7 +91,7 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Copy_NullValue_ReturnsDefault()
     {
-        using var treeView = new SubTreeView();
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag value = treeView.GetItemRenderStyles(null, 0);
         OwnerDrawPropertyBag bag = OwnerDrawPropertyBag.Copy(value);
         Assert.NotSame(value, bag);
@@ -104,17 +104,17 @@ public class OwnerDrawPropertyBagTests
     [WinFormsFact]
     public void OwnerDrawPropertyBag_Serialize_Deserialize_Success()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
-        using var treeView = new SubTreeView();
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using SubTreeView treeView = new();
         OwnerDrawPropertyBag original = treeView.GetItemRenderStyles(null, 0);
         original.BackColor = Color.Blue;
         original.Font = SystemFonts.MenuFont;
         original.ForeColor = Color.Red;
 
-        using (var stream = new MemoryStream())
+        using (MemoryStream stream = new())
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            var formatter = new BinaryFormatter();
+            BinaryFormatter formatter = new();
             formatter.Serialize(stream, original);
 
             stream.Position = 0;

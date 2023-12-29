@@ -170,10 +170,7 @@ public partial class PrintPreviewControl : Control
         get => _rows;
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _rows = value;
             InvalidateLayout();
@@ -191,10 +188,7 @@ public partial class PrintPreviewControl : Control
         get => _columns;
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _columns = value;
             InvalidateLayout();
@@ -223,10 +217,7 @@ public partial class PrintPreviewControl : Control
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             int oldValue = StartPage;
             _startPage = value;
@@ -625,7 +616,7 @@ public partial class PrintPreviewControl : Control
         Size controlPhysicalSize = PixelsToPhysical(rect.Size, _screenDPI);
 
         // center pages on screen if small enough
-        Point offset = new Point(
+        Point offset = new(
             Math.Max(0, (rect.Width - _virtualSize.Width) / 2),
             Math.Max(0, (rect.Height - _virtualSize.Height) / 2));
         offset.X -= Position.X;

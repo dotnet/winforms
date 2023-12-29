@@ -805,7 +805,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     private void UpdateWindowRegion()
     {
-        Region region = new Region(new Rectangle(0, 0, 0, 0));
+        Region region = new(new Rectangle(0, 0, 0, 0));
         foreach (SelectionUIItem item in _selectionItems.Values)
         {
             region.Union(item.GetRegion());
@@ -893,7 +893,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         // If this component is selected, create a new UI handler for it.
         if (_selSvc is not null && _selSvc.GetComponentSelected(component))
         {
-            SelectionUIItem item = new SelectionUIItem(this, component);
+            SelectionUIItem item = new(this, component);
             _selectionItems[component] = item;
             UpdateWindowRegion();
             item.Invalidate();

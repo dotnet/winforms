@@ -151,7 +151,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetAudio_InvokeByteArray_GetReturnsExpected()
     {
-        byte[] audioBytes = new byte[] { 1, 2, 3 };
+        byte[] audioBytes = [1, 2, 3];
         Clipboard.SetAudio(audioBytes);
         Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetAudioStream()).ToArray());
         Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetData(DataFormats.WaveAudio)).ToArray());
@@ -179,8 +179,8 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetAudio_InvokeStream_GetReturnsExpected()
     {
-        byte[] audioBytes = new byte[] { 1, 2, 3 };
-        using (var audioStream = new MemoryStream(audioBytes))
+        byte[] audioBytes = [1, 2, 3];
+        using (MemoryStream audioStream = new(audioBytes))
         {
             Clipboard.SetAudio(audioStream);
             Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetAudioStream()).ToArray());
@@ -193,7 +193,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetAudio_InvokeEmptyStream_GetReturnsExpected()
     {
-        var audioStream = new MemoryStream();
+        MemoryStream audioStream = new();
         Clipboard.SetAudio(audioStream);
         Assert.Null(Clipboard.GetAudioStream());
         Assert.Null(Clipboard.GetData(DataFormats.WaveAudio));
@@ -260,7 +260,7 @@ public class ClipboardTests
     [InlineData("data")]
     public void Clipboard_SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data)
     {
-        var dataObject = new DataObject(data);
+        DataObject dataObject = new(data);
         Clipboard.SetDataObject(dataObject);
         Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
         Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -285,7 +285,7 @@ public class ClipboardTests
     [InlineData("data", false, 1, 2)]
     public void Clipboard_SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
     {
-        var dataObject = new DataObject(data);
+        DataObject dataObject = new(data);
         Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
         Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
         Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -334,7 +334,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetFileDropList_Invoke_GetReturnsExpected()
     {
-        var filePaths = new StringCollection
+        StringCollection filePaths = new()
         {
             "filePath",
             "filePath2"
@@ -354,7 +354,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
     {
-        var filePaths = new StringCollection();
+        StringCollection filePaths = new();
         Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
     }
 
@@ -363,7 +363,7 @@ public class ClipboardTests
     [InlineData("\0")]
     public void Clipboard_SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
     {
-        var filePaths = new StringCollection
+        StringCollection filePaths = new()
         {
             filePath
         };
@@ -373,7 +373,7 @@ public class ClipboardTests
     [Fact] // x-thread
     public void Clipboard_SetFileDropList_NotSta_ThrowsThreadStateException()
     {
-        var filePaths = new StringCollection
+        StringCollection filePaths = new()
         {
             "filePath"
         };
@@ -383,7 +383,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetImage_InvokeBitmap_GetReturnsExpected()
     {
-        using (var bitmap = new Bitmap(10, 10))
+        using (Bitmap bitmap = new(10, 10))
         {
             bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
             Clipboard.SetImage(bitmap);
@@ -397,7 +397,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetImage_InvokeMetafile_GetReturnsExpected()
     {
-        using (var metafile = new Metafile("bitmaps/telescope_01.wmf"))
+        using (Metafile metafile = new("bitmaps/telescope_01.wmf"))
         {
             Clipboard.SetImage(metafile);
             Assert.Null(Clipboard.GetImage());
@@ -408,7 +408,7 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetImage_InvokeEnhancedMetafile_GetReturnsExpected()
     {
-        using (var metafile = new Metafile("bitmaps/milkmateya01.emf"))
+        using (Metafile metafile = new("bitmaps/milkmateya01.emf"))
         {
             Clipboard.SetImage(metafile);
             Assert.Null(Clipboard.GetImage());
@@ -425,9 +425,9 @@ public class ClipboardTests
     [Fact] // x-thread
     public void Clipboard_SetImage_NotSta_ThrowsThreadStateException()
     {
-        using (var bitmap = new Bitmap(10, 10))
-        using (var metafile = new Metafile("bitmaps/telescope_01.wmf"))
-        using (var enhancedMetafile = new Metafile("bitmaps/milkmateya01.emf"))
+        using (Bitmap bitmap = new(10, 10))
+        using (Metafile metafile = new("bitmaps/telescope_01.wmf"))
+        using (Metafile enhancedMetafile = new("bitmaps/milkmateya01.emf"))
         {
             Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(bitmap));
             Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(metafile));

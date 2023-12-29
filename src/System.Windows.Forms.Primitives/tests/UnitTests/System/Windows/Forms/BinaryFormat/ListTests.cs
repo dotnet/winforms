@@ -170,7 +170,7 @@ public class ListTests
         BinaryFormatWriter.TryWritePrimitiveList(stream, list).Should().BeTrue();
         stream.Position = 0;
 
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
         IList deserialized = (IList)formatter.Deserialize(stream);

@@ -22,7 +22,7 @@ internal class ListControlUnboundActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection returnItems = new DesignerActionItemCollection();
+        DesignerActionItemCollection returnItems = new();
         returnItems.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
             SR.ListControlUnboundActionListEditItemsDisplayName,
             SR.ItemsCategoryName,

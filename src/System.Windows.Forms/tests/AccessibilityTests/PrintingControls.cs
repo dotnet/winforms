@@ -18,7 +18,7 @@ public partial class PrintingControls : Form
     private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
     {
         float currentY = 50;// declare  one variable for height measurement
-        Font font = new Font("Times New Roman", 30);
+        Font font = new("Times New Roman", 30);
         Brush brush = Brushes.Blue;
 
         while (totalNumber <= 500) // check the number of items

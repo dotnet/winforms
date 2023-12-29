@@ -16,7 +16,7 @@ public class DateRangeEventArgsTests
     [MemberData(nameof(Ctor_DateTime_DateTime_TestData))]
     public void Ctor_DateTime_DateTime(DateTime start, DateTime end)
     {
-        var e = new DateRangeEventArgs(start, end);
+        DateRangeEventArgs e = new(start, end);
         Assert.Equal(start, e.Start);
         Assert.Equal(end, e.End);
     }

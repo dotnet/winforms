@@ -14,7 +14,7 @@ public class AgileComPointerTests
 
         uint count;
 
-        using (var agileStream = new AgileComPointer<IStream>(stream, takeOwnership: true))
+        using (AgileComPointer<IStream> agileStream = new(stream, takeOwnership: true))
         {
             count = stream->AddRef();
             Assert.Equal(2u, count);

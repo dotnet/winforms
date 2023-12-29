@@ -14,7 +14,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
     {
         using DateTimePicker dateTimePicker = new();
 
-        DateTimePickerAccessibleObject accessibleObject = new DateTimePickerAccessibleObject(dateTimePicker);
+        DateTimePickerAccessibleObject accessibleObject = new(dateTimePicker);
 
         Assert.Equal(dateTimePicker, accessibleObject.Owner);
         Assert.False(dateTimePicker.IsHandleCreated);
@@ -347,7 +347,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
     [WinFormsFact]
     public void DateTimePickerAccessibleObject_KeyboardShortcut_ReturnsExpected()
     {
-        using Form form = new Form();
+        using Form form = new();
         using DateTimePicker dateTimePicker1 = new();
         using Label label1 = new ();
         using DateTimePicker dateTimePicker2 = new();

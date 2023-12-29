@@ -17,7 +17,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [WinFormsFact]
     public void SplitterAccessibleObject_Ctor_Default()
     {
-        using var splitter = new Splitter();
+        using Splitter splitter = new();
         Assert.False(splitter.IsHandleCreated);
         var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
@@ -28,7 +28,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [WinFormsFact]
     public void SplitterAccessibleObject_Description_ReturnsExpected()
     {
-        using var splitter = new Splitter
+        using Splitter splitter = new()
         {
             AccessibleDescription = "TestDescription"
         };
@@ -43,7 +43,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [WinFormsFact]
     public void SplitterAccessibleObject_Name_ReturnsExpected()
     {
-        using var splitter = new Splitter
+        using Splitter splitter = new()
         {
             AccessibleName = "TestName"
         };
@@ -58,7 +58,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [WinFormsFact]
     public void SplitterAccessibleObject_CustomRole_ReturnsExpected()
     {
-        using var splitter = new Splitter
+        using Splitter splitter = new()
         {
             AccessibleRole = AccessibleRole.PushButton
         };
@@ -75,7 +75,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void SplitterAccessibleObject_DefaultRole_ReturnsNone_IfControlIsNotCreated(bool createControl, AccessibleRole accessibleRole)
     {
-        using var splitter = new Splitter();
+        using Splitter splitter = new();
 
         if (createControl)
         {
@@ -95,7 +95,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "Splitter1")]
     public void SplitterAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
-        using var splitter = new Splitter
+        using Splitter splitter = new()
         {
             Name = "Splitter1",
             AccessibleName = "TestName"
@@ -112,7 +112,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [WinFormsFact]
     public void SplitterAccessibleObject_IsPatternSupported_Invoke_ReturnsTrue_ForLegacyIAccessiblePattern()
     {
-        using var splitter = new Splitter
+        using Splitter splitter = new()
         {
             Name = "Splitter1"
         };
@@ -142,7 +142,7 @@ public class Splitter_SplitterAccessibleObjectTests
     [MemberData(nameof(SplitterAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void SplitterAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using Splitter splitter = new Splitter();
+        using Splitter splitter = new();
         splitter.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)splitter.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

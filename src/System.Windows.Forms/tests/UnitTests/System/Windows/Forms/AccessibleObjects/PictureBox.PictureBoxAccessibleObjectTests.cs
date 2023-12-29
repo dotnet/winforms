@@ -17,7 +17,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [WinFormsFact]
     public void PictureBoxAccessibleObject_Ctor_Default()
     {
-        using var pictureBox = new PictureBox();
+        using PictureBox pictureBox = new();
         Assert.False(pictureBox.IsHandleCreated);
         var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
@@ -28,7 +28,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [WinFormsFact]
     public void PictureBoxAccessibleObject_Description_ReturnsExpected()
     {
-        using var pictureBox = new PictureBox
+        using PictureBox pictureBox = new()
         {
             AccessibleDescription = "TestDescription",
         };
@@ -43,7 +43,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [WinFormsFact]
     public void PictureBoxAccessibleObject_Name_ReturnsExpected()
     {
-        using var pictureBox = new PictureBox
+        using PictureBox pictureBox = new()
         {
             AccessibleName = "TestName"
         };
@@ -58,7 +58,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [WinFormsFact]
     public void PictureBoxAccessibleObject_CustomRole_ReturnsExpected()
     {
-        using var pictureBox = new PictureBox
+        using PictureBox pictureBox = new()
         {
             AccessibleRole = AccessibleRole.PushButton
         };
@@ -75,7 +75,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void PictureBoxAccessibleObject_DefaultRole_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
     {
-        using var pictureBox = new PictureBox();
+        using PictureBox pictureBox = new();
 
         if (createControl)
         {
@@ -94,7 +94,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "PictureBox1")]
     public void PictureBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
-        using var pictureBox = new PictureBox
+        using PictureBox pictureBox = new()
         {
             Name = "PictureBox1",
             AccessibleName = "TestName"
@@ -110,7 +110,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [WinFormsFact]
     public void PictureBoxAccessibleObject_IsPatternSupported_Invoke_ReturnsTrue_ForLegacyIAccessiblePatternId()
     {
-        using var pictureBox = new PictureBox();
+        using PictureBox pictureBox = new();
         Assert.False(pictureBox.IsHandleCreated);
         var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
@@ -137,7 +137,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
     [MemberData(nameof(PictureBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void PictureBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using PictureBox pictureBox = new PictureBox();
+        using PictureBox pictureBox = new();
         pictureBox.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)pictureBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

@@ -336,7 +336,7 @@ public partial class PrinterSettings : ICloneable
             int nEscape = imageFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
 
             using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new(dc, dc.Hdc);
             return Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out int outData) > 0;
         }
 
@@ -363,7 +363,7 @@ public partial class PrinterSettings : ICloneable
             int nEscape = image.RawFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
 
             using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
-            HandleRef hdc = new HandleRef(dc, dc.Hdc);
+            HandleRef hdc = new(dc, dc.Hdc);
             bool querySupported = Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out int outData) > 0;
             if (querySupported)
             {

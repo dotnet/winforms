@@ -84,10 +84,7 @@ public abstract class ScrollProperties
         {
             if (_largeChange != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _largeChange = value;
                 _largeChangeSetExternally = true;
@@ -151,10 +148,7 @@ public abstract class ScrollProperties
 
             if (_minimum != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 if (_maximum < value)
                 {
@@ -200,10 +194,7 @@ public abstract class ScrollProperties
         {
             if (_smallChange != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(SmallChange), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _smallChange = value;
                 _smallChangeSetExternally = true;

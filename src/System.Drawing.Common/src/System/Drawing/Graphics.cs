@@ -23,7 +23,7 @@ namespace System.Drawing;
 public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 {
 #if FINALIZATION_WATCH
-    static readonly TraceSwitch GraphicsFinalization = new TraceSwitch("GraphicsFinalization", "Tracks the creation and destruction of finalization");
+    static readonly TraceSwitch GraphicsFinalization = new("GraphicsFinalization", "Tracks the creation and destruction of finalization");
     internal static string GetAllocationStack() {
         if (GraphicsFinalization.TraceVerbose) {
             return Environment.StackTrace;
@@ -294,7 +294,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            var region = new Region();
+            Region region = new();
             int status = Gdip.GdipGetClip(new HandleRef(this, NativeGraphics), new HandleRef(region, region.NativeRegion));
             Gdip.CheckStatus(status);
 
@@ -563,7 +563,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         get
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             Gdip.CheckStatus(Gdip.GdipGetWorldTransform(
                 new HandleRef(this, NativeGraphics), new HandleRef(matrix, matrix.NativeMatrix)));
 
@@ -1874,7 +1874,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if (font is null)
             throw new ArgumentNullException(nameof(font));
 
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
+        RectangleF layout = new(0, 0, layoutArea.Width, layoutArea.Height);
         RectangleF boundingBox = default;
 
         Gdip.CheckStatus(Gdip.GdipMeasureString(
@@ -1911,7 +1911,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if (font is null)
             throw new ArgumentNullException(nameof(font));
 
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
+        RectangleF layout = new(0, 0, layoutArea.Width, layoutArea.Height);
         RectangleF boundingBox = default;
 
         Gdip.CheckStatus(Gdip.GdipMeasureString(
@@ -1938,7 +1938,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if (font is null)
             throw new ArgumentNullException(nameof(font));
 
-        RectangleF layout = new RectangleF(origin.X, origin.Y, 0, 0);
+        RectangleF layout = new(origin.X, origin.Y, 0, 0);
         RectangleF boundingBox = default;
 
         Gdip.CheckStatus(Gdip.GdipMeasureString(
@@ -1964,7 +1964,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if (font is null)
             throw new ArgumentNullException(nameof(font));
 
-        RectangleF layout = new RectangleF(origin.X, origin.Y, 0, 0);
+        RectangleF layout = new(origin.X, origin.Y, 0, 0);
         RectangleF boundingBox = default;
 
         Gdip.CheckStatus(Gdip.GdipMeasureString(
@@ -2000,7 +2000,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if (font is null)
             throw new ArgumentNullException(nameof(font));
 
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
+        RectangleF layout = new(0, 0, layoutArea.Width, layoutArea.Height);
         RectangleF boundingBox = default;
 
         Gdip.CheckStatus(Gdip.GdipMeasureString(
@@ -2026,7 +2026,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         if (font is null)
             throw new ArgumentNullException(nameof(font));
 
-        RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
+        RectangleF layout = new(0, 0, layoutArea.Width, layoutArea.Height);
         RectangleF boundingBox = default;
 
         Gdip.CheckStatus(Gdip.GdipMeasureString(
@@ -3032,7 +3032,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 return null;
             }
 
-            Region region = new Region(regionHandle);
+            Region region = new(regionHandle);
             regionHandle = IntPtr.Zero;
             return region;
         }
@@ -3699,7 +3699,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
     public GraphicsState Save()
     {
-        GraphicsContext context = new GraphicsContext(this);
+        GraphicsContext context = new(this);
         int status = Gdip.GdipSaveGraphics(new HandleRef(this, NativeGraphics), out int state);
 
         if (status != Gdip.Ok)
@@ -3723,7 +3723,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
     public GraphicsContainer BeginContainer(RectangleF dstrect, RectangleF srcrect, GraphicsUnit unit)
     {
-        GraphicsContext context = new GraphicsContext(this);
+        GraphicsContext context = new(this);
 
         int status = Gdip.GdipBeginContainer(
             new HandleRef(this, NativeGraphics), ref dstrect, ref srcrect, unit, out int state);
@@ -3742,7 +3742,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
     public GraphicsContainer BeginContainer()
     {
-        GraphicsContext context = new GraphicsContext(this);
+        GraphicsContext context = new(this);
         int status = Gdip.GdipBeginContainer2(new HandleRef(this, NativeGraphics), out int state);
 
         if (status != Gdip.Ok)
@@ -3767,7 +3767,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 
     public GraphicsContainer BeginContainer(Rectangle dstrect, Rectangle srcrect, GraphicsUnit unit)
     {
-        GraphicsContext context = new GraphicsContext(this);
+        GraphicsContext context = new(this);
 
         int status = Gdip.GdipBeginContainerI(
             new HandleRef(this, NativeGraphics), ref dstrect, ref srcrect, unit, out int state);

@@ -16,7 +16,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Ctor_SplitContainer()
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -125,7 +125,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(ControlTests.Anchor_Set_TestData), MemberType = typeof(ControlTests))]
     public void ToolStripContentPanel_Anchor_Set_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Anchor = value
         };
@@ -145,7 +145,7 @@ public class ToolStripContentPanelTests
     [InlineData(false, 1, 4)]
     public void ToolStripContentPanel_AutoScroll_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -181,7 +181,7 @@ public class ToolStripContentPanelTests
     [InlineData(false, 1, 4)]
     public void ToolStripContentPanel_AutoScroll_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -244,7 +244,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void ToolStripContentPanel_AutoScrollMargin_Set_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             AutoScroll = autoScroll
         };
@@ -275,7 +275,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void ToolStripContentPanel_AutoScrollMargin_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             AutoScroll = autoScroll
         };
@@ -334,7 +334,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(AutoScrollMinSize_TestData))]
     public void ToolStripContentPanel_AutoScrollMinSize_Set_GetReturnsExpected(bool autoScroll, Size value, bool expectedAutoScroll, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             AutoScroll = autoScroll
         };
@@ -363,7 +363,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(AutoScrollMinSize_TestData))]
     public void ToolStripContentPanel_AutoScrollMinSize_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, bool expectedAutoScroll, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             AutoScroll = autoScroll
         };
@@ -405,7 +405,7 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -430,7 +430,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             AutoSize = true
         };
@@ -470,7 +470,7 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<AutoSizeMode>]
     public void ToolStripContentPanel_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -491,8 +491,8 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<AutoSizeMode>]
     public void ToolStripContentPanel_AutoSizeMode_SetWithParent_GetReturnsExpected(AutoSizeMode value)
     {
-        using var parent = new Control();
-        using var control = new ToolStripContentPanel
+        using Control parent = new();
+        using ToolStripContentPanel control = new()
         {
             Parent = parent
         };
@@ -522,7 +522,7 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<AutoSizeMode>]
     public void ToolStripContentPanel_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -552,8 +552,8 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<AutoSizeMode>]
     public void ToolStripContentPanel_AutoSizeMode_SetWithHandleWithParent_GetReturnsExpected(AutoSizeMode value)
     {
-        using var parent = new Control();
-        using var control = new ToolStripContentPanel
+        using Control parent = new();
+        using ToolStripContentPanel control = new()
         {
             Parent = parent
         };
@@ -607,7 +607,7 @@ public class ToolStripContentPanelTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void ToolStripContentPanel_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             BackColor = value
         };
@@ -631,11 +631,11 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(BackColor_SetWithParent_TestData))]
     public void ToolStripContentPanel_BackColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             BackColor = Color.Blue
         };
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Parent = parent,
             BackColor = value
@@ -663,7 +663,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(BackColor_SetWithToolStripContainerParent_TestData))]
     public void ToolStripContentPanel_BackColor_SetWithToolStripContainerParent_GetReturnsExpected(Color value, Color expected, Color expectedBackColor)
     {
-        using var parent = new ToolStripContainer
+        using ToolStripContainer parent = new()
         {
             BackColor = Color.Blue
         };
@@ -685,7 +685,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -721,7 +721,7 @@ public class ToolStripContentPanelTests
     [EnumData<BorderStyle>]
     public void ToolStripContentPanel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             BorderStyle = value
         };
@@ -740,7 +740,7 @@ public class ToolStripContentPanelTests
     [InlineData(BorderStyle.None, 0)]
     public void ToolStripContentPanel_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -769,7 +769,7 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<BorderStyle>]
     public void ToolStripContentPanel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
@@ -777,7 +777,7 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_CausesValidation_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             CausesValidation = value
         };
@@ -798,7 +798,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_CausesValidation_SetWithHandler_CallsCausesValidationChanged()
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             CausesValidation = true
         };
@@ -837,7 +837,7 @@ public class ToolStripContentPanelTests
     [EnumData<DockStyle>]
     public void ToolStripContentPanel_Dock_Set_GetReturnsExpected(DockStyle value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Dock = value
         };
@@ -853,7 +853,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Dock_SetWithHandler_CallsDockChanged()
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Dock = DockStyle.None
         };
@@ -892,7 +892,7 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<DockStyle>]
     public void ToolStripContentPanel_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Dock = value);
     }
 
@@ -909,7 +909,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(Location_Set_TestData))]
     public void ToolStripContentPanel_Location_Set_GetReturnsExpected(Point value, int expectedLocationChangedCallCount)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int moveCallCount = 0;
         int locationChangedCallCount = 0;
         int layoutCallCount = 0;
@@ -982,7 +982,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Location_SetWithHandler_CallsLocationChanged()
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int locationChangedCallCount = 0;
         EventHandler locationChangedHandler = (sender, e) =>
         {
@@ -1037,7 +1037,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(ControlTests.MaximumSize_Set_TestData), MemberType = typeof(ControlTests))]
     public void ToolStripContentPanel_MaximumSize_Set_GetReturnsExpected(Size value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Size = Size.Empty
         };
@@ -1062,7 +1062,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(ControlTests.MinimumSize_Set_TestData), MemberType = typeof(ControlTests))]
     public void ToolStripContentPanel_MinimumSize_Set_GetReturnsExpected(Size value, Size expectedSize, int expectedLayoutCallCount)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Size = Size.Empty
         };
@@ -1093,7 +1093,7 @@ public class ToolStripContentPanelTests
     [NormalizedStringData]
     public void ToolStripContentPanel_Name_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Name = value
         };
@@ -1109,7 +1109,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Renderer_Get_CallsOnRendererChanged()
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int rendererChangedCallCount = 0;
         control.RendererChanged += (sender, e) =>
         {
@@ -1141,7 +1141,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(Renderer_Set_TestData))]
     public void ToolStripContentPanel_Renderer_Set_ReturnsExpected(bool visible, bool doubleBuffered, ToolStripRenderer value, bool expectedDoubleBuffered)
     {
-        using var control = new SubToolStripContentPanel
+        using SubToolStripContentPanel control = new()
         {
             Visible = visible
         };
@@ -1174,7 +1174,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(Renderer_Set_TestData))]
     public void ToolStripContentPanel_Renderer_SetWithHandle_ReturnsExpected(bool visible, bool doubleBuffered, ToolStripRenderer value, bool expectedDoubleBuffered)
     {
-        using var control = new SubToolStripContentPanel
+        using SubToolStripContentPanel control = new()
         {
             Visible = visible
         };
@@ -1222,8 +1222,8 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Renderer_Set_CallsInitializeContentPanel()
     {
-        using var control = new SubToolStripContentPanel();
-        var mockToolStripRenderer = new Mock<ToolStripRenderer>(MockBehavior.Strict);
+        using SubToolStripContentPanel control = new();
+        Mock<ToolStripRenderer> mockToolStripRenderer = new(MockBehavior.Strict);
         mockToolStripRenderer
             .Protected()
             .Setup("InitializeContentPanel", control)
@@ -1241,7 +1241,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Renderer_SetWithHandler_CallsRendererChanged()
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1252,7 +1252,7 @@ public class ToolStripContentPanelTests
         control.RendererChanged += handler;
 
         // Set different.
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         control.Renderer = renderer;
         Assert.Same(renderer, control.Renderer);
         Assert.Equal(2, callCount);
@@ -1286,7 +1286,7 @@ public class ToolStripContentPanelTests
     [InlineData(ToolStripRenderMode.System, typeof(ToolStripSystemRenderer), 4)]
     public void ToolStripContentPanel_RenderMode_Set_ReturnsExpected(ToolStripRenderMode value, Type expectedRendererType, int expectedSetSameCallCount)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         int rendererChangedCallCount = 0;
         control.RendererChanged += (sender, e) =>
         {
@@ -1324,7 +1324,7 @@ public class ToolStripContentPanelTests
     [InlineData(ToolStripRenderMode.System, typeof(ToolStripSystemRenderer))]
     public void ToolStripContentPanel_RenderMode_SetWithCustomRenderer_ReturnsExpected(ToolStripRenderMode value, Type expectedRendererType)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Renderer = new SubToolStripRenderer()
         };
@@ -1365,7 +1365,7 @@ public class ToolStripContentPanelTests
     [InlineData(ToolStripRenderMode.System, typeof(ToolStripSystemRenderer), 4)]
     public void ToolStripContentPanel_RenderMode_SetWithHandle_ReturnsExpected(ToolStripRenderMode value, Type expectedRendererType, int expectedSetSameCallCount)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1418,14 +1418,14 @@ public class ToolStripContentPanelTests
     [InvalidEnumData<ToolStripRenderMode>]
     public void ToolStripContentPanel_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.RenderMode = value);
     }
 
     [WinFormsFact]
     public void ToolStripContentPanel_RenderMode_SetCustomThrowsInvalidEnumArgumentException()
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.Throws<NotSupportedException>(() => control.RenderMode = ToolStripRenderMode.Custom);
     }
 
@@ -1433,7 +1433,7 @@ public class ToolStripContentPanelTests
     public void ToolStripContentPanel_RenderMode_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripContentPanel))[nameof(ToolStripContentPanel.RenderMode)];
-        using var item = new SubToolStripContentPanel();
+        using SubToolStripContentPanel item = new();
         Assert.False(property.CanResetValue(item));
 
         item.RenderMode = ToolStripRenderMode.Professional;
@@ -1461,7 +1461,7 @@ public class ToolStripContentPanelTests
     public void ToolStripContentPanel_RenderMode_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripContentPanel))[nameof(ToolStripContentPanel.RenderMode)];
-        using var item = new SubToolStripContentPanel();
+        using SubToolStripContentPanel item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.RenderMode = ToolStripRenderMode.Professional;
@@ -1491,7 +1491,7 @@ public class ToolStripContentPanelTests
     [InlineData(2)]
     public void ToolStripContentPanel_TabIndex_Set_GetReturnsExpected(int value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             TabIndex = value
         };
@@ -1507,7 +1507,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_TabIndex_SetWithHandler_CallsTabIndexChanged()
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             TabIndex = 0
         };
@@ -1545,7 +1545,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_TabIndex_SetNegative_CallsArgumentOutOfRangeException()
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.TabIndex = -1);
     }
 
@@ -1553,7 +1553,7 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             TabStop = value
         };
@@ -1575,7 +1575,7 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1611,7 +1611,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             TabStop = true
         };
@@ -1649,7 +1649,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1664,7 +1664,7 @@ public class ToolStripContentPanelTests
     [InlineData((-1), false)]
     public void ToolStripContentPanel_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -1691,7 +1691,7 @@ public class ToolStripContentPanelTests
     [InlineData((ControlStyles)(-1), false)]
     public void ToolStripContentPanel_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1701,7 +1701,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1709,7 +1709,7 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_Visible_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Visible = value
         };
@@ -1731,7 +1731,7 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_Visible_SetWithRenderer_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStripContentPanel();
+        using ToolStripContentPanel control = new();
         Assert.NotNull(control.Renderer);
 
         control.Visible = value;
@@ -1752,7 +1752,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_Visible_SetWithHandler_CallsVisibleChanged()
     {
-        using var control = new ToolStripContentPanel
+        using ToolStripContentPanel control = new()
         {
             Visible = true
         };
@@ -1791,7 +1791,7 @@ public class ToolStripContentPanelTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripContentPanel_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         int loadCallCount = 0;
         control.Load += (sender, e) =>
         {
@@ -1826,7 +1826,7 @@ public class ToolStripContentPanelTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripContentPanel_OnLoad_Invoke_CallsLoad(EventArgs eventArgs)
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1850,12 +1850,12 @@ public class ToolStripContentPanelTests
     [BoolData]
     public void ToolStripContentPanel_OnPaintBackground_Invoke_CallsRenderToolStripContentPanelBackground(bool handled)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        var renderer = new SubToolStripRenderer();
-        using var control = new SubToolStripContentPanel
+        SubToolStripRenderer renderer = new();
+        using SubToolStripContentPanel control = new()
         {
             Renderer = renderer
         };
@@ -1883,7 +1883,7 @@ public class ToolStripContentPanelTests
     [WinFormsFact]
     public void ToolStripContentPanel_OnPaintBackground_InvokeNullE_ThrowsNullReferenceException()
     {
-        using var control = new SubToolStripContentPanel();
+        using SubToolStripContentPanel control = new();
         Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
     }
 
@@ -1906,7 +1906,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(OnRendererChanged_TestData))]
     public void ToolStripContentPanel_OnRendererChanged_Invoke_CallsRendererChanged(bool doubleBuffered, ToolStripRenderer renderer, EventArgs eventArgs, bool expectedDoubleBuffered)
     {
-        using var control = new SubToolStripContentPanel
+        using SubToolStripContentPanel control = new()
         {
             Renderer = renderer
         };
@@ -1938,7 +1938,7 @@ public class ToolStripContentPanelTests
     [MemberData(nameof(OnRendererChanged_TestData))]
     public void ToolStripContentPanel_OnRendererChanged_InvokeWithHandle_CallsRendererChanged(bool doubleBuffered, ToolStripRenderer renderer, EventArgs eventArgs, bool expectedDoubleBuffered)
     {
-        using var control = new SubToolStripContentPanel
+        using SubToolStripContentPanel control = new()
         {
             Renderer = renderer
         };
@@ -1983,8 +1983,8 @@ public class ToolStripContentPanelTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripContentPanel_OnRendererChanged_Invoke_CallsInitializeContentPanel(EventArgs eventArgs)
     {
-        using var control = new SubToolStripContentPanel();
-        var mockToolStripRenderer = new Mock<ToolStripRenderer>(MockBehavior.Strict);
+        using SubToolStripContentPanel control = new();
+        Mock<ToolStripRenderer> mockToolStripRenderer = new(MockBehavior.Strict);
         mockToolStripRenderer
             .Protected()
             .Setup("InitializeContentPanel", control)

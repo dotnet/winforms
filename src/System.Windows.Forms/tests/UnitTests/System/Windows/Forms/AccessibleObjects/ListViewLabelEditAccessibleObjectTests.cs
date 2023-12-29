@@ -162,7 +162,7 @@ public class ListViewLabelEditAccessibleObjectTests
         listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
 
         ListViewItem item = new("Test", 0);
-        ListViewSubItem subItem = new ListViewSubItem(item, "Test");
+        ListViewSubItem subItem = new(item, "Test");
         item.SubItems.Add(subItem);
         listView.Items.Add(item);
         listView._listViewSubItem = subItem;

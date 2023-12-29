@@ -40,7 +40,7 @@ public class TiffCodecTest
     public void Bitmap32bitsFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver32bits.tif");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -64,7 +64,7 @@ public class TiffCodecTest
     public void Bitmap32bitsPixelFormat()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver32bits.tif");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // GDI+ reports 24 bpp while libgdiplus reports 32 bpp
             Assert.Equal (PixelFormat.Format24bppRgb, bmp.PixelFormat);
@@ -75,7 +75,7 @@ public class TiffCodecTest
     public void Bitmap32bitsPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver32bits.tif");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-1579559, bmp.GetPixel(0, 0).ToArgb());
@@ -121,7 +121,7 @@ public class TiffCodecTest
     public void Bitmap32bitsData()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver32bits.tif");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -245,10 +245,10 @@ public class TiffCodecTest
         string sOutFile = $"linerect-{expected}.tif";
 
         // Save
-        Bitmap bmp = new Bitmap(100, 100, original);
+        Bitmap bmp = new(100, 100, original);
         Graphics gr = Graphics.FromImage(bmp);
 
-        using (Pen p = new Pen(Color.BlueViolet, 2))
+        using (Pen p = new(Color.BlueViolet, 2))
         {
             gr.DrawLine(p, 10.0F, 10.0F, 90.0F, 90.0F);
             gr.DrawRectangle(p, 10.0F, 10.0F, 80.0F, 80.0F);
@@ -259,7 +259,7 @@ public class TiffCodecTest
             bmp.Save(sOutFile, ImageFormat.Tiff);
 
             // Load
-            using (Bitmap bmpLoad = new Bitmap(sOutFile))
+            using (Bitmap bmpLoad = new(sOutFile))
             {
                 Assert.Equal(expected, bmpLoad.PixelFormat);
                 if (colorCheck)

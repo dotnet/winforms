@@ -8,7 +8,7 @@ public class BlendTests
     [Fact]
     public void Ctor_Default()
     {
-        var blend = new Blend();
+        Blend blend = new();
         Assert.Equal(new float[1], blend.Factors);
         Assert.Equal(new float[1], blend.Positions);
     }
@@ -18,7 +18,7 @@ public class BlendTests
     [InlineData(2)]
     public void Ctor_Count(int count)
     {
-        var blend = new Blend(count);
+        Blend blend = new(count);
         Assert.Equal(new float[count], blend.Factors);
         Assert.Equal(new float[count], blend.Positions);
     }
@@ -38,7 +38,7 @@ public class BlendTests
     [Fact]
     public void Factors_Set_GetReturnsExpected()
     {
-        var blend = new Blend { Factors = null };
+        Blend blend = new() { Factors = null };
         Assert.Null(blend.Factors);
 
         blend.Factors = new float[10];
@@ -48,7 +48,7 @@ public class BlendTests
     [Fact]
     public void Positions_Set_GetReturnsExpected()
     {
-        var blend = new Blend { Positions = null };
+        Blend blend = new() { Positions = null };
         Assert.Null(blend.Positions);
 
         blend.Positions = new float[10];

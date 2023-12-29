@@ -9,7 +9,7 @@ public class ToolStripGripRenderEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStrip_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
 
         yield return new object[] { null, null };
@@ -26,7 +26,7 @@ public class ToolStripGripRenderEventArgsTests
 
     public static IEnumerable<object[]> Ctor_Graphics_ToolStrip_TestData()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
 
         yield return new object[] { graphics, new ToolStrip() };
@@ -44,7 +44,7 @@ public class ToolStripGripRenderEventArgsTests
     [MemberData(nameof(Ctor_Graphics_ToolStrip_TestData))]
     public void Ctor_Graphics_ToolStrip(Graphics g, ToolStrip toolStrip)
     {
-        var e = new ToolStripGripRenderEventArgs(g, toolStrip);
+        ToolStripGripRenderEventArgs e = new(g, toolStrip);
         Assert.Equal(g, e.Graphics);
         Assert.Equal(toolStrip, e.ToolStrip);
         Assert.Equal(new Rectangle(Point.Empty, toolStrip.Size), e.AffectedBounds);

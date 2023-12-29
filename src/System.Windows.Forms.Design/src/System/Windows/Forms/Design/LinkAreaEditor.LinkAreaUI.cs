@@ -48,7 +48,7 @@ internal partial class LinkAreaEditor
         [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(LinkAreaEditor));
+            ComponentResourceManager resources = new(typeof(LinkAreaEditor));
             _caption = new Label();
             _sampleEdit = new TextBox();
             _okButton = new Button();

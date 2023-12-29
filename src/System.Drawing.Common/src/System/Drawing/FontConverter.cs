@@ -277,7 +277,7 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            char[] trimChars = new char[] { separator, ' ' };
+            char[] trimChars = [separator, ' '];
 
             if (splitPoint > 0)
             {
@@ -499,7 +499,7 @@ public class FontConverter : TypeConverter
             {
                 base.GetStandardValues(context); // sets "values"
                 Debug.Assert(Values is not null);
-                ArrayList filteredValues = new ArrayList(Values);
+                ArrayList filteredValues = new(Values);
                 filteredValues.Remove(GraphicsUnit.Display);
                 Values = new StandardValuesCollection(filteredValues);
             }

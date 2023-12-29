@@ -260,10 +260,10 @@ internal class StandardMenuStripVerb
     {
         // build the static menu items structure.
         //
-        string[] menuItemNames = new string[] { SR.StandardMenuNew, SR.StandardMenuOpen, SR.StandardMenuSave, SR.StandardMenuPrint, "-", SR.StandardToolCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardToolHelp };
+        string[] menuItemNames = [SR.StandardMenuNew, SR.StandardMenuOpen, SR.StandardMenuSave, SR.StandardMenuPrint, "-", SR.StandardToolCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardToolHelp];
 
         // build a image list mapping one-one the above menuItems list... this is required so that the in LOCALIZED build we don't use the Localized item string.
-        string[] menuItemImageNames = new string[] { "new", "open", "save", "print", "-", "cut", "copy", "paste", "-", "help" };
+        string[] menuItemImageNames = ["new", "open", "save", "print", "-", "cut", "copy", "paste", "-", "help"];
         Debug.Assert(host is not null, "can't create standard menu without designer _host.");
 
         if (host is null)
@@ -457,7 +457,7 @@ internal class StandardMenuStripVerb
         {
             string nameSuffix = itemType.Name;
             // remove all the non letter and number characters.   Append length of "MenuItem"
-            Text.StringBuilder name = new Text.StringBuilder(text.Length + nameSuffix.Length);
+            Text.StringBuilder name = new(text.Length + nameSuffix.Length);
             bool firstCharSeen = false;
             for (int i = 0; i < text.Length; i++)
             {

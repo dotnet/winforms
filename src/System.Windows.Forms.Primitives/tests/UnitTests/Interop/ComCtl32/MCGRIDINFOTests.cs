@@ -38,7 +38,7 @@ public class MCGRIDINFOTests
             return;
         }
 
-        MCGRIDINFO sut = new MCGRIDINFO();
+        MCGRIDINFO sut = new();
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.cbSize - addr);          // 4, UINT
@@ -107,7 +107,7 @@ public class MCGRIDINFOTests
             return;
         }
 
-        MCGRIDINFO sut = new MCGRIDINFO();
+        MCGRIDINFO sut = new();
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.cbSize - addr);          // 4, UINT

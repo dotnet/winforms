@@ -41,7 +41,7 @@ internal abstract class HtmlShim : IDisposable
     {
         _attachedEventList ??= new Dictionary<EventHandler, HtmlToClrEventProxy>();
 
-        HtmlToClrEventProxy proxy = new HtmlToClrEventProxy(this, eventName, eventHandler);
+        HtmlToClrEventProxy proxy = new(this, eventName, eventHandler);
         _attachedEventList[eventHandler] = proxy;
         return proxy;
     }

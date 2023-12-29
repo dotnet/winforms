@@ -16,7 +16,7 @@ public class ItemCheckedEventArgsTests
     public void Ctor_ListViewItem()
     {
         ListViewItem listViewItem = new();
-        var e = new ItemCheckedEventArgs(listViewItem);
+        ItemCheckedEventArgs e = new(listViewItem);
         Assert.Equal(listViewItem, e.Item);
     }
 }

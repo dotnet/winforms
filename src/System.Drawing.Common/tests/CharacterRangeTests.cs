@@ -8,7 +8,7 @@ public class CharacterRangeTests
     [Fact]
     public void Ctor_Default()
     {
-        var range = new CharacterRange();
+        CharacterRange range = new();
         Assert.Equal(0, range.First);
         Assert.Equal(0, range.Length);
     }
@@ -19,7 +19,7 @@ public class CharacterRangeTests
     [InlineData(1, 2)]
     public void Ctor_Int_Int(int First, int Length)
     {
-        var range = new CharacterRange(First, Length);
+        CharacterRange range = new(First, Length);
         Assert.Equal(First, range.First);
         Assert.Equal(Length, range.Length);
     }
@@ -30,7 +30,7 @@ public class CharacterRangeTests
     [InlineData(10)]
     public void First_Set_GetReturnsExpected(int value)
     {
-        var range = new CharacterRange
+        CharacterRange range = new()
         {
             First = value
         };
@@ -47,7 +47,7 @@ public class CharacterRangeTests
     [InlineData(10)]
     public void Length_Set_GetReturnsExpected(int value)
     {
-        var range = new CharacterRange
+        CharacterRange range = new()
         {
             Length = value
         };

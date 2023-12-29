@@ -34,7 +34,7 @@ public class PageSettingsTests
     [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
     public void Clone_Success()
     {
-        PageSettings ps = new PageSettings();
+        PageSettings ps = new();
         ps.Color = false;
         ps.Landscape = true;
         ps.Margins = new Margins(120, 130, 140, 150);

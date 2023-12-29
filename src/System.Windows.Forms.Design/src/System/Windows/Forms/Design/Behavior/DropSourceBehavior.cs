@@ -136,7 +136,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     private Point AdjustToGrid(Point dragLoc)
     {
         // location of the drag with respect to the parent
-        Point controlLocation = new Point(dragLoc.X - parentLocation.X, dragLoc.Y - parentLocation.Y);
+        Point controlLocation = new(dragLoc.X - parentLocation.X, dragLoc.Y - parentLocation.Y);
         Point offset = Point.Empty;
         // determine which way we need to snap
         int xDelta = controlLocation.X % parentGridSize.Width;
@@ -258,7 +258,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         if ((propLoc is not null) && (dragComponents[dragComponentIndex].dragComponent is Control currentControl))
         {
             // ControlDesigner shadows the Location property. If the control is parented and the parent is a scrollable control, then it expects the Location to be in displayrectangle coordinates. At this point bounds are in clientrectangle coordinates, so we need to check if we need to adjust the coordinates.
-            Point pt = new Point(dropPoint.X, dropPoint.Y);
+            Point pt = new(dropPoint.X, dropPoint.Y);
             if (currentControl.Parent is ScrollableControl p)
             {
                 Point ptScroll = p.AutoScrollPosition;
@@ -465,7 +465,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         }
 
                         DropControl(i, dragTarget, dragSource, localDrag);
-                        Point dropPoint = new Point(initialDropPoint.X + dragComponents[i].positionOffset.X,
+                        Point dropPoint = new(initialDropPoint.X + dragComponents[i].positionOffset.X,
                                                         initialDropPoint.Y + dragComponents[i].positionOffset.Y);
                         SetLocationPropertyAndChildIndex(i, dragTarget, dropPoint,
                                                             shareParent ? dragComponents[i].zorderIndex : 0, allowSetChildIndexOnDrop);
@@ -704,12 +704,12 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             }
 
             // The new position of the primary control, i.e. where did we just drag it to
-            Point newPosition = new Point(mouseLoc.X - initialMouseLoc.X + dragComponents[primaryComponentIndex].originalControlLocation.X,
+            Point newPosition = new(mouseLoc.X - initialMouseLoc.X + dragComponents[primaryComponentIndex].originalControlLocation.X,
                                             mouseLoc.Y - initialMouseLoc.Y + dragComponents[primaryComponentIndex].originalControlLocation.Y);
             // Map it to the target's adorner window so that we can snap correctly
             newPosition = MapPointFromSourceToTarget(newPosition);
             // The new rectangle
-            Rectangle newRect = new Rectangle(newPosition.X, newPosition.Y,
+            Rectangle newRect = new(newPosition.X, newPosition.Y,
                                                 dragComponents[primaryComponentIndex].dragImage.Width,
                                                 dragComponents[primaryComponentIndex].dragImage.Height);
             // if we have a valid snapline engine - ask it to offset our drag
@@ -756,7 +756,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             newImageRect.Location = MapPointFromSourceToTarget(newImageRect.Location);
 
             Rectangle unionRectangle = Rectangle.Union(newImageRect, previousImageRect);
-            Region invalidRegion = new Region(unionRectangle);
+            Region invalidRegion = new(unionRectangle);
             invalidRegion.Exclude(newImageRect);
 
             // SECOND, INVALIDATE THE TRANSPARENT REGION OF THE DRAGIMAGERECT
@@ -980,11 +980,11 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         // Draw each control into the dragimage
         using (Graphics g = Graphics.FromImage(dragImage))
         {
-            using (SolidBrush brush = new SolidBrush(primaryControl.BackColor))
+            using (SolidBrush brush = new(primaryControl.BackColor))
             {
                 for (int i = 0; i < dragComponents.Length; i++)
                 {
-                    Rectangle controlRect = new Rectangle(dragComponents[i].draggedLocation.X - dragImageRect.X,
+                    Rectangle controlRect = new(dragComponents[i].draggedLocation.X - dragImageRect.X,
                                               dragComponents[i].draggedLocation.Y - dragImageRect.Y,
                                               dragComponents[i].dragImage.Width, dragComponents[i].dragImage.Height);
                     // The background

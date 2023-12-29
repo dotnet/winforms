@@ -449,13 +449,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             : _imageIndex.Index;
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
 
             if (value == _imageIndex.Index && value != ImageList.Indexer.DefaultIndex)
             {

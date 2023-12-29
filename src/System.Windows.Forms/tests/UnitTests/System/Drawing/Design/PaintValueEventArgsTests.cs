@@ -19,10 +19,10 @@ public class PaintValueEventArgsTests
     [MemberData(nameof(Ctor_ITypeDescriptorContext_Object_Rectangle_TestData))]
     public void PaintValueEventArgs_Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle(ITypeDescriptorContext context, object value, Rectangle bounds)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
-        var e = new PaintValueEventArgs(context, value, graphics, bounds);
+        PaintValueEventArgs e = new(context, value, graphics, bounds);
         Assert.Same(context, e.Context);
         Assert.Same(value, e.Value);
         Assert.Same(graphics, e.Graphics);

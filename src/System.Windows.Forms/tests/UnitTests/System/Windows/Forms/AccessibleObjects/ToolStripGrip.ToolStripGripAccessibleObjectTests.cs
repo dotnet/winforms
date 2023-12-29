@@ -11,8 +11,8 @@ public class ToolStripGrip_ToolStripGripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripGripAccessibleObject_Ctor_Default()
     {
-        using ToolStripGrip toolStripGrip = new ToolStripGrip();
-        ToolStripGripAccessibleObject accessibleObject = new ToolStripGripAccessibleObject(toolStripGrip);
+        using ToolStripGrip toolStripGrip = new();
+        ToolStripGripAccessibleObject accessibleObject = new(toolStripGrip);
 
         Assert.Equal(toolStripGrip, accessibleObject.Owner);
     }
@@ -20,7 +20,7 @@ public class ToolStripGrip_ToolStripGripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripGripAccessibleObject_ControlType_IsThumb_IfAccessibleRoleIsDefault()
     {
-        using ToolStripGrip toolStripGrip = new ToolStripGrip();
+        using ToolStripGrip toolStripGrip = new();
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)toolStripGrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -31,7 +31,7 @@ public class ToolStripGrip_ToolStripGripAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripGripAccessibleObject_Role_IsGrip_ByDefault()
     {
-        using ToolStripGrip toolStripGrip = new ToolStripGrip();
+        using ToolStripGrip toolStripGrip = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripGrip.AccessibilityObject.Role;
@@ -58,7 +58,7 @@ public class ToolStripGrip_ToolStripGripAccessibleObjectTests
     [MemberData(nameof(ToolStripGripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripGripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripGrip toolStripGrip = new ToolStripGrip();
+        using ToolStripGrip toolStripGrip = new();
         toolStripGrip.AccessibleRole = role;
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)toolStripGrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

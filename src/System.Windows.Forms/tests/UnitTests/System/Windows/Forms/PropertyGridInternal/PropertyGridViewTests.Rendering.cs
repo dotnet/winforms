@@ -28,7 +28,7 @@ public partial class PropertyGridViewTests
         // have no parent - so we can't add it to another control (such as a form).
         propertyGrid.CreateControl();
 
-        using var emf = new EmfScope();
+        using EmfScope emf = new();
         DeviceContextState state = new(emf);
 
         propertyGridView.PrintToMetafile(emf);

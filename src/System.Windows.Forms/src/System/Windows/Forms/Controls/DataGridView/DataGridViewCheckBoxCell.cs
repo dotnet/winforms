@@ -1324,7 +1324,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                     // CheckBox::Paint will only paint the check box differently when in FlatStyle.Flat
                     // this code is copied from CheckBox::DrawCheckFlat. it was a lot of trouble making this function static
 
-                    Rectangle checkBounds = new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height);
+                    Rectangle checkBounds = new(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height);
 
                     Color foreBrushColor = default;
                     Color backBrushColor = default;
@@ -1382,7 +1382,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                         // draw the check box
                         if (checkState != CheckState.Unchecked)
                         {
-                            Rectangle fullSize = new Rectangle(checkBoxX - 1, checkBoxY - 1, checkBoxSize.Width + 3, checkBoxSize.Height + 3);
+                            Rectangle fullSize = new(checkBoxX - 1, checkBoxY - 1, checkBoxSize.Width + 3, checkBoxSize.Height + 3);
                             fullSize.Width++;
                             fullSize.Height++;
 
@@ -1397,7 +1397,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                                 // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
                                 // and compensate below
                                 RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
-                                Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
+                                Bitmap bitmap = new(fullSize.Width, fullSize.Height);
                                 using (Graphics offscreen = Graphics.FromImage(bitmap))
                                 {
                                     offscreen.Clear(Color.Transparent);
@@ -1430,7 +1430,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                 {
                     Debug.Assert(FlatStyle == FlatStyle.Popup);
 
-                    Rectangle checkBounds = new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width - 1, checkBoxSize.Height - 1);
+                    Rectangle checkBounds = new(checkBoxX, checkBoxY, checkBoxSize.Width - 1, checkBoxSize.Height - 1);
 
                     // The CheckBoxAdapter code moves the check box down about 3 pixels so we have to take that into account
                     checkBounds.Y -= 3;

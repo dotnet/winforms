@@ -141,10 +141,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_AUTOMATIC];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime((int)PInvoke.TTDT_AUTOMATIC, value);
         }
@@ -165,10 +162,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_AUTOPOP];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutoPopDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime(PInvoke.TTDT_AUTOPOP, value);
         }
@@ -199,7 +193,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     {
         get
         {
-            CreateParams cp = new CreateParams();
+            CreateParams cp = new();
             if (TopLevelControl is not null && !TopLevelControl.IsDisposed)
             {
                 cp.Parent = TopLevelControl.Handle;
@@ -339,10 +333,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_INITIAL];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(InitialDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime(PInvoke.TTDT_INITIAL, value);
         }
@@ -367,10 +358,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         get => _delayTimes[(int)PInvoke.TTDT_RESHOW];
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ReshowDelay), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             SetDelayTime(PInvoke.TTDT_RESHOW, value);
         }
@@ -2048,7 +2036,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         Control? toolControl = window as Control;
 
         Size currentTooltipSize = rect.Size;
-        PopupEventArgs e = new PopupEventArgs(window, toolControl, IsBalloon, currentTooltipSize);
+        PopupEventArgs e = new(window, toolControl, IsBalloon, currentTooltipSize);
         OnPopup(e);
 
         if (toolControl is DataGridView dataGridView && dataGridView.CancelToolTipPopup(this))

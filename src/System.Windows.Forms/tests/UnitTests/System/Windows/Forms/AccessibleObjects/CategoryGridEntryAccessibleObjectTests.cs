@@ -15,7 +15,7 @@ public class CategoryGridEntryAccessibleObjectTests
     public void CategoryGridEntryAccessibleObject_Ctor_Default()
     {
         using NoAssertContext context = new();
-        var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+        CategoryGridEntryAccessibleObject accessibilityObject = new(null);
 
         Assert.Null(((IOwnedObject<GridEntry>)accessibilityObject).Owner);
     }
@@ -24,7 +24,7 @@ public class CategoryGridEntryAccessibleObjectTests
     public void CategoryGridEntryAccessibleObject_Role_ReturnsExpected()
     {
         using NoAssertContext context = new();
-        var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+        CategoryGridEntryAccessibleObject accessibilityObject = new(null);
 
         Assert.Equal(AccessibleRole.ButtonDropDownGrid, accessibilityObject.Role);
     }
@@ -33,7 +33,7 @@ public class CategoryGridEntryAccessibleObjectTests
     public void CategoryGridEntryAccessibleObject_Column_ReturnsExpected()
     {
         using NoAssertContext context = new();
-        var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+        CategoryGridEntryAccessibleObject accessibilityObject = new(null);
 
         Assert.Equal(0, accessibilityObject.Column);
     }
@@ -42,7 +42,7 @@ public class CategoryGridEntryAccessibleObjectTests
     public void CategoryGridEntryAccessibleObject_ControlType_ReturnsExpected()
     {
         using NoAssertContext context = new();
-        var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+        CategoryGridEntryAccessibleObject accessibilityObject = new(null);
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId;
 
@@ -55,7 +55,7 @@ public class CategoryGridEntryAccessibleObjectTests
     public void CategoryGridEntryAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         using NoAssertContext context = new();
-        var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+        CategoryGridEntryAccessibleObject accessibilityObject = new(null);
 
         Assert.True(accessibilityObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -150,7 +150,7 @@ public class CategoryGridEntryAccessibleObjectTests
     public void CategoryGridEntryAccessibleObject_LocalizedControlType_ReturnsExpected()
     {
         using NoAssertContext context = new();
-        var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+        CategoryGridEntryAccessibleObject accessibilityObject = new(null);
 
         string expected = SR.CategoryPropertyGridLocalizedControlType;
 

@@ -12,8 +12,8 @@ public class WebBrowserNavigatingEventArgsTests
     [InlineData("targetFrameName")]
     public void Ctor_Uri(string targetFrameName)
     {
-        var url = new Uri("http://google.com");
-        var e = new WebBrowserNavigatingEventArgs(url, targetFrameName);
+        Uri url = new("http://google.com");
+        WebBrowserNavigatingEventArgs e = new(url, targetFrameName);
         Assert.Equal(url, e.Url);
         Assert.Equal(targetFrameName, e.TargetFrameName);
     }

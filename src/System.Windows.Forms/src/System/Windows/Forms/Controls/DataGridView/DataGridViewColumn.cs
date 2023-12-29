@@ -335,15 +335,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         get => _fillWeight;
         set
         {
-            if (value <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(FillWeight), value, 0));
-            }
-
-            if (value > (float)ushort.MaxValue)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(FillWeight), value, ushort.MaxValue));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, ushort.MaxValue);
 
             if (DataGridView is not null)
             {
@@ -446,7 +439,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                 return columnStyle;
             }
 
-            DataGridViewCellStyle inheritedCellStyleTmp = new DataGridViewCellStyle();
+            DataGridViewCellStyle inheritedCellStyleTmp = new();
             DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
             Debug.Assert(dataGridViewStyle is not null);
 

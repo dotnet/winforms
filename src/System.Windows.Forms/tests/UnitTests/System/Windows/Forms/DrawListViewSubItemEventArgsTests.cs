@@ -21,10 +21,10 @@ public class DrawListViewSubItemEventArgsTests
     [MemberData(nameof(Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData))]
     public void DrawListViewSubItemEventArgs_Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates(Rectangle bounds, ListViewItem item, ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex, ColumnHeader header, ListViewItemStates itemState)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewSubItemEventArgs(graphics, bounds, item, subItem, itemIndex, columnIndex, header, itemState);
+            DrawListViewSubItemEventArgs e = new(graphics, bounds, item, subItem, itemIndex, columnIndex, header, itemState);
             Assert.Same(graphics, e.Graphics);
             Assert.Equal(bounds, e.Bounds);
             Assert.Same(item, e.Item);
@@ -46,7 +46,7 @@ public class DrawListViewSubItemEventArgsTests
     [WinFormsFact]
     public void DrawListViewSubItemEventArgs_Ctor_NullItemIndexNegativeOne_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.Throws<ArgumentNullException>("item", () => new DrawListViewSubItemEventArgs(graphics, new Rectangle(1, 2, 3, 4), null, new ListViewItem.ListViewSubItem(), -1, 0, new ColumnHeader(), ListViewItemStates.Default));
@@ -58,7 +58,7 @@ public class DrawListViewSubItemEventArgsTests
     [InlineData(0)]
     public void DrawListViewSubItemEventArgs_Ctor_NullSubItemIndexNotNegativeOne_ThrowsArgumentNullException(int itemIndex)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.Throws<ArgumentNullException>("subItem", () => new DrawListViewSubItemEventArgs(graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), null, itemIndex, 0, new ColumnHeader(), ListViewItemStates.Default));
@@ -69,10 +69,10 @@ public class DrawListViewSubItemEventArgsTests
     [BoolData]
     public void DrawListViewSubItemEventArgs_DrawDefault_Set_GetReturnsExpected(bool value)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewSubItemEventArgs(graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), null, -1, -1, new ColumnHeader(), ListViewItemStates.Checked)
+            DrawListViewSubItemEventArgs e = new(graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), null, -1, -1, new ColumnHeader(), ListViewItemStates.Checked)
             {
                 DrawDefault = value
             };
@@ -121,10 +121,10 @@ public class DrawListViewSubItemEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewSubItemEventArgs_DrawBackground_HasGraphics_Success(Rectangle bounds, ListViewItem item, ListViewItem.ListViewSubItem subItem, int itemIndex, ColumnHeader header, ListViewItemStates itemState)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewSubItemEventArgs(graphics, bounds, item, subItem, itemIndex, 0, header, itemState);
+            DrawListViewSubItemEventArgs e = new(graphics, bounds, item, subItem, itemIndex, 0, header, itemState);
             e.DrawBackground();
         }
     }
@@ -133,10 +133,10 @@ public class DrawListViewSubItemEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawListViewSubItemEventArgs_DrawFocusRectangle_HasGraphics_Success(Rectangle bounds, ListViewItem item, ListViewItem.ListViewSubItem subItem, int itemIndex, ColumnHeader header, ListViewItemStates itemState)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawListViewSubItemEventArgs(graphics, bounds, item, subItem, itemIndex, 0, header, itemState);
+            DrawListViewSubItemEventArgs e = new(graphics, bounds, item, subItem, itemIndex, 0, header, itemState);
             e.DrawFocusRectangle(new Rectangle(1, 2, 3, 4));
         }
     }

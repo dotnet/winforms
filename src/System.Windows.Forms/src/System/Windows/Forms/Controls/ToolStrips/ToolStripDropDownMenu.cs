@@ -208,7 +208,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     /// </summary>
     internal static unsafe ToolStripDropDownMenu FromHMenu(HMENU hmenu, IWin32Window targetWindow)
     {
-        ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
+        ToolStripDropDownMenu managedDropDown = new();
         managedDropDown.SuspendLayout();
 
         int count = PInvoke.GetMenuItemCount(hmenu);
@@ -531,7 +531,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         base.Initialize();
         Padding = DefaultPadding;
-        FlowLayoutSettings settings = new FlowLayoutSettings(this);
+        FlowLayoutSettings settings = new(this);
         settings.FlowDirection = FlowDirection.TopDown;
         _state[s_stateShowImageMargin] = true;
     }
@@ -796,14 +796,14 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         {
             Size upSize = UpScrollButton.GetPreferredSize(Size.Empty);
             //
-            Point upLocation = new Point(1, 0);
+            Point upLocation = new(1, 0);
 
             UpScrollButton.SetBounds(new Rectangle(upLocation, upSize));
 
             Size downSize = DownScrollButton.GetPreferredSize(Size.Empty);
             int height = GetDropDownBounds(Bounds).Height;
 
-            Point downLocation = new Point(1, height - downSize.Height);
+            Point downLocation = new(1, height - downSize.Height);
             DownScrollButton.SetBounds(new Rectangle(downLocation, downSize));
             UpdateScrollButtonStatus();
         }

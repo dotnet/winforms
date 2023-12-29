@@ -12,7 +12,7 @@ internal sealed class DesignerOptionServiceExt4SnapLines : DesignerOptionService
         if (options.Parent is not null)
             return;
 
-        DesignerOptions ops = new DesignerOptions();
+        DesignerOptions ops = new();
         ops.UseSnapLines = true;
         ops.UseSmartTags = true;
         DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
@@ -31,7 +31,7 @@ internal sealed class DesignerOptionServiceExt4Grid : DesignerOptionService
         if (options.Parent is not null)
             return;
 
-        DesignerOptions ops = new DesignerOptions();
+        DesignerOptions ops = new();
         ops.GridSize = _gridSize;
         ops.SnapToGrid = true;
         ops.ShowGrid = true;
@@ -53,7 +53,7 @@ internal sealed class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOpt
         if (options.Parent is not null)
             return;
 
-        DesignerOptions ops = new DesignerOptions();
+        DesignerOptions ops = new();
         ops.GridSize = _gridSize;
         ops.SnapToGrid = false;
         ops.ShowGrid = true;
@@ -73,7 +73,7 @@ internal sealed class DesignerOptionServiceExt4NoGuides : DesignerOptionService
         if (options.Parent is not null)
             return;
 
-        DesignerOptions ops = new DesignerOptions();
+        DesignerOptions ops = new();
         ops.GridSize = new System.Drawing.Size(8, 8);
         ops.SnapToGrid = false;
         ops.ShowGrid = false;

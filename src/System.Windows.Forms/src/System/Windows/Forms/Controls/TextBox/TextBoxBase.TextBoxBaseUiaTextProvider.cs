@@ -368,8 +368,8 @@ public abstract partial class TextBoxBase
 
             // Formatting rectangle is the boundary, which we need to inflate by 1
             // in order to read characters within the rectangle
-            Point ptStart = new Point(rectangle.X + 1, rectangle.Y + 1);
-            Point ptEnd = new Point(rectangle.Right - 1, rectangle.Bottom - 1);
+            Point ptStart = new(rectangle.X + 1, rectangle.Y + 1);
+            Point ptEnd = new(rectangle.Right - 1, rectangle.Bottom - 1);
 
             if (IsMultiline)
             {

@@ -20,7 +20,7 @@ public class ImageTests
     [Fact]
     public void PropertyIdList_GetBitmapJpg_Success()
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
         Assert.NotSame(bitmap.PropertyIdList, bitmap.PropertyIdList);
     }
@@ -28,7 +28,7 @@ public class ImageTests
     [Fact]
     public void PropertyIdList_GetEmptyMemoryBitmap_ReturnsExpected()
     {
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap bitmap = new(1, 1);
         Assert.Empty(bitmap.PropertyIdList);
         Assert.Same(bitmap.PropertyIdList, bitmap.PropertyIdList);
     }
@@ -36,7 +36,7 @@ public class ImageTests
     [Fact]
     public void PropertyItems_GetBitmapJpg_Success()
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Equal(3, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -78,7 +78,7 @@ public class ImageTests
     [Fact]
     public void PropertyItems_GetEmptyBitmapBmp_Success()
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
         Assert.Empty(bitmap.PropertyItems);
         Assert.Same(bitmap.PropertyItems, bitmap.PropertyItems);
     }
@@ -86,7 +86,7 @@ public class ImageTests
     [Fact]
     public void PropertyItems_GetEmptyMemoryBitmap_ReturnsExpected()
     {
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap bitmap = new(1, 1);
         Assert.Empty(bitmap.PropertyItems);
         Assert.Same(bitmap.PropertyItems, bitmap.PropertyItems);
     }
@@ -94,7 +94,7 @@ public class ImageTests
     [Fact]
     public void GetPropertyItem_InvokeExistsBitmapBmp_Success()
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item = bitmap.GetPropertyItem(PropertyTagExifUserComment);
         Assert.Equal(PropertyTagExifUserComment, item.Id);
         Assert.Equal(29, item.Len);
@@ -108,7 +108,7 @@ public class ImageTests
     [InlineData(-1)]
     public void GetPropertyItem_NoSuchPropertyItemEmptyMemoryBitmap_ThrowsArgumentException(int propid)
     {
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap bitmap = new(1, 1);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(propid));
     }
 
@@ -118,18 +118,18 @@ public class ImageTests
     [InlineData(-1)]
     public void GetPropertyItem_NoSuchPropertyItemEmptyImageBitmapBmp_ThrowsArgumentException(int propid)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(propid));
     }
 
     [Fact]
     public void RemovePropertyItem_InvokeMemoryBitmap_Success()
     {
-        using var source = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap source = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item1 = source.GetPropertyItem(PropertyTagExifUserComment);
         PropertyItem item2 = source.GetPropertyItem(PropertyTagChrominanceTable);
         PropertyItem item3 = source.GetPropertyItem(PropertyTagLuminanceTable);
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap bitmap = new(1, 1);
         bitmap.SetPropertyItem(item1);
         bitmap.SetPropertyItem(item2);
         bitmap.SetPropertyItem(item3);
@@ -153,7 +153,7 @@ public class ImageTests
     [Fact]
     public void RemovePropertyItem_InvokeBitmapJpg_Success()
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         bitmap.RemovePropertyItem(PropertyTagExifUserComment);
         Assert.Equal(new int[] { PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagExifUserComment));
@@ -176,7 +176,7 @@ public class ImageTests
     [InlineData(-1)]
     public void RemovePropertyItem_NoSuchPropertyItemEmptyMemoryBitmap_ThrowsExternalException(int propid)
     {
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap bitmap = new(1, 1);
         Assert.Throws<ExternalException>(() => bitmap.RemovePropertyItem(propid));
     }
 
@@ -186,7 +186,7 @@ public class ImageTests
     [InlineData(-1)]
     public void RemovePropertyItem_NoSuchPropertyItemEmptyImageBitmapBmp_ThrowsExternalException(int propid)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
         Assert.Throws<ExternalException>(() => bitmap.RemovePropertyItem(propid));
     }
 
@@ -196,11 +196,11 @@ public class ImageTests
     [InlineData(-1)]
     public void RemovePropertyItem_NoSuchPropertyNotEmptyMemoryBitmap_ThrowsArgumentException(int propid)
     {
-        using var source = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap source = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         PropertyItem item1 = source.GetPropertyItem(PropertyTagExifUserComment);
         PropertyItem item2 = source.GetPropertyItem(PropertyTagChrominanceTable);
         PropertyItem item3 = source.GetPropertyItem(PropertyTagLuminanceTable);
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap bitmap = new(1, 1);
         bitmap.SetPropertyItem(item1);
         bitmap.SetPropertyItem(item2);
         bitmap.SetPropertyItem(item3);
@@ -214,7 +214,7 @@ public class ImageTests
     [InlineData(-1)]
     public void RemovePropertyItem_NoSuchPropertyNotEmptyBitmapJpg_ThrowsArgumentException(int propid)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(propid));
     }
 
@@ -224,8 +224,8 @@ public class ImageTests
     [InlineData(-1)]
     public void SetPropertyItem_InvokeMemoryBitmap_Success(int propid)
     {
-        using var source = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
-        using var bitmap = new Bitmap(1, 1);
+        using Bitmap source = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(1, 1);
 
         // Change data.
         PropertyItem item = source.GetPropertyItem(PropertyTagExifUserComment);
@@ -283,7 +283,7 @@ public class ImageTests
     [InlineData(-1)]
     public void SetPropertyItem_InvokeBitmapJpg_Success(int propid)
     {
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
 
         // Change data.
         PropertyItem item = bitmap.GetPropertyItem(PropertyTagExifUserComment);
@@ -425,8 +425,8 @@ public class ImageTests
     [InlineData(-1)]
     public void SetPropertyItem_InvokeBitmapBmp_Success(int propid)
     {
-        using var source = new Bitmap(Helpers.GetTestBitmapPath("nature24bits.jpg"));
-        using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
+        using Bitmap source = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
 
         // Change data.
         PropertyItem item = source.GetPropertyItem(PropertyTagExifUserComment);
@@ -546,7 +546,7 @@ public class ImageTests
     [MemberData(nameof(InvalidBytes_TestData))]
     public void FromStream_InvalidBytes_ThrowsArgumentException(byte[] bytes)
     {
-        using (var stream = new MemoryStream())
+        using (MemoryStream stream = new())
         {
             stream.Write(bytes, 0, bytes.Length);
             stream.Position = 0;
@@ -652,7 +652,7 @@ public class ImageTests
         ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
         ImageCodecInfo codec = codecs.Single(c => c.FormatID == format.Guid);
 
-        using (var bitmap = new Bitmap(1, 1))
+        using (Bitmap bitmap = new(1, 1))
         {
             EncoderParameters paramList = bitmap.GetEncoderParameterList(codec.Clsid);
 
@@ -665,7 +665,7 @@ public class ImageTests
     [Fact]
     public void Save_InvalidDirectory_ThrowsDirectoryNotFoundException()
     {
-        using (var bitmap = new Bitmap(1, 1))
+        using (Bitmap bitmap = new(1, 1))
         {
             string badTarget = System.IO.Path.Combine("NoSuchDirectory", "NoSuchFile");
             AssertExtensions.Throws<DirectoryNotFoundException>(() => bitmap.Save(badTarget), $"The directory NoSuchDirectory of the filename {badTarget} does not exist.");

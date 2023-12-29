@@ -18,7 +18,7 @@ namespace System.ComponentModel.Design.Serialization;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class CodeDomSerializerBase
 {
-    private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
+    private static readonly Attribute[] runTimeProperties = [DesignOnlyAttribute.No];
     private static readonly TraceSwitch traceSerialization = new("DesignerSerialization", "Trace design time serialization");
 #pragma warning disable CS0649
     private static Stack<string>? traceScope;
@@ -54,7 +54,7 @@ public abstract partial class CodeDomSerializerBase
             return typeref.BaseType;
         }
 
-        StringBuilder typeName = new StringBuilder();
+        StringBuilder typeName = new();
         GetTypeNameFromCodeTypeReferenceHelper(manager, typeref, typeName);
         return typeName.ToString();
     }
@@ -1057,7 +1057,7 @@ public abstract partial class CodeDomSerializerBase
                         {
                             Trace(TraceLevel.Verbose, $"{arrayCreateEx.Initializers.Count} initializers");
                             // Passed an array of initializers.  Use this to create the array.  Note that we use an  ArrayList here and add elements as we create them. It is possible that an element cannot be resolved. This is an error, but we do not want to tank the entire array.  If we kicked out the entire statement, a missing control would cause all controls on a form to vanish.
-                            ArrayList arrayList = new ArrayList(arrayCreateEx.Initializers.Count);
+                            ArrayList arrayList = new(arrayCreateEx.Initializers.Count);
 
                             foreach (CodeExpression initializer in arrayCreateEx.Initializers)
                             {
@@ -1779,8 +1779,8 @@ public abstract partial class CodeDomSerializerBase
 
                         if (rhsProp is not null)
                         {
-                            MemberRelationship source = new MemberRelationship(lhs, p);
-                            MemberRelationship target = new MemberRelationship(rhsPropTarget, rhsProp);
+                            MemberRelationship source = new(lhs, p);
+                            MemberRelationship target = new(rhsPropTarget, rhsProp);
 
                             oldRelation = relationships[source];
 
@@ -2195,7 +2195,7 @@ public abstract partial class CodeDomSerializerBase
             }
 
             Type expressionType = descriptor.MemberInfo!.DeclaringType!;
-            CodeTypeReference typeRef = new CodeTypeReference(expressionType);
+            CodeTypeReference typeRef = new(expressionType);
 
             if (descriptor.MemberInfo is ConstructorInfo)
             {
@@ -2203,15 +2203,15 @@ public abstract partial class CodeDomSerializerBase
             }
             else if (descriptor.MemberInfo is MethodInfo methodInfo)
             {
-                CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
-                CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(typeRefExp, methodInfo.Name);
+                CodeTypeReferenceExpression typeRefExp = new(typeRef);
+                CodeMethodReferenceExpression methodRef = new(typeRefExp, methodInfo.Name);
                 expression = new CodeMethodInvokeExpression(methodRef, arguments);
                 expressionType = methodInfo.ReturnType;
             }
             else if (descriptor.MemberInfo is PropertyInfo propertyInfo)
             {
-                CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
-                CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(typeRefExp, propertyInfo.Name);
+                CodeTypeReferenceExpression typeRefExp = new(typeRef);
+                CodePropertyReferenceExpression propertyRef = new(typeRefExp, propertyInfo.Name);
                 Debug.Assert(arguments.Length == 0, "Property serialization does not support arguments");
                 expression = propertyRef;
                 expressionType = propertyInfo.PropertyType;
@@ -2219,7 +2219,7 @@ public abstract partial class CodeDomSerializerBase
             else if (descriptor.MemberInfo is FieldInfo fieldInfo)
             {
                 Debug.Assert(arguments.Length == 0, "Field serialization does not support arguments");
-                CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
+                CodeTypeReferenceExpression typeRefExp = new(typeRef);
                 expression = new CodeFieldReferenceExpression(typeRefExp, fieldInfo.Name);
                 expressionType = fieldInfo.FieldType;
             }
@@ -2411,11 +2411,11 @@ public abstract partial class CodeDomSerializerBase
                 CodeExpression? target = SerializeToExpression(manager, value);
                 if (target is not null)
                 {
-                    CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(target, string.Empty);
+                    CodePropertyReferenceExpression propertyRef = new(target, string.Empty);
                     foreach (PropertyDescriptor property in props)
                     {
                         TraceIf(TraceLevel.Warning, property.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content), $"PersistContents property {property.Name} cannot be serialized to resources.");
-                        ExpressionContext tree = new ExpressionContext(propertyRef, property.PropertyType, value);
+                        ExpressionContext tree = new(propertyRef, property.PropertyType, value);
                         manager.Context.Push(tree);
                         try
                         {

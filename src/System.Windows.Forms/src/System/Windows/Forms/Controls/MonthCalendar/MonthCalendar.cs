@@ -450,10 +450,7 @@ public partial class MonthCalendar : Control
                 return;
             }
 
-            if (value < DateTimePicker.EffectiveMinDate(_minDate))
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDate(value), nameof(MinDate)));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, DateTimePicker.EffectiveMinDate(_minDate));
 
             _maxDate = value;
             SetRange();
@@ -473,10 +470,7 @@ public partial class MonthCalendar : Control
         get => _maxSelectionCount;
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxSelectionCount), value.ToString("D"), 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             if (value == _maxSelectionCount)
             {
@@ -512,21 +506,8 @@ public partial class MonthCalendar : Control
                 return;
             }
 
-            if (value > DateTimePicker.EffectiveMaxDate(_maxDate))
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
-            }
-
-            if (value < DateTimePicker.MinimumDateTime)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, DateTimePicker.EffectiveMaxDate(_maxDate));
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, DateTimePicker.MinimumDateTime);
 
             _minDate = value;
             SetRange();
@@ -627,21 +608,8 @@ public partial class MonthCalendar : Control
                 return;
             }
 
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
-            }
-
-            if (value > MaxScrollChange)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxScrollChange);
 
             if (IsHandleCreated)
             {
@@ -669,21 +637,8 @@ public partial class MonthCalendar : Control
                 return;
             }
 
-            if (value < MinDate)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
-            }
-
-            if (value > MaxDate)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, MinDate);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxDate);
 
             // If we've moved SelectionEnd before SelectionStart, move SelectionStart back
             if (_selectionStart > value)
@@ -719,21 +674,8 @@ public partial class MonthCalendar : Control
                 return;
             }
 
-            if (value < _minDate)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
-            }
-
-            if (value > _maxDate)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, _minDate);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, _maxDate);
 
             // If we've moved SelectionStart beyond SelectionEnd, move SelectionEnd forward
             if (_selectionEnd < value)
@@ -927,22 +869,10 @@ public partial class MonthCalendar : Control
             if (!_todayDateSet || (DateTime.Compare(value, _todaysDate) != 0))
             {
                 // Throw if trying to set the TodayDate to a value greater than MaxDate.
-                if (DateTime.Compare(value, _maxDate) > 0)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(value),
-                        value,
-                        string.Format(SR.InvalidHighBoundArgumentEx, nameof(TodayDate), FormatDate(value), FormatDate(_maxDate)));
-                }
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(value, _maxDate);
 
                 // Throw if trying to set the TodayDate to a value less than MinDate.
-                if (DateTime.Compare(value, _minDate) < 0)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(value),
-                        value,
-                        string.Format(SR.InvalidLowBoundArgument, nameof(TodayDate), FormatDate(value), FormatDate(_minDate)));
-                }
+                ArgumentOutOfRangeException.ThrowIfLessThan(value, _minDate);
 
                 _todaysDate = value.Date;
                 _todayDateSet = true;
@@ -1879,15 +1809,8 @@ public partial class MonthCalendar : Control
     /// </summary>
     public void SetDate(DateTime date)
     {
-        if (date.Ticks < _minDate.Ticks)
-        {
-            throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidLowBoundArgumentEx, nameof(date), FormatDate(date), nameof(MinDate)));
-        }
-
-        if (date.Ticks > _maxDate.Ticks)
-        {
-            throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidHighBoundArgumentEx, nameof(date), FormatDate(date), nameof(MaxDate)));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(date, _minDate);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(date, _maxDate);
 
         SetSelectionRange(date, date);
     }
@@ -1925,25 +1848,10 @@ public partial class MonthCalendar : Control
     public void SetSelectionRange(DateTime date1, DateTime date2)
     {
         // Keep the dates within the min and max dates
-        if (date1.Ticks < _minDate.Ticks)
-        {
-            throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date1), nameof(MinDate)));
-        }
-
-        if (date1.Ticks > _maxDate.Ticks)
-        {
-            throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date1), nameof(MaxDate)));
-        }
-
-        if (date2.Ticks < _minDate.Ticks)
-        {
-            throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date2), nameof(MinDate)));
-        }
-
-        if (date2.Ticks > _maxDate.Ticks)
-        {
-            throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date2), nameof(MaxDate)));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(date1, _minDate);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(date1, _maxDate);
+        ArgumentOutOfRangeException.ThrowIfLessThan(date2, _minDate);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(date2, _maxDate);
 
         // If date1 > date2, we just select date2 (compat)
         if (date1 > date2)
@@ -2205,7 +2113,7 @@ public partial class MonthCalendar : Control
     private unsafe void WmDateBold(ref Message m)
     {
         NMDAYSTATE* nmmcds = (NMDAYSTATE*)(nint)m.LParamInternal;
-        Span<int> boldDates = new Span<int>((int*)nmmcds->prgDayState, nmmcds->cDayState);
+        Span<int> boldDates = new((int*)nmmcds->prgDayState, nmmcds->cDayState);
         WriteBoldDates(boldDates);
     }
 

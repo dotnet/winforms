@@ -51,7 +51,7 @@ public partial class DataGridViewRow
                     return Rectangle.Empty;
                 }
 
-                Rectangle rowRect = _owningDataGridViewRow.DataGridView.RectangleToScreen(_owningDataGridViewRow.DataGridView.GetRowDisplayRectangle(_owningDataGridViewRow.Index, false /*cutOverflow*/));
+                Rectangle rowRect = _owningDataGridViewRow.DataGridView.RectangleToScreen(_owningDataGridViewRow.DataGridView.GetRowDisplayRectangle(_owningDataGridViewRow.Index, cutOverflow: false));
 
                 int horizontalScrollBarHeight = 0;
                 if (_owningDataGridViewRow.DataGridView.HorizontalScrollBarVisible)
@@ -196,7 +196,7 @@ public partial class DataGridViewRow
 
                 if (_owningDataGridViewRow.DataGridView is not null && _owningDataGridViewRow.DataGridView.IsHandleCreated)
                 {
-                    Rectangle rowBounds = _owningDataGridViewRow.DataGridView.GetRowDisplayRectangle(_owningDataGridViewRow.Index, true /*cutOverflow*/);
+                    Rectangle rowBounds = _owningDataGridViewRow.DataGridView.GetRowDisplayRectangle(_owningDataGridViewRow.Index, cutOverflow: true);
                     if (!rowBounds.IntersectsWith(_owningDataGridViewRow.DataGridView.ClientRectangle))
                     {
                         accState |= AccessibleStates.Offscreen;
@@ -221,7 +221,7 @@ public partial class DataGridViewRow
                     return SR.DataGridView_AccRowCreateNew;
                 }
 
-                StringBuilder sb = new StringBuilder(1024);
+                StringBuilder sb = new(1024);
 
                 int childCount = GetChildCount();
 

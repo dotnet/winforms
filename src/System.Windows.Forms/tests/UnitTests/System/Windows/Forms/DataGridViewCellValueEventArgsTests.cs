@@ -11,7 +11,7 @@ public class DataGridViewCellValueEventArgsTests
     [InlineData(1, 2)]
     public void Ctor_Int_Int(int columnIndex, int rowIndex)
     {
-        var e = new DataGridViewCellValueEventArgs(columnIndex, rowIndex);
+        DataGridViewCellValueEventArgs e = new(columnIndex, rowIndex);
         Assert.Equal(columnIndex, e.ColumnIndex);
         Assert.Equal(rowIndex, e.RowIndex);
         Assert.Null(e.Value);
@@ -38,7 +38,7 @@ public class DataGridViewCellValueEventArgsTests
     [InlineData(1)]
     public void Value_Set_GetReturnsExpected(object value)
     {
-        var e = new DataGridViewCellValueEventArgs(1, 2)
+        DataGridViewCellValueEventArgs e = new(1, 2)
         {
             Value = value
         };

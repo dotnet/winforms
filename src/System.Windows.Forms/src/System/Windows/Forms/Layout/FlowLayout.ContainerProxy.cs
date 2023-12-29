@@ -63,7 +63,7 @@ internal partial class FlowLayout
                         Point ptScroll = flp.AutoScrollPosition;
                         if (ptScroll != Point.Empty)
                         {
-                            Point pt = new Point(value.X, value.Y);
+                            Point pt = new(value.X, value.Y);
                             if (IsVertical)
                             {
                                 // Offset the Y value here, since it is really the X value.
@@ -141,7 +141,7 @@ internal partial class FlowLayout
                 Point ptScroll = flp.AutoScrollPosition;
                 if (ptScroll != Point.Empty)
                 {
-                    Point pt = new Point(newBounds.X, newBounds.Y);
+                    Point pt = new(newBounds.X, newBounds.Y);
                     if (IsVertical)
                     {
                         // We need to treat Vertical a little differently. It really helps if you draw this out.

@@ -13,19 +13,19 @@ public class DeviceContextHdcScopeTests
     [Fact]
     public unsafe void CreateWithGraphicsBasedOnImageAppliesRequestedParameters()
     {
-        using Bitmap b = new Bitmap(10, 10);
+        using Bitmap b = new(10, 10);
         using Graphics g = Graphics.FromImage(b);
 
-        Rectangle clipRectangle = new Rectangle(1, 1, 5, 5);
-        using Region r = new Region(clipRectangle);
+        Rectangle clipRectangle = new(1, 1, 5, 5);
+        using Region r = new(clipRectangle);
         g.Clip = r;
 
-        Matrix transform = new Matrix();
+        Matrix transform = new();
         transform.Translate(1.0f, 2.0f);
         g.Transform = transform;
 
         // Just the translation transform
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.TranslateTransform))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.TranslateTransform))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -40,7 +40,7 @@ public class DeviceContextHdcScopeTests
         }
 
         // Just the clipping
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.Clipping))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.Clipping))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -55,7 +55,7 @@ public class DeviceContextHdcScopeTests
         }
 
         // Both
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.All))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -70,7 +70,7 @@ public class DeviceContextHdcScopeTests
         }
 
         // Nothing
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.None))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.None))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -99,16 +99,16 @@ public class DeviceContextHdcScopeTests
 
         using Graphics g = Graphics.FromHdcInternal(hdc);
 
-        Rectangle clipRectangle = new Rectangle(1, 1, 5, 5);
-        using Region r = new Region(clipRectangle);
+        Rectangle clipRectangle = new(1, 1, 5, 5);
+        using Region r = new(clipRectangle);
         g.Clip = r;
 
-        Matrix transform = new Matrix();
+        Matrix transform = new();
         transform.Translate(1.0f, 2.0f);
         g.Transform = transform;
 
         // Just the translation transform
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.TranslateTransform))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.TranslateTransform))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -135,7 +135,7 @@ public class DeviceContextHdcScopeTests
         Assert.Equal(originalOrigin, currentOrigin);
 
         // Just the clipping
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.Clipping))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.Clipping))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -158,7 +158,7 @@ public class DeviceContextHdcScopeTests
         Assert.Equal(originalOrigin, currentOrigin);
 
         // Both
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.All))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -181,7 +181,7 @@ public class DeviceContextHdcScopeTests
         Assert.Equal(originalOrigin, currentOrigin);
 
         // Nothing
-        using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.None))
+        using (DeviceContextHdcScope scope = new(g, ApplyGraphicsProperties.None))
         {
             Point origin = default;
             PInvoke.GetViewportOrgEx(scope, &origin);
@@ -215,7 +215,7 @@ public class DeviceContextHdcScopeTests
     public void CreateFromCleanIGraphicsHdcProviderDoesNotCreateGraphics(int apply)
     {
         using var hdc = GetDcScope.ScreenDC;
-        var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
+        Mock<IGraphicsHdcProvider> mockHdcProvider = new();
         var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
         mockHdcProvider
             .Setup(p => p.IsGraphicsStateClean)
@@ -224,7 +224,7 @@ public class DeviceContextHdcScopeTests
             .Setup(p => p.GetHDC())
             .Returns(hdc);
 
-        using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
+        using (DeviceContextHdcScope scope = new(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
         {
             Assert.Equal(hdc, scope.HDC);
             Assert.Equal(mockIDeviceContext.Object, scope.DeviceContext);
@@ -246,11 +246,11 @@ public class DeviceContextHdcScopeTests
     [InlineData((int)ApplyGraphicsProperties.All)]
     public void CreateFromDirtyIGraphicsHdcProviderCreatesGraphics(int apply)
     {
-        using Bitmap b = new Bitmap(10, 10);
+        using Bitmap b = new(10, 10);
         using Graphics g = Graphics.FromImage(b);
 
-        HDC mockHdc = new HDC((IntPtr)1234);
-        var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
+        HDC mockHdc = new((IntPtr)1234);
+        Mock<IGraphicsHdcProvider> mockHdcProvider = new();
         var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
         mockHdcProvider
             .Setup(p => p.IsGraphicsStateClean)
@@ -262,7 +262,7 @@ public class DeviceContextHdcScopeTests
             .Setup(p => p.GetGraphics(true))
             .Returns(g);
 
-        using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
+        using (DeviceContextHdcScope scope = new(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
         {
             Assert.NotEqual(mockHdc, scope.HDC);
             Assert.Equal(g, scope.DeviceContext);
@@ -287,7 +287,7 @@ public class DeviceContextHdcScopeTests
         // If we don't request to apply properties, there is no need to get the graphics.
 
         using var hdc = GetDcScope.ScreenDC;
-        var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
+        Mock<IGraphicsHdcProvider> mockHdcProvider = new();
         var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
         mockHdcProvider
             .Setup(p => p.IsGraphicsStateClean)
@@ -296,7 +296,7 @@ public class DeviceContextHdcScopeTests
             .Setup(p => p.GetHDC())
             .Returns(hdc);
 
-        using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, ApplyGraphicsProperties.None))
+        using (DeviceContextHdcScope scope = new(mockIDeviceContext.Object, ApplyGraphicsProperties.None))
         {
             Assert.Equal(hdc, scope.HDC);
             Assert.Equal(mockIDeviceContext.Object, scope.DeviceContext);
@@ -320,14 +320,14 @@ public class DeviceContextHdcScopeTests
     public void CreateFromIDeviceContext(int apply)
     {
         using var hdc = GetDcScope.ScreenDC;
-        var mockIDeviceContext = new Mock<IDeviceContext>();
+        Mock<IDeviceContext> mockIDeviceContext = new();
         mockIDeviceContext
             .Setup(p => p.GetHdc())
             .Returns(hdc);
         mockIDeviceContext
             .Setup(p => p.ReleaseHdc());
 
-        using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
+        using (DeviceContextHdcScope scope = new(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
         {
             Assert.Equal(hdc, scope.HDC);
             Assert.Equal(mockIDeviceContext.Object, scope.DeviceContext);

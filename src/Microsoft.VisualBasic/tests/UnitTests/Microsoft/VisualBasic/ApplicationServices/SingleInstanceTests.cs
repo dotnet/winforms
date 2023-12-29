@@ -55,7 +55,7 @@ public class SingleInstanceTests
 
     private bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
     {
-        var tokenSource = new CancellationTokenSource();
+        CancellationTokenSource tokenSource = new();
         tokenSource.CancelAfter(timeout);
         try
         {
@@ -75,7 +75,7 @@ public class SingleInstanceTests
     [Fact]
     public void MultipleDistinctServers()
     {
-        var pipeServers = new List<NamedPipeServerStream>();
+        List<NamedPipeServerStream> pipeServers = new();
         int n = 5;
         try
         {
@@ -181,7 +181,7 @@ public class SingleInstanceTests
 
         static IEnumerable<string> getStrings(int maxTotalLength)
         {
-            var r = new Random();
+            Random r = new();
             int n = 0;
             while (n < maxTotalLength)
             {
@@ -194,7 +194,7 @@ public class SingleInstanceTests
         static string getString(Random r)
         {
             int n = r.Next(1000);
-            var builder = new StringBuilder();
+            StringBuilder builder = new();
             for (int i = 0; i < n; i++)
             {
                 builder.Append((char)('a' + r.Next(26)));
@@ -225,7 +225,7 @@ public class SingleInstanceTests
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
             // Allow time for connection.
             Thread.Sleep(100);
@@ -244,7 +244,7 @@ public class SingleInstanceTests
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
             sendData(pipeName, Array.Empty<string>()); // valid
@@ -269,7 +269,7 @@ public class SingleInstanceTests
 
             using (pipeClient)
             {
-                var serializer = new DataContractSerializer(typeof(T));
+                DataContractSerializer serializer = new(typeof(T));
                 serializer.WriteObject(pipeClient, obj);
             }
         }
@@ -283,7 +283,7 @@ public class SingleInstanceTests
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
         using (pipeServer)
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
             // Send valid args.
@@ -332,7 +332,7 @@ public class SingleInstanceTests
         NamedPipeClientStream pipeClient = null;
         try
         {
-            var receivedArgs = new ReceivedArgs();
+            ReceivedArgs receivedArgs = new();
             Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
             using (pipeServer)
             {
@@ -358,7 +358,7 @@ public class SingleInstanceTests
 
     private static NamedPipeClientStream CreateClientConnection(string pipeName, int timeout)
     {
-        var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
+        NamedPipeClientStream pipeClient = new(".", pipeName, PipeDirection.Out);
         try
         {
             pipeClient.Connect(timeout);

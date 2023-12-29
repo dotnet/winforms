@@ -10,7 +10,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_Properties_GetEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         Assert.Equal(0, collection.Count);
         Assert.False(collection.IsReadOnly);
@@ -21,7 +21,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_Properties_GetNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -40,7 +40,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_Item_GetNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -60,7 +60,7 @@ public class DataGridViewSelectedRowCollectionTests
     [InlineData(1)]
     public void DataGridViewSelectedRowCollection_Item_GetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
@@ -70,7 +70,7 @@ public class DataGridViewSelectedRowCollectionTests
     [InlineData(2)]
     public void DataGridViewSelectedRowCollection_Item_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -86,7 +86,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_Clear_Invoke_ThrowsNotSupportedException()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         Assert.Throws<NotSupportedException>(() => collection.Clear());
     }
@@ -94,7 +94,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_Contains_InvokeNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -121,7 +121,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(Contains_TestData))]
     public void DataGridViewSelectedRowCollection_Contains_InvokeEmpty_ReturnsFalse(DataGridViewRow dataGridViewRow)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         Assert.False(collection.Contains(dataGridViewRow));
     }
@@ -129,7 +129,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_CopyTo_InvokeEmpty_Success()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         var array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 1);
@@ -139,7 +139,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_CopyTo_InvokeNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -167,7 +167,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(Insert_TestData))]
     public void DataGridViewSelectedRowCollection_Insert_Invoke_ThrowsNotSupportedException(int index, DataGridViewRow dataGridRow)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         Assert.Throws<NotSupportedException>(() => collection.Insert(index, dataGridRow));
     }
@@ -175,7 +175,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListProperties_GetEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Equal(0, iList.Count);
@@ -188,7 +188,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListProperties_GetNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -209,7 +209,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListItem_GetNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -230,7 +230,7 @@ public class DataGridViewSelectedRowCollectionTests
     [InlineData(1)]
     public void DataGridViewSelectedRowCollection_IListItem_GetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<ArgumentOutOfRangeException>("index", () => iList[index]);
@@ -241,7 +241,7 @@ public class DataGridViewSelectedRowCollectionTests
     [InlineData(2)]
     public void DataGridViewSelectedRowCollection_IListItem_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -266,7 +266,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(IListItem_SetTestData))]
     public void DataGridViewSelectedRowCollection_IListItem_Set_ThrowsNotSupportedException(int index, object value)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<NotSupportedException>(() => iList[index] = value);
@@ -283,7 +283,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(IListAdd_TestData))]
     public void DataGridViewSelectedRowCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<NotSupportedException>(() => iList.Add(value));
@@ -292,7 +292,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListClear_Invoke_ThrowsNotSupportedException()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<NotSupportedException>(() => iList.Clear());
@@ -301,7 +301,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListCopyTo_InvokeEmpty_Success()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         var array = new object[] { 1, 2, 3 };
@@ -312,7 +312,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListCopyTo_InvokeNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -339,7 +339,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(IListContains_TestData))]
     public void DataGridViewSelectedRowCollection_IListContains_InvokeEmpty_ReturnsFalse(object value)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.False(iList.Contains(value));
@@ -348,7 +348,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListContains_InvokeNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -369,7 +369,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListGetEnumerator_InvokeEmpty_Success()
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         IEnumerator enumerator = iList.GetEnumerator();
@@ -388,7 +388,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListGetEnumerator_InvokeNotEmpty_Success()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -429,7 +429,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(IListIndexOf_TestData))]
     public void DataGridViewSelectedRowCollection_IListIndexOf_InvokeEmpty_ReturnsMinusOne(object value)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Equal(-1, iList.IndexOf(value));
@@ -438,7 +438,7 @@ public class DataGridViewSelectedRowCollectionTests
     [WinFormsFact]
     public void DataGridViewSelectedRowCollection_IListIndexOf_InvokeNotEmpty_ReturnsExpected()
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 3
@@ -470,7 +470,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(IListInsert_TestData))]
     public void DataGridViewSelectedRowCollection_IListInsert_Invoke_ThrowsNotSupportedException(int index, object value)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<NotSupportedException>(() => iList.Insert(index, value));
@@ -487,7 +487,7 @@ public class DataGridViewSelectedRowCollectionTests
     [MemberData(nameof(IListRemove_TestData))]
     public void DataGridViewSelectedRowCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<NotSupportedException>(() => iList.Remove(value));
@@ -499,7 +499,7 @@ public class DataGridViewSelectedRowCollectionTests
     [InlineData(1)]
     public void DataGridViewSelectedRowCollection_IListRemoveAt_Invoke_ThrowsNotSupportedException(int index)
     {
-        using var control = new DataGridView();
+        using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
         Assert.Throws<NotSupportedException>(() => iList.RemoveAt(index));

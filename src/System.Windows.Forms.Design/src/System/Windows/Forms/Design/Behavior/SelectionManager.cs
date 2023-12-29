@@ -302,7 +302,7 @@ internal sealed class SelectionManager : IDisposable
     /// </summary>
     private Region DetermineRegionToRefresh(object? primarySelection, Rectangle[] previousSelectionBounds, Rectangle[] currentSelectionBounds)
     {
-        Region toRefresh = new Region(Rectangle.Empty);
+        Region toRefresh = new(Rectangle.Empty);
         Rectangle[] larger;
         Rectangle[] smaller;
         if (currentSelectionBounds.Length >= previousSelectionBounds.Length)

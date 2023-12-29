@@ -1154,12 +1154,7 @@ public abstract partial class ToolStripItem :
         }
         set
         {
-            if (value < ImageList.Indexer.DefaultIndex)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, ImageList.Indexer.DefaultIndex);
 
             ImageIndexer.Index = value;
             _state[s_stateInvalidMirroredImage] = true;
@@ -3655,7 +3650,7 @@ public abstract partial class ToolStripItem :
 
     IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
     {
-        List<Rectangle> neighbors = new List<Rectangle>(3);
+        List<Rectangle> neighbors = new(3);
         if (_parent is not null)
         {
             ToolStripItemCollection items = _parent.DisplayedItems;

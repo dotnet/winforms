@@ -44,7 +44,7 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
         // Get PropertyDescriptor
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(objectToChange)[propName]!;
         // Create a Context
-        EditorServiceContext context = new EditorServiceContext(designer, descriptor);
+        EditorServiceContext context = new(designer, descriptor);
         // Get Editor
         UITypeEditor editor = descriptor.GetEditor<UITypeEditor>()!;
         // Get value to edit

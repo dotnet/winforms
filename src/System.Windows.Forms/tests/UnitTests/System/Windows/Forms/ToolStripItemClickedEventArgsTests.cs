@@ -15,7 +15,7 @@ public class ToolStripItemClickedEventArgsTests
     [MemberData(nameof(Ctor_ToolStripItem_TestData))]
     public void Ctor_ToolStripItem(ToolStripItem clickedItem)
     {
-        var e = new ToolStripItemClickedEventArgs(clickedItem);
+        ToolStripItemClickedEventArgs e = new(clickedItem);
         Assert.Equal(clickedItem, e.ClickedItem);
     }
 }

@@ -184,8 +184,8 @@ public class ApplicationTests
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
-        Font font = new Font(new FontFamily("Arial"), 12f);
-        Font scaled = new Font(new FontFamily("Arial"), 16f);
+        Font font = new(new FontFamily("Arial"), 12f);
+        Font scaled = new(new FontFamily("Arial"), 16f);
         try
         {
             applicationTestAccessor.s_defaultFont = font;
@@ -211,8 +211,8 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_SetDefaultFont_AfterHandleCreated_InvalidOperationException()
     {
-        using var control = new Control();
-        var window = new NativeWindow();
+        using Control control = new();
+        NativeWindow window = new();
         window.AssignHandle(control.Handle);
 
         Assert.Throws<InvalidOperationException>(() => Application.SetDefaultFont(SystemFonts.CaptionFont));

@@ -174,7 +174,7 @@ public partial class DocumentDesigner
                 return null;
             }
 
-            FileInfo file = new FileInfo(path);
+            FileInfo file = new(path);
             string fullPath = file.FullName;
             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking: {fullPath}");
 
@@ -299,7 +299,7 @@ public partial class DocumentDesigner
                 object o = tlbKey.GetValue("")!;
 
                 // Try to get the TypeLib's Guid.
-                var tlbGuid = new Guid((string)o);
+                Guid tlbGuid = new((string)o);
                 Debug.Assert(!tlbGuid.Equals(Guid.Empty), $"No valid Guid found for: {controlKey}");
                 tlbKey.Close();
 

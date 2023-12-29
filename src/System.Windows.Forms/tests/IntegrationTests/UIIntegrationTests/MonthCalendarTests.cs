@@ -55,7 +55,7 @@ public class MonthCalendarTests : ControlTestBase
                                                 .KeyPress(VIRTUAL_KEY.VK_RIGHT)
                                                 .KeyPress(VIRTUAL_KEY.VK_RIGHT));
 
-            DateTime selectedDate = new DateTime(2020, 4, 10);
+            DateTime selectedDate = new(2020, 4, 10);
             SYSTEMTIME date = new()
             {
                 wYear = (ushort)selectedDate.Year,
@@ -144,7 +144,7 @@ public class MonthCalendarTests : ControlTestBase
             var centerOnScreen = calendar.PointToScreen(centerOfRect);
             await MoveMouseAsync(form, centerOnScreen);
 
-            TaskCompletionSource<VoidResult> dateChanged = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            TaskCompletionSource<VoidResult> dateChanged = new(TaskCreationOptions.RunContinuationsAsynchronously);
             calendar.DateChanged += (sender, e) => dateChanged.TrySetResult(default);
 
             await InputSimulator.SendAsync(

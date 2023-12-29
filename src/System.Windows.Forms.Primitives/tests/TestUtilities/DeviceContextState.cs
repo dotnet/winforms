@@ -89,7 +89,7 @@ internal unsafe class DeviceContextState
     /// <summary>
     ///  When using to parse a metafile, this is the list of known created objects.
     /// </summary>
-    public List<EmfRecord> GdiObjects { get; } = new List<EmfRecord>();
+    public List<EmfRecord> GdiObjects { get; } = new();
 
     /// <summary>
     ///  Adds the given object to <see cref="GdiObjects"/>.

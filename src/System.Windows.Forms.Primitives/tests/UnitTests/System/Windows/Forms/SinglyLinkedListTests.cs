@@ -8,7 +8,7 @@ public class SinglyLinkedListTests
     [Fact]
     public void AddFirst()
     {
-        var list = new SinglyLinkedList<int>();
+        SinglyLinkedList<int> list = new();
 
         Assert.Equal(0, list.Count);
         Assert.Null(list.First);
@@ -36,7 +36,7 @@ public class SinglyLinkedListTests
     [Fact]
     public void AddLast()
     {
-        var list = new SinglyLinkedList<int>();
+        SinglyLinkedList<int> list = new();
 
         Assert.Equal(0, list.Count);
         Assert.Null(list.First);
@@ -64,7 +64,7 @@ public class SinglyLinkedListTests
     [Fact]
     public void MoveToFront()
     {
-        var list = new SinglyLinkedList<int>();
+        SinglyLinkedList<int> list = new();
         list.AddAll(1, 2, 3, 4, 5);
 
         var enumerator = list.GetEnumerator();
@@ -103,7 +103,7 @@ public class SinglyLinkedListTests
     [Fact]
     public void MoveToFront_InvalidOperations()
     {
-        var list = new SinglyLinkedList<int>();
+        SinglyLinkedList<int> list = new();
         list.AddFirst(1);
 
         var enumerator = list.GetEnumerator();
@@ -116,7 +116,7 @@ public class SinglyLinkedListTests
     [Fact]
     public void RemoveCurrent()
     {
-        var list = new SinglyLinkedList<int>();
+        SinglyLinkedList<int> list = new();
         list.AddAll(1, 2, 3, 4, 5);
 
         var enumerator = list.GetEnumerator();
@@ -150,7 +150,7 @@ public class SinglyLinkedListTests
     [Fact]
     public void RemoveCurrent_InvalidOperations()
     {
-        var list = new SinglyLinkedList<int>();
+        SinglyLinkedList<int> list = new();
         list.AddFirst(1);
         list.AddLast(2);
 
@@ -174,7 +174,7 @@ internal static class ListExtensions
 
     public static List<T> WalkToList<T>(this SinglyLinkedList<T> linkedList)
     {
-        List<T> list = new List<T>(linkedList.Count);
+        List<T> list = new(linkedList.Count);
         var node = linkedList.First;
         while (node is not null)
         {
@@ -187,7 +187,7 @@ internal static class ListExtensions
 
     public static List<T> EnumerateToList<T>(this SinglyLinkedList<T> linkedList)
     {
-        List<T> list = new List<T>(linkedList.Count);
+        List<T> list = new(linkedList.Count);
         var enumerator = linkedList.GetEnumerator();
         while (enumerator.MoveNext())
         {

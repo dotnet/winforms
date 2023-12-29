@@ -16,7 +16,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Ctor_Default()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.NotNull(item.AccessibilityObject);
         Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
@@ -103,7 +103,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Ctor_String_Image_EventHandler_TestData))]
     public void ToolStripItem_Ctor_String_Image_EventHandler(string text, Image image, EventHandler onClick)
     {
-        using var item = new SubToolStripItem(text, image, onClick);
+        using SubToolStripItem item = new(text, image, onClick);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
         Assert.Null(item.AccessibleDescription);
@@ -180,7 +180,7 @@ public class ToolStripItemTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var item = new SubToolStripItem("text", null, onClick);
+        using SubToolStripItem item = new("text", null, onClick);
         item.PerformClick();
         Assert.Equal(1, callCount);
     }
@@ -198,7 +198,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Ctor_String_Image_EventHandler_String_TestData))]
     public void ToolStripItem_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name, string expectedName)
     {
-        using var item = new SubToolStripItem(text, image, onClick, name);
+        using SubToolStripItem item = new(text, image, onClick, name);
         Assert.NotNull(item.AccessibilityObject);
         Assert.Null(item.AccessibleDefaultActionDescription);
         Assert.Null(item.AccessibleDescription);
@@ -275,7 +275,7 @@ public class ToolStripItemTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var item = new SubToolStripItem("text", null, onClick, "name");
+        using SubToolStripItem item = new("text", null, onClick, "name");
         item.PerformClick();
         Assert.Equal(1, callCount);
     }
@@ -291,7 +291,7 @@ public class ToolStripItemTests
     [MemberData(nameof(AccessibilityObject_Get_TestData))]
     public void ToolStripItem_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result)
     {
-        using var item = new CustomCreateAccessibilityInstanceToolStripItem
+        using CustomCreateAccessibilityInstanceToolStripItem item = new()
         {
             CreateAccessibilityInstanceResult = result
         };
@@ -310,7 +310,7 @@ public class ToolStripItemTests
     [StringData]
     public void ToolStripItem_AccessibleDefaultActionDescription_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AccessibleDefaultActionDescription = value
         };
@@ -325,7 +325,7 @@ public class ToolStripItemTests
     [StringData]
     public void ToolStripItem_AccessibleDescription_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AccessibleDescription = value
         };
@@ -340,7 +340,7 @@ public class ToolStripItemTests
     [StringData]
     public void ToolStripItem_AccessibleName_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AccessibleName = value
         };
@@ -355,7 +355,7 @@ public class ToolStripItemTests
     [EnumData<AccessibleRole>]
     public void ToolStripItem_AccessibleRole_Set_GetReturnsExpected(AccessibleRole value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AccessibleRole = value
         };
@@ -370,7 +370,7 @@ public class ToolStripItemTests
     [InvalidEnumData<AccessibleRole>]
     public void ToolStripItem_AccessibleRole_SetInvalid_ThrowsInvalidEnumArgumentException(AccessibleRole value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.AccessibleRole = value);
     }
 
@@ -378,7 +378,7 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemAlignment>]
     public void ToolStripItem_Alignment_Set_GetReturnsExpected(ToolStripItemAlignment value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         item.Alignment = value;
         Assert.Equal(value, item.Alignment);
@@ -392,8 +392,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemAlignment>]
     public void ToolStripItem_Alignment_SetWithParent_GetReturnsExpected(ToolStripItemAlignment value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -417,8 +417,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemAlignment.Right, 1)]
     public void ToolStripItem_Alignment_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemAlignment value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -469,8 +469,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemAlignment>]
     public void ToolStripItem_Alignment_SetWithOwner_GetReturnsExpected(ToolStripItemAlignment value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -501,8 +501,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemAlignment>]
     public void ToolStripItem_Alignment_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemAlignment value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -546,7 +546,7 @@ public class ToolStripItemTests
     [InvalidEnumData<ToolStripItemAlignment>]
     public void ToolStripItem_Alignment_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemAlignment value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.Alignment = value);
     }
 
@@ -554,7 +554,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AllowDrop_Set_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AllowDrop = value
         };
@@ -573,8 +573,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AllowDrop_SetWithOwner_GetReturnsExpected(bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             AllowDrop = value
@@ -600,8 +600,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AllowDrop_SetWithOwnerWithHandle_GetReturnsExpected(bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -644,8 +644,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AllowDrop_SetWithParent_GetReturnsExpected(bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             AllowDrop = value
@@ -671,8 +671,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AllowDrop_SetWithParentWithHandle_GetReturnsExpected(bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -715,11 +715,11 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AllowDrop_SetWithParentWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             AllowDrop = true
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             AllowDrop = value
@@ -738,8 +738,8 @@ public class ToolStripItemTests
     [Fact] // x-thread
     public void Control_AllowDrop_SetWithParentWithHandleNonSTAThread_ThrowsInvalidOperationException()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -781,7 +781,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Anchor_Set_TestData))]
     public void ToolStripItem_Anchor_Set_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Anchor = value
         };
@@ -796,8 +796,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Anchor_Set_TestData))]
     public void ToolStripItem_Anchor_SetWithOwner_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -828,8 +828,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Anchor_Set_TestData))]
     public void ToolStripItem_Anchor_SetWithParent_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -860,7 +860,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AutoSize = value
         };
@@ -880,8 +880,8 @@ public class ToolStripItemTests
     [InlineData(false, 1)]
     public void ToolStripItem_AutoSize_SetWithOwner_GetReturnsExpected(bool value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -926,8 +926,8 @@ public class ToolStripItemTests
     [InlineData(false, 1)]
     public void ToolStripItem_AutoSize_SetWithOwnerWithHandle_GetReturnsExpected(bool value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -987,8 +987,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AutoSize_SetWithParent_GetReturnsExpected(bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1025,8 +1025,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AutoSize_SetWithParentWithHandle_GetReturnsExpected(bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1078,7 +1078,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_AutoToolTip_GetWithDefaultAutoToolTip_ReturnsExpected()
     {
-        using var item = new CustomDefaultAutoToolTipToolStripItem();
+        using CustomDefaultAutoToolTipToolStripItem item = new();
         Assert.True(item.AutoToolTip);
     }
 
@@ -1091,7 +1091,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_AutoToolTip_Set_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AutoToolTip = value
         };
@@ -1110,7 +1110,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_Set_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1137,7 +1137,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_SetDesignMode_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -1147,7 +1147,7 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1175,7 +1175,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_Available_SetSelected_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.Select();
         Assert.True(item.Selected);
 
@@ -1201,8 +1201,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_SetWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1234,7 +1234,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_SetDesignModeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -1244,8 +1244,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1290,8 +1290,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Available_SetWithOwnerWithHandle_TestData))]
     public void ToolStripItem_Available_SetWithOwnerWithHandle_GetReturnsExpected(bool enabled, Image image, bool value, int expectedInvalidatedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1339,8 +1339,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_SetWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1372,7 +1372,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_SetDesignModeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -1382,8 +1382,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1416,8 +1416,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Available_SetWithParentWithHandle_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -1464,7 +1464,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Available_SetWithHandler_CallsAvailableChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1499,7 +1499,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Available_SetWithHandler_CallsVisibleChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1534,11 +1534,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_BackColor_GetWithOwner_ReturnsExpected()
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             BackColor = Color.Red
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1548,11 +1548,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_BackColor_GetWithParent_ReturnsExpected()
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             BackColor = Color.Red
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1563,7 +1563,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void ToolStripItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             BackColor = value
         };
@@ -1578,8 +1578,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void ToolStripItem_BackColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1598,8 +1598,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void ToolStripItem_BackColor_SetWithOwnerWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1631,8 +1631,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
     public void ToolStripItem_BackColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1657,8 +1657,8 @@ public class ToolStripItemTests
     [MemberData(nameof(BackColor_SetWithParentWithHandle_TestData))]
     public void ToolStripItem_BackColor_SetWithParentWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1689,7 +1689,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_BackColor_SetWithHandler_CallsBackColorChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1725,7 +1725,7 @@ public class ToolStripItemTests
     public void ToolStripItem_BackColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.BackColor)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.BackColor = Color.Red;
@@ -1741,7 +1741,7 @@ public class ToolStripItemTests
     public void ToolStripItem_BackColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.BackColor)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.BackColor = Color.Red;
@@ -1765,7 +1765,7 @@ public class ToolStripItemTests
     [MemberData(nameof(BackgroundImage_Set_TestData))]
     public void ToolStripItem_BackgroundImage_Set_GetReturnsExpected(Image value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             BackgroundImage = value
         };
@@ -1780,8 +1780,8 @@ public class ToolStripItemTests
     [MemberData(nameof(BackgroundImage_Set_TestData))]
     public void ToolStripItem_BackgroundImage_SetWithOwner_GetReturnsExpected(Image value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1800,8 +1800,8 @@ public class ToolStripItemTests
     [MemberData(nameof(BackgroundImage_Set_TestData))]
     public void ToolStripItem_BackgroundImage_SetWithOwnerWithHandle_GetReturnsExpected(Image value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1833,8 +1833,8 @@ public class ToolStripItemTests
     [MemberData(nameof(BackgroundImage_Set_TestData))]
     public void ToolStripItem_BackgroundImage_SetWithParent_GetReturnsExpected(Image value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1861,8 +1861,8 @@ public class ToolStripItemTests
     [MemberData(nameof(BackgroundImage_SetWithParentWithHandle_TestData))]
     public void ToolStripItem_BackgroundImage_SetWithParentWithHandle_GetReturnsExpected(Image value, int expectedInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1894,7 +1894,7 @@ public class ToolStripItemTests
     [EnumData<ImageLayout>]
     public void ToolStripItem_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             BackgroundImageLayout = value
         };
@@ -1909,8 +1909,8 @@ public class ToolStripItemTests
     [EnumData<ImageLayout>]
     public void ToolStripItem_BackgroundImageLayout_SetWithOwner_GetReturnsExpected(ImageLayout value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1929,8 +1929,8 @@ public class ToolStripItemTests
     [EnumData<ImageLayout>]
     public void ToolStripItem_BackgroundImageLayout_SetWithOwnerWithHandle_GetReturnsExpected(ImageLayout value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -1962,8 +1962,8 @@ public class ToolStripItemTests
     [EnumData<ImageLayout>]
     public void ToolStripItem_BackgroundImageLayout_SetWithParent_GetReturnsExpected(ImageLayout value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -1986,8 +1986,8 @@ public class ToolStripItemTests
     [InlineData(ImageLayout.Zoom, 1)]
     public void ToolStripItem_BackgroundImageLayout_SetWithParentWithHandle_GetReturnsExpected(ImageLayout value, int expectedInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2019,7 +2019,7 @@ public class ToolStripItemTests
     [InvalidEnumData<ImageLayout>]
     public void ToolStripItem_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.BackgroundImageLayout = value);
     }
 
@@ -2036,7 +2036,7 @@ public class ToolStripItemTests
     [MemberData(nameof(ContentRectangle_GetWithPadding_ReturnsExpected))]
     public void ToolStripItem_ContentRectangle_GetWithLargePadding_ReturnsExpected(Padding padding, Rectangle expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Padding = padding
         };
@@ -2046,8 +2046,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_DefaultMargin_GetWithToolStripOwner_ReturnsExpected()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2057,8 +2057,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_DefaultMargin_GetWithToolStripParent_ReturnsExpected()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2068,8 +2068,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_DefaultMargin_GetWithStatusStripOwner_ReturnsExpected()
     {
-        using var owner = new StatusStrip();
-        using var item = new SubToolStripItem
+        using StatusStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2079,8 +2079,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_DefaultMargin_GetWithStatusStripParent_ReturnsExpected()
     {
-        using var parent = new StatusStrip();
-        using var item = new SubToolStripItem
+        using StatusStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2090,7 +2090,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_DisplayStyle_GetWithCustomDisplayStyle_ReturnsExpected()
     {
-        using var item = new CustomDefaultDisplayStyleToolStripItem();
+        using CustomDefaultDisplayStyleToolStripItem item = new();
         Assert.Equal(ToolStripItemDisplayStyle.Text, item.DisplayStyle);
     }
 
@@ -2103,7 +2103,7 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemDisplayStyle>]
     public void ToolStripItem_DisplayStyle_Set_GetReturnsExpected(ToolStripItemDisplayStyle value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             DisplayStyle = value
         };
@@ -2121,8 +2121,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemDisplayStyle.ImageAndText, 0)]
     public void ToolStripItem_DisplayStyle_SetWithOwner_GetReturnsExpected(ToolStripItemDisplayStyle value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2162,8 +2162,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemDisplayStyle.ImageAndText, 0)]
     public void ToolStripItem_DisplayStyle_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2214,8 +2214,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemDisplayStyle>]
     public void ToolStripItem_DisplayStyle_SetWithParent_GetReturnsExpected(ToolStripItemDisplayStyle value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2238,8 +2238,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemDisplayStyle>]
     public void ToolStripItem_DisplayStyle_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2275,7 +2275,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_DisplayStyle_SetWithHandler_CallsDisplayStyleChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2310,7 +2310,7 @@ public class ToolStripItemTests
     [InvalidEnumData<ToolStripItemDisplayStyle>]
     public void ToolStripItem_DisplayStyle_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemDisplayStyle value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.DisplayStyle = value);
     }
 
@@ -2318,7 +2318,7 @@ public class ToolStripItemTests
     public void ToolStripItem_DisplayStyle_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.DisplayStyle)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.DisplayStyle = ToolStripItemDisplayStyle.Text;
@@ -2334,7 +2334,7 @@ public class ToolStripItemTests
     public void ToolStripItem_DisplayStyle_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.DisplayStyle)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.DisplayStyle = ToolStripItemDisplayStyle.Text;
@@ -2350,7 +2350,7 @@ public class ToolStripItemTests
     [EnumData<DockStyle>]
     public void ToolStripItem_Dock_Set_GetReturnsExpected(DockStyle value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Dock = value
         };
@@ -2365,8 +2365,8 @@ public class ToolStripItemTests
     [EnumData<DockStyle>]
     public void ToolStripItem_Dock_SetWithOwner_GetReturnsExpected(DockStyle value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2398,8 +2398,8 @@ public class ToolStripItemTests
     [EnumData<DockStyle>]
     public void ToolStripItem_Dock_SetWithParent_GetReturnsExpected(DockStyle value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2431,7 +2431,7 @@ public class ToolStripItemTests
     [InvalidEnumData<DockStyle>]
     public void ToolStripItem_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.Dock = value);
     }
 
@@ -2439,7 +2439,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_DoubleClickEnabled_Set_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             DoubleClickEnabled = value
         };
@@ -2457,11 +2457,11 @@ public class ToolStripItemTests
     [InlineData(false, false, false)]
     public void ToolStripItem_Enabled_GetWithOwner_ReturnsExpected(bool ownerEnabled, bool enabled, bool expected)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             Enabled = ownerEnabled
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2479,11 +2479,11 @@ public class ToolStripItemTests
     [InlineData(false, false, false)]
     public void ToolStripItem_Enabled_GetWithParent_ReturnsExpected(bool parentEnabled, bool enabled, bool expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             Enabled = parentEnabled
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2510,7 +2510,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_Set_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2531,7 +2531,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_Enabled_SetSelected_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.Select();
         Assert.True(item.Selected);
 
@@ -2553,7 +2553,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Enabled_SetPressed_GetReturnsExpected()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -2573,7 +2573,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetDesignMode_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -2583,7 +2583,7 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2605,8 +2605,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetWithOwner_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2632,8 +2632,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetWithImageWithOwner_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2659,7 +2659,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetDesignModeWithOwner_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -2669,8 +2669,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2697,8 +2697,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetWithOwnerWithHandle_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2740,8 +2740,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetWithParent_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2767,8 +2767,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetWithImageWithParent_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2794,7 +2794,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_Set_TestData))]
     public void ToolStripItem_Enabled_SetDesignModeWithParent_GetReturnsExpected(bool visible, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -2804,8 +2804,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2844,8 +2844,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Enabled_SetWithParentWithHandle_TestData))]
     public void ToolStripItem_Enabled_SetWithParentWithHandle_GetReturnsExpected(bool visible, Image image, bool value, int expectedInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Visible = visible,
             Image = image,
@@ -2886,7 +2886,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Enabled_SetWithHandler_CallsEnabledChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2920,12 +2920,12 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Font_GetWithParent_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var parent = new ToolStrip
+        using Font font = new("Arial", 8.25f);
+        using ToolStrip parent = new()
         {
             Font = font
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -2938,12 +2938,12 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Font_GetWithOwner_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var owner = new ToolStrip
+        using Font font = new("Arial", 8.25f);
+        using ToolStrip owner = new()
         {
             Font = font
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -2963,7 +2963,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Font_Set_TestData))]
     public void ToolStripItem_Font_Set_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             DisplayStyle = displayStyle
         };
@@ -2993,8 +2993,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Font_SetWithOwner_TestData))]
     public void ToolStripItem_Font_SetWithOwner_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -3034,8 +3034,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Font_SetWithOwner_TestData))]
     public void ToolStripItem_Font_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -3087,8 +3087,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Font_Set_TestData))]
     public void ToolStripItem_Font_SetWithParent_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -3121,8 +3121,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Font_Set_TestData))]
     public void ToolStripItem_Font_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -3167,10 +3167,10 @@ public class ToolStripItemTests
     public void ToolStripItem_Font_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Font)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
-        using var font = new Font("Arial", 8.25f);
+        using Font font = new("Arial", 8.25f);
         item.Font = font;
         Assert.Same(font, item.Font);
         Assert.True(property.CanResetValue(item));
@@ -3196,10 +3196,10 @@ public class ToolStripItemTests
     public void ToolStripItem_Font_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Font)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
-        using var font = new Font("Arial", 8.25f);
+        using Font font = new("Arial", 8.25f);
         item.Font = font;
         Assert.Same(font, item.Font);
         Assert.True(property.ShouldSerializeValue(item));
@@ -3224,11 +3224,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ForeColor_GetWithOwner_ReturnsExpected()
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ForeColor = Color.Red
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -3238,11 +3238,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ForeColor_GetWithParent_ReturnsExpected()
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ForeColor = Color.Red
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -3253,7 +3253,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStripItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ForeColor = value
         };
@@ -3268,8 +3268,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStripItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -3288,8 +3288,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStripItem_ForeColor_SetWithOwnerWithHandle_GetReturnsExpected(Color value, Color expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -3321,8 +3321,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStripItem_ForeColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -3350,8 +3350,8 @@ public class ToolStripItemTests
     [MemberData(nameof(ForeColor_SetWithParentWithHandle_TestData))]
     public void ToolStripItem_ForeColor_SetWithParentWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -3382,7 +3382,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3418,7 +3418,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ForeColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ForeColor)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.ForeColor = Color.Red;
@@ -3434,7 +3434,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ForeColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ForeColor)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.ForeColor = Color.Red;
@@ -3450,7 +3450,7 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_Height_Set_GetReturnsExpected(int value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int locationChangedCallCount = 0;
         item.LocationChanged += (sender, e) => locationChangedCallCount++;
 
@@ -3468,8 +3468,8 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_Height_SetWithOwner_GetReturnsExpected(int value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -3504,8 +3504,8 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_Height_SetWithOwnerWithHandle_GetReturnsExpected(int value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -3556,8 +3556,8 @@ public class ToolStripItemTests
     [InlineData(23, 0)]
     public void ToolStripItem_Height_SetWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -3602,8 +3602,8 @@ public class ToolStripItemTests
     [InlineData(23, 0)]
     public void ToolStripItem_Height_SetWithParentWithHandle_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -3664,11 +3664,11 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_GetWithOwner_TestData))]
     public void ToolStripItem_Image_GetWithOwner_ReturnsNull(ImageList imageList)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -3681,14 +3681,14 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Image_GetWithValidImageIndexWithOwner_ReturnsExpected()
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = 0,
             Owner = owner
@@ -3702,14 +3702,14 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Image_GetWithInvalidImageIndexWithOwner_ReturnsExpected()
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = 1,
             Owner = owner
@@ -3730,11 +3730,11 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_GetWithParent_TestData))]
     public void ToolStripItem_Image_GetWithParent_ReturnsNull(ImageList imageList)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -3749,14 +3749,14 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_Image_GetWithImageIndexWithParent_ReturnsExpected(int imageIndex)
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = imageIndex,
             Parent = parent
@@ -3782,7 +3782,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_Set_TestData))]
     public void ToolStripItem_Image_Set_GetReturnsExpected(Color imageTransparentColor, Image value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageTransparentColor = imageTransparentColor
         };
@@ -3812,7 +3812,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_SetWithImageIndex_TestData))]
     public void ToolStripItem_Image_SetWithImageIndex_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedImageIndex)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageTransparentColor = imageTransparentColor,
             ImageIndex = 1
@@ -3832,8 +3832,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_Set_TestData))]
     public void ToolStripItem_Image_SetWithNonNullOldValue_GetReturnsExpected(Color imageTransparentColor, Image value)
     {
-        using var oldValue = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap oldValue = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = oldValue,
             ImageTransparentColor = imageTransparentColor
@@ -3853,8 +3853,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_SetWithImageIndex_TestData))]
     public void ToolStripItem_Image_SetWithNonNullOldValueWithImageIndex_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedImageIndex)
     {
-        using var oldValue = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap oldValue = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = oldValue,
             ImageTransparentColor = imageTransparentColor,
@@ -3886,8 +3886,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_SetWithOwner_TestData))]
     public void ToolStripItem_Image_SetWithOwner_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             ImageTransparentColor = imageTransparentColor,
             Owner = owner
@@ -3931,8 +3931,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_SetWithOwner_TestData))]
     public void ToolStripItem_Image_SetWithOwnerWithHandle_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             ImageTransparentColor = imageTransparentColor,
             Owner = owner
@@ -3989,8 +3989,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_Set_TestData))]
     public void ToolStripItem_Image_SetWithParent_GetReturnsExpected(Color imageTransparentColor, Image value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             ImageTransparentColor = imageTransparentColor,
             Parent = parent
@@ -4024,8 +4024,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Image_Set_TestData))]
     public void ToolStripItem_Image_SetWithParentWithHandle_GetReturnsExpected(Color imageTransparentColor, Image value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             ImageTransparentColor = imageTransparentColor,
             Parent = parent
@@ -4072,10 +4072,10 @@ public class ToolStripItemTests
     public void ToolStripItem_Image_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         item.Image = image;
         Assert.Same(image, item.Image);
         Assert.True(property.CanResetValue(item));
@@ -4089,21 +4089,21 @@ public class ToolStripItemTests
     public void ToolStripItem_Image_ResetValueWithOwnerWithImageList_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = 0,
             Owner = owner
         };
         Assert.False(property.CanResetValue(item));
 
-        using var otherImage = new Bitmap(10, 10);
+        using Bitmap otherImage = new(10, 10);
         item.Image = otherImage;
         Assert.Same(otherImage, item.Image);
         Assert.True(property.CanResetValue(item));
@@ -4117,10 +4117,10 @@ public class ToolStripItemTests
     public void ToolStripItem_Image_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         item.Image = image;
         Assert.Same(image, item.Image);
         Assert.True(property.ShouldSerializeValue(item));
@@ -4134,21 +4134,21 @@ public class ToolStripItemTests
     public void ToolStripItem_Image_ShouldSerializeValueWithOwnerWithImageList_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = 0,
             Owner = owner
         };
         Assert.False(property.ShouldSerializeValue(item));
 
-        using var otherImage = new Bitmap(10, 10);
+        using Bitmap otherImage = new(10, 10);
         item.Image = otherImage;
         Assert.Same(otherImage, item.Image);
         Assert.True(property.ShouldSerializeValue(item));
@@ -4162,7 +4162,7 @@ public class ToolStripItemTests
     [EnumData<ContentAlignment>]
     public void ToolStripItem_ImageAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageAlign = value
         };
@@ -4185,8 +4185,8 @@ public class ToolStripItemTests
     [InlineData(ContentAlignment.BottomRight, 1)]
     public void ToolStripItem_ImageAlign_SetWithOwner_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4232,8 +4232,8 @@ public class ToolStripItemTests
     [InlineData(ContentAlignment.BottomRight, 1)]
     public void ToolStripItem_ImageAlign_SetWithOwnerWithHandle_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4284,8 +4284,8 @@ public class ToolStripItemTests
     [EnumData<ContentAlignment>]
     public void ToolStripItem_ImageAlign_SetWithParent_GetReturnsExpected(ContentAlignment value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -4316,8 +4316,8 @@ public class ToolStripItemTests
     [EnumData<ContentAlignment>]
     public void ToolStripItem_ImageAlign_SetWithParentWithHandle_GetReturnsExpected(ContentAlignment value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -4363,7 +4363,7 @@ public class ToolStripItemTests
     [InlineData((ContentAlignment)int.MinValue)]
     public void ToolStripItem_ImageAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.ImageAlign = value);
     }
 
@@ -4373,7 +4373,7 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_Set_GetReturnsExpected(int value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = value
         };
@@ -4394,8 +4394,8 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithImage_GetReturnsExpected(int value)
     {
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image,
             ImageIndex = value
@@ -4419,7 +4419,7 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithImageKey_GetReturnsExpected(int value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageKey = "ImageKey",
             ImageIndex = value
@@ -4443,8 +4443,8 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithOwner_GetReturnsExpected(int value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4486,14 +4486,14 @@ public class ToolStripItemTests
     [InlineData(1, 0, false)]
     public void ToolStripItem_ImageIndex_SetWithOwnerWithImageList_GetReturnsExpected(int value, int expected, bool expectedHasImage)
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4537,8 +4537,8 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithOwnerWithHandle_GetReturnsExpected(int value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4593,8 +4593,8 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithParent_GetReturnsExpected(int value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -4629,14 +4629,14 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithParentWithImageList_GetReturnsExpected(int value)
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -4671,8 +4671,8 @@ public class ToolStripItemTests
     [InlineData(1)]
     public void ToolStripItem_ImageIndex_SetWithParentWithHandle_GetReturnsExpected(int value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -4717,7 +4717,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => item.ImageIndex = -2);
     }
 
@@ -4725,7 +4725,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageIndex_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.ImageIndex = -1;
@@ -4746,8 +4746,8 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageIndex_ResetValueWithImage_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -4771,14 +4771,14 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageIndex_ResetValueWithOwnerWithImageList_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4805,7 +4805,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageIndex_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
         item.ImageIndex = -1;
         Assert.Equal(-1, item.ImageIndex);
@@ -4825,8 +4825,8 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageIndex_ShouldSerializeValueWithImage_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -4849,14 +4849,14 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageIndex_ShouldSerializeValueWithOwnerWithImageList_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4883,7 +4883,7 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_Set_GetReturnsExpected(string value, string expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageKey = value
         };
@@ -4902,8 +4902,8 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithImage_GetReturnsExpected(string value, string expected)
     {
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image,
             ImageKey = value
@@ -4923,7 +4923,7 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageIndex = 1,
             ImageKey = value
@@ -4943,8 +4943,8 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithOwner_GetReturnsExpected(string value, string expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -4988,14 +4988,14 @@ public class ToolStripItemTests
     [InlineData("OtherImage", "OtherImage", false)]
     public void ToolStripItem_ImageKey_SetWithOwnerWithImageList_GetReturnsExpected(string value, string expected, bool expectedHasImage)
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add("Image", image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5037,8 +5037,8 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithOwnerWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5091,8 +5091,8 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithParent_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5125,14 +5125,14 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithParentWithImageList_GetReturnsExpected(string value, string expected)
     {
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5165,8 +5165,8 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_ImageKey_SetWithParentWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5212,7 +5212,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageKey_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         // Set null.
@@ -5239,8 +5239,8 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageKey_ResetValueWithImage_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -5270,14 +5270,14 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageKey_ResetValueWithOwnerWithImageList_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add("Image", image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5304,7 +5304,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageKey_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         // Set null.
@@ -5331,8 +5331,8 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageKey_ShouldSerializeValueWithImage_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -5362,14 +5362,14 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageKey_ShouldSerializeValueWithOwnerWithImageList_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add("Image", image);
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ImageList = imageList
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5396,7 +5396,7 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemImageScaling>]
     public void ToolStripItem_ImageScaling_Set_GetReturnsExpected(ToolStripItemImageScaling value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ImageScaling = value
         };
@@ -5412,8 +5412,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemImageScaling.SizeToFit, 0)]
     public void ToolStripItem_ImageScaling_SetWithOwner_GetReturnsExpected(ToolStripItemImageScaling value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5452,8 +5452,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemImageScaling.SizeToFit, 0)]
     public void ToolStripItem_ImageScaling_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemImageScaling value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5504,8 +5504,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemImageScaling>]
     public void ToolStripItem_ImageScaling_SetWithParent_GetReturnsExpected(ToolStripItemImageScaling value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5536,8 +5536,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemImageScaling>]
     public void ToolStripItem_ImageScaling_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemImageScaling value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5581,7 +5581,7 @@ public class ToolStripItemTests
     [InvalidEnumData<ToolStripItemImageScaling>]
     public void ToolStripItem_ImageScaling_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemImageScaling value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.ImageScaling = value);
     }
 
@@ -5600,7 +5600,7 @@ public class ToolStripItemTests
     [MemberData(nameof(ImageTransparentColor_Set_TestData))]
     public void ToolStripItem_ImageTransparentColor_Set_GetReturnsExpected(Image image, Color value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -5617,7 +5617,7 @@ public class ToolStripItemTests
     [MemberData(nameof(ImageTransparentColor_Set_TestData))]
     public void ToolStripItem_ImageTransparentColor_SetWithCustomOldValue_GetReturnsExpected(Image image, Color value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Image = image,
             ImageTransparentColor = Color.Red
@@ -5635,8 +5635,8 @@ public class ToolStripItemTests
     [MemberData(nameof(ImageTransparentColor_Set_TestData))]
     public void ToolStripItem_ImageTransparentColor_SetWithOwner_GetReturnsExpected(Image image, Color value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             Image = image
@@ -5668,8 +5668,8 @@ public class ToolStripItemTests
     [MemberData(nameof(ImageTransparentColor_SetWithOwnerWithHandle_TestData))]
     public void ToolStripItem_ImageTransparentColor_SetWithOwnerWithHandle_GetReturnsExpected(Image image, Color value, int expectedInvalidatedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             Image = image
@@ -5702,8 +5702,8 @@ public class ToolStripItemTests
     [MemberData(nameof(ImageTransparentColor_Set_TestData))]
     public void ToolStripItem_ImageTransparentColor_SetWithParent_GetReturnsExpected(Image image, Color value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             Image = image
@@ -5735,8 +5735,8 @@ public class ToolStripItemTests
     [MemberData(nameof(ImageTransparentColor_SetWithParentWithHandle_TestData))]
     public void ToolStripItem_ImageTransparentColor_SetWithParentWithHandle_GetReturnsExpected(Image image, Color value, int expectedParentInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             Image = image
@@ -5769,7 +5769,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageTransparentColor_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageTransparentColor)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.ImageTransparentColor = Color.Red;
@@ -5785,7 +5785,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ImageTransparentColor_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageTransparentColor)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.ImageTransparentColor = Color.Red;
@@ -5800,8 +5800,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_IsOnDropDown_GetWithOwner_ReturnsFalse()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5811,8 +5811,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_IsOnDropDown_GetWithDropDownOwner_ReturnsTrue()
     {
-        using var owner = new ToolStripDropDown();
-        using var item = new SubToolStripItem
+        using ToolStripDropDown owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5822,11 +5822,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_IsOnDropDown_GetWithOverflowingOwner_ReturnsTrue()
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             Size = new Size(1, 2)
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5838,8 +5838,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_IsOnDropDown_GetWithParent_ReturnsFalse()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5849,8 +5849,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_IsOnDropDown_GetWithDropDownParent_ReturnsTrue()
     {
-        using var parent = new ToolStripDropDown();
-        using var item = new SubToolStripItem
+        using ToolStripDropDown parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5860,11 +5860,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_IsOnDropDown_GetWithOverflowingParent_ReturnsFalse()
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             Size = new Size(1, 2)
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -5876,7 +5876,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Margin_GetWithDefaultMargin_ReturnsExpected()
     {
-        using var item = new CustomDefaultMarginToolStripItem();
+        using CustomDefaultMarginToolStripItem item = new();
         Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
     }
 
@@ -5889,7 +5889,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStripItem_Margin_Set_GetReturnsExpected(Padding value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Margin = value
         };
@@ -5904,8 +5904,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStripItem_Margin_SetWithOwner_GetReturnsExpected(Padding value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5943,8 +5943,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStripItem_Margin_SetWithOwnerWithHandle_GetReturnsExpected(Padding value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -5995,8 +5995,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStripItem_Margin_SetWithParent_GetReturnsExpected(Padding value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6034,8 +6034,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStripItem_Margin_SetWithParentWithHandle_GetReturnsExpected(Padding value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6086,7 +6086,7 @@ public class ToolStripItemTests
     public void ToolStripItem_Margin_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Margin)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.Margin = new Padding(1, 2, 3, 4);
@@ -6102,7 +6102,7 @@ public class ToolStripItemTests
     public void ToolStripItem_Margin_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Margin)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.Margin = new Padding(1, 2, 3, 4);
@@ -6118,7 +6118,7 @@ public class ToolStripItemTests
     [EnumData<MergeAction>]
     public void ToolStripItem_MergeAction_Set_GetReturnsExpected(MergeAction value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             MergeAction = value
         };
@@ -6133,7 +6133,7 @@ public class ToolStripItemTests
     [InvalidEnumData<MergeAction>]
     public void ToolStripItem_MergeAction_SetInvalid_ThrowsInvalidEnumArgumentException(MergeAction value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.MergeAction = value);
     }
 
@@ -6141,7 +6141,7 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_MergeIndex_Set_GetReturnsExpected(int value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             MergeIndex = value
         };
@@ -6156,14 +6156,14 @@ public class ToolStripItemTests
     [NormalizedStringData]
     public void ToolStripItem_Name_GetWithSite_ReturnsExpected(string siteName, string expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns(siteName);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Site = mockSite.Object
         };
@@ -6179,7 +6179,7 @@ public class ToolStripItemTests
     [StringData]
     public void ToolStripItem_Name_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Name = value
         };
@@ -6194,7 +6194,7 @@ public class ToolStripItemTests
     [StringData]
     public void ToolStripItem_Name_SetDesignMode_Nop(string value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("name");
@@ -6204,7 +6204,7 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Site = mockSite.Object
         };
@@ -6217,7 +6217,7 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemOverflow>]
     public void ToolStripItem_Overflow_Set_GetReturnsExpected(ToolStripItemOverflow value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Overflow = value
         };
@@ -6236,8 +6236,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemOverflow.AsNeeded, ToolStripItemPlacement.None, 0)]
     public void ToolStripItem_Overflow_SetWithOwner_GetReturnsExpected(ToolStripItemOverflow value, ToolStripItemPlacement expectedPlacement, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6281,8 +6281,8 @@ public class ToolStripItemTests
     [InlineData(ToolStripItemOverflow.AsNeeded, ToolStripItemPlacement.None, 0)]
     public void ToolStripItem_Overflow_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemOverflow value, ToolStripItemPlacement expectedPlacement, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6337,8 +6337,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemOverflow>]
     public void ToolStripItem_Overflow_SetWithParent_GetReturnsExpected(ToolStripItemOverflow value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6373,8 +6373,8 @@ public class ToolStripItemTests
     [EnumData<ToolStripItemOverflow>]
     public void ToolStripItem_Overflow_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemOverflow value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6422,17 +6422,17 @@ public class ToolStripItemTests
     [InvalidEnumData<ToolStripItemOverflow>]
     public void ToolStripItem_Overflow_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemOverflow value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.Overflow = value);
     }
 
     [WinFormsFact]
     public void ToolStripItem_Owner_Set_GetReturnsExpected()
     {
-        using var owner = new ToolStrip();
-        using var otherOwner = new ToolStrip();
-        using var statusOwner = new StatusStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using ToolStrip otherOwner = new();
+        using StatusStrip statusOwner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6478,10 +6478,10 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Owner_SetWithMargin_GetReturnsExpected()
     {
-        using var owner = new ToolStrip();
-        using var otherOwner = new ToolStrip();
-        using var statusOwner = new StatusStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using ToolStrip otherOwner = new();
+        using StatusStrip statusOwner = new();
+        using SubToolStripItem item = new()
         {
             Margin = new Padding(1, 2, 3, 4),
             Owner = owner
@@ -6537,11 +6537,11 @@ public class ToolStripItemTests
     [InlineData(RightToLeft.Inherit, RightToLeft.Inherit, RightToLeft.No, 1)]
     public void ToolStripItem_Owner_SetWithRightToLeft_CallsRightToLeftChanged(RightToLeft ownerRightToLeft, RightToLeft rightToLeft, RightToLeft expectedRightToLeft, int expectedRightToLeftChangedCallCount)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             RightToLeft = ownerRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             RightToLeft = rightToLeft
         };
@@ -6568,9 +6568,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Owner_SetWithHandler_CallsOwnerChanged()
     {
-        using var owner = new ToolStrip();
-        using var otherOwner = new ToolStrip();
-        using var item = new SubToolStripItem();
+        using ToolStrip owner = new();
+        using ToolStrip otherOwner = new();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -6618,8 +6618,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OwnerItem_GetWithOwner_ReturnsNull()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6636,11 +6636,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OwnerItem_GetWithDropDown_TestData))]
     public void ToolStripItem_OwnerItem_GetWithDropDownOwner_ReturnsExpected(ToolStripItem result)
     {
-        using var owner = new ToolStripDropDown
+        using ToolStripDropDown owner = new()
         {
             OwnerItem = result
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6650,8 +6650,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OwnerItem_GetWithParent_ReturnsNull()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6662,11 +6662,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OwnerItem_GetWithDropDown_TestData))]
     public void ToolStripItem_OwnerItem_GetWithDropDownParent_ReturnsExpected(ToolStripItem result)
     {
-        using var parent = new ToolStripDropDown
+        using ToolStripDropDown parent = new()
         {
             OwnerItem = result
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6676,17 +6676,17 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OwnerItem_GetWithOwnerAndParent_ReturnsExpected()
     {
-        using var ownerItem = new SubToolStripItem();
-        using var owner = new ToolStripDropDown
+        using SubToolStripItem ownerItem = new();
+        using ToolStripDropDown owner = new()
         {
             OwnerItem = ownerItem
         };
-        using var parentItem = new SubToolStripItem();
-        using var parent = new ToolStripDropDown
+        using SubToolStripItem parentItem = new();
+        using ToolStripDropDown parent = new()
         {
             OwnerItem = parentItem
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             Parent = parent
@@ -6697,7 +6697,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Padding_GetWithDefaultPadding_ReturnsExpected()
     {
-        using var item = new CustomDefaultPaddingToolStripItem();
+        using CustomDefaultPaddingToolStripItem item = new();
         Assert.Equal(new Padding(2, 3, 4, 5), item.Padding);
     }
 
@@ -6710,7 +6710,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ToolStripItem_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Padding = value
         };
@@ -6733,8 +6733,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Padding_SetWithOwner_TestData))]
     public void ToolStripItem_Padding_SetWithOwner_GetReturnsExpected(Padding value, Padding expected, int expectedOwnerLayoutCallCount1, int expectedOwnerLayoutCallCount2)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6772,8 +6772,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Padding_SetWithOwner_TestData))]
     public void ToolStripItem_Padding_SetWithOwnerWithHandle_GetReturnsExpected(Padding value, Padding expected, int expectedOwnerLayoutCallCount1, int expectedOwnerLayoutCallCount2)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -6824,8 +6824,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ToolStripItem_Padding_SetWithParent_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6856,8 +6856,8 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void ToolStripItem_Padding_SetWithParentWithHandle_GetReturnsExpected(Padding value, Padding expected)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -6901,7 +6901,7 @@ public class ToolStripItemTests
     public void ToolStripItem_Padding_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Padding)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.Padding = new Padding(1, 2, 3, 4);
@@ -6917,7 +6917,7 @@ public class ToolStripItemTests
     public void ToolStripItem_Padding_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Padding)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.Padding = new Padding(1, 2, 3, 4);
@@ -6951,10 +6951,10 @@ public class ToolStripItemTests
     [MemberData(nameof(Parent_Set_TestData))]
     public void ToolStripItem_Parent_Set_GetReturnsExpected(bool enabled, bool visible, Image image, bool allowDrop)
     {
-        using var parent = new ToolStrip();
-        using var otherParent = new ToolStrip();
-        using var statusParent = new StatusStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using ToolStrip otherParent = new();
+        using StatusStrip statusParent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -7007,10 +7007,10 @@ public class ToolStripItemTests
     [MemberData(nameof(Parent_Set_TestData))]
     public void ToolStripItem_Parent_SetWithMargin_GetReturnsExpected(bool enabled, bool visible, Image image, bool allowDrop)
     {
-        using var parent = new ToolStrip();
-        using var otherParent = new ToolStrip();
-        using var statusParent = new StatusStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using ToolStrip otherParent = new();
+        using StatusStrip statusParent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -7088,11 +7088,11 @@ public class ToolStripItemTests
     [InlineData(RightToLeft.No, RightToLeft.No)]
     public void ToolStripItem_RightToLeft_GetWithOwner_ReturnsExpected(RightToLeft ownerRightToLeft, RightToLeft expected)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             RightToLeft = ownerRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7105,11 +7105,11 @@ public class ToolStripItemTests
     [InlineData(RightToLeft.No, RightToLeft.No)]
     public void ToolStripItem_RightToLeft_GetWithParent_ReturnsExpected(RightToLeft parentRightToLeft, RightToLeft expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             RightToLeft = parentRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7119,15 +7119,15 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_RightToLeft_GetWithOwnerAndParent_ReturnsExpected()
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             RightToLeft = RightToLeft.No
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             Parent = parent
@@ -7139,7 +7139,7 @@ public class ToolStripItemTests
     [EnumData<RightToLeft>]
     public void ToolStripItem_RightToLeft_Set_GetReturnsExpected(RightToLeft value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             RightToLeft = value
         };
@@ -7167,11 +7167,11 @@ public class ToolStripItemTests
     [MemberData(nameof(RightToLeft_SetWithOwner_TestData))]
     public void ToolStripItem_RightToLeft_SetWithOwner_GetReturnsExpected(RightToLeft ownerRightToLeft, RightToLeft value, RightToLeft expected, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             RightToLeft = ownerRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7209,11 +7209,11 @@ public class ToolStripItemTests
     [MemberData(nameof(RightToLeft_SetWithOwner_TestData))]
     public void ToolStripItem_RightToLeft_SetWithOwnerWithHandle_GetReturnsExpected(RightToLeft ownerRightToLeft, RightToLeft value, RightToLeft expected, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             RightToLeft = ownerRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7277,11 +7277,11 @@ public class ToolStripItemTests
     [MemberData(nameof(RightToLeft_SetWithParent_TestData))]
     public void ToolStripItem_RightToLeft_SetWithParent_GetReturnsExpected(RightToLeft parentRightToLeft, RightToLeft value, RightToLeft expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             RightToLeft = parentRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7312,11 +7312,11 @@ public class ToolStripItemTests
     [MemberData(nameof(RightToLeft_SetWithParent_TestData))]
     public void ToolStripItem_RightToLeft_SetWithParentWithHandle_GetReturnsExpected(RightToLeft parentRightToLeft, RightToLeft value, RightToLeft expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             RightToLeft = parentRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7359,7 +7359,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -7395,7 +7395,7 @@ public class ToolStripItemTests
     [InvalidEnumData<RightToLeft>]
     public void ToolStripItem_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.RightToLeft = value);
     }
 
@@ -7403,7 +7403,7 @@ public class ToolStripItemTests
     public void ToolStripItem_RightToLeft_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.RightToLeft)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.RightToLeft = RightToLeft.Yes;
@@ -7431,7 +7431,7 @@ public class ToolStripItemTests
     public void ToolStripItem_RightToLeft_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.RightToLeft)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.RightToLeft = RightToLeft.Yes;
@@ -7459,7 +7459,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_RightToLeftAutoMirrorImage_Set_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             RightToLeftAutoMirrorImage = value
         };
@@ -7478,8 +7478,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithOwner_GetReturnsExpected(bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7516,8 +7516,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithOwnerWithHandle_GetReturnsExpected(bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7577,8 +7577,8 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithParent_GetReturnsExpected(bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7616,8 +7616,8 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithParentWithHandle_GetReturnsExpected(bool value, int expectedParentInvalidatedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7669,14 +7669,14 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetCantSelect_ReturnsFalse()
     {
-        using var item = new CannotSelectToolStripItem();
+        using CannotSelectToolStripItem item = new();
         Assert.False(item.Selected);
     }
 
     [WinFormsFact]
     public void ToolStripItem_Selected_GetDesignMode_ReturnsFalse()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -7686,7 +7686,7 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Site = mockSite.Object
         };
@@ -7696,8 +7696,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithOwner_ReturnsFalse()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7707,9 +7707,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithDraggingOwner_ReturnsFalse()
     {
-        using var owner = new SubToolStrip();
+        using SubToolStrip owner = new();
         owner.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7719,9 +7719,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithSelectionSuspendedOwner_ReturnsFalse()
     {
-        using var owner = new SubToolStrip();
+        using SubToolStrip owner = new();
         owner.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7734,8 +7734,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithParent_ReturnsFalse()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7745,9 +7745,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithDraggingParent_ReturnsFalse()
     {
-        using var parent = new SubToolStrip();
+        using SubToolStrip parent = new();
         parent.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7757,9 +7757,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithSelectionSuspendedParentNotCurrentItem_ReturnsFalse()
     {
-        using var parent = new SubToolStrip();
+        using SubToolStrip parent = new();
         parent.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7772,9 +7772,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Selected_GetWithSelectionSuspendedParentCurrentItem_ReturnsTrue()
     {
-        using var parent = new SubToolStrip();
+        using SubToolStrip parent = new();
         parent.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             Owner = parent,
@@ -7790,11 +7790,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ShowKeyboardCues_GetDesignMode_ReturnsTrue()
     {
-        var mockSite = new Mock<ISite>();
+        Mock<ISite> mockSite = new();
         mockSite
         .Setup(s => s.DesignMode)
         .Returns(true);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Site = mockSite.Object
         };
@@ -7804,7 +7804,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Size_GetWithDefaultSize_ReturnsExpected()
     {
-        using var item = new CustomDefaultSizeToolStripItem();
+        using CustomDefaultSizeToolStripItem item = new();
         Assert.Equal(new Size(10, 11), item.Size);
     }
 
@@ -7827,7 +7827,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Size_Set_TestData))]
     public void ToolStripItem_Size_Set_GetReturnsExpected(Size value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int locationChangedCallCount = 0;
         item.LocationChanged += (sender, e) => locationChangedCallCount++;
 
@@ -7845,8 +7845,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Size_Set_TestData))]
     public void ToolStripItem_Size_SetWithOwner_GetReturnsExpected(Size value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7881,8 +7881,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Size_Set_TestData))]
     public void ToolStripItem_Size_SetWithOwnerWithHandle_GetReturnsExpected(Size value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -7940,8 +7940,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Size_SetWithParent_TestData))]
     public void ToolStripItem_Size_SetWithParent_GetReturnsExpected(Size value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -7983,8 +7983,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Size_SetWithParent_TestData))]
     public void ToolStripItem_Size_SetWithParentWithHandle_GetReturnsExpected(Size value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8039,7 +8039,7 @@ public class ToolStripItemTests
     [StringWithNullData]
     public void ToolStripItem_Tag_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Tag = value
         };
@@ -8054,7 +8054,7 @@ public class ToolStripItemTests
     [StringWithNullData]
     public void ToolStripItem_Text_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Text = value
         };
@@ -8071,8 +8071,8 @@ public class ToolStripItemTests
     [InlineData("text", 1)]
     public void ToolStripItem_Text_SetWithOwner_GetReturnsExpected(string value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8113,8 +8113,8 @@ public class ToolStripItemTests
     [InlineData("text", 1)]
     public void ToolStripItem_Text_SetWithOwnerWithHandle_GetReturnsExpected(string value, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8165,8 +8165,8 @@ public class ToolStripItemTests
     [StringWithNullData]
     public void ToolStripItem_Text_SetWithParent_GetReturnsExpected(string value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8198,8 +8198,8 @@ public class ToolStripItemTests
     [StringWithNullData]
     public void ToolStripItem_Text_SetWithParentWithHandle_GetReturnsExpected(string value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8242,7 +8242,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Text_SetWithHandler_CallsTextChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -8278,7 +8278,7 @@ public class ToolStripItemTests
     [EnumData<ContentAlignment>]
     public void ToolStripItem_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             TextAlign = value
         };
@@ -8301,8 +8301,8 @@ public class ToolStripItemTests
     [InlineData(ContentAlignment.BottomRight, 1)]
     public void ToolStripItem_TextAlign_SetWithOwner_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8348,8 +8348,8 @@ public class ToolStripItemTests
     [InlineData(ContentAlignment.BottomRight, 1)]
     public void ToolStripItem_TextAlign_SetWithOwnerWithHandle_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8400,8 +8400,8 @@ public class ToolStripItemTests
     [EnumData<ContentAlignment>]
     public void ToolStripItem_TextAlign_SetWithParent_GetReturnsExpected(ContentAlignment value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8432,8 +8432,8 @@ public class ToolStripItemTests
     [EnumData<ContentAlignment>]
     public void ToolStripItem_TextAlign_SetWithParentWithHandle_GetReturnsExpected(ContentAlignment value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8479,7 +8479,7 @@ public class ToolStripItemTests
     [InlineData((ContentAlignment)int.MinValue)]
     public void ToolStripItem_TextAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextAlign = value);
     }
 
@@ -8490,11 +8490,11 @@ public class ToolStripItemTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270)]
     public void ToolStripItem_TextDirection_GetWithOwner_ReturnsExpected(ToolStripTextDirection ownerTextDirection, ToolStripTextDirection expected)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             TextDirection = ownerTextDirection
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8508,11 +8508,11 @@ public class ToolStripItemTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270)]
     public void ToolStripItem_TextDirection_GetWithParent_ReturnsExpected(ToolStripTextDirection parentTextDirection, ToolStripTextDirection expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             TextDirection = parentTextDirection
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8522,15 +8522,15 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_TextDirection_GetWithOwnerAndParent_ReturnsExpected()
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             TextDirection = ToolStripTextDirection.Vertical90
         };
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             TextDirection = ToolStripTextDirection.Vertical270
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             Parent = parent
@@ -8550,7 +8550,7 @@ public class ToolStripItemTests
     [MemberData(nameof(TextDirection_Set_TestData))]
     public void ToolStripItem_TextDirection_Set_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             TextDirection = value
         };
@@ -8573,11 +8573,11 @@ public class ToolStripItemTests
     [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
     public void ToolStripItem_TextDirection_SetWithOwner_GetReturnsExpected(ToolStripTextDirection ownerTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             TextDirection = ownerTextDirection
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8615,11 +8615,11 @@ public class ToolStripItemTests
     [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
     public void ToolStripItem_TextDirection_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripTextDirection ownerTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             TextDirection = ownerTextDirection
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8670,11 +8670,11 @@ public class ToolStripItemTests
     [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
     public void ToolStripItem_TextDirection_SetWithParent_GetReturnsExpected(ToolStripTextDirection parentTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             TextDirection = parentTextDirection
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8705,11 +8705,11 @@ public class ToolStripItemTests
     [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
     public void ToolStripItem_TextDirection_SetWithParentWithHandle_GetReturnsExpected(ToolStripTextDirection parentTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             TextDirection = parentTextDirection
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8753,7 +8753,7 @@ public class ToolStripItemTests
     [InvalidEnumData<ToolStripTextDirection>]
     public void ToolStripItem_TextDirection_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripTextDirection value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextDirection = value);
     }
 
@@ -8761,7 +8761,7 @@ public class ToolStripItemTests
     public void ToolStripItem_TextDirection_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.TextDirection)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.TextDirection = ToolStripTextDirection.Vertical270;
@@ -8785,7 +8785,7 @@ public class ToolStripItemTests
     public void ToolStripItem_TextDirection_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.TextDirection)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.TextDirection = ToolStripTextDirection.Vertical270;
@@ -8809,7 +8809,7 @@ public class ToolStripItemTests
     [EnumData<TextImageRelation>]
     public void ToolStripItem_TextImageRelation_Set_GetReturnsExpected(TextImageRelation value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             TextImageRelation = value
         };
@@ -8828,8 +8828,8 @@ public class ToolStripItemTests
     [InlineData(TextImageRelation.TextAboveImage, 1)]
     public void ToolStripItem_TextImageRelation_SetWithOwner_GetReturnsExpected(TextImageRelation value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8871,8 +8871,8 @@ public class ToolStripItemTests
     [InlineData(TextImageRelation.TextAboveImage, 1)]
     public void ToolStripItem_TextImageRelation_SetWithOwnerWithHandle_GetReturnsExpected(TextImageRelation value, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -8923,8 +8923,8 @@ public class ToolStripItemTests
     [EnumData<TextImageRelation>]
     public void ToolStripItem_TextImageRelation_SetWithParent_GetReturnsExpected(TextImageRelation value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -8955,8 +8955,8 @@ public class ToolStripItemTests
     [EnumData<TextImageRelation>]
     public void ToolStripItem_TextImageRelation_SetWithParentWithHandle_GetReturnsExpected(TextImageRelation value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -9004,7 +9004,7 @@ public class ToolStripItemTests
     [InlineData((TextImageRelation)7)]
     public void ToolStripItem_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextImageRelation = value);
     }
 
@@ -9035,7 +9035,7 @@ public class ToolStripItemTests
     [MemberData(nameof(ToolTipText_Get_TestData))]
     public void ToolStripItem_ToolTipText_Get_ReturnsExpected(bool autoToolTip, string text, string expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             AutoToolTip = autoToolTip,
             Text = text
@@ -9047,7 +9047,7 @@ public class ToolStripItemTests
     [StringData]
     public void ToolStripItem_ToolTipText_Set_GetReturnsExpected(string value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = value
         };
@@ -9062,7 +9062,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ToolTipText_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ToolTipText)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         // Set null.
@@ -9089,7 +9089,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ToolTipText_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ToolTipText)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         // Set null.
@@ -9119,11 +9119,11 @@ public class ToolStripItemTests
     [InlineData(false, false)]
     public void ToolStripItem_Visible_GetWithOwner_ReturnsExpected(bool ownerVisible, bool visible)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             Visible = ownerVisible
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -9141,11 +9141,11 @@ public class ToolStripItemTests
     [InlineData(false, false, false)]
     public void ToolStripItem_Visible_GetWithParent_ReturnsExpected(bool parentVisible, bool visible, bool expected)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             Visible = parentVisible
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -9160,7 +9160,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_Set_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9187,7 +9187,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_SetDesignMode_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -9197,7 +9197,7 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9225,7 +9225,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_Visible_SetSelected_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.Select();
         Assert.True(item.Selected);
 
@@ -9251,8 +9251,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_SetWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9284,7 +9284,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_SetDesignModeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -9294,8 +9294,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9340,8 +9340,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Visible_SetWithOwnerWithHandle_TestData))]
     public void ToolStripItem_Visible_SetWithOwnerWithHandle_GetReturnsExpected(bool enabled, Image image, bool value, int expectedInvalidatedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9389,8 +9389,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_SetWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9422,7 +9422,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_SetDesignModeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -9432,8 +9432,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9466,8 +9466,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_Visible_SetWithParentWithHandle_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -9514,7 +9514,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Visible_SetWithHandler_CallsAvailableChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -9549,7 +9549,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Visible_SetWithHandler_CallsVisibleChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -9585,7 +9585,7 @@ public class ToolStripItemTests
     public void ToolStripItem_Visible_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Visible)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.CanResetValue(item));
 
         item.Visible = false;
@@ -9601,7 +9601,7 @@ public class ToolStripItemTests
     public void ToolStripItem_Visible_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Visible)];
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(property.ShouldSerializeValue(item));
 
         item.Visible = false;
@@ -9617,7 +9617,7 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_Width_Set_GetReturnsExpected(int value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int locationChangedCallCount = 0;
         item.LocationChanged += (sender, e) => locationChangedCallCount++;
 
@@ -9635,8 +9635,8 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_Width_SetWithOwner_GetReturnsExpected(int value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -9671,8 +9671,8 @@ public class ToolStripItemTests
     [IntegerData<int>]
     public void ToolStripItem_Width_SetWithOwnerWithHandle_GetReturnsExpected(int value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -9723,8 +9723,8 @@ public class ToolStripItemTests
     [InlineData(23, 0)]
     public void ToolStripItem_Width_SetWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -9769,8 +9769,8 @@ public class ToolStripItemTests
     [InlineData(23, 0)]
     public void ToolStripItem_Width_SetWithParentWithHandle_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -9824,7 +9824,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
         Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);
         Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
@@ -9835,7 +9835,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Dispose_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         void handler(object sender, EventArgs e) => callCount++;
         item.Disposed += handler;
@@ -9862,8 +9862,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Dispose_InvokeWithImage_Success()
     {
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -9898,9 +9898,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Dispose_InvokeWithOwner_Success()
     {
-        using var image = new Bitmap(10, 10);
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Image = image,
             Owner = owner
@@ -9940,9 +9940,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Dispose_InvokeWithParent_Success()
     {
-        using var image = new Bitmap(10, 10);
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Image = image,
             Parent = parent
@@ -9984,7 +9984,7 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_Dispose_InvokeBool_Success(bool disposing, int expectedCallCount)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         void handler(object sender, EventArgs e) => callCount++;
         item.Disposed += handler;
@@ -10013,8 +10013,8 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_Dispose_InvokeBoolWithImage_Success(bool disposing, int expectedCallCount)
     {
-        using var image = new Bitmap(10, 10);
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using SubToolStripItem item = new()
         {
             Image = image
         };
@@ -10051,9 +10051,9 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_Dispose_InvokeBoolWithOwner_Success(bool disposing, int expectedCallCount)
     {
-        using var image = new Bitmap(10, 10);
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Image = image,
             Owner = owner
@@ -10095,9 +10095,9 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_Dispose_InvokeBoolWithParent_Success(bool disposing, int expectedCallCount)
     {
-        using var image = new Bitmap(10, 10);
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using Bitmap image = new(10, 10);
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Image = image,
             Parent = parent
@@ -10152,7 +10152,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void ToolStripItem_DoDragDrop_Invoke_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Equal(DragDropEffects.None, item.DoDragDrop(data, allowedEffects));
     }
 
@@ -10161,8 +10161,8 @@ public class ToolStripItemTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void ToolStripItem_DoDragDrop_InvokeWithParent_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10175,11 +10175,11 @@ public class ToolStripItemTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void ToolStripItem_DoDragDrop_InvokeWithParentAllowItemReorder_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             AllowItemReorder = true
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10192,8 +10192,8 @@ public class ToolStripItemTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void ToolStripItem_DoDragDrop_InvokeWithOwner_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10206,11 +10206,11 @@ public class ToolStripItemTests
     [MemberData(nameof(DoDragDrop_TestData))]
     public void ToolStripItem_DoDragDrop_InvokeWithOwnerAllowItemReorder_ReturnsNone(object data, DragDropEffects allowedEffects)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             AllowItemReorder = true
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10222,7 +10222,7 @@ public class ToolStripItemTests
     [ActiveIssue("https://github.com/dotnet/winforms/issues/3336")]
     public void ToolStripItem_DoDragDrop_NullData_ThrowsArgumentNullException()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Throws<ArgumentNullException>("data", () => item.DoDragDrop(null, DragDropEffects.All));
     }
 
@@ -10277,15 +10277,15 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_GetCurrentParent_InvokeWithoutParent_ReturnsNull()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Null(item.GetCurrentParent());
     }
 
     [WinFormsFact]
     public void ToolStripItem_GetCurrentParent_InvokeWithOwner_ReturnsNull()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10295,8 +10295,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_GetCurrentParent_InvokeWithParent_ReturnsExpected()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10316,7 +10316,7 @@ public class ToolStripItemTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ToolStripItem_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
 
         // Call again.
@@ -10327,8 +10327,8 @@ public class ToolStripItemTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ToolStripItem_GetPreferredSize_InvokeWithOwner_ReturnsExpected(Size proposedSize)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10342,8 +10342,8 @@ public class ToolStripItemTests
     [MemberData(nameof(GetPreferredSize_TestData))]
     public void ToolStripItem_GetPreferredSize_InvokeWithParent_ReturnsExpected(Size proposedSize)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10358,7 +10358,7 @@ public class ToolStripItemTests
     [InlineData('\0')]
     public void ToolStripItem_IsInputChar_Invoke_ReturnsFalse(char charCode)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(item.IsInputChar(charCode));
     }
 
@@ -10370,14 +10370,14 @@ public class ToolStripItemTests
     [InlineData((Keys)(Keys.None - 1))]
     public void ToolStripItem_IsInputKey_Invoke_ReturnsFalse(Keys keyData)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.False(item.IsInputKey(keyData));
     }
 
     [WinFormsFact]
     public void ToolStripItem_Invalidate_Invoke_Nop()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.Invalidate();
 
         // Call again.
@@ -10387,8 +10387,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Invalidate_InvokeWithOwner_Nop()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10403,8 +10403,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Invalidate_InvokeWithOwnerWithHandler_Nop()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10433,8 +10433,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Invalidate_InvokeWithParent_Nop()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10449,8 +10449,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Invalidate_InvokeWithParentWithHandler_CallsInvalidate()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10486,7 +10486,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Invalidate_Rectangle_TestData))]
     public void ToolStripItem_Invalidate_InvokeRectangle_Nop(Rectangle r)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.Invalidate(r);
 
         // Call again.
@@ -10497,8 +10497,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Invalidate_Rectangle_TestData))]
     public void ToolStripItem_Invalidate_InvokeRectangleWithOwner_Nop(Rectangle r)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10514,8 +10514,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Invalidate_Rectangle_TestData))]
     public void ToolStripItem_Invalidate_InvokeRectangleWithOwnerWithHandler_Nop(Rectangle r)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10545,8 +10545,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Invalidate_Rectangle_TestData))]
     public void ToolStripItem_Invalidate_InvokeRectangleWithParent_Nop(Rectangle r)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10562,8 +10562,8 @@ public class ToolStripItemTests
     [MemberData(nameof(Invalidate_Rectangle_TestData))]
     public void ToolStripItem_Invalidate_InvokeRectangleWithParentWithHandler_CallsInvalidate(Rectangle r)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10593,7 +10593,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnAvailableChanged_Invoke_CallsAvailableChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -10617,7 +10617,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -10641,8 +10641,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnBackColorChanged_InvokeWithOwner_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10671,8 +10671,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnBackColorChanged_InvokeWithOwnerWithHandle_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10715,8 +10715,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnBackColorChanged_InvokeWithParent_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10745,8 +10745,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnBackColorChanged_InvokeWithParentWithHandle_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10788,15 +10788,15 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OnBoundsChanged_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.OnBoundsChanged();
     }
 
     [WinFormsFact]
     public void ToolStripItem_OnBoundsChanged_InvokeWithOwner_Success()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10819,8 +10819,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OnBoundsChanged_InvokeWithOwnerWithHandle_Success()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -10853,8 +10853,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OnBoundsChanged_InvokeWithParent_Success()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10884,8 +10884,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OnBoundsChanged_InvokeWithParentWithHandle_Success()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -10926,7 +10926,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -10951,7 +10951,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnDisplayStyleChanged_Invoke_CallsDisplayStyleChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -10975,7 +10975,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -11005,7 +11005,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void ToolStripItem_OnDragDrop_Invoke_CallsDragDrop(DragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
@@ -11029,7 +11029,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void ToolStripItem_OnDragEnter_Invoke_CallsDragEnter(DragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
@@ -11053,7 +11053,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnDragLeave_Invoke_CallsDragLeave(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -11077,7 +11077,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void ToolStripItem_OnDragOver_Invoke_CallsDragOver(DragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
@@ -11116,7 +11116,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnEnabledChanged_Invoke_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -11145,7 +11145,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnEnabledChanged_InvokeDesignMode_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -11174,8 +11174,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnEnabledChanged_InvokeWithOwner_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -11207,8 +11207,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnEnabledChanged_InvokeWithOwnerWithHandle_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -11253,8 +11253,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnEnabledChanged_InvokeWithParent_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -11286,8 +11286,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnEnabledChanged_InvokeWithParentWithHandle_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -11341,7 +11341,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripItem_OnFontChanged_Invoke_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             DisplayStyle = displayStyle
         };
@@ -11368,8 +11368,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
     public void ToolStripItem_OnFontChanged_InvokeWithOwner_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -11406,8 +11406,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
     public void ToolStripItem_OnFontChanged_InvokeWithOwnerWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -11457,8 +11457,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripItem_OnFontChanged_InvokeWithParent_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -11488,8 +11488,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripItem_OnFontChanged_InvokeWithParentWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -11532,7 +11532,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -11556,8 +11556,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnForeColorChanged_InvokeWithOwner_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -11586,8 +11586,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnForeColorChanged_InvokeWithOwnerWithHandle_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -11630,8 +11630,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnForeColorChanged_InvokeWithParent_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -11660,8 +11660,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnForeColorChanged_InvokeWithParentWithHandle_CallsForeColorChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -11710,7 +11710,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnGiveFeedback_TestData))]
     public void ToolStripItem_OnGiveFeedback_Invoke_CallsGiveFeedback(GiveFeedbackEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         GiveFeedbackEventHandler handler = (sender, e) =>
         {
@@ -11734,7 +11734,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStripItem_OnLayout_Invoke_Nop(LayoutEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         item.OnLayout(eventArgs);
 
@@ -11746,7 +11746,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnLocationChanged_Invoke_CallsLocationChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -11770,7 +11770,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void ToolStripItem_OnMouseDown_Invoke_Nop(MouseEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -11794,7 +11794,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnMouseEnter_Invoke_DoesNotCallMouseEnter(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
 
@@ -11813,7 +11813,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnMouseHover_Invoke_DoesNotCallMouseHover(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -11849,11 +11849,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnMouseHover_WithOwner_TestData))]
     public void ToolStripItem_OnMouseHover_InvokeWithOwner_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ShowItemToolTips = showItemToolTips
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = toolTipText,
             Owner = owner
@@ -11881,11 +11881,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnMouseHover_WithOwner_TestData))]
     public void ToolStripItem_OnMouseHover_InvokeWithParent_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ShowItemToolTips = showItemToolTips
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = toolTipText,
             Parent = parent
@@ -11913,7 +11913,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnMouseLeave_Invoke_Nop(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -11949,11 +11949,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
     public void ToolStripItem_OnMouseLeave_InvokeWithOwner_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ShowItemToolTips = showItemToolTips
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = toolTipText,
             Owner = owner
@@ -11981,11 +11981,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
     public void ToolStripItem_OnMouseLeave_InvokeWithOwnerAfterHover_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             ShowItemToolTips = showItemToolTips
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = toolTipText,
             Owner = owner
@@ -12014,11 +12014,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
     public void ToolStripItem_OnMouseLeave_InvokeWithParent_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ShowItemToolTips = showItemToolTips
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = toolTipText,
             Parent = parent
@@ -12046,11 +12046,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
     public void ToolStripItem_OnMouseLeave_InvokeWithParentAfterHover_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip
+        using ToolStrip parent = new()
         {
             ShowItemToolTips = showItemToolTips
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             ToolTipText = toolTipText,
             Parent = parent
@@ -12079,7 +12079,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void ToolStripItem_OnMouseMove_Invoke_Nop(MouseEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -12103,7 +12103,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void ToolStripItem_OnMouseUp_Invoke_Nop(MouseEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -12127,7 +12127,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnOwnerChanged_Invoke_CallsOwnerChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12153,7 +12153,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnOwnerChanged_InvokeWithMargin_CallsOwnerChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Margin = new Padding(1, 2, 3, 4)
         };
@@ -12213,11 +12213,11 @@ public class ToolStripItemTests
     [MemberData(nameof(OnOwnerChanged_TestData))]
     public void ToolStripItem_OnOwnerChanged_InvokeWithRightToLeft_CallsHandler(RightToLeft ownerRightToLeft, RightToLeft rightToLeft, EventArgs eventArgs, RightToLeft expectedRightToLeft, int expectedRightToLeftChangedCallCount)
     {
-        using var owner = new ToolStrip
+        using ToolStrip owner = new()
         {
             RightToLeft = ownerRightToLeft
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             RightToLeft = rightToLeft
@@ -12259,7 +12259,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripItem_OnOwnerFontChanged_Invoke_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             DisplayStyle = displayStyle
         };
@@ -12278,8 +12278,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
     public void ToolStripItem_OnOwnerFontChanged_InvokeWithOwner_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedOwnerLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -12324,8 +12324,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
     public void ToolStripItem_OnOwnerFontChanged_InvokeWithOwnerWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedParentLayoutCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner,
             DisplayStyle = displayStyle
@@ -12389,8 +12389,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripItem_OnOwnerFontChanged_InvokeWithParent_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -12426,8 +12426,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnFontChanged_TestData))]
     public void ToolStripItem_OnOwnerFontChanged_InvokeWithParentWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             DisplayStyle = displayStyle
@@ -12479,7 +12479,7 @@ public class ToolStripItemTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
     public void ToolStripItem_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) => callCount++;
 
@@ -12498,7 +12498,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnParentBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12548,7 +12548,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnParentChanged_TestData))]
     public void ToolStripItem_OnParentChanged_Invoke_Success(bool enabled, bool visible, Image image, bool allowDrop, ToolStrip oldParent, ToolStrip newParent)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -12562,7 +12562,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnEnabledChanged_TestData))]
     public void ToolStripItem_OnParentEnabledChanged_Invoke_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -12591,8 +12591,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_OnParentForeColorChanged_Invoke_CallsHandler()
     {
-        using var item = new SubToolStripItem();
-        var eventArgs = new EventArgs();
+        using SubToolStripItem item = new();
+        EventArgs eventArgs = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12622,7 +12622,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnParentRightToLeftChanged_Invoke_CallsParentRightToLeftChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12656,7 +12656,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnParentRightToLeftChanged_TestData))]
     public void ToolStripItem_OnParentRightToLeftChanged_InvokeWithRightToLeft_CallsRightToLeftChange(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCallCount)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             RightToLeft = rightToLeft
         };
@@ -12689,7 +12689,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnQueryContinueDrag_TestData))]
     public void ToolStripItem_OnQueryContinueDrag_Invoke_CallsQueryContinueDrag(QueryContinueDragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         QueryContinueDragEventHandler handler = (sender, e) =>
         {
@@ -12712,7 +12712,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_QueryAccessibilityHelp_AddRemove_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         QueryAccessibilityHelpEventHandler handler = (sender, e) => { };
         item.QueryAccessibilityHelp += handler;
         item.QueryAccessibilityHelp -= handler;
@@ -12722,7 +12722,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12746,8 +12746,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnRightToLeftChanged_InvokeWithOwner_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -12796,8 +12796,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnRightToLeftChanged_InvokeWithOwnerWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -12859,8 +12859,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnRightToLeftChanged_InvokeWithParent_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -12902,8 +12902,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnRightToLeftChanged_InvokeWithParentWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -12958,7 +12958,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -12982,8 +12982,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnTextChanged_InvokeWithOwner_CallsTextChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -13032,8 +13032,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnTextChanged_InvokeWithOwnerWithHandle_CallsTextChanged(EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -13095,8 +13095,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnTextChanged_InvokeWithParent_CallsTextChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -13138,8 +13138,8 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_OnTextChanged_InvokeWithParentWithHandle_CallsTextChanged(EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -13209,7 +13209,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_Invoke_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13238,7 +13238,7 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeDesignMode_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13267,8 +13267,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeWithOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13311,8 +13311,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeWithOwnerWithHandle_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13377,8 +13377,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeWithDisposingOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13443,8 +13443,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeWithDisposedOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13503,8 +13503,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeWithParent_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13547,8 +13547,8 @@ public class ToolStripItemTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStripItem_OnVisibleChanged_InvokeWithParentWithHandle_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Visible = visible,
@@ -13612,7 +13612,7 @@ public class ToolStripItemTests
     [MemberData(nameof(PerformClick_TestData))]
     public void ToolStripItem_PerformClick_Invoke_Success(bool enabled, bool available, int expectedClickCount)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Available = available
@@ -13643,11 +13643,11 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_PerformClick_InvokeDesignMode_Success()
     {
-        var mockSite = new Mock<ISite>();
+        Mock<ISite> mockSite = new();
         mockSite
             .Setup(s => s.DesignMode)
             .Returns(true);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Site = mockSite.Object
         };
@@ -13678,7 +13678,7 @@ public class ToolStripItemTests
     [MemberData(nameof(PerformClick_TestData))]
     public void ToolStripItem_PerformClick_InvokeDoesNotSupportItemClick_Success(bool enabled, bool available, int expectedClickCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
         grip.Enabled = enabled;
         grip.Available = available;
@@ -13716,7 +13716,7 @@ public class ToolStripItemTests
     [MemberData(nameof(PerformClick_TestData))]
     public void ToolStripItem_PerformClick_InvokeCantSelect_Success(bool enabled, bool available, int expectedClickCount)
     {
-        using var item = new CannotSelectToolStripItem
+        using CannotSelectToolStripItem item = new()
         {
             Enabled = enabled,
             Available = available
@@ -13747,8 +13747,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_PerformClick_InvokeWithOwner_Success()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -13799,8 +13799,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_PerformClick_InvokeWithOwnerWithHandle_Success()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -13867,8 +13867,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_PerformClick_InvokeWithParent_Success()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -13904,8 +13904,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_PerformClick_InvokeWithParentWithHandle_Success()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -13959,8 +13959,8 @@ public class ToolStripItemTests
     [InlineData((Keys)(Keys.None - 1))]
     public void ToolStripItem_ProcessCmdKey_Invoke_ReturnsFalse(Keys keyData)
     {
-        using var item = new SubToolStripItem();
-        var message = new Message();
+        using SubToolStripItem item = new();
+        Message message = new();
         Assert.False(item.ProcessCmdKey(ref message, keyData));
     }
 
@@ -13969,7 +13969,7 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_ProcessDialogKey_EnterKey_PerformsClick(bool enabled, int expectedCallCount)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled
         };
@@ -13994,8 +13994,8 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_ProcessDialogKey_EnterKeyWithParent_PerformsClick(bool enabled, int expectedCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             Enabled = enabled
@@ -14021,8 +14021,8 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_ProcessDialogKey_EnterKeyWithDropDownParent_PerformsClick(bool enabled, int expectedCallCount)
     {
-        var parent = new ToolStripDropDown();
-        using var item = new SubToolStripItem
+        ToolStripDropDown parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent,
             Enabled = enabled
@@ -14050,7 +14050,7 @@ public class ToolStripItemTests
     [InlineData((Keys)(Keys.None - 1))]
     public void ToolStripItem_ProcessDialogKey_UnknownKey_ReturnsFalse(Keys keyData)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         item.Click += (sender, e) => callCount++;
         Assert.False(item.ProcessDialogKey(keyData));
@@ -14063,7 +14063,7 @@ public class ToolStripItemTests
     [InlineData(false, 0)]
     public void ToolStripItem_ProcessMnemonic_Invoke_PerformsClick(bool enabled, int expectedCallCount)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled
         };
@@ -14086,7 +14086,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetBackColor_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetBackColor();
@@ -14105,7 +14105,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetDisplayStyle_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetDisplayStyle();
@@ -14124,8 +14124,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetFont_Invoke_Success()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var item = new SubToolStripItem();
+        using Font font = new("Arial", 8.25f);
+        using SubToolStripItem item = new();
 
         // Reset without value.
         Assert.NotSame(font, item.Font);
@@ -14149,7 +14149,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetForeColor_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetForeColor();
@@ -14168,7 +14168,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetImage_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetImage();
@@ -14187,7 +14187,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetMargin_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetMargin();
@@ -14206,7 +14206,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetPadding_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetPadding();
@@ -14225,7 +14225,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetRightToLeft_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetRightToLeft();
@@ -14244,7 +14244,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ResetTextDirection_Invoke_Success()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
 
         // Reset without value.
         item.ResetTextDirection();
@@ -14264,7 +14264,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_Select_Invoke_Success(bool enabled)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled
         };
@@ -14287,7 +14287,7 @@ public class ToolStripItemTests
     [MemberData(nameof(Select_WithoutToolStripItemAccessibleObject_TestData))]
     public void ToolStripItem_Select_InvokeWithoutToolStripItemAccessibleObject_Success(AccessibleObject result)
     {
-        using var item = new CustomCreateAccessibilityInstanceToolStripItem
+        using CustomCreateAccessibilityInstanceToolStripItem item = new()
         {
             CreateAccessibilityInstanceResult = result
         };
@@ -14303,7 +14303,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_CantSelect_Success()
     {
-        using var item = new CannotSelectToolStripItem();
+        using CannotSelectToolStripItem item = new();
         item.Select();
         Assert.False(item.Selected);
 
@@ -14315,16 +14315,16 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithOwnerItemOnDropdown_Success()
     {
-        using var ownerItemOwner = new ToolStripDropDown();
-        using var ownerItem = new SubToolStripItem
+        using ToolStripDropDown ownerItemOwner = new();
+        using SubToolStripItem ownerItem = new()
         {
             Owner = ownerItemOwner
         };
-        using var owner = new ToolStripDropDown
+        using ToolStripDropDown owner = new()
         {
             OwnerItem = ownerItem
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14341,12 +14341,12 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithOwnerItemNotOnDropDown_Success()
     {
-        using var ownerItem = new SubToolStripItem();
-        using var owner = new ToolStripDropDown
+        using SubToolStripItem ownerItem = new();
+        using ToolStripDropDown owner = new()
         {
             OwnerItem = ownerItem
         };
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14363,8 +14363,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithOwner_Success()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14382,8 +14382,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithOwnerWithHandle_Success()
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14414,9 +14414,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithDraggingOwner_Success()
     {
-        using var owner = new SubToolStrip();
+        using SubToolStrip owner = new();
         owner.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14432,9 +14432,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithSelectionSuspendedOwner_Success()
     {
-        using var owner = new SubToolStrip();
+        using SubToolStrip owner = new();
         owner.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14452,8 +14452,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithParent_Success()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -14471,8 +14471,8 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithParentWithHandle_Success()
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -14503,9 +14503,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithDraggingParent_Success()
     {
-        using var parent = new SubToolStrip();
+        using SubToolStrip parent = new();
         parent.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -14521,9 +14521,9 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_Select_InvokeWithSelectionSuspendedParent_Success()
     {
-        using var parent = new SubToolStrip();
+        using SubToolStrip parent = new();
         parent.OnBeginDrag(EventArgs.Empty);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -14556,7 +14556,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetBounds_TestData))]
     public void ToolStripItem_SetBounds_Invoke_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int locationChangedCallCount = 0;
         item.LocationChanged += (sender, e) =>
         {
@@ -14585,8 +14585,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetBounds_TestData))]
     public void ToolStripItem_SetBounds_InvokeWithOwner_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14632,8 +14632,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetBounds_TestData))]
     public void ToolStripItem_SetBounds_InvokeWithOwnerWithHandle_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Owner = owner
         };
@@ -14706,8 +14706,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetBounds_WithParent_TestData))]
     public void ToolStripItem_SetBounds_InvokeWithParent_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -14760,8 +14760,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetBounds_WithParent_TestData))]
     public void ToolStripItem_SetBounds_InvokeWithParentWithHandle_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Parent = parent
         };
@@ -14839,7 +14839,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_Invoke_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image
@@ -14867,7 +14867,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeDesignMode_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -14877,7 +14877,7 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -14906,7 +14906,7 @@ public class ToolStripItemTests
     [BoolData]
     public void ToolStripItem_SetVisibleCore_InvokeSelected_GetReturnsExpected(bool value)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         item.Select();
         Assert.True(item.Selected);
 
@@ -14932,8 +14932,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -14965,7 +14965,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeDesignModeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -14975,8 +14975,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -15021,8 +15021,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_InvokeWithOwnerWithHandle_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeWithOwnerWithHandle_GetReturnsExpected(bool enabled, Image image, bool value, int expectedInvalidatedCallCount)
     {
-        using var owner = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip owner = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -15070,8 +15070,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -15103,7 +15103,7 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeDesignModeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
@@ -15113,8 +15113,8 @@ public class ToolStripItemTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -15147,8 +15147,8 @@ public class ToolStripItemTests
     [MemberData(nameof(SetVisibleCore_TestData))]
     public void ToolStripItem_SetVisibleCore_InvokeWithParentWithHandle_GetReturnsExpected(bool enabled, Image image, bool value)
     {
-        using var parent = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip parent = new();
+        using SubToolStripItem item = new()
         {
             Enabled = enabled,
             Image = image,
@@ -15195,7 +15195,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_SetVisibleCore_InvokeWithHandler_CallsAvailableChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -15230,7 +15230,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_SetVisibleCore_InvokeWithHandler_CallsVisibleChanged()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -15265,7 +15265,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ToString_InvokeWithoutText_ReturnsExpected()
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         Assert.Equal("System.Windows.Forms.Tests.ToolStripItemTests+SubToolStripItem", item.ToString());
     }
 
@@ -15275,7 +15275,7 @@ public class ToolStripItemTests
     [InlineData("text", "text")]
     public void ToolStripItem_ToString_InvokeWithText_ReturnsExpected(string text, string expected)
     {
-        using var item = new SubToolStripItem
+        using SubToolStripItem item = new()
         {
             Text = text
         };
@@ -15285,7 +15285,7 @@ public class ToolStripItemTests
     [WinFormsFact]
     public void ToolStripItem_ToString_InvokeWithNullText_ReturnsExpected()
     {
-        using var item = new NullTextToolStripItem();
+        using NullTextToolStripItem item = new();
         Assert.Equal("System.Windows.Forms.Tests.ToolStripItemTests+NullTextToolStripItem", item.ToString());
     }
 
@@ -15302,7 +15302,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void ToolStripItem_IDropTargetOnDragDrop_Invoke_CallsDragDrop(DragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         IDropTarget dropTarget = item;
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
@@ -15327,7 +15327,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void ToolStripItem_IDropTargetOnDragEnter_Invoke_CallsDragEnter(DragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         IDropTarget dropTarget = item;
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
@@ -15352,7 +15352,7 @@ public class ToolStripItemTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStripItem_IDropTargetOnDragLeave_Invoke_CallsDragLeave(EventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         IDropTarget dropTarget = item;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -15377,7 +15377,7 @@ public class ToolStripItemTests
     [MemberData(nameof(DragEventArgs_TestData))]
     public void ToolStripItem_IDropTargetOnDragOver_Invoke_CallsDragOver(DragEventArgs eventArgs)
     {
-        using var item = new SubToolStripItem();
+        using SubToolStripItem item = new();
         IDropTarget dropTarget = item;
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>

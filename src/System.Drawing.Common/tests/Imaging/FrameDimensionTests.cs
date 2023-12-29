@@ -9,7 +9,7 @@ public class FrameDimensionTests
     public void Ctor_Guid()
     {
         Guid guid = Guid.NewGuid();
-        FrameDimension fd = new FrameDimension(guid);
+        FrameDimension fd = new(guid);
         Assert.Equal(guid, fd.Guid);
     }
 

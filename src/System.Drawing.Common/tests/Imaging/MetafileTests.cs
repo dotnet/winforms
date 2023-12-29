@@ -43,7 +43,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_IntPtrToWmf_ThrowsExternalException()
     {
-        using (var metafile = new Metafile(GetPath(WmfFile)))
+        using (Metafile metafile = new(GetPath(WmfFile)))
         {
             Assert.Throws<ExternalException>(() => new Metafile(metafile.GetHenhmetafile(), false));
         }
@@ -52,7 +52,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_String_Success()
     {
-        using (var metafile = new Metafile(GetPath(WmfFile)))
+        using (Metafile metafile = new(GetPath(WmfFile)))
         {
             AssertMetafile(metafile);
         }
@@ -95,7 +95,7 @@ public class MetafileTests
     public void Ctor_Stream_Success()
     {
         using (FileStream stream = File.OpenRead(GetPath(WmfFile)))
-        using (var metafile = new Metafile(stream))
+        using (Metafile metafile = new(stream))
         {
             AssertMetafile(metafile);
         }
@@ -110,7 +110,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_EmptyStream_ThrowsExternalException()
     {
-        using (var stream = new MemoryStream())
+        using (MemoryStream stream = new())
         {
             Assert.Throws<ExternalException>(() => new Metafile(stream));
         }
@@ -127,9 +127,9 @@ public class MetafileTests
     [MemberData(nameof(EmfType_TestData))]
     public void Ctor_IntPtrEmfType_Success(EmfType emfType)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), emfType))
+        using (Metafile metafile = new(g.GetHdc(), emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -148,7 +148,7 @@ public class MetafileTests
     [MemberData(nameof(EmfType_Invalid_TestData))]
     public void Ctor_IntPtrInvalidEmfType_ThrowsArgumentException(EmfType emfType)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(g.GetHdc(), emfType));
@@ -177,9 +177,9 @@ public class MetafileTests
     [MemberData(nameof(Description_TestData))]
     public void Ctor_IntPtrEmfTypeString_Success(string description)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), EmfType.EmfOnly, description))
+        using (Metafile metafile = new(g.GetHdc(), EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -195,9 +195,9 @@ public class MetafileTests
     [Fact]
     public void Ctor_IntPtrRectangleF_Success()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangleF))
+        using (Metafile metafile = new(g.GetHdc(), _rectangleF))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -217,9 +217,9 @@ public class MetafileTests
     [MemberData(nameof(MetafileFrameUnit_TestData))]
     public void Ctor_IntPtrRectangleFMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangleF, frameUnit))
+        using (Metafile metafile = new(g.GetHdc(), _rectangleF, frameUnit))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -229,9 +229,9 @@ public class MetafileTests
     [MemberData(nameof(EmfType_TestData))]
     public void Ctor_IntPtrRectangleFMetafileFrameUnitEmfType_Success(EmfType emfType)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangleF, MetafileFrameUnit.Pixel, emfType))
+        using (Metafile metafile = new(g.GetHdc(), _rectangleF, MetafileFrameUnit.Pixel, emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -242,9 +242,9 @@ public class MetafileTests
     [MemberData(nameof(Description_TestData))]
     public void Ctor_IntPtrRectangleFMetafileFrameUnitEmfTypeString_Success(string description)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangleF, MetafileFrameUnit.Pixel, EmfType.EmfOnly, description))
+        using (Metafile metafile = new(g.GetHdc(), _rectangleF, MetafileFrameUnit.Pixel, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -253,9 +253,9 @@ public class MetafileTests
     [Fact]
     public void Ctor_IntPtrRectangle_Success()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangle))
+        using (Metafile metafile = new(g.GetHdc(), _rectangle))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -265,9 +265,9 @@ public class MetafileTests
     [MemberData(nameof(MetafileFrameUnit_TestData))]
     public void Ctor_IntPtrRectangleMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangle, frameUnit))
+        using (Metafile metafile = new(g.GetHdc(), _rectangle, frameUnit))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -277,9 +277,9 @@ public class MetafileTests
     [MemberData(nameof(EmfType_TestData))]
     public void Ctor_IntPtrRectangleMetafileFrameUnitEmfType_Success(EmfType emfType)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangle, MetafileFrameUnit.Pixel, emfType))
+        using (Metafile metafile = new(g.GetHdc(), _rectangle, MetafileFrameUnit.Pixel, emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -290,9 +290,9 @@ public class MetafileTests
     [MemberData(nameof(Description_TestData))]
     public void Ctor_IntPtrRectangleMetafileFrameUnitEmfTypeString_Success(string description)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(g.GetHdc(), _rectangle, MetafileFrameUnit.Pixel, EmfType.EmfOnly, description))
+        using (Metafile metafile = new(g.GetHdc(), _rectangle, MetafileFrameUnit.Pixel, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -328,7 +328,7 @@ public class MetafileTests
     [MemberData(nameof(MetafileFrameUnit_Invalid_TestData))]
     public void Ctor_InvalidMetafileFrameUnit_ThrowsArgumentException(MetafileFrameUnit farameUnit)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -348,7 +348,7 @@ public class MetafileTests
     [MemberData(nameof(EmfType_Invalid_TestData))]
     public void Ctor_InvalidEmfType_ThrowsArgumentException(EmfType emfType)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -368,9 +368,9 @@ public class MetafileTests
     public void Ctor_StringIntPtr_Success()
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc()))
+        using (Metafile metafile = new(fileName, g.GetHdc()))
         {
             AssertMetafileIsBlank(metafile);
             Assert.True(File.Exists(fileName));
@@ -384,9 +384,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrEmfType_Success(EmfType emfType)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), emfType))
+        using (Metafile metafile = new(fileName, g.GetHdc(), emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -401,9 +401,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrEmfTypeDescription_Success(string description)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), EmfType.EmfPlusDual, description))
+        using (Metafile metafile = new(fileName, g.GetHdc(), EmfType.EmfPlusDual, description))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfPlusDual);
@@ -428,7 +428,7 @@ public class MetafileTests
     public void Ctor_InvalidEmfTypeI_ThrowsArgumentException(EmfType emfType)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -441,7 +441,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_NullPath_ThrowsArgumentNullException()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -456,7 +456,7 @@ public class MetafileTests
     [InlineData("")]
     public void Ctor_InvalidPathI_ThrowsArgumentException(string fileName)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -470,7 +470,7 @@ public class MetafileTests
     public void Ctor_PathTooLong_ThrowsPathTooLongException()
     {
         string fileName = GetPath(new string('a', short.MaxValue));
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -485,9 +485,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleF_Success()
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), _rectangleF))
+        using (Metafile metafile = new(fileName, g.GetHdc(), _rectangleF))
         {
             AssertMetafileIsBlank(metafile);
             Assert.True(File.Exists(fileName));
@@ -501,9 +501,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleFMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), _rectangleF, frameUnit))
+        using (Metafile metafile = new(fileName, g.GetHdc(), _rectangleF, frameUnit))
         {
             AssertMetafileIsBlank(metafile);
             Assert.True(File.Exists(fileName));
@@ -517,9 +517,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleFMetafileFrameUnitEmfType_Success(EmfType emfType)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), _rectangleF, MetafileFrameUnit.GdiCompatible, emfType))
+        using (Metafile metafile = new(fileName, g.GetHdc(), _rectangleF, MetafileFrameUnit.GdiCompatible, emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -534,9 +534,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleFMetafileFrameUnitEmfTypeString_Success(string description)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(
+        using (Metafile metafile = new(
             fileName, g.GetHdc(), _rectangleF, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
@@ -552,9 +552,9 @@ public class MetafileTests
     public void Ctor_RectangleFEmpty_Success(string description)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(
+        using (Metafile metafile = new(
             fileName, g.GetHdc(), new RectangleF(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
@@ -569,9 +569,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangle_Success()
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), _rectangle))
+        using (Metafile metafile = new(fileName, g.GetHdc(), _rectangle))
         {
             AssertMetafileIsBlank(metafile);
             Assert.True(File.Exists(fileName));
@@ -585,9 +585,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), _rectangle, frameUnit))
+        using (Metafile metafile = new(fileName, g.GetHdc(), _rectangle, frameUnit))
         {
             AssertMetafileIsBlank(metafile);
             Assert.True(File.Exists(fileName));
@@ -601,9 +601,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleMetafileFrameUnitEmfType_Success(EmfType emfType)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(fileName, g.GetHdc(), _rectangle, MetafileFrameUnit.GdiCompatible, emfType))
+        using (Metafile metafile = new(fileName, g.GetHdc(), _rectangle, MetafileFrameUnit.GdiCompatible, emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -618,9 +618,9 @@ public class MetafileTests
     public void Ctor_StringIntPtrRectangleMetafileFrameUnitEmfTypeString_Success(string description)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(
+        using (Metafile metafile = new(
             fileName, g.GetHdc(), _rectangle, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
@@ -636,9 +636,9 @@ public class MetafileTests
     public void Ctor_RectangleEmpty_Success(string description)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var metafile = new Metafile(
+        using (Metafile metafile = new(
             fileName, g.GetHdc(), new Rectangle(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
@@ -674,7 +674,7 @@ public class MetafileTests
     public void Ctor_InvalidFrameUnit_ThrowsArgumentException(MetafileFrameUnit frameUnit)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -698,7 +698,7 @@ public class MetafileTests
     public void Ctor_InvalidEmfTypeII_ThrowsArgumentException(EmfType emfType)
     {
         string fileName = GetPath("newTestImage.wmf");
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -718,7 +718,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_NullPathI_ThrowsArgumentNullException()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -737,7 +737,7 @@ public class MetafileTests
     [InlineData("")]
     public void Ctor_InvalidPathII_ThrowsArgumentException(string fileName)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -755,7 +755,7 @@ public class MetafileTests
     public void Ctor_PathTooLongI_ThrowsPathTooLongException()
     {
         string fileName = GetPath(new string('a', 261));
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -773,10 +773,10 @@ public class MetafileTests
     [Fact]
     public void Ctor_StreamIntPtrRectangle_Success()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var stream = new MemoryStream())
-        using (var metafile = new Metafile(stream, g.GetHdc(), _rectangle))
+        using (MemoryStream stream = new())
+        using (Metafile metafile = new(stream, g.GetHdc(), _rectangle))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -786,10 +786,10 @@ public class MetafileTests
     [MemberData(nameof(MetafileFrameUnit_TestData))]
     public void Ctor_StreamIntPtrRectangleMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var stream = new MemoryStream())
-        using (var metafile = new Metafile(stream, g.GetHdc(), _rectangle, frameUnit))
+        using (MemoryStream stream = new())
+        using (Metafile metafile = new(stream, g.GetHdc(), _rectangle, frameUnit))
         {
             AssertMetafileIsBlank(metafile);
         }
@@ -799,10 +799,10 @@ public class MetafileTests
     [MemberData(nameof(EmfType_TestData))]
     public void Ctor_StreamIntPtrRectangleMetafileFrameUnitEmfType_Success(EmfType emfType)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var stream = new MemoryStream())
-        using (var metafile = new Metafile(stream, g.GetHdc(), _rectangle, MetafileFrameUnit.GdiCompatible, emfType))
+        using (MemoryStream stream = new())
+        using (Metafile metafile = new(stream, g.GetHdc(), _rectangle, MetafileFrameUnit.GdiCompatible, emfType))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), emfType);
@@ -813,10 +813,10 @@ public class MetafileTests
     [MemberData(nameof(Description_TestData))]
     public void Ctor_StreamIntPtrRectangleMetafileFrameUnitEmfTypeString_Success(string description)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var stream = new MemoryStream())
-        using (var metafile = new Metafile(
+        using (MemoryStream stream = new())
+        using (Metafile metafile = new(
             stream, g.GetHdc(), _rectangle, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
@@ -828,10 +828,10 @@ public class MetafileTests
     [MemberData(nameof(Description_TestData))]
     public void Ctor_RectangleEmptyI_Success(string description)
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
-        using (var stream = new MemoryStream())
-        using (var metafile = new Metafile(
+        using (MemoryStream stream = new())
+        using (Metafile metafile = new(
             stream, g.GetHdc(), new Rectangle(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
@@ -842,7 +842,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_IntPtrZeroIV_ThrowsArgumentException()
     {
-        using (var stream = new MemoryStream())
+        using (MemoryStream stream = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(stream, IntPtr.Zero, _rectangle));
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(stream, IntPtr.Zero, _rectangle, MetafileFrameUnit.GdiCompatible));
@@ -857,8 +857,8 @@ public class MetafileTests
     [MemberData(nameof(MetafileFrameUnit_Invalid_TestData))]
     public void Ctor_InvalidFrameUnitIII_ThrowsArgumentException(MetafileFrameUnit frameUnit)
     {
-        using (var stream = new MemoryStream())
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (MemoryStream stream = new())
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -874,8 +874,8 @@ public class MetafileTests
     [MemberData(nameof(EmfType_Invalid_TestData))]
     public void Ctor_InvalidEmfTypeIII_ThrowsArgumentException(EmfType emfType)
     {
-        using (var stream = new MemoryStream())
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (MemoryStream stream = new())
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -889,7 +889,7 @@ public class MetafileTests
     [Fact]
     public void Ctor_NullStream_ThrowsNullReferenceException()
     {
-        using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
+        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
@@ -913,7 +913,7 @@ public class MetafileTests
     public void Static_GetMetafileHeader_IntPtr_ThrowsArgumentException()
     {
         AssertExtensions.Throws<ArgumentException>(null, () => Metafile.GetMetafileHeader(IntPtr.Zero));
-        using (var metafile = new Metafile(GetPath(WmfFile)))
+        using (Metafile metafile = new(GetPath(WmfFile)))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Metafile.GetMetafileHeader(metafile.GetHenhmetafile()));
         }
@@ -952,7 +952,7 @@ public class MetafileTests
     [Fact]
     public void Static_GetMetafileHeader_EmptyStream_ArgumentException()
     {
-        using (var stream = new MemoryStream())
+        using (MemoryStream stream = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Metafile.GetMetafileHeader(stream));
         }
@@ -961,7 +961,7 @@ public class MetafileTests
     [Fact]
     public void GetMetafileHeader_ReturnsExpected()
     {
-        using (var metafile = new Metafile(GetPath(WmfFile)))
+        using (Metafile metafile = new(GetPath(WmfFile)))
         {
             MetafileHeader headerA = metafile.GetMetafileHeader();
             MetafileHeader headerB = metafile.GetMetafileHeader();
@@ -973,7 +973,7 @@ public class MetafileTests
     [Fact]
     public void GetMetafileHeader_Disposed_ThrowsArgumentException()
     {
-        var metafile = new Metafile(GetPath(WmfFile));
+        Metafile metafile = new(GetPath(WmfFile));
         metafile.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => metafile.GetMetafileHeader());
@@ -982,7 +982,7 @@ public class MetafileTests
     [Fact]
     public void GetHenhmetafile_ReturnsExpected()
     {
-        using (var metafile = new Metafile(GetPath(WmfFile)))
+        using (Metafile metafile = new(GetPath(WmfFile)))
         {
             Assert.NotEqual(IntPtr.Zero, metafile.GetHenhmetafile());
         }
@@ -991,7 +991,7 @@ public class MetafileTests
     [Fact]
     public void GetHenhmetafile_Disposed_ThrowsArgumentException()
     {
-        var metafile = new Metafile(GetPath(WmfFile));
+        Metafile metafile = new(GetPath(WmfFile));
         metafile.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => metafile.GetHenhmetafile());
@@ -1000,7 +1000,7 @@ public class MetafileTests
     [Fact]
     public void PlayRecord_Disposed_ThrowsArgumentException()
     {
-        var metafile = new Metafile(GetPath(WmfFile));
+        Metafile metafile = new(GetPath(WmfFile));
         metafile.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () =>

@@ -353,7 +353,7 @@ internal partial class LayoutUtils
 
     public static Size Stretch(Size stretchThis, Size withinThis, AnchorStyles anchorStyles)
     {
-        Size stretchedSize = new Size(
+        Size stretchedSize = new(
             (anchorStyles & HorizontalAnchorStyles) == HorizontalAnchorStyles ? withinThis.Width : stretchThis.Width,
             (anchorStyles & VerticalAnchorStyles) == VerticalAnchorStyles ? withinThis.Height : stretchThis.Height);
         if (stretchedSize.Width > withinThis.Width)

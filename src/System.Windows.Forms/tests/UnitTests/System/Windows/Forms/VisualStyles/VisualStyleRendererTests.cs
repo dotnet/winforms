@@ -25,7 +25,7 @@ public class VisualStyleRendererTests
     [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
     public void VisualStyleRenderer_Ctor_String_Int_Int(VisualStyleElement element)
     {
-        var renderer = new VisualStyleRenderer(element.ClassName, element.Part, element.State);
+        VisualStyleRenderer renderer = new(element.ClassName, element.Part, element.State);
         Assert.Equal(element.ClassName, renderer.Class);
         Assert.Equal(element.Part, renderer.Part);
         Assert.Equal(element.State, renderer.State);
@@ -59,7 +59,7 @@ public class VisualStyleRendererTests
     [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
     public void VisualStyleRenderer_Ctor_VisualStyleElement(VisualStyleElement element)
     {
-        var renderer = new VisualStyleRenderer(element);
+        VisualStyleRenderer renderer = new(element);
         Assert.Equal(element.ClassName, renderer.Class);
         Assert.Equal(element.Part, renderer.Part);
         Assert.Equal(element.State, renderer.State);
@@ -132,8 +132,8 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawBackground_InvokeIDeviceContextRectangle_Success(Rectangle bounds)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         renderer.DrawBackground(graphics, bounds);
         Assert.Equal(0, renderer.LastHResult);
@@ -166,8 +166,8 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawBackground_InvokeIDeviceContextRectangleRectangle_Success(Rectangle bounds, Rectangle clipBounds)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         renderer.DrawBackground(graphics, bounds, clipBounds);
         Assert.Equal(0, renderer.LastHResult);
@@ -176,7 +176,7 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawBackground_NullDc_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawBackground(null, new Rectangle(1, 2, 3, 4)));
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawBackground(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4)));
     }
@@ -201,8 +201,8 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawEdge_Invoke_Success(Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         Rectangle result = renderer.DrawEdge(graphics, bounds, edges, style, effects);
         Assert.Equal(0, renderer.LastHResult);
@@ -211,7 +211,7 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawEdge_NullDc_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawEdge(null, new Rectangle(1, 2, 3, 4), Edges.Top, EdgeStyle.Bump, EdgeEffects.FillInterior));
     }
 
@@ -219,8 +219,8 @@ public class VisualStyleRendererTests
     [InvalidEnumData<Edges>]
     public void VisualStyleRenderer_DrawEdge_InvalidEdges_ThrowsInvalidEnumArgumentException(Edges edges)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         Assert.Throws<InvalidEnumArgumentException>("edges", () => renderer.DrawEdge(graphics, new Rectangle(1, 2, 3, 4), edges, EdgeStyle.Bump, EdgeEffects.FillInterior));
     }
@@ -229,8 +229,8 @@ public class VisualStyleRendererTests
     [InvalidEnumData<EdgeStyle>]
     public void VisualStyleRenderer_DrawEdge_InvalidStyle_ThrowsInvalidEnumArgumentException(EdgeStyle style)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         Assert.Throws<InvalidEnumArgumentException>("style", () => renderer.DrawEdge(graphics, new Rectangle(1, 2, 3, 4), Edges.Bottom, style, EdgeEffects.FillInterior));
     }
@@ -239,8 +239,8 @@ public class VisualStyleRendererTests
     [InvalidEnumData<EdgeEffects>]
     public void VisualStyleRenderer_DrawEdge_InvalidEffects_ThrowsInvalidEnumArgumentException(EdgeEffects effects)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         Assert.Throws<InvalidEnumArgumentException>("effects", () => renderer.DrawEdge(graphics, new Rectangle(1, 2, 3, 4), Edges.Bottom, EdgeStyle.Bump, effects));
     }
@@ -263,10 +263,10 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawImage_InvokeIDeviceContextRectangleImage_Success(Rectangle bounds)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         renderer.DrawImage(graphics, bounds, image);
         Assert.Equal(0, renderer.LastHResult);
     }
@@ -276,11 +276,11 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawImage_InvokeIDeviceContextRectangleImageListInt_Success(Rectangle bounds)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
         renderer.DrawImage(graphics, bounds, imageList, 0);
         Assert.Equal(0, renderer.LastHResult);
@@ -289,9 +289,9 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawImage_NullG_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         Assert.Throws<ArgumentNullException>("g", () => renderer.DrawImage(null, new Rectangle(1, 2, 3, 4), image));
         Assert.Throws<ArgumentNullException>("g", () => renderer.DrawImage(null, new Rectangle(1, 2, 3, 4), imageList, 0));
     }
@@ -299,9 +299,9 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawImage_NullImage_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var image = new Bitmap(10, 10);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap image = new(10, 10);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         Assert.Throws<ArgumentNullException>("image", () => renderer.DrawImage(graphics, new Rectangle(1, 2, 3, 4), null));
     }
@@ -309,9 +309,9 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawImage_NullImageList_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var image = new Bitmap(10, 10);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap image = new(10, 10);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         Assert.Throws<ArgumentNullException>("imageList", () => renderer.DrawImage(graphics, new Rectangle(1, 2, 3, 4), null, 0));
     }
@@ -321,11 +321,11 @@ public class VisualStyleRendererTests
     [InlineData(1)]
     public void VisualStyleRenderer_DrawImage_InvalidImageIndex_ThrowsArgumentNullException(int imageIndex)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        using var image = new Bitmap(10, 10);
-        using var imageList = new ImageList();
+        using Bitmap image = new(10, 10);
+        using ImageList imageList = new();
         imageList.Images.Add(image);
         Assert.Throws<ArgumentOutOfRangeException>("imageIndex", () => renderer.DrawImage(graphics, new Rectangle(1, 2, 3, 4), imageList, imageIndex));
     }
@@ -348,10 +348,10 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawParentBackgroundInvokeIDeviceContextRectangleChildWithoutHandle_Success(Rectangle bounds)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        using var childControl = new Control();
+        using Control childControl = new();
         renderer.DrawParentBackground(graphics, bounds, childControl);
         Assert.False(childControl.IsHandleCreated);
         Assert.Equal(0, renderer.LastHResult);
@@ -375,10 +375,10 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawParentBackground_InvokeIDeviceContextRectangleChildWithHandle_Success(Rectangle bounds)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        using var childControl = new Control();
+        using Control childControl = new();
         Assert.NotEqual(IntPtr.Zero, childControl.Handle);
         renderer.DrawParentBackground(graphics, bounds, childControl);
         Assert.True(childControl.IsHandleCreated);
@@ -388,8 +388,8 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawParentBackground_NullDc_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var childControl = new Control();
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Control childControl = new();
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawParentBackground(null, new Rectangle(1, 2, 3, 4), childControl));
     }
 
@@ -414,8 +414,8 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawText_InvokeIDeviceContextRectangleString_Success(Rectangle bounds, string textToDraw)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         renderer.DrawText(graphics, bounds, textToDraw);
         Assert.Equal(0, renderer.LastHResult);
@@ -445,8 +445,8 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawText_InvokeIDeviceContextRectangleStringBool_Success(Rectangle bounds, string textToDraw, bool drawDisabled)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         renderer.DrawText(graphics, bounds, textToDraw, drawDisabled);
         Assert.Equal(0, renderer.LastHResult);
@@ -476,8 +476,8 @@ public class VisualStyleRendererTests
     public void VisualStyleRenderer_DrawText_InvokeIDeviceContextRectangleStringBoolTextFormatFlags_Success(Rectangle bounds, string textToDraw, bool drawDisabled, TextFormatFlags flags)
     {
         // Don't verify anything, just make sure the interop call succeeds.
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var bitmap = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
         renderer.DrawText(graphics, bounds, textToDraw, drawDisabled, flags);
         Assert.Equal(0, renderer.LastHResult);
@@ -486,8 +486,8 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_DrawText_NullDc_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-        using var image = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
+        using Bitmap image = new(10, 10);
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawText(null, new Rectangle(1, 2, 3, 4), "text"));
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawText(null, new Rectangle(1, 2, 3, 4), "text", true));
         Assert.Throws<ArgumentNullException>("dc", () => renderer.DrawText(null, new Rectangle(1, 2, 3, 4), "text", false));
@@ -498,9 +498,9 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_GetMargins()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Normal);
 
-        using var form = new Form();
+        using Form form = new();
         using Graphics graphics = form.CreateGraphics();
 
         // GetMargins should not throw an exception.
@@ -512,7 +512,7 @@ public class VisualStyleRendererTests
     [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
     public void VisualStyleRenderer_SetParameters_InvokeStringIntInt_Success(VisualStyleElement element)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Hot);
         renderer.SetParameters(element.ClassName, element.Part, element.State);
         Assert.Equal(element.ClassName, renderer.Class);
         Assert.Equal(element.Part, renderer.Part);
@@ -525,7 +525,7 @@ public class VisualStyleRendererTests
     [MemberData(nameof(Ctor_InvalidElement_TestData))]
     public void VisualStyleRenderer_SetParameters_InvalidClassNamePartState_ThrowsArgumentException(VisualStyleElement element)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Hot);
         Assert.Throws<ArgumentException>(() => renderer.SetParameters(element.ClassName, element.Part, element.State));
     }
 
@@ -533,7 +533,7 @@ public class VisualStyleRendererTests
     [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
     public void VisualStyleRenderer_SetParameters_InvokeVisualStyleElement_Success(VisualStyleElement element)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Hot);
         renderer.SetParameters(element);
         Assert.Equal(element.ClassName, renderer.Class);
         Assert.Equal(element.Part, renderer.Part);
@@ -545,7 +545,7 @@ public class VisualStyleRendererTests
     [Fact]
     public void VisualStyleRenderer_SetParameters_NullElement_ThrowsArgumentNullException()
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Hot);
         Assert.Throws<ArgumentNullException>("element", () => renderer.SetParameters(null));
     }
 
@@ -553,22 +553,22 @@ public class VisualStyleRendererTests
     [MemberData(nameof(Ctor_InvalidElement_TestData))]
     public void VisualStyleRenderer_SetParameters_InvalidElement_ThrowsArgumentException(VisualStyleElement element)
     {
-        var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
+        VisualStyleRenderer renderer = new(VisualStyleElement.Button.PushButton.Hot);
         Assert.Throws<ArgumentException>(() => renderer.SetParameters(element));
     }
 
     [Fact]
     public void VisualStyleRenderer_IsBackgroundPartiallyTransparent_Invoke_ReturnsExpected()
     {
-        var renderer = new VisualStyleRenderer("BUTTON", 0, 0);
+        VisualStyleRenderer renderer = new("BUTTON", 0, 0);
         Assert.False(renderer.IsBackgroundPartiallyTransparent());
     }
 
     [Fact]
     public void VisualStyleRenderer_GetFont_for_TextFont()
     {
-        var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);
-        using var image = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new("TEXTSTYLE", 1, 0);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         using Font font = renderer.GetFont(graphics, FontProperty.TextFont);
 
@@ -579,8 +579,8 @@ public class VisualStyleRendererTests
     [InvalidEnumData<FontProperty>]
     public void VisualStyleRenderer_GetFont_for_InvalidFontProperty(FontProperty value)
     {
-        var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);
-        using var image = new Bitmap(10, 10);
+        VisualStyleRenderer renderer = new("TEXTSTYLE", 1, 0);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
         Assert.Throws<InvalidEnumArgumentException>("prop", () => renderer.GetFont(graphics, value));

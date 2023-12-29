@@ -24,7 +24,7 @@ internal class DataSourceListEditor : UITypeEditor
         {
             _designBindingPicker ??= new DesignBindingPicker();
 
-            DesignBinding oldSelection = new DesignBinding(value, "");
+            DesignBinding oldSelection = new(value, "");
             DesignBinding? newSelection = _designBindingPicker.Pick(context, provider,
                                                                   true,  /* showDataSources   */
                                                                   false, /* showDataMembers   */

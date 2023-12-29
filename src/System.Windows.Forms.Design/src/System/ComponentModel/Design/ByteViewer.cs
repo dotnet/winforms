@@ -127,7 +127,7 @@ public class ByteViewer : TableLayoutPanel
         bool success = ((startLine + line) * _columnCount).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
         Debug.Assert(success && charCount == 8);
 
-        using var foreground = new SolidBrush(ForeColor);
+        using SolidBrush foreground = new(ForeColor);
         g.DrawString(hexChars, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
@@ -145,7 +145,7 @@ public class ByteViewer : TableLayoutPanel
                                                  _rowCount * CELL_HEIGHT));
         }
 
-        using (Pen pen = new Pen(SystemColors.ControlDark))
+        using (Pen pen = new(SystemColors.ControlDark))
         {
             g.DrawRectangle(pen, new Rectangle(HEX_START_X,
                                                CLIENT_START_Y,

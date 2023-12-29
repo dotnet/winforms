@@ -13,7 +13,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Ctor_Default()
     {
-        using var provider = new SubErrorProvider();
+        using SubErrorProvider provider = new();
         Assert.Equal(250, provider.BlinkRate);
         Assert.Equal(ErrorBlinkStyle.BlinkIfDifferentError, provider.BlinkStyle);
         Assert.True(provider.CanRaiseEvents);
@@ -35,8 +35,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Ctor_ContainerControl()
     {
-        using var parentControl = new ContainerControl();
-        using var provider = new SubErrorProvider(parentControl);
+        using ContainerControl parentControl = new();
+        using SubErrorProvider provider = new(parentControl);
         Assert.Equal(250, provider.BlinkRate);
         Assert.Equal(ErrorBlinkStyle.BlinkIfDifferentError, provider.BlinkStyle);
         Assert.True(provider.CanRaiseEvents);
@@ -62,8 +62,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Ctor_IContainer()
     {
-        using var container = new Container();
-        using var provider = new SubErrorProvider(container);
+        using Container container = new();
+        using SubErrorProvider provider = new(container);
         Assert.Equal(250, provider.BlinkRate);
         Assert.Equal(ErrorBlinkStyle.BlinkIfDifferentError, provider.BlinkStyle);
         Assert.True(provider.CanRaiseEvents);
@@ -92,7 +92,7 @@ public class ErrorProviderTests
     [InlineData(250, ErrorBlinkStyle.BlinkIfDifferentError)]
     public void ErrorProvider_BlinkRate_Set_GetReturnsExpected(int value, ErrorBlinkStyle expectedBlinkStyle)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             BlinkRate = value
         };
@@ -113,7 +113,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_BlinkRate_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => provider.BlinkRate = -1);
     }
 
@@ -121,7 +121,7 @@ public class ErrorProviderTests
     [EnumData<ErrorBlinkStyle>]
     public void ErrorProvider_BlinkStyle_Set_GetReturnsExpected(ErrorBlinkStyle value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             BlinkStyle = value
         };
@@ -138,7 +138,7 @@ public class ErrorProviderTests
     [EnumData<ErrorBlinkStyle>]
     public void ErrorProvider_BlinkStyle_SetAlreadyBlink_GetReturnsExpected(ErrorBlinkStyle value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             BlinkStyle = ErrorBlinkStyle.AlwaysBlink
         };
@@ -157,7 +157,7 @@ public class ErrorProviderTests
     [EnumData<ErrorBlinkStyle>]
     public void ErrorProvider_BlinkStyle_SetWithZeroBlinkRate_GetReturnsExpected(ErrorBlinkStyle value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             BlinkRate = 0,
             BlinkStyle = value
@@ -175,7 +175,7 @@ public class ErrorProviderTests
     [InvalidEnumData<ErrorBlinkStyle>]
     public void ErrorProvider_BlinkStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ErrorBlinkStyle value)
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => provider.BlinkStyle = value);
     }
 
@@ -190,7 +190,7 @@ public class ErrorProviderTests
     [MemberData(nameof(ContainerControl_TestData))]
     public void ErrorProvider_ContainerControl_Set_GetReturnsExpected(ContainerControl value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             ContainerControl = value
         };
@@ -205,7 +205,7 @@ public class ErrorProviderTests
     [MemberData(nameof(ContainerControl_TestData))]
     public void ErrorProvider_ContainerControl_SetWithNonNullOldValue_GetReturnsExpected(ContainerControl value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             ContainerControl = new ContainerControl()
         };
@@ -222,7 +222,7 @@ public class ErrorProviderTests
     [NormalizedStringData]
     public void ErrorProvider_DataMember_Set_GetReturnsExpected(string value, string expected)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             DataMember = value
         };
@@ -237,7 +237,7 @@ public class ErrorProviderTests
     [NormalizedStringData]
     public void ErrorProvider_DataMember_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             DataMember = "OldMember"
         };
@@ -264,7 +264,7 @@ public class ErrorProviderTests
     [MemberData(nameof(DataMember_SetWithContainerControl_TestData))]
     public void ErrorProvider_DataMember_SetWithContainerControl_GetReturnsExpected(ContainerControl containerControl, string value, string expected)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataMember = value
@@ -290,8 +290,8 @@ public class ErrorProviderTests
     [MemberData(nameof(DataMember_SetWithValidDataMemberWithContainerControl_TestData))]
     public void ErrorProvider_DataMember_SetWithValidDataSourceWithContainerControl_ReturnsExpected(ContainerControl containerControl, string dataMember)
     {
-        var value = new DataClass();
-        using var provider = new ErrorProvider
+        DataClass value = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataSource = value,
@@ -304,7 +304,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_DataMember_ShouldSerializeValue_ReturnsExpected()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataMember)];
         Assert.False(property.ShouldSerializeValue(provider));
 
@@ -315,7 +315,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_DataMember_CanResetValue_ReturnsExpected()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataMember)];
         Assert.False(property.CanResetValue(provider));
 
@@ -337,8 +337,8 @@ public class ErrorProviderTests
     [MemberData(nameof(NoBindingContextContainerControl_TestData))]
     public void ErrorProvider_DataMember_SetWithInvalidDataSourceWithContainerControl_ReturnsExpected(ContainerControl containerControl)
     {
-        var value = new DataClass();
-        using var provider = new ErrorProvider
+        DataClass value = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataSource = value,
@@ -351,9 +351,9 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_DataMember_SetWithInvalidDataSourceWithContainerControl_ResetsDataMember()
     {
-        using var containerControl = new ContainerControl();
-        var value = new DataClass();
-        using var provider = new ErrorProvider
+        using ContainerControl containerControl = new();
+        DataClass value = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataSource = value
@@ -374,7 +374,7 @@ public class ErrorProviderTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ErrorProvider_DataSource_SetWithNullDataMember_GetReturnsExpected(object value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             DataSource = value
         };
@@ -391,7 +391,7 @@ public class ErrorProviderTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ErrorProvider_DataSource_SetWithEmptyDataMember_GetReturnsExpected(object value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             DataMember = string.Empty,
             DataSource = value
@@ -409,7 +409,7 @@ public class ErrorProviderTests
     [MemberData(nameof(DataSource_Set_TestData))]
     public void ErrorProvider_DataSource_SetWithNonNullOldValue_GetReturnsExpected(object value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             DataSource = new object()
         };
@@ -436,7 +436,7 @@ public class ErrorProviderTests
     [MemberData(nameof(DataSource_SetWithContainerControl_TestData))]
     public void ErrorProvider_DataSource_SetWithContainerControl_GetReturnsExpected(ContainerControl containerControl, object value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataSource = value
@@ -462,8 +462,8 @@ public class ErrorProviderTests
     [MemberData(nameof(DataSource_SetWithValidDataMemberWithContainerControl_TestData))]
     public void ErrorProvider_DataSource_SetWithValidDataMemberWithContainerControl_ReturnsExpected(ContainerControl containerControl, string dataMember)
     {
-        var value = new DataClass();
-        using var provider = new ErrorProvider
+        DataClass value = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataMember = dataMember,
@@ -477,8 +477,8 @@ public class ErrorProviderTests
     [MemberData(nameof(NoBindingContextContainerControl_TestData))]
     public void ErrorProvider_DataSource_SetWithInvalidDataMemberWithContainerControl_ReturnsExpected(ContainerControl containerControl)
     {
-        var value = new DataClass();
-        using var provider = new ErrorProvider
+        DataClass value = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataMember = "NoSuchValue",
@@ -491,9 +491,9 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_DataSource_SetWithInvalidDataMemberWithContainerControl_ResetsDataMember()
     {
-        using var containerControl = new ContainerControl();
-        var value = new DataClass();
-        using var provider = new ErrorProvider
+        using ContainerControl containerControl = new();
+        DataClass value = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl,
             DataMember = "NoSuchValue",
@@ -506,7 +506,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_DataSource_ShouldSerializeValue_ReturnsExpected()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataSource)];
         Assert.False(property.ShouldSerializeValue(provider));
 
@@ -517,7 +517,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_DataSource_CanResetValue_ReturnsExpected()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataSource)];
         Assert.False(property.CanResetValue(provider));
 
@@ -539,7 +539,7 @@ public class ErrorProviderTests
     [MemberData(nameof(Icon_Set_TestData))]
     public void ErrorProvider_Icon_Set_GetReturnsExpected(Icon value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             Icon = value
         };
@@ -553,7 +553,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Icon_ShouldSerializeValue_ReturnsExpected()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.Icon)];
         Assert.False(property.ShouldSerializeValue(provider));
 
@@ -565,7 +565,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Icon_CanResetValue_ReturnsExpected()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.Icon)];
         Assert.False(property.CanResetValue(provider));
 
@@ -581,7 +581,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Icon_Null_ThrowsArgumentNullException()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("value", () => provider.Icon = null);
     }
 
@@ -589,7 +589,7 @@ public class ErrorProviderTests
     [BoolData]
     public void ErrorProvider_RightToLeft_Set_GetReturnsExpected(bool value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             RightToLeft = value
         };
@@ -607,7 +607,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             RightToLeft = true
         };
@@ -646,13 +646,13 @@ public class ErrorProviderTests
     {
         yield return new object[] { null };
 
-        var mockNullHostSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockNullHostSite = new(MockBehavior.Strict);
         mockNullHostSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(null);
         yield return new object[] { mockNullHostSite.Object };
 
-        var mockInvalidHostSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockInvalidHostSite = new(MockBehavior.Strict);
         mockInvalidHostSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(new object());
@@ -663,11 +663,11 @@ public class ErrorProviderTests
     [MemberData(nameof(Site_Set_TestData))]
     public void ErrorProvider_Site_Set_GetReturnsExpected(ISite value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(null);
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             Site = value
         };
@@ -686,11 +686,11 @@ public class ErrorProviderTests
     [MemberData(nameof(Site_Set_TestData))]
     public void ErrorProvider_Site_SetWithNonNullOldValue_GetReturnsExpected(ISite value)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(null);
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             Site = mockSite.Object
         };
@@ -712,7 +712,7 @@ public class ErrorProviderTests
         yield return new object[] { null, null };
         yield return new object[] { new Component(), null };
 
-        var containerControl = new ContainerControl();
+        ContainerControl containerControl = new();
         yield return new object[] { containerControl, containerControl };
     }
 
@@ -720,16 +720,16 @@ public class ErrorProviderTests
     [MemberData(nameof(Site_SetWithIDesignerHost_TestData))]
     public void ErrorProvider_Site_SetWithIDesignerHost_SetsContainerControl(IComponent rootComponent, ContainerControl expected)
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(rootComponent);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object)
             .Verifiable();
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             Site = mockSite.Object
         };
@@ -749,7 +749,7 @@ public class ErrorProviderTests
     [StringWithNullData]
     public void ErrorProvider_Tag_Set_GetReturnsExpected(object value)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             Tag = value
         };
@@ -777,7 +777,7 @@ public class ErrorProviderTests
     [MemberData(nameof(BindToDataAndErrors_TestData))]
     public void BindToDataAndErrors_Invoke_SetsDataSourceAndDataMember(ContainerControl containerControl, object newDataSource, string newDataMember)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl
         };
@@ -810,8 +810,8 @@ public class ErrorProviderTests
     [MemberData(nameof(BindToDataAndErrors_WithBindingContext_TestData))]
     public void BindToDataAndErrors_InvokeValidDataMemberWithBindingContext_SetsDataSourceAndDataMember(object newDataSource, string newDataMember)
     {
-        using var containerControl = new ContainerControl();
-        using var provider = new ErrorProvider
+        using ContainerControl containerControl = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl
         };
@@ -828,12 +828,12 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void BindToDataAndErrors_InvokeInvalidDataMemberWithBindingContext_ThrowsArgumentException()
     {
-        using var containerControl = new ContainerControl();
-        using var provider = new ErrorProvider
+        using ContainerControl containerControl = new();
+        using ErrorProvider provider = new()
         {
             ContainerControl = containerControl
         };
-        var newDataSource = new DataClass();
+        DataClass newDataSource = new();
         Assert.Throws<ArgumentException>(() => provider.BindToDataAndErrors(newDataSource, "NoSuchValue"));
         Assert.Same(newDataSource, provider.DataSource);
         Assert.Equal("NoSuchValue", provider.DataMember);
@@ -857,15 +857,15 @@ public class ErrorProviderTests
     [MemberData(nameof(CanExtend_TestData))]
     public void ErrorProvider_CanExtend_Invoke_ReturnsExpected(object extendee, bool expected)
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Equal(expected, provider.CanExtend(extendee));
     }
 
     [WinFormsFact]
     public void ErrorProvider_Clear_InvokeMultipleTimesWithItems_Success()
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
         provider.SetError(control, "error");
         Assert.Equal("error", provider.GetError(control));
 
@@ -879,7 +879,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Clear_InvokeMultipleTimesWithoutItems_Nop()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         provider.Clear();
         provider.Clear();
     }
@@ -887,8 +887,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Dispose_InvokeWithItems_Clears()
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
         provider.SetError(control, "error");
         Assert.Equal("error", provider.GetError(control));
 
@@ -904,7 +904,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_Dispose_InvokeMultipleTimesWithoutItems_Nop()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         provider.Dispose();
         Assert.NotNull(provider.Icon);
 
@@ -917,8 +917,8 @@ public class ErrorProviderTests
     [InlineData(false, "error")]
     public void ErrorProvider_Dispose_InvokeBoolWithItems_ClearsIfDisposing(bool disposing, string expectedError)
     {
-        using var provider = new SubErrorProvider();
-        using var control = new Control();
+        using SubErrorProvider provider = new();
+        using Control control = new();
         provider.SetError(control, "error");
         Assert.Equal("error", provider.GetError(control));
 
@@ -935,7 +935,7 @@ public class ErrorProviderTests
     [BoolData]
     public void ErrorProvider_Dispose_InvokeBoolMultipleTimesDefault_Nop(bool disposing)
     {
-        using var provider = new SubErrorProvider();
+        using SubErrorProvider provider = new();
         provider.Dispose(disposing);
         Assert.NotNull(provider.Icon);
 
@@ -946,8 +946,8 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_GetError_InvokeWithoutError_ReturnsEmpty()
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
         Assert.Empty(provider.GetError(control));
 
         // Call again.
@@ -957,15 +957,15 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_GetError_NullControl_ThrowsArgumentNullException()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("control", () => provider.GetError(null));
     }
 
     [WinFormsFact]
     public void ErrorProvider_GetIconAlignment_InvokeWithoutError_ReturnsMiddleRight()
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
         Assert.Equal(ErrorIconAlignment.MiddleRight, provider.GetIconAlignment(control));
 
         // Call again.
@@ -975,15 +975,15 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_GetIconAlignment_NullControl_ThrowsArgumentNullException()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("control", () => provider.GetIconAlignment(null));
     }
 
     [WinFormsFact]
     public void ErrorProvider_GetIconPadding_InvokeWithoutError_ReturnsZero()
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
         Assert.Equal(0, provider.GetIconPadding(control));
 
         // Call again.
@@ -993,7 +993,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_GetIconPadding_NullControl_ThrowsArgumentNullException()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("control", () => provider.GetIconPadding(null));
     }
 
@@ -1001,7 +1001,7 @@ public class ErrorProviderTests
     [NewAndDefaultData<EventArgs>]
     public void ErrorProvider_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var provider = new SubErrorProvider();
+        using SubErrorProvider provider = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1035,11 +1035,11 @@ public class ErrorProviderTests
     [MemberData(nameof(SetError_TestData))]
     public void ErrorProvider_SetError_Invoke_GetErrorReturnsExpected(ErrorBlinkStyle blinkStyle, string value, string expected)
     {
-        using var provider = new ErrorProvider
+        using ErrorProvider provider = new()
         {
             BlinkStyle = blinkStyle
         };
-        using var control = new Control();
+        using Control control = new();
 
         provider.SetError(control, value);
         Assert.Equal(expected, provider.GetError(control));
@@ -1057,7 +1057,7 @@ public class ErrorProviderTests
     [StringWithNullData]
     public void ErrorProvider_SetError_NullControl_ThrowsArgumentNullException(string value)
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("control", () => provider.SetError(null, value));
     }
 
@@ -1065,8 +1065,8 @@ public class ErrorProviderTests
     [EnumData<ErrorIconAlignment>]
     public void ErrorProvider_SetIconAlignment_Invoke_GetIconAlignmentReturnsExpected(ErrorIconAlignment value)
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
 
         provider.SetIconAlignment(control, value);
         Assert.Equal(value, provider.GetIconAlignment(control));
@@ -1081,7 +1081,7 @@ public class ErrorProviderTests
     [InvalidEnumData<ErrorIconAlignment>]
     public void ErrorProvider_SetIconAlignment_NullControl_ThrowsArgumentNullException(ErrorIconAlignment value)
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("control", () => provider.SetIconAlignment(null, value));
     }
 
@@ -1089,8 +1089,8 @@ public class ErrorProviderTests
     [InvalidEnumData<ErrorIconAlignment>]
     public void ErrorProvider_SetIconAlignment_InvalidValue_ThrowsInvalidEnumArgumentException(ErrorIconAlignment value)
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => provider.SetIconAlignment(control, value));
     }
 
@@ -1098,8 +1098,8 @@ public class ErrorProviderTests
     [IntegerData<int>]
     public void ErrorProvider_SetIconPadding_Invoke_GetIconPaddingReturnsExpected(int value)
     {
-        using var provider = new ErrorProvider();
-        using var control = new Control();
+        using ErrorProvider provider = new();
+        using Control control = new();
 
         provider.SetIconPadding(control, value);
         Assert.Equal(value, provider.GetIconPadding(control));
@@ -1112,7 +1112,7 @@ public class ErrorProviderTests
     [WinFormsFact]
     public void ErrorProvider_SetIconPadding_NullControl_ThrowsArgumentNullException()
     {
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         Assert.Throws<ArgumentNullException>("control", () => provider.SetIconPadding(null, 0));
     }
 
@@ -1124,7 +1124,7 @@ public class ErrorProviderTests
             {
                 yield return new object[] { blinkStyle, new SubControl(), error, error ?? string.Empty };
                 yield return new object[] { blinkStyle, new SubControl { Visible = false }, error, error ?? string.Empty };
-                yield return new object[] { blinkStyle, new SubControl { Parent = new Control() }, error, error ?? string.Empty };
+                yield return new object[] { blinkStyle, new SubControl { Parent = new() }, error, error ?? string.Empty };
             }
         }
     }
@@ -1134,10 +1134,10 @@ public class ErrorProviderTests
     public void ErrorProvider_Items_CallEvents_Success(ErrorBlinkStyle blinkStyle, SubControl control, string error, string expected)
     {
         bool originalVisible = control.Visible;
-        using var originalParent = new Control();
-        using var newParent = new Control();
+        using Control originalParent = new();
+        using Control newParent = new();
 
-        using (var provider = new ErrorProvider
+        using (ErrorProvider provider = new()
         {
             BlinkStyle = blinkStyle
         })
@@ -1325,7 +1325,7 @@ public class ErrorProviderTests
     public void ErrorProvider_Icon_NotDisposed_Unexpectedly()
     {
         // Unit test for https://github.com/dotnet/winforms/issues/8513.
-        using var provider = new ErrorProvider();
+        using ErrorProvider provider = new();
         var icon = provider.Icon;
 
         Assert.NotNull(icon);

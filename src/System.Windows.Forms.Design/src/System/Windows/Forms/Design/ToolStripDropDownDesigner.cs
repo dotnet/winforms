@@ -52,9 +52,9 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     {
         get
         {
-            DesignerActionListCollection actionLists = new DesignerActionListCollection();
+            DesignerActionListCollection actionLists = new();
             actionLists.AddRange(base.ActionLists);
-            ContextMenuStripActionList cmActionList = new ContextMenuStripActionList(this);
+            ContextMenuStripActionList cmActionList = new(this);
             if (cmActionList is not null)
             {
                 actionLists.Add(cmActionList);
@@ -199,7 +199,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     {
         // If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
         ICollection selComponents = selectionService.GetSelectedComponents();
-        GlyphCollection glyphs = new GlyphCollection();
+        GlyphCollection glyphs = new();
         foreach (object selComp in selComponents)
         {
             if (selComp is ToolStripItem item)
@@ -554,7 +554,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     {
         base.PreFilterProperties(properties);
         PropertyDescriptor prop;
-        string[] shadowProps = new string[] { "AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop" };
+        string[] shadowProps = ["AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop"];
         Attribute[] empty = Array.Empty<Attribute>();
         for (int i = 0; i < shadowProps.Length; i++)
         {

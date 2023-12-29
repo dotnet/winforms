@@ -105,10 +105,8 @@ public partial class DomainUpDown : UpDownBase
 
         set
         {
-            if (value < -1 || value >= Items.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, Items.Count);
 
             if (value != SelectedIndex)
             {
@@ -350,7 +348,7 @@ public partial class DomainUpDown : UpDownBase
     {
         if (ReadOnly)
         {
-            char[] character = new char[] { e.KeyChar };
+            char[] character = [e.KeyChar];
             UnicodeCategory uc = char.GetUnicodeCategory(character[0]);
 
             if (uc == UnicodeCategory.LetterNumber

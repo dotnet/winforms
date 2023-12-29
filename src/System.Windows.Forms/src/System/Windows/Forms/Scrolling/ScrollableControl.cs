@@ -1472,7 +1472,7 @@ public partial class ScrollableControl : Control, IArrangedElement
         ScrollEventType type = (ScrollEventType)m.WParamInternal.LOWORD;
         if (type != ScrollEventType.EndScroll)
         {
-            ScrollEventArgs se = new ScrollEventArgs(type, oldValue, value, scrollOrientation);
+            ScrollEventArgs se = new(type, oldValue, value, scrollOrientation);
             OnScroll(se);
         }
     }

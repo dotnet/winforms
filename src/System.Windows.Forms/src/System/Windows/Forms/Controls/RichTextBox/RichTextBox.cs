@@ -236,10 +236,7 @@ public partial class RichTextBox : TextBoxBase
 
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(BulletIndent), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             _bulletIndent = value;
 
@@ -580,10 +577,7 @@ public partial class RichTextBox : TextBoxBase
         {
             if (_rightMargin != value)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RightMargin), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _rightMargin = value;
 
@@ -831,13 +825,8 @@ public partial class RichTextBox : TextBoxBase
         }
         set
         {
-            if (value > 2000 || value < -2000)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidBoundArgument, nameof(SelectionCharOffset), value, -2000, 2000));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 2000);
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -2000);
 
             ForceHandleCreate();
             CHARFORMAT2W cf = new()
@@ -1171,13 +1160,7 @@ public partial class RichTextBox : TextBoxBase
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionRightIndent), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             ForceHandleCreate();
             PARAFORMAT pf = new()
@@ -1508,12 +1491,10 @@ public partial class RichTextBox : TextBoxBase
 
         set
         {
-            if (value <= 0.015625f || value >= 64.0f)
+            if (!float.IsNaN(value))
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidExBoundArgument, nameof(ZoomFactor), value, 0.015625f, 64.0f));
+                ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, 0.015625f);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, 64.0f);
             }
 
             if (value != _zoomMultiplier)
@@ -1988,9 +1969,9 @@ public partial class RichTextBox : TextBoxBase
         ArgumentOutOfRangeException.ThrowIfNegative(start);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLength);
 
-        if (end < start && end != -1)
+        if (end != -1)
         {
-            throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.InvalidLowBoundArgumentEx, nameof(end), end, nameof(start)));
+            ArgumentOutOfRangeException.ThrowIfLessThan(end, start);
         }
 
         // Don't do anything if we get nothing to look for
@@ -2026,7 +2007,7 @@ public partial class RichTextBox : TextBoxBase
         };
 
         // Characters we have slurped into memory in order to search
-        var charBuffer = new UnicodeCharBuffer(CHAR_BUFFER_LEN + 1);
+        UnicodeCharBuffer charBuffer = new(CHAR_BUFFER_LEN + 1);
         txrg.lpstrText = charBuffer.AllocCoTaskMem();
         if (txrg.lpstrText == IntPtr.Zero)
         {

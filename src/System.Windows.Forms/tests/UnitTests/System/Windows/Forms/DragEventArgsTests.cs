@@ -22,7 +22,7 @@ public class DragEventArgsTests
     [MemberData(nameof(Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData))]
     public void Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect)
     {
-        var e = new DragEventArgs(data, keyState, x, y, allowedEffect, effect);
+        DragEventArgs e = new(data, keyState, x, y, allowedEffect, effect);
         Assert.Equal(data, e.Data);
         Assert.Equal(keyState, e.KeyState);
         Assert.Equal(x, e.X);
@@ -36,7 +36,7 @@ public class DragEventArgsTests
     public void Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string(IDataObject data, int keyState, int x,
         int y, DragDropEffects allowedEffect, DragDropEffects effect, DropImageType dropImageType, string message, string messageReplacementToken)
     {
-        var e = new DragEventArgs(data, keyState, x, y, allowedEffect, effect, dropImageType, message, messageReplacementToken);
+        DragEventArgs e = new(data, keyState, x, y, allowedEffect, effect, dropImageType, message, messageReplacementToken);
         Assert.Equal(data, e.Data);
         Assert.Equal(keyState, e.KeyState);
         Assert.Equal(x, e.X);
@@ -53,7 +53,7 @@ public class DragEventArgsTests
     [InlineData((DragDropEffects)(DragDropEffects.None - 1))]
     public void Effect_Set_GetReturnsExpected(DragDropEffects value)
     {
-        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move)
+        DragEventArgs e = new(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move)
         {
             Effect = value
         };
@@ -65,7 +65,7 @@ public class DragEventArgsTests
     [InlineData(DropImageType.Invalid - 1)]
     public void DropImageType_Set_GetReturnsExpected(DropImageType value)
     {
-        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Copy to %1", "Documents")
+        DragEventArgs e = new(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Copy to %1", "Documents")
         {
             DropImageType = value
         };
@@ -77,7 +77,7 @@ public class DragEventArgsTests
     [InlineData(null)]
     public void Message_Set_GetReturnsExpected(string value)
     {
-        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents")
+        DragEventArgs e = new(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents")
         {
             Message = value
         };
@@ -89,7 +89,7 @@ public class DragEventArgsTests
     [InlineData(null)]
     public void MessageReplacementToken_Set_GetReturnsExpected(string value)
     {
-        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Desktop")
+        DragEventArgs e = new(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Desktop")
         {
             MessageReplacementToken = value
         };

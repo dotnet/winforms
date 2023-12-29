@@ -145,7 +145,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     /// </summary>
     private void OnVerbSetMask(object sender, EventArgs e)
     {
-        MaskedTextBoxDesignerActionList actionList = new MaskedTextBoxDesignerActionList(this);
+        MaskedTextBoxDesignerActionList actionList = new(this);
         actionList.SetMask();
     }
 

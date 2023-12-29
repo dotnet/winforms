@@ -20,14 +20,14 @@ public class FileDialogCustomPlaceTests
     [MemberData(nameof(GetStringWithNullTheoryData))]
     public void FileDialogCustomPlace_Ctor_String(string? path)
     {
-        var place = new FileDialogCustomPlace(path);
+        FileDialogCustomPlace place = new(path);
         Assert.Equal(Guid.Empty, place.KnownFolderGuid);
         Assert.Same(path ?? string.Empty, place.Path);
     }
 
     public static TheoryData<Guid> GetGuidTheoryData()
     {
-        var data = new TheoryData<Guid>
+        TheoryData<Guid> data = new()
         {
             Guid.Empty,
             Guid.NewGuid()
@@ -39,7 +39,7 @@ public class FileDialogCustomPlaceTests
     [MemberData(nameof(GetGuidTheoryData))]
     public void FileDialogCustomPlace_Ctor_Guid(Guid knownFolderGuid)
     {
-        var place = new FileDialogCustomPlace(knownFolderGuid);
+        FileDialogCustomPlace place = new(knownFolderGuid);
         Assert.Equal(knownFolderGuid, place.KnownFolderGuid);
         Assert.Empty(place.Path);
     }
@@ -48,7 +48,7 @@ public class FileDialogCustomPlaceTests
     [MemberData(nameof(GetGuidTheoryData))]
     public void FileDialogCustomPlace_KnownFolderGuid_Set_GetReturnsExpected(Guid value)
     {
-        var place = new FileDialogCustomPlace("path")
+        FileDialogCustomPlace place = new("path")
         {
             KnownFolderGuid = value
         };
@@ -65,7 +65,7 @@ public class FileDialogCustomPlaceTests
     [MemberData(nameof(GetStringWithNullTheoryData))]
     public void FileDialogCustomPlace_Path_Set_GetReturnsExpected(string? value)
     {
-        var place = new FileDialogCustomPlace(Guid.NewGuid())
+        FileDialogCustomPlace place = new(Guid.NewGuid())
         {
             Path = value
         };

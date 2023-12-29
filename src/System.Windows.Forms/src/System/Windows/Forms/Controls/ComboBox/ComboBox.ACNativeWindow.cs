@@ -27,7 +27,7 @@ public partial class ComboBox
         {
             if (!s_ACWindows.ContainsKey(handle))
             {
-                ACNativeWindow newAC = new ACNativeWindow(handle);
+                ACNativeWindow newAC = new(handle);
             }
 
             return true;
@@ -89,7 +89,7 @@ public partial class ComboBox
             {
                 if (subclass)
                 {
-                    ACNativeWindow newAC = new ACNativeWindow(acHandle);
+                    ACNativeWindow newAC = new(acHandle);
                 }
                 else
                 {

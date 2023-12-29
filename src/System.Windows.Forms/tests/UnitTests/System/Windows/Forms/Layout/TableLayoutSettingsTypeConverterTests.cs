@@ -21,14 +21,14 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData(typeof(string), true)]
     public void TableLayoutSettingsTypeConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Equal(expected, converter.CanConvertFrom(sourceType));
     }
 
     [Fact]
     public void TableLayoutSettingsTypeConverter_ConvertFrom_HasStylesAndControls_ReturnsExpected()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(
 @"<?xml version=""1.0"" encoding=""utf-16""?>
 <TableLayoutSettings>
@@ -101,7 +101,7 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls><Control /><Control Name="""" /></Controls><Columns Styles="""" /><Rows Styles="""" /></TableLayoutSettings>")]
     public void TableLayoutSettingsTypeConverter_ConvertFrom_Empty_ReturnsExpected(string value)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(value));
         Assert.Empty(settings.ColumnStyles);
         Assert.Empty(settings.RowStyles);
@@ -112,7 +112,7 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData("notXmlValue")]
     public void TableLayoutSettingsTypeConverter_ConvertFrom_InvalidStringXmlValue_ThrowsInvalidXmlException(string value)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<XmlException>(() => converter.ConvertFrom(value));
     }
 
@@ -122,7 +122,7 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData(",1")]
     public void TableLayoutSettingsTypeConverter_ConvertFrom_InvalidStyleSize_ThrowsArgumentException(string style)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<ArgumentException>(() => converter.ConvertFrom($@"<?xml version=""1.0"" encoding=""utf-16""?><Root><Columns Styles=""{style}"" /></Root>"));
     }
 
@@ -132,7 +132,7 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData("AutoSize,Invalid")]
     public void TableLayoutSettingsTypeConverter_ConvertFrom_InvalidStyleWidth_ThrowsIndexOutOfRangeException(string style)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<IndexOutOfRangeException>(() => converter.ConvertFrom($@"<?xml version=""1.0"" encoding=""utf-16""?><Root><Columns Styles=""{style}"" /></Root>"));
     }
 
@@ -141,7 +141,7 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData(null)]
     public void TableLayoutSettingsTypeConverter_ConvertFrom_InvalidValue_ThrowsNotSupportedException(object value)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(value));
     }
 
@@ -153,16 +153,16 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData(null, false)]
     public void TableLayoutSettingsTypeConverter_CanConvertTo_Invoke_ReturnsExpected(Type destinationType, bool expected)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Equal(expected, converter.CanConvertTo(destinationType));
     }
 
     [WinFormsFact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_NoStylesOrControls_ReturnsExpected()
     {
-        using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+        using ToolStrip toolStrip = new() { LayoutStyle = ToolStripLayoutStyle.Table };
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         string result = Assert.IsType<string>(converter.ConvertTo(settings, typeof(string)));
         Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls /><Columns Styles="""" /><Rows Styles="""" /></TableLayoutSettings>", result);
     }
@@ -170,7 +170,7 @@ public class TableLayoutSettingsTypeConverterTests
     [WinFormsFact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_HasStylesAndControls_ReturnsExpected()
     {
-        using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+        using ToolStrip toolStrip = new() { LayoutStyle = ToolStripLayoutStyle.Table };
         toolStrip.Items.Add(new ToolStripLabel("text"));
 
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
@@ -179,13 +179,13 @@ public class TableLayoutSettingsTypeConverterTests
         settings.RowStyles.Add(new RowStyle(SizeType.AutoSize, 1));
         settings.RowStyles.Add(new RowStyle(SizeType.Absolute, 2));
 
-        using var control = new ScrollableControl();
+        using ScrollableControl control = new();
         settings.SetColumnSpan(control, 1);
         settings.SetRowSpan(control, 2);
         settings.SetColumn(control, 3);
         settings.SetRow(control, 4);
 
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         string result = Assert.IsType<string>(converter.ConvertTo(settings, typeof(string)));
         Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls /><Columns Styles=""AutoSize,1,Absolute,2"" /><Rows Styles=""AutoSize,1,Absolute,2"" /></TableLayoutSettings>", result);
     }
@@ -193,8 +193,8 @@ public class TableLayoutSettingsTypeConverterTests
     [WinFormsFact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_HasControlChildren_ReturnsExpected()
     {
-        using var panel = new TableLayoutPanel();
-        using var control = new ScrollableControl();
+        using TableLayoutPanel panel = new();
+        using ScrollableControl control = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(panel.LayoutSettings);
 
         panel.Controls.Add(control);
@@ -203,7 +203,7 @@ public class TableLayoutSettingsTypeConverterTests
         settings.SetColumn(control, 3);
         settings.SetRow(control, 4);
 
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         string result = Assert.IsType<string>(converter.ConvertTo(settings, typeof(string)));
         Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls><Control Name="""" Row=""4"" RowSpan=""2"" Column=""3"" ColumnSpan=""1"" /></Controls><Columns Styles="""" /><Rows Styles="""" /></TableLayoutSettings>", result);
     }
@@ -211,7 +211,7 @@ public class TableLayoutSettingsTypeConverterTests
     [Fact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_StubWithoutChildren_ReturnsExpected()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
         string result = Assert.IsType<string>(converter.ConvertTo(settings, typeof(string)));
         Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls /><Columns Styles="""" /><Rows Styles="""" /></TableLayoutSettings>", result);
@@ -220,7 +220,7 @@ public class TableLayoutSettingsTypeConverterTests
     [Fact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_StubWithChildren_ReturnsExpected()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
         settings.SetColumnSpan("name", 1);
         settings.SetRowSpan("name", 2);
@@ -234,19 +234,19 @@ public class TableLayoutSettingsTypeConverterTests
     [WinFormsFact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_HasControlChildWithoutNameProperty_ThrowsInvalidOperationException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         var settings = Assert.IsType<TableLayoutSettings>(control.LayoutSettings);
 
-        using var child = new ControlWithNullName();
+        using ControlWithNullName child = new();
         control.Controls.Add(child);
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<InvalidOperationException>(() => converter.ConvertTo(settings, typeof(string)));
     }
 
     [Fact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_HasControlChildWithoutNameStub_ReturnsExpected()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
         Assert.Throws<ArgumentNullException>("control", () => settings.SetColumnSpan(null, 1));
         string result = Assert.IsType<string>(converter.ConvertTo(settings, typeof(string)));
@@ -256,36 +256,36 @@ public class TableLayoutSettingsTypeConverterTests
     [WinFormsFact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_RowStyleInColumnStyles_ThrowsInvalidCastException()
     {
-        using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+        using ToolStrip toolStrip = new() { LayoutStyle = ToolStripLayoutStyle.Table };
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
         Assert.Throws<InvalidCastException>(() => settings.ColumnStyles.Add(new RowStyle()));
 
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<InvalidCastException>(() => converter.ConvertTo(settings, typeof(string)));
     }
 
     [WinFormsFact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_ColumnStyleInRowStyles_ThrowsInvalidCastException()
     {
-        using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+        using ToolStrip toolStrip = new() { LayoutStyle = ToolStripLayoutStyle.Table };
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
         settings.RowStyles.Add(new ColumnStyle());
 
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<InvalidCastException>(() => converter.ConvertTo(settings, typeof(string)));
     }
 
     [Fact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_ValueNotTableLayoutSettings_ReturnsExpected()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Equal("1", converter.ConvertTo(1, typeof(string)));
     }
 
     [Fact]
     public void TableLayoutSettingsTypeConverter_ConvertTo_NullDestinationType_ThrowsArgumentNullException()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(new object(), null));
     }
 
@@ -295,8 +295,8 @@ public class TableLayoutSettingsTypeConverterTests
     [InlineData(typeof(int))]
     public void TableLayoutSettingsTypeConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
-        var converter = new TableLayoutSettingsTypeConverter();
-        using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+        TableLayoutSettingsTypeConverter converter = new();
+        using ToolStrip toolStrip = new() { LayoutStyle = ToolStripLayoutStyle.Table };
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(toolStrip.LayoutSettings, destinationType));
     }
 
@@ -313,7 +313,7 @@ public class TableLayoutSettingsTypeConverterTests
 
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
         {
-            var mockDescriptor = new Mock<ICustomTypeDescriptor>(MockBehavior.Strict);
+            Mock<ICustomTypeDescriptor> mockDescriptor = new(MockBehavior.Strict);
             mockDescriptor
                 .Setup(c => c.GetProperties())
                 .Returns(new PropertyDescriptorCollection(Array.Empty<PropertyDescriptor>()));

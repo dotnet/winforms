@@ -19,10 +19,10 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font_TestData))]
     public void Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+            DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
             Assert.Same(graphics, e.Graphics);
             Assert.Same(associatedWindow, e.AssociatedWindow);
             Assert.Same(associatedControl, e.AssociatedControl);
@@ -46,10 +46,10 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawBackground_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+            DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
             e.DrawBackground();
         }
     }
@@ -58,10 +58,10 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawText_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+            DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
             e.DrawText();
         }
     }
@@ -70,10 +70,10 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawText_InvokeTextFormatFlags_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+            DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
             e.DrawText(TextFormatFlags.Bottom);
         }
     }
@@ -82,10 +82,10 @@ public class DrawToolTipEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawBorder_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawToolTipEventArgs(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
+            DrawToolTipEventArgs e = new(graphics, associatedWindow, associatedControl, bounds, toolTipText, backColor, foreColor, font);
             e.DrawBorder();
         }
     }

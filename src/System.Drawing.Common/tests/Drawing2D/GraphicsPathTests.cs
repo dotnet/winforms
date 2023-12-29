@@ -33,7 +33,7 @@ public class GraphicsPathTests
     [Fact]
     public void Ctor_Default_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.Equal(FillMode.Alternate, gp.FillMode);
             AssertEmptyGraphicsPath(gp);
@@ -43,8 +43,8 @@ public class GraphicsPathTests
     [Fact]
     public void Ctor_FillMode_Success()
     {
-        using (GraphicsPath gpa = new GraphicsPath(FillMode.Alternate))
-        using (GraphicsPath gpw = new GraphicsPath(FillMode.Winding))
+        using (GraphicsPath gpa = new(FillMode.Alternate))
+        using (GraphicsPath gpw = new(FillMode.Winding))
         {
             Assert.Equal(FillMode.Alternate, gpa.FillMode);
             AssertEmptyGraphicsPath(gpa);
@@ -67,8 +67,8 @@ public class GraphicsPathTests
             new(1f, 1f), new(1f, 1f), new(1f, 1f),
         ];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
-        using (GraphicsPath gpf = new GraphicsPath(fPoints, types))
+        using (GraphicsPath gp = new(points, types))
+        using (GraphicsPath gpf = new(fPoints, types))
         {
             Assert.Equal(FillMode.Alternate, gp.FillMode);
             Assert.Equal(6, gp.PointCount);
@@ -105,7 +105,7 @@ public class GraphicsPathTests
     [Fact]
     public void Clone_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             Assert.Equal(FillMode.Alternate, clone.FillMode);
@@ -116,7 +116,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reset_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.Reset();
 
@@ -128,7 +128,7 @@ public class GraphicsPathTests
     [Fact]
     public void GraphicsPath_FillModeChange()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.FillMode = FillMode.Winding;
             Assert.Equal(FillMode.Winding, gp.FillMode);
@@ -140,7 +140,7 @@ public class GraphicsPathTests
     [InlineData(FillMode.Winding + 1)]
     public void GraphicsPath_InvalidFillMode_ThrowsInvalidEnumArgumentException(FillMode fillMode)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.ThrowsAny<ArgumentException>(() => gp.FillMode = fillMode);
         }
@@ -149,7 +149,7 @@ public class GraphicsPathTests
     [Fact]
     public void PathData_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.Equal(0, gp.PathData.Points.Length);
             Assert.Equal(0, gp.PathData.Types.Length);
@@ -159,7 +159,7 @@ public class GraphicsPathTests
     [Fact]
     public void PathData_CannotChange()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(1, 1, 2, 2));
             Assert.Equal(1f, gp.PathData.Points[0].X);
@@ -174,7 +174,7 @@ public class GraphicsPathTests
     [Fact]
     public void PathPoints_CannotChange()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(1, 1, 2, 2));
             Assert.Equal(1f, gp.PathPoints[0].X);
@@ -189,7 +189,7 @@ public class GraphicsPathTests
     [Fact]
     public void PathPoints_EmptyPath_ThrowsArgumentException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.Throws<ArgumentException>(() => gp.PathPoints);
         }
@@ -198,7 +198,7 @@ public class GraphicsPathTests
     [Fact]
     public void PathTypes_CannotChange()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(1, 1, 2, 2));
             Assert.Equal(0, gp.PathTypes[0]);
@@ -211,7 +211,7 @@ public class GraphicsPathTests
     [Fact]
     public void PathTypes_EmptyPath_ThrowsArgumentException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.Throws<ArgumentException>(() => gp.PathTypes);
         }
@@ -225,7 +225,7 @@ public class GraphicsPathTests
             new(1f, 1f), new(2f, 2f), new(3f, 3f),
         ];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
+        using (GraphicsPath gp = new(points, types))
         {
             Assert.Equal(gp.GetLastPoint(), points[2]);
         }
@@ -234,10 +234,10 @@ public class GraphicsPathTests
     [Fact]
     public void AddLine_Success()
     {
-        using (GraphicsPath gpInt = new GraphicsPath())
-        using (GraphicsPath gpFloat = new GraphicsPath())
-        using (GraphicsPath gpPointsInt = new GraphicsPath())
-        using (GraphicsPath gpfPointsloat = new GraphicsPath())
+        using (GraphicsPath gpInt = new())
+        using (GraphicsPath gpFloat = new())
+        using (GraphicsPath gpPointsInt = new())
+        using (GraphicsPath gpfPointsloat = new())
         {
             gpInt.AddLine(1, 1, 2, 2);
             // AssertLine() method expects line drawn between points with coordinates 1, 1 and 2, 2, here and below.
@@ -257,8 +257,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddLine_SamePoints_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddLine(new Point(49, 157), new Point(75, 196));
             gpi.AddLine(new Point(75, 196), new Point(102, 209));
@@ -283,8 +283,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddLines_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddLines(new Point[] { new(1, 1), new(2, 2) });
             AssertLine(gpi);
@@ -297,8 +297,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddLines_SinglePoint_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddLines(new PointF[] { new(1, 1) });
             Assert.Equal(1, gpi.PointCount);
@@ -322,8 +322,8 @@ public class GraphicsPathTests
             new(49, 57), new(49, 57)
         ];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddLines(intPoints);
             Assert.Equal(2, gpi.PointCount);
@@ -350,7 +350,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddLines_PointsNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => new GraphicsPath().AddLines((Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => new GraphicsPath().AddLines((PointF[])null));
@@ -367,8 +367,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddArc_Values_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddArc(1, 1, 2, 2, Pi4, Pi4);
             // AssertArc() method expects added Arc with parameters
@@ -383,8 +383,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddArc_Rectangle_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddArc(new Rectangle(1, 1, 2, 2), Pi4, Pi4);
             AssertArc(gpi);
@@ -400,7 +400,7 @@ public class GraphicsPathTests
     [InlineData(0, 1)]
     public void AddArc_ZeroWidthHeight_ThrowsArgumentException(int width, int height)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddArc(1, 1, width, height, Pi4, Pi4));
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddArc(1.0f, 1.0f, (float)width, (float)height, Pi4, Pi4));
@@ -410,8 +410,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddBezier_Points_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddBezier(new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4));
             // AssertBezier() method expects added Bezier with points (1, 1), (2, 2), (3, 3), (4, 4), here and below.
@@ -425,8 +425,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddBezier_SamePoints_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gp = new())
+        using (GraphicsPath gpf = new())
         {
             gp.AddBezier(new Point(0, 0), new Point(0, 0), new Point(0, 0), new Point(0, 0));
             Assert.Equal(4, gp.PointCount);
@@ -449,8 +449,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddBezier_Values_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddBezier(1, 1, 2, 2, 3, 3, 4, 4);
             AssertBezier(gpi);
@@ -467,7 +467,7 @@ public class GraphicsPathTests
             new(1, 1), new(2, 2), new(3, 3), new(4, 4)
         ];
 
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpf = new())
         {
             gpf.AddBeziers(points);
             AssertBezier(gpf);
@@ -477,7 +477,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddBeziers_PointsNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddBeziers((PointF[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddBeziers((Point[])null));
@@ -496,7 +496,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddBeziers_InvalidFloatPointsLength_TestData))]
     public void AddBeziers_InvalidFloatPointsLength_ThrowsArgumentException(PointF[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddBeziers(points));
         }
@@ -508,8 +508,8 @@ public class GraphicsPathTests
         Point[] intPoints = [new(1, 1), new(2, 2)];
         PointF[] floatPoints = [new(1, 1), new(2, 2)];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpf.AddCurve(floatPoints);
             // AssertCurve() method expects added Curve with points (1, 1), (2, 2), here and below.
@@ -526,8 +526,8 @@ public class GraphicsPathTests
         Point[] intPoints = [new(1, 1), new(2, 2)];
         PointF[] floatPoints = [new(1, 1), new(2, 2)];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddCurve(intPoints, 0.5f);
             AssertCurve(gpi);
@@ -543,8 +543,8 @@ public class GraphicsPathTests
         Point[] intPoints = [new(1, 1), new(1, 1)];
         PointF[] floatPoints = [new(1, 1), new(1, 1)];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddCurve(intPoints);
             Assert.Equal(4, gpi.PointCount);
@@ -564,8 +564,8 @@ public class GraphicsPathTests
         Point[] intPoints = [new(1, 1), new(2, 2)];
         PointF[] floatPoints = [new(1, 1), new(2, 2)];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddCurve(intPoints, float.MaxValue);
             Assert.Equal(4, gpi.PointCount);
@@ -606,7 +606,7 @@ public class GraphicsPathTests
 
         byte[] expectedTypes = [0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
         int[] pointsCount = [4, 7, 10, 13];
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             for (int i = 0; i < points.Length - 1; i++)
             {
@@ -622,7 +622,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddCurve_PointsNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddCurve((PointF[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddCurve((Point[])null));
@@ -639,7 +639,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidFloatPointsLength_TestData))]
     public void AddCurve_InvalidFloatPointsLength_ThrowsArgumentException(PointF[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points));
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points, 0, 2, 0.5f));
@@ -656,7 +656,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidPointsLength_TestData))]
     public void AddCurve_InvalidPointsLength_ThrowsArgumentException(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points));
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points, 0, 2, 0.5f));
@@ -673,7 +673,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidSegment_TestData))]
     public void AddCurve_InvalidSegment_ThrowsArgumentException(int segment)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(
                 new PointF[2] { new(1f, 1f), new(2f, 2f) }, 0, segment, 0.5f));
@@ -686,7 +686,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddCurve_OffsetTooLarge_ThrowsArgumentException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(
                 new PointF[3] { new(1f, 1f), new(0f, 20f), new(20f, 0f) }, 1, 2, 0.5f));
@@ -699,8 +699,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddClosedCurve_Points_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddClosedCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
             // AssertClosedCurve() method expects added ClosedCurve with points (1, 1), (2, 2), (3, 3), here and below.
@@ -714,8 +714,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddClosedCurve_SamePoints_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddClosedCurve(new Point[3] { new(1, 1), new(1, 1), new(1, 1) });
             Assert.Equal(10, gpi.PointCount);
@@ -732,8 +732,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddClosedCurve_Tension_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddClosedCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) }, 0.5f);
             AssertClosedCurve(gpi);
@@ -746,7 +746,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddClosedCurve_PointsNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddClosedCurve((PointF[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddClosedCurve((Point[])null));
@@ -764,7 +764,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidPointsLength_TestData))]
     public void AddClosedCurve_InvalidPointsLength_ThrowsArgumentException(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddClosedCurve(points));
         }
@@ -781,7 +781,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddClosedCurve_InvalidFloatPointsLength_TestData))]
     public void AddClosedCurve_InvalidFloatPointsLength_ThrowsArgumentException(PointF[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddClosedCurve(points));
         }
@@ -790,8 +790,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddRectangle_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddRectangle(new Rectangle(1, 1, 2, 2));
             // AssertRectangle() method expects added Rectangle with parameters x=1, y=1, width=2, height=2, here and below.
@@ -805,8 +805,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddRectangle_SameRectangles_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddRectangle(new Rectangle(1, 1, 1, 1));
             Assert.Equal(4, gpi.PointCount);
@@ -837,8 +837,8 @@ public class GraphicsPathTests
     [InlineData(0, 4)]
     public void AddRectangle_ZeroWidthHeight_Success(int width, int height)
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddRectangle(new Rectangle(1, 2, width, height));
             Assert.Equal(0, gpi.PathData.Points.Length);
@@ -854,8 +854,8 @@ public class GraphicsPathTests
         Rectangle[] rectInt = [new(1, 1, 2, 2), new(3, 3, 4, 4)];
         RectangleF[] rectFloat = [new(1, 1, 2, 2), new(3, 3, 4, 4)];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddRectangles(rectInt);
             Assert.Equal(8, gpi.PathPoints.Length);
@@ -884,8 +884,8 @@ public class GraphicsPathTests
             new(1, 1, 2, 2)
         ];
 
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddRectangles(rectInt);
             Assert.Equal(8, gpi.PathPoints.Length);
@@ -902,7 +902,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddRectangles_RectangleNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("rects", () => gp.AddRectangles((RectangleF[])null));
             AssertExtensions.Throws<ArgumentNullException>("rects", () => gp.AddRectangles((Rectangle[])null));
@@ -912,8 +912,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddEllipse_Rectangle_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddEllipse(new Rectangle(1, 1, 2, 2));
             // AssertEllipse() method expects added Ellipse with parameters x=1, y=1, width=2, height=2, here and below.
@@ -927,8 +927,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddEllipse_Values_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddEllipse(1, 1, 2, 2);
             AssertEllipse(gpi);
@@ -944,8 +944,8 @@ public class GraphicsPathTests
     [InlineData(0, 2)]
     public void AddEllipse_ZeroWidthHeight_Success(int width, int height)
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddEllipse(1, 1, width, height);
             Assert.Equal(13, gpi.PathData.Points.Length);
@@ -958,7 +958,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddPie_Rectangle_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
+        using (GraphicsPath gpi = new())
         {
             gpi.AddPie(new Rectangle(1, 1, 2, 2), Pi4, Pi4);
             // AssertPie() method expects added Pie with parameters
@@ -970,8 +970,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddPie_Values_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddPie(1, 1, 2, 2, Pi4, Pi4);
             AssertPie(gpi);
@@ -987,7 +987,7 @@ public class GraphicsPathTests
     [InlineData(0, 2)]
     public void AddPie_ZeroWidthHeight_ThrowsArgumentException(int width, int height)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddPie(1, 1, height, width, Pi4, Pi4));
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddPie(1f, 1f, height, width, Pi4, Pi4));
@@ -998,8 +998,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddPolygon_Points_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
             // AssertPolygon() method expects added Polygon with points (1, 1), (2, 2), (3, 3), here and below.
@@ -1013,8 +1013,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddPolygon_SamePoints_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
             Assert.Equal(3, gpi.PointCount);
@@ -1053,7 +1053,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddPolygon_PointsNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => new GraphicsPath().AddPolygon((Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => new GraphicsPath().AddPolygon((PointF[])null));
@@ -1071,7 +1071,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddPolygon_InvalidFloadPointsLength_TestData))]
     public void AddPolygon_InvalidFloadPointsLength_ThrowsArgumentException(PointF[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddPolygon(points));
         }
@@ -1088,7 +1088,7 @@ public class GraphicsPathTests
     [MemberData(nameof(AddPolygon_InvalidPointsLength_TestData))]
     public void AddPolygon_InvalidPointsLength_ThrowsArgumentException(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gp.AddPolygon(points));
         }
@@ -1097,8 +1097,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddPath_Success()
     {
-        using (GraphicsPath inner = new GraphicsPath())
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath inner = new())
+        using (GraphicsPath gp = new())
         {
             inner.AddRectangle(new Rectangle(1, 1, 2, 2));
             gp.AddPath(inner, true);
@@ -1109,7 +1109,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddPath_PathNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("addingPath", () => new GraphicsPath().AddPath(null, false));
         }
@@ -1118,8 +1118,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_Point_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddString("mono", FontFamily.GenericMonospace, 0, 10, new Point(10, 10), StringFormat.GenericDefault);
             AssertExtensions.GreaterThan(gpi.PointCount, 0);
@@ -1132,8 +1132,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_Rectangle_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddString("mono", FontFamily.GenericMonospace, 0, 10, new Rectangle(10, 10, 10, 10), StringFormat.GenericDefault);
             AssertExtensions.GreaterThan(gpi.PointCount, 0);
@@ -1146,8 +1146,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_NegativeSize_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddString("mono", FontFamily.GenericMonospace, 0, -10, new Point(10, 10), StringFormat.GenericDefault);
             AssertExtensions.GreaterThan(gpi.PointCount, 0);
@@ -1168,9 +1168,9 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_StringFormat_Success()
     {
-        using (GraphicsPath gp1 = new GraphicsPath())
-        using (GraphicsPath gp2 = new GraphicsPath())
-        using (GraphicsPath gp3 = new GraphicsPath())
+        using (GraphicsPath gp1 = new())
+        using (GraphicsPath gp2 = new())
+        using (GraphicsPath gp3 = new())
         {
             gp1.AddString("mono", FontFamily.GenericMonospace, 0, 10, new RectangleF(10f, 10f, 10f, 10f), null);
             AssertExtensions.GreaterThan(gp1.PointCount, 0);
@@ -1186,8 +1186,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_EmptyString_Success()
     {
-        using (GraphicsPath gpi = new GraphicsPath())
-        using (GraphicsPath gpf = new GraphicsPath())
+        using (GraphicsPath gpi = new())
+        using (GraphicsPath gpf = new())
         {
             gpi.AddString(string.Empty, FontFamily.GenericMonospace, 0, 10, new Point(10, 10), StringFormat.GenericDefault);
             Assert.Equal(0, gpi.PointCount);
@@ -1200,7 +1200,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_StringNull_ThrowsNullReferenceException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.Throws<NullReferenceException>(() =>
                 gp.AddString(null, FontFamily.GenericMonospace, 0, 10, new Point(10, 10), StringFormat.GenericDefault));
@@ -1216,7 +1216,7 @@ public class GraphicsPathTests
     [Fact]
     public void AddString_FontFamilyNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException, ArgumentException>("family", null, () =>
                 new GraphicsPath().AddString("mono", null, 0, 10, new Point(10, 10), StringFormat.GenericDefault));
@@ -1226,8 +1226,8 @@ public class GraphicsPathTests
     [Fact]
     public void Transform_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Matrix matrix = new Matrix(1f, 1f, 2f, 2f, 3f, 3f))
+        using (GraphicsPath gp = new())
+        using (Matrix matrix = new(1f, 1f, 2f, 2f, 3f, 3f))
         {
             gp.AddRectangle(new Rectangle(1, 1, 2, 2));
             AssertRectangle(gp);
@@ -1242,8 +1242,8 @@ public class GraphicsPathTests
     [Fact]
     public void Transform_PathEmpty_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Matrix matrix = new Matrix(1f, 1f, 2f, 2f, 3f, 3f))
+        using (GraphicsPath gp = new())
+        using (Matrix matrix = new(1f, 1f, 2f, 2f, 3f, 3f))
         {
             gp.Transform(matrix);
             Assert.Equal(new float[] { 1f, 1f, 2f, 2f, 3f, 3f }, matrix.Elements);
@@ -1254,7 +1254,7 @@ public class GraphicsPathTests
     [Fact]
     public void Transform_MatrixNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("matrix", () => gp.Transform(null));
         }
@@ -1263,7 +1263,7 @@ public class GraphicsPathTests
     [Fact]
     public void GetBounds_PathEmpty_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Assert.Equal(new RectangleF(0f, 0f, 0f, 0f), gp.GetBounds());
         }
@@ -1272,10 +1272,10 @@ public class GraphicsPathTests
     [Fact]
     public void GetBounds_Rectangle_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Matrix matrix = new Matrix())
+        using (GraphicsPath gp = new())
+        using (Matrix matrix = new())
         {
-            RectangleF rectangle = new RectangleF(1f, 1f, 2f, 2f);
+            RectangleF rectangle = new(1f, 1f, 2f, 2f);
             gp.AddRectangle(rectangle);
             Assert.Equal(rectangle, gp.GetBounds());
             Assert.Equal(rectangle, gp.GetBounds(null));
@@ -1287,8 +1287,8 @@ public class GraphicsPathTests
     [Fact]
     public void GetBounds_Pie_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Matrix matrix = new Matrix())
+        using (GraphicsPath gp = new())
+        using (Matrix matrix = new())
         {
             Rectangle rectangle = new(10, 10, 100, 100);
             gp.AddPie(rectangle, 30, 45);
@@ -1299,7 +1299,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Empty_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.Flatten();
@@ -1310,7 +1310,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_MatrixNull_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.Flatten(null);
@@ -1321,7 +1321,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_MatrixNullFloat_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.Flatten(null, 1f);
@@ -1332,7 +1332,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Arc_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddArc(0f, 0f, 100f, 100f, 30, 30);
@@ -1344,7 +1344,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Bezier_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddBezier(0, 0, 100, 100, 30, 30, 60, 60);
@@ -1356,7 +1356,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_ClosedCurve_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddClosedCurve(new Point[4]
@@ -1373,7 +1373,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Curve_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddCurve(new Point[4]
@@ -1390,7 +1390,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Ellipse_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddEllipse(10f, 10f, 100f, 100f);
@@ -1402,7 +1402,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Line_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddLine(10f, 10f, 100f, 100f);
@@ -1414,7 +1414,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Pie_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddPie(0, 0, 100, 100, 30, 30);
@@ -1426,7 +1426,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Polygon_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddPolygon(new Point[4]
@@ -1443,7 +1443,7 @@ public class GraphicsPathTests
     [Fact]
     public void Flatten_Rectangle_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         using (GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone()))
         {
             gp.AddRectangle(new Rectangle(0, 0, 100, 100));
@@ -1455,7 +1455,7 @@ public class GraphicsPathTests
     [Fact]
     public void Warp_DestinationPointsNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("destPoints", () => gp.Warp(null, new RectangleF()));
         }
@@ -1464,7 +1464,7 @@ public class GraphicsPathTests
     [Fact]
     public void Warp_DestinationPointsZero_ThrowsArgumentException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new GraphicsPath().Warp(new PointF[0], new RectangleF()));
         }
@@ -1473,8 +1473,8 @@ public class GraphicsPathTests
     [Fact]
     public void Warp_PathEmpty_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Matrix matrix = new Matrix())
+        using (GraphicsPath gp = new())
+        using (Matrix matrix = new())
         {
             Assert.Equal(0, gp.PointCount);
             gp.Warp(new PointF[1] { new(0, 0) }, new RectangleF(10, 20, 30, 40), matrix);
@@ -1485,8 +1485,8 @@ public class GraphicsPathTests
     [Fact]
     public void Warp_WarpModeInvalid_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Matrix matrix = new Matrix())
+        using (GraphicsPath gp = new())
+        using (Matrix matrix = new())
         {
             gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
             gp.Warp(new PointF[1] { new(0, 0) }, new RectangleF(10, 20, 30, 40), matrix, (WarpMode)int.MinValue);
@@ -1497,7 +1497,7 @@ public class GraphicsPathTests
     [Fact]
     public void Warp_RectangleEmpty_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
             gp.Warp(new PointF[1] { new(0, 0) }, new Rectangle(), null);
@@ -1508,7 +1508,7 @@ public class GraphicsPathTests
     [Fact]
     public void SetMarkers_EmptyPath_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.SetMarkers();
         }
@@ -1517,7 +1517,7 @@ public class GraphicsPathTests
     [Fact]
     public void SetMarkers_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(new Point(1, 1), new Point(2, 2));
             Assert.Equal(1, gp.PathTypes[1]);
@@ -1530,7 +1530,7 @@ public class GraphicsPathTests
     [Fact]
     public void ClearMarkers_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(new Point(1, 1), new Point(2, 2));
             Assert.Equal(1, gp.PathTypes[1]);
@@ -1546,7 +1546,7 @@ public class GraphicsPathTests
     [Fact]
     public void ClearMarkers_EmptyPath_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.ClearMarkers();
         }
@@ -1555,7 +1555,7 @@ public class GraphicsPathTests
     [Fact]
     public void CloseFigure_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(new Point(1, 1), new Point(2, 2));
             Assert.Equal(1, gp.PathTypes[1]);
@@ -1568,7 +1568,7 @@ public class GraphicsPathTests
     [Fact]
     public void CloseFigure_EmptyPath_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.CloseFigure();
         }
@@ -1577,7 +1577,7 @@ public class GraphicsPathTests
     [Fact]
     public void CloseAllFigures_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(new Point(1, 1), new Point(2, 2));
             gp.StartFigure();
@@ -1594,7 +1594,7 @@ public class GraphicsPathTests
     [Fact]
     public void CloseAllFigures_EmptyPath_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.CloseAllFigures();
         }
@@ -1603,7 +1603,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddArc()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddArc(10, 10, 100, 100, 90, 180);
@@ -1620,7 +1620,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddBezier()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddBezier(10, 10, 100, 100, 20, 20, 200, 200);
@@ -1637,7 +1637,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddBeziers()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddBeziers(new Point[7]
@@ -1660,7 +1660,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddClosedCurve()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddClosedCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
@@ -1678,7 +1678,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddCurve()
     {
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             path.AddLine(1, 1, 2, 2);
             path.AddCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
@@ -1695,7 +1695,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddEllipse()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddEllipse(10, 10, 100, 100);
@@ -1713,7 +1713,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddLine()
     {
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             path.AddLine(1, 1, 2, 2);
             path.AddLine(5, 5, 10, 10);
@@ -1730,7 +1730,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddLines()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddLines(new Point[4] { new(10, 10), new(20, 10), new(20, 20), new(30, 20) });
@@ -1747,8 +1747,8 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddPath_Connect()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPath inner = new GraphicsPath())
+        using (GraphicsPath gp = new())
+        using (GraphicsPath inner = new())
         {
             inner.AddArc(10, 10, 100, 100, 90, 180);
             gp.AddLine(1, 1, 2, 2);
@@ -1766,8 +1766,8 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddPath_NoConnect()
     {
-        using (GraphicsPath inner = new GraphicsPath())
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath inner = new())
+        using (GraphicsPath path = new())
         {
             inner.AddArc(10, 10, 100, 100, 90, 180);
             path.AddLine(1, 1, 2, 2);
@@ -1785,7 +1785,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddPie()
     {
-        using (GraphicsPath path = new GraphicsPath())
+        using (GraphicsPath path = new())
         {
             path.AddLine(1, 1, 2, 2);
             path.AddPie(10, 10, 10, 10, 90, 180);
@@ -1804,7 +1804,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddPolygon()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
@@ -1822,7 +1822,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddRectangle()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddRectangle(new RectangleF(10, 10, 20, 20));
@@ -1840,7 +1840,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddRectangles()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddRectangles(new RectangleF[2]
@@ -1863,7 +1863,7 @@ public class GraphicsPathTests
     [Fact]
     public void StartClose_AddString()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 1, 2, 2);
             gp.AddString("mono", FontFamily.GenericMonospace, 0, 10, new Point(20, 20), StringFormat.GenericDefault);
@@ -1891,8 +1891,8 @@ public class GraphicsPathTests
 
         byte[] expectedTypes = [0, 1, 1, 129, 0, 1, 1, 1, 1, 1, 1, 129];
 
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Pen pen = new Pen(Color.Blue))
+        using (GraphicsPath gp = new())
+        using (Pen pen = new(Color.Blue))
         {
             gp.AddRectangle(new Rectangle(1, 1, 2, 2));
             gp.PointCount.Should().Be(4);
@@ -1906,8 +1906,8 @@ public class GraphicsPathTests
     [Fact]
     public void Widen_EmptyPath_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Pen pen = new Pen(Color.Blue))
+        using (GraphicsPath gp = new())
+        using (Pen pen = new(Color.Blue))
         {
             Assert.Equal(0, gp.PointCount);
             gp.Widen(pen);
@@ -1918,7 +1918,7 @@ public class GraphicsPathTests
     [Fact]
     public void Widen_PenNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => gp.Widen(null));
             AssertExtensions.Throws<ArgumentNullException>("pen", () => gp.Widen(null, new Matrix()));
@@ -1929,8 +1929,8 @@ public class GraphicsPathTests
     [Fact]
     public void Widen_MatrixNull_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Pen pen = new Pen(Color.Blue))
+        using (GraphicsPath gp = new())
+        using (Pen pen = new(Color.Blue))
         {
             gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
             gp.Widen(pen, null);
@@ -1942,9 +1942,9 @@ public class GraphicsPathTests
     [Fact]
     public void Widen_MatrixEmpty_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Pen pen = new Pen(Color.Blue))
-        using (Matrix matrix = new Matrix())
+        using (GraphicsPath gp = new())
+        using (Pen pen = new(Color.Blue))
+        using (Matrix matrix = new())
         {
             gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
             gp.Widen(pen, new Matrix());
@@ -1966,9 +1966,9 @@ public class GraphicsPathTests
     public void Widen_Pen_SmallWidth_Success(
         Rectangle rectangle, float penWidth, RectangleF expectedBounds)
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Pen pen = new Pen(Color.Aqua, 0))
-        using (Matrix matrix = new Matrix())
+        using (GraphicsPath gp = new())
+        using (Pen pen = new(Color.Aqua, 0))
+        using (Matrix matrix = new())
         {
             pen.Width = penWidth;
             gp.AddRectangle(rectangle);
@@ -1981,7 +1981,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsOutlineVisible_PenNull_ThrowsArgumentNullException()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => gp.IsOutlineVisible(1, 1, null));
             AssertExtensions.Throws<ArgumentNullException>("pen", () => gp.IsOutlineVisible(1.0f, 1.0f, null));
@@ -1999,7 +1999,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsOutlineVisible_LineInsideGraphics_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             AssertIsOutlineVisibleLine(graphics);
@@ -2009,7 +2009,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsOutlineVisible_LineOutsideGraphics_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(5, 5))
+        using (Bitmap bitmap = new(5, 5))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             AssertIsOutlineVisibleLine(graphics);
@@ -2019,9 +2019,9 @@ public class GraphicsPathTests
     [Fact]
     public void IsOutlineVisible_LineWithGraphicsTransform_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics graphics = Graphics.FromImage(bitmap))
-        using (Matrix matrix = new Matrix(2, 0, 0, 2, 50, -50))
+        using (Matrix matrix = new(2, 0, 0, 2, 50, -50))
         {
             graphics.Transform = matrix;
             AssertIsOutlineVisibleLine(graphics);
@@ -2031,7 +2031,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsOutlineVisible_LineWithGraphicsPageUnit_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             graphics.PageUnit = GraphicsUnit.Millimeter;
@@ -2042,7 +2042,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsOutlineVisible_LineWithGraphicsPageScale_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(20, 20))
+        using (Bitmap bitmap = new(20, 20))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             graphics.PageScale = 2.0f;
@@ -2065,7 +2065,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsVisible_RectangleWithGraphics_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(40, 40))
+        using (Bitmap bitmap = new(40, 40))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             AssertIsVisibleRectangle(graphics);
@@ -2081,7 +2081,7 @@ public class GraphicsPathTests
     [Fact]
     public void IsVisible_EllipseWithGraphics_ReturnsExpected()
     {
-        using (Bitmap bitmap = new Bitmap(40, 40))
+        using (Bitmap bitmap = new(40, 40))
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             AssertIsVisibleEllipse(graphics);
@@ -2091,7 +2091,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Arc_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddArc(1f, 1f, 2f, 2f, Pi4, Pi4);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2101,7 +2101,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Bezier_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddBezier(1, 2, 3, 4, 5, 6, 7, 8);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2124,7 +2124,7 @@ public class GraphicsPathTests
     [MemberData(nameof(Reverse_TestData))]
     public void Reverse_Beziers_Success(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddBeziers(points);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2135,7 +2135,7 @@ public class GraphicsPathTests
     [MemberData(nameof(Reverse_TestData))]
     public void Reverse_ClosedCurve_Success(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddClosedCurve(points);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2146,7 +2146,7 @@ public class GraphicsPathTests
     [MemberData(nameof(Reverse_TestData))]
     public void Reverse_Curve_Success(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddCurve(points);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2156,7 +2156,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Ellipse_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddEllipse(1, 2, 3, 4);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2166,7 +2166,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Line_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 2, 3, 4);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2176,7 +2176,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_LineClosed_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(1, 2, 3, 4);
             gp.CloseFigure();
@@ -2188,7 +2188,7 @@ public class GraphicsPathTests
     [MemberData(nameof(Reverse_TestData))]
     public void Reverse_Lines_Success(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLines(points);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2199,7 +2199,7 @@ public class GraphicsPathTests
     [MemberData(nameof(Reverse_TestData))]
     public void Reverse_Polygon_Success(Point[] points)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddPolygon(points);
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2209,7 +2209,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Rectangle_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(1, 2, 3, 4));
             AssertReverse(gp, gp.PathPoints, gp.PathTypes);
@@ -2219,7 +2219,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Rectangles_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             Rectangle[] rects = [new(1, 2, 3, 4), new(5, 6, 7, 8)];
             gp.AddRectangles(rects);
@@ -2230,10 +2230,10 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Pie_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddPie(1, 2, 3, 4, 10, 20);
-            byte[] expectedTypes = new byte[] { 0, 3, 3, 3, 129 };
+            byte[] expectedTypes = [0, 3, 3, 3, 129];
             AssertReverse(gp, gp.PathPoints, expectedTypes);
         }
     }
@@ -2241,12 +2241,12 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_ArcLineInnerPath_Success()
     {
-        using (GraphicsPath inner = new GraphicsPath())
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath inner = new())
+        using (GraphicsPath gp = new())
         {
             inner.AddArc(1f, 1f, 2f, 2f, Pi4, Pi4);
             inner.AddLine(1, 2, 3, 4);
-            byte[] expectedTypes = new byte[] { 0, 1, 1, 3, 3, 3 };
+            byte[] expectedTypes = [0, 1, 1, 3, 3, 3];
             gp.AddPath(inner, true);
             AssertReverse(gp, gp.PathPoints, expectedTypes);
         }
@@ -2255,11 +2255,11 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_EllipseRectangle_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddEllipse(50, 51, 50, 100);
             gp.AddRectangle(new Rectangle(200, 201, 60, 61));
-            byte[] expectedTypes = new byte[] { 0, 1, 1, 129, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 131 };
+            byte[] expectedTypes = [0, 1, 1, 129, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 131];
             AssertReverse(gp, gp.PathPoints, expectedTypes);
         }
     }
@@ -2267,7 +2267,7 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_String_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddString("Mono::", FontFamily.GenericMonospace, 0, 10, new Point(10, 10), StringFormat.GenericDefault);
             byte[] expectedTypes = new byte[]
@@ -2296,11 +2296,11 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_Marker_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(200, 201, 60, 61));
             gp.SetMarkers();
-            byte[] expectedTypes = new byte[] { 0, 1, 1, 129 };
+            byte[] expectedTypes = [0, 1, 1, 129];
             AssertReverse(gp, gp.PathPoints, expectedTypes);
         }
     }
@@ -2308,25 +2308,25 @@ public class GraphicsPathTests
     [Fact]
     public void Reverse_SubpathMarker_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(0, 1, 2, 3);
             gp.SetMarkers();
             gp.CloseFigure();
             gp.AddBezier(5, 6, 7, 8, 9, 10, 11, 12);
             gp.CloseFigure();
-            byte[] expectedTypes = new byte[] { 0, 3, 3, 163, 0, 129 };
+            byte[] expectedTypes = [0, 3, 3, 163, 0, 129];
             AssertReverse(gp, gp.PathPoints, expectedTypes);
         }
 
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddLine(0, 1, 2, 3);
             gp.SetMarkers();
             gp.StartFigure();
             gp.AddLine(20, 21, 22, 23);
             gp.AddBezier(5, 6, 7, 8, 9, 10, 11, 12);
-            byte[] expectedTypes = new byte[] { 0, 3, 3, 3, 1, 33, 0, 1 };
+            byte[] expectedTypes = [0, 3, 3, 3, 1, 33, 0, 1];
             AssertReverse(gp, gp.PathPoints, expectedTypes);
         }
     }
@@ -2349,7 +2349,7 @@ public class GraphicsPathTests
             (byte)PathPointType.Bezier
         };
 
-        using (GraphicsPath path = new GraphicsPath(expectedPoints, expectedTypes))
+        using (GraphicsPath path = new(expectedPoints, expectedTypes))
         {
             Assert.Equal(7, path.PointCount);
             byte[] actualTypes = path.PathTypes;
@@ -2542,8 +2542,8 @@ public class GraphicsPathTests
 
     private void AssertIsOutlineVisibleLine(Graphics graphics)
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (Pen pen = new Pen(Color.Red, 3.0f))
+        using (GraphicsPath gp = new())
+        using (Pen pen = new(Color.Red, 3.0f))
         {
             gp.AddLine(10, 1, 14, 1);
             Assert.True(gp.IsOutlineVisible(10, 1, Pens.Red, graphics));
@@ -2554,14 +2554,14 @@ public class GraphicsPathTests
             Assert.True(gp.IsOutlineVisible(11.0f, 1.0f, pen, graphics));
             Assert.False(gp.IsOutlineVisible(11.0f, 2.0f, Pens.Red, graphics));
 
-            Point point = new Point(12, 2);
+            Point point = new(12, 2);
             Assert.False(gp.IsOutlineVisible(point, Pens.Red, graphics));
             Assert.True(gp.IsOutlineVisible(point, pen, graphics));
 
             point.Y = 1;
             Assert.True(gp.IsOutlineVisible(point, Pens.Red, graphics));
 
-            PointF fPoint = new PointF(13.0f, 2.0f);
+            PointF fPoint = new(13.0f, 2.0f);
             Assert.False(gp.IsOutlineVisible(fPoint, Pens.Red, graphics));
             Assert.True(gp.IsOutlineVisible(fPoint, pen, graphics));
 
@@ -2572,8 +2572,8 @@ public class GraphicsPathTests
 
     private void AssertIsOutlineVisibleRectangle(Graphics graphics)
     {
-        using (Pen pen = new Pen(Color.Red, 3.0f))
-        using (GraphicsPath gp = new GraphicsPath())
+        using (Pen pen = new(Color.Red, 3.0f))
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(10, 10, 20, 20));
             Assert.True(gp.IsOutlineVisible(10, 10, Pens.Red, graphics));
@@ -2584,14 +2584,14 @@ public class GraphicsPathTests
             Assert.True(gp.IsOutlineVisible(11.0f, 11.0f, pen, graphics));
             Assert.False(gp.IsOutlineVisible(11.0f, 11.0f, Pens.Red, graphics));
 
-            Point point = new Point(15, 10);
+            Point point = new(15, 10);
             Assert.True(gp.IsOutlineVisible(point, Pens.Red, graphics));
             Assert.True(gp.IsOutlineVisible(point, pen, graphics));
 
             point.Y = 15;
             Assert.False(gp.IsOutlineVisible(point, Pens.Red, graphics));
 
-            PointF fPoint = new PointF(29.0f, 29.0f);
+            PointF fPoint = new(29.0f, 29.0f);
             Assert.False(gp.IsOutlineVisible(fPoint, Pens.Red, graphics));
             Assert.True(gp.IsOutlineVisible(fPoint, pen, graphics));
 
@@ -2602,7 +2602,7 @@ public class GraphicsPathTests
 
     private void AssertIsVisibleRectangle(Graphics graphics)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddRectangle(new Rectangle(10, 10, 20, 20));
             Assert.False(gp.IsVisible(9, 9, graphics));
@@ -2625,7 +2625,7 @@ public class GraphicsPathTests
 
     private void AssertIsVisibleEllipse(Graphics graphics)
     {
-        using (GraphicsPath gp = new GraphicsPath())
+        using (GraphicsPath gp = new())
         {
             gp.AddEllipse(new Rectangle(10, 10, 20, 20));
             Assert.False(gp.IsVisible(10, 10, graphics));

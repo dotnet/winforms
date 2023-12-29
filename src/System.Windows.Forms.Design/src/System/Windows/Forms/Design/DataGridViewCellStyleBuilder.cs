@@ -48,7 +48,7 @@ internal class DataGridViewCellStyleBuilder : Form
         _sampleDataGridView.Size = new Drawing.Size(100, Font.Height + 9);
         _sampleDataGridView.AccessibilityObject.Name = SR.CellStyleBuilderNormalPreviewAccName;
 
-        DataGridViewRow row = new DataGridViewRow();
+        DataGridViewRow row = new();
         row.Cells.Add(new DialogDataGridViewCell());
         row.Cells[0].Value = "####";
         row.Cells[0].AccessibilityObject.Name = SR.CellStyleBuilderSelectedPreviewAccName;
@@ -88,7 +88,7 @@ internal class DataGridViewCellStyleBuilder : Form
 
     private void ListenerDataGridViewDefaultCellStyleChanged(object? sender, EventArgs e)
     {
-        DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle!);
+        DataGridViewCellStyle cellStyleTmp = new(_cellStyle!);
         _sampleDataGridView.DefaultCellStyle = cellStyleTmp;
         _sampleDataGridViewSelected.DefaultCellStyle = cellStyleTmp;
     }
@@ -112,7 +112,7 @@ internal class DataGridViewCellStyleBuilder : Form
     [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
     private void InitializeComponent()
     {
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(DataGridViewCellStyleBuilder));
+        ComponentResourceManager resources = new(typeof(DataGridViewCellStyleBuilder));
         _cellStyleProperties = new PropertyGrid();
         _sampleViewTableLayoutPanel = new TableLayoutPanel();
         _sampleViewGridsTableLayoutPanel = new TableLayoutPanel();

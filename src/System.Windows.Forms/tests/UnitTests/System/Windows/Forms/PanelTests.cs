@@ -14,7 +14,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_Ctor_Default()
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -119,7 +119,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -142,7 +142,7 @@ public class PanelTests
     [InlineData(BorderStyle.FixedSingle, 0x56800000, 0x10000)]
     public void Panel_CreateParams_GetBorderStyle_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
     {
-        using var control = new SubPanel
+        using SubPanel control = new()
         {
             BorderStyle = borderStyle
         };
@@ -165,7 +165,7 @@ public class PanelTests
     [BoolData]
     public void Panel_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new Panel();
+        using Panel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -190,7 +190,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new Panel
+        using Panel control = new()
         {
             AutoSize = true
         };
@@ -229,7 +229,7 @@ public class PanelTests
     [EnumData<AutoSizeMode>]
     public void Panel_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -252,8 +252,8 @@ public class PanelTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Panel_AutoSizeMode_SetWithParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubPanel
+        using Control parent = new();
+        using SubPanel control = new()
         {
             Parent = parent
         };
@@ -300,8 +300,8 @@ public class PanelTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Panel_AutoSizeMode_SetWithCustomLayoutEngineParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubPanel
+        using CustomLayoutEngineControl parent = new();
+        using SubPanel control = new()
         {
             Parent = parent
         };
@@ -368,7 +368,7 @@ public class PanelTests
     [EnumData<AutoSizeMode>]
     public void Panel_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -400,8 +400,8 @@ public class PanelTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Panel_AutoSizeMode_SetWithParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubPanel
+        using Control parent = new();
+        using SubPanel control = new()
         {
             Parent = parent
         };
@@ -473,8 +473,8 @@ public class PanelTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void Panel_AutoSizeMode_SetWithCustomLayoutEngineParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubPanel
+        using CustomLayoutEngineControl parent = new();
+        using SubPanel control = new()
         {
             Parent = parent
         };
@@ -545,7 +545,7 @@ public class PanelTests
     [InvalidEnumData<AutoSizeMode>]
     public void Panel_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
     {
-        using var control = new Panel();
+        using Panel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoSizeMode = value);
     }
 
@@ -553,7 +553,7 @@ public class PanelTests
     [EnumData<BorderStyle>]
     public void Panel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var control = new Panel
+        using Panel control = new()
         {
             BorderStyle = value
         };
@@ -572,7 +572,7 @@ public class PanelTests
     [InlineData(BorderStyle.None, 0)]
     public void Panel_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
     {
-        using var control = new Panel();
+        using Panel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -601,15 +601,15 @@ public class PanelTests
     [InvalidEnumData<BorderStyle>]
     public void Panel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new Panel();
+        using Panel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
     [WinFormsFact]
     public void Panel_PreferredSize_GetWithChildrenSimple_ReturnsExpected()
     {
-        using var control = new Panel();
-        using var child = new Control
+        using Panel control = new();
+        using Control child = new()
         {
             Size = new Size(16, 20)
         };
@@ -620,11 +620,11 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_PreferredSize_GetWithChildrenAdvanced_ReturnsExpected()
     {
-        using var control = new BorderedPanel
+        using BorderedPanel control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
-        using var child = new Control
+        using Control child = new()
         {
             Size = new Size(16, 20)
         };
@@ -652,7 +652,7 @@ public class PanelTests
     [BoolData]
     public void Panel_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new Panel
+        using Panel control = new()
         {
             TabStop = value
         };
@@ -674,7 +674,7 @@ public class PanelTests
     [BoolData]
     public void Panel_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new Panel();
+        using Panel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -710,7 +710,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new Panel
+        using Panel control = new()
         {
             TabStop = true
         };
@@ -749,7 +749,7 @@ public class PanelTests
     [NormalizedStringData]
     public void Panel_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new Panel
+        using Panel control = new()
         {
             Text = value
         };
@@ -766,7 +766,7 @@ public class PanelTests
     [NormalizedStringData]
     public void Panel_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new Panel();
+        using Panel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -794,7 +794,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new Panel();
+        using Panel control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -829,7 +829,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -844,7 +844,7 @@ public class PanelTests
     [InlineData((-1), false)]
     public void Panel_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -871,7 +871,7 @@ public class PanelTests
     [InlineData((ControlStyles)(-1), false)]
     public void Panel_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -881,7 +881,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -889,7 +889,7 @@ public class PanelTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void Panel_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -913,7 +913,7 @@ public class PanelTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void Panel_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         int callCount = 0;
         KeyPressEventHandler handler = (sender, e) =>
         {
@@ -937,7 +937,7 @@ public class PanelTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void Panel_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -961,7 +961,7 @@ public class PanelTests
     [NewAndDefaultData<EventArgs>]
     public void Panel_OnResize_Invoke_CallsResize(EventArgs eventArgs)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1005,7 +1005,7 @@ public class PanelTests
     [MemberData(nameof(OnResize_WithHandle_TestData))]
     public void Panel_OnResize_InvokeWithHandle_CallsResize(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubPanel();
+        using SubPanel control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1072,7 +1072,7 @@ public class PanelTests
     [MemberData(nameof(OnResize_DesignMode_TestData))]
     public void Panel_OnResize_InvokeWithDesignMode_CallsResize(bool resizeRedraw, BorderStyle borderStyle, EventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1082,7 +1082,7 @@ public class PanelTests
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
-        using var control = new SubPanel
+        using SubPanel control = new()
         {
             Site = mockSite.Object,
             BorderStyle = borderStyle
@@ -1135,7 +1135,7 @@ public class PanelTests
     [WinFormsFact]
     public void Panel_ToString_Invoke_ReturnsExpected()
     {
-        var panel = new Panel { BorderStyle = BorderStyle.Fixed3D };
+        Panel panel = new() { BorderStyle = BorderStyle.Fixed3D };
         Assert.Equal("System.Windows.Forms.Panel, BorderStyle: System.Windows.Forms.BorderStyle.Fixed3D", panel.ToString());
     }
 

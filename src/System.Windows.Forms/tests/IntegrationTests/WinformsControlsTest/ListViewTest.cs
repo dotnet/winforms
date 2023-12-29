@@ -15,7 +15,7 @@ public partial class ListViewTest : Form
         listView1.LabelEdit = true;
         listView1.View = View.Tile;
 
-        var random = new Random();
+        Random random = new();
         int i = random.Next(100, 300);
 
         listView1.TileSize = new Size(200, 50);
@@ -130,7 +130,7 @@ public partial class ListViewTest : Form
 
     private void AddCollapsibleGroupToListView()
     {
-        var lvgroup1 = new ListViewGroup
+        ListViewGroup lvgroup1 = new()
         {
             Header = "CollapsibleGroup1",
             CollapsedState = ListViewGroupCollapsedState.Expanded
@@ -143,7 +143,7 @@ public partial class ListViewTest : Form
             Group = lvgroup1
         });
 
-        var lvgroup2 = new ListViewGroup
+        ListViewGroup lvgroup2 = new()
         {
             Header = "CollapsibleGroup2",
             CollapsedState = ListViewGroupCollapsedState.Collapsed
@@ -170,7 +170,7 @@ public partial class ListViewTest : Form
         listView1.Groups[0].Subtitle = "Subtitle";
         listView1.GroupTaskLinkClick += listView1_GroupTaskLinkClick;
 
-        var lvgroup1 = new ListViewGroup
+        ListViewGroup lvgroup1 = new()
         {
             Header = "TaskGroup",
             TaskLink = "Task2"
@@ -205,7 +205,7 @@ public partial class ListViewTest : Form
             return;
         }
 
-        var random = new Random();
+        Random random = new();
         listView2.Columns[random.Next(0, listView2.Columns.Count)].ImageIndex = random.Next(0, 2);
     }
 

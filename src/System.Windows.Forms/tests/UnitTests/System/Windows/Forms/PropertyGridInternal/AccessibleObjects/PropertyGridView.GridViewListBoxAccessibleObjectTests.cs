@@ -12,9 +12,9 @@ public class PropertyGridView_GridViewListBoxAccessibleObjectTest
     [WinFormsFact]
     public void GridViewListBoxAccessibleObject_Ctor_Default()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using GridViewListBox gridViewListBox = new GridViewListBox(propertyGridView);
+        using GridViewListBox gridViewListBox = new(propertyGridView);
 
         Type type = gridViewListBox.AccessibilityObject.GetType();
         ControlAccessibleObject accessibleObject = (ControlAccessibleObject)Activator.CreateInstance(type, gridViewListBox);
@@ -27,7 +27,7 @@ public class PropertyGridView_GridViewListBoxAccessibleObjectTest
     [WinFormsFact]
     public void GridViewListBoxAccessibleObject_ControlType_IsList_IfAccessibleRoleIsDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
         AccessibleObject accessibleObject = propertyGridView.DropDownListBoxAccessibleObject;
         // AccessibleRole is not set = Default
@@ -43,9 +43,9 @@ public class PropertyGridView_GridViewListBoxAccessibleObjectTest
     [InlineData(false, AccessibleRole.None)]
     public void GridViewListBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using GridViewListBox gridViewListBox = new GridViewListBox(propertyGridView);
+        using GridViewListBox gridViewListBox = new(propertyGridView);
         // AccessibleRole is not set = Default
 
         if (createControl)

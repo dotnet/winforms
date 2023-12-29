@@ -9,7 +9,7 @@ public class LayoutSettingsTests
     [Fact]
     public void LayoutSettings_Ctor_Default()
     {
-        var settings = new SubLayoutSettings();
+        SubLayoutSettings settings = new();
         Assert.Null(settings.LayoutEngine);
     }
 

@@ -17,7 +17,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [WinFormsFact]
     public void ButtonBaseAccessibleObject_Ctor_InvalidTypeControl_ThrowsArgumentException()
     {
-        using var textBox = new TextBox();
+        using TextBox textBox = new();
         Assert.Throws<ArgumentException>(() => new ButtonBase.ButtonBaseAccessibleObject(textBox));
     }
 
@@ -40,7 +40,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [InlineData(FlatStyle.System, false, false, AccessibleStates.None)]
     public void ButtonBaseAccessibleObject_State_is_correct(FlatStyle flatStyle, bool createControl, bool mouseIsDown, AccessibleStates expectedAccessibleState)
     {
-        using var button = new SubButtonBase()
+        using SubButtonBase button = new()
         {
             FlatStyle = flatStyle
         };
@@ -70,7 +70,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [InlineData(false, false, AccessibleRole.HelpBalloon)]
     public void ButtonBase_CreateAccessibilityInstance_InvokeWithRole_ReturnsExpected(bool createControl, bool defaultRole, AccessibleRole expectedAccessibleRole)
     {
-        using var control = new SubButtonBase();
+        using SubButtonBase control = new();
 
         if (!defaultRole)
         {
@@ -98,7 +98,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [EnumData<FlatStyle>]
     public void ButtonBase_CreateAccessibilityInstance_InvokeWithDefaultRole_ReturnsExpected_ForAllFlatStyles_IfControlIsCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButtonBase()
+        using SubButtonBase control = new()
         {
             FlatStyle = flatStyle
         };
@@ -112,7 +112,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [EnumData<FlatStyle>]
     public void ButtonBase_CreateAccessibilityInstance_InvokeWithDefaultRole_ReturnsNone_ForAllFlatStyles_IfControlIsNotCreated(FlatStyle flatStyle)
     {
-        using var control = new SubButtonBase()
+        using SubButtonBase control = new()
         {
             FlatStyle = flatStyle
         };
@@ -129,7 +129,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [InlineData(false)]
     public void ButtonBase_CreateAccessibilityInstance_InvokeDoDefaultAction_CallsOnClick(bool createControl)
     {
-        using var control = new SubButtonBase();
+        using SubButtonBase control = new();
 
         if (createControl)
         {
@@ -158,7 +158,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     [InlineData(false, 0)]
     public void ButtonBase_CreateAccessibilityInstance_InvokeIButtonControlDoDefaultAction_CallsOnClick(bool createControl, int expectedCallCount)
     {
-        using var control = new SubButtonBase();
+        using SubButtonBase control = new();
 
         if (createControl)
         {
@@ -248,7 +248,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     public void ButtonBaseAccessibleObject_TextChanged_AutomationPropertyChanged_Raised()
     {
         const string newText = "New text";
-        using var control = new ButtonWithCustomAccessibleObject(
+        using ButtonWithCustomAccessibleObject control = new(
             (propertyId, value) => propertyId == UIA_PROPERTY_ID.UIA_NamePropertyId && newText.Equals(value.ToObject()))
         {
             Text = "Text"

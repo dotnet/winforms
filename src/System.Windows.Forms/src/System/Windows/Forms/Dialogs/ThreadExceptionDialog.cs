@@ -159,7 +159,7 @@ public class ThreadExceptionDialog : Form
             messageText = string.Format(messageFormat, Trim(messageText));
         }
 
-        StringBuilder detailsTextBuilder = new StringBuilder();
+        StringBuilder detailsTextBuilder = new();
         string separator = SR.ExDlgMsgSeparator;
         string sectionseparator = SR.ExDlgMsgSectionSeparator;
         if (Application.CustomThreadExceptionHandlerAttached)
@@ -199,7 +199,7 @@ public class ThreadExceptionDialog : Form
 
         Graphics g = _message.CreateGraphicsInternal();
 
-        Size textSize = new Size(_scaledMaxWidth - _scaledPaddingWidth, int.MaxValue);
+        Size textSize = new(_scaledMaxWidth - _scaledPaddingWidth, int.MaxValue);
 
         if (ScaleHelper.IsScalingRequirementMet && !UseCompatibleTextRenderingDefault)
         {

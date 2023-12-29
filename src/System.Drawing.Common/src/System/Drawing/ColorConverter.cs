@@ -45,7 +45,7 @@ namespace System.Drawing {
                 if (colorConstants == null) {
                     lock(ColorConstantsLock) {
                         if (colorConstants == null) {
-                            Hashtable tempHash = new Hashtable(StringComparer.OrdinalIgnoreCase);
+                            Hashtable tempHash = new(StringComparer.OrdinalIgnoreCase);
                             FillConstants(tempHash, typeof(Color));
                             colorConstants = tempHash;
                         }
@@ -66,7 +66,7 @@ namespace System.Drawing {
                 if (systemColorConstants == null) {
                     lock (SystemColorConstantsLock) {
                         if (systemColorConstants == null) {
-                            Hashtable tempHash = new Hashtable(StringComparer.OrdinalIgnoreCase);
+                            Hashtable tempHash = new(StringComparer.OrdinalIgnoreCase);
                             FillConstants(tempHash, typeof(System.Drawing.SystemColors));
                             systemColorConstants = tempHash;
                         }
@@ -352,7 +352,7 @@ namespace System.Drawing {
 
                        // We must take the value from each hashtable and combine them.
                        //
-                       ArrayList arrayValues = new ArrayList();
+                       ArrayList arrayValues = new();
                        arrayValues.AddRange(Colors.Values);
                        arrayValues.AddRange(SystemColors.Values);
 

@@ -33,7 +33,7 @@ public class PaperSourceTests
     [Fact]
     public void Ctor_Default()
     {
-        var source = new PaperSource();
+        PaperSource source = new();
         Assert.Equal(PaperSourceKind.Custom, source.Kind);
         Assert.Equal((int)PaperSourceKind.Custom, source.RawKind);
         Assert.Empty(source.SourceName);
@@ -60,7 +60,7 @@ public class PaperSourceTests
     [InlineData(256, PaperSourceKind.Custom)]
     public void RawKind_Set_GetReturnsExpected(int value, PaperSourceKind expectedKind)
     {
-        var source = new PaperSource
+        PaperSource source = new()
         {
             RawKind = value
         };
@@ -79,7 +79,7 @@ public class PaperSourceTests
     [InlineData("sourceName")]
     public void SourceName_Set_GetReturnsExpected(string value)
     {
-        var source = new PaperSource
+        PaperSource source = new()
         {
             SourceName = value
         };

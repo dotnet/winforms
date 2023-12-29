@@ -119,7 +119,7 @@ internal class MaskDesignerDialog : Form
     private void InitializeComponent()
     {
         _components = new Container();
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(MaskDesignerDialog));
+        ComponentResourceManager resources = new(typeof(MaskDesignerDialog));
         _lblHeader = new Label();
         _listViewCannedMasks = new ListView();
         _maskDescriptionHeader = new ColumnHeader(resources.GetString("listViewCannedMasks.Columns")!);

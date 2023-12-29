@@ -14,7 +14,7 @@ public class TrackBarAccessibleObjectTests
     [WinFormsFact]
     public void TrackBarAccessibilityObject_Properties_ReturnsExpected_IfHandleIsCreated()
     {
-        using var ownerControl = new TrackBar
+        using TrackBar ownerControl = new()
         {
             Value = 5,
         };
@@ -40,7 +40,7 @@ public class TrackBarAccessibleObjectTests
     [WinFormsFact]
     public void TrackBarAccessibilityObject_Properties_ReturnsExpected_IfHandleIsNotCreated()
     {
-        using var ownerControl = new TrackBar
+        using TrackBar ownerControl = new()
         {
             Value = 5,
         };
@@ -75,7 +75,7 @@ public class TrackBarAccessibleObjectTests
     [InlineData("0", 0, "", false)]
     public void TrackBarAccessibilityObject_Value_Set_GetReturnsExpected(string value, int expected, string expectedValueString, bool createControl)
     {
-        using var ownerControl = new TrackBar();
+        using TrackBar ownerControl = new();
         if (createControl)
         {
             ownerControl.CreateControl();
@@ -105,7 +105,7 @@ public class TrackBarAccessibleObjectTests
     [InlineData("NotAnInt")]
     public void TrackBarAccessibilityObject_Value_SetInvalid_ThrowsCOMException_IfHandleIsCreated(string value)
     {
-        using var ownerControl = new TrackBar
+        using TrackBar ownerControl = new()
         {
             Value = 5
         };
@@ -124,7 +124,7 @@ public class TrackBarAccessibleObjectTests
     [InlineData("NotAnInt")]
     public void TrackBarAccessibilityObject_Value_SetInvalid_ThrowsCOMException_IfHandleIsNotCreated(string value)
     {
-        using var ownerControl = new TrackBar
+        using TrackBar ownerControl = new()
         {
             Value = 5
         };

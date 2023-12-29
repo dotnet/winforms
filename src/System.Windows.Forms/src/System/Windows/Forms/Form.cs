@@ -2840,7 +2840,7 @@ public partial class Form : ContainerControl
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"base  ={baseVar}");
             SizeF newVarF = GetAutoScaleSize(Font);
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(f)={newVarF}");
-            Size newVar = new Size((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
+            Size newVar = new((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(i)={newVar}");
 
             // We save a significant amount of time by bailing early if there's no work to be done
@@ -2993,7 +2993,7 @@ public partial class Form : ContainerControl
 
         try
         {
-            FormClosingEventArgs e = new FormClosingEventArgs(_closeReason, false);
+            FormClosingEventArgs e = new(_closeReason, false);
 
             if (!CalledClosing)
             {
@@ -3013,7 +3013,7 @@ public partial class Form : ContainerControl
 
             if (!closingOnly && _dialogResult != DialogResult.None)
             {
-                FormClosedEventArgs fc = new FormClosedEventArgs(_closeReason);
+                FormClosedEventArgs fc = new(_closeReason);
                 OnClosed(fc);
                 OnFormClosed(fc);
 
@@ -4336,7 +4336,7 @@ public partial class Form : ContainerControl
     {
         DefWndProc(ref m);
 
-        DpiChangedEventArgs e = new DpiChangedEventArgs(_deviceDpi, m);
+        DpiChangedEventArgs e = new(_deviceDpi, m);
         _deviceDpi = e.DeviceDpiNew;
 
         OnDpiChanged(e);
@@ -4361,7 +4361,7 @@ public partial class Form : ContainerControl
         // Calculate AutoscaleFactor for AutoScaleMode.Font. We will be using this factor to scale child controls
         // and use same factor to compute desired size for top-level windows for the current DPI.
         // This desired size is then used to notify Windows that we need non-linear size for top-level window.
-        FontHandleWrapper fontwrapper = new FontHandleWrapper(fontForDpi);
+        FontHandleWrapper fontwrapper = new(fontForDpi);
         SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontwrapper.Handle);
         SizeF autoScaleFactor = GetCurrentAutoScaleFactor(currentAutoScaleDimensions, AutoScaleDimensions);
 
@@ -4630,7 +4630,7 @@ public partial class Form : ContainerControl
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
-                FormClosedEventArgs fce = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
+                FormClosedEventArgs fce = new(CloseReason.FormOwnerClosing);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     if (ownedForms[i] is not null && !Application.OpenForms.Contains(ownedForms[i]))
@@ -4650,7 +4650,7 @@ public partial class Form : ContainerControl
     /// </summary>
     internal bool RaiseFormClosingOnAppExit()
     {
-        FormClosingEventArgs e = new FormClosingEventArgs(CloseReason.ApplicationExitCall, false);
+        FormClosingEventArgs e = new(CloseReason.ApplicationExitCall, false);
         // e.Cancel = !Validate(true);    This would cause a breaking change between v2.0 and v1.0/v1.1 in case validation fails.
         if (!Modal)
         {
@@ -4660,7 +4660,7 @@ public partial class Form : ContainerControl
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
-                FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.FormOwnerClosing, false);
+                FormClosingEventArgs fce = new(CloseReason.FormOwnerClosing, false);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     if (ownedForms[i] is not null && !Application.OpenForms.Contains(ownedForms[i]))
@@ -6150,7 +6150,7 @@ public partial class Form : ContainerControl
     /// </summary>
     private void WmClose(ref Message m)
     {
-        FormClosingEventArgs e = new FormClosingEventArgs(CloseReason, false);
+        FormClosingEventArgs e = new(CloseReason, false);
 
         // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
         if (m.Msg != (int)PInvoke.WM_ENDSESSION)
@@ -6183,7 +6183,7 @@ public partial class Form : ContainerControl
                 // Call OnClosing/OnFormClosing on all MDI children
                 if (IsMdiContainer)
                 {
-                    FormClosingEventArgs fe = new FormClosingEventArgs(CloseReason.MdiFormClosing, e.Cancel);
+                    FormClosingEventArgs fe = new(CloseReason.MdiFormClosing, e.Cancel);
                     foreach (Form mdiChild in MdiChildren)
                     {
                         if (mdiChild.IsHandleCreated)
@@ -6210,7 +6210,7 @@ public partial class Form : ContainerControl
                 int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
-                    FormClosingEventArgs cfe = new FormClosingEventArgs(CloseReason.FormOwnerClosing, e.Cancel);
+                    FormClosingEventArgs cfe = new(CloseReason.FormOwnerClosing, e.Cancel);
                     if (ownedForms[i] is not null)
                     {
                         // Call OnFormClosing on the child forms.
@@ -6547,7 +6547,7 @@ public partial class Form : ContainerControl
                 _formStateEx[FormStateExInModalSizingLoop] = 1;
                 break;
             case PInvoke.SC_CONTEXTHELP:
-                CancelEventArgs e = new CancelEventArgs(false);
+                CancelEventArgs e = new(false);
                 OnHelpButtonClicked(e);
                 if (e.Cancel)
                 {

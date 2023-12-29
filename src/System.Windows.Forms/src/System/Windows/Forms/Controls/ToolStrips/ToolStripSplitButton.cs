@@ -190,11 +190,7 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
         get => _dropDownButtonWidth;
         set
         {
-            if (value < 0)
-            {
-                // throw if less than 0.
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(DropDownButtonWidth), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (_dropDownButtonWidth != value)
             {
@@ -302,13 +298,13 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
     private void CalculateLayout()
     {
         // Figure out where the DropDown image goes.
-        Rectangle dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(Width, DropDownButtonWidth), Height));
+        Rectangle dropDownButtonBounds = new(Point.Empty, new Size(Math.Min(Width, DropDownButtonWidth), Height));
 
         // Figure out the height and width of the selected item.
         int splitButtonButtonWidth = Math.Max(0, Width - dropDownButtonBounds.Width);
         int splitButtonButtonHeight = Math.Max(0, Height);
 
-        Rectangle splitButtonButtonBounds = new Rectangle(Point.Empty, new Size(splitButtonButtonWidth, splitButtonButtonHeight));
+        Rectangle splitButtonButtonBounds = new(Point.Empty, new Size(splitButtonButtonWidth, splitButtonButtonHeight));
 
         // grow the selected item by one since we're overlapping the borders.
         splitButtonButtonBounds.Width -= _splitterWidth;
@@ -467,7 +463,7 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
             }
         }
 
-        Point clickPoint = new Point(e.X, e.Y);
+        Point clickPoint = new(e.X, e.Y);
         if ((e.Button == MouseButtons.Left) && SplitButtonButton.Bounds.Contains(clickPoint))
         {
             bool shouldFireDoubleClick = false;

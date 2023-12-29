@@ -11,8 +11,8 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripSplitButtonAccessibleObject_Ctor_Default()
     {
-        using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
-        ToolStripSplitButtonAccessibleObject accessibleObject = new ToolStripSplitButtonAccessibleObject(toolStripSplitButton);
+        using ToolStripSplitButton toolStripSplitButton = new();
+        ToolStripSplitButtonAccessibleObject accessibleObject = new(toolStripSplitButton);
 
         Assert.Equal(toolStripSplitButton, accessibleObject.Owner);
     }
@@ -20,7 +20,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripSplitButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
     {
-        using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
+        using ToolStripSplitButton toolStripSplitButton = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -31,7 +31,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripSplitButtonAccessibleObject_Role_IsMenuItem_ByDefault()
     {
-        using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
+        using ToolStripSplitButton toolStripSplitButton = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripSplitButton.AccessibilityObject.Role;
@@ -58,7 +58,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
     [MemberData(nameof(ToolStripSplitButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripSplitButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
+        using ToolStripSplitButton toolStripSplitButton = new();
         toolStripSplitButton.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

@@ -1361,7 +1361,7 @@ public partial class DataGridView
                     }
                     catch (Exception exception) when (!exception.IsCriticalException())
                     {
-                        DataGridViewCellCancelEventArgs dgvce = new DataGridViewCellCancelEventArgs(e.ColumnIndex, e.RowIndex);
+                        DataGridViewCellCancelEventArgs dgvce = new(e.ColumnIndex, e.RowIndex);
                         ProcessException(exception, dgvce, beginEdit: false);
                     }
 
@@ -1489,7 +1489,7 @@ public partial class DataGridView
             }
             catch (Exception exception) when (!exception.IsCriticalException())
             {
-                DataGridViewCellCancelEventArgs e = new DataGridViewCellCancelEventArgs(columnIndex, rowIndex);
+                DataGridViewCellCancelEventArgs e = new(columnIndex, rowIndex);
                 ProcessException(exception, e, false);
                 return !e.Cancel;
             }

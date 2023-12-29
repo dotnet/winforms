@@ -115,14 +115,14 @@ internal sealed partial class DesignerActionPanel
                         // Draw the arrow icon
                         try
                         {
-                            Icon icon = new Icon(typeof(DesignerActionPanel), "Arrow.ico");
+                            Icon icon = new(typeof(DesignerActionPanel), "Arrow.ico");
                             try
                             {
                                 Bitmap arrowBitmap = icon.ToBitmap();
 
                                 // Make sure we draw properly under high contrast by re-mapping
                                 // the arrow color to the WindowText color
-                                ImageAttributes attrs = new ImageAttributes();
+                                ImageAttributes attrs = new();
                                 try
                                 {
                                     ColorMap cm = new ColorMap

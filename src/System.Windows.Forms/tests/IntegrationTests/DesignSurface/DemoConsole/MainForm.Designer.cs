@@ -24,7 +24,7 @@ protected override void Dispose ( bool disposing ) {
 /// the contents of this method with the code editor.
 /// </summary>
 private void InitializeComponent() {
-    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( MainForm ) );
+    System.ComponentModel.ComponentResourceManager resources = new( typeof( MainForm ) );
     this.splitContainer = new System.Windows.Forms.SplitContainer();
     this.tabControl1 = new System.Windows.Forms.TabControl();
     this.tabPage1 = new System.Windows.Forms.TabPage();

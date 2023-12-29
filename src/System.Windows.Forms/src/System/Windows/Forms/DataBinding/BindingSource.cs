@@ -188,7 +188,7 @@ public class BindingSource : Component,
         }
 
         // Otherwise create the related binding source, cache it, and return it
-        BindingSource bs = new BindingSource(this, dataMember);
+        BindingSource bs = new(this, dataMember);
         _relatedBindingSources[dataMember] = bs;
         return bs;
     }
@@ -1597,7 +1597,7 @@ public class BindingSource : Component,
         }
 
         // Raise the AddingNew event in case listeners want to supply the new item for us
-        AddingNewEventArgs addingNew = new AddingNewEventArgs();
+        AddingNewEventArgs addingNew = new();
         int oldCount = List.Count;
         OnAddingNew(addingNew);
         object? addNewItem = addingNew.NewObject;

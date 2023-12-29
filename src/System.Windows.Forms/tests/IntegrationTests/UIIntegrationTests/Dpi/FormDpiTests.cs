@@ -67,7 +67,7 @@ public class FormDpiTests : ControlTestBase
         {
             var minSize = new Drawing.Size(100, 100);
             var maxSize = new Drawing.Size(500, 500);
-            using var form = new Form();
+            using Form form = new();
             form.MinimumSize = minSize;
             form.MaximumSize = maxSize;
             form.AutoScaleMode = AutoScaleMode.Dpi;
@@ -101,7 +101,7 @@ public class FormDpiTests : ControlTestBase
         {
             var minSize = new Drawing.Size(100, 100);
             var maxSize = new Drawing.Size(500, 500);
-            using var form = new Form();
+            using Form form = new();
             form.MinimumSize = minSize;
             form.MaximumSize = maxSize;
             form.AutoScaleMode = AutoScaleMode.Dpi;
@@ -141,7 +141,7 @@ public class FormDpiTests : ControlTestBase
         typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 
@@ -177,7 +177,7 @@ public class FormDpiTests : ControlTestBase
         typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 
@@ -209,7 +209,7 @@ public class FormDpiTests : ControlTestBase
         typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Dpi;
             form.Show();
 
@@ -237,7 +237,7 @@ public class FormDpiTests : ControlTestBase
         typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
         try
         {
-            using var form = new Form();
+            using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 

@@ -104,7 +104,7 @@ public class ObjectSelectorEditorTests
     [Fact]
     public void ObjectSelectorEditor_Selector()
     {
-        ObjectSelectorEditor.Selector underTest = new ObjectSelectorEditor.Selector(new SubObjectSelectorEditor());
+        ObjectSelectorEditor.Selector underTest = new(new SubObjectSelectorEditor());
 
         Assert.NotNull(underTest);
         underTest.AddNode("node", "value", null);

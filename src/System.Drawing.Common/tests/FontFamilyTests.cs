@@ -15,7 +15,7 @@ public class FontFamilyTests
     [InlineData(GenericFontFamilies.Serif, "Times New Roman")]
     public void Ctor_GenericFamily(GenericFontFamilies genericFamily, string expectedName)
     {
-        using (var fontFamily = new FontFamily(genericFamily))
+        using (FontFamily fontFamily = new(genericFamily))
         {
             Assert.Equal(expectedName, fontFamily.Name);
         }
@@ -28,7 +28,7 @@ public class FontFamilyTests
     [InlineData("times new roman", "Times New Roman")]
     public void Ctor_Name(string name, string expectedName)
     {
-        using (var fontFamily = new FontFamily(name))
+        using (FontFamily fontFamily = new(name))
         {
             Assert.Equal(expectedName, fontFamily.Name);
         }
@@ -37,11 +37,11 @@ public class FontFamilyTests
     [Fact]
     public void Ctor_Name_FontCollection()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            using (var fontFamily = new FontFamily("Code New Roman", fontCollection))
+            using (FontFamily fontFamily = new("Code New Roman", fontCollection))
             {
                 Assert.Equal("Code New Roman", fontFamily.Name);
             }
@@ -61,7 +61,7 @@ public class FontFamilyTests
     [Fact]
     public void Ctor_NoSuchFontNameInCollection_ThrowsArgumentException()
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily("Times New Roman", fontCollection));
         }
@@ -100,7 +100,7 @@ public class FontFamilyTests
     public void Families_Get_ReturnsExpected()
     {
 #pragma warning disable 0618 // FontFamily.GetFamilies is deprecated.
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (var graphics = Graphics.FromImage(image))
         {
             FontFamily[] families = FontFamily.Families;
@@ -117,7 +117,7 @@ public class FontFamilyTests
 
             foreach (FontFamily fontFamily in families)
             {
-                using (FontFamily copy = new FontFamily(fontFamily.Name))
+                using (FontFamily copy = new(fontFamily.Name))
                 {
                     Assert.Equal(fontFamily.Name, copy.Name);
                 }
@@ -197,11 +197,11 @@ public class FontFamilyTests
     [MemberData(nameof(FontStyle_TestData))]
     public void FontFamilyProperties_CustomFont_ReturnsExpected(FontStyle style)
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            using (var fontFamily = new FontFamily("Code New Roman", fontCollection))
+            using (FontFamily fontFamily = new("Code New Roman", fontCollection))
             {
                 Assert.True(fontFamily.IsStyleAvailable(style));
                 Assert.Equal(1884, fontFamily.GetCellAscent(style));
@@ -240,11 +240,11 @@ public class FontFamilyTests
     [InlineData(FrenchLCID, "Bonjour")]
     public void GetName_LanguageCode_ReturnsExpected(int languageCode, string expectedName)
     {
-        using (var fontCollection = new PrivateFontCollection())
+        using (PrivateFontCollection fontCollection = new())
         {
             fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
 
-            using (var fontFamily = new FontFamily("Code New Roman", fontCollection))
+            using (FontFamily fontFamily = new("Code New Roman", fontCollection))
             {
                 Assert.Equal(expectedName, fontFamily.GetName(languageCode));
             }

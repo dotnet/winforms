@@ -11,15 +11,15 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [WinFormsFact]
     public void DataGridViewTextBoxEditingControlAccessibleObject_Ctor_Default()
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
-        DataGridViewTextBoxEditingControlAccessibleObject accessibleObject = new DataGridViewTextBoxEditingControlAccessibleObject(textCellControl);
+        using DataGridViewTextBoxEditingControl textCellControl = new();
+        DataGridViewTextBoxEditingControlAccessibleObject accessibleObject = new(textCellControl);
         Assert.Equal(textCellControl, accessibleObject.Owner);
     }
 
     [WinFormsFact]
     public void DataGridViewTextBoxEditingControlAccessibleObject_Ctor_ThrowsException_IfOwnerIsNull()
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         Assert.Throws<ArgumentNullException>(() => new DataGridViewTextBoxEditingControlAccessibleObject(null));
     }
 
@@ -28,7 +28,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [InlineData(false)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_IsReadOnly_IsExpected(bool readOnly)
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         textCellControl.ReadOnly = readOnly;
         AccessibleObject accessibleObject = textCellControl.AccessibilityObject;
         Assert.Equal(readOnly, accessibleObject.IsReadOnly);
@@ -40,7 +40,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         AccessibleObject accessibleObject = textCellControl.AccessibilityObject;
         Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID));
     }
@@ -51,7 +51,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         AccessibleObject accessibleObject = textCellControl.AccessibilityObject;
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -59,7 +59,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [WinFormsFact]
     public void DataGridViewTextBoxEditingControlAccessibleObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -73,7 +73,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [InlineData(false, AccessibleRole.None)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         // AccessibleRole is not set = Default
 
         if (createControl)
@@ -106,7 +106,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     [MemberData(nameof(DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+        using DataGridViewTextBoxEditingControl textCellControl = new();
         textCellControl.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

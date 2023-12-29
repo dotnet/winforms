@@ -32,10 +32,10 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void Ctor_Path_Success()
     {
-        byte[] types = new byte[] { 0, 1 };
+        byte[] types = [0, 1];
 
-        using (GraphicsPath gp = new GraphicsPath(_twoPoints, types))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(_twoPoints, types))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(2, gpi.Count);
         }
@@ -44,8 +44,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void Ctor_EmptyPath_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(0, gpi.Count);
         }
@@ -54,7 +54,7 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void Ctor_NullPath_Success()
     {
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(null))
+        using (GraphicsPathIterator gpi = new(null))
         {
             Assert.Equal(0, gpi.Count);
         }
@@ -63,8 +63,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextSubpath_PathFigureNotClosed_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             gp.AddLines(_twoPoints);
             Assert.Equal(0, gpi.NextSubpath(gp, out bool isClosed));
@@ -75,8 +75,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextSubpath_PathFigureClosed_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 129 }))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(_twoPoints, [0, 129]))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(2, gpi.NextSubpath(gp, out bool isClosed));
             Assert.True(isClosed);
@@ -86,7 +86,7 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextSubpath_NullPath_ReturnsExpected()
     {
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(null))
+        using (GraphicsPathIterator gpi = new(null))
         {
             Assert.Equal(0, gpi.NextSubpath(null, out bool isClosed));
             Assert.False(isClosed);
@@ -96,8 +96,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextSubpath_FigureNotClosed_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             gp.AddLines(_twoPoints);
             Assert.Equal(0, gpi.NextSubpath(out int startIndex, out int endIndex, out bool isClosed));
@@ -110,8 +110,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextSubpath_FigureClosed_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 129 }))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(_twoPoints, [0, 129]))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(2, gpi.NextSubpath(out int startIndex, out int endIndex, out bool isClosed));
             Assert.True(isClosed);
@@ -123,8 +123,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextMarker_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 1 }))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(_twoPoints, [0, 1]))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(2, gpi.NextMarker(out int startIndex, out int endIndex));
             Assert.Equal(0, startIndex);
@@ -135,8 +135,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextMarker_Empty_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             gp.AddLines(_twoPoints);
             Assert.Equal(0, gpi.NextMarker(out int startIndex, out int endIndex));
@@ -148,8 +148,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextMarker_NullPath_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             gp.AddLines(_twoPoints);
             Assert.Equal(0, gpi.NextMarker(null));
@@ -159,8 +159,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextMarker_EmptyPath_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             gp.AddLines(_twoPoints);
             Assert.Equal(0, gpi.NextMarker(gp));
@@ -170,8 +170,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void NextMarker_Path_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 1 }))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(_twoPoints, new byte[] { 0, 1 }))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(2, gpi.NextMarker(gp));
         }
@@ -180,11 +180,11 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void Count_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 1 }))
-        using (GraphicsPath gpEmpty = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
-        using (GraphicsPathIterator gpiEmpty = new GraphicsPathIterator(gpEmpty))
-        using (GraphicsPathIterator gpiNull = new GraphicsPathIterator(null))
+        using (GraphicsPath gp = new(_twoPoints, [0, 1]))
+        using (GraphicsPath gpEmpty = new())
+        using (GraphicsPathIterator gpi = new(gp))
+        using (GraphicsPathIterator gpiEmpty = new(gpEmpty))
+        using (GraphicsPathIterator gpiNull = new(null))
         {
             Assert.Equal(2, gpi.Count);
             Assert.Equal(0, gpiEmpty.Count);
@@ -195,9 +195,9 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void SubpathCount_ReturnsExpected()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
-        using (GraphicsPathIterator gpiNull = new GraphicsPathIterator(null))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
+        using (GraphicsPathIterator gpiNull = new(null))
         {
             Assert.Equal(0, gpi.SubpathCount);
             Assert.Equal(0, gpiNull.SubpathCount);
@@ -208,7 +208,7 @@ public class GraphicsPathIteratorTests
             gp.AddLine(20, 21, 22, 23);
             gp.AddBezier(5, 6, 7, 8, 9, 10, 11, 12);
 
-            using (GraphicsPathIterator gpiWithSubpaths = new GraphicsPathIterator(gp))
+            using (GraphicsPathIterator gpiWithSubpaths = new(gp))
             {
                 Assert.Equal(2, gpiWithSubpaths.SubpathCount);
             }
@@ -219,13 +219,13 @@ public class GraphicsPathIteratorTests
     public void HasCurve_ReturnsExpected()
     {
         Point[] points = [new(1, 1), new(2, 2), new(3, 3), new(4, 4)];
-        byte[] types = new byte[] { 0, 3, 3, 3 };
+        byte[] types = [0, 3, 3, 3];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
-        using (GraphicsPath gpEmpty = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
-        using (GraphicsPathIterator gpiEmpty = new GraphicsPathIterator(gpEmpty))
-        using (GraphicsPathIterator gpiNull = new GraphicsPathIterator(null))
+        using (GraphicsPath gp = new(points, types))
+        using (GraphicsPath gpEmpty = new())
+        using (GraphicsPathIterator gpi = new(gp))
+        using (GraphicsPathIterator gpiEmpty = new(gpEmpty))
+        using (GraphicsPathIterator gpiNull = new(null))
         {
             Assert.True(gpi.HasCurve());
             Assert.False(gpiEmpty.HasCurve());
@@ -236,8 +236,8 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void Rewind_Success()
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPath inner = new GraphicsPath())
+        using (GraphicsPath gp = new())
+        using (GraphicsPath inner = new())
         {
             gp.AddLine(0, 1, 2, 3);
             gp.SetMarkers();
@@ -245,7 +245,7 @@ public class GraphicsPathIteratorTests
             gp.AddLine(20, 21, 22, 23);
             gp.AddBezier(5, 6, 7, 8, 9, 10, 11, 12);
 
-            using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+            using (GraphicsPathIterator gpi = new(gp))
             {
                 Assert.Equal(2, gpi.SubpathCount);
                 Assert.Equal(2, gpi.NextMarker(gp));
@@ -264,8 +264,8 @@ public class GraphicsPathIteratorTests
         PointF[] points = new PointF[0];
         byte[] types = new byte[0];
 
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(0, gpi.Enumerate(ref points, ref types));
             Assert.Equal(0, points.Length);
@@ -277,13 +277,13 @@ public class GraphicsPathIteratorTests
     public void Enumerate_ReturnsExpected()
     {
         PointF[] points = [new(1f, 1f), new(2f, 2f), new(3f, 3f), new(4f, 4f)];
-        byte[] types = new byte[] { 0, 3, 3, 3 };
+        byte[] types = [0, 3, 3, 3];
 
         PointF[] actualPoints = new PointF[4];
         byte[] actualTypes = new byte[4];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(points, types))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(4, gpi.Enumerate(ref actualPoints, ref actualTypes));
             Assert.Equal(gp.PathPoints, actualPoints);
@@ -301,8 +301,8 @@ public class GraphicsPathIteratorTests
     [MemberData(nameof(PointsTypesLengthMismatch_TestData))]
     public void Enumerate_PointsTypesMismatch_ThrowsArgumentException(PointF[] points, byte[] types)
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gpi.Enumerate(ref points, ref types));
         }
@@ -319,8 +319,8 @@ public class GraphicsPathIteratorTests
     [MemberData(nameof(NullPointsTypes_TestData))]
     public void Enumerate_NullPointsTypes_ThrowsNullReferenceException(PointF[] points, byte[] types)
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Throws<NullReferenceException>(() => gpi.Enumerate(ref points, ref types));
         }
@@ -330,8 +330,8 @@ public class GraphicsPathIteratorTests
     [MemberData(nameof(PointsTypesLengthMismatch_TestData))]
     public void CopyData_PointsTypesMismatch_ThrowsArgumentException(PointF[] points, byte[] types)
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gpi.CopyData(ref points, ref types, 0, points.Length));
         }
@@ -341,8 +341,8 @@ public class GraphicsPathIteratorTests
     [MemberData(nameof(NullPointsTypes_TestData))]
     public void CopyData_NullPointsTypes_ThrowsNullReferenceException(PointF[] points, byte[] types)
     {
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Throws<NullReferenceException>(() => gpi.CopyData(ref points, ref types, 0, 1));
         }
@@ -356,8 +356,8 @@ public class GraphicsPathIteratorTests
         PointF[] resultPoints = new PointF[0];
         byte[] resultTypes = new byte[0];
 
-        using (GraphicsPath gp = new GraphicsPath())
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new())
+        using (GraphicsPathIterator gpi = new(gp))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => gpi.CopyData(ref resultPoints, ref resultTypes, startIndex, endIndex));
         }
@@ -377,8 +377,8 @@ public class GraphicsPathIteratorTests
         PointF[] resultPoints = new PointF[points.Length];
         byte[] resultTypes = new byte[points.Length];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(points, types))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(0, gpi.CopyData(ref resultPoints, ref resultTypes, startIndex, endIndex));
         }
@@ -388,13 +388,13 @@ public class GraphicsPathIteratorTests
     public void CopyData_EqualStartEndIndexes_ReturnsExpected()
     {
         PointF[] points = [new(1f, 1f), new(2f, 2f), new(3f, 3f), new(4f, 4f)];
-        byte[] types = new byte[] { 0, 3, 3, 3 };
+        byte[] types = [0, 3, 3, 3];
 
         PointF[] actualPoints = new PointF[1];
         byte[] actualTypes = new byte[1];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(points, types))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(1, gpi.CopyData(ref actualPoints, ref actualTypes, 0, 0));
             Assert.Equal(gp.PathPoints[0], actualPoints[0]);
@@ -406,13 +406,13 @@ public class GraphicsPathIteratorTests
     public void CopyData_ReturnsExpected()
     {
         PointF[] points = [new(1f, 1f), new(2f, 2f), new(3f, 3f), new(4f, 4f)];
-        byte[] types = new byte[] { 0, 3, 3, 3 };
+        byte[] types = [0, 3, 3, 3];
 
         PointF[] actualPoints = new PointF[3];
         byte[] actualTypes = new byte[3];
 
-        using (GraphicsPath gp = new GraphicsPath(points, types))
-        using (GraphicsPathIterator gpi = new GraphicsPathIterator(gp))
+        using (GraphicsPath gp = new(points, types))
+        using (GraphicsPathIterator gpi = new(gp))
         {
             Assert.Equal(3, gpi.CopyData(ref actualPoints, ref actualTypes, 0, 2));
         }

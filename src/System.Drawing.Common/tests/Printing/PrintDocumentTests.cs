@@ -38,7 +38,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
     public void Ctor_Default_Success()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             Assert.Equal("document", document.DocumentName);
             Assert.False(document.OriginAtMargins);
@@ -49,7 +49,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
     public void DefaultPageSettings_SetValue_ReturnsExpected()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.DefaultPageSettings = null;
             Assert.IsAssignableFrom<PageSettings>(document.DefaultPageSettings);
@@ -63,7 +63,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [ActiveIssue("https://github.com/dotnet/winforms/issues/8812")]
     public void DefaultPageSettings_Null_ReturnsExpected()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.DefaultPageSettings = null;
             AssertDefaultPageSettings(document.DefaultPageSettings);
@@ -75,7 +75,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [InlineData("newDocument")]
     public void DocumentName_SetValue_ReturnsExpected(string documentName)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.DocumentName = documentName;
             Assert.Equal(documentName, document.DocumentName);
@@ -85,7 +85,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [Fact]
     public void DocumentName_Null_ReturnsExpected()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.DocumentName = null;
             Assert.Equal(string.Empty, document.DocumentName);
@@ -97,7 +97,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [InlineData(false)]
     public void OriginAtMargins_SetValue_ReturnsExpected(bool originAtMargins)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.OriginAtMargins = originAtMargins;
             Assert.Equal(originAtMargins, document.OriginAtMargins);
@@ -107,12 +107,12 @@ public class PrintDocumentTests : FileCleanupTestBase
     [Fact]
     public void PrintController_SetValue_ReturnsExpected()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.PrintController = null;
             Assert.NotNull(document.PrintController);
 
-            var printController = new StandardPrintController();
+            StandardPrintController printController = new();
             document.PrintController = printController;
             Assert.Same(printController, document.PrintController);
         }
@@ -121,12 +121,12 @@ public class PrintDocumentTests : FileCleanupTestBase
     [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
     public void PrinterSettings_SetValue_ReturnsExpected()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.PrinterSettings = null;
             Assert.IsAssignableFrom<PrinterSettings>(document.PrinterSettings);
 
-            var printerSettings = new PrinterSettings();
+            PrinterSettings printerSettings = new();
             document.PrinterSettings = printerSettings;
             Assert.Same(printerSettings, document.PrinterSettings);
             Assert.Equal(
@@ -145,9 +145,9 @@ public class PrintDocumentTests : FileCleanupTestBase
     public void BeginPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
-        var beginPrintHandler = new PrintEventHandler((sender, e) => flag = true);
+        PrintEventHandler beginPrintHandler = new((sender, e) => flag = true);
 
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.PrintController = new TestPrintController();
             document.BeginPrint += beginPrintHandler;
@@ -166,9 +166,9 @@ public class PrintDocumentTests : FileCleanupTestBase
     public void EndPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
-        var endPrintHandler = new PrintEventHandler((sender, e) => flag = true);
+        PrintEventHandler endPrintHandler = new((sender, e) => flag = true);
 
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.PrintController = new TestPrintController();
             document.EndPrint += endPrintHandler;
@@ -186,8 +186,8 @@ public class PrintDocumentTests : FileCleanupTestBase
     public void Print_DefaultPrintController_Success()
     {
         bool endPrintCalled = false;
-        var endPrintHandler = new PrintEventHandler((sender, e) => endPrintCalled = true);
-        using (var document = new PrintDocument())
+        PrintEventHandler endPrintHandler = new((sender, e) => endPrintCalled = true);
+        using (PrintDocument document = new())
         {
             document.PrinterSettings.PrinterName = PrintToPdfPrinterName;
             document.PrinterSettings.PrintFileName = GetTestFilePath();
@@ -207,9 +207,9 @@ public class PrintDocumentTests : FileCleanupTestBase
     public void PrintPage_SetValue_ReturnsExpected()
     {
         bool flag = false;
-        var printPageHandler = new PrintPageEventHandler((sender, e) => flag = true);
+        PrintPageEventHandler printPageHandler = new((sender, e) => flag = true);
 
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.PrintController = new TestPrintController();
             document.PrintPage += printPageHandler;
@@ -227,9 +227,9 @@ public class PrintDocumentTests : FileCleanupTestBase
     public void QueryPageSettings_SetValue_ReturnsExpected()
     {
         bool flag = false;
-        var queryPageSettingsHandler = new QueryPageSettingsEventHandler((sender, e) => flag = true);
+        QueryPageSettingsEventHandler queryPageSettingsHandler = new((sender, e) => flag = true);
 
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             document.PrintController = new TestPrintController();
             document.QueryPageSettings += queryPageSettingsHandler;
@@ -246,7 +246,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     [Fact]
     public void ToString_ReturnsExpected()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
             string expected = $"[PrintDocument {document.DocumentName}]";
             Assert.Equal(expected, document.ToString());
@@ -292,7 +292,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     {
         public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
         {
-            using (var bitmap = new Bitmap(20, 20))
+            using (Bitmap bitmap = new(20, 20))
             {
                 return Graphics.FromImage(bitmap);
             }

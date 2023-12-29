@@ -11,7 +11,7 @@ public class TextMetricsTests
     [Fact]
     public void TextMetrics_Ctor_Default()
     {
-        var metric = new TextMetrics();
+        TextMetrics metric = new();
         Assert.Equal(0, metric.Ascent);
         Assert.Equal(0, metric.AverageCharWidth);
         Assert.Equal('\0', metric.BreakChar);
@@ -37,7 +37,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_Ascent_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Ascent = value
         };
@@ -52,7 +52,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_AverageCharWidth_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             AverageCharWidth = value
         };
@@ -67,7 +67,7 @@ public class TextMetricsTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetCharTheoryData))]
     public void TextMetrics_BreakChar_Set_GetReturnsExpected(char value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             BreakChar = value
         };
@@ -83,7 +83,7 @@ public class TextMetricsTests
     [InvalidEnumData<TextMetricsCharacterSet>]
     public void TextMetrics_CharSet_Set_GetReturnsExpected(TextMetricsCharacterSet value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             CharSet = value
         };
@@ -98,7 +98,7 @@ public class TextMetricsTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetCharTheoryData))]
     public void TextMetrics_DefaultChar_Set_GetReturnsExpected(char value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             DefaultChar = value
         };
@@ -113,7 +113,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_Descent_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Descent = value
         };
@@ -128,7 +128,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_DigitizedAspectX_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             DigitizedAspectX = value
         };
@@ -143,7 +143,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_DigitizedAspectY_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             DigitizedAspectY = value
         };
@@ -158,7 +158,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_ExternalLeading_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             ExternalLeading = value
         };
@@ -173,7 +173,7 @@ public class TextMetricsTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetCharTheoryData))]
     public void TextMetrics_FirstChar_Set_GetReturnsExpected(char value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             FirstChar = value
         };
@@ -188,7 +188,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_Height_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Height = value
         };
@@ -203,7 +203,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_InternalLeading_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             InternalLeading = value
         };
@@ -218,7 +218,7 @@ public class TextMetricsTests
     [BoolData]
     public void TextMetrics_Italic_Set_GetReturnsExpected(bool value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Italic = value
         };
@@ -233,7 +233,7 @@ public class TextMetricsTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetCharTheoryData))]
     public void TextMetrics_LastChar_Set_GetReturnsExpected(char value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             LastChar = value
         };
@@ -248,7 +248,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_MaxCharWidth_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             MaxCharWidth = value
         };
@@ -263,7 +263,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_Overhang_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Overhang = value
         };
@@ -279,7 +279,7 @@ public class TextMetricsTests
     [InvalidEnumData<TextMetricsPitchAndFamilyValues>]
     public void TextMetrics_PitchAndFamily_GetReturnsExpected(TextMetricsPitchAndFamilyValues value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             PitchAndFamily = value
         };
@@ -294,7 +294,7 @@ public class TextMetricsTests
     [BoolData]
     public void TextMetrics_StruckOut_Set_GetReturnsExpected(bool value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             StruckOut = value
         };
@@ -309,7 +309,7 @@ public class TextMetricsTests
     [BoolData]
     public void TextMetrics_Underlined_Set_GetReturnsExpected(bool value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Underlined = value
         };
@@ -324,7 +324,7 @@ public class TextMetricsTests
     [IntegerData<int>]
     public void TextMetrics_Weight_Set_GetReturnsExpected(int value)
     {
-        var metric = new TextMetrics
+        TextMetrics metric = new()
         {
             Weight = value
         };

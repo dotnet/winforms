@@ -1034,7 +1034,7 @@ public class DesignerSerializationManagerTests
         Assert.Same(service, iManager.GetService(serviceType));
         mockServiceProvider.Verify(p => p.GetService(serviceType), Times.Once());
 
-        Assert.Same(service, ((IServiceProvider)iManager).GetService(serviceType));
+        Assert.Same(service, iManager.GetService(serviceType));
         mockServiceProvider.Verify(p => p.GetService(serviceType), Times.Exactly(2));
     }
 
@@ -1044,7 +1044,7 @@ public class DesignerSerializationManagerTests
     {
         IDesignerSerializationManager iManager = new DesignerSerializationManager(provider);
         Assert.Same(expected, iManager.GetService(typeof(IContainer)));
-        Assert.Same(expected, ((IServiceProvider)iManager).GetService(typeof(IContainer)));
+        Assert.Same(expected, iManager.GetService(typeof(IContainer)));
     }
 
     [Theory]
@@ -1055,7 +1055,7 @@ public class DesignerSerializationManagerTests
     {
         IDesignerSerializationManager iManager = new DesignerSerializationManager();
         Assert.Null(iManager.GetService(serviceType));
-        Assert.Null(((IServiceProvider)iManager).GetService(serviceType));
+        Assert.Null(iManager.GetService(serviceType));
     }
 
     public static IEnumerable<object[]> GetRuntimeType_ValidProvider_TestData()
@@ -2114,7 +2114,7 @@ public class DesignerSerializationManagerTests
 
     private class PublicDesignerSerializationProvider : IDesignerSerializationProvider
     {
-        public static object Serializer { get; } = new object();
+        public static object Serializer { get; } = new();
 
         private PublicDesignerSerializationProvider()
         {
@@ -2128,7 +2128,7 @@ public class DesignerSerializationManagerTests
 
     private class PrivateDesignerSerializationProvider : IDesignerSerializationProvider
     {
-        public static object Serializer { get; } = new object();
+        public static object Serializer { get; } = new();
 
         private PrivateDesignerSerializationProvider()
         {

@@ -103,7 +103,7 @@ public sealed partial class BinaryEditor
         {
             try
             {
-                SaveFileDialog sfd = new SaveFileDialog();
+                SaveFileDialog sfd = new();
                 sfd.FileName = SR.BinaryEditorFileName;
                 sfd.Title = SR.BinaryEditorSaveFile;
                 sfd.Filter = SR.BinaryEditorAllFiles + " (*.*)|*.*";
@@ -146,7 +146,7 @@ public sealed partial class BinaryEditor
         [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(BinaryEditor));
+            ComponentResourceManager resources = new(typeof(BinaryEditor));
             _byteViewer = new ByteViewer();
             _buttonOK = new Button();
             _buttonSave = new Button();

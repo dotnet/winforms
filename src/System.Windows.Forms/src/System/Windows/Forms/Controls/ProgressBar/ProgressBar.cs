@@ -212,10 +212,7 @@ public partial class ProgressBar : Control
         get => _marqueeAnimationSpeed;
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MarqueeAnimationSpeed), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             _marqueeAnimationSpeed = value;
             if (!DesignMode)
@@ -258,10 +255,7 @@ public partial class ProgressBar : Control
             if (_maximum != value)
             {
                 // Ensure that value is in the Win32 control's acceptable range
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Maximum), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 if (_minimum > value)
                 {
@@ -299,10 +293,7 @@ public partial class ProgressBar : Control
             if (_minimum != value)
             {
                 // Ensure that value is in the Win32 control's acceptable range
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 if (_maximum < value)
                 {
@@ -463,7 +454,7 @@ public partial class ProgressBar : Control
             {
                 if (value < _minimum || value > _maximum)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, "'minimum'", "'maximum'"));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, nameof(Minimum), nameof(Maximum)));
                 }
 
                 _value = value;

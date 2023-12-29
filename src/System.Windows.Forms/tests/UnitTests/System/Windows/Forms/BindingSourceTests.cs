@@ -12,7 +12,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void Ctor_Default()
     {
-        using var source = new SubBindingSource();
+        using SubBindingSource source = new();
         Assert.True(source.AllowEdit);
         Assert.True(source.AllowNew);
         Assert.True(source.AllowRemove);
@@ -71,7 +71,7 @@ public class BindingSourceTests
     [MemberData(nameof(Ctor_Object_String_Null_TestData))]
     public void Ctor_Object_String_Null(object dataSource, string dataMember, Type expectedType)
     {
-        using var source = new SubBindingSource(dataSource, dataMember);
+        using SubBindingSource source = new(dataSource, dataMember);
         Assert.True(source.AllowEdit);
         Assert.True(source.AllowNew);
         Assert.True(source.AllowRemove);
@@ -118,13 +118,13 @@ public class BindingSourceTests
     {
         foreach (string dataMember in new string[] { null, string.Empty })
         {
-            var emptyList = new List<int> { };
+            List<int> emptyList = new() { };
             yield return new object[] { emptyList, dataMember, true, false, emptyList };
 
             var emptyArray = Array.Empty<int>();
             yield return new object[] { emptyArray, dataMember, false, true, emptyArray };
 
-            var mockEmptyListSource = new Mock<IListSource>(MockBehavior.Strict);
+            Mock<IListSource> mockEmptyListSource = new(MockBehavior.Strict);
             mockEmptyListSource
                 .Setup(s => s.GetList())
                 .Returns(emptyList);
@@ -136,7 +136,7 @@ public class BindingSourceTests
     [MemberData(nameof(Ctor_Object_String_Empty_TestData))]
     public void Ctor_Object_String_Empty(object dataSource, string dataMember, bool expectedAllowRemove, bool expectedIsFixedSize, IList expected)
     {
-        using var source = new SubBindingSource(dataSource, dataMember);
+        using SubBindingSource source = new(dataSource, dataMember);
         Assert.True(source.AllowEdit);
         Assert.False(source.AllowNew);
         Assert.Equal(expectedAllowRemove, source.AllowRemove);
@@ -182,38 +182,38 @@ public class BindingSourceTests
     {
         foreach (string dataMember in new string[] { null, string.Empty })
         {
-            var nonEmptyList = new List<int> { 1, 2, 3 };
+            List<int> nonEmptyList = new() { 1, 2, 3 };
             yield return new object[] { nonEmptyList, dataMember, true, false, true, false, false, false, nonEmptyList };
 
-            var fixedSizeList = new FixedSizeList<int> { 1, 2, 3 };
+            FixedSizeList<int> fixedSizeList = new() { 1, 2, 3 };
             yield return new object[] { fixedSizeList, dataMember, true, false, false, true, false, false, fixedSizeList };
 
-            var readOnlyList = new ReadOnlyList<int> { 1, 2, 3 };
+            ReadOnlyList<int> readOnlyList = new() { 1, 2, 3 };
             yield return new object[] { readOnlyList, dataMember, false, false, false, false, true, false, readOnlyList };
 
-            var synchronizedList = new SynchronizedList<int> { 1, 2, 3 };
+            SynchronizedList<int> synchronizedList = new() { 1, 2, 3 };
             yield return new object[] { synchronizedList, dataMember, true, false, true, false, false, true, synchronizedList };
 
             var nonEmptyArray = new int[] { 1, 2, 3 };
             yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray };
 
-            var mockNonEmptyListSource = new Mock<IListSource>(MockBehavior.Strict);
+            Mock<IListSource> mockNonEmptyListSource = new(MockBehavior.Strict);
             mockNonEmptyListSource
                 .Setup(s => s.GetList())
                 .Returns(nonEmptyList);
             yield return new object[] { mockNonEmptyListSource.Object, dataMember, true, false, true, false, false, false, nonEmptyList };
         }
 
-        var list = new List<int> { 1, 2, 3 };
-        var listDataClass = new DataClass { List = list };
+        List<int> list = new() { 1, 2, 3 };
+        DataClass listDataClass = new() { List = list };
         yield return new object[] { listDataClass, nameof(DataClass.List), true, false, true, false, false, false, list };
         yield return new object[] { listDataClass, nameof(DataClass.List).ToLower(), true, false, true, false, false, false, list };
 
-        var mockListSource = new Mock<IListSource>(MockBehavior.Strict);
+        Mock<IListSource> mockListSource = new(MockBehavior.Strict);
         mockListSource
             .Setup(s => s.GetList())
             .Returns(list);
-        var listSourceDataClass = new ListSourceDataClass { ListSource = mockListSource.Object };
+        ListSourceDataClass listSourceDataClass = new() { ListSource = mockListSource.Object };
         yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource), true, false, true, false, false, false, list };
         yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource).ToLower(), true, false, true, false, false, false, list };
     }
@@ -222,7 +222,7 @@ public class BindingSourceTests
     [MemberData(nameof(Ctor_Object_String_TestData))]
     public void Ctor_Object_String(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected)
     {
-        using var source = new SubBindingSource(dataSource, dataMember);
+        using SubBindingSource source = new(dataSource, dataMember);
         Assert.Equal(expectedAllowEdit, source.AllowEdit);
         Assert.Equal(expectedAllowNew, source.AllowNew);
         Assert.Equal(expectedAllowRemove, source.AllowRemove);
@@ -268,20 +268,20 @@ public class BindingSourceTests
     {
         foreach (string dataMember in new string[] { null, string.Empty })
         {
-            var emptyList = new List<int> { };
+            List<int> emptyList = new() { };
 
-            var nonEmptyList = new List<int> { 1, 2, 3 };
-            var emptyEnumerable = new EnumerableWrapper<int>(emptyList);
+            List<int> nonEmptyList = new() { 1, 2, 3 };
+            EnumerableWrapper<int> emptyEnumerable = new(emptyList);
             yield return new object[] { emptyEnumerable, dataMember, true, false, true, false, false, false, new List<int>[] { emptyList }, typeof(BindingList<EnumerableWrapper<int>>) };
 
-            var nonEmptyEnumerable = new EnumerableWrapper<int>(nonEmptyList);
+            EnumerableWrapper<int> nonEmptyEnumerable = new(nonEmptyList);
             yield return new object[] { nonEmptyEnumerable, dataMember, true, false, true, false, false, false, nonEmptyList, typeof(BindingList<int>) };
         }
 
-        var o1 = new object();
+        object o1 = new();
         yield return new object[] { new ObjectDataClass { List = o1 }, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<object> { o1 }, typeof(BindingList<object>) };
 
-        var o2 = new object();
+        object o2 = new();
         yield return new object[] { new ObjectDataClass { List = o2 }, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<object> { o2 }, typeof(BindingList<object>) };
 
         yield return new object[] { new ObjectDataClass { List = 1 }, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
@@ -292,7 +292,7 @@ public class BindingSourceTests
     [MemberData(nameof(Ctor_Object_String_BindingList_TestData))]
     public void Ctor_Object_String_BindingList(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected, Type expectedType)
     {
-        using var source = new SubBindingSource(dataSource, dataMember);
+        using SubBindingSource source = new(dataSource, dataMember);
         Assert.Equal(expectedAllowEdit, source.AllowEdit);
         Assert.Equal(expectedAllowNew, source.AllowNew);
         Assert.Equal(expectedAllowRemove, source.AllowRemove);
@@ -341,8 +341,8 @@ public class BindingSourceTests
     public void Ctor_Object_String_IBindingList(string dataMember)
     {
         PropertyDescriptor sortProperty = TypeDescriptor.GetProperties(typeof(DataClass))[0];
-        var syncRoot = new object();
-        var mockList = new Mock<IBindingList>(MockBehavior.Strict);
+        object syncRoot = new();
+        Mock<IBindingList> mockList = new(MockBehavior.Strict);
         mockList
             .Setup(p => p.Count)
             .Returns(0);
@@ -389,7 +389,7 @@ public class BindingSourceTests
             .Setup(p => p.SyncRoot)
             .Returns(syncRoot);
 
-        var sortDescriptions = new ListSortDescriptionCollection();
+        ListSortDescriptionCollection sortDescriptions = new();
         var mockListView = mockList.As<IBindingListView>();
         mockListView
             .Setup(p => p.SortDescriptions)
@@ -401,7 +401,7 @@ public class BindingSourceTests
             .Setup(p => p.SupportsFiltering)
             .Returns(true);
 
-        using var source = new SubBindingSource(mockList.Object, dataMember);
+        using SubBindingSource source = new(mockList.Object, dataMember);
         Assert.False(source.AllowEdit);
         Assert.False(source.AllowNew);
         Assert.False(source.AllowRemove);
@@ -447,12 +447,12 @@ public class BindingSourceTests
     [NullAndEmptyStringData]
     public void Ctor_Object_String_ICurrencyManagerProvider(string dataMember)
     {
-        var mockCurrencyManagerProvider = new Mock<ICurrencyManagerProvider>(MockBehavior.Strict);
+        Mock<ICurrencyManagerProvider> mockCurrencyManagerProvider = new(MockBehavior.Strict);
         mockCurrencyManagerProvider
             .Setup(p => p.CurrencyManager)
             .Returns<CurrencyManager>(null)
             .Verifiable();
-        using var source = new BindingSource(mockCurrencyManagerProvider.Object, dataMember);
+        using BindingSource source = new(mockCurrencyManagerProvider.Object, dataMember);
         mockCurrencyManagerProvider.Verify(p => p.CurrencyManager, Times.Once());
     }
 
@@ -474,8 +474,8 @@ public class BindingSourceTests
     [WinFormsFact]
     public void Ctor_IContainer()
     {
-        using var container = new Container();
-        using var source = new SubBindingSource(container);
+        using Container container = new();
+        using SubBindingSource source = new(container);
         Assert.True(source.AllowEdit);
         Assert.True(source.AllowNew);
         Assert.True(source.AllowRemove);
@@ -527,7 +527,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void ISupportInitializeNotification_GetProperties_ReturnsExpected()
     {
-        using var bindingSource = new BindingSource();
+        using BindingSource bindingSource = new();
         ISupportInitializeNotification source = bindingSource;
         Assert.True(source.IsInitialized);
     }
@@ -535,7 +535,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_Invoke_Success()
     {
-        using var bindingSource = new BindingSource();
+        using BindingSource bindingSource = new();
         ISupportInitializeNotification source = bindingSource;
         source.BeginInit();
         Assert.False(source.IsInitialized);
@@ -547,7 +547,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_WithInitializedEvent_CallsEvent()
     {
-        using var bindingSource = new BindingSource();
+        using BindingSource bindingSource = new();
         ISupportInitializeNotification source = bindingSource;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -576,7 +576,7 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_WithDataSource_CallsEvent()
     {
-        using var bindingSource = new BindingSource(new DataSource(), nameof(DataSource.Member));
+        using BindingSource bindingSource = new(new DataSource(), nameof(DataSource.Member));
         ISupportInitializeNotification source = bindingSource;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -599,8 +599,8 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_WithISupportInitializeNotificationDataSource_WaitsForDataSourceInitialize()
     {
-        var dataSource = new ISupportInitializeNotificationDataSource { IsInitializedResult = false };
-        using var bindingSource = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+        ISupportInitializeNotificationDataSource dataSource = new() { IsInitializedResult = false };
+        using BindingSource bindingSource = new(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
         ISupportInitializeNotification source = bindingSource;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -635,8 +635,8 @@ public class BindingSourceTests
     [WinFormsFact]
     public void BeginInitEndInit_WithISupportInitializeNotificationDataSourceInitialized_DoesNotWaitForDataSourceInitialize()
     {
-        var dataSource = new ISupportInitializeNotificationDataSource { IsInitializedResult = true };
-        using var bindingSource = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+        ISupportInitializeNotificationDataSource dataSource = new() { IsInitializedResult = true };
+        using BindingSource bindingSource = new(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
         ISupportInitializeNotification source = bindingSource;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -671,8 +671,8 @@ public class BindingSourceTests
     [MemberData(nameof(BeginInitEndInit_SetDataSourceInInit_TestData))]
     public void BeginInitEndInit_SetDataSourceInInit_Success(object newDataSource)
     {
-        var dataSource = new ISupportInitializeNotificationDataSource { IsInitializedResult = false };
-        using var bindingSource = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+        ISupportInitializeNotificationDataSource dataSource = new() { IsInitializedResult = false };
+        using BindingSource bindingSource = new(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
         ISupportInitializeNotification source = bindingSource;
         int callCount = 0;
         EventHandler handler = (sender, e) =>

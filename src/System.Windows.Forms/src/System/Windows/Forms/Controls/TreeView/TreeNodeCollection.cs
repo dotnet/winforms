@@ -126,7 +126,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Add(string? text)
     {
-        TreeNode tn = new TreeNode(text);
+        TreeNode tn = new(text);
         Add(tn);
         return tn;
     }
@@ -138,7 +138,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Add(string? key, string? text)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key
         };
@@ -151,7 +151,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, int imageIndex)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key,
             ImageIndex = imageIndex
@@ -165,7 +165,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, string? imageKey)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key,
             ImageKey = imageKey
@@ -179,7 +179,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, int imageIndex, int selectedImageIndex)
     {
-        TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex)
+        TreeNode tn = new(text, imageIndex, selectedImageIndex)
         {
             Name = key
         };
@@ -192,7 +192,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, string? imageKey, string? selectedImageKey)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key,
             ImageKey = imageKey,
@@ -487,7 +487,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Insert(int index, string? text)
     {
-        TreeNode tn = new TreeNode(text);
+        TreeNode tn = new(text);
         Insert(index, tn);
         return tn;
     }
@@ -497,7 +497,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key
         };
@@ -510,7 +510,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, int imageIndex)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key,
             ImageIndex = imageIndex
@@ -524,7 +524,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, string? imageKey)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key,
             ImageKey = imageKey
@@ -538,7 +538,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, int imageIndex, int selectedImageIndex)
     {
-        TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex)
+        TreeNode tn = new(text, imageIndex, selectedImageIndex)
         {
             Name = key
         };
@@ -551,7 +551,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, string? imageKey, string? selectedImageKey)
     {
-        TreeNode tn = new TreeNode(text)
+        TreeNode tn = new(text)
         {
             Name = key,
             ImageKey = imageKey,

@@ -13,7 +13,7 @@ public class DataGridViewBindingCompleteEventArgsTests
     [InlineData(ListChangedType.Reset - 1)]
     public void Ctor_ListChangedType(ListChangedType listChangedType)
     {
-        var e = new DataGridViewBindingCompleteEventArgs(listChangedType);
+        DataGridViewBindingCompleteEventArgs e = new(listChangedType);
         Assert.Equal(listChangedType, e.ListChangedType);
     }
 }

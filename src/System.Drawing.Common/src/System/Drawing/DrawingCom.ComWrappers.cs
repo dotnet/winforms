@@ -24,7 +24,7 @@ internal unsafe partial class DrawingCom : ComWrappers
 
     private static readonly ComInterfaceEntry* s_wrapperEntry = InitializeComInterfaceEntry();
 
-    internal static DrawingCom Instance { get; } = new DrawingCom();
+    internal static DrawingCom Instance { get; } = new();
 
     private DrawingCom() { }
 

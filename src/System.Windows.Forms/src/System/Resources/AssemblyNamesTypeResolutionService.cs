@@ -106,7 +106,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 
                 if (assemblyName is not null)
                 {
-                    List<AssemblyName> assemblyList = new List<AssemblyName>(_names.Length);
+                    List<AssemblyName> assemblyList = new(_names.Length);
                     foreach (AssemblyName asmName in _names)
                     {
                         if (string.Equals(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase))

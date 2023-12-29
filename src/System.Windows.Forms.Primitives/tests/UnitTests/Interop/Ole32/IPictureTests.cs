@@ -15,7 +15,7 @@ public unsafe class IPictureTests
     [StaFact]
     public void GetIPictureFromCursor()
     {
-        using MockCursor arrow = new MockCursor(PInvoke.IDC_ARROW);
+        using MockCursor arrow = new(PInvoke.IDC_ARROW);
 
         using var picture = IPicture.CreateFromIcon(Icon.FromHandle(arrow.Handle), copy: true);
         Assert.False(picture.IsNull);
@@ -30,7 +30,7 @@ public unsafe class IPictureTests
     [StaFact]
     public void GetIPictureFromImage()
     {
-        using MockCursor arrow = new MockCursor(PInvoke.IDC_ARROW);
+        using MockCursor arrow = new(PInvoke.IDC_ARROW);
         using Icon icon = Icon.FromHandle(arrow.Handle);
         using Bitmap bitmap = icon.ToBitmap();
         using var picture = IPicture.CreateFromImage(bitmap);
@@ -78,7 +78,7 @@ public unsafe class IPictureTests
     [StaFact]
     public void GetPictureFromIPictureDisp()
     {
-        using Bitmap bitmap = new Bitmap(100, 200);
+        using Bitmap bitmap = new(100, 200);
         using var picture = IPictureDisp.CreateFromImage(bitmap);
         Assert.False(picture.IsNull);
         using Image? image = picture.Value->ToImage();

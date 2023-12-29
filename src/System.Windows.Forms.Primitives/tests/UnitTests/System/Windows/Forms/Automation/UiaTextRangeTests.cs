@@ -24,7 +24,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.Equal(start, textRange.Start);
         Assert.Equal(end, textRange.End);
 
@@ -49,7 +49,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.Equal(expectedStart, textRange.Start);
         Assert.Equal(expectedEnd, textRange.End);
     }
@@ -80,7 +80,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(textRange.Start >= 0);
         Assert.True(textRange.End >= 0);
     }
@@ -93,7 +93,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end);
         Assert.Equal(end, textRange.End);
     }
 
@@ -105,7 +105,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         textRange.End = end;
         int actual = textRange.End < textRange.Start ? textRange.Start : textRange.End;
         Assert.Equal(end, actual);
@@ -116,7 +116,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 5, end: 10);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 5, end: 10);
         textRange.End = 3;  /*Incorrect value*/
         Assert.Equal(textRange.Start, textRange.End);
 
@@ -137,7 +137,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.Equal(expected, textRange.Length);
     }
 
@@ -150,7 +150,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 3, 10);
+        UiaTextRange textRange = new(enclosingElement, provider, 3, 10);
 
         var testAccessor = textRange.TestAccessor();
         testAccessor._start = start;
@@ -167,7 +167,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
 
         textRange.TestAccessor()._start = start;
 
@@ -182,7 +182,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         textRange.Start = start;
         int actual = textRange.Start < textRange.End ? textRange.End : textRange.Start;
         Assert.Equal(start, actual);
@@ -193,7 +193,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 4, end: 8);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 4, end: 8);
         textRange.Start = -10;
         Assert.Equal(0, textRange.Start);
         Assert.Equal(8, textRange.End);
@@ -204,7 +204,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 4, end: 10);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 4, end: 10);
         textRange.Start = 15; // More than End = 10
         Assert.True(textRange.Start <= textRange.End);
     }
@@ -214,7 +214,7 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 3, end: 9);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 3, end: 9);
 
         using ComScope<ITextRangeProvider> rangeScope = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).Clone(rangeScope).Succeeded);
@@ -230,8 +230,8 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange1 = new UiaTextRange(enclosingElement, provider, start: 3, end: 9);
-        UiaTextRange textRange2 = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange1 = new(enclosingElement, provider, start: 3, end: 9);
+        UiaTextRange textRange2 = new(enclosingElement, provider, start, end);
         BOOL actual = default;
         using var textRange2Scope = ComHelpers.GetComScope<ITextRangeProvider>(textRange2);
         Assert.True(((ITextRangeProvider.Interface)textRange1).Compare(textRange2Scope, &actual).Succeeded);
@@ -261,8 +261,8 @@ public unsafe class UiaTextRangeTests
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 3, end: 9);
-        UiaTextRange targetRange = new UiaTextRange(enclosingElement, provider, start: targetStart, end: targetEnd);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 3, end: 9);
+        UiaTextRange targetRange = new(enclosingElement, provider, start: targetStart, end: targetEnd);
         using var textRangeScope = ComHelpers.GetComScope<ITextRangeProvider>(targetRange);
         int actual;
         Assert.True(((ITextRangeProvider.Interface)textRange).CompareEndpoints((TextPatternRangeEndpoint)endpoint, textRangeScope, (TextPatternRangeEndpoint)targetEndpoint, &actual).Succeeded);
@@ -276,10 +276,10 @@ public unsafe class UiaTextRangeTests
     public void UiaTextRange_ITextRangeProvider_ExpandToEnclosingUnit_ExpandsToCharacter(int start, int end, int expandedStart, int expandedEnd)
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.TextLength).Returns("words, words, words".Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ExpandToEnclosingUnit(TextUnit.TextUnit_Character).Succeeded);
         Assert.Equal(expandedStart, textRange.Start);
         Assert.Equal(expandedEnd, textRange.End);
@@ -293,11 +293,11 @@ public unsafe class UiaTextRangeTests
     {
         string testText = "words, words, words";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ExpandToEnclosingUnit(TextUnit.TextUnit_Word).Succeeded);
         Assert.Equal(expandedStart, textRange.Start);
         Assert.Equal(expandedEnd, textRange.End);
@@ -314,7 +314,7 @@ public unsafe class UiaTextRangeTests
 second line
 third line.";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         providerMock.Setup(m => m.LinesCount).Returns(3);
@@ -328,7 +328,7 @@ third line.";
         providerMock.Setup(m => m.GetLineFromCharIndex(27)).Returns(2);
         providerMock.Setup(m => m.GetLineFromCharIndex(28)).Returns(2);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ExpandToEnclosingUnit(TextUnit.TextUnit_Line).Succeeded);
         Assert.Equal(expandedStart, textRange.Start);
         Assert.Equal(expandedEnd, textRange.End);
@@ -345,11 +345,11 @@ third line.";
 this is the second line
 this is the third line.";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ExpandToEnclosingUnit(TextUnit.TextUnit_Paragraph).Succeeded);
         Assert.Equal(expandedStart, textRange.Start);
         Assert.Equal(expandedEnd, textRange.End);
@@ -371,10 +371,10 @@ this is the third line.";
 this is the second line
 this is the third line.";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ExpandToEnclosingUnit(textUnit).Succeeded);
         Assert.Equal(expandedStart, textRange.Start);
         Assert.Equal(expandedEnd, textRange.End);
@@ -387,7 +387,7 @@ this is the third line.";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         Array textAttributeIdentifiers = Enum.GetValues(typeof(UIA_TEXTATTRIBUTE_ID));
 
         foreach (UIA_TEXTATTRIBUTE_ID textAttributeIdentifier in textAttributeIdentifiers)
@@ -412,11 +412,11 @@ this is the third line.";
     {
         string testText = "Test text to find something.";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 28);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 28);
 
         using BSTR bstrText = new(textToSearch);
         using ComScope<ITextRangeProvider> actual = new(null);
@@ -440,7 +440,7 @@ this is the third line.";
         {
             IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-            UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 28);
+            UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 28);
             using ComScope<ITextRangeProvider> actual = new(null);
             Assert.True(((ITextRangeProvider.Interface)textRange).FindText(default, BOOL.TRUE, BOOL.TRUE, actual).Failed);
             Assert.True(actual.IsNull);
@@ -519,13 +519,13 @@ this is the third line.";
     internal void UiaTextRange_ITextRangeProvider_GetAttributeValue_Returns_Correct(UIA_TEXTATTRIBUTE_ID attributeId, object attributeValue)
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
-        using Font font = new Font("Segoe UI", 9, FontStyle.Regular);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
+        using Font font = new("Segoe UI", 9, FontStyle.Regular);
         providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
         providerMock.Setup(m => m.WindowStyle).Returns(PInvoke.ES_LEFT);
         providerMock.Setup(m => m.IsReadOnly).Returns(false);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 28);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 28);
         using VARIANT actual = default;
         Assert.True(((ITextRangeProvider.Interface)textRange).GetAttributeValue(attributeId, &actual).Succeeded);
         Assert.Equal(attributeValue, actual.ToObject());
@@ -534,7 +534,7 @@ this is the third line.";
     [StaFact]
     public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_EmptyText()
     {
-        Rectangle expected = new Rectangle(10, 33, 96, 19);
+        Rectangle expected = new(10, 33, 96, 19);
         SafeArrayScope<double> array = new(4);
         array[0] = 10;
         array[1] = 33;
@@ -547,11 +547,11 @@ this is the third line.";
         };
 
         MockRawElementProviderSimple enclosingElement = new(variant);
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(p => p.Text).Returns("");
         providerMock.Setup(p => p.TextLength).Returns(0);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
 
         using SafeArrayScope<double> actual = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
@@ -577,12 +577,12 @@ this is the third line.";
         };
 
         MockRawElementProviderSimple enclosingElement = new(variant);
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(p => p.Text).Returns("abcde");
         providerMock.Setup(p => p.TextLength).Returns(5);
         providerMock.Setup(p => p.IsMultiline).Returns(false);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         using SafeArrayScope<double> actual = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
         Assert.True(actual.IsEmpty);
@@ -603,15 +603,15 @@ this is the third line.";
         };
 
         MockRawElementProviderSimple enclosingElement = new(variant);
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(p => p.Text).Returns("abc");
         providerMock.Setup(p => p.TextLength).Returns(3);
         providerMock.Setup(p => p.PointToScreen(It.IsAny<Point>())).Returns(Point.Empty);
-        using Font font = new Font("Arial", 9f, FontStyle.Regular);
+        using Font font = new("Arial", 9f, FontStyle.Regular);
         providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
         UiaTextProvider provider = providerMock.Object;
 
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 3, end: 3);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 3, end: 3);
         using SafeArrayScope<double> safeArrayScope = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(safeArrayScope).Succeeded); // {X,Y,Width,Height}
 
@@ -642,7 +642,7 @@ this is the third line.";
         };
         MockRawElementProviderSimple enclosingElement = new(variant);
 
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         providerMock.Setup(m => m.IsMultiline).Returns(false);
@@ -652,7 +652,7 @@ this is the third line.";
         providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(5, testText)).Returns(new Point(28, 0));
         providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(1, testText)).Returns(new Point(17, 0));
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         using SafeArrayScope<double> actual = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
 
@@ -692,7 +692,7 @@ and numbers 12345";
 
         MockRawElementProviderSimple enclosingElement = new(variant);
 
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.IsReadingRTL).Returns(false);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         providerMock.Setup(m => m.Text).Returns(testText);
@@ -700,7 +700,7 @@ and numbers 12345";
         providerMock.Setup(m => m.IsMultiline).Returns(true);
         providerMock.Setup(m => m.FirstVisibleLine).Returns(0);
         providerMock.Setup(m => m.LinesPerPage).Returns(9);
-        using Font font = new Font("Arial", 9f, FontStyle.Regular);
+        using Font font = new("Arial", 9f, FontStyle.Regular);
         providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
 
         // Offset by enclosing element's coordinates
@@ -735,7 +735,7 @@ and numbers 12345";
         providerMock.Setup(m => m.GetLineIndex(3)).Returns(46);
         providerMock.Setup(m => m.GetLineIndex(4)).Returns(58);
 
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, providerMock.Object, start, end);
+        UiaTextRange textRange = new(enclosingElement, providerMock.Object, start, end);
         using SafeArrayScope<double> actual = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
         Assert.True(expected.Length == actual.Length);
@@ -774,7 +774,7 @@ and numbers 12345";
 
         MockRawElementProviderSimple enclosingElement = new(variant);
 
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.IsReadingRTL).Returns(true);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         providerMock.Setup(m => m.Text).Returns(testText);
@@ -782,7 +782,7 @@ and numbers 12345";
         providerMock.Setup(m => m.IsMultiline).Returns(true);
         providerMock.Setup(m => m.FirstVisibleLine).Returns(0);
         providerMock.Setup(m => m.LinesPerPage).Returns(9);
-        using Font font = new Font("Arial", 9f, FontStyle.Regular);
+        using Font font = new("Arial", 9f, FontStyle.Regular);
         providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
 
         // Offset by enclosing element's coordinates
@@ -817,7 +817,7 @@ and numbers 12345";
         providerMock.Setup(m => m.GetLineIndex(3)).Returns(46);
         providerMock.Setup(m => m.GetLineIndex(4)).Returns(58);
 
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, providerMock.Object, start, end);
+        UiaTextRange textRange = new(enclosingElement, providerMock.Object, start, end);
         using SafeArrayScope<double> actual = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
         Assert.True(expected.Length == actual.Length);
@@ -832,7 +832,7 @@ and numbers 12345";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         using ComScope<IRawElementProviderSimple> actual = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetEnclosingElement(actual).Succeeded);
         Assert.Equal(enclosingElement, ComHelpers.GetObjectForIUnknown(actual.AsUnknown));
@@ -860,11 +860,11 @@ and numbers 12345";
     {
         string testText = "Some long long test text";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         using BSTR actual = default;
         Assert.True(((ITextRangeProvider.Interface)textRange).GetText(maxLength, &actual).Succeeded);
         Assert.Equal(expected, actual.ToString());
@@ -891,11 +891,11 @@ and numbers 12345";
 This is the line 2
 This is the line 3";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         int result;
         Assert.True(((ITextRangeProvider.Interface)textRange).Move(unit, count, &result).Succeeded);
         Assert.Equal(expectedStart, textRange.Start);
@@ -925,11 +925,11 @@ This is the line 3";
 This is the line 2
 This is the line 3";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.Text).Returns(testText);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         int result;
         ((ITextRangeProvider.Interface)textRange).MoveEndpointByUnit(endpoint, unit, count, &result);
         Assert.Equal(expectedStart, textRange.Start);
@@ -950,8 +950,8 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
-        UiaTextRange targetRange = new UiaTextRange(enclosingElement, provider, targetRangeStart, targetRangeEnd);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
+        UiaTextRange targetRange = new(enclosingElement, provider, targetRangeStart, targetRangeEnd);
         using var targetRangeScope = ComHelpers.GetComScope<ITextRangeProvider>(targetRange);
         Assert.True(((ITextRangeProvider.Interface)textRange).MoveEndpointByRange(endpoint, targetRangeScope, targetEndpoint).Succeeded);
         Assert.Equal(expectedStart, textRange.Start);
@@ -965,10 +965,10 @@ This is the line 3";
     public void UiaTextRange_ITextRangeProvider_Select_ReturnsCorrectValue(int start, int end)
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.SetSelection(start, end));
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).Select().Succeeded);
         providerMock.Verify(m => m.SetSelection(start, end), Times.Once());
     }
@@ -979,7 +979,7 @@ This is the line 3";
         // Check an app doesn't crash when calling AddToSelection method.
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 3, 7);
+        UiaTextRange textRange = new(enclosingElement, provider, 3, 7);
         Assert.True(((ITextRangeProvider.Interface)textRange).AddToSelection().Succeeded);
     }
 
@@ -989,7 +989,7 @@ This is the line 3";
         // Check an app doesn't crash when calling RemoveFromSelection method.
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 3, 7);
+        UiaTextRange textRange = new(enclosingElement, provider, 3, 7);
         Assert.True(((ITextRangeProvider.Interface)textRange).RemoveFromSelection().Succeeded);
     }
 
@@ -1005,14 +1005,14 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
 
-        var providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(p => p.IsMultiline).Returns(true);
         providerMock.Setup(p => p.GetLineFromCharIndex(charIndex)).Returns(lineForCharIndex);
         providerMock.Setup(p => p.LineScroll(charactersHorizontal, linesVertical)).Returns(true);
         providerMock.Setup(p => p.FirstVisibleLine).Returns(firstVisibleLine);
 
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ScrollIntoView(BOOL.TRUE).Succeeded);
         providerMock.Verify(e => e.LineScroll(charactersHorizontal, linesVertical), Times.Once());
     }
@@ -1031,14 +1031,14 @@ This is the line 3";
         int visibleStart = 40;
         int visibleEnd = 60;
 
-        var providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(p => p.IsMultiline).Returns(false);
         providerMock.Setup(p => p.IsScrollable).Returns(scrollable);
         providerMock.Setup(p => p.IsReadingRTL).Returns(readingRTL);
         providerMock.Setup(p => p.GetVisibleRangePoints(out visibleStart, out visibleEnd));
 
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
         Assert.True(((ITextRangeProvider.Interface)textRange).ScrollIntoView(BOOL.TRUE).Succeeded);
         providerMock.Verify(p => p.GetVisibleRangePoints(out visibleStart, out visibleEnd), Times.Exactly(2));
     }
@@ -1048,7 +1048,7 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+        UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
         ComSafeArrayScope<IRawElementProviderSimple> actual = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetChildren(actual).Succeeded);
         Assert.True(actual.IsEmpty);
@@ -1115,7 +1115,7 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
+        UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
         HorizontalTextAlignment actual = textRange.TestAccessor().GetHorizontalTextAlignment((WINDOW_STYLE)style);
 
@@ -1129,7 +1129,7 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
+        UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
         CapStyle actual = textRange.TestAccessor().GetCapStyle((WINDOW_STYLE)editStyle);
 
@@ -1142,10 +1142,10 @@ This is the line 3";
     public void UiaTextRange_private_GetReadOnly_ReturnsCorrectValue(bool readOnly)
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.IsReadOnly).Returns(readOnly);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
+        UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
         bool actual = textRange.TestAccessor().GetReadOnly();
 
@@ -1188,11 +1188,11 @@ This is the line 3";
     public void UiaTextRange_private_GetFontSize_ReturnsCorrectValue(float fontSize, double expected)
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
-        using Font font = new Font("Arial", fontSize, FontStyle.Regular);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
+        using Font font = new("Arial", fontSize, FontStyle.Regular);
         providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 5, 20);
+        UiaTextRange textRange = new(enclosingElement, provider, 5, 20);
 
         double actual = textRange.TestAccessor().GetFontSize(provider.Logfont);
 
@@ -1229,7 +1229,7 @@ This is the line 3";
     [InlineData(5, true)]
     public void UiaTextRange_private_GetItalic_ReturnsCorrectValue(byte ifItalic, bool expected)
     {
-        LOGFONTW logfont = new LOGFONTW() { lfItalic = ifItalic };
+        LOGFONTW logfont = new() { lfItalic = ifItalic };
 
         bool actual = StaticNullTextRange.TestAccessor().GetItalic(logfont);
 
@@ -1241,7 +1241,7 @@ This is the line 3";
     [InlineData(5, (int)TextDecorationLineStyle.Single)]
     public void UiaTextRange_private_GetStrikethroughStyle_ReturnsCorrectValue(byte ifStrikeOut, int expected)
     {
-        LOGFONTW logfont = new LOGFONTW() { lfStrikeOut = ifStrikeOut };
+        LOGFONTW logfont = new() { lfStrikeOut = ifStrikeOut };
         TextDecorationLineStyle actual = StaticNullTextRange.TestAccessor().GetStrikethroughStyle(logfont);
 
         Assert.Equal((TextDecorationLineStyle)expected, actual);
@@ -1252,7 +1252,7 @@ This is the line 3";
     [InlineData(5, (int)TextDecorationLineStyle.Single)]
     public void UiaTextRange_private_GetUnderlineStyle_ReturnsCorrectValue(byte ifUnderline, int expected)
     {
-        LOGFONTW logfont = new LOGFONTW() { lfUnderline = ifUnderline };
+        LOGFONTW logfont = new() { lfUnderline = ifUnderline };
         TextDecorationLineStyle actual = StaticNullTextRange.TestAccessor().GetUnderlineStyle(logfont);
 
         Assert.Equal((TextDecorationLineStyle)expected, actual);
@@ -1269,7 +1269,7 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
+        UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
         textRange.TestAccessor().MoveTo(start, end);
 
@@ -1286,7 +1286,7 @@ This is the line 3";
     {
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
+        UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
         Assert.ThrowsAny<Exception>(() => textRange.TestAccessor().MoveTo(start, end));
     }
@@ -1302,10 +1302,10 @@ This is the line 3";
     {
         string testText = "Some long long test text";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
-        Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         providerMock.Setup(m => m.TextLength).Returns(testText.Length);
         UiaTextProvider provider = providerMock.Object;
-        UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+        UiaTextRange textRange = new(enclosingElement, provider, start, end);
 
         textRange.TestAccessor().ValidateEndpoints();
 

@@ -718,7 +718,7 @@ public unsafe class VARIANTTests
     public void VARIANT_ToObject_FILETIME_Success()
     {
         using VARIANT variant = new();
-        var dt = new DateTime(2020, 05, 13, 13, 3, 12);
+        DateTime dt = new(2020, 05, 13, 13, 3, 12);
         var ft = new PInvoke.FILETIME(dt);
         HRESULT hr = InitPropVariantFromFileTime(&ft, &variant);
         Assert.Equal(HRESULT.S_OK, hr);
@@ -750,7 +750,7 @@ public unsafe class VARIANTTests
     public void VARIANT_ToObject_DateFromFILETIME_Success()
     {
         using VARIANT variant = new();
-        var dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
+        DateTime dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
         var ft = new PInvoke.FILETIME(dt);
         HRESULT hr = InitVariantFromFileTime(&ft, &variant);
         Assert.Equal(HRESULT.S_OK, hr);
@@ -762,7 +762,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void VARIANT_ToObject_Date_Success()
     {
-        var dt = new DateTime(2020, 05, 13, 13, 3, 12);
+        DateTime dt = new(2020, 05, 13, 13, 3, 12);
         double date = dt.ToOADate();
         using VARIANT variant = new()
         {
@@ -789,7 +789,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void VARIANT_ToObject_DateBYREF_Success()
     {
-        var dt = new DateTime(2020, 05, 13, 13, 3, 12);
+        DateTime dt = new(2020, 05, 13, 13, 3, 12);
         double date = dt.ToOADate();
         using VARIANT variant = new()
         {
@@ -1675,9 +1675,9 @@ public unsafe class VARIANTTests
     {
         yield return new object[] { Array.Empty<double>(), Array.Empty<DateTime>() };
 
-        var d1 = new DateTime(2020, 05, 13, 13, 3, 12);
-        var d2 = new DateTime(2020, 05, 13, 13, 3, 11);
-        var d3 = new DateTime(2020, 3, 13, 13, 3, 12);
+        DateTime d1 = new(2020, 05, 13, 13, 3, 12);
+        DateTime d2 = new(2020, 05, 13, 13, 3, 11);
+        DateTime d3 = new(2020, 3, 13, 13, 3, 12);
         yield return new object[] { new double[] { d1.ToOADate(), d2.ToOADate(), d3.ToOADate() }, new DateTime[] { d1, d2, d3 } };
     }
 
@@ -1716,9 +1716,9 @@ public unsafe class VARIANTTests
     {
         yield return new object[] { Array.Empty<PInvoke.FILETIME>(), Array.Empty<DateTime>() };
 
-        var d1 = new DateTime(2020, 05, 13, 13, 3, 12);
-        var d2 = new DateTime(2020, 05, 13, 13, 3, 11);
-        var d3 = new DateTime(2020, 3, 13, 13, 3, 12);
+        DateTime d1 = new(2020, 05, 13, 13, 3, 12);
+        DateTime d2 = new(2020, 05, 13, 13, 3, 11);
+        DateTime d3 = new(2020, 3, 13, 13, 3, 12);
         yield return new object[] { new PInvoke.FILETIME[] { new(d1), new(d2), new(d3) }, new DateTime[] { d1, d2, d3 } };
     }
 
@@ -1791,7 +1791,7 @@ public unsafe class VARIANTTests
 
         try
         {
-            nint[] result = new nint[] { 0, ptr1, ptr2 };
+            nint[] result = [0, ptr1, ptr2];
             fixed (nint* pResult = result)
             {
                 if (nint.Size == 4)
@@ -1833,7 +1833,7 @@ public unsafe class VARIANTTests
         nint ptr2 = Marshal.StringToCoTaskMemUni("");
         try
         {
-            nint[] result = new nint[] { 0, ptr1, ptr2 };
+            nint[] result = [0, ptr1, ptr2];
             fixed (nint* pResult = result)
             {
                 if (nint.Size == 4)
@@ -1875,7 +1875,7 @@ public unsafe class VARIANTTests
         nint ptr2 = Marshal.StringToCoTaskMemAnsi("");
         try
         {
-            nint[] result = new nint[] { 0, ptr1, ptr2 };
+            nint[] result = [0, ptr1, ptr2];
             fixed (nint* pResult = result)
             {
                 if (nint.Size == 4)
@@ -4299,12 +4299,12 @@ public unsafe class VARIANTTests
     {
         yield return new object[] { new double[0, 0], new DateTime[0, 0] };
 
-        var d1 = new DateTime(2020, 05, 13, 13, 3, 12);
-        var d2 = new DateTime(2020, 05, 13, 13, 3, 11);
-        var d3 = new DateTime(2020, 3, 13, 13, 3, 12);
-        var d4 = new DateTime(1892, 1, 2, 3, 4, 5, 6);
-        var d5 = new DateTime(2010, 2, 3, 4, 5, 6);
-        var d6 = new DateTime(8000, 10, 11, 12, 13, 14);
+        DateTime d1 = new(2020, 05, 13, 13, 3, 12);
+        DateTime d2 = new(2020, 05, 13, 13, 3, 11);
+        DateTime d3 = new(2020, 3, 13, 13, 3, 12);
+        DateTime d4 = new(1892, 1, 2, 3, 4, 5, 6);
+        DateTime d5 = new(2010, 2, 3, 4, 5, 6);
+        DateTime d6 = new(8000, 10, 11, 12, 13, 14);
         yield return new object[]
         {
             new double[2, 3]
@@ -4379,7 +4379,7 @@ public unsafe class VARIANTTests
         using BSTR ptr1 = new("text");
         using BSTR ptr2 = new("");
 
-        nint[] result = new nint[] { 0, ptr1, ptr2 };
+        nint[] result = [0, ptr1, ptr2];
         SAFEARRAY* psa = CreateSafeArray(VT_BSTR, result);
         using VARIANT variant = new()
         {
@@ -5415,7 +5415,7 @@ public unsafe class VARIANTTests
 
     private static unsafe SAFEARRAY* CreateSafeArray<T>(VARENUM vt, T[] result, int lbound = 0) where T : unmanaged
     {
-        var saBound = new SAFEARRAYBOUND
+        SAFEARRAYBOUND saBound = new()
         {
             cElements = (uint)result.Length,
             lLbound = lbound
@@ -5616,7 +5616,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void ToObject_RECORDARRAYValid_ReturnsExpected()
     {
-        int[] result = new int[] { 1, 2 };
+        int[] result = [1, 2];
         CustomRecordInfo recordInfo = new()
         {
             GetGuidAction = () => (typeof(int).GUID, HRESULT.S_OK)
@@ -5635,7 +5635,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void ToObject_RECORDARRAYInvalidFFeatures_ThrowsArgumentException()
     {
-        int[] result = new int[] { 1, 2 };
+        int[] result = [1, 2];
         CustomRecordInfo recordInfo = new();
         using ComScope<IRecordInfo> pRecordInfo = new(recordInfo.GetComInterface());
         SAFEARRAY* psa = CreateRecordSafeArray(result, pRecordInfo);
@@ -5656,7 +5656,7 @@ public unsafe class VARIANTTests
     [StaFact]
     public void ToObject_RECORDARRAYInvalidGetGuidHR_ThrowsArgumentException()
     {
-        int[] result = new int[] { 1, 2 };
+        int[] result = [1, 2];
         CustomRecordInfo record = new()
         {
             GetGuidAction = () => (Guid.Empty, HRESULT.DISP_E_DIVBYZERO)
@@ -5682,7 +5682,7 @@ public unsafe class VARIANTTests
     [MemberData(nameof(RECORDARRAY_InvalidGuid_TestData))]
     public void ToObject_RECORDARRAY_InvokeInvalidGuid_ThrowsArgumentException(Guid guid)
     {
-        int[] result = new int[] { 1, 2 };
+        int[] result = [1, 2];
         CustomRecordInfo record = new()
         {
             GetGuidAction = () => (guid, HRESULT.S_OK)
@@ -5744,7 +5744,7 @@ public unsafe class VARIANTTests
 
     private static SAFEARRAY* CreateRecordSafeArray<T>(T[] result, IRecordInfo* recordInfo, int lbound = 0)
     {
-        var saBound = new SAFEARRAYBOUND
+        SAFEARRAYBOUND saBound = new()
         {
             cElements = (uint)result.Length,
             lLbound = lbound

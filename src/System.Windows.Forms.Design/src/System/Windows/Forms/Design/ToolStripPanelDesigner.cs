@@ -48,7 +48,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
                           ControlPaint.Light(Control.BackColor) :
                           ControlPaint.Dark(Control.BackColor);
 
-            Pen pen = new Pen(penColor)
+            Pen pen = new(penColor)
             {
                 DashStyle = DashStyle.Dash
             };

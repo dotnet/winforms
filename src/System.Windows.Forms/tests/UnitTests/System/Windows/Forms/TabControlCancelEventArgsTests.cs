@@ -17,7 +17,7 @@ public class TabControlCancelEventArgsTests
     [MemberData(nameof(Ctor_TabPage_Int_Bool_TabControlAction_TestData))]
     public void Ctor_TabPage_Int_Bool_TabControlAction(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action)
     {
-        var e = new TabControlCancelEventArgs(tabPage, tabPageIndex, cancel, action);
+        TabControlCancelEventArgs e = new(tabPage, tabPageIndex, cancel, action);
         Assert.Equal(tabPage, e.TabPage);
         Assert.Equal(tabPageIndex, e.TabPageIndex);
         Assert.Equal(cancel, e.Cancel);

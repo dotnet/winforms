@@ -20,7 +20,7 @@ public class FeatureSupportTests
     [MemberData(nameof(IsPresent_DefaultMinimumVersion_TestData))]
     public void FeatureSupport_IsPresent_InvokeDefaultMinimVersion_ReturnsExpected(Version versionPresent, object feature, bool expected)
     {
-        var featureSupport = new Mock<FeatureSupport>(MockBehavior.Strict);
+        Mock<FeatureSupport> featureSupport = new(MockBehavior.Strict);
         featureSupport
             .Setup(s => s.IsPresent(feature))
             .CallBase();
@@ -50,7 +50,7 @@ public class FeatureSupportTests
     [MemberData(nameof(IsPresent_CustomMinimumVersion_TestData))]
     public void FeatureSupport_IsPresent_InvokeCustomMinimumVersion_ReturnsExpected(Version versionPresent, object feature, Version minimumVersion, bool expected)
     {
-        var featureSupport = new Mock<FeatureSupport>(MockBehavior.Strict);
+        Mock<FeatureSupport> featureSupport = new(MockBehavior.Strict);
         featureSupport
             .Setup(s => s.IsPresent(feature, minimumVersion))
             .CallBase();

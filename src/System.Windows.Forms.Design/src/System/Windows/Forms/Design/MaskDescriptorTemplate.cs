@@ -50,7 +50,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
     /// </summary>
     public static List<MaskDescriptor> GetLocalizedMaskDescriptors(CultureInfo culture)
     {
-        ValidMaskDescriptorList maskDescriptors = new ValidMaskDescriptorList();
+        ValidMaskDescriptorList maskDescriptors = new();
 
         // Note: MaskDescriptor.Sample should not contain culture-sensitive literals since they can fail the mask
         //       for some specific cultures. (ex: date separator).
@@ -312,6 +312,6 @@ internal class MaskDescriptorTemplate : MaskDescriptor
         /// <summary>
         /// Returns a reference to the internal List object.
         /// </summary>
-        public List<MaskDescriptor> List { get; } = new List<MaskDescriptor>();
+        public List<MaskDescriptor> List { get; } = new();
     }
 }

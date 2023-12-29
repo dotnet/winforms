@@ -12,7 +12,7 @@ public class DataGridViewCellContextMenuStripNeededEventArgsTests
     [InlineData(1, 2)]
     public void Ctor_Int_Int(int columnIndex, int rowIndex)
     {
-        var e = new DataGridViewCellContextMenuStripNeededEventArgs(columnIndex, rowIndex);
+        DataGridViewCellContextMenuStripNeededEventArgs e = new(columnIndex, rowIndex);
         Assert.Equal(columnIndex, e.ColumnIndex);
         Assert.Equal(rowIndex, e.RowIndex);
         Assert.Null(e.ContextMenuStrip);
@@ -40,7 +40,7 @@ public class DataGridViewCellContextMenuStripNeededEventArgsTests
     [MemberData(nameof(ContextMenuStrip_TestData))]
     public void ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        var e = new DataGridViewCellContextMenuStripNeededEventArgs(1, 2)
+        DataGridViewCellContextMenuStripNeededEventArgs e = new(1, 2)
         {
             ContextMenuStrip = value
         };

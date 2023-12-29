@@ -120,7 +120,7 @@ public static class Helpers
             return GetMonitorRectForWindow(hWnd);
         }
 
-        var rect = new RECT();
+        RECT rect = new();
         GetClientRect(hWnd, ref rect);
 
         return GetRectangle(rect);
@@ -131,7 +131,7 @@ public static class Helpers
         IntPtr hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTOPRIMARY);
         Assert.NotEqual(IntPtr.Zero, hMonitor);
 
-        var info = new MONITORINFO();
+        MONITORINFO info = new();
         info.cbSize = Marshal.SizeOf(info);
         int result = GetMonitorInfo(hMonitor, ref info);
         Assert.NotEqual(0, result);

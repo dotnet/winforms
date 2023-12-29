@@ -10,11 +10,11 @@ public class ControlBindingsCollectionTests
 {
     public static IEnumerable<object[]> Ctor_IBindableComponent_TestData()
     {
-        var mockBindableComponent = new Mock<IBindableComponent>(MockBehavior.Strict);
+        Mock<IBindableComponent> mockBindableComponent = new(MockBehavior.Strict);
         mockBindableComponent.Setup(c => c.Dispose());
         yield return new object[] { mockBindableComponent.Object, null };
 
-        var control = new Control();
+        Control control = new();
         yield return new object[] { control, control };
         yield return new object[] { null, null };
     }
@@ -23,7 +23,7 @@ public class ControlBindingsCollectionTests
     [MemberData(nameof(Ctor_IBindableComponent_TestData))]
     public void Ctor_IBindableComponent(IBindableComponent control, Control expectedControl)
     {
-        var collection = new ControlBindingsCollection(control);
+        ControlBindingsCollection collection = new(control);
         Assert.Same(control, collection.BindableComponent);
         Assert.Same(expectedControl, collection.Control);
         Assert.Equal(DataSourceUpdateMode.OnValidation, collection.DefaultDataSourceUpdateMode);
@@ -35,8 +35,8 @@ public class ControlBindingsCollectionTests
     [InvalidEnumData<DataSourceUpdateMode>]
     public void DefaultDataSourceUpdateMode_Set_GetReturnsExpected(DataSourceUpdateMode value)
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control)
+        using Control control = new();
+        ControlBindingsCollection collection = new(control)
         {
             DefaultDataSourceUpdateMode = value
         };
@@ -54,8 +54,8 @@ public class ControlBindingsCollectionTests
     [MemberData(nameof(Add_Binding_TestData))]
     public void Add_Binding_Success(Binding binding)
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control)
+        using Control control = new();
+        ControlBindingsCollection collection = new(control)
         {
             binding
         };
@@ -66,16 +66,16 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_DuplicateBinding_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding1 = new Binding("", 1, "dataMember");
-        var binding2 = new Binding(null, 1, "dataMember");
-        var binding3 = new Binding(nameof(Control.Text), 1, "dataMember");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding1 = new("", 1, "dataMember");
+        Binding binding2 = new(null, 1, "dataMember");
+        Binding binding3 = new(nameof(Control.Text), 1, "dataMember");
         collection.Add(binding1);
         collection.Add(binding2);
         collection.Add(binding3);
 
-        var binding4 = new Binding(nameof(Control.Text), 1, "dataMember");
+        Binding binding4 = new(nameof(Control.Text), 1, "dataMember");
         collection.Add(binding4);
         Assert.Equal(4, collection.Count);
         Assert.Same(binding1, collection[0]);
@@ -87,9 +87,9 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_FormControl_Success()
     {
-        using var control = new Form();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(nameof(Control.Text), 1, "dataMember");
+        using Form control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(nameof(Control.Text), 1, "dataMember");
         collection.Add(binding);
         Assert.Same(binding, Assert.Single(collection));
     }
@@ -97,13 +97,13 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_ControlBindings_Success()
     {
-        using var control = new SubControl();
+        using SubControl control = new();
         ControlBindingsCollection collection = control.DataBindings;
-        var binding1 = new Binding(nameof(SubControl.Text), 1, "dataMember");
-        var binding2 = new Binding(nameof(SubControl.AccessibleRole), 1, "dataMember");
-        var binding3 = new Binding(null, 1, "dataMember");
-        var binding4 = new Binding("", 1, "dataMember");
-        var binding5 = new Binding(nameof(SubControl.text), 1, "dataMember");
+        Binding binding1 = new(nameof(SubControl.Text), 1, "dataMember");
+        Binding binding2 = new(nameof(SubControl.AccessibleRole), 1, "dataMember");
+        Binding binding3 = new(null, 1, "dataMember");
+        Binding binding4 = new("", 1, "dataMember");
+        Binding binding5 = new(nameof(SubControl.text), 1, "dataMember");
 
         collection.Add(binding1);
         collection.Add(binding2);
@@ -121,8 +121,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_StringObjectString_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember");
         Assert.Same(binding, Assert.Single(collection));
         Assert.Same(control, binding.BindableComponent);
@@ -138,8 +138,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_StringObjectStringBool_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember", true);
         Assert.Same(binding, Assert.Single(collection));
         Assert.Same(control, binding.BindableComponent);
@@ -155,8 +155,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_StringObjectStringBoolDataSourceUpdateMode_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember", true, DataSourceUpdateMode.OnPropertyChanged);
         Assert.Same(binding, Assert.Single(collection));
         Assert.Same(control, binding.BindableComponent);
@@ -172,8 +172,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_StringObjectStringBoolDataSourceUpdateModeObject_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember", true, DataSourceUpdateMode.OnPropertyChanged, "null");
         Assert.Same(binding, Assert.Single(collection));
         Assert.Same(control, binding.BindableComponent);
@@ -189,8 +189,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_StringObjectStringBoolDataSourceUpdateModeObjectString_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember", true, DataSourceUpdateMode.OnPropertyChanged, "null", "formatString");
         Assert.Same(binding, Assert.Single(collection));
         Assert.Same(control, binding.BindableComponent);
@@ -206,8 +206,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_StringObjectStringBoolDataSourceUpdateModeObjectStringIFormatProvider_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember", true, DataSourceUpdateMode.OnPropertyChanged, "null", "formatString", CultureInfo.CurrentCulture);
         Assert.Same(binding, Assert.Single(collection));
         Assert.Same(control, binding.BindableComponent);
@@ -223,8 +223,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_NullDataSource_ThrowsArgumentNullException()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Assert.Throws<ArgumentNullException>("dataSource", () => collection.Add("propertyName", null, "dataMember"));
         Assert.Throws<ArgumentNullException>("dataSource", () => collection.Add("propertyName", null, "dataMember", true));
         Assert.Throws<ArgumentNullException>("dataSource", () => collection.Add("propertyName", null, "dataMember", true, DataSourceUpdateMode.OnPropertyChanged));
@@ -236,8 +236,8 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_InvalidBinding_ThrowsArgumentException()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Assert.Throws<ArgumentException>("PropertyName", () => collection.Add(new Binding("NoSuchProperty", new object(), "dataMember")));
         Assert.Throws<ArgumentException>("PropertyName", () => collection.Add("NoSuchProperty", new object(), "dataMember"));
         Assert.Throws<ArgumentException>("PropertyName", () => collection.Add("NoSuchProperty", new object(), "dataMember", true));
@@ -250,9 +250,9 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_DuplicateBinding_ThrowsArgumentException()
     {
-        using var control = new Control();
+        using Control control = new();
         ControlBindingsCollection collection = control.DataBindings;
-        var binding = new Binding(nameof(Control.Text), new object(), "dataMember");
+        Binding binding = new(nameof(Control.Text), new object(), "dataMember");
         collection.Add(binding);
 
         Assert.Throws<ArgumentException>("binding", () => collection.Add(new Binding(nameof(Control.Text), new object(), "dataMember")));
@@ -267,17 +267,17 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_NullDataBinding_ThrowsArgumentNullException()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
         Assert.Throws<ArgumentNullException>("dataBinding", () => collection.Add(null));
     }
 
     [WinFormsFact]
     public void Add_AddAlreadyInSameManager_ThrowsArgumentException()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(null, new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(null, new object(), "member");
 
         collection.Add(binding);
         Assert.Throws<ArgumentException>("dataBinding", () => collection.Add(binding));
@@ -286,11 +286,11 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Add_AlreadyInDifferentManager_ThrowsArgumentException()
     {
-        using var control1 = new Control();
-        using var control2 = new Control();
-        var collection1 = new ControlBindingsCollection(control1);
-        var collection2 = new ControlBindingsCollection(control2);
-        var binding = new Binding(null, new object(), "member");
+        using Control control1 = new();
+        using Control control2 = new();
+        ControlBindingsCollection collection1 = new(control1);
+        ControlBindingsCollection collection2 = new(control2);
+        Binding binding = new(null, new object(), "member");
 
         collection1.Add(binding);
         Assert.Throws<ArgumentException>("dataBinding", () => collection2.Add(binding));
@@ -299,9 +299,9 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Clear_Invoke_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(null, new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(null, new object(), "member");
 
         collection.Add(binding);
         Assert.Same(binding, Assert.Single(collection));
@@ -319,9 +319,9 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Remove_Invoke_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(null, new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(null, new object(), "member");
 
         collection.Add(binding);
         Assert.Same(binding, Assert.Single(collection));
@@ -335,9 +335,9 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Remove_NullDataBinding_ThrowsArgumentNullException()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(null, new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(null, new object(), "member");
         collection.Add(binding);
 
         Assert.Throws<ArgumentNullException>("dataBinding", () => collection.Remove(null));
@@ -347,10 +347,10 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Remove_NoSuchDataBinding_ThrowsArgumentException()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding1 = new Binding(null, new object(), "member");
-        var binding2 = new Binding(null, new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding1 = new(null, new object(), "member");
+        Binding binding2 = new(null, new object(), "member");
         collection.Add(binding1);
 
         Assert.Throws<ArgumentException>("dataBinding", () => collection.Remove(binding2));
@@ -360,12 +360,12 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void Remove_DataBindingFromOtherCollection_ThrowsArgumentException()
     {
-        using var control1 = new Control();
-        using var control2 = new Control();
-        var collection1 = new ControlBindingsCollection(control1);
-        var collection2 = new ControlBindingsCollection(control2);
-        var binding1 = new Binding(null, new object(), "member");
-        var binding2 = new Binding(null, new object(), "member");
+        using Control control1 = new();
+        using Control control2 = new();
+        ControlBindingsCollection collection1 = new(control1);
+        ControlBindingsCollection collection2 = new(control2);
+        Binding binding1 = new(null, new object(), "member");
+        Binding binding2 = new(null, new object(), "member");
         collection1.Add(binding1);
         collection2.Add(binding2);
 
@@ -377,9 +377,9 @@ public class ControlBindingsCollectionTests
     [WinFormsFact]
     public void RemoveAt_Invoke_Success()
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(null, new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(null, new object(), "member");
 
         collection.Add(binding);
         Assert.Same(binding, Assert.Single(collection));
@@ -395,9 +395,9 @@ public class ControlBindingsCollectionTests
     [InlineData("TEXT")]
     public void Item_PropertyNameExists_ReturnsExpected(string propertyName)
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(nameof(Control.Text), new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(nameof(Control.Text), new object(), "member");
         collection.Add(binding);
         Assert.Same(binding, collection[propertyName]);
     }
@@ -408,9 +408,9 @@ public class ControlBindingsCollectionTests
     [InlineData("NoSuchProperty")]
     public void Item_NoSuchPropertyName_ReturnsNull(string propertyName)
     {
-        using var control = new Control();
-        var collection = new ControlBindingsCollection(control);
-        var binding = new Binding(nameof(Control.Text), new object(), "member");
+        using Control control = new();
+        ControlBindingsCollection collection = new(control);
+        Binding binding = new(nameof(Control.Text), new object(), "member");
         collection.Add(binding);
         Assert.Null(collection[propertyName]);
     }

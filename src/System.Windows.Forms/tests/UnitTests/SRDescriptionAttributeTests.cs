@@ -9,7 +9,7 @@ public class SRDescriptionAttributeTests
     [Fact]
     public void VerifyDescriptionAttributeValue()
     {
-        SRDescriptionAttribute srDescriptionAttribute = new SRDescriptionAttribute(nameof(SR.AboutBoxDesc));
+        SRDescriptionAttribute srDescriptionAttribute = new(nameof(SR.AboutBoxDesc));
         Assert.Equal(SR.AboutBoxDesc, srDescriptionAttribute.Description);
 
         // Getting srDescriptionAttribute.Description again should also return description value
@@ -19,7 +19,7 @@ public class SRDescriptionAttributeTests
     [Fact]
     public void InvalidDescriptionAttributeShouldReturnNull()
     {
-        SRDescriptionAttribute srDescriptionAttribute = new SRDescriptionAttribute("fake");
+        SRDescriptionAttribute srDescriptionAttribute = new("fake");
         Assert.Null(srDescriptionAttribute.Description);
     }
 }

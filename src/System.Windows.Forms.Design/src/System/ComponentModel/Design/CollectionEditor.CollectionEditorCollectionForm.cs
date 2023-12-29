@@ -63,7 +63,7 @@ public partial class CollectionEditor
             Type[] newItemTypes = NewItemTypes;
             if (newItemTypes.Length > 1)
             {
-                EventHandler addDownMenuClick = new EventHandler(AddDownMenu_click);
+                EventHandler addDownMenuClick = new(AddDownMenu_click);
                 _addButton.ShowSplit = true;
                 ContextMenuStrip addDownMenu = new();
                 _addButton.ContextMenuStrip = addDownMenu;
@@ -137,7 +137,7 @@ public partial class CollectionEditor
                     {
                         _dirty = true;
                         _createdItems.Add(instance);
-                        ListItem created = new ListItem(_editor, instance);
+                        ListItem created = new(_editor, instance);
                         _listbox.Items.Add(created);
                     }
                 }
@@ -405,7 +405,7 @@ public partial class CollectionEditor
         [MemberNotNull(nameof(_addRemoveTableLayoutPanel))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(CollectionEditor));
+            ComponentResourceManager resources = new(typeof(CollectionEditor));
             _membersLabel = new Label();
             _listbox = new FilterListBox();
             _upButton = new Button();
@@ -599,14 +599,14 @@ public partial class CollectionEditor
 
                 if (item.Editor is not null && item.Editor.GetPaintValueSupported())
                 {
-                    Rectangle baseVar = new Rectangle(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
+                    Rectangle baseVar = new(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
                     g.DrawRectangle(SystemPens.ControlText, baseVar.X, baseVar.Y, baseVar.Width - 1, baseVar.Height - 1);
                     baseVar.Inflate(-1, -1);
                     item.Editor.PaintValue(item.Value, g, baseVar);
                     offset += PaintIndent + TextIndent;
                 }
 
-                using (StringFormat format = new StringFormat())
+                using (StringFormat format = new())
                 {
                     format.Alignment = StringAlignment.Center;
                     g.DrawString(e.Index.ToString(CultureInfo.CurrentCulture), Font, SystemBrushes.ControlText,

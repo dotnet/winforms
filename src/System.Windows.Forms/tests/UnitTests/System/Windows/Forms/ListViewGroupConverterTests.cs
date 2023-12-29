@@ -30,15 +30,15 @@ public class ListViewGroupConverterTests
         yield return new object[] { new object(), false };
         yield return new object[] { new ListViewItem(), true };
 
-        var listView = new ListView();
-        var item1 = new ListViewItem();
+        ListView listView = new();
+        ListViewItem item1 = new();
         listView.Items.Add(item1);
         yield return new object[] { item1, true };
 
-        var listViewWithGroups = new ListView();
-        var group = new ListViewGroup("name", "header");
+        ListView listViewWithGroups = new();
+        ListViewGroup group = new("name", "header");
         listViewWithGroups.Groups.Add(group);
-        var item2 = new ListViewItem();
+        ListViewItem item2 = new();
         listViewWithGroups.Items.Add(item2);
         yield return new object[] { item2, true };
     }
@@ -48,7 +48,7 @@ public class ListViewGroupConverterTests
     public void ListViewGroupConverter_CanConvertFrom_Context_ReturnsExpected(object instance, bool expected)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns(instance);
@@ -69,14 +69,14 @@ public class ListViewGroupConverterTests
     [InlineData("  header  ")]
     public void ListViewGroupConverter_ConvertFrom_ValidContext_ReturnsExpected(string value)
     {
-        var listView = new ListView();
-        var group = new ListViewGroup("name", "header");
+        ListView listView = new();
+        ListViewGroup group = new("name", "header");
         listView.Groups.Add(group);
-        var item = new ListViewItem();
+        ListViewItem item = new();
         listView.Items.Add(item);
 
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns(item);
@@ -89,14 +89,14 @@ public class ListViewGroupConverterTests
         yield return new object[] { new object() };
         yield return new object[] { new ListViewItem() };
 
-        var listView = new ListView();
-        var item1 = new ListViewItem();
+        ListView listView = new();
+        ListViewItem item1 = new();
         listView.Items.Add(item1);
         yield return new object[] { item1 };
 
-        var listViewWithGroups = new ListView();
+        ListView listViewWithGroups = new();
         listViewWithGroups.Groups.Add(new ListViewGroup("name", "header"));
-        var item2 = new ListViewItem();
+        ListViewItem item2 = new();
         listViewWithGroups.Items.Add(item2);
         yield return new object[] { item2 };
     }
@@ -106,7 +106,7 @@ public class ListViewGroupConverterTests
     public void ListViewGroupConverter_ConvertFrom_InvalidContext_ThrowsNotSupportedException(object instance)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns(instance);
@@ -143,15 +143,15 @@ public class ListViewGroupConverterTests
         yield return new object[] { new object(), true };
         yield return new object[] { new ListViewItem(), true };
 
-        var listView = new ListView();
-        var item1 = new ListViewItem();
+        ListView listView = new();
+        ListViewItem item1 = new();
         listView.Items.Add(item1);
         yield return new object[] { item1, true };
 
-        var listViewWithGroups = new ListView();
-        var group = new ListViewGroup("name", "header");
+        ListView listViewWithGroups = new();
+        ListViewGroup group = new("name", "header");
         listViewWithGroups.Groups.Add(group);
-        var item2 = new ListViewItem();
+        ListViewItem item2 = new();
         listViewWithGroups.Items.Add(item2);
         yield return new object[] { item2, true };
     }
@@ -161,7 +161,7 @@ public class ListViewGroupConverterTests
     public void ListViewGroupConverter_CanConvertTo_Context_ReturnsExpected(object instance, bool expected)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns(instance);
@@ -249,7 +249,7 @@ public class ListViewGroupConverterTests
     public void ListViewGroupConverter_GetProperties_Invoke_ReturnsNull()
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
-        var item = new ListViewGroup();
+        ListViewGroup item = new();
         Assert.Null(converter.GetProperties(null, item, null));
     }
 
@@ -259,15 +259,15 @@ public class ListViewGroupConverterTests
         yield return new object[] { new object(), null };
         yield return new object[] { new ListViewItem(), null };
 
-        var listView = new ListView();
-        var item1 = new ListViewItem();
+        ListView listView = new();
+        ListViewItem item1 = new();
         listView.Items.Add(item1);
         yield return new object[] { item1, new object[] { null } };
 
-        var listViewWithGroups = new ListView();
-        var group = new ListViewGroup("name", "header");
+        ListView listViewWithGroups = new();
+        ListViewGroup group = new("name", "header");
         listViewWithGroups.Groups.Add(group);
-        var item2 = new ListViewItem();
+        ListViewItem item2 = new();
         listViewWithGroups.Items.Add(item2);
         yield return new object[] { item2, new object[] { group, null } };
     }
@@ -277,7 +277,7 @@ public class ListViewGroupConverterTests
     public void ListViewGroupConverter_GetStandardValues_HasContext_ReturnsExpected(object instance, object[] expected)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(ListViewGroup));
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns(instance);

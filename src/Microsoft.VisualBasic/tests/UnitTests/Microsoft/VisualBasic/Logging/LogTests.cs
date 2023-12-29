@@ -8,7 +8,7 @@ public class LogTests : FileCleanupTestBase
     [Fact]
     public void Properties()
     {
-        var log = new Log();
+        Log log = new();
         _ = log.TraceSource;
         _ = log.DefaultFileLogWriter;
     }
@@ -16,7 +16,7 @@ public class LogTests : FileCleanupTestBase
     [Fact]
     public void Write()
     {
-        var log = new Log();
+        Log log = new();
         var listener = log.DefaultFileLogWriter;
         listener.Location = LogFileLocation.Custom;
         listener.CustomLocation = GetTestFilePath();

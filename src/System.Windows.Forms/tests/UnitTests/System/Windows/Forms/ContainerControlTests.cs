@@ -15,7 +15,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_Ctor_Default()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -126,7 +126,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -146,9 +146,9 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_ActiveContainerControl_Set_GetReturnsExpected()
     {
-        using var control = new ContainerControl();
-        using var child = new Control();
-        var grandchild = new Control();
+        using ContainerControl control = new();
+        using Control child = new();
+        Control grandchild = new();
         control.Controls.Add(child);
         child.Controls.Add(grandchild);
 
@@ -171,7 +171,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_ActiveContainerControl_SetInvalid_ThrowsArgumentException()
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.Throws<ArgumentException>("value", () => control.ActiveControl = control);
         Assert.Throws<ArgumentException>("value", () => control.ActiveControl = new Control());
     }
@@ -180,7 +180,7 @@ public class ContainerControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
     public void ContainerControl_AutoScaleDimensions_Set_GetReturnsExpected(Size value)
     {
-        using var control = new ContainerControl
+        using ContainerControl control = new()
         {
             AutoScaleDimensions = value
         };
@@ -197,8 +197,8 @@ public class ContainerControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
     public void ContainerControl_AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
     {
-        using var child = new Control();
-        using var control = new ContainerControl();
+        using Control child = new();
+        using ContainerControl control = new();
         control.Controls.Add(child);
 
         control.AutoScaleDimensions = value;
@@ -213,7 +213,7 @@ public class ContainerControlTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
     public void ContainerControl_AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScaleDimensions = value);
     }
 
@@ -221,7 +221,7 @@ public class ContainerControlTests
     [EnumData<AutoScaleMode>]
     public void ContainerControl_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
     {
-        using var control = new ContainerControl
+        using ContainerControl control = new()
         {
             AutoScaleMode = value
         };
@@ -245,7 +245,7 @@ public class ContainerControlTests
     [MemberData(nameof(AutoScaleMode_SetWithCustomOldValue_TestData))]
     public void ContainerControl_AutoScaleMode_SetWithCustomOldValue_ResetsAutoScaleDimensions(AutoScaleMode value, SizeF expectedAutoScaleDimensions)
     {
-        using var control = new ContainerControl
+        using ContainerControl control = new()
         {
             AutoScaleDimensions = new SizeF(1, 2),
             AutoScaleMode = AutoScaleMode.Font
@@ -269,7 +269,7 @@ public class ContainerControlTests
     [InvalidEnumData<AutoScaleMode>]
     public void ContainerControl_AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoScaleMode = value);
     }
 
@@ -285,7 +285,7 @@ public class ContainerControlTests
     [MemberData(nameof(AutoValidate_Set_TestData))]
     public void UserControl_AutoValidate_Set_GetReturnsExpected(AutoValidate value, AutoValidate expected)
     {
-        using var control = new ContainerControl
+        using ContainerControl control = new()
         {
             AutoValidate = value
         };
@@ -301,7 +301,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_AutoValidate_SetWithHandler_CallsAutoValidateChanged()
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -337,15 +337,15 @@ public class ContainerControlTests
     [InvalidEnumData<AutoValidate>]
     public void ContainerControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoValidate = value);
     }
 
     [WinFormsFact]
     public void ContainerControl_BindingContext_Set_GetReturnsExpected()
     {
-        var value = new BindingContext();
-        using var control = new ContainerControl
+        BindingContext value = new();
+        using ContainerControl control = new()
         {
             BindingContext = value
         };
@@ -366,7 +366,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_BindingContext_SetWithHandler_CallsBindingContextChanged()
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -377,7 +377,7 @@ public class ContainerControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        var value1 = new BindingContext();
+        BindingContext value1 = new();
         control.BindingContext = value1;
         Assert.Same(value1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -388,13 +388,13 @@ public class ContainerControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var value2 = new BindingContext();
+        BindingContext value2 = new();
         control.BindingContext = value2;
         Assert.Equal(value2, control.BindingContext);
         Assert.Equal(2, callCount);
 
         // Remove handler.
-        var value3 = new BindingContext();
+        BindingContext value3 = new();
         control.BindingContextChanged -= handler;
         control.BindingContext = value3;
         Assert.Same(value3, control.BindingContext);
@@ -405,7 +405,7 @@ public class ContainerControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void ContainerControl_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubContainerControl
+        using SubContainerControl control = new()
         {
             Font = value
         };
@@ -424,7 +424,7 @@ public class ContainerControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void ContainerControl_Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
     {
-        using var control = new SubContainerControl
+        using SubContainerControl control = new()
         {
             AutoScaleMode = AutoScaleMode.Font
         };
@@ -446,7 +446,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -457,7 +457,7 @@ public class ContainerControlTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -488,7 +488,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -503,7 +503,7 @@ public class ContainerControlTests
     [InlineData((-1), false)]
     public void ContainerControl_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -530,7 +530,7 @@ public class ContainerControlTests
     [InlineData((ControlStyles)(-1), false)]
     public void ContainerControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -540,7 +540,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -548,7 +548,7 @@ public class ContainerControlTests
     [EnumData<AutoScaleMode>]
     public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
     {
-        using var control = new SubContainerControl
+        using SubContainerControl control = new()
         {
             AutoScaleMode = autoScaleMode
         };
@@ -559,8 +559,8 @@ public class ContainerControlTests
     [EnumData<AutoScaleMode>]
     public void PerformAutoScale_InvokeWithChildren_Success(AutoScaleMode autoScaleMode)
     {
-        using var child = new Control();
-        using var control = new SubContainerControl
+        using Control child = new();
+        using SubContainerControl control = new()
         {
             AutoScaleMode = autoScaleMode
         };
@@ -571,7 +571,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_CreateContainerControl_Invoke_CallsBindingContextChanged()
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -582,7 +582,7 @@ public class ContainerControlTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        var value1 = new BindingContext();
+        BindingContext value1 = new();
         control.BindingContext = value1;
         Assert.Same(value1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -593,13 +593,13 @@ public class ContainerControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var value2 = new BindingContext();
+        BindingContext value2 = new();
         control.BindingContext = value2;
         Assert.Equal(value2, control.BindingContext);
         Assert.Equal(2, callCount);
 
         // Remove handler.
-        var value3 = new BindingContext();
+        BindingContext value3 = new();
         control.BindingContextChanged -= handler;
         control.BindingContext = value3;
         Assert.Same(value3, control.BindingContext);
@@ -609,8 +609,8 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_Dispose_Invoke_ResetsActiveControl()
     {
-        using var control = new ContainerControl();
-        using var child = new Control();
+        using ContainerControl control = new();
+        using Control child = new();
         control.Controls.Add(child);
         control.ActiveControl = child;
 
@@ -622,7 +622,7 @@ public class ContainerControlTests
     [NewAndDefaultData<EventArgs>]
     public void ContainerControl_OnAutoValidateChanged_Invoke_CallsAutoValidateChanged(EventArgs eventArgs)
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -645,7 +645,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void UserControl_OnCreateControl_Invoke_Nop()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         int bindingContextChangedCallCount = 0;
         control.BindingContextChanged += (sender, e) =>
         {
@@ -668,7 +668,7 @@ public class ContainerControlTests
     [NewAndDefaultData<EventArgs>]
     public void ContainerControl_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -692,7 +692,7 @@ public class ContainerControlTests
     [NewAndDefaultData<EventArgs>]
     public void ContainerControl_OnFontChanged_InvokeWithAutoScaleModeFont_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubContainerControl
+        using SubContainerControl control = new()
         {
             AutoScaleMode = AutoScaleMode.Font
         };
@@ -721,7 +721,7 @@ public class ContainerControlTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ContainerControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         int callCount = 0;
         LayoutEventHandler handler = (sender, e) =>
         {
@@ -745,7 +745,7 @@ public class ContainerControlTests
     [NewAndDefaultData<EventArgs>]
     public void ContainerControl_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -768,7 +768,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_UpdateDefaultButton_Invoke_Nop()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         control.UpdateDefaultButton();
         control.UpdateDefaultButton();
     }
@@ -776,7 +776,7 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_ValidateChildren_InvokeWithoutChildren_ReturnsTrue()
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.True(control.ValidateChildren());
     }
 
@@ -790,31 +790,31 @@ public class ContainerControlTests
     [MemberData(nameof(ValidateChildren_TestData))]
     public void ContainerControl_ValidateChildren_InvokeWithChildren_ReturnsExpected(bool cancel, int expectedCallCount)
     {
-        using var control = new ContainerControl();
-        using var child1 = new Control();
-        using var grandchild1 = new Control();
+        using ContainerControl control = new();
+        using Control child1 = new();
+        using Control grandchild1 = new();
         child1.Controls.Add(grandchild1);
-        using var child2 = new ContainerControl();
-        using var grandchild2 = new Control();
+        using ContainerControl child2 = new();
+        using Control grandchild2 = new();
         child2.Controls.Add(grandchild2);
-        using var child3 = new TabControl();
-        using var grandchild3 = new TabPage();
+        using TabControl child3 = new();
+        using TabPage grandchild3 = new();
         child3.Controls.Add(grandchild3);
-        using var child4 = new SubControl();
+        using SubControl child4 = new();
         child4.SetStyle(ControlStyles.Selectable, false);
-        using var child5 = new SubControl
+        using SubControl child5 = new()
         {
             Enabled = false
         };
-        using var child6 = new SubControl
+        using SubControl child6 = new()
         {
             Visible = false
         };
-        using var child7 = new SubControl
+        using SubControl child7 = new()
         {
             TabStop = false
         };
-        using var child8 = new SubControl
+        using SubControl child8 = new()
         {
             CausesValidation = false
         };
@@ -984,7 +984,7 @@ public class ContainerControlTests
     [EnumData<ValidationConstraints>]
     public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.True(control.ValidateChildren(validationConstraints));
     }
 
@@ -1016,31 +1016,31 @@ public class ContainerControlTests
     [MemberData(nameof(ValidateChildren_ValidationConstraints_TestData))]
     public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithChildren_ReturnsExpected(ValidationConstraints validationConstraints, bool cancel, int expectedChild1CallCount, int expectedGrandchild2CallCount, int expectedGrandchild3CallCount, int expectedChild4CallCount, int expectedChild5CallCount, int expectedChild6CallCount, int expectedChild7CallCount)
     {
-        using var control = new ContainerControl();
-        using var child1 = new Control();
-        using var grandchild1 = new Control();
+        using ContainerControl control = new();
+        using Control child1 = new();
+        using Control grandchild1 = new();
         child1.Controls.Add(grandchild1);
-        using var child2 = new ContainerControl();
-        using var grandchild2 = new Control();
+        using ContainerControl child2 = new();
+        using Control grandchild2 = new();
         child2.Controls.Add(grandchild2);
-        using var child3 = new TabControl();
-        using var grandchild3 = new TabPage();
+        using TabControl child3 = new();
+        using TabPage grandchild3 = new();
         child3.Controls.Add(grandchild3);
-        using var child4 = new SubControl();
+        using SubControl child4 = new();
         child4.SetStyle(ControlStyles.Selectable, false);
-        using var child5 = new SubControl
+        using SubControl child5 = new()
         {
             Enabled = false
         };
-        using var child6 = new SubControl
+        using SubControl child6 = new()
         {
             Visible = false
         };
-        using var child7 = new SubControl
+        using SubControl child7 = new()
         {
             TabStop = false
         };
-        using var child8 = new SubControl
+        using SubControl child8 = new()
         {
             CausesValidation = false
         };
@@ -1211,14 +1211,14 @@ public class ContainerControlTests
     [InlineData((ValidationConstraints)(0x20))]
     public void ContainerControl_ValidateChildren_InvalidValidationConstraints_ThrowsInvalidEnumArgumentException(ValidationConstraints validationConstraints)
     {
-        using var control = new ContainerControl();
+        using ContainerControl control = new();
         Assert.Throws<InvalidEnumArgumentException>("validationConstraints", () => control.ValidateChildren(validationConstraints));
     }
 
     [WinFormsFact]
     public void ContainerControl_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubContainerControl();
+        using SubContainerControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1234,7 +1234,7 @@ public class ContainerControlTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
@@ -1251,9 +1251,9 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_WndProc_InvokeSetFocusWithHandle_Success()
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubContainerControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubContainerControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1264,7 +1264,7 @@ public class ContainerControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250
@@ -1281,9 +1281,9 @@ public class ContainerControlTests
     [WinFormsFact]
     public void ContainerControl_WndProc_InvokeSetFocusWithActiveControlWithHandle_Success()
     {
-        using var child1 = new Control();
-        using var child2 = new Control();
-        using var control = new SubContainerControl();
+        using Control child1 = new();
+        using Control child2 = new();
+        using SubContainerControl control = new();
         control.Controls.Add(child1);
         control.Controls.Add(child2);
         control.ActiveControl = child2;
@@ -1295,7 +1295,7 @@ public class ContainerControlTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_SETFOCUS,
             Result = (IntPtr)250

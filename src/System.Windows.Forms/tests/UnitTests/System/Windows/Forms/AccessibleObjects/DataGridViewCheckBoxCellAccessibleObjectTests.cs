@@ -10,7 +10,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     [WinFormsFact]
     public void DataGridViewCheckBoxCellAccessibleObject_Ctor_Default()
     {
-        var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+        DataGridViewCheckBoxCellAccessibleObject accessibleObject = new(null);
         Assert.Null(accessibleObject.Owner);
         Assert.Equal(AccessibleRole.Cell, accessibleObject.Role);
     }
@@ -48,21 +48,21 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     [WinFormsFact]
     public void DataGridViewCheckBoxCellAccessibleObject_GetChildCount_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+        DataGridViewCheckBoxCellAccessibleObject accessibleObject = new(null);
         Assert.Equal(0, accessibleObject.GetChildCount());
     }
 
     [WinFormsFact]
     public void DataGridViewCheckBoxCellAccessibleObject_ControlType_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+        DataGridViewCheckBoxCellAccessibleObject accessibleObject = new(null);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
     public void DataGridViewCheckBoxCellAccessibleObject_IsTogglePatternAvailablePropertyId_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+        DataGridViewCheckBoxCellAccessibleObject accessibleObject = new(null);
 
         Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId));
     }
@@ -88,14 +88,14 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     [InlineData((int)UIA_PATTERN_ID.UIA_TogglePatternId)]
     public void DataGridViewCheckBoxCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
-        var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+        DataGridViewCheckBoxCellAccessibleObject accessibleObject = new(null);
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
     public void DataGridViewCheckBoxCellAccessibleObject_IsIAccessibleExSupported_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
+        DataGridViewCheckBoxCellAccessibleObject accessibleObject = new(null);
         Assert.True(accessibleObject.IsIAccessibleExSupported());
     }
 

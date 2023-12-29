@@ -504,7 +504,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsFact]
     public void TabControlAccessibleObject_Support_SelectionPattern()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -515,7 +515,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsFact]
     public void TabControlAccessibleObject_GetPropertyValue_IsSelectionPatternAvailable_ReturnsTrue()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -526,7 +526,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsFact]
     public void TabControlAccessibleObject_Support_LegacyIAccessible()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -537,7 +537,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsFact]
     public void TabControlAccessibleObject_GetPropertyValue_IsLegacyIAccessiblePatternAvailable_ReturnsTrue()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -551,7 +551,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [InlineData(null)]
     public void TabControlAccessibleObject_Name_ReturnsExpected(string accessibleName)
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
         tabControl.AccessibleName = accessibleName;
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
@@ -632,7 +632,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsFact]
     public void TabControlAccessibleObject_GetPropertyValue_HasKeyboardFocusPropertyId_ReturnsFalse()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -643,7 +643,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsFact]
     public void TabControlAccessibleObject_GetPropertyValue_IsKeyboardFocusablePropertyId_ReturnsTrue()
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -656,7 +656,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [InlineData(false)]
     public void TabControlAccessibleObject_GetPropertyValue_IsEnabledPropertyId_ReturnsTrue(bool enabled)
     {
-        using TabControl tabControl = new TabControl() { Enabled = enabled };
+        using TabControl tabControl = new() { Enabled = enabled };
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -669,7 +669,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [InlineData(false)]
     public void TabControlAccessibleObject_GetPropertyValue_NativeWindowHandlePropertyId_ReturnsTrue(bool createControl)
     {
-        using TabControl tabControl = new TabControl();
+        using TabControl tabControl = new();
 
         if (createControl)
         {

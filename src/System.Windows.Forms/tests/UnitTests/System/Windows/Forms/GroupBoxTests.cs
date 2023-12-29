@@ -15,7 +15,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_Ctor_Default()
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -106,7 +106,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -130,7 +130,7 @@ public class GroupBoxTests
     [InlineData(FlatStyle.System, "Button", 0x56000007)]
     public void GroupBox_CreateParams_GetFlatStyle_ReturnsExpected(FlatStyle flatStyle, string expectedClassName, int expectedStyle)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = flatStyle
         };
@@ -155,7 +155,7 @@ public class GroupBoxTests
     [BoolData]
     public void ProgressBar_AllowDrop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             AllowDrop = value
         };
@@ -177,7 +177,7 @@ public class GroupBoxTests
     [BoolData]
     public void GroupBox_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -202,7 +202,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             AutoSize = true
         };
@@ -241,7 +241,7 @@ public class GroupBoxTests
     [EnumData<AutoSizeMode>]
     public void GroupBox_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -264,8 +264,8 @@ public class GroupBoxTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void GroupBox_AutoSizeMode_SetWithParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubGroupBox
+        using Control parent = new();
+        using SubGroupBox control = new()
         {
             Parent = parent
         };
@@ -312,8 +312,8 @@ public class GroupBoxTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void GroupBox_AutoSizeMode_SetWithCustomLayoutEngineParent_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubGroupBox
+        using CustomLayoutEngineControl parent = new();
+        using SubGroupBox control = new()
         {
             Parent = parent
         };
@@ -380,7 +380,7 @@ public class GroupBoxTests
     [EnumData<AutoSizeMode>]
     public void GroupBox_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -412,8 +412,8 @@ public class GroupBoxTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void GroupBox_AutoSizeMode_SetWithParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new SubGroupBox
+        using Control parent = new();
+        using SubGroupBox control = new()
         {
             Parent = parent
         };
@@ -485,8 +485,8 @@ public class GroupBoxTests
     [InlineData(AutoSizeMode.GrowOnly, 0)]
     public void GroupBox_AutoSizeMode_SetWithCustomLayoutEngineParentWithHandle_GetReturnsExpected(AutoSizeMode value, int expectedLayoutCallCount)
     {
-        using var parent = new CustomLayoutEngineControl();
-        using var control = new SubGroupBox
+        using CustomLayoutEngineControl parent = new();
+        using SubGroupBox control = new()
         {
             Parent = parent
         };
@@ -557,14 +557,14 @@ public class GroupBoxTests
     [InvalidEnumData<AutoSizeMode>]
     public void GroupBox_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoSizeMode = value);
     }
 
     [WinFormsFact]
     public void GroupBox_DisplayRectangle_Get_ReturnsExpected()
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         Rectangle result = control.DisplayRectangle;
         Assert.Equal(new Rectangle(3, Control.DefaultFont.Height + 3, 194, 94 - Control.DefaultFont.Height), control.DisplayRectangle);
         Assert.Equal(result, control.DisplayRectangle);
@@ -573,8 +573,8 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_DisplayRectangle_GetWithCustomFontSetAfterCallingDisplayRectangle_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var control = new GroupBox();
+        using Font font = new("Arial", 8.25f);
+        using GroupBox control = new();
         Assert.Equal(new Rectangle(3, Control.DefaultFont.Height + 3, 194, 94 - Control.DefaultFont.Height), control.DisplayRectangle);
 
         control.Font = font;
@@ -586,8 +586,8 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_DisplayRectangle_GetWithCustomFontSetBeforeCallingDisplayRectangle_ReturnsExpected()
     {
-        using var font = new Font("Arial", 8.25f);
-        using var control = new GroupBox
+        using Font font = new("Arial", 8.25f);
+        using GroupBox control = new()
         {
             Font = font
         };
@@ -603,7 +603,7 @@ public class GroupBoxTests
     [InlineData(FlatStyle.System, true, false, false)]
     public void GroupBox_FlatStyle_Set_GetReturnsExpected(FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         control.SetStyle(ControlStyles.ContainerControl, false);
 
         control.FlatStyle = value;
@@ -645,7 +645,7 @@ public class GroupBoxTests
     [InlineData(FlatStyle.System, FlatStyle.System, false, false, false)]
     public void GroupBox_FlatStyle_SetWithCustomOldValue_GetReturnsExpected(FlatStyle oldValue, FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = oldValue
         };
@@ -683,7 +683,7 @@ public class GroupBoxTests
             return;
         }
 
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -737,7 +737,7 @@ public class GroupBoxTests
             return;
         }
 
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -797,7 +797,7 @@ public class GroupBoxTests
             return;
         }
 
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = oldValue
         };
@@ -860,7 +860,7 @@ public class GroupBoxTests
             return;
         }
 
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = oldValue
         };
@@ -903,8 +903,8 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_PreferredSize_GetWithChildrenSimple_ReturnsExpected()
     {
-        using var control = new GroupBox();
-        using var child = new Control
+        using GroupBox control = new();
+        using Control child = new()
         {
             Size = new Size(16, 20)
         };
@@ -915,7 +915,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_PreferredSize_GetWithBorder_ReturnsExpected()
     {
-        using var control = new BorderedGroupBox
+        using BorderedGroupBox control = new()
         {
             Padding = new Padding(1, 2, 3, 4)
         };
@@ -940,7 +940,7 @@ public class GroupBoxTests
     [BoolData]
     public void GroupBox_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             TabStop = value
         };
@@ -962,7 +962,7 @@ public class GroupBoxTests
     [BoolData]
     public void GroupBox_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -998,7 +998,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             TabStop = true
         };
@@ -1037,7 +1037,7 @@ public class GroupBoxTests
     [NormalizedStringData]
     public void GroupBox_Text_Set_GetReturnsExpected(string value, string expected)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             Text = value
         };
@@ -1054,7 +1054,7 @@ public class GroupBoxTests
     [NormalizedStringData]
     public void GroupBox_Text_SetInvisible_GetReturnsExpected(string value, string expected)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             Visible = false,
             Text = value
@@ -1072,7 +1072,7 @@ public class GroupBoxTests
     [NormalizedStringData]
     public void GroupBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1101,7 +1101,7 @@ public class GroupBoxTests
     [NormalizedStringData]
     public void GroupBox_Text_SetInvisibleWithHandle_GetReturnsExpected(string value, string expected)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             Visible = false
         };
@@ -1132,7 +1132,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_Text_SetWithHandler_CallsTextChanged()
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1171,7 +1171,7 @@ public class GroupBoxTests
     [InlineData(false, false)]
     public void GroupBox_UseCompatibleTextRendering_Set_GetReturnsExpected(bool autoSize, bool value)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             AutoSize = autoSize,
             UseCompatibleTextRendering = value
@@ -1197,8 +1197,8 @@ public class GroupBoxTests
     [InlineData(false, false, 0, 0)]
     public void GroupBox_UseCompatibleTextRendering_SetWithParent_GetReturnsExpected(bool autoSize, bool value, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2)
     {
-        using var parent = new Control();
-        using var control = new GroupBox
+        using Control parent = new();
+        using GroupBox control = new()
         {
             AutoSize = autoSize,
             Parent = parent
@@ -1251,7 +1251,7 @@ public class GroupBoxTests
     [InlineData(false, false, 1)]
     public void GroupBox_UseCompatibleTextRendering_SetWithHandle_GetReturnsExpected(bool autoSize, bool value, int expectedInvalidatedCallCount)
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             AutoSize = autoSize
         };
@@ -1294,8 +1294,8 @@ public class GroupBoxTests
     [InlineData(false, false, 1, 0, 0)]
     public void GroupBox_UseCompatibleTextRendering_SetWithParentWithHandle_GetReturnsExpected(bool autoSize, bool value, int expectedInvalidatedCallCount, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2)
     {
-        using var parent = new Control();
-        using var control = new GroupBox
+        using Control parent = new();
+        using GroupBox control = new()
         {
             AutoSize = autoSize,
             Parent = parent
@@ -1360,7 +1360,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
@@ -1372,7 +1372,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -1387,7 +1387,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -1414,7 +1414,7 @@ public class GroupBoxTests
     [InlineData((ControlStyles)(-1), false)]
     public void GroupBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1424,7 +1424,7 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1432,7 +1432,7 @@ public class GroupBoxTests
     [NewAndDefaultData<EventArgs>]
     public void GroupBox_OnClick_Invoke_CallsClick(EventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1456,7 +1456,7 @@ public class GroupBoxTests
     [NewAndDefaultData<EventArgs>]
     public void GroupBox_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1480,7 +1480,7 @@ public class GroupBoxTests
     [NewAndDefaultData<EventArgs>]
     public void GroupBox_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1519,7 +1519,7 @@ public class GroupBoxTests
     [MemberData(nameof(OnFontChanged_WithHandle_TestData))]
     public void GroupBox_OnFontChanged_InvokeWithHandle_CallsFontChangedAndInvalidated(bool userPaint, EventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -1564,7 +1564,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void GroupBox_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -1588,7 +1588,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
     public void GroupBox_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         KeyPressEventHandler handler = (sender, e) =>
         {
@@ -1612,7 +1612,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void GroupBox_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -1636,7 +1636,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void GroupBox_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -1660,7 +1660,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void GroupBox_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -1684,7 +1684,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void GroupBox_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -1708,7 +1708,7 @@ public class GroupBoxTests
     [NewAndDefaultData<EventArgs>]
     public void GroupBox_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1732,7 +1732,7 @@ public class GroupBoxTests
     [NewAndDefaultData<EventArgs>]
     public void GroupBox_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1756,7 +1756,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void GroupBox_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -1780,7 +1780,7 @@ public class GroupBoxTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
     public void GroupBox_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
     {
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         int callCount = 0;
         MouseEventHandler handler = (sender, e) =>
         {
@@ -1828,11 +1828,11 @@ public class GroupBoxTests
     [MemberData(nameof(OnPaint_TestData))]
     public void GroupBox_OnPaint_Invoke_CallsPaint(Size size, bool enabled, bool useCompatibleTextRendering, RightToLeft rightToLeft, Color foreColor, string text)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Size = size,
             Enabled = enabled,
@@ -1866,11 +1866,11 @@ public class GroupBoxTests
     [MemberData(nameof(OnPaint_TestData))]
     public void GroupBox_OnPaint_InvokeWithHandle_CallsPaint(Size size, bool enabled, bool useCompatibleTextRendering, RightToLeft rightToLeft, Color foreColor, string text)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Size = size,
             Enabled = enabled,
@@ -1922,7 +1922,7 @@ public class GroupBoxTests
             return;
         }
 
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
     }
 
@@ -1934,7 +1934,7 @@ public class GroupBoxTests
             return;
         }
 
-        using var control = new SubGroupBox();
+        using SubGroupBox control = new();
         Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
     }
 
@@ -1950,7 +1950,7 @@ public class GroupBoxTests
     [MemberData(nameof(ProcessMnemonic_TestData))]
     public void GroupBox_ProcessMnemonic_Invoke_ReturnsExpected(string text, char charCode, bool expected)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Text = text
         };
@@ -1961,8 +1961,8 @@ public class GroupBoxTests
     [MemberData(nameof(ProcessMnemonic_TestData))]
     public void GroupBox_ProcessMnemonic_InvokeWithParent_ReturnsExpected(string text, char charCode, bool expected)
     {
-        using var parent = new Control();
-        using var control = new SubGroupBox
+        using Control parent = new();
+        using SubGroupBox control = new()
         {
             Parent = parent,
             Text = text
@@ -1982,7 +1982,7 @@ public class GroupBoxTests
     [MemberData(nameof(ProcessMnemonic_CantProcess_TestData))]
     public void GroupBox_ProcessMnemonic_InvokeNotVisible_ReturnsFalse(string text, char charCode)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Text = text,
             Visible = false
@@ -1994,7 +1994,7 @@ public class GroupBoxTests
     [MemberData(nameof(ProcessMnemonic_CantProcess_TestData))]
     public void GroupBox_ProcessMnemonic_InvokeNotEnabled_ReturnsFalse(string text, char charCode)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Text = text,
             Enabled = false
@@ -2006,11 +2006,11 @@ public class GroupBoxTests
     [MemberData(nameof(ProcessMnemonic_CantProcess_TestData))]
     public void GroupBox_ProcessMnemonic_InvokeParentNotVisible_ReturnsFalse(string text, char charCode)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Visible = false
         };
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Parent = parent,
             Text = text
@@ -2022,11 +2022,11 @@ public class GroupBoxTests
     [MemberData(nameof(ProcessMnemonic_CantProcess_TestData))]
     public void GroupBox_ProcessMnemonic_InvokeParentNotEnabled_ReturnsFalse(string text, char charCode)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Enabled = false
         };
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             Parent = parent,
             Text = text
@@ -2037,14 +2037,14 @@ public class GroupBoxTests
     [WinFormsFact]
     public void GroupBox_ToString_Invoke_ReturnsExpected()
     {
-        using var control = new GroupBox();
+        using GroupBox control = new();
         Assert.Equal("System.Windows.Forms.GroupBox, Text: ", control.ToString());
     }
 
     [WinFormsFact]
     public void GroupBox_ToString_InvokeWithText_ReturnsExpected()
     {
-        using var control = new GroupBox
+        using GroupBox control = new()
         {
             Text = "CustomText"
         };
@@ -2062,16 +2062,16 @@ public class GroupBoxTests
     [InlineData((int)PInvoke.WM_PRINTCLIENT)]
     public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawWithoutHandle_Success(int msg)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = FlatStyle.System
         };
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 WParam = hdc,
@@ -2092,7 +2092,7 @@ public class GroupBoxTests
     [InlineData((int)PInvoke.WM_PRINTCLIENT)]
     public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawWithHandle_Success(int msg)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = FlatStyle.System
         };
@@ -2104,12 +2104,12 @@ public class GroupBoxTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = msg,
                 WParam = hdc,
@@ -2133,11 +2133,11 @@ public class GroupBoxTests
     [InlineData((int)PInvoke.WM_PRINTCLIENT)]
     public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawZeroWParam_DoesNotThrow(int msg)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = FlatStyle.System
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = msg,
             Result = (IntPtr)250
@@ -2153,7 +2153,7 @@ public class GroupBoxTests
     [InlineData(FlatStyle.Standard)]
     public void GroupBox_WndProc_InvokeEraseBkgndOwnerDrawWithHandleWithWParam_Success(FlatStyle flatStyle)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2167,12 +2167,12 @@ public class GroupBoxTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
@@ -2198,7 +2198,7 @@ public class GroupBoxTests
     [InlineData(FlatStyle.Standard)]
     public void GroupBox_WndProc_InvokePrintClientOwnerDrawWithHandleWithWParam_Success(FlatStyle flatStyle)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2212,12 +2212,12 @@ public class GroupBoxTests
         int paintCallCount = 0;
         control.Paint += (sender, e) => paintCallCount++;
 
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         IntPtr hdc = graphics.GetHdc();
         try
         {
-            var m = new Message
+            Message m = new()
             {
                 Msg = (int)PInvoke.WM_PRINTCLIENT,
                 WParam = hdc,
@@ -2241,7 +2241,7 @@ public class GroupBoxTests
     [EnumData<FlatStyle>]
     public void GroupBox_WndProc_InvokeMouseHoverWithHandle_Success(FlatStyle flatStyle)
     {
-        using var control = new SubGroupBox
+        using SubGroupBox control = new()
         {
             FlatStyle = flatStyle
         };
@@ -2260,7 +2260,7 @@ public class GroupBoxTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250

@@ -128,7 +128,7 @@ public partial class LinkLabel
                 _owner.FocusLink = null;
             }
 
-            Link l = new Link(_owner)
+            Link l = new(_owner)
             {
                 Start = start,
                 Length = length,

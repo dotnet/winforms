@@ -881,8 +881,8 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
-            DesignerActionPropertyItem chooseDataSource = new DesignerActionPropertyItem("DataSource", // property name
+            DesignerActionItemCollection items = new();
+            DesignerActionPropertyItem chooseDataSource = new("DataSource", // property name
                                                                SR.DataGridViewChooseDataSource);// displayName
             chooseDataSource.RelatedComponent = _owner.Component;
             items.Add(chooseDataSource);
@@ -940,7 +940,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
+            DesignerActionItemCollection items = new();
             items.Add(new DesignerActionMethodItem(this,
                         "EditColumns",                      // method name
                         SR.DataGridViewEditColumnsVerb,   // display name
@@ -981,7 +981,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
+            DesignerActionItemCollection items = new();
             items.Add(new DesignerActionPropertyItem("AllowUserToAddRows",
                                                         SR.DataGridViewEnableAdding));
             items.Add(new DesignerActionPropertyItem("ReadOnly",

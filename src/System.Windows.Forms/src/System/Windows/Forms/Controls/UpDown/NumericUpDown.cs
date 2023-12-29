@@ -107,10 +107,8 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
 
         set
         {
-            if (value < 0 || value > 99)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(DecimalPlaces), value, 0, 99));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 99);
 
             _decimalPlaces = value;
             UpdateEditText();
@@ -160,14 +158,9 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
 
         set
         {
-            if (value < 0.0m)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Increment), value));
-            }
-            else
-            {
-                _increment = value;
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+
+            _increment = value;
         }
     }
 
