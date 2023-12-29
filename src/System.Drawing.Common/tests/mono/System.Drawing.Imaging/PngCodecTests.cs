@@ -41,7 +41,7 @@ public class PngCodecTest
     public void Bitmap1bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("1bit.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -70,7 +70,7 @@ public class PngCodecTest
     public void Bitmap1bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("1bit.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-1, bmp.GetPixel(0, 0).ToArgb());
@@ -146,7 +146,7 @@ public class PngCodecTest
     public void Bitmap1bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("1bit.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -249,7 +249,7 @@ public class PngCodecTest
     public void Bitmap2bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("81674-2bpp.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -278,7 +278,7 @@ public class PngCodecTest
     public void Bitmap2bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("81674-2bpp.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-11249559, bmp.GetPixel(0, 0).ToArgb());
@@ -304,7 +304,7 @@ public class PngCodecTest
     public void Bitmap2bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("81674-2bpp.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -363,7 +363,7 @@ public class PngCodecTest
     public void Bitmap4bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("4bit.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -406,7 +406,7 @@ public class PngCodecTest
     public void Bitmap4bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("4bit.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-10381134, bmp.GetPixel(0, 0).ToArgb());
@@ -483,7 +483,7 @@ public class PngCodecTest
     public void Bitmap4bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("4bit.png");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -585,10 +585,10 @@ public class PngCodecTest
         string sOutFile = $"linerect-{expected}.png";
 
         // Save
-        Bitmap bmp = new Bitmap(100, 100, original);
+        Bitmap bmp = new(100, 100, original);
         Graphics gr = Graphics.FromImage(bmp);
 
-        using (Pen p = new Pen(Color.BlueViolet, 2))
+        using (Pen p = new(Color.BlueViolet, 2))
         {
             gr.DrawLine(p, 10.0F, 10.0F, 90.0F, 90.0F);
             gr.DrawRectangle(p, 10.0F, 10.0F, 80.0F, 80.0F);
@@ -599,7 +599,7 @@ public class PngCodecTest
             bmp.Save(sOutFile, ImageFormat.Png);
 
             // Load
-            using (Bitmap bmpLoad = new Bitmap(sOutFile))
+            using (Bitmap bmpLoad = new(sOutFile))
             {
                 Assert.Equal(expected, bmpLoad.PixelFormat);
                 if (colorCheck)

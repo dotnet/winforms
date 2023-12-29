@@ -8,7 +8,7 @@ public class WmfPlaceableFileHeaderTests
     [Fact]
     public void Ctor_Default()
     {
-        WmfPlaceableFileHeader fileHeader = new WmfPlaceableFileHeader();
+        WmfPlaceableFileHeader fileHeader = new();
         Assert.Equal(0, fileHeader.BboxBottom);
         Assert.Equal(0, fileHeader.BboxLeft);
         Assert.Equal(0, fileHeader.BboxRight);
@@ -26,7 +26,7 @@ public class WmfPlaceableFileHeaderTests
     [InlineData(short.MinValue)]
     public void ShortProperties_SetValues_ReturnsExpected(short value)
     {
-        WmfPlaceableFileHeader fileHeader = new WmfPlaceableFileHeader();
+        WmfPlaceableFileHeader fileHeader = new();
         fileHeader.BboxBottom = value;
         fileHeader.BboxLeft = value;
         fileHeader.BboxRight = value;
@@ -53,7 +53,7 @@ public class WmfPlaceableFileHeaderTests
     [InlineData(int.MinValue)]
     public void IntProperties_SetValues_ReturnsExpected(int value)
     {
-        WmfPlaceableFileHeader fileHeader = new WmfPlaceableFileHeader();
+        WmfPlaceableFileHeader fileHeader = new();
         fileHeader.Key = value;
         fileHeader.Reserved = value;
         Assert.Equal(value, fileHeader.Key);

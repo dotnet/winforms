@@ -12,7 +12,7 @@ public class GroupBoxAccessibleObjectTests
     public void GroupBoxAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
     {
         string testAccName = "Test group name";
-        using var groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         AccessibleObject groupBoxAccessibleObject = groupBox.AccessibilityObject;
 
         Assert.Equal(VARIANT.Empty, groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
@@ -30,7 +30,7 @@ public class GroupBoxAccessibleObjectTests
     [WinFormsFact]
     public void GroupBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
     {
-        using var groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         groupBox.Name = "Group1";
         groupBox.Text = "Some test groupBox text";
         var groupBoxAccessibleObject = new GroupBox.GroupBoxAccessibleObject(groupBox);
@@ -44,7 +44,7 @@ public class GroupBoxAccessibleObjectTests
     [WinFormsFact]
     public void GroupBoxAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
     {
-        using var groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         groupBox.Name = "Group1";
         groupBox.Text = "Some test groupBox text";
         groupBox.AccessibleRole = AccessibleRole.Link;
@@ -57,7 +57,7 @@ public class GroupBoxAccessibleObjectTests
     [WinFormsFact]
     public void GroupBoxAccessibleObject_Role_IsGrouping_ByDefault()
     {
-        using GroupBox groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = groupBox.AccessibilityObject.Role;
@@ -70,7 +70,7 @@ public class GroupBoxAccessibleObjectTests
     public void GroupBoxAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
     {
         string testAccDescription = "Test description";
-        using var groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         groupBox.Name = "Group1";
         groupBox.Text = "Some test groupBox text";
         groupBox.AccessibleDescription = testAccDescription;
@@ -83,7 +83,7 @@ public class GroupBoxAccessibleObjectTests
     [WinFormsFact]
     public void GroupBoxAccessibleObject_ControlType_IsGroup_IfAccessibleRoleIsDefault()
     {
-        using GroupBox groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         // AccessibleRole is not set = Default
         VARIANT actual = groupBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
@@ -109,7 +109,7 @@ public class GroupBoxAccessibleObjectTests
     [MemberData(nameof(GroupBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void GroupBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using GroupBox groupBox = new GroupBox();
+        using GroupBox groupBox = new();
         groupBox.AccessibleRole = role;
 
         VARIANT actual = groupBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

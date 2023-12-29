@@ -3462,9 +3462,6 @@ Stack trace where the illegal operation occurred was:
   <data name="InvalidCrossThreadControlCall" xml:space="preserve">
     <value>Action being performed on this control is being called from the wrong thread. Marshal to the correct thread using Control.Invoke or Control.BeginInvoke to perform this action.</value>
   </data>
-  <data name="InvalidExBoundArgument" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</value>
-  </data>
   <data name="InvalidFileFormat" xml:space="preserve">
     <value>File format is not valid.</value>
   </data>
@@ -3473,18 +3470,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="InvalidGDIHandle" xml:space="preserve">
     <value>Win32 handle passed to {0} is not valid or is the wrong type.</value>
-  </data>
-  <data name="InvalidHighBoundArgument" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</value>
-  </data>
-  <data name="InvalidHighBoundArgumentEx" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</value>
-  </data>
-  <data name="InvalidLowBoundArgument" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</value>
-  </data>
-  <data name="InvalidLowBoundArgumentEx" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</value>
   </data>
   <data name="InvalidNullArgument" xml:space="preserve">
     <value>Null is not a valid value for '{0}'.</value>

@@ -18,7 +18,7 @@ public class PropertyValueChangedEventArgsTests
     [MemberData(nameof(Ctor_GridItem_Object_TestData))]
     public void Ctor_GridItem_Object(GridItem changedItem, object oldValue)
     {
-        var e = new PropertyValueChangedEventArgs(changedItem, oldValue);
+        PropertyValueChangedEventArgs e = new(changedItem, oldValue);
         Assert.Equal(changedItem, e.ChangedItem);
         Assert.Equal(oldValue, e.OldValue);
     }

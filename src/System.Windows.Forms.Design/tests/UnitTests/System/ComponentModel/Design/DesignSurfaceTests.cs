@@ -1760,7 +1760,7 @@ public class DesignSurfaceTests
 
     private class RootComponentDesigner : ComponentDesigner, IRootDesigner
     {
-        public static object View { get; } = new object();
+        public static object View { get; } = new();
 
         public ViewTechnology[] SupportedTechnologies => new ViewTechnology[] { ViewTechnology.Default + 1 };
         public object GetView(ViewTechnology technology)

@@ -315,7 +315,7 @@ public class ToolStripContentPanel : Panel
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnPaintBackground(PaintEventArgs e)
     {
-        ToolStripContentPanelRenderEventArgs rea = new ToolStripContentPanelRenderEventArgs(e.Graphics, this);
+        ToolStripContentPanelRenderEventArgs rea = new(e.Graphics, this);
 
         Renderer.DrawToolStripContentPanelBackground(rea);
 

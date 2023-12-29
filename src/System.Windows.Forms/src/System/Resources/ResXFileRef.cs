@@ -81,7 +81,7 @@ public partial class ResXFileRef
             return string.Empty;
         }
 
-        StringBuilder relPath = new StringBuilder();
+        StringBuilder relPath = new();
 
         for (; i < path1.Length; ++i)
         {

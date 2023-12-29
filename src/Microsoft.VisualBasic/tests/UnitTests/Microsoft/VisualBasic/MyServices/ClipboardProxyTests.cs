@@ -37,7 +37,7 @@ public class ClipboardProxyTests
     public void Image()
     {
         var clipboard = (new Computer()).Clipboard;
-        var image = new Bitmap(2, 2);
+        Bitmap image = new(2, 2);
         Assert.Equal(System.Windows.Forms.Clipboard.ContainsImage(), clipboard.ContainsImage());
         Assert.Equal(System.Windows.Forms.Clipboard.GetImage(), clipboard.GetImage());
         clipboard.SetImage(image);

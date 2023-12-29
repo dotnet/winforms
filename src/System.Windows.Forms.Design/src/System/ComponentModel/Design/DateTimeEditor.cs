@@ -19,7 +19,7 @@ public partial class DateTimeEditor : UITypeEditor
             return value;
         }
 
-        using (DateTimeUI dateTimeUI = new DateTimeUI(editorService, value))
+        using (DateTimeUI dateTimeUI = new(editorService, value))
         {
             editorService.DropDownControl(dateTimeUI);
             value = dateTimeUI.Value;

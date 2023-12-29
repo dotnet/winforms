@@ -13,7 +13,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     [WinFormsFact]
     public void PropertyGridAccessibleObject_Ctor_Default()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         PropertyGrid.PropertyGridAccessibleObject accessibleObject =
             new PropertyGrid.PropertyGridAccessibleObject(propertyGrid);
 
@@ -26,8 +26,8 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     [InlineData((int)UIA_PATTERN_ID.UIA_GridItemPatternId)]
     public void GridEntryAccessibleObject_SupportsPattern(int pattern)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        using ComboBox comboBox = new ComboBox();
+        using PropertyGrid propertyGrid = new();
+        using ComboBox comboBox = new();
         propertyGrid.SelectedObject = comboBox;
         GridEntry defaultGridEntry = propertyGrid.GetDefaultGridEntry();
         GridEntry parentGridEntry = defaultGridEntry.ParentGridEntry; // Category which has item pattern.
@@ -40,9 +40,9 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     [InlineData((int)UIA_PATTERN_ID.UIA_TablePatternId)]
     public void PropertyGridAccessibleObject_SupportsPattern(int pattern)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         propertyGrid.SelectedObject = comboBox;
         PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject =
             new PropertyGrid.PropertyGridAccessibleObject(propertyGrid);
@@ -61,7 +61,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void PropertyGridAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         // AccessibleRole is not set = Default
 
         if (createControl)
@@ -96,7 +96,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     [MemberData(nameof(PropertyGridAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void PropertyGridAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         propertyGrid.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)propertyGrid.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -190,7 +190,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     {
         private class MenuCommandService : IMenuCommandService
         {
-            public DesignerVerbCollection Verbs { get; } = new DesignerVerbCollection(new[] { new DesignerVerb("", null) });
+            public DesignerVerbCollection Verbs { get; } = new(new[] { new DesignerVerb("", null) });
 
             public void AddCommand(MenuCommand command) => throw new NotImplementedException();
 

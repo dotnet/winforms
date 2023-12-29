@@ -12,7 +12,7 @@ public class TableLayoutStyleTests
     [WinFormsFact]
     public void TableLayoutStyle_Ctor_Default()
     {
-        var style = new SubTableLayoutStyle();
+        SubTableLayoutStyle style = new();
         Assert.Equal(SizeType.AutoSize, style.SizeType);
     }
 
@@ -21,7 +21,7 @@ public class TableLayoutStyleTests
     [InvalidEnumData<SizeType>]
     public void TableLayoutStyle_SizeType_Set_GetReturnsExpected(SizeType value)
     {
-        var style = new SubTableLayoutStyle
+        SubTableLayoutStyle style = new()
         {
             SizeType = value
         };
@@ -40,8 +40,8 @@ public class TableLayoutStyleTests
     [InlineData((SizeType.Percent + 1), 1)]
     public void TableLayoutStyle_SizeType_SetWithOwner_GetReturnsExpected(SizeType value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new ColumnStyle();
+        using TableLayoutPanel control = new();
+        ColumnStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -72,8 +72,8 @@ public class TableLayoutStyleTests
     [InlineData((SizeType.Percent + 1), 1)]
     public void TableLayoutStyle_SizeType_SetWithOwnerWithHandle_GetReturnsExpected(SizeType value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
-        var style = new ColumnStyle();
+        using TableLayoutPanel control = new();
+        ColumnStyle style = new();
         control.LayoutSettings.RowStyles.Add(style);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;

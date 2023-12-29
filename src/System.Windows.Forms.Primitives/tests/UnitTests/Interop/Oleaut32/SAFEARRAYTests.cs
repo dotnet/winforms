@@ -51,7 +51,7 @@ public unsafe class SAFEARRAYTests
     [MemberData(nameof(Create_TestData))]
     public void SAFEARRAY_CreateSingleDimension_GetProperties_Success(ushort vt, ushort expectedFeatures, uint expectedCbElements)
     {
-        var saBound = new SAFEARRAYBOUND
+        SAFEARRAYBOUND saBound = new()
         {
             cElements = 10,
             lLbound = 1
@@ -84,7 +84,7 @@ public unsafe class SAFEARRAYTests
     [StaFact]
     public void SAFEARRAY_CreateSingleDimensionRECORD_GetProperties_Success()
     {
-        var saBound = new SAFEARRAYBOUND
+        SAFEARRAYBOUND saBound = new()
         {
             cElements = 10,
             lLbound = 1
@@ -210,7 +210,7 @@ public unsafe class SAFEARRAYTests
     [StaFact]
     public void SAFEARRAY_GetValue_InvokeSingleDimensional_ReturnsExpected()
     {
-        var saBound = new SAFEARRAYBOUND
+        SAFEARRAYBOUND saBound = new()
         {
             cElements = 10,
             lLbound = 0
@@ -256,7 +256,7 @@ public unsafe class SAFEARRAYTests
     [StaFact]
     public void SAFEARRAY_GetValue_InvokeSingleDimensionalNonZeroLowerBound_ReturnsExpected()
     {
-        var saBound = new SAFEARRAYBOUND
+        SAFEARRAYBOUND saBound = new()
         {
             cElements = 10,
             lLbound = -5

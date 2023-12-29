@@ -73,7 +73,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
         Debug.Assert(dataGridViewCell.DataGridView!.SelectionMode == DataGridViewSelectionMode.CellSelect ||
                      dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect ||
                      dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect);
-        DataGridViewCellLinkedListElement newHead = new DataGridViewCellLinkedListElement(dataGridViewCell);
+        DataGridViewCellLinkedListElement newHead = new(dataGridViewCell);
         if (_headElement is not null)
         {
             newHead.Next = _headElement;

@@ -533,7 +533,7 @@ public partial class Control
         {
             if (text.AsSpan().ContainsAny(s_whitespace))
             {
-                StringBuilder sb = new StringBuilder(text.Length);
+                StringBuilder sb = new(text.Length);
                 for (int i = 0; i < text.Length; i++)
                 {
                     switch (text[i])
@@ -1717,7 +1717,7 @@ public partial class Control
 
             try
             {
-                Size size = new Size(HiMetricToPixel(pSizel->Width, pSizel->Height));
+                Size size = new(HiMetricToPixel(pSizel->Width, pSizel->Height));
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"SetExtent : new size:{size}");
 
                 // If we're in place active, let the in place site set our bounds.
@@ -1729,7 +1729,7 @@ public partial class Control
                     {
                         Rectangle bounds = _control.Bounds;
                         bounds.Location = new Point(bounds.X, bounds.Y);
-                        Size adjusted = new Size(size.Width, size.Height);
+                        Size adjusted = new(size.Width, size.Height);
                         bounds.Width = adjusted.Width;
                         bounds.Height = adjusted.Height;
                         Debug.WriteLineIf(

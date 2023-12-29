@@ -5,7 +5,7 @@ namespace System.Windows.Forms.PropertyGridInternal;
 
 internal class GridEntryComparer : IComparer<GridEntry>
 {
-    public static GridEntryComparer Default { get; } = new GridEntryComparer();
+    public static GridEntryComparer Default { get; } = new();
 
     public int Compare(GridEntry? x, GridEntry? y)
         => StringComparer.CurrentCulture.Compare(x?.ToString(), y?.ToString());

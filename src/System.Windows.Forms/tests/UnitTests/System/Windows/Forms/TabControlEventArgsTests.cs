@@ -17,7 +17,7 @@ public class TabControlEventArgsTests
     [MemberData(nameof(Ctor_TabPage_Int_TabControlAction_TestData))]
     public void Ctor_TabPage_Int_TabControlAction(TabPage tabPage, int tabPageIndex, TabControlAction action)
     {
-        var e = new TabControlEventArgs(tabPage, tabPageIndex, action);
+        TabControlEventArgs e = new(tabPage, tabPageIndex, action);
         Assert.Equal(tabPage, e.TabPage);
         Assert.Equal(tabPageIndex, e.TabPageIndex);
         Assert.Equal(action, e.Action);

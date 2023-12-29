@@ -10,7 +10,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_Ctor_Default()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.Null(accessibleObject.Owner);
         Assert.Equal(AccessibleRole.Cell, accessibleObject.Role);
@@ -19,7 +19,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_DefaultAction_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.Equal(string.Empty, accessibleObject.DefaultAction);
     }
@@ -27,7 +27,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_GetChildCount_Default()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.Equal(0, accessibleObject.GetChildCount());
     }
@@ -35,7 +35,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_IsIAccessibleExSupported_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.True(accessibleObject.IsIAccessibleExSupported());
     }
@@ -43,7 +43,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_ControlType_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId;
         Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
@@ -52,7 +52,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_IsInvokePatternAvailable_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
     }
@@ -61,7 +61,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [InlineData(((int)UIA_PATTERN_ID.UIA_InvokePatternId))]
     public void DataGridViewImageCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -69,7 +69,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     [WinFormsFact]
     public void DataGridViewImageCellAccessibleObject_Description_IsNull_IfOwnerIsNotImageCell()
     {
-        var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
+        DataGridViewImageCellAccessibleObject accessibleObject = new(null);
 
         Assert.Null(accessibleObject.Description);
     }

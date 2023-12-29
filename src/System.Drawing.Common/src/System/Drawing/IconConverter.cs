@@ -42,7 +42,7 @@ public class IconConverter : ExpandableObjectConverter
         {
             if (value is Icon icon)
             {
-                using var ms = new MemoryStream();
+                using MemoryStream ms = new();
                 icon.Save(ms);
                 return ms.ToArray();
             }

@@ -8,19 +8,19 @@ public class PrintControllerTests
     [Fact]
     public void Ctor_Default()
     {
-        var controller = new SubPrintController();
+        SubPrintController controller = new();
         Assert.False(controller.IsPreview);
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPage_InvokeWithPrint_ReturnsNull()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new SubPrintController();
+            SubPrintController controller = new();
             controller.OnStartPrint(document, new PrintEventArgs());
 
-            var printEventArgs = new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null);
+            PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, null);
             Assert.Null(controller.OnStartPage(document, printEventArgs));
 
             // Call OnEndPage.
@@ -34,9 +34,9 @@ public class PrintControllerTests
     [Fact]
     public void OnStartPage_Invoke_ReturnsNull()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new SubPrintController();
+            SubPrintController controller = new();
             Assert.Null(controller.OnStartPage(document, new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null)));
             Assert.Null(controller.OnStartPage(null, null));
         }
@@ -45,9 +45,9 @@ public class PrintControllerTests
     [Fact]
     public void OnEndPage_InvokeWithoutStarting_Nop()
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new SubPrintController();
+            SubPrintController controller = new();
             controller.OnEndPage(document, new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null));
             controller.OnEndPage(null, null);
         }
@@ -63,9 +63,9 @@ public class PrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnStartPrint_InvokeWithDocument_Success(PrintEventArgs e)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new SubPrintController();
+            SubPrintController controller = new();
             controller.OnStartPrint(document, e);
 
             // Call OnEndPrint
@@ -77,9 +77,9 @@ public class PrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnStartPrint_InvokeWithDocumentSeveralTimes_Success(PrintEventArgs e)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new SubPrintController();
+            SubPrintController controller = new();
             controller.OnStartPrint(document, e);
             controller.OnStartPrint(document, e);
 
@@ -91,7 +91,7 @@ public class PrintControllerTests
     [Fact]
     public void OnStartPrint_InvokeNullDocument_ThrowsNullReferenceException()
     {
-        var controller = new SubPrintController();
+        SubPrintController controller = new();
         Assert.Throws<NullReferenceException>(() => controller.OnStartPrint(null, new PrintEventArgs()));
     }
 
@@ -99,9 +99,9 @@ public class PrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnEndPrint_InvokeWithoutStarting_Nop(PrintEventArgs e)
     {
-        using (var document = new PrintDocument())
+        using (PrintDocument document = new())
         {
-            var controller = new SubPrintController();
+            SubPrintController controller = new();
             controller.OnEndPrint(document, e);
             controller.OnEndPrint(null, e);
         }

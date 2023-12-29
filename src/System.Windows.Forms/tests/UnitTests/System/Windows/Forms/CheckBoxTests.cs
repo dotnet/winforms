@@ -15,7 +15,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_Ctor_Default()
     {
-        using var control = new SubCheckBox();
+        using SubCheckBox control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -125,7 +125,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubCheckBox();
+        using SubCheckBox control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("Button", createParams.ClassName);
@@ -146,7 +146,7 @@ public class CheckBoxTests
     [EnumData<Appearance>]
     public void CheckBox_Appearance_Set_GetReturnsExpected(Appearance value)
     {
-        using var control = new CheckBox
+        using CheckBox control = new()
         {
             Appearance = value
         };
@@ -163,7 +163,7 @@ public class CheckBoxTests
     [InvalidEnumData<Appearance>]
     public void CheckBox_Appearance_SetInvalidValue_ThrowsInvalidEnumArgumentException(Appearance value)
     {
-        using var control = new CheckBox();
+        using CheckBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Appearance = value);
     }
 
@@ -171,7 +171,7 @@ public class CheckBoxTests
     [BoolData]
     public void CheckBox_AutoCheck(bool expected)
     {
-        using var box = new CheckBox
+        using CheckBox box = new()
         {
             AutoCheck = expected
         };
@@ -183,7 +183,7 @@ public class CheckBoxTests
     [EnumData<ContentAlignment>]
     public void CheckBox_CheckAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
-        using var control = new CheckBox
+        using CheckBox control = new()
         {
             CheckAlign = value
         };
@@ -200,7 +200,7 @@ public class CheckBoxTests
     [InvalidEnumData<ContentAlignment>]
     public void CheckBox_CheckAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var control = new CheckBox();
+        using CheckBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
     }
 
@@ -209,7 +209,7 @@ public class CheckBoxTests
     [InlineData(false, CheckState.Unchecked)]
     public void CheckBox_CheckedGetSet(bool sent, CheckState expected)
     {
-        using var box = new CheckBox
+        using CheckBox box = new()
         {
             Checked = sent
         };
@@ -226,7 +226,7 @@ public class CheckBoxTests
     [InlineData(false, CheckState.Indeterminate, false, CheckState.Unchecked)]
     public void CheckBox_OnClick_AutoCheck_SetCorrectCheckState(bool threeState, CheckState checkState, bool expectedChecked, CheckState expectedCheckState)
     {
-        using var box = new SubCheckBox
+        using SubCheckBox box = new()
         {
             AutoCheck = true,
             ThreeState = threeState,
@@ -248,7 +248,7 @@ public class CheckBoxTests
     [InlineData(false, CheckState.Indeterminate, true)]
     public void CheckBox_OnClick_AutoCheckFalse_DoesNotChangeCheckState(bool threeState, CheckState expectedCheckState, bool expectedChecked)
     {
-        using var box = new SubCheckBox
+        using SubCheckBox box = new()
         {
             AutoCheck = false,
             ThreeState = threeState,
@@ -265,7 +265,7 @@ public class CheckBoxTests
     [EnumData<CheckState>]
     public void CheckBox_CheckState_Set_GetReturnsExpected(CheckState value)
     {
-        using var control = new CheckBox
+        using CheckBox control = new()
         {
             CheckState = value
         };
@@ -282,7 +282,7 @@ public class CheckBoxTests
     [InvalidEnumData<CheckState>]
     public void CheckBox_CheckState_SetInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
     {
-        using var control = new CheckBox();
+        using CheckBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckState = value);
     }
 
@@ -290,7 +290,7 @@ public class CheckBoxTests
     [EnumData<ContentAlignment>]
     public void CheckBox_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
-        using var control = new CheckBox
+        using CheckBox control = new()
         {
             TextAlign = value
         };
@@ -307,7 +307,7 @@ public class CheckBoxTests
     [InvalidEnumData<ContentAlignment>]
     public void CheckBox_TextAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var control = new CheckBox();
+        using CheckBox control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.TextAlign = value);
     }
 
@@ -315,7 +315,7 @@ public class CheckBoxTests
     [BoolData]
     public void CheckBox_ThreeState(bool expected)
     {
-        using var box = new CheckBox
+        using CheckBox box = new()
         {
             ThreeState = expected
         };
@@ -326,7 +326,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_CreateFlatAdapter()
     {
-        using var box = new CheckBox();
+        using CheckBox box = new();
 
         ButtonInternal.ButtonBaseAdapter buttonBaseAdptr = box.CreateFlatAdapter();
 
@@ -336,7 +336,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_CreatePopupAdapter()
     {
-        using var box = new CheckBox();
+        using CheckBox box = new();
 
         ButtonInternal.ButtonBaseAdapter checkBoxPopupAdptr = box.CreatePopupAdapter();
 
@@ -346,7 +346,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_CreateStandardAdapter()
     {
-        using var box = new CheckBox();
+        using CheckBox box = new();
 
         ButtonInternal.ButtonBaseAdapter checkBoxSndAdptr = box.CreateStandardAdapter();
 
@@ -356,7 +356,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubCheckBox();
+        using SubCheckBox control = new();
         Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
     }
 
@@ -383,7 +383,7 @@ public class CheckBoxTests
     [InlineData((ControlStyles)(-1), false)]
     public void CheckBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubCheckBox();
+        using SubCheckBox control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -393,14 +393,14 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubCheckBox();
+        using SubCheckBox control = new();
         Assert.False(control.GetTopLevel());
     }
 
     [WinFormsFact]
     public void CheckBox_RaiseAutomationEvent_Invoke_Success()
     {
-        using var checkBox = new TestCheckBox();
+        using TestCheckBox checkBox = new();
         Assert.False(checkBox.IsHandleCreated);
 
         var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
@@ -418,7 +418,7 @@ public class CheckBoxTests
     [WinFormsFact]
     public void CheckBox_ToStringTest()
     {
-        using var box = new CheckBox();
+        using CheckBox box = new();
         var expected = "System.Windows.Forms.CheckBox, CheckState: 0";
 
         var actual = box.ToString();

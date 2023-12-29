@@ -14,7 +14,7 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Ctor_Default()
     {
-        var cell = new SubDataGridViewHeaderCell();
+        SubDataGridViewHeaderCell cell = new();
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
         Assert.Equal(-1, cell.ColumnIndex);
         Assert.Equal(Rectangle.Empty, cell.ContentBounds);
@@ -52,11 +52,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Displayed_GetWithRow_ReturnsExpected(bool rowVisible)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Visible = rowVisible
         };
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.False(cell.Displayed);
     }
@@ -65,11 +65,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Displayed_GetWithRowHeaderCell_ReturnsExpected(bool rowVisible)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Visible = rowVisible
         };
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.False(cell.Displayed);
     }
@@ -78,11 +78,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Displayed_GetColumnHeaderCellHeaderCell_ReturnsExpected(bool columnVisible)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Visible = columnVisible
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.False(cell.Displayed);
     }
@@ -111,14 +111,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetWithDataGridView_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool rowVisible, bool columnVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
@@ -136,20 +136,20 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetShared_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetColumnHeaderCellWithDataGridViewHeaderCell_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
         };
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.False(cell.Displayed);
         Assert.False(control.IsHandleCreated);
@@ -159,14 +159,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetRowHeaderCellWithDataGridView_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible, bool rowVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
@@ -175,7 +175,7 @@ public class DataGridViewHeaderCellTests
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
         row.Visible = rowVisible;
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.False(cell.Displayed);
         Assert.False(control.IsHandleCreated);
@@ -199,8 +199,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetTopLeftHeaderCell_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetTopLeftHeaderCell_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
@@ -232,14 +232,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetShared_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetShared_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
@@ -265,14 +265,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetWithDataGridViewWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool rowVisible, bool columnVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
@@ -301,20 +301,20 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetShared_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetColumnHeaderCellWithDataGridViewWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
         };
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -335,14 +335,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetRowHeaderCellWithDataGridViewWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible, bool rowVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
@@ -351,7 +351,7 @@ public class DataGridViewHeaderCellTests
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
         row.Visible = rowVisible;
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -372,11 +372,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Displayed_GetTopLeftHeaderCellWithHandle_ReturnsExpected(bool visible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = visible
         };
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         control.TopLeftHeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -398,14 +398,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Displayed_GetShared_TestData))]
     public void DataGridViewHeaderCell_Displayed_GetSharedWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             Visible = gridVisible,
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
         };
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Visible = columnVisible
@@ -448,7 +448,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewElementStates.Frozen | DataGridViewElementStates.Selected, false)]
     public void DataGridViewHeaderCell_Frozen_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var cell = new CustomStateDataGridViewHeaderCell
+        using CustomStateDataGridViewHeaderCell cell = new()
         {
             StateResult = state
         };
@@ -459,11 +459,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Frozen_GetWithRow_ReturnsExpected(bool rowFrozen)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Frozen = rowFrozen
         };
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(rowFrozen, cell.Frozen);
     }
@@ -472,11 +472,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Frozen_GetColumnHeaderCellHeaderCell_ReturnsExpected(bool columnFrozen)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Frozen = columnFrozen
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(columnFrozen, cell.Frozen);
     }
@@ -488,12 +488,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, false, false)]
     public void DataGridViewHeaderCell_Frozen_GetWithDataGridView_ReturnsExpected(bool rowFrozen, bool columnFrozen, bool expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
         row.Frozen = rowFrozen;
@@ -510,8 +510,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, false)]
     public void DataGridViewHeaderCell_Frozen_GetTopLeftHeaderCell_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible,
@@ -525,12 +525,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Frozen_GetShared_ThrowsInvalidOperationException(bool columnFrozen)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows.SharedRow(0);
         column.Frozen = columnFrozen;
@@ -546,7 +546,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected)]
     public void DataGridViewHeaderCell_ReadOnly_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state)
     {
-        using var cell = new CustomStateDataGridViewHeaderCell
+        using CustomStateDataGridViewHeaderCell cell = new()
         {
             StateResult = state
         };
@@ -557,11 +557,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_GetWithRow_ReturnsExpected(bool rowReadOnly)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ReadOnly = rowReadOnly
         };
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.True(cell.ReadOnly);
     }
@@ -570,11 +570,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_GetWithRowHeaderCell_ReturnsExpected(bool rowReadOnly)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ReadOnly = rowReadOnly
         };
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.True(cell.ReadOnly);
     }
@@ -583,11 +583,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_GetColumnHeaderCellHeaderCell_ReturnsExpected(bool columnReadOnly)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             ReadOnly = columnReadOnly
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.True(cell.ReadOnly);
     }
@@ -610,12 +610,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ReadOnly_Get_TestData))]
     public void DataGridViewHeaderCell_ReadOnly_GetWithDataGridView_ReturnsExpected(bool readOnly, bool rowReadOnly, bool columnReadOnly)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ReadOnly = readOnly
         };
@@ -632,12 +632,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ReadOnly_Get_TestData))]
     public void DataGridViewHeaderCell_ReadOnly_GetRowHeaderWithDataGridView_ReturnsExpected(bool readOnly, bool rowReadOnly, bool columnReadOnly)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ReadOnly = readOnly
         };
@@ -645,7 +645,7 @@ public class DataGridViewHeaderCellTests
         DataGridViewRow row = control.Rows[0];
         row.ReadOnly = rowReadOnly;
         column.ReadOnly = columnReadOnly;
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.True(cell.ReadOnly);
         Assert.False(control.IsHandleCreated);
@@ -655,12 +655,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ReadOnly_Get_TestData))]
     public void DataGridViewHeaderCell_ReadOnly_GetColumnHeaderCellWithDataGridView_ReturnsExpected(bool readOnly, bool rowReadOnly, bool columnReadOnly)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ReadOnly = readOnly
         };
@@ -668,7 +668,7 @@ public class DataGridViewHeaderCellTests
         DataGridViewRow row = control.Rows[0];
         row.ReadOnly = rowReadOnly;
         column.ReadOnly = columnReadOnly;
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.True(cell.ReadOnly);
         Assert.False(control.IsHandleCreated);
@@ -678,8 +678,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_GetTopLeftHeaderCell_ReturnsExpected(bool readOnly)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             ReadOnly = readOnly,
             TopLeftHeaderCell = cell
@@ -695,12 +695,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, false)]
     public void DataGridViewHeaderCell_ReadOnly_GetShared_ReturnsExpected(bool readOnly, bool columnReadOnly)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ReadOnly = readOnly
         };
@@ -715,7 +715,7 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_Set_ThrowsInvalidOperationException(bool value)
     {
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
         Assert.True(cell.ReadOnly);
     }
@@ -724,8 +724,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetWithRow_ThrowsInvalidOperationException(bool value)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
 
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
@@ -736,8 +736,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetWithRowHeaderCell_ThrowsInvalidOperationException(bool value)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
         Assert.True(cell.ReadOnly);
@@ -747,8 +747,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetColumnHeaderCellHeaderCell_ThrowsInvalidOperationException(bool value)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
         Assert.True(cell.ReadOnly);
@@ -758,12 +758,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetWithDataGridView_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
@@ -775,15 +775,15 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetRowHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
 
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
@@ -795,14 +795,14 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetColumnHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
 
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
@@ -814,8 +814,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetTopLeftHeaderCell_ThrowsInvalidOperationException(bool value)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -828,12 +828,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_ReadOnly_SetShared_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
         Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
@@ -847,7 +847,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewElementStates.Resizable | DataGridViewElementStates.Selected, false)]
     public void DataGridViewHeaderCell_Resizable_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
     {
-        using var cell = new CustomStateDataGridViewHeaderCell
+        using CustomStateDataGridViewHeaderCell cell = new()
         {
             StateResult = state
         };
@@ -860,11 +860,11 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewTriState.NotSet, false)]
     public void DataGridViewHeaderCell_Resizable_GetWithRow_ReturnsExpected(DataGridViewTriState rowResizable, bool expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Resizable = rowResizable
         };
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(expected, cell.Resizable);
     }
@@ -875,11 +875,11 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewTriState.NotSet, false)]
     public void DataGridViewHeaderCell_Resizable_GetWithRowHeaderCell_ReturnsExpected(DataGridViewTriState columnResizable, bool expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Resizable = columnResizable
         };
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(expected, cell.Resizable);
     }
@@ -890,11 +890,11 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewTriState.NotSet, false)]
     public void DataGridViewHeaderCell_Resizable_GetColumnHeaderCellHeaderCell_ReturnsExpected(DataGridViewTriState columnResizable, bool expected)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Resizable = columnResizable
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(expected, cell.Resizable);
     }
@@ -920,12 +920,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Resizable_GetRowHeaderCellWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Resizable_GetWithDataGridView_ReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode, DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, DataGridViewTriState rowResizable, DataGridViewTriState columnResizable, bool expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnHeadersHeightSizeMode = columnHeadersHeightSizeMode,
             RowHeadersWidthSizeMode = rowHeadersWidthSizeMode
@@ -944,12 +944,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Resizable_GetRowHeaderCellWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Resizable_GetRowHeaderCellWithDataGridView_ReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode, DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, DataGridViewTriState rowResizable, DataGridViewTriState columnResizable, bool expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnHeadersHeightSizeMode = columnHeadersHeightSizeMode,
             RowHeadersWidthSizeMode = rowHeadersWidthSizeMode
@@ -959,7 +959,7 @@ public class DataGridViewHeaderCellTests
         row.Resizable = rowResizable;
         column.Resizable = columnResizable;
 
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(expected, cell.Resizable);
         Assert.False(control.IsHandleCreated);
@@ -986,12 +986,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Resizable_GetColumnHeaderCellWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Resizable_GetColumnHeaderCellWithDataGridView_ReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode, DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, DataGridViewTriState rowResizable, DataGridViewTriState columnResizable, bool expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnHeadersHeightSizeMode = columnHeadersHeightSizeMode,
             RowHeadersWidthSizeMode = rowHeadersWidthSizeMode
@@ -1001,7 +1001,7 @@ public class DataGridViewHeaderCellTests
         row.Resizable = rowResizable;
         column.Resizable = columnResizable;
 
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(expected, cell.Resizable);
         Assert.False(control.IsHandleCreated);
@@ -1026,18 +1026,18 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Resizable_GetTopLeftHeaderCell_TestData))]
     public void DataGridViewHeaderCell_Resizable_GetTopLeftHeaderCell_ReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode, DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ColumnHeadersHeightSizeMode = columnHeadersHeightSizeMode,
             RowHeadersWidthSizeMode = rowHeadersWidthSizeMode
         };
 
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         control.TopLeftHeaderCell = cell;
         Assert.Equal(expected, cell.Resizable);
         Assert.False(control.IsHandleCreated);
@@ -1047,12 +1047,12 @@ public class DataGridViewHeaderCellTests
     [EnumData<DataGridViewTriState>]
     public void DataGridViewHeaderCell_Resizable_GetShared_ThrowsInvalidOperationException(DataGridViewTriState columnResizable)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows.SharedRow(0);
         column.Resizable = columnResizable;
@@ -1068,7 +1068,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewElementStates.Selected | DataGridViewElementStates.Frozen)]
     public void DataGridViewHeaderCell_Selected_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state)
     {
-        using var cell = new CustomStateDataGridViewHeaderCell
+        using CustomStateDataGridViewHeaderCell cell = new()
         {
             StateResult = state
         };
@@ -1078,8 +1078,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Selected_GetWithRow_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.False(cell.Selected);
     }
@@ -1087,8 +1087,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Selected_GetWithRowHeaderCell_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.False(cell.Selected);
     }
@@ -1096,8 +1096,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Selected_GetColumnHeaderCellHeaderCell_ReturnsExpected()
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.False(cell.Selected);
     }
@@ -1109,12 +1109,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, false)]
     public void DataGridViewHeaderCell_Selected_GetWithDataGridView_ReturnsExpected(bool rowSelected, bool columnSelected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
         row.Selected = rowSelected;
@@ -1131,17 +1131,17 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, false)]
     public void DataGridViewHeaderCell_Selected_GetRowHeaderCellWithDataGridView_ReturnsExpected(bool rowSelected, bool columnSelected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
         row.Selected = rowSelected;
         column.Selected = columnSelected;
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.False(cell.Selected);
         Assert.False(control.IsHandleCreated);
@@ -1154,17 +1154,17 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, false)]
     public void DataGridViewHeaderCell_Selected_GetColumnHeaderCellWithDataGridView_ReturnsExpected(bool rowSelected, bool columnSelected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
         row.Selected = rowSelected;
         column.Selected = columnSelected;
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.False(cell.Selected);
         Assert.False(control.IsHandleCreated);
@@ -1173,8 +1173,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Selected_GetTopLeftHeaderCell_ReturnsExpected()
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -1186,12 +1186,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_GetShared_ReturnsExpected(bool columnSelected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows.SharedRow(0);
         column.Selected = columnSelected;
@@ -1203,7 +1203,7 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_Set_ThrowsInvalidOperationException(bool value)
     {
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
         Assert.False(cell.Selected);
     }
@@ -1212,8 +1212,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetWithRow_ThrowsInvalidOperationException(bool value)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
 
         Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
@@ -1224,8 +1224,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetWithRowHeaderCell_ThrowsInvalidOperationException(bool value)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
 
         Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
@@ -1236,8 +1236,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetColumnHeaderCellHeaderCell_ThrowsInvalidOperationException(bool value)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
 
         Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
@@ -1248,12 +1248,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetWithDataGridView_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
 
@@ -1266,15 +1266,15 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetRowHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
 
         Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
@@ -1286,14 +1286,14 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetColumnHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
 
         Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
@@ -1305,8 +1305,8 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetTopLeftHeaderCell_ThrowsInvalidOperationException(bool value)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -1320,12 +1320,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Selected_SetShared_ThrowsInvalidOperationException(bool value)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
 
@@ -1337,8 +1337,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_ValueType_GetWithRow_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(typeof(object), cell.ValueType);
     }
@@ -1346,8 +1346,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_ValueType_GetWithRowHeaderCell_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(typeof(object), cell.ValueType);
     }
@@ -1356,11 +1356,11 @@ public class DataGridViewHeaderCellTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DataGridViewHeaderCell_ValueType_GetColumnHeaderCellHeaderCell_ReturnsExpected(Type valueType)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             ValueType = valueType
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(typeof(object), cell.ValueType);
     }
@@ -1369,13 +1369,13 @@ public class DataGridViewHeaderCellTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DataGridViewHeaderCell_ValueType_GetWithDataGridView_ReturnsExpected(Type valueType)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             ValueType = valueType
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
         Assert.Equal(typeof(object), cell.ValueType);
@@ -1386,16 +1386,16 @@ public class DataGridViewHeaderCellTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DataGridViewHeaderCell_ValueType_GetRowHeaderCellWithDataGridView_ReturnsExpected(Type valueType)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             ValueType = valueType
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(typeof(object), cell.ValueType);
         Assert.False(control.IsHandleCreated);
@@ -1405,15 +1405,15 @@ public class DataGridViewHeaderCellTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DataGridViewHeaderCell_ValueType_GetColumnHeaderCellWithDataGridView_ReturnsExpected(Type valueType)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             ValueType = valueType
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(typeof(object), cell.ValueType);
         Assert.False(control.IsHandleCreated);
@@ -1422,8 +1422,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_ValueType_GetTopLeftHeaderCell_ReturnsExpected()
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -1437,7 +1437,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_Set_GetReturnsExpected(Type value, Type expected)
     {
-        using var cell = new DataGridViewHeaderCell
+        using DataGridViewHeaderCell cell = new()
         {
             ValueType = value
         };
@@ -1456,7 +1456,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var cell = new DataGridViewHeaderCell
+        using DataGridViewHeaderCell cell = new()
         {
             ValueType = typeof(string)
         };
@@ -1476,8 +1476,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetWithRow_GetReturnsExpected(Type value, Type expected)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
 
         cell.ValueType = value;
@@ -1496,8 +1496,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetWithRowWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new()
         {
             ValueType = typeof(string)
         };
@@ -1524,8 +1524,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ValueType_SetColumnHeaderCellHeaderCell_TestData))]
     public void DataGridViewHeaderCell_ValueType_SetWithRowHeaderCell_GetReturnsExpected(Type value, Type expected)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
 
         cell.ValueType = value;
@@ -1542,8 +1542,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ValueType_SetColumnHeaderCellHeaderCell_TestData))]
     public void DataGridViewHeaderCell_ValueType_SetWithRowHeaderCellWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new()
         {
             ValueType = typeof(string)
         };
@@ -1563,8 +1563,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ValueType_SetColumnHeaderCellHeaderCell_TestData))]
     public void DataGridViewHeaderCell_ValueType_SetColumnHeaderCellHeaderCell_GetReturnsExpected(Type value, Type expected)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
 
         cell.ValueType = value;
@@ -1581,8 +1581,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ValueType_SetColumnHeaderCellHeaderCell_TestData))]
     public void DataGridViewHeaderCell_ValueType_SetColumnHeaderCellWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new()
         {
             ValueType = typeof(string)
         };
@@ -1604,12 +1604,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetWithDataGridView_GetReturnsExpected(Type value, Type expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
 
@@ -1631,12 +1631,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
         cell.ValueType = typeof(string);
@@ -1659,15 +1659,15 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetRowHeaderCellWithDataGridView_GetReturnsExpected(Type value, Type expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
 
         cell.ValueType = value;
@@ -1688,15 +1688,15 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetRowHeaderCellWithDataGridViewWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         cell.ValueType = typeof(string);
 
@@ -1718,14 +1718,14 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetColumnHeaderCellWithDataGridView_GetReturnsExpected(Type value, Type expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
 
         cell.ValueType = value;
@@ -1746,14 +1746,14 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetColumnHeaderCellWithDataGridViewWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         cell.ValueType = typeof(string);
 
@@ -1775,11 +1775,11 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetTopLeftHeaderCell_GetReturnsExpected(Type value, Type expected)
     {
-        using var cell = new DataGridViewHeaderCell
+        using DataGridViewHeaderCell cell = new()
         {
             ValueType = value
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -1800,11 +1800,11 @@ public class DataGridViewHeaderCellTests
     [InlineData(null, typeof(object))]
     public void DataGridViewHeaderCell_ValueType_SetTopLeftHeaderCellWithNonNullOldValue_GetReturnsExpected(Type value, Type expected)
     {
-        using var cell = new DataGridViewHeaderCell
+        using DataGridViewHeaderCell cell = new()
         {
             ValueType = typeof(string)
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -1827,7 +1827,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected)]
     public void DataGridViewHeaderCell_Visible_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state)
     {
-        using var cell = new CustomStateDataGridViewHeaderCell
+        using CustomStateDataGridViewHeaderCell cell = new()
         {
             StateResult = state
         };
@@ -1838,11 +1838,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Visible_GetWithRow_ReturnsExpected(bool rowVisible)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Visible = rowVisible
         };
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(rowVisible, cell.Visible);
     }
@@ -1851,11 +1851,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Visible_GetRowHeaderCell_ReturnsExpected(bool rowVisible)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Visible = rowVisible
         };
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(rowVisible, row.Visible);
     }
@@ -1864,11 +1864,11 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Visible_GetColumnHeaderCell_ReturnsExpected(bool columnVisible)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Visible = columnVisible
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(columnVisible, cell.Visible);
     }
@@ -1894,12 +1894,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Visible_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Visible_GetWithDataGridView_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, bool rowVisible, bool columnVisible)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
@@ -1919,12 +1919,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Visible_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Visible_GetRowHeaderCellWithDataGridView_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, bool rowVisible, bool columnVisible)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
@@ -1935,7 +1935,7 @@ public class DataGridViewHeaderCellTests
         row.Visible = rowVisible;
         column.Visible = columnVisible;
 
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(rowVisible && rowHeadersVisible, cell.Visible);
         Assert.False(control.IsHandleCreated);
@@ -1945,12 +1945,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Visible_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_Visible_GetColumnHeaderCellWithDataGridView_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, bool rowVisible, bool columnVisible)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible
@@ -1961,7 +1961,7 @@ public class DataGridViewHeaderCellTests
         row.Visible = rowVisible;
         column.Visible = columnVisible;
 
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(columnVisible && columnHeadersVisible, cell.Visible);
         Assert.False(control.IsHandleCreated);
@@ -1982,8 +1982,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(Visible_GetTopLeftHeaderCell_TestData))]
     public void DataGridViewHeaderCell_Visible_GetTopLeftHeaderCell_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             RowHeadersVisible = rowHeadersVisible,
             ColumnHeadersVisible = columnHeadersVisible,
@@ -1998,12 +1998,12 @@ public class DataGridViewHeaderCellTests
     [BoolData]
     public void DataGridViewHeaderCell_Visible_GetShared_ThrowsInvalidOperationException(bool columnVisible)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows.SharedRow(0);
         column.Visible = columnVisible;
@@ -2016,8 +2016,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Clone_NonEmpty_Success()
     {
-        using var menu = new ContextMenuStrip();
-        using var source = new DataGridViewHeaderCell
+        using ContextMenuStrip menu = new();
+        using DataGridViewHeaderCell source = new()
         {
             ContextMenuStrip = menu,
             ErrorText = "errorText",
@@ -2066,7 +2066,7 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Clone_Empty_Success()
     {
-        using var source = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell source = new();
         DataGridViewHeaderCell cell = Assert.IsType<DataGridViewHeaderCell>(source.Clone());
         Assert.Equal(DataGridViewElementStates.None, cell.State);
         Assert.Null(cell.DataGridView);
@@ -2102,8 +2102,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Clone_NonEmptySubclass_Success()
     {
-        using var menu = new ContextMenuStrip();
-        using var source = new SubDataGridViewHeaderCell
+        using ContextMenuStrip menu = new();
+        using SubDataGridViewHeaderCell source = new()
         {
             ContextMenuStrip = menu,
             ErrorText = "errorText",
@@ -2152,7 +2152,7 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Clone_EmptySubclass_Success()
     {
-        using var source = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell source = new();
         SubDataGridViewHeaderCell cell = Assert.IsType<SubDataGridViewHeaderCell>(source.Clone());
         Assert.Equal(DataGridViewElementStates.None, cell.State);
         Assert.Null(cell.DataGridView);
@@ -2191,7 +2191,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_Invoke_ReturnsExpected(int rowIndex)
     {
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         Assert.Null(cell.GetInheritedContextMenuStrip(rowIndex));
     }
 
@@ -2201,8 +2201,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithMenu_ReturnsExpected(int rowIndex)
     {
-        using var cellMenu = new ContextMenuStrip();
-        using var cell = new DataGridViewHeaderCell
+        using ContextMenuStrip cellMenu = new();
+        using DataGridViewHeaderCell cell = new()
         {
             ContextMenuStrip = cellMenu
         };
@@ -2223,11 +2223,11 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedContextMenuStrip_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithRow_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = menu
         };
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Null(cell.GetInheritedContextMenuStrip(rowIndex));
     }
@@ -2236,12 +2236,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedContextMenuStrip_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithMenuWithRow_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             ContextMenuStrip = menu
         };
-        using var cellMenu = new ContextMenuStrip();
-        using var cell = new DataGridViewHeaderCell
+        using ContextMenuStrip cellMenu = new();
+        using DataGridViewHeaderCell cell = new()
         {
             ContextMenuStrip = cellMenu
         };
@@ -2265,12 +2265,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithDataGridView_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ContextMenuStrip = menu
         };
@@ -2287,12 +2287,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithMenuWithDataGridView_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ContextMenuStrip = menu
         };
@@ -2300,7 +2300,7 @@ public class DataGridViewHeaderCellTests
         int callCount = 0;
         control.CellContextMenuStripNeeded += (sender, e) => callCount++;
 
-        using var cellMenu = new ContextMenuStrip();
+        using ContextMenuStrip cellMenu = new();
         DataGridViewCell cell = control.Rows[0].Cells[0];
         cell.ContextMenuStrip = cellMenu;
         Assert.Same(cellMenu, cell.GetInheritedContextMenuStrip(rowIndex));
@@ -2311,14 +2311,14 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeTopLeftHeaderCell_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ContextMenuStrip = menu
         };
         int callCount = 0;
         control.CellContextMenuStripNeeded += (sender, e) => callCount++;
 
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         control.TopLeftHeaderCell = cell;
         Assert.Same(menu, cell.GetInheritedContextMenuStrip(rowIndex));
         Assert.Equal(0, callCount);
@@ -2328,15 +2328,15 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeTopLeftHeaderCellWithMenu_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ContextMenuStrip = menu
         };
         int callCount = 0;
         control.CellContextMenuStripNeeded += (sender, e) => callCount++;
 
-        using var cellMenu = new ContextMenuStrip();
-        using var cell = new DataGridViewHeaderCell
+        using ContextMenuStrip cellMenu = new();
+        using DataGridViewHeaderCell cell = new()
         {
             ContextMenuStrip = cellMenu
         };
@@ -2349,12 +2349,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeShared_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             ContextMenuStrip = menu
         };
@@ -2369,9 +2369,9 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithDataGridViewVirtualMode_CallsCellContextMenuStripNeeded()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridView
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
@@ -2403,15 +2403,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedContextMenuStrip_InvokeWithDataGridViewDataSource_CallsCellContextMenuStripNeeded()
     {
-        using var menu1 = new ContextMenuStrip();
-        using var menu2 = new ContextMenuStrip();
-        using var control = new DataGridView
+        using ContextMenuStrip menu1 = new();
+        using ContextMenuStrip menu2 = new();
+        using DataGridView control = new()
         {
             ColumnCount = 1,
             RowCount = 1,
             DataSource = new[] { new { Name = "Name" } }
         };
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         DataGridViewCell cell = control.Rows[0].Cells[0];
@@ -2440,15 +2440,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_Invoke_ReturnsExpected()
     {
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet, cell.GetInheritedState(-1));
     }
 
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithRow_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible, cell.GetInheritedState(-1));
     }
@@ -2459,14 +2459,14 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewTriState.NotSet, DataGridViewElementStates.ResizableSet)]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithRowCustomState_ReturnsExpected(DataGridViewTriState resizable, DataGridViewElementStates expected)
     {
-        using var row = new DataGridViewRow
+        using DataGridViewRow row = new()
         {
             Frozen = true,
             ReadOnly = true,
             Visible = false,
             Resizable = resizable
         };
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | expected, cell.GetInheritedState(-1));
     }
@@ -2474,8 +2474,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeColumnHeaderCell_ReturnsExpected()
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible, cell.GetInheritedState(-1));
     }
@@ -2486,14 +2486,14 @@ public class DataGridViewHeaderCellTests
     [InlineData(DataGridViewTriState.NotSet, DataGridViewElementStates.ResizableSet)]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeColumnHeaderCellCustomState_ReturnsExpected(DataGridViewTriState resizable, DataGridViewElementStates expected)
     {
-        using var column = new DataGridViewColumn
+        using DataGridViewColumn column = new()
         {
             Frozen = true,
             ReadOnly = true,
             Visible = false,
             Resizable = resizable
         };
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | expected, cell.GetInheritedState(-1));
     }
@@ -2501,12 +2501,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithDataGrid_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
 
         DataGridViewCell cell = control.Rows[0].Cells[0];
@@ -2543,12 +2543,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_DataGridViewCustomState_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithDataGridCustomState_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
@@ -2566,16 +2566,16 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithRowHeaderCell_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
 
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible, cell.GetInheritedState(0));
         Assert.False(control.IsHandleCreated);
@@ -2585,12 +2585,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_DataGridViewCustomState_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithRowHeaderCellCustomState_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
@@ -2601,7 +2601,7 @@ public class DataGridViewHeaderCellTests
         column.Frozen = columnFrozen;
         column.Visible = columnVisible;
 
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet | expected, cell.GetInheritedState(0));
         Assert.False(control.IsHandleCreated);
@@ -2610,15 +2610,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeColumnHeaderCellHeaderCell_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
 
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible, cell.GetInheritedState(-1));
         Assert.False(control.IsHandleCreated);
@@ -2653,12 +2653,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_ColumnHeaderCellCustomState_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeColumnHeaderCellHeaderCellCustomState_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
@@ -2669,7 +2669,7 @@ public class DataGridViewHeaderCellTests
         column.Frozen = columnFrozen;
         column.Visible = columnVisible;
 
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet | expected, cell.GetInheritedState(-1));
         Assert.False(control.IsHandleCreated);
@@ -2694,8 +2694,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_TopLeftHeaderCell_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeTopLeftHeaderCell_ReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode, bool columnHeadersVisible, DataGridViewElementStates expected)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             RowHeadersWidthSizeMode = rowHeadersWidthSizeMode,
             RowHeadersVisible = rowHeadersVisible,
@@ -2710,12 +2710,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithDataGridWithHandle_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -2762,12 +2762,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_DataGridViewCustomStateWithHandle_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithDataGridCustomStateWithHandle_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
@@ -2796,15 +2796,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithRowHeaderCellWithHandle_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -2825,12 +2825,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_DataGridViewCustomStateWithHandle_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeWithRowHeaderCellCustomStateWithHandle_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
@@ -2840,7 +2840,7 @@ public class DataGridViewHeaderCellTests
         column.Resizable = columnResizable;
         column.Frozen = columnFrozen;
         column.Visible = columnVisible;
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -2860,14 +2860,14 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeColumnHeaderCellHeaderCellWithHandle_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -2913,12 +2913,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_ColumnHeaderCellCustomStateWithHandle_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeColumnHeaderCellHeaderCellCustomStateWithHandle_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         control.Rows.Add();
         DataGridViewRow row = control.Rows[0];
@@ -2928,7 +2928,7 @@ public class DataGridViewHeaderCellTests
         column.Resizable = columnResizable;
         column.Frozen = columnFrozen;
         column.Visible = columnVisible;
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -2965,8 +2965,8 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(GetInheritedState_TopLeftHeaderCellWithHandle_TestData))]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeTopLeftHeaderCellWithHandle_ReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, DataGridViewColumnHeadersHeightSizeMode columnHeadersHeightSizeMode, bool columnHeadersVisible, DataGridViewElementStates expected)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             RowHeadersWidthSizeMode = rowHeadersWidthSizeMode,
             RowHeadersVisible = rowHeadersVisible,
@@ -2993,12 +2993,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetInheritedState_InvokeSharedRow_ThrowsArgumentException()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
         Assert.Throws<ArgumentException>("rowIndex", () => cell.GetInheritedState(-1));
@@ -3009,8 +3009,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexWithRow_ThrowsArgumentException(int rowIndex)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Throws<ArgumentException>("rowIndex", () => cell.GetInheritedState(rowIndex));
     }
@@ -3020,8 +3020,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexRowHeaderCell_ThrowsArgumentException(int rowIndex)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Throws<ArgumentException>("rowIndex", () => cell.GetInheritedState(rowIndex));
     }
@@ -3031,8 +3031,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexColumnHeaderCell_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedState(rowIndex));
     }
@@ -3043,12 +3043,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexWithDataGridView_ThrowsArgumentException(int rowIndex)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
         Assert.Throws<ArgumentException>("rowIndex", () => cell.GetInheritedState(rowIndex));
@@ -3060,16 +3060,16 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexRowHeaderCellWithDataGridView_ThrowsArgumentException(int rowIndex)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
 
         DataGridViewRow row = control.Rows[0];
-        using var cell = new DataGridViewRowHeaderCell();
+        using DataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Throws<ArgumentException>("rowIndex", () => cell.GetInheritedState(rowIndex));
     }
@@ -3079,15 +3079,15 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexColumnHeaderCellWithDataGridView_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
 
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedState(rowIndex));
     }
@@ -3097,8 +3097,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(0)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexTopLeftHeaderCell_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cell = new DataGridViewHeaderCell();
-        using var control = new DataGridView();
+        using DataGridViewHeaderCell cell = new();
+        using DataGridView control = new();
         control.TopLeftHeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedState(rowIndex));
     }
@@ -3109,12 +3109,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetInheritedState_InvalidRowIndexShared_ThrowsArgumentException(int rowIndex)
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
         Assert.Throws<ArgumentException>("rowIndex", () => cell.GetInheritedState(rowIndex));
@@ -3123,8 +3123,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_Invoke_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(new Size(-1, -1), cell.GetSize(-1));
     }
@@ -3132,8 +3132,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeWithRow_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal(new Size(-1, -1), cell.GetSize(-1));
     }
@@ -3141,8 +3141,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeRowHeaderCell_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(new Size(-1, -1), cell.GetSize(-1));
     }
@@ -3150,8 +3150,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeColumnHeaderCell_ReturnsExpected()
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(new Size(-1, -1), cell.GetSize(-1));
     }
@@ -3159,13 +3159,13 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersWidth = 20,
             ColumnHeadersHeight = 25
@@ -3182,13 +3182,13 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeRowHeaderCellWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersWidth = 20,
             ColumnHeadersHeight = 25
@@ -3197,7 +3197,7 @@ public class DataGridViewHeaderCellTests
         DataGridViewRow row = control.Rows[0];
         row.Height = 11;
 
-        using var cell = new SubDataGridViewRowHeaderCell();
+        using SubDataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Equal(new Size(20, 11), cell.GetSize(0));
         Assert.False(control.IsHandleCreated);
@@ -3206,13 +3206,13 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeColumnHeaderCellWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersWidth = 20,
             ColumnHeadersHeight = 25
@@ -3221,7 +3221,7 @@ public class DataGridViewHeaderCellTests
         DataGridViewRow row = control.Rows[0];
         row.Height = 11;
 
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal(new Size(10, 25), cell.GetSize(-1));
         Assert.False(control.IsHandleCreated);
@@ -3230,8 +3230,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeTopLeftHeaderCell_ReturnsExpected()
     {
-        using var cell = new SubDataGridViewColumnHeaderCell();
-        using var control = new DataGridView
+        using SubDataGridViewColumnHeaderCell cell = new();
+        using DataGridView control = new()
         {
             RowHeadersWidth = 20,
             ColumnHeadersHeight = 25,
@@ -3244,13 +3244,13 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetSize_InvokeShared_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             RowHeadersWidth = 20,
             ColumnHeadersHeight = 25
@@ -3268,7 +3268,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetSize_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetSize(rowIndex));
     }
 
@@ -3278,8 +3278,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetSize_InvalidRowIndexWithRow_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetSize(rowIndex));
     }
@@ -3290,8 +3290,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetSize_InvalidRowIndexRowHeaderCell_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetSize(rowIndex));
     }
@@ -3302,8 +3302,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetSize_InvalidRowIndexColumnHeaderCell_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetSize(rowIndex));
     }
@@ -3314,12 +3314,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetSize_InvalidRowIndexWithDataGridView_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetSize(rowIndex));
@@ -3331,12 +3331,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetSize_InvalidRowIndexShared_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows.SharedRow(0).Cells[0];
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetSize(rowIndex));
@@ -3345,15 +3345,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_Invoke_ReturnsExpected()
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.Null(cell.GetValue(-1));
     }
 
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValue_ReturnsExpected()
     {
-        var value = new object();
-        using var cell = new SubDataGridViewHeaderCell
+        object value = new();
+        using SubDataGridViewHeaderCell cell = new()
         {
             Value = value
         };
@@ -3363,8 +3363,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithRow_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Null(cell.GetValue(-1));
     }
@@ -3372,9 +3372,9 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueWithRow_ReturnsExpected()
     {
-        var value = new object();
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewHeaderCell
+        object value = new();
+        using DataGridViewRow row = new();
+        using SubDataGridViewHeaderCell cell = new()
         {
             Value = value
         };
@@ -3389,8 +3389,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvokeRowHeaderCell_ReturnsExpected(int rowIndex)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewRowHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Null(cell.GetValue(rowIndex));
     }
@@ -3402,9 +3402,9 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueRowHeaderCell_ReturnsExpected(int rowIndex)
     {
-        var value = new object();
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewRowHeaderCell
+        object value = new();
+        using DataGridViewRow row = new();
+        using SubDataGridViewRowHeaderCell cell = new()
         {
             Value = value
         };
@@ -3415,8 +3415,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeColumnHeaderCell_ReturnsExpected()
     {
-        using var row = new DataGridViewColumn();
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using DataGridViewColumn row = new();
+        using SubDataGridViewColumnHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Empty((string)cell.GetValue(-1));
     }
@@ -3424,9 +3424,9 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueColumnHeaderCell_ReturnsExpected()
     {
-        var value = new object();
-        using var row = new DataGridViewColumn();
-        using var cell = new SubDataGridViewColumnHeaderCell
+        object value = new();
+        using DataGridViewColumn row = new();
+        using SubDataGridViewColumnHeaderCell cell = new()
         {
             Value = value
         };
@@ -3437,13 +3437,13 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         Assert.Null(cell.GetValue(-1));
@@ -3452,15 +3452,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        var value = new object();
+        object value = new();
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.Value = value);
         Assert.Null(cell.GetValue(-1));
@@ -3469,16 +3469,16 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeRowHeaderCellWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new SubDataGridViewRowHeaderCell();
+        using SubDataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
         Assert.Null(cell.GetValue(-1));
     }
@@ -3486,18 +3486,18 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueRowHeaderCellWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewRow row = control.Rows[0];
-        using var cell = new SubDataGridViewRowHeaderCell();
+        using SubDataGridViewRowHeaderCell cell = new();
         row.HeaderCell = cell;
-        var value = new object();
+        object value = new();
         cell.Value = value;
         Assert.Same(value, cell.GetValue(-1));
     }
@@ -3505,15 +3505,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeColumnHeaderCellWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Empty((string)cell.GetValue(-1));
     }
@@ -3521,17 +3521,17 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueColumnHeaderCellWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate,
             Width = 10
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
-        var value = new object();
+        object value = new();
         cell.Value = value;
         Assert.Same(value, cell.GetValue(-1));
     }
@@ -3539,8 +3539,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeTopLeftHeaderCell_ReturnsExpected()
     {
-        using var control = new DataGridView();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridView control = new();
+        using SubDataGridViewHeaderCell cell = new();
         control.TopLeftHeaderCell = cell;
         Assert.Null(cell.GetValue(-1));
     }
@@ -3548,10 +3548,10 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithValueTopLeftHeaderCell_ReturnsExpected()
     {
-        using var control = new DataGridView();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridView control = new();
+        using SubDataGridViewHeaderCell cell = new();
         control.TopLeftHeaderCell = cell;
-        var value = new object();
+        object value = new();
         cell.Value = value;
         Assert.Same(value, cell.GetValue(-1));
     }
@@ -3559,12 +3559,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeShared_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows.SharedRow(0).Cells[0];
         Assert.Null(cell.GetValue(-1));
@@ -3573,15 +3573,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeSharedWithValue_ReturnsExpected()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows.SharedRow(0).Cells[0];
-        var value = new object();
+        object value = new();
         cell.Value = value;
         Assert.Same(value, cell.GetValue(-1));
     }
@@ -3589,14 +3589,14 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithDataGridViewVirtualMode_CallsCellValueNeeded()
     {
-        var value1 = new object();
-        var value2 = new object();
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        object value1 = new();
+        object value2 = new();
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             VirtualMode = true
         };
@@ -3628,14 +3628,14 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithDataGridViewNewRowVirtualMode_CallsCellValueNeeded()
     {
-        var value1 = new object();
-        var value2 = new object();
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        object value1 = new();
+        object value2 = new();
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             VirtualMode = true
         };
@@ -3666,19 +3666,19 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_GetValue_InvokeWithDataGridViewNewRowDataSource_CallsCellValueNeeded()
     {
-        var value1 = new object();
-        var value2 = new object();
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        object value1 = new();
+        object value2 = new();
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             DataSource = new[] { new { Name = "Name" } }
         };
         control.Columns.Add(column);
-        using var form = new Form();
+        using Form form = new();
         form.Controls.Add(control);
         Assert.NotNull(control.BindingContext);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
@@ -3710,7 +3710,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvokeInvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
     }
 
@@ -3720,8 +3720,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvokeInvalidRowIndexWithRow_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var row = new DataGridViewRow();
-        using var cell = new SubDataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using SubDataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
     }
@@ -3732,8 +3732,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvokeInvalidColumnIndexColumnHeaderCell_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
     }
@@ -3744,12 +3744,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvalidRowIndexWithDataGridView_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
@@ -3761,14 +3761,14 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvalidRowIndexColumnHeaderCellWithDataGridView_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
-        using var cell = new SubDataGridViewColumnHeaderCell();
+        using SubDataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
     }
@@ -3779,8 +3779,8 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvalidRowIndexTopLeftHeaderCell_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
-        using var control = new DataGridView
+        using SubDataGridViewHeaderCell cell = new();
+        using DataGridView control = new()
         {
             TopLeftHeaderCell = cell
         };
@@ -3793,12 +3793,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_GetValue_InvalidRowIndexShared_ThrowsArgumentOutOfRangeException(int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows.SharedRow(0).Cells[0];
         Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
@@ -3830,7 +3830,7 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(MouseDownUnsharesRow_TestData))]
     public void DataGridViewHeaderCell_MouseDownUnsharesRow_Invoke_ReturnsFalse(DataGridViewCellMouseEventArgs e)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseDownUnsharesRow(e));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -3874,12 +3874,12 @@ public class DataGridViewHeaderCellTests
 
                 Application.EnableVisualStyles();
 
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
+                using SubDataGridViewHeaderCell cellTemplate = new();
+                using DataGridViewColumn column = new()
                 {
                     CellTemplate = cellTemplate
                 };
-                using var control = new DataGridView
+                using DataGridView control = new()
                 {
                     EnableHeadersVisualStyles = enableHeadersVisualStyles
                 };
@@ -3906,7 +3906,7 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(MouseDownUnsharesRow_ButtonLeftNullDataGridView_TestData))]
     public void DataGridViewHeaderCell_MouseDownUnsharesRow_ButtonLeftNullDataGridView_ReturnsFalse(DataGridViewCellMouseEventArgs e)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseDownUnsharesRow(e));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -3914,7 +3914,7 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_MouseDownUnsharesRow_NullE_ReturnsFalse()
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseDownUnsharesRow(null));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -3926,7 +3926,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_MouseEnterUnsharesRow_InvokeWithoutDataGridView_ReturnsFalse(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseEnterUnsharesRow(rowIndex));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -3942,12 +3942,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, 1)]
     public void DataGridViewHeaderCell_MouseEnterUnsharesRow_InvokeWithDataGridView_ReturnsExpected(bool enableHeadersVisualStyles, int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = enableHeadersVisualStyles
         };
@@ -3965,7 +3965,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithoutDataGridView_ReturnsFalse(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseLeaveUnsharesRow(rowIndex));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -3981,12 +3981,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, 1)]
     public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridView_ReturnsExpected(bool enableHeadersVisualStyles, int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = enableHeadersVisualStyles
         };
@@ -4023,12 +4023,12 @@ public class DataGridViewHeaderCellTests
 
             Application.EnableVisualStyles();
 
-            using var cellTemplate = new SubDataGridViewHeaderCell();
-            using var column = new DataGridViewColumn
+            using SubDataGridViewHeaderCell cellTemplate = new();
+            using DataGridViewColumn column = new()
             {
                 CellTemplate = cellTemplate
             };
-            using var control = new DataGridView
+            using DataGridView control = new()
             {
                 EnableHeadersVisualStyles = enableHeadersVisualStyles
             };
@@ -4045,7 +4045,7 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(MouseDownUnsharesRow_TestData))]
     public void DataGridViewHeaderCell_MouseUpUnsharesRow_Invoke_ReturnsFalse(DataGridViewCellMouseEventArgs e)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseUpUnsharesRow(e));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4064,12 +4064,12 @@ public class DataGridViewHeaderCellTests
 
                 Application.EnableVisualStyles();
 
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
+                using SubDataGridViewHeaderCell cellTemplate = new();
+                using DataGridViewColumn column = new()
                 {
                     CellTemplate = cellTemplate
                 };
-                using var control = new DataGridView
+                using DataGridView control = new()
                 {
                     EnableHeadersVisualStyles = enableHeadersVisualStyles
                 };
@@ -4085,7 +4085,7 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_MouseUpUnsharesRow_NullE_ReturnsFalse()
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseUpUnsharesRow(null));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4094,7 +4094,7 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(MouseDownUnsharesRow_ButtonLeftNullDataGridView_TestData))]
     public void DataGridViewHeaderCell_MouseUpUnsharesRow_ButtonLeftNullDataGridView_ReturnsFalse(DataGridViewCellMouseEventArgs e)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         Assert.False(cell.MouseUpUnsharesRow(e));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4126,7 +4126,7 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void DataGridViewHeaderCell_OnMouseDown_Invoke_Nop(DataGridViewCellMouseEventArgs e)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         cell.OnMouseDown(e);
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4171,12 +4171,12 @@ public class DataGridViewHeaderCellTests
 
                 Application.EnableVisualStyles();
 
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
+                using SubDataGridViewHeaderCell cellTemplate = new();
+                using DataGridViewColumn column = new()
                 {
                     CellTemplate = cellTemplate
                 };
-                using var control = new DataGridView
+                using DataGridView control = new()
                 {
                     EnableHeadersVisualStyles = enableHeadersVisualStyles
                 };
@@ -4197,18 +4197,18 @@ public class DataGridViewHeaderCellTests
         {
             Application.EnableVisualStyles();
 
-            using var cellTemplate = new SubDataGridViewHeaderCell();
-            using var column = new DataGridViewColumn
+            using SubDataGridViewHeaderCell cellTemplate = new();
+            using DataGridViewColumn column = new()
             {
                 CellTemplate = cellTemplate
             };
-            using var control = new DataGridView
+            using DataGridView control = new()
             {
                 EnableHeadersVisualStyles = true
             };
             control.Columns.Add(column);
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-            var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
+            DataGridViewCellMouseEventArgs e = new(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseDown(e));
             Assert.Equal(VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal, cell.ButtonState);
         }).Dispose();
@@ -4217,12 +4217,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseDown_NullEWithDataGridView_ThrowsNullReferenceException()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         Assert.Throws<NullReferenceException>(() => cell.OnMouseDown(null));
@@ -4236,7 +4236,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_OnMouseEnter_Invoke_Nop(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         cell.OnMouseEnter(rowIndex);
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4252,12 +4252,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, 1)]
     public void DataGridViewHeaderCell_OnMouseEnter_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = enableHeadersVisualStyles
         };
@@ -4280,12 +4280,12 @@ public class DataGridViewHeaderCellTests
             return;
         }
 
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = true
         };
@@ -4302,7 +4302,7 @@ public class DataGridViewHeaderCellTests
     [InlineData(1)]
     public void DataGridViewHeaderCell_OnMouseLeave_Invoke_Nop(int rowIndex)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         cell.OnMouseLeave(rowIndex);
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4318,12 +4318,12 @@ public class DataGridViewHeaderCellTests
     [InlineData(false, 1)]
     public void DataGridViewHeaderCell_OnMouseLeave_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, int rowIndex)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = enableHeadersVisualStyles
         };
@@ -4346,12 +4346,12 @@ public class DataGridViewHeaderCellTests
             return;
         }
 
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = true
         };
@@ -4378,12 +4378,12 @@ public class DataGridViewHeaderCellTests
 
             Application.EnableVisualStyles();
 
-            using var cellTemplate = new SubDataGridViewHeaderCell();
-            using var column = new DataGridViewColumn
+            using SubDataGridViewHeaderCell cellTemplate = new();
+            using DataGridViewColumn column = new()
             {
                 CellTemplate = cellTemplate
             };
-            using var control = new DataGridView
+            using DataGridView control = new()
             {
                 EnableHeadersVisualStyles = enableHeadersVisualStyles
             };
@@ -4408,12 +4408,12 @@ public class DataGridViewHeaderCellTests
 
             Application.EnableVisualStyles();
 
-            using var cellTemplate = new SubDataGridViewHeaderCell();
-            using var column = new DataGridViewColumn
+            using SubDataGridViewHeaderCell cellTemplate = new();
+            using DataGridViewColumn column = new()
             {
                 CellTemplate = cellTemplate
             };
-            using var control = new DataGridView
+            using DataGridView control = new()
             {
                 EnableHeadersVisualStyles = true
             };
@@ -4429,7 +4429,7 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(OnMouseDown_TestData))]
     public void DataGridViewHeaderCell_OnMouseUp_Invoke_Nop(DataGridViewCellMouseEventArgs e)
     {
-        using var cell = new SubDataGridViewHeaderCell();
+        using SubDataGridViewHeaderCell cell = new();
         cell.OnMouseUp(e);
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
@@ -4465,12 +4465,12 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(OnMouseUp_WithDataGridView_TestData))]
     public void DataGridViewHeaderCell_OnMouseUp_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = enableHeadersVisualStyles
         };
@@ -4491,19 +4491,19 @@ public class DataGridViewHeaderCellTests
             return;
         }
 
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView
+        using DataGridView control = new()
         {
             EnableHeadersVisualStyles = true
         };
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
 
-        var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
+        DataGridViewCellMouseEventArgs e = new(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
         Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseUp(e));
     }
 
@@ -4549,12 +4549,12 @@ public class DataGridViewHeaderCellTests
 
                 Application.EnableVisualStyles();
 
-                using var cellTemplate = new SubDataGridViewHeaderCell();
-                using var column = new DataGridViewColumn
+                using SubDataGridViewHeaderCell cellTemplate = new();
+                using DataGridViewColumn column = new()
                 {
                     CellTemplate = cellTemplate
                 };
-                using var control = new DataGridView
+                using DataGridView control = new()
                 {
                     EnableHeadersVisualStyles = enableHeadersVisualStyles
                 };
@@ -4576,18 +4576,18 @@ public class DataGridViewHeaderCellTests
         {
             Application.EnableVisualStyles();
 
-            using var cellTemplate = new SubDataGridViewHeaderCell();
-            using var column = new DataGridViewColumn
+            using SubDataGridViewHeaderCell cellTemplate = new();
+            using DataGridViewColumn column = new()
             {
                 CellTemplate = cellTemplate
             };
-            using var control = new DataGridView
+            using DataGridView control = new()
             {
                 EnableHeadersVisualStyles = true
             };
             control.Columns.Add(column);
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
-            var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
+            DataGridViewCellMouseEventArgs e = new(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseUp(e));
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
         }).Dispose();
@@ -4596,12 +4596,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseUp_NullEWithDataGridView_ThrowsNullReferenceException()
     {
-        using var cellTemplate = new SubDataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using SubDataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         Assert.Throws<NullReferenceException>(() => cell.OnMouseUp(null));
@@ -4611,8 +4611,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_Paint_NullCellStyle_ThrowsArgumentNullException()
     {
-        using var cell = new SubDataGridViewHeaderCell();
-        using var image = new Bitmap(10, 10);
+        using SubDataGridViewHeaderCell cell = new();
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentNullException>("cellStyle", () => cell.Paint(graphics, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, null, null, null, null, null, DataGridViewPaintParts.All));
     }
@@ -4620,15 +4620,15 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_ToString_Invoke_ReturnsExpected()
     {
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewHeaderCell cell = new();
         Assert.Equal("DataGridViewHeaderCell { ColumnIndex=-1, RowIndex=-1 }", cell.ToString());
     }
 
     [WinFormsFact]
     public void DataGridViewHeaderCell_ToString_InvokeWithRow_ReturnsExpected()
     {
-        using var row = new DataGridViewRow();
-        using var cell = new DataGridViewHeaderCell();
+        using DataGridViewRow row = new();
+        using DataGridViewHeaderCell cell = new();
         row.Cells.Add(cell);
         Assert.Equal("DataGridViewHeaderCell { ColumnIndex=-1, RowIndex=-1 }", cell.ToString());
     }
@@ -4636,8 +4636,8 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_ToString_InvokeColumnHeaderCell_ReturnsExpected()
     {
-        using var column = new DataGridViewColumn();
-        using var cell = new DataGridViewColumnHeaderCell();
+        using DataGridViewColumn column = new();
+        using DataGridViewColumnHeaderCell cell = new();
         column.HeaderCell = cell;
         Assert.Equal("DataGridViewColumnHeaderCell { ColumnIndex=-1 }", cell.ToString());
     }
@@ -4645,12 +4645,12 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_ToString_InvokeWithDataGridView_ReturnsExpected()
     {
-        using var cellTemplate = new DataGridViewHeaderCell();
-        using var column = new DataGridViewColumn
+        using DataGridViewHeaderCell cellTemplate = new();
+        using DataGridViewColumn column = new()
         {
             CellTemplate = cellTemplate
         };
-        using var control = new DataGridView();
+        using DataGridView control = new();
         control.Columns.Add(column);
         DataGridViewCell cell = control.Rows[0].Cells[0];
         Assert.Equal("DataGridViewHeaderCell { ColumnIndex=0, RowIndex=0 }", cell.ToString());

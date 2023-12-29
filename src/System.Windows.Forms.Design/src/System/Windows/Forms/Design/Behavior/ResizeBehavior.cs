@@ -376,7 +376,7 @@ internal class ResizeBehavior : Behavior
                             using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
                             {
                                 graphics.SetClip(borderRect);
-                                using (Region newRegion = new Region(borderRect))
+                                using (Region newRegion = new(borderRect))
                                 {
                                     newRegion.Exclude(Rectangle.Inflate(borderRect, -BorderSize, -BorderSize));
                                     BehaviorService.Invalidate(newRegion);
@@ -468,7 +468,7 @@ internal class ResizeBehavior : Behavior
         // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
         if (_lastMouseAbs != Point.Empty)
         {
-            var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
+            Point mouseLocAbs = new(mouseLoc.X, mouseLoc.Y);
             PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref mouseLocAbs);
             if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
             {
@@ -584,7 +584,7 @@ internal class ResizeBehavior : Behavior
         }
 
         // IF WE ARE SNAPPING TO A CONTROL, then we also need to adjust for the offset between the initialPoint (where the MouseDown happened) and the edge of the control otherwise we would be those pixels off when resizing the control. Remember that snaplines are based on the targetControl, so we need to use the targetControl to figure out the offset.
-        Rectangle controlBounds = new Rectangle(_resizeComponents[0].resizeBounds.X, _resizeComponents[0].resizeBounds.Y,
+        Rectangle controlBounds = new(_resizeComponents[0].resizeBounds.X, _resizeComponents[0].resizeBounds.Y,
                                                   _resizeComponents[0].resizeBounds.Width, _resizeComponents[0].resizeBounds.Height);
         if ((_didSnap) && (targetControl.Parent is not null))
         {
@@ -783,13 +783,13 @@ internal class ResizeBehavior : Behavior
                 // render the resize border
                 if (!newBorderRect.IsEmpty)
                 {
-                    using (Region newRegion = new Region(newBorderRect))
+                    using (Region newRegion = new(newBorderRect))
                     {
                         newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
                         // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
                         if (needToUpdate)
                         {
-                            using (Region oldRegion = new Region(oldBorderRect))
+                            using (Region oldRegion = new(oldBorderRect))
                             {
                                 oldRegion.Exclude(Rectangle.Inflate(oldBorderRect, -BorderSize, -BorderSize));
                                 BehaviorService.Invalidate(oldRegion);

@@ -32,8 +32,8 @@ public class FontTests
     [MemberData(nameof(FontFamily_Equals_SameFamily_TestData))]
     public void Font_Equals_SameFontFamily(FontFamily fontFamily, float size)
     {
-        using (var font1 = new Font(fontFamily, size))
-        using (var font2 = new Font(fontFamily, size))
+        using (Font font1 = new(fontFamily, size))
+        using (Font font2 = new(fontFamily, size))
         {
             Assert.True(font1.Equals(font2));
         }
@@ -43,8 +43,8 @@ public class FontTests
     [MemberData(nameof(FontFamily_Equals_DifferentFamily_TestData))]
     public void Font_Equals_DifferentFontFamily(FontFamily fontFamily1, FontFamily fontFamily2)
     {
-        using (var font1 = new Font(fontFamily1, 9))
-        using (var font2 = new Font(fontFamily2, 9))
+        using (Font font1 = new(fontFamily1, 9))
+        using (Font font2 = new(fontFamily2, 9))
         {
             // In some Linux distros all the default fonts live under the same family (Fedora, Centos, Redhat)
             if (font1.FontFamily.GetHashCode() != font2.FontFamily.GetHashCode())
@@ -65,7 +65,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily, emSize))
+            using (Font font = new(fontFamily, emSize))
             {
                 VerifyFont(font, fontFamily.Name, emSize, FontStyle.Regular, GraphicsUnit.Point, 1, false);
             }
@@ -82,7 +82,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily.Name, emSize))
+            using (Font font = new(fontFamily.Name, emSize))
             {
                 VerifyFont(font, fontFamily.Name, emSize, FontStyle.Regular, GraphicsUnit.Point, 1, false);
             }
@@ -111,7 +111,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily, emSize, style))
+            using (Font font = new(fontFamily, emSize, style))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, GraphicsUnit.Point, 1, false);
             }
@@ -128,7 +128,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily.Name, emSize, style))
+            using (Font font = new(fontFamily.Name, emSize, style))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, GraphicsUnit.Point, 1, false);
             }
@@ -155,7 +155,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily, emSize, unit))
+            using (Font font = new(fontFamily, emSize, unit))
             {
                 VerifyFont(font, fontFamily.Name, emSize, FontStyle.Regular, unit, 1, false);
             }
@@ -172,7 +172,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily.Name, emSize, unit))
+            using (Font font = new(fontFamily.Name, emSize, unit))
             {
                 VerifyFont(font, fontFamily.Name, emSize, FontStyle.Regular, unit, 1, false);
             }
@@ -201,7 +201,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily, emSize, style, unit))
+            using (Font font = new(fontFamily, emSize, style, unit))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, unit, 1, false);
             }
@@ -218,7 +218,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily.Name, emSize, style, unit))
+            using (Font font = new(fontFamily.Name, emSize, style, unit))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, unit, 1, false);
             }
@@ -247,7 +247,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily, emSize, style, unit, gdiCharSet))
+            using (Font font = new(fontFamily, emSize, style, unit, gdiCharSet))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, unit, gdiCharSet, false);
             }
@@ -264,7 +264,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily.Name, emSize, style, unit, gdiCharSet))
+            using (Font font = new(fontFamily.Name, emSize, style, unit, gdiCharSet))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, unit, gdiCharSet, false);
             }
@@ -293,7 +293,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily, emSize, style, unit, gdiCharSet, gdiVerticalFont))
+            using (Font font = new(fontFamily, emSize, style, unit, gdiCharSet, gdiVerticalFont))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, unit, gdiCharSet, gdiVerticalFont);
             }
@@ -310,7 +310,7 @@ public class FontTests
     {
         try
         {
-            using (var font = new Font(fontFamily.Name, emSize, style, unit, gdiCharSet, gdiVerticalFont))
+            using (Font font = new(fontFamily.Name, emSize, style, unit, gdiCharSet, gdiVerticalFont))
             {
                 VerifyFont(font, fontFamily.Name, emSize, style, unit, gdiCharSet, gdiVerticalFont);
             }
@@ -325,7 +325,7 @@ public class FontTests
     public void Ctor_FamilyNamePrefixedWithAtSign_StripsSign()
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font($"@{family.Name}", 10))
+        using (Font font = new($"@{family.Name}", 10))
         {
             Assert.Equal(family.Name, font.Name);
             Assert.Equal($"@{family.Name}", font.OriginalFontName);
@@ -343,10 +343,10 @@ public class FontTests
     {
         using (FontFamily family = FontFamily.GenericSerif)
         {
-            var font = new Font(family, 10);
+            Font font = new(family, 10);
             font.Dispose();
 
-            using (var copy = new Font(font, FontStyle.Italic))
+            using (Font copy = new(font, FontStyle.Italic))
             {
                 Assert.Equal(FontStyle.Italic, copy.Style);
                 Assert.Equal(family.Name, copy.Name);
@@ -427,7 +427,7 @@ public class FontTests
     public void Clone_Invoke_ReturnsExpected()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true))
+        using (Font font = new(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true))
         {
             Font clone = Assert.IsType<Font>(font.Clone());
             Assert.NotSame(font, clone);
@@ -446,7 +446,7 @@ public class FontTests
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
         {
-            var font = new Font(family, 10);
+            Font font = new(family, 10);
             font.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => font.Clone());
@@ -456,7 +456,7 @@ public class FontTests
     public static IEnumerable<object[]> Equals_TestData()
     {
         FontFamily family = FontFamily.GenericSansSerif;
-        var font = new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true);
+        Font font = new(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true);
 
         yield return new object[] { font, font, true };
         yield return new object[] { font.Clone(), new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true), false };
@@ -503,7 +503,7 @@ public class FontTests
     [Fact]
     public void FromHdc_GraphicsHdc_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             IntPtr hdc = graphics.GetHdc();
@@ -528,7 +528,7 @@ public class FontTests
     public void GetHeight_Parameterless_ReturnsExpected()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10))
+        using (Font font = new(family, 10))
         {
             float height = font.GetHeight();
             AssertExtensions.GreaterThan(height, 0);
@@ -541,8 +541,8 @@ public class FontTests
     public void GetHeight_Graphics_ReturnsExpected()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10))
-        using (var image = new Bitmap(10, 10))
+        using (Font font = new(family, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.Equal((double)font.GetHeight(graphics.DpiY), font.GetHeight(graphics), 5);
@@ -559,7 +559,7 @@ public class FontTests
     public void GetHeight_Dpi_ReturnsExpected(float dpi, float expected)
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10))
+        using (Font font = new(family, 10))
         {
             Assert.Equal((double)expected, font.GetHeight(dpi), 5);
         }
@@ -569,7 +569,7 @@ public class FontTests
     public void GetHeight_NullGraphics_ThrowsArgumentNullException()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10))
+        using (Font font = new(family, 10))
         {
             AssertExtensions.Throws<ArgumentNullException>("graphics", () => font.GetHeight(null));
         }
@@ -579,8 +579,8 @@ public class FontTests
     public void GetHeight_DisposedGraphics_ThrowsArgumentException()
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10))
-        using (var image = new Bitmap(10, 10))
+        using (Font font = new(family, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -593,10 +593,10 @@ public class FontTests
     public void GetHeight_Disposed_ThrowsArgumentException()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var font = new Font(family, 10);
+            Font font = new(family, 10);
             font.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => font.GetHeight());
@@ -626,7 +626,7 @@ public class FontTests
 
         using (FontFamily family = FontFamily.GenericMonospace)
         {
-            var logFont = new LOGFONT
+            LOGFONT logFont = new()
             {
                 lfFaceName = family.Name,
                 lfWeight = weight,
@@ -645,7 +645,7 @@ public class FontTests
     [Fact]
     public void FromLogFont_NullLogFont_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             IntPtr hdc = graphics.GetHdc();
@@ -672,13 +672,13 @@ public class FontTests
     [Fact]
     public void FromLogFont_InvalidLogFont_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             IntPtr hdc = graphics.GetHdc();
             try
             {
-                var logFont = new LOGFONT();
+                LOGFONT logFont = new();
                 AssertExtensions.Throws<ArgumentException>(null, () => Font.FromLogFont(logFont));
                 AssertExtensions.Throws<ArgumentException>(null, () => Font.FromLogFont(logFont, hdc));
             }
@@ -693,13 +693,13 @@ public class FontTests
     public void FromLogFont_UnblittableStruct()
     {
         const byte OUT_TT_ONLY_PRECIS = 7;
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetHdc();
             try
             {
-                var logFont = new UnblittableLOGFONT
+                UnblittableLOGFONT logFont = new()
                 {
                     lfOutPrecision = OUT_TT_ONLY_PRECIS
                 };
@@ -748,7 +748,7 @@ public class FontTests
     public void SizeInPoints_Get_ReturnsExpected(GraphicsUnit unit)
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10, unit))
+        using (Font font = new(family, 10, unit))
         {
             float sizeInPoints = font.SizeInPoints;
             if (unit == GraphicsUnit.Point)
@@ -769,9 +769,9 @@ public class FontTests
     public void ToLogFont_Invoke_ReturnsExpected(FontStyle fontStyle, byte gdiCharSet, bool gdiVerticalFont, string expectedNamePrefix, int expectedWeight)
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10, fontStyle, GraphicsUnit.Point, gdiCharSet, gdiVerticalFont))
+        using (Font font = new(family, 10, fontStyle, GraphicsUnit.Point, gdiCharSet, gdiVerticalFont))
         {
-            var logFont = new LOGFONT();
+            LOGFONT logFont = new();
             font.ToLogFont(logFont);
 
             Assert.Equal(-13, logFont.lfHeight);
@@ -801,13 +801,13 @@ public class FontTests
     public void ToLogFont_InvokeGraphics_ReturnsExpected(TextRenderingHint textRenderingHint)
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10))
-        using (var image = new Bitmap(10, 10))
+        using (Font font = new(family, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.TextRenderingHint = textRenderingHint;
 
-            var logFont = new LOGFONT();
+            LOGFONT logFont = new();
             font.ToLogFont(logFont, graphics);
 
             Assert.Equal(-13, logFont.lfHeight);
@@ -831,8 +831,8 @@ public class FontTests
     public void ToLogFont_NullLogFont_ThrowsArgumentNullException()
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10))
-        using (var image = new Bitmap(10, 10))
+        using (Font font = new(family, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             Assert.Throws<ArgumentNullException>(() => font.ToLogFont(null));
@@ -844,7 +844,7 @@ public class FontTests
     public void ToLogFont_NullGraphics_ThrowsArgumentNullException()
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10))
+        using (Font font = new(family, 10))
         {
             AssertExtensions.Throws<ArgumentNullException>("graphics", () => font.ToLogFont(new LOGFONT(), null));
         }
@@ -854,8 +854,8 @@ public class FontTests
     public void ToLogFont_DisposedGraphics_ThrowsArgumentException()
     {
         using (FontFamily family = FontFamily.GenericMonospace)
-        using (var font = new Font(family, 10))
-        using (var image = new Bitmap(10, 10))
+        using (Font font = new(family, 10))
+        using (Bitmap image = new(10, 10))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -888,7 +888,7 @@ public class FontTests
     public void ToHfont_SimpleFont_Roundtrips()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10))
+        using (Font font = new(family, 10))
         {
             IntPtr hfont = font.ToHfont();
             Assert.NotEqual(IntPtr.Zero, hfont);
@@ -903,7 +903,7 @@ public class FontTests
     public void ToHfont_ComplicatedFont_DoesNotRoundtrip()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true))
+        using (Font font = new(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true))
         {
             IntPtr hfont = font.ToHfont();
             Assert.NotEqual(IntPtr.Zero, hfont);
@@ -918,10 +918,10 @@ public class FontTests
     public void ToHfont_Disposed_ThrowsArgumentException()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var font = new Font(family, 10);
+            Font font = new(family, 10);
             font.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => font.ToHfont());
@@ -932,7 +932,7 @@ public class FontTests
     public void ToString_Invoke_ReturnsExpected()
     {
         using (FontFamily family = FontFamily.GenericSansSerif)
-        using (var font = new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true))
+        using (Font font = new(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: true))
         {
             Assert.Equal($"[Font: Name={family.Name}, Size=10, Units=4, GdiCharSet=10, GdiVerticalFont=True]", font.ToString());
         }
@@ -961,10 +961,10 @@ public class FontTests
     public void GetHashCode_DifferentNameSameSizeStyleUnit_HashCodeIsNotSame()
     {
         using FontFamily family1 = FontFamily.GenericSansSerif;
-        using var font1 = new Font(family1, 1, FontStyle.Bold, GraphicsUnit.Point);
+        using Font font1 = new(family1, 1, FontStyle.Bold, GraphicsUnit.Point);
 
         using FontFamily family2 = FontFamily.GenericMonospace;
-        using var font2 = new Font(family2, 1, FontStyle.Bold, GraphicsUnit.Point);
+        using Font font2 = new(family2, 1, FontStyle.Bold, GraphicsUnit.Point);
         // This test depends on machine setup and whether the fonts we use are installed or not.
         // If not installed we could get the same font for the two Font families we are testing for.
         if (font1.Name.Equals(font2.Name, StringComparison.OrdinalIgnoreCase))

@@ -15,14 +15,14 @@ public class SolidBrushTests
     [MemberData(nameof(Colors_TestData))]
     public void Ctor_Color(Color color, Color expectedColor)
     {
-        var brush = new SolidBrush(color);
+        SolidBrush brush = new(color);
         Assert.Equal(expectedColor, brush.Color);
     }
 
     [Fact]
     public void Clone_Color_ReturnsClone()
     {
-        var brush = new SolidBrush(Color.PeachPuff);
+        SolidBrush brush = new(Color.PeachPuff);
         SolidBrush clone = Assert.IsType<SolidBrush>(brush.Clone());
 
         Assert.NotSame(clone, brush);
@@ -50,7 +50,7 @@ public class SolidBrushTests
     [Fact]
     public void Clone_Disposed_ThrowsArgumentException()
     {
-        var brush = new SolidBrush(Color.LavenderBlush);
+        SolidBrush brush = new(Color.LavenderBlush);
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
@@ -59,7 +59,7 @@ public class SolidBrushTests
     [Fact]
     public void Color_EmptyAndGetDisposed_ThrowsArgumentException()
     {
-        var brush = new SolidBrush(new Color());
+        SolidBrush brush = new(new Color());
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Color);
@@ -68,7 +68,7 @@ public class SolidBrushTests
     [Fact]
     public void Color_NonEmptyAndGetDisposed_ReturnsExpected()
     {
-        var brush = new SolidBrush(Color.Aquamarine);
+        SolidBrush brush = new(Color.Aquamarine);
         brush.Dispose();
 
         Assert.Equal(Color.Aquamarine, brush.Color);
@@ -77,14 +77,14 @@ public class SolidBrushTests
     [Fact]
     public void Color_SetValid_GetReturnsExpected()
     {
-        var brush = new SolidBrush(Color.Goldenrod) { Color = Color.GhostWhite };
+        SolidBrush brush = new(Color.Goldenrod) { Color = Color.GhostWhite };
         Assert.Equal(Color.GhostWhite, brush.Color);
     }
 
     [Fact]
     public void Color_SetDisposed_ThrowsArgumentException()
     {
-        var brush = new SolidBrush(new Color());
+        SolidBrush brush = new(new Color());
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Color = Color.WhiteSmoke);
@@ -100,7 +100,7 @@ public class SolidBrushTests
     [Fact]
     public void Dispose_MultipleTimes_Success()
     {
-        var brush = new SolidBrush(Color.Plum);
+        SolidBrush brush = new(Color.Plum);
         brush.Dispose();
         brush.Dispose();
     }

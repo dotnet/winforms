@@ -378,14 +378,14 @@ public partial class ResXResourceReader : IResourceReader
             {
                 Point pt = GetPosition(reader);
                 string newMessage = string.Format(SR.SerializationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, se.Message);
-                XmlException xml = new XmlException(newMessage, se, pt.Y, pt.X);
+                XmlException xml = new(newMessage, se, pt.Y, pt.X);
                 throw new SerializationException(newMessage, xml);
             }
             catch (TargetInvocationException tie)
             {
                 Point pt = GetPosition(reader);
                 string newMessage = string.Format(SR.InvocationException, reader[ResXResourceWriter.TypeStr], pt.Y, pt.X, tie.InnerException?.Message);
-                XmlException xml = new XmlException(newMessage, tie.InnerException, pt.Y, pt.X);
+                XmlException xml = new(newMessage, tie.InnerException, pt.Y, pt.X);
                 throw new TargetInvocationException(newMessage, xml);
             }
             catch (XmlException e)
@@ -401,7 +401,7 @@ public partial class ResXResourceReader : IResourceReader
                 else
                 {
                     Point pt = GetPosition(reader);
-                    XmlException xmlEx = new XmlException(e.Message, e, pt.Y, pt.X);
+                    XmlException xmlEx = new(e.Message, e, pt.Y, pt.X);
                     throw new ArgumentException(string.Format(SR.InvalidResXFile, xmlEx.Message), xmlEx);
                 }
             }
@@ -513,7 +513,7 @@ public partial class ResXResourceReader : IResourceReader
         string? typeName = reader[ResXResourceWriter.NameStr];
 
         // Let this throw out the way it historically did (argument null)
-        AssemblyName assemblyName = new AssemblyName(typeName!);
+        AssemblyName assemblyName = new(typeName!);
 
         if (string.IsNullOrEmpty(alias))
         {
@@ -610,7 +610,7 @@ public partial class ResXResourceReader : IResourceReader
             throw new ArgumentException(string.Format(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
         }
 
-        ResXDataNode dataNode = new ResXDataNode(nodeInfo, BasePath);
+        ResXDataNode dataNode = new(nodeInfo, BasePath);
 
         if (UseResXDataNodes)
         {

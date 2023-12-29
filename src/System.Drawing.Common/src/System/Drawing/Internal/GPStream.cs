@@ -18,7 +18,7 @@ internal sealed partial class GPStream : Ole32.IStream
         if (makeSeekable && !stream.CanSeek)
         {
             // Copy to a memory stream so we can seek
-            MemoryStream memoryStream = new MemoryStream();
+            MemoryStream memoryStream = new();
             stream.CopyTo(memoryStream);
             _dataStream = memoryStream;
         }
@@ -54,7 +54,7 @@ internal sealed partial class GPStream : Ole32.IStream
         ActualizeVirtualPosition();
 
         // Stream Span API isn't available in 2.0
-        Span<byte> buffer = new Span<byte>(pv, checked((int)cb));
+        Span<byte> buffer = new(pv, checked((int)cb));
         int read = _dataStream.Read(buffer);
 
         if (pcbRead != null)
@@ -164,7 +164,7 @@ internal sealed partial class GPStream : Ole32.IStream
     {
         ActualizeVirtualPosition();
 
-        var buffer = new ReadOnlySpan<byte>(pv, checked((int)cb));
+        ReadOnlySpan<byte> buffer = new(pv, checked((int)cb));
         _dataStream.Write(buffer);
 
         if (pcbWritten != null)

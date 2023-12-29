@@ -46,7 +46,7 @@ internal class TabPageDesigner : PanelDesigner
         Rectangle translatedBounds = Rectangle.Empty;
 
         // create our glyph, and set its cursor appropriately
-        ControlBodyGlyph g = new ControlBodyGlyph(translatedBounds, Cursor.Current, Control, this);
+        ControlBodyGlyph g = new(translatedBounds, Cursor.Current, Control, this);
 
         return g;
     }

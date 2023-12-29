@@ -66,7 +66,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            DesignerActionListCollection actionLists = new DesignerActionListCollection();
+            DesignerActionListCollection actionLists = new();
             actionLists.AddRange(base.ActionLists);
             _actionLists ??= new ToolStripActionList(this);
 
@@ -144,7 +144,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            ArrayList items = new ArrayList();
+            ArrayList items = new();
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is not DesignerToolStripControlHost)
@@ -486,7 +486,7 @@ internal class ToolStripDesigner : ControlDesigner
                 Rectangle bounds = dropDownItemDesigner.GetGlyphBounds();
                 Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
                 // Initialize Glyph
-                ToolStripItemGlyph bodyGlyphForddItem = new ToolStripItemGlyph(item, dropDownItemDesigner, bounds, toolStripBehavior);
+                ToolStripItemGlyph bodyGlyphForddItem = new(item, dropDownItemDesigner, bounds, toolStripBehavior);
                 // Set the glyph for the item .. so that we can remove it later....
                 dropDownItemDesigner.bodyGlyph = bodyGlyphForddItem;
                 // Add ItemGlyph to the Collection
@@ -662,7 +662,7 @@ internal class ToolStripDesigner : ControlDesigner
             {
                 Rectangle bounds = designer.GetGlyphBounds();
                 Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
-                ToolStripItemGlyph bodyGlyphForItem = new ToolStripItemGlyph(item, designer, bounds, toolStripBehavior);
+                ToolStripItemGlyph bodyGlyphForItem = new(item, designer, bounds, toolStripBehavior);
 
                 // Add ItemGlyph to the Collection
                 GetService<SelectionManager>().BodyGlyphAdorner.Glyphs.Insert(0, bodyGlyphForItem);
@@ -1302,7 +1302,7 @@ internal class ToolStripDesigner : ControlDesigner
                         if (IsGlyphTotallyVisible(itemBounds, parentBounds) && item.Visible)
                         {
                             // Add Glyph ONLY AFTER item width is changed...
-                            ToolStripItemGlyph bodyGlyphForItem = new ToolStripItemGlyph(item, itemDesigner, itemBounds, toolStripBehavior);
+                            ToolStripItemGlyph bodyGlyphForItem = new(item, itemDesigner, itemBounds, toolStripBehavior);
                             itemDesigner.bodyGlyph = bodyGlyphForItem;
                             // Add ItemGlyph to the Collection
                             selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyphForItem);
@@ -1321,7 +1321,7 @@ internal class ToolStripDesigner : ControlDesigner
     public override GlyphCollection GetGlyphs(GlyphSelectionType selType)
     {
         // get the default glyphs for this component.
-        GlyphCollection glyphs = new GlyphCollection();
+        GlyphCollection glyphs = new();
         ICollection selComponents = SelectionService.GetSelectedComponents();
         foreach (object comp in selComponents)
         {
@@ -1344,7 +1344,7 @@ internal class ToolStripDesigner : ControlDesigner
         {
             // get the adornerwindow-relative coords for the container control
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
-            Rectangle translatedBounds = new Rectangle(loc, ((Control)Component).Size);
+            Rectangle translatedBounds = new(loc, ((Control)Component).Size);
             int glyphOffset = (int)(DesignerUtils.CONTAINERGRABHANDLESIZE * .5);
             // if the control is too small for our ideal position...
             if (translatedBounds.Width < 2 * DesignerUtils.CONTAINERGRABHANDLESIZE)
@@ -1352,8 +1352,8 @@ internal class ToolStripDesigner : ControlDesigner
                 glyphOffset = -1 * glyphOffset;
             }
 
-            ContainerSelectorBehavior behavior = new ContainerSelectorBehavior(ToolStrip, Component.Site, true);
-            ContainerSelectorGlyph containerSelectorGlyph = new ContainerSelectorGlyph(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
+            ContainerSelectorBehavior behavior = new(ToolStrip, Component.Site, true);
+            ContainerSelectorGlyph containerSelectorGlyph = new(translatedBounds, DesignerUtils.CONTAINERGRABHANDLESIZE, glyphOffset, behavior);
             glyphs.Insert(0, containerSelectorGlyph);
         }
 
@@ -1661,7 +1661,7 @@ internal class ToolStripDesigner : ControlDesigner
 
         string nameSuffix = componentType.Name;
         // remove all the non letter and number characters. Append length of the item name...
-        Text.StringBuilder name = new Text.StringBuilder(text.Length + nameSuffix.Length);
+        Text.StringBuilder name = new(text.Length + nameSuffix.Length);
         bool nextCharToUpper = false;
         for (int i = 0; i < text.Length; i++)
         {
@@ -1780,7 +1780,7 @@ internal class ToolStripDesigner : ControlDesigner
         // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyphs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
         bool dropAtHead = false;
         ToolStrip parentToolStrip = ToolStrip;
-        var offset = new Point(de.X, de.Y);
+        Point offset = new(de.X, de.Y);
         offset = parentToolStrip.PointToClient(offset);
         if (ToolStrip.Orientation == Orientation.Horizontal)
         {

@@ -47,7 +47,7 @@ internal class PictureBoxDesigner : ControlDesigner
             ;
         }
 
-        Pen pen = new Pen(penColor);
+        Pen pen = new(penColor);
         pen.DashStyle = DashStyle.Dash;
 
         rc.Width--;

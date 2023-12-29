@@ -36,7 +36,7 @@ internal static class InputBuilder
     public static INPUT CharacterDown(char character)
     {
         ushort scanCode = character;
-        var input = new INPUT
+        INPUT input = new()
         {
             type = INPUT_TYPE.INPUT_KEYBOARD,
             Anonymous =

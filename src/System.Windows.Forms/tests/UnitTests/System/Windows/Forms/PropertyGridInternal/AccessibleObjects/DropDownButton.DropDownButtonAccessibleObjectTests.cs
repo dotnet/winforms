@@ -11,7 +11,7 @@ public class DropDownButton_DropDownButtonAccessibleObjectTests
     [WinFormsFact]
     public void DropDownButtonAccessibleObject_Ctor_Default()
     {
-        using DropDownButton dropDownButton = new DropDownButton();
+        using DropDownButton dropDownButton = new();
         DropDownButton.DropDownButtonAccessibleObject accessibleObject =
             new DropDownButton.DropDownButtonAccessibleObject(dropDownButton);
 
@@ -22,7 +22,7 @@ public class DropDownButton_DropDownButtonAccessibleObjectTests
     [WinFormsFact]
     public void DropDownButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
     {
-        using DropDownButton dropDownButton = new DropDownButton();
+        using DropDownButton dropDownButton = new();
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)dropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -37,7 +37,7 @@ public class DropDownButton_DropDownButtonAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void DomainUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
-        using DropDownButton dropDownButton = new DropDownButton();
+        using DropDownButton dropDownButton = new();
         AccessibleObject accessibleObject = dropDownButton.AccessibilityObject;
         VARIANT actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
         if (expected is null)
@@ -55,7 +55,7 @@ public class DropDownButton_DropDownButtonAccessibleObjectTests
     [WinFormsFact]
     public void DropDownButtonAccessibleObject_Role_IsPushButton_ByDefault()
     {
-        using DropDownButton dropDownButton = new DropDownButton();
+        using DropDownButton dropDownButton = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = dropDownButton.AccessibilityObject.Role;

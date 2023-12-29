@@ -26,7 +26,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsFact]
     public void ListBoxAccessibleObject_ControlType_IsList_IfAccessibleRoleIsDefault()
     {
-        using ListBox listBox = new ListBox();
+        using ListBox listBox = new();
         // AccessibleRole is not set = Default
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -40,7 +40,7 @@ public class ListBoxAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void ListBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using ListBox listBox = new ListBox();
+        using ListBox listBox = new();
         // AccessibleRole is not set = Default
 
         if (createControl)
@@ -73,7 +73,7 @@ public class ListBoxAccessibleObjectTests
     [MemberData(nameof(ListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ListBox listBox = new ListBox();
+        using ListBox listBox = new();
         listBox.AccessibleRole = role;
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -86,7 +86,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected()
     {
-        using ListBox listBox = new ListBox();
+        using ListBox listBox = new();
         AccessibleObject accessibleObject = listBox.AccessibilityObject;
 
         Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));

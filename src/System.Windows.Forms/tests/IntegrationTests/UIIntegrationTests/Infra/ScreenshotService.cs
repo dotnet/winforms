@@ -59,7 +59,7 @@ internal static class ScreenshotService
             return null;
         }
 
-        var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+        Bitmap bitmap = new(width, height, PixelFormat.Format32bppArgb);
 
         using (var graphics = Graphics.FromImage(bitmap))
         {
@@ -73,7 +73,7 @@ internal static class ScreenshotService
 
             if (Cursor.Current is { } cursor)
             {
-                var bounds = new Rectangle(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
+                Rectangle bounds = new(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
                 cursor.Draw(graphics, bounds);
             }
 

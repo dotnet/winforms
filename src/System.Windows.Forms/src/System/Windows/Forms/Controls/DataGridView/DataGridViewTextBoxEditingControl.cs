@@ -23,7 +23,7 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
 
     protected override AccessibleObject CreateAccessibilityInstance()
     {
-        var controlAccessibleObject = new DataGridViewTextBoxEditingControlAccessibleObject(this);
+        DataGridViewTextBoxEditingControlAccessibleObject controlAccessibleObject = new(this);
         _dataGridView?.SetAccessibleObjectParent(controlAccessibleObject);
         return controlAccessibleObject;
     }

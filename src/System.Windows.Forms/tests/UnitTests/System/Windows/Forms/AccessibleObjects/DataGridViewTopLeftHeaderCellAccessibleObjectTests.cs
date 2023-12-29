@@ -11,7 +11,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     [WinFormsFact]
     public void DataGridViewTopLeftHeaderCellAccessibleObject_Ctor_Default()
     {
-        var accessibleObject = new DataGridViewTopLeftHeaderCellAccessibleObject(null);
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null);
 
         Assert.Null(accessibleObject.Owner);
     }
@@ -88,7 +88,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     [WinFormsFact]
     public void DataGridViewTopLeftHeaderCellAccessibleObject_ControlType_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewTopLeftHeaderCellAccessibleObject(null);
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null);
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId;
 

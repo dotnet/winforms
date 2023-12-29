@@ -100,7 +100,7 @@ public class DragDropTests : ControlTestBase
 
             var startRect = form.DisplayRectangle;
             var startCoordinates = form.PointToScreen(GetCenter(startRect));
-            var endCoordinates = new Point(startCoordinates.X + 5, startCoordinates.Y + 5);
+            Point endCoordinates = new(startCoordinates.X + 5, startCoordinates.Y + 5);
             var virtualPointStart = ToVirtualPoint(startCoordinates);
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
@@ -315,7 +315,7 @@ public class DragDropTests : ControlTestBase
 
             var startRect = form.DisplayRectangle;
             var startCoordinates = form.PointToScreen(GetCenter(startRect));
-            var endCoordinates = new Point(startCoordinates.X + 5, startCoordinates.Y + 5);
+            Point endCoordinates = new(startCoordinates.X + 5, startCoordinates.Y + 5);
             var virtualPointStart = ToVirtualPoint(startCoordinates);
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
@@ -1043,7 +1043,7 @@ public class DragDropTests : ControlTestBase
             string dragAcceptRtf = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             if (File.Exists(dragAcceptRtf))
             {
-                string[] dropFiles = new string[] { dragAcceptRtf };
+                string[] dropFiles = [dragAcceptRtf];
                 DataObject data = new(DataFormats.FileDrop, dropFiles);
                 dragAcceptItem.DoDragDrop(data, DragDropEffects.All, _dragAcceptBmp, new Point(0, 16), false);
             }
@@ -1103,7 +1103,7 @@ public class DragDropTests : ControlTestBase
             string dragAcceptRtf = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             if (File.Exists(dragAcceptRtf))
             {
-                string[] dropFiles = new string[] { dragAcceptRtf };
+                string[] dropFiles = [dragAcceptRtf];
                 DataObject data = new(DataFormats.FileDrop, dropFiles);
                 PictureBoxDragSource.DoDragDrop(data, DragDropEffects.All, _dragImage, new Point(0, 16), false);
             }

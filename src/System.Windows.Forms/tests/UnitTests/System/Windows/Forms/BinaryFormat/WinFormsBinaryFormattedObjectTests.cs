@@ -8,7 +8,7 @@ namespace System.Windows.Forms.BinaryFormat.Tests;
 
 public class WinFormsBinaryFormattedObjectTests
 {
-    private static readonly Attribute[] s_visible = new Attribute[] { DesignerSerializationVisibilityAttribute.Visible };
+    private static readonly Attribute[] s_visible = [DesignerSerializationVisibilityAttribute.Visible];
 
     [Theory]
     [MemberData(nameof(BinaryFormattedObjects_TestData))]

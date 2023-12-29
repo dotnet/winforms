@@ -455,13 +455,7 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             if (Properties.GetInteger(PropDropDownWidth) != value)
             {
@@ -498,13 +492,7 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             if (Properties.GetInteger(PropDropDownHeight) != value)
             {
@@ -673,10 +661,7 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemHeight), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             ResetHeightCache();
 
@@ -744,10 +729,8 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            if (value < 1 || value > 100)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 100);
 
             _maxDropDownItems = (short)value;
         }
@@ -985,16 +968,8 @@ public partial class ComboBox : ListControl
                 return;
             }
 
-            int itemCount = 0;
-            if (_itemsCollection is not null)
-            {
-                itemCount = _itemsCollection.Count;
-            }
-
-            if (value < -1 || value >= itemCount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, _itemsCollection?.Count ?? 0);
 
             if (IsHandleCreated)
             {
@@ -1126,13 +1101,7 @@ public partial class ComboBox : ListControl
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             Select(value, SelectionLength);
         }
@@ -3403,14 +3372,10 @@ public partial class ComboBox : ListControl
         ArgumentOutOfRangeException.ThrowIfNegative(start);
 
         // the Length can be negative to support Selecting in the "reverse" direction..
+        // but start + length cannot be negative... this means Length is far negative...
+        ArgumentOutOfRangeException.ThrowIfLessThan(length, -start);
+
         int end = start + length;
-
-        // but end cannot be negative... this means Length is far negative...
-        if (end < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
-        }
-
         PInvoke.SendMessage(this, PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
     }
 
@@ -3570,7 +3535,7 @@ public partial class ComboBox : ListControl
             for (int i = 0; i < Items.Count; i++)
             {
                 int original = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
-                MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
+                MeasureItemEventArgs mievent = new(graphics, i, original);
                 OnMeasureItem(mievent);
                 if (mievent.ItemHeight != original)
                 {

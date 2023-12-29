@@ -30,7 +30,7 @@ public class CursorTests
     public void Cursor_Ctor_IntPtr()
     {
         Cursor sourceCursor = Cursors.AppStarting;
-        using var cursor = new Cursor(sourceCursor.Handle);
+        using Cursor cursor = new(sourceCursor.Handle);
         Assert.Equal(sourceCursor.Handle, cursor.Handle);
         Assert.Equal(sourceCursor.HotSpot, cursor.HotSpot);
         Assert.Equal(sourceCursor.Size, cursor.Size);
@@ -40,7 +40,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_IntPtr_Invalid()
     {
-        using var cursor = new Cursor(-1000);
+        using Cursor cursor = new(-1000);
         Assert.Equal(-1000, cursor.Handle);
         Assert.Equal(new Point(0, 0), cursor.HotSpot);
         Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
@@ -63,8 +63,8 @@ public class CursorTests
     [MemberData(nameof(Ctor_ValidFile_TestData))]
     public void Cursor_Ctor_Stream(string fileName, Point expectedHotSpot)
     {
-        using var stream = new MemoryStream(File.ReadAllBytes(fileName));
-        using var cursor = new Cursor(stream);
+        using MemoryStream stream = new(File.ReadAllBytes(fileName));
+        using Cursor cursor = new(stream);
         Assert.NotEqual(IntPtr.Zero, cursor.Handle);
         Assert.Equal(expectedHotSpot, cursor.HotSpot);
         Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
@@ -74,9 +74,9 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_Stream_NonStartPosition()
     {
-        using var stream = new MemoryStream(File.ReadAllBytes(Path.Combine("bitmaps", "cursor.cur")));
+        using MemoryStream stream = new(File.ReadAllBytes(Path.Combine("bitmaps", "cursor.cur")));
         stream.Position = 5;
-        using var cursor = new Cursor(stream);
+        using Cursor cursor = new(stream);
         Assert.NotNull(cursor);
     }
 
@@ -107,7 +107,7 @@ public class CursorTests
     [MemberData(nameof(Ctor_InvalidFile_TestData))]
     public void Cursor_Ctor_StreamNotIcon_ThrowsArgumentException(string fileName)
     {
-        using var stream = new MemoryStream(File.ReadAllBytes(fileName));
+        using MemoryStream stream = new(File.ReadAllBytes(fileName));
         Assert.Throws<ArgumentException>("stream", () => new Cursor(stream));
     }
 
@@ -115,7 +115,7 @@ public class CursorTests
     [MemberData(nameof(Ctor_ValidFile_TestData))]
     public void Cursor_Ctor_String(string fileName, Point expectedHotSpot)
     {
-        using var cursor = new Cursor(fileName);
+        using Cursor cursor = new(fileName);
         Assert.NotEqual(IntPtr.Zero, cursor.Handle);
         Assert.Equal(expectedHotSpot, cursor.HotSpot);
         Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
@@ -152,7 +152,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_Type_String()
     {
-        using var cursor = new Cursor(typeof(PropertyTabTests), "CustomPropertyTab");
+        using Cursor cursor = new(typeof(PropertyTabTests), "CustomPropertyTab");
         Assert.NotEqual(IntPtr.Zero, cursor.Handle);
         Assert.Equal(new Point(5, 8), cursor.HotSpot);
         Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
@@ -243,7 +243,7 @@ public class CursorTests
         try
         {
             // Set non-null.
-            Cursor value = new Cursor(Cursors.AppStarting.Handle);
+            Cursor value = new(Cursors.AppStarting.Handle);
             Cursor.Current = value;
             Assert.Equal(value.Handle, Cursor.Current.Handle);
 
@@ -310,7 +310,7 @@ public class CursorTests
     [StringWithNullData]
     public void Cursor_Tag_Set_GetReturnsExpected(object value)
     {
-        using var cursor = new Cursor(2)
+        using Cursor cursor = new(2)
         {
             Tag = value
         };
@@ -324,12 +324,12 @@ public class CursorTests
     [Fact]
     public void Cursor_CopyHandle_Invoke_Success()
     {
-        using var sourceCursor = new Cursor(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Cursor sourceCursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
         IntPtr handle = sourceCursor.CopyHandle();
         Assert.NotEqual(IntPtr.Zero, handle);
         Assert.NotEqual(sourceCursor.Handle, handle);
 
-        using var cursor = new Cursor(sourceCursor.Handle);
+        using Cursor cursor = new(sourceCursor.Handle);
         Assert.Equal(sourceCursor.Handle, cursor.Handle);
         Assert.Equal(sourceCursor.HotSpot, cursor.HotSpot);
         Assert.Equal(sourceCursor.Size, cursor.Size);
@@ -339,7 +339,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Dispose_InvokeOwned_Success()
     {
-        var cursor = new Cursor(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
         cursor.Dispose();
         Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
         Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
@@ -352,7 +352,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Dispose_InvokeNotOwned_Success()
     {
-        var cursor = new Cursor(2);
+        Cursor cursor = new(2);
         cursor.Dispose();
 
         // Cursors not owned should not be disposed.
@@ -375,8 +375,8 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_Draw_InvokeValidCursor_Success(Rectangle rectangle)
     {
-        using var cursor = new Cursor(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
-        using var image = new Bitmap(10, 10);
+        using Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.Draw(graphics, rectangle);
     }
@@ -385,8 +385,8 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_Draw_InvokeInvalidCursor_Success(Rectangle rectangle)
     {
-        using var cursor = new Cursor(-1000);
-        using var image = new Bitmap(10, 10);
+        using Cursor cursor = new(-1000);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.Draw(graphics, rectangle);
     }
@@ -402,7 +402,7 @@ public class CursorTests
     public void Cursor_Draw_DisposedGraphics_ThrowsArgumentException()
     {
         Cursor cursor = Cursors.AppStarting;
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
         Assert.Throws<ArgumentException>(() => cursor.Draw(graphics, new Rectangle(Point.Empty, cursor.Size)));
@@ -412,8 +412,8 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_DrawStretched_InvokeValidCursor_Success(Rectangle rectangle)
     {
-        using var cursor = new Cursor(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
-        using var image = new Bitmap(10, 10);
+        using Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.DrawStretched(graphics, rectangle);
     }
@@ -422,8 +422,8 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_DrawStretched_InvokeInvalidCursor_Success(Rectangle rectangle)
     {
-        using var cursor = new Cursor(-1000);
-        using var image = new Bitmap(10, 10);
+        using Cursor cursor = new(-1000);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.DrawStretched(graphics, rectangle);
     }
@@ -439,7 +439,7 @@ public class CursorTests
     public void Cursor_DrawStretched_DisposedGraphics_ThrowsArgumentException()
     {
         Cursor cursor = Cursors.AppStarting;
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
         Assert.Throws<ArgumentException>(() => cursor.DrawStretched(graphics, new Rectangle(Point.Empty, cursor.Size)));
@@ -447,7 +447,7 @@ public class CursorTests
 
     public static IEnumerable<object[]> Equals_Object_TestData()
     {
-        var cursor = new Cursor(Cursors.AppStarting.Handle);
+        Cursor cursor = new(Cursors.AppStarting.Handle);
         yield return new object[] { cursor, cursor, true };
         yield return new object[] { cursor, new Cursor(Cursors.AppStarting.Handle), true };
         yield return new object[] { cursor, new Cursor(Cursors.Arrow.Handle), false };
@@ -469,7 +469,7 @@ public class CursorTests
 
     public static IEnumerable<object[]> Equals_Cursor_TestData()
     {
-        var cursor = new Cursor(2);
+        Cursor cursor = new(2);
         yield return new object[] { cursor, cursor, true };
         yield return new object[] { cursor, new Cursor(2), true };
         yield return new object[] { cursor, new Cursor(1), false };
@@ -497,14 +497,14 @@ public class CursorTests
     [Fact]
     public void Cursor_ToString_CursorFromFile_ReturnsExpected()
     {
-        using var cursor = new Cursor(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
         Assert.Equal("[Cursor: System.Windows.Forms.Cursor]", cursor.ToString());
     }
 
     [Fact]
     public void Cursor_ToString_InvalidCursor_DoesNotThrowFormatException()
     {
-        using var cursor = new Cursor(2);
+        using Cursor cursor = new(2);
         _ = cursor.ToString();
     }
 }

@@ -21,7 +21,7 @@ public class IconConverterTest
         _icon = new Icon(Path.Combine("bitmaps", "TestIcon.ico"));
         _iconStr = _icon.ToString();
 
-        using (MemoryStream destStream = new MemoryStream())
+        using (MemoryStream destStream = new())
         {
             _icon.Save(destStream);
             _iconBytes = destStream.ToArray();

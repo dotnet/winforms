@@ -15,7 +15,7 @@ public class FontMetrics
     [InlineData("MS Gothic", 10.0f, 14)]
     public void Font_GetHeight(string family, float size, int height)
     {
-        using Font font = new Font(family, size);
+        using Font font = new(family, size);
         if (font.Name != family)
         {
             // Not installed on this machine
@@ -34,7 +34,7 @@ public class FontMetrics
     [InlineData("MS Gothic", 10.0f, 3, 4)]
     public void Font_GetTextMargins(string family, float size, int left, int right)
     {
-        using Font font = new Font(family, size);
+        using Font font = new(family, size);
         if (font.Name != family)
         {
             // Not installed on this machine
@@ -55,7 +55,7 @@ public class FontMetrics
     [InlineData("MS Gothic", 10.0f, 91, 14)]
     public void Font_GetTextExtent(string family, float size, int width, int height)
     {
-        using Font font = new Font(family, size);
+        using Font font = new(family, size);
         if (font.Name != family)
         {
             // Not installed on this machine
@@ -73,7 +73,7 @@ public class FontMetrics
     [MemberData(nameof(MeasureTextData))]
     public void Font_MeasureText(string family, float size, Size proposedSize, uint dt, Size expected)
     {
-        using Font font = new Font(family, size);
+        using Font font = new(family, size);
         if (font.Name != family)
         {
             // Not installed on this machine
@@ -130,7 +130,7 @@ public class FontMetrics
     [MemberData(nameof(AdjustData))]
     public unsafe void Font_AdjustForVerticalAlignment(string family, float size, Rectangle bounds, uint dt, Rectangle expected)
     {
-        using Font font = new Font(family, size);
+        using Font font = new(family, size);
         if (font.Name != family)
         {
             // Not installed on this machine

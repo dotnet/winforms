@@ -16,7 +16,7 @@ public class TaskDialogTests
             Application.EnableVisualStyles();
             Control.CheckForIllegalCrossThreadCalls = true;
 
-            TaskDialogPage page = new TaskDialogPage();
+            TaskDialogPage page = new();
             page.Created += (_, __) =>
             {
                 // Set the property in the same thread.
@@ -40,7 +40,7 @@ public class TaskDialogTests
             Application.EnableVisualStyles();
             Control.CheckForIllegalCrossThreadCalls = true;
 
-            TaskDialogPage page = new TaskDialogPage();
+            TaskDialogPage page = new();
             page.Created += (_, __) =>
             {
                 // Set the property in a different thread.

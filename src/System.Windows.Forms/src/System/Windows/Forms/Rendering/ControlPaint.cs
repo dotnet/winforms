@@ -431,7 +431,7 @@ public static partial class ControlPaint
 
         if (backgroundImageLayout == ImageLayout.Tile)
         {
-            using TextureBrush textureBrush = new TextureBrush(backgroundImage, WrapMode.Tile);
+            using TextureBrush textureBrush = new(backgroundImage, WrapMode.Tile);
 
             // Make sure the brush origin matches the display rectangle, not the client rectangle,
             // so the background image scrolls on AutoScroll forms.
@@ -479,7 +479,7 @@ public static partial class ControlPaint
                     imageRectangle.Offset(clipRect.Location);
                     Rectangle imageRect = imageRectangle;
                     imageRect.Intersect(clipRect);
-                    Rectangle partOfImageToDraw = new Rectangle(Point.Empty, imageRect.Size);
+                    Rectangle partOfImageToDraw = new(Point.Empty, imageRect.Size);
                     g.DrawImage(
                         backgroundImage,
                         imageRect,
@@ -493,7 +493,7 @@ public static partial class ControlPaint
                 {
                     Rectangle imageRect = imageRectangle;
                     imageRect.Intersect(clipRect);
-                    Rectangle partOfImageToDraw = new Rectangle(
+                    Rectangle partOfImageToDraw = new(
                         new Point(imageRect.X - imageRectangle.X, imageRect.Y - imageRectangle.Y),
                         imageRect.Size);
 
@@ -509,7 +509,7 @@ public static partial class ControlPaint
             }
             else
             {
-                ImageAttributes imageAttrib = new ImageAttributes();
+                ImageAttributes imageAttrib = new();
                 imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                 g.DrawImage(
                     backgroundImage,
@@ -766,7 +766,7 @@ public static partial class ControlPaint
             case ButtonBorderStyle.Inset:
             case ButtonBorderStyle.Outset:
                 {
-                    HLSColor hlsColor = new HLSColor(topColor);
+                    HLSColor hlsColor = new(topColor);
                     float inc = InfinityToOne(1.0f / (topWidth - 1));
                     using DeviceContextHdcScope hdc = new(deviceContext);
                     for (int i = 0; i < topWidth; i++)
@@ -829,7 +829,7 @@ public static partial class ControlPaint
             case ButtonBorderStyle.Inset:
             case ButtonBorderStyle.Outset:
                 {
-                    HLSColor hlsColor = new HLSColor(leftColor);
+                    HLSColor hlsColor = new(leftColor);
                     float inc = InfinityToOne(1.0f / (leftWidth - 1));
                     using DeviceContextHdcScope hdc = new(deviceContext);
                     for (int i = 0; i < leftWidth; i++)
@@ -902,7 +902,7 @@ public static partial class ControlPaint
             case ButtonBorderStyle.Inset:
             case ButtonBorderStyle.Outset:
                 {
-                    HLSColor hlsColor = new HLSColor(bottomColor);
+                    HLSColor hlsColor = new(bottomColor);
                     float inc = InfinityToOne(1.0f / (bottomWidth - 1));
                     using DeviceContextHdcScope hdc = new(deviceContext);
                     for (int i = 0; i < bottomWidth; i++)
@@ -1092,7 +1092,7 @@ public static partial class ControlPaint
         if (style == ButtonBorderStyle.Inset)
         {
             // Button being pushed
-            HLSColor hls = new HLSColor(color);
+            HLSColor hls = new(color);
 
             // Top + left
             using var darkPen = hls.Darker(1.0f).GetCachedPenScope();
@@ -1131,7 +1131,7 @@ public static partial class ControlPaint
             Debug.Assert(style == ButtonBorderStyle.Outset, "Caller should have known how to use us.");
 
             bool stockColor = color.ToKnownColor() == SystemColors.Control.ToKnownColor();
-            HLSColor hls = new HLSColor(color);
+            HLSColor hls = new(color);
 
             // Top + left
             using var lightPen = (stockColor ? SystemColors.ControlLightLight : hls.Lighter(1.0f)).GetCachedPenScope();
@@ -1378,7 +1378,7 @@ public static partial class ControlPaint
         if (rectangle.Width < 0 || rectangle.Height < 0)
             throw new ArgumentOutOfRangeException(nameof(rectangle));
 
-        Rectangle offsetRectangle = new Rectangle(
+        Rectangle offsetRectangle = new(
             rectangle.X + 1,
             rectangle.Y + 1,
             rectangle.Width - 2,
@@ -1400,7 +1400,7 @@ public static partial class ControlPaint
 
                 // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
                 RECT rcCheck = new(rectangle.Size);
-                Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
+                Bitmap bitmap = new(rectangle.Width, rectangle.Height);
                 using (Graphics g2 = Graphics.FromImage(bitmap))
                 {
                     g2.Clear(Color.Transparent);
@@ -1470,8 +1470,8 @@ public static partial class ControlPaint
         ArgumentOutOfRangeException.ThrowIfNegative(width);
         ArgumentOutOfRangeException.ThrowIfNegative(height);
 
-        RECT rcFrame = new RECT(0, 0, width, height);
-        using Bitmap bitmap = new Bitmap(width, height);
+        RECT rcFrame = new(0, 0, width, height);
+        using Bitmap bitmap = new(width, height);
         using Graphics g2 = Graphics.FromImage(bitmap);
         g2.Clear(Color.Transparent);
 
@@ -1488,7 +1488,7 @@ public static partial class ControlPaint
         else
         {
             // Replace black/white with foreColor/backColor.
-            ImageAttributes attrs = new ImageAttributes();
+            ImageAttributes attrs = new();
             ColorMap cm1 = new()
             {
                 OldColor = Color.Black,
@@ -1530,7 +1530,7 @@ public static partial class ControlPaint
             ? enabled ? (s_grabBrushPrimary ??= Brushes.White) : SystemBrushes.Control
             : enabled ? (s_grabBrushSecondary ??= Brushes.Black) : SystemBrushes.Control;
 
-        Rectangle fillRect = new Rectangle(
+        Rectangle fillRect = new(
             rectangle.X + 1,
             rectangle.Y + 1,
             rectangle.Width - 1,
@@ -1572,7 +1572,7 @@ public static partial class ControlPaint
             int width = ((idealSize / pixelsBetweenDots.Width) + 1) * pixelsBetweenDots.Width;
             int height = ((idealSize / pixelsBetweenDots.Height) + 1) * pixelsBetweenDots.Height;
 
-            using Bitmap bitmap = new Bitmap(width, height);
+            using Bitmap bitmap = new(width, height);
 
             // draw the dots
             for (int x = 0; x < width; x += pixelsBetweenDots.Width)
@@ -1667,7 +1667,7 @@ public static partial class ControlPaint
             array[3] = new float[5] { 0, 0, 0, 1, 0 };
             array[4] = new float[5] { 0.38f, 0.38f, 0.38f, 0, 1 };
 
-            ColorMatrix grayMatrix = new ColorMatrix(array);
+            ColorMatrix grayMatrix = new(array);
 
             t_disabledImageAttr = new ImageAttributes();
             t_disabledImageAttr.ClearColorKey();
@@ -2136,7 +2136,7 @@ public static partial class ControlPaint
 
             int patternSize = 8;
 
-            Bitmap bitmap = new Bitmap(patternSize, patternSize);
+            Bitmap bitmap = new(patternSize, patternSize);
 
             // Bitmap does not initialize itself to be zero?
 
@@ -2188,7 +2188,7 @@ public static partial class ControlPaint
             t_focusPenColor = baseColor;
             t_hcFocusPen = highContrast;
 
-            using Bitmap b = new Bitmap(2, 2);
+            using Bitmap b = new(2, 2);
             Color color1 = Color.Transparent;
             Color color2;
             if (highContrast)
@@ -2267,7 +2267,7 @@ public static partial class ControlPaint
 
             int patternSize = 8;
 
-            Bitmap bitmap = new Bitmap(patternSize, patternSize);
+            Bitmap bitmap = new(patternSize, patternSize);
 
             // Bitmap does not initialize itself to be zero?
 

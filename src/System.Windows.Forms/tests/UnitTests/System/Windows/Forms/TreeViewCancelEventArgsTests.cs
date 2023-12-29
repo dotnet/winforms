@@ -16,7 +16,7 @@ public class TreeViewCancelEventArgsTests
     [MemberData(nameof(Ctor_TreeNode_Bool_TreeViewAction_TestData))]
     public void Ctor_TreeNode_Bool_TreeViewAction(TreeNode node, bool cancel, TreeViewAction action)
     {
-        var e = new TreeViewCancelEventArgs(node, cancel, action);
+        TreeViewCancelEventArgs e = new(node, cancel, action);
         Assert.Equal(node, e.Node);
         Assert.Equal(cancel, e.Cancel);
         Assert.Equal(action, e.Action);

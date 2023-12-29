@@ -19,7 +19,7 @@ public class PaddingConverterTests
     [InlineData(typeof(string), true)]
     public void PaddingConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Equal(expected, converter.CanConvertFrom(sourceType));
     }
 
@@ -36,7 +36,7 @@ public class PaddingConverterTests
     [MemberData(nameof(ConvertFrom_TestData))]
     public void PaddingConverter_ConvertFrom_String_ReturnsExpected(string value, object expected)
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Equal(expected, converter.ConvertFrom(value));
         Assert.Equal(expected, converter.ConvertFrom(null, null, value));
         Assert.Equal(expected, converter.ConvertFrom(null, CultureInfo.InvariantCulture, value));
@@ -47,7 +47,7 @@ public class PaddingConverterTests
     [InlineData(null)]
     public void PaddingConverter_ConvertFrom_InvalidValue_ThrowsNotSupportedException(object value)
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(value));
     }
 
@@ -56,7 +56,7 @@ public class PaddingConverterTests
     [InlineData("1,2,3,4,5")]
     public void PaddingConverter_ConvertFrom_InvalidString_ThrowsArgumentException(string value)
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Throws<ArgumentException>("value", () => converter.ConvertFrom(value));
     }
 
@@ -68,7 +68,7 @@ public class PaddingConverterTests
     [InlineData(null, false)]
     public void PaddingConverter_CanConvertTo_Invoke_ReturnsExpected(Type destinationType, bool expected)
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Equal(expected, converter.CanConvertTo(destinationType));
     }
 
@@ -76,7 +76,7 @@ public class PaddingConverterTests
     [UseDefaultXunitCulture]
     public void PaddingConverter_ConvertTo_String_ReturnsExpected()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Equal("1, 2, 3, 4", converter.ConvertTo(new Padding(1, 2, 3, 4), typeof(string)));
         Assert.Equal("1, 2, 3, 4", converter.ConvertTo(null, null, new Padding(1, 2, 3, 4), typeof(string)));
         Assert.Equal("1, 2, 3, 4", converter.ConvertTo(null, CultureInfo.InvariantCulture, new Padding(1, 2, 3, 4), typeof(string)));
@@ -85,7 +85,7 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_ConvertTo_InstanceDescriptor_ReturnsExpected()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new Padding(1, 2, 3, 4), typeof(InstanceDescriptor)));
         Assert.Equal(typeof(Padding).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(int) }), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1, 2, 3, 4 }, descriptor.Arguments);
@@ -94,7 +94,7 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_ConvertTo_InstanceDescriptorAll_ReturnsExpected()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new Padding(1, 1, 1, 1), typeof(InstanceDescriptor)));
         Assert.Equal(typeof(Padding).GetConstructor(new Type[] { typeof(int) }), descriptor.MemberInfo);
         Assert.Equal(new object[] { 1 }, descriptor.Arguments);
@@ -103,14 +103,14 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_ConvertTo_NullDestinationType_ThrowsArgumentNullException()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(new object(), null));
     }
 
     [Fact]
     public void PaddingConverter_ConvertTo_ValueNotPadding_ThrowsNotSupportedException()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(1, typeof(InstanceDescriptor)));
     }
 
@@ -119,7 +119,7 @@ public class PaddingConverterTests
     [InlineData(typeof(int))]
     public void PaddingConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new Padding(), destinationType));
     }
 
@@ -135,8 +135,8 @@ public class PaddingConverterTests
     [MemberData(nameof(CreateInstance_TestData))]
     public void PaddingConverter_CreateInstance_ValidPropertyValuesAll_ReturnsExpected(Padding instance, int all, Padding result)
     {
-        var converter = new PaddingConverter();
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        PaddingConverter converter = new();
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns(new ClassWithPadding { Padding = instance });
@@ -158,8 +158,8 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_CreateInstance_ValidPropertyValuesNullContext_ReturnsExpected()
     {
-        var converter = new PaddingConverter();
-        Padding expected = new Padding(1, 2, 3, 4);
+        PaddingConverter converter = new();
+        Padding expected = new(1, 2, 3, 4);
         Padding padding = Assert.IsType<Padding>(converter.CreateInstance(
             null, new Dictionary<string, object>
             {
@@ -175,7 +175,7 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_CreateInstance_NullPropertyValues_ThrowsArgumentNullException()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, null));
     }
 
@@ -351,11 +351,11 @@ public class PaddingConverterTests
     [MemberData(nameof(CreateInstance_InvalidPropertyValueType_TestData))]
     public void PaddingConverter_CreateInstance_InvalidPropertyValueType_ThrowsArgumentException(IDictionary propertyValues)
     {
-        var converter = new PaddingConverter();
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        PaddingConverter converter = new();
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
-            .Returns(new ClassWithPadding { Padding = new Padding(1) });
+            .Returns(new ClassWithPadding { Padding = new(1) });
         mockContext
             .Setup(c => c.PropertyDescriptor)
             .Returns(TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]);
@@ -366,8 +366,8 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_CreateInstance_UnknownInstanceType_ReturnsExpected()
     {
-        var converter = new PaddingConverter();
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        PaddingConverter converter = new();
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
             .Returns("abc");
@@ -384,7 +384,7 @@ public class PaddingConverterTests
             { nameof(Padding.Bottom), 4 },
         };
 
-        Padding expected = new Padding(2, 2, 3, 4);
+        Padding expected = new(2, 2, 3, 4);
         Padding padding = Assert.IsType<Padding>(converter.CreateInstance(mockContext.Object, propertyValues));
         Assert.Equal(expected, padding);
     }
@@ -392,14 +392,14 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_GetCreateInstanceSupported_Invoke_ReturnsTrue()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.True(converter.GetCreateInstanceSupported());
     }
 
     [Fact]
     public void PaddingConverter_GetProperties_Invoke_ReturnsExpected()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         PropertyDescriptorCollection properties = converter.GetProperties(null);
         Assert.Equal(5, properties.Count);
         Assert.Equal(nameof(Padding.All), properties[0].Name);
@@ -412,7 +412,7 @@ public class PaddingConverterTests
     [Fact]
     public void PaddingConverter_GetPropertiesSupported_Invoke_ReturnsTrue()
     {
-        var converter = new PaddingConverter();
+        PaddingConverter converter = new();
         Assert.True(converter.GetPropertiesSupported());
     }
 

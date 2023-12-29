@@ -10,7 +10,7 @@ public class NumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void NumericUpDownAccessibleObject_Ctor_Default()
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
         Assert.NotNull(accessibleObject);
     }
@@ -18,7 +18,7 @@ public class NumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void NumericUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_ReturnsTrue()
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
 
         bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId);
@@ -28,7 +28,7 @@ public class NumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void NumericUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_WhenDisabled_ReturnsFalse()
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
 
         numericUpDown.Enabled = false;
@@ -40,7 +40,7 @@ public class NumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void NumericUpDownAccessibleObject_ControlType_IsSpinner_IfAccessibleRoleIsDefault()
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)numericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -52,7 +52,7 @@ public class NumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void NumericUpDownAccessibleObject_Role_IsSpinButton_ByDefault()
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = numericUpDown.AccessibilityObject.Role;
@@ -80,7 +80,7 @@ public class NumericUpDownAccessibleObjectTests
     [MemberData(nameof(NumericUpDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void NumericUpDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         numericUpDown.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)numericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -95,7 +95,7 @@ public class NumericUpDownAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, (int)AccessibleStates.None)]
     public void NumericUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
-        using NumericUpDown numericUpDown = new NumericUpDown();
+        using NumericUpDown numericUpDown = new();
         AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
         var actual = (int)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 

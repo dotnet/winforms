@@ -14,8 +14,8 @@ public partial class CommonControl1 : Form
 
     private void MainForm_Load(object sender, EventArgs e)
     {
-        ImageList imageListSmall = new ImageList();
-        ImageList imageListLarge = new ImageList();
+        ImageList imageListSmall = new();
+        ImageList imageListLarge = new();
         listView1.LargeImageList = imageListLarge;
         listView1.SmallImageList = imageListSmall;
     }

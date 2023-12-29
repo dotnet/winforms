@@ -10,7 +10,7 @@ public class DataGridViewTextBoxCell_DataGridViewTextBoxCellAccessibleObject
     [WinFormsFact]
     public void DataGridViewTextBoxCellAccessibleObject_ControlType_IsDataItem()
     {
-        using var cell = new DataGridViewTextBoxCell();
+        using DataGridViewTextBoxCell cell = new();
         AccessibleObject accessibleObject = cell.AccessibilityObject;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

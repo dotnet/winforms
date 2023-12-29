@@ -179,7 +179,7 @@ public sealed class ImageCodecInfo
         {
             ref readonly ImageCodecInfoPrivate codecp = ref ((ImageCodecInfoPrivate*)memoryStart)[index];
 
-            var codec = new ImageCodecInfo();
+            ImageCodecInfo codec = new();
             codec.Clsid = codecp.Clsid;
             codec.FormatID = codecp.FormatID;
             codec.CodecName = Marshal.PtrToStringUni(codecp.CodecName);

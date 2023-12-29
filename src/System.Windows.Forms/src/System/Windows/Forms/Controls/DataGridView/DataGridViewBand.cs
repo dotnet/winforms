@@ -60,7 +60,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
             ContextMenuStrip? oldValue = (ContextMenuStrip?)Properties.GetObject(s_propContextMenuStrip);
             if (oldValue != value)
             {
-                EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
+                EventHandler disposedHandler = new(DetachContextMenuStrip);
                 if (oldValue is not null)
                 {
                     oldValue.Disposed -= disposedHandler;
@@ -188,29 +188,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (value < 0)
-            {
-                if (IsRow)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(DataGridViewRow.DividerHeight), value, 0));
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(DataGridViewColumn.DividerWidth), value, 0));
-                }
-            }
-
-            if (value > MaxBandThickness)
-            {
-                if (IsRow)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewRow.DividerHeight), value, MaxBandThickness));
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewColumn.DividerWidth), value, MaxBandThickness));
-                }
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxBandThickness);
 
             if (value != DividerThickness)
             {
@@ -424,7 +403,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     /// <summary>
     ///  Contains all properties that are not always set.
     /// </summary>
-    private protected PropertyStore Properties { get; private set; } = new PropertyStore();
+    private protected PropertyStore Properties { get; private set; } = new();
 
     [DefaultValue(false)]
     public virtual bool ReadOnly
@@ -663,17 +642,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 value = minimumThickness;
             }
 
-            if (value > MaxBandThickness)
-            {
-                if (IsRow)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewRow.Height), value, MaxBandThickness));
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(DataGridViewColumn.Width), value, MaxBandThickness));
-                }
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MaxBandThickness);
 
             bool setThickness = true;
             if (IsRow)

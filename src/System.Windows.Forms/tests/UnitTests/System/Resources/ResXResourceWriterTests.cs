@@ -8,7 +8,7 @@ namespace System.Resources.Tests;
 // NB: doesn't require thread affinity
 public class ResXResourceWriterTests
 {
-    private readonly byte[] _testBytes = new byte[] { 1, 2, 3 };
+    private readonly byte[] _testBytes = [1, 2, 3];
     private readonly string _testString1 = "TestString1";
     private readonly string _testString2 = "TestString2";
     private readonly string _resxFileName = "test.resx";
@@ -21,15 +21,15 @@ public class ResXResourceWriterTests
         var key = "Some.Key.Name";
         var value = "Some.Key.Value";
 
-        using (var stream = new MemoryStream())
+        using (MemoryStream stream = new())
         {
-            using (var writer = new ResXResourceWriter(stream))
+            using (ResXResourceWriter writer = new(stream))
             {
                 writer.AddResource(key, value);
             }
 
             var buffer = stream.ToArray();
-            using (var reader = new ResXResourceReader(new MemoryStream(buffer)))
+            using (ResXResourceReader reader = new(new MemoryStream(buffer)))
             {
                 var dictionary = new Dictionary<object, object>();
                 IDictionaryEnumerator dictionaryEnumerator = reader.GetEnumerator();

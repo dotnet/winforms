@@ -487,7 +487,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         // dirt simple clone - just properties, no subitems
 
-        ToolStripMenuItem menuItem = new ToolStripMenuItem();
+        ToolStripMenuItem menuItem = new();
         menuItem.Events.AddHandlers(Events);
 
         menuItem.AccessibleName = AccessibleName;

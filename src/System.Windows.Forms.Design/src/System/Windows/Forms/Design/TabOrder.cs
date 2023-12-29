@@ -215,7 +215,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
                     Color backColor = hoverParent.BackColor;
                     Region clip = graphics.Clip;
                     graphics.ExcludeClip(ctlInner);
-                    using (SolidBrush brush = new SolidBrush(backColor))
+                    using (SolidBrush brush = new(backColor))
                     {
                         graphics.FillRectangle(brush, ctlOuter);
                     }

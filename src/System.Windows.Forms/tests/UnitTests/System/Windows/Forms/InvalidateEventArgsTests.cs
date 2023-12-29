@@ -19,7 +19,7 @@ public class InvalidateEventArgsTests
     [MemberData(nameof(Ctor_Rectangle_TestData))]
     public void Ctor_Rectangle(Rectangle invalidRect)
     {
-        var e = new InvalidateEventArgs(invalidRect);
+        InvalidateEventArgs e = new(invalidRect);
         Assert.Equal(invalidRect, e.InvalidRect);
     }
 }

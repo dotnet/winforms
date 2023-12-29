@@ -69,7 +69,7 @@ public partial class MainForm : Form
     {
         // - step.0
         // - create a DesignSurface and put it inside a Form in DesignTime
-        DesignSurfaceExt.DesignSurfaceExt surface = new DesignSurfaceExt.DesignSurfaceExt();
+        DesignSurfaceExt.DesignSurfaceExt surface = new();
         // -
         // -
         // - store for later use

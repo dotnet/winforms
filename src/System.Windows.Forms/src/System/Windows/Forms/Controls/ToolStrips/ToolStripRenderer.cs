@@ -614,7 +614,7 @@ public abstract class ToolStripRenderer
         Rectangle dropDownRect = e.ArrowRectangle;
         using (var brush = e.ArrowColor.GetCachedSolidBrushScope())
         {
-            Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
+            Point middle = new(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
             // if the width is odd - favor pushing it over one pixel right.
             // middle.X += (dropDownRect.Width % 2);
 
@@ -889,7 +889,7 @@ public abstract class ToolStripRenderer
         {
             // Perf: this is a bit heavy handed.. perhaps we can share the bitmap.
             Size textSize = LayoutUtils.FlipSize(textRect.Size);
-            using (Bitmap textBmp = new Bitmap(textSize.Width, textSize.Height, PixelFormat.Format32bppPArgb))
+            using (Bitmap textBmp = new(textSize.Width, textSize.Height, PixelFormat.Format32bppPArgb))
             {
                 using (Graphics textGraphics = Graphics.FromImage(textBmp))
                 {
@@ -1051,7 +1051,7 @@ public abstract class ToolStripRenderer
         imgAttrib.SetColorMatrix(DisabledImageColorMatrix);
 
         Size size = normalImage.Size;
-        Bitmap disabledBitmap = new Bitmap(size.Width, size.Height);
+        Bitmap disabledBitmap = new(size.Width, size.Height);
         using (Graphics graphics = Graphics.FromImage(disabledBitmap))
         {
             graphics.DrawImage(normalImage,

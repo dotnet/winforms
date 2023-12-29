@@ -21,10 +21,10 @@ public class DrawItemEventArgsTests
     [MemberData(nameof(Ctor_Graphics_Font_Rectangle_Int_DrawItemState_TestData))]
     public void DrawItemEventArgs_Ctor_Graphics_Font_Rectangle_Int_DrawItemState(Font font, Rectangle rect, int index, DrawItemState state, Color expectedForeColor, Color expectedBackColor)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawItemEventArgs(graphics, font, rect, index, state);
+            DrawItemEventArgs e = new(graphics, font, rect, index, state);
             Assert.Equal(graphics, e.Graphics);
             Assert.Equal(font, e.Font);
             Assert.Equal(rect, e.Bounds);
@@ -48,10 +48,10 @@ public class DrawItemEventArgsTests
     [MemberData(nameof(Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color_TestData))]
     public void DrawItemEventArgs_Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color(Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
 
-        var e = new DrawItemEventArgs(graphics, font, rect, index, state, foreColor, backColor);
+        DrawItemEventArgs e = new(graphics, font, rect, index, state, foreColor, backColor);
         Assert.Equal(graphics, e.Graphics);
         Assert.Equal(font, e.Font);
         Assert.Equal(rect, e.Bounds);
@@ -88,10 +88,10 @@ public class DrawItemEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawItemEventArgs_DrawBackground_Invoke_Success(Rectangle bounds, DrawItemState state)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawItemEventArgs(graphics, SystemFonts.DefaultFont, bounds, -1, state);
+            DrawItemEventArgs e = new(graphics, SystemFonts.DefaultFont, bounds, -1, state);
             e.DrawBackground();
         }
     }
@@ -100,10 +100,10 @@ public class DrawItemEventArgsTests
     [MemberData(nameof(Draw_TestData))]
     public void DrawItemEventArgs_DrawFocusRectangle_Invoke_Success(Rectangle bounds, DrawItemState state)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new DrawItemEventArgs(graphics, SystemFonts.DefaultFont, bounds, -1, state);
+            DrawItemEventArgs e = new(graphics, SystemFonts.DefaultFont, bounds, -1, state);
             e.DrawFocusRectangle();
         }
     }

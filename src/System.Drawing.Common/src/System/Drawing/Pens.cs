@@ -317,7 +317,7 @@ public static class Pens
             return Pen;
         }
 
-        Pen newPen = new Pen(color, true);
+        Pen newPen = new(color, true);
         Gdip.ThreadData[key] = newPen;
         return newPen;
     }

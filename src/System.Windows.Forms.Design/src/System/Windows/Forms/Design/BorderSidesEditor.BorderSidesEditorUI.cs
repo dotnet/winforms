@@ -79,7 +79,7 @@ public partial class BorderSidesEditor
         [MemberNotNull(nameof(_topCheckBox))]
         private void InitializeComponent()
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(BorderSidesEditor));
+            ComponentResourceManager resources = new(typeof(BorderSidesEditor));
             _tableLayoutPanel = new TableLayoutPanel();
             _noneCheckBox = new CheckBox();
             _allCheckBox = new CheckBox();

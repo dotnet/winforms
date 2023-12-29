@@ -30,7 +30,7 @@ internal partial class FormatControl
     /// </summary>
     private void InitializeComponent()
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormatControl));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(FormatControl));
         formatGroupBox = new System.Windows.Forms.GroupBox();
         tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
         explanationLabel = new System.Windows.Forms.Label();

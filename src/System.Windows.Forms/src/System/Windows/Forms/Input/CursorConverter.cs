@@ -66,7 +66,7 @@ public class CursorConverter : TypeConverter
 
         if (value is byte[] bytes)
         {
-            using MemoryStream ms = new MemoryStream(bytes);
+            using MemoryStream ms = new(bytes);
             return new Cursor(ms);
         }
 

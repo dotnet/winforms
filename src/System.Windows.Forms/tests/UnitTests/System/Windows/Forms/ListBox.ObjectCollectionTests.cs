@@ -10,7 +10,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Ctor_ListBox()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Equal(0, collection.Count);
         Assert.Empty(collection);
@@ -21,7 +21,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Ctor_ListBox_ObjectArray()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner, new object[] { 3, 2, 1 });
         Assert.Equal(3, collection.Count);
         Assert.Equal(new object[] { 3, 2, 1 }, collection.Cast<object>());
@@ -32,9 +32,9 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Ctor_ListBox_ObjectCollection()
     {
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner, new object[] { 3, 2, 1 });
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner, otherCollection);
         Assert.Equal(3, collection.Count);
         Assert.Equal(new object[] { 3, 2, 1 }, collection.Cast<object>());
@@ -45,7 +45,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null));
         Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, new ListBox.ObjectCollection(owner)));
         Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, Array.Empty<object>()));
@@ -54,11 +54,11 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Ctor_OwnerHasDataSource_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
 
         var emptyCollection = new ListBox.ObjectCollection(owner);
@@ -74,7 +74,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Ctor_NullValue_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         Assert.Throws<ArgumentNullException>("value", () => new ListBox.ObjectCollection(owner, (object[])null));
         Assert.Throws<ArgumentNullException>("value", () => new ListBox.ObjectCollection(owner, (ListBox.ObjectCollection)null));
     }
@@ -82,7 +82,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_ICollection_Properties_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ICollection collection = new ListBox.ObjectCollection(owner);
         Assert.Equal(0, collection.Count);
         Assert.False(collection.IsSynchronized);
@@ -92,7 +92,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IList_Properties_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Equal(0, collection.Count);
         Assert.False(collection.IsFixedSize);
@@ -104,7 +104,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_Get_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.AddRange(new object[] { 2, 1, 1, 3 });
 
@@ -117,7 +117,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_GetSorted_ReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -136,7 +136,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(1)]
     public void ListBoxObjectCollection_Item_GetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
@@ -147,7 +147,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_Item_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
@@ -156,7 +156,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetNotSorted_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.AddRange(new object[] { 2, 1, 3 });
         int selectedIndexChangedCallCount = 0;
@@ -194,7 +194,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetSorted_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -235,7 +235,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetItems_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.AddRange(new object[] { 2, 1, 3 });
         int selectedIndexChangedCallCount = 0;
@@ -273,7 +273,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetItemsSorted_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -315,7 +315,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Item_SetNotSortedWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.AddRange(new object[] { 2, 1, 3 });
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -401,7 +401,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Item_SetSortedWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -491,7 +491,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Item_SetItemsWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.AddRange(new object[] { 2, 1, 3 });
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
@@ -577,7 +577,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Item_SetItemsSortedWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -666,7 +666,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetWithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -712,7 +712,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetWithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -763,7 +763,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Item_SetWithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -832,7 +832,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Item_SetWithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -900,7 +900,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetWithOneSelectedItemNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -970,7 +970,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Item_SetWithOneSelectedItemSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -1045,7 +1045,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Item_SetWithMultipleSelectedItemsNotSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -1144,7 +1144,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Item_SetWithMultipleSelectedItemsSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -1246,7 +1246,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_Item_SetNullValueEmpty_ThrowsArgumentNullException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
     }
@@ -1258,7 +1258,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_Item_SetNullValueNotEmpty_ThrowsArgumentNullException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
@@ -1270,7 +1270,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(1)]
     public void ListBoxObjectCollection_Item_SetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
     }
@@ -1281,7 +1281,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_Item_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
@@ -1290,7 +1290,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -1331,7 +1331,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -1372,7 +1372,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -1416,7 +1416,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -1460,7 +1460,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Add_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -1539,7 +1539,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Add_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -1618,7 +1618,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Add_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -1700,7 +1700,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Add_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -1782,7 +1782,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -1811,7 +1811,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -1845,7 +1845,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Add_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -1889,7 +1889,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Add_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -1928,7 +1928,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_WithOneSelectedItemNotSortedWithHandle_Succes()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -1970,7 +1970,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_WithOneSelectedItemSortedWithHandle_Succes()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2017,7 +2017,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Add_WithMultipleSelectedItemsNotSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -2077,7 +2077,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Add_WithMultipleSelectedItemsSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -2135,7 +2135,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Add_CreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -2149,7 +2149,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Add_ItemsCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -2171,7 +2171,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_NullItem_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("item", () => collection.Add(null));
     }
@@ -2179,7 +2179,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Add_OwnerHasDataSource_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -2195,7 +2195,7 @@ public class ListBoxObjectCollectionTests
         // Note that this is not an actual out of memory, we're artificially setting up an error case
         // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
 
-        using var owner = new CustomAddStringListBox
+        using CustomAddStringListBox owner = new()
         {
             AddStringResult = (IntPtr)result
         };
@@ -2207,7 +2207,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -2231,7 +2231,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -2255,7 +2255,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArraySorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2282,7 +2282,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2309,7 +2309,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectArrayNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -2361,7 +2361,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectArrayItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -2413,7 +2413,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectArraySortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2468,7 +2468,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectArrayItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2523,7 +2523,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -2551,7 +2551,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2584,7 +2584,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -2619,7 +2619,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -2650,7 +2650,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithOneSelectedItemNotSortedWithHandle_Succes()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -2691,7 +2691,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithOneSelectedItemSortedWithHandle_Succes()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2737,7 +2737,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithMultipleSelectedItemsNotSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -2785,7 +2785,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectArrayWithMultipleSelectedItemsSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -2831,7 +2831,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectArrayCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.AddRange(new object[] { 2, 1, 1, 3 });
         char* textBuffer = stackalloc char[256];
@@ -2842,7 +2842,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectArrayItemsCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.AddRange(new object[] { 2, 1, 1, 3 });
         char* textBuffer = stackalloc char[256];
@@ -2861,12 +2861,12 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -2877,7 +2877,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -2890,12 +2890,12 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -2906,7 +2906,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -2919,7 +2919,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2927,7 +2927,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -2938,7 +2938,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -2951,7 +2951,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -2959,7 +2959,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -2970,7 +2970,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -2983,7 +2983,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectCollectionNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -2994,7 +2994,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -3016,7 +3016,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -3040,7 +3040,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectCollectionItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -3051,7 +3051,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -3073,7 +3073,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -3097,7 +3097,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectCollectionSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -3111,7 +3111,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -3133,7 +3133,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -3157,7 +3157,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectCollectionItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -3171,7 +3171,7 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
         char* textBuffer = stackalloc char[256];
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -3193,7 +3193,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(4, collection.Count);
@@ -3217,7 +3217,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -3226,7 +3226,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 5 });
         collection.AddRange(otherCollection);
@@ -3237,7 +3237,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
@@ -3250,7 +3250,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -3262,7 +3262,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 5 });
         collection.AddRange(otherCollection);
@@ -3273,7 +3273,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
@@ -3288,7 +3288,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -3302,7 +3302,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 2, 4 });
         collection.AddRange(otherCollection);
@@ -3313,7 +3313,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
@@ -3328,7 +3328,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -3342,7 +3342,7 @@ public class ListBoxObjectCollectionTests
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 2, 4 });
         collection.AddRange(otherCollection);
@@ -3352,7 +3352,7 @@ public class ListBoxObjectCollectionTests
         Assert.False(owner.IsHandleCreated);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
@@ -3364,7 +3364,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithOneSelectedItemNotSortedWithHandle_Succes()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -3380,7 +3380,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 5 });
         collection.AddRange(otherCollection);
@@ -3394,7 +3394,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, createdCallCount);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
@@ -3410,7 +3410,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithOneSelectedItemSortedWithHandle_Succes()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -3429,7 +3429,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 5 });
         collection.AddRange(otherCollection);
@@ -3443,7 +3443,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, createdCallCount);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
@@ -3461,7 +3461,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithMultipleSelectedItemsNotSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -3482,7 +3482,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 2, 4 });
         collection.AddRange(otherCollection);
@@ -3496,7 +3496,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, createdCallCount);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
@@ -3514,7 +3514,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_AddRange_ObjectCollectionWithMultipleSelectedItemsSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -3535,7 +3535,7 @@ public class ListBoxObjectCollectionTests
         int createdCallCount = 0;
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 0, 2, 5 });
         collection.AddRange(otherCollection);
@@ -3549,7 +3549,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, createdCallCount);
 
         // Add empty.
-        using var emptyOwner = new ListBox();
+        using ListBox emptyOwner = new();
         var emptyCollection = new ListBox.ObjectCollection(emptyOwner);
         collection.AddRange(emptyCollection);
         Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
@@ -3565,9 +3565,9 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectCollectionCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -3579,9 +3579,9 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_AddRange_ObjectCollectionItemsCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.AddRange(new object[] { 2, 1, 1, 3 });
         collection.AddRange(otherCollection);
@@ -3601,7 +3601,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_SameObjectCollectionEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.AddRange(collection);
         Assert.Empty(collection);
@@ -3610,7 +3610,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_SameObjectCollectionNotEmptyOneValue_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<InvalidOperationException>(() => collection.AddRange(collection));
@@ -3620,7 +3620,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_SameObjectCollectionNotEmptyMultipleValues_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         collection.Add(2);
@@ -3631,7 +3631,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_NullItems_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("items", () => collection.AddRange((object[])null));
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((ListBox.ObjectCollection)null));
@@ -3640,7 +3640,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_ObjectArrayContainsNullItem_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("item", () => collection.AddRange(new object[] { null }));
     }
@@ -3648,12 +3648,12 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_AddRange_OwnerHasDataSource_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
         var collection = new ListBox.ObjectCollection(owner);
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         Assert.Throws<ArgumentException>(() => collection.AddRange(Array.Empty<object>()));
         Assert.Throws<ArgumentException>(() => collection.AddRange(otherCollection));
@@ -3667,13 +3667,13 @@ public class ListBoxObjectCollectionTests
         // Note that this is not an actual out of memory, we're artificially setting up an error case
         // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
 
-        using var owner = new CustomAddStringListBox
+        using CustomAddStringListBox owner = new()
         {
             AddStringResult = (IntPtr)result
         };
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
-        using var otherOwner = new ListBox();
+        using ListBox otherOwner = new();
         var otherCollection = new ListBox.ObjectCollection(otherOwner);
         otherCollection.Add(1);
 
@@ -3684,7 +3684,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -3705,7 +3705,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeItemsEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -3726,7 +3726,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeNotEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
 
@@ -3749,7 +3749,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeItemsNotEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
 
@@ -3772,7 +3772,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -3809,7 +3809,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeItemsEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -3846,7 +3846,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeNotEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -3884,7 +3884,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Clear_InvokeItemsNotEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -3922,7 +3922,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Contains_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.False(collection.Contains(0));
         Assert.False(collection.Contains(1));
@@ -3933,7 +3933,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Contains_InvokeWithValues_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
 
         // Add one.
@@ -3956,7 +3956,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Contains_NullValue_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("value", () => collection.Contains(null));
     }
@@ -3964,7 +3964,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_CopyTo_InvokeEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         var array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
@@ -3974,7 +3974,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_CopyTo_InvokeNotEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         collection.Add(2);
@@ -3986,7 +3986,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_CopyTo_NullArrayEmpty_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
     }
@@ -3994,7 +3994,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_CopyTo_NullArrayNotEmpty_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
@@ -4003,7 +4003,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_GetEnumerator_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
 
         IEnumerator enumerator = collection.GetEnumerator();
@@ -4026,7 +4026,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_GetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
 
@@ -4053,7 +4053,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IndexOf_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Equal(-1, collection.IndexOf(0));
         Assert.Equal(-1, collection.IndexOf(1));
@@ -4064,7 +4064,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IndexOf_InvokeWithValues_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
 
         // Add one.
@@ -4087,7 +4087,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IndexOf_NullValue_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("value", () => collection.IndexOf(null));
     }
@@ -4095,7 +4095,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -4136,7 +4136,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -4177,7 +4177,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -4221,7 +4221,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -4265,7 +4265,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Insert_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -4344,7 +4344,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Insert_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -4423,7 +4423,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Insert_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -4505,7 +4505,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Insert_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -4587,7 +4587,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -4616,7 +4616,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -4644,7 +4644,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Insert_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -4688,7 +4688,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Insert_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -4725,7 +4725,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_WithOneSelectedItemNotSortedWithHandle_Succes()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -4767,7 +4767,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_WithOneSelectedItemSortedWithHandle_Succes()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -4814,7 +4814,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Insert_WithMultipleSelectedItemsNotSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -4874,7 +4874,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Insert_WithMultipleSelectedItemsSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -4932,7 +4932,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Insert_CreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Insert(0, 2);
         collection.Insert(1, 1);
@@ -4946,7 +4946,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Insert_ItemsCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Insert(0, 2);
         collection.Insert(1, 1);
@@ -4971,7 +4971,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_Insert_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, 1));
     }
@@ -4982,7 +4982,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(3)]
     public void ListBoxObjectCollection_Insert_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, 1));
@@ -4991,7 +4991,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_NullItem_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("item", () => collection.Insert(0, null));
     }
@@ -4999,7 +4999,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Insert_OwnerHasDataSource_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -5015,7 +5015,7 @@ public class ListBoxObjectCollectionTests
         // Note that this is not an actual out of memory, we're artificially setting up an error case
         // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
 
-        using var owner = new CustomInsertStringListBox
+        using CustomInsertStringListBox owner = new()
         {
             InsertStringResult = (IntPtr)result
         };
@@ -5027,7 +5027,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -5071,7 +5071,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -5112,7 +5112,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -5159,7 +5159,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -5203,7 +5203,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Remove_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -5275,7 +5275,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Remove_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -5352,7 +5352,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Remove_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -5427,7 +5427,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_Remove_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -5507,7 +5507,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -5545,7 +5545,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -5588,7 +5588,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Remove_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -5640,7 +5640,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Remove_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -5690,7 +5690,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_WithOneSelectedItemNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -5749,7 +5749,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_WithOneSelectedItemSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -5813,7 +5813,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Remove_WithMultipleSelectedItemsNotSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -5881,7 +5881,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_Remove_WithMultipleSelectedItemsSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -5947,7 +5947,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_OwnerHasDataSourceEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -5958,7 +5958,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_Remove_OwnerHasDataSourceNotEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = new object[] { 1 }
         };
@@ -5970,7 +5970,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -6006,7 +6006,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -6040,7 +6040,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6079,7 +6079,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6116,7 +6116,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_RemoveAt_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -6173,7 +6173,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_RemoveAt_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -6234,7 +6234,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_RemoveAt_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6294,7 +6294,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_RemoveAt_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6358,7 +6358,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -6396,7 +6396,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6439,7 +6439,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_RemoveAt_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -6491,7 +6491,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_RemoveAt_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -6541,7 +6541,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_WithOneSelectedItemNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -6600,7 +6600,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_WithOneSelectedItemSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6664,7 +6664,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_RemoveAt_WithMultipleSelectedItemsNotSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -6732,7 +6732,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_RemoveAt_WithMultipleSelectedItemsSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -6801,7 +6801,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(1)]
     public void ListBoxObjectCollection_RemoveAt_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
@@ -6812,7 +6812,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_RemoveAt_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
@@ -6821,7 +6821,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_OwnerHasDataSourceEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -6832,7 +6832,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_RemoveAt_OwnerHasDataSourceNotEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = new object[] { 1 }
         };
@@ -6843,7 +6843,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_Get_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -6859,7 +6859,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_GetSorted_ReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6881,7 +6881,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(1)]
     public void ListBoxObjectCollection_IListItem_GetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
     }
@@ -6892,7 +6892,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_IListItem_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
@@ -6901,7 +6901,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetNotSorted_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -6941,7 +6941,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetSorted_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -6984,7 +6984,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetItems_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -7024,7 +7024,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetItemsSorted_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -7068,7 +7068,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListItem_SetNotSortedWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -7156,7 +7156,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListItem_SetSortedWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -7248,7 +7248,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListItem_SetItemsWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -7336,7 +7336,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListItem_SetItemsSortedWithHandle_GetReturnsExpected()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -7427,7 +7427,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetWithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -7473,7 +7473,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetWithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -7524,7 +7524,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListItem_SetWithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -7593,7 +7593,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListItem_SetWithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -7661,7 +7661,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetWithOneSelectedItemNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -7731,7 +7731,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListItem_SetWithOneSelectedItemSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -7806,7 +7806,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListItem_SetWithMultipleSelectedItemsNotSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -7905,7 +7905,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListItem_SetWithMultipleSelectedItemsSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -8007,7 +8007,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_IListItem_SetNullValueEmpty_ThrowsArgumentNullException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
     }
@@ -8019,7 +8019,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_IListItem_SetNullValueNotEmpty_ThrowsArgumentNullException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
@@ -8031,7 +8031,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(1)]
     public void ListBoxObjectCollection_IListItem_SetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
     }
@@ -8042,7 +8042,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_IListItem_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
@@ -8051,7 +8051,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -8092,7 +8092,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -8133,7 +8133,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -8177,7 +8177,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -8221,7 +8221,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListAdd_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -8300,7 +8300,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListAdd_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -8379,7 +8379,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListAdd_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -8461,7 +8461,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListAdd_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -8543,7 +8543,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -8572,7 +8572,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -8606,7 +8606,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListAdd_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -8650,7 +8650,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListAdd_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -8689,7 +8689,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_WithOneSelectedItemNotSortedWithHandle_Succes()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -8731,7 +8731,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_WithOneSelectedItemSortedWithHandle_Succes()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -8778,7 +8778,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListAdd_WithMultipleSelectedItemsNotSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -8838,7 +8838,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListAdd_WithMultipleSelectedItemsSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -8896,7 +8896,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListAdd_CreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -8910,7 +8910,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListAdd_ItemsCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -8932,7 +8932,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_NullItem_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("item", () => collection.Add(null));
     }
@@ -8940,7 +8940,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListAdd_OwnerHasDataSource_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -8956,7 +8956,7 @@ public class ListBoxObjectCollectionTests
         // Note that this is not an actual out of memory, we're artificially setting up an error case
         // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
 
-        using var owner = new CustomAddStringListBox
+        using CustomAddStringListBox owner = new()
         {
             AddStringResult = (IntPtr)result
         };
@@ -8968,7 +8968,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -8989,7 +8989,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeItemsEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Clear();
         Assert.Equal(0, collection.Count);
@@ -9010,7 +9010,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeNotEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
 
@@ -9033,7 +9033,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeItemsNotEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(1);
 
@@ -9056,7 +9056,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -9093,7 +9093,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeItemsEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -9130,7 +9130,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeNotEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -9168,7 +9168,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListClear_InvokeItemsNotEmptyWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -9206,7 +9206,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListContains_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.False(collection.Contains(0));
         Assert.False(collection.Contains(1));
@@ -9217,7 +9217,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListContains_InvokeWithValues_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
 
         // Add one.
@@ -9240,7 +9240,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListContains_NullValue_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("value", () => collection.Contains(null));
     }
@@ -9248,7 +9248,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListCopyTo_InvokeEmpty_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         var array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
@@ -9258,7 +9258,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListCopyTo_InvokeNotEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         collection.Add(2);
@@ -9270,7 +9270,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListCopyTo_NullArrayEmpty_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
     }
@@ -9278,7 +9278,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListCopyTo_NullArrayNotEmpty_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
@@ -9287,7 +9287,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListGetEnumerator_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
 
         IEnumerator enumerator = collection.GetEnumerator();
@@ -9310,7 +9310,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListGetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
 
@@ -9337,7 +9337,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListIndexOf_InvokeEmpty_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Equal(-1, collection.IndexOf(0));
         Assert.Equal(-1, collection.IndexOf(1));
@@ -9348,7 +9348,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListIndexOf_InvokeWithValues_ReturnsExpected()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
 
         // Add one.
@@ -9371,7 +9371,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListIndexOf_NullValue_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("value", () => collection.IndexOf(null));
     }
@@ -9379,7 +9379,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -9420,7 +9420,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         int selectedIndexChangedCallCount = 0;
         owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
@@ -9461,7 +9461,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -9505,7 +9505,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -9549,7 +9549,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListInsert_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -9628,7 +9628,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListInsert_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -9707,7 +9707,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListInsert_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -9789,7 +9789,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListInsert_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -9871,7 +9871,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -9900,7 +9900,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -9928,7 +9928,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListInsert_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -9972,7 +9972,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListInsert_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -10009,7 +10009,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_WithOneSelectedItemNotSortedWithHandle_Succes()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(1);
         collection.Add(3);
@@ -10051,7 +10051,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_WithOneSelectedItemSortedWithHandle_Succes()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -10098,7 +10098,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListInsert_WithMultipleSelectedItemsNotSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -10158,7 +10158,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListInsert_WithMultipleSelectedItemsSortedWithHandle_Succes(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -10216,7 +10216,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListInsert_CreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Insert(0, 2);
         collection.Insert(1, 1);
@@ -10230,7 +10230,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListInsert_ItemsCreateHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Insert(0, 2);
         collection.Insert(1, 1);
@@ -10255,7 +10255,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_IListInsert_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, 1));
     }
@@ -10266,7 +10266,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(3)]
     public void ListBoxObjectCollection_IListInsert_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, 1));
@@ -10275,7 +10275,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_NullItem_ThrowsArgumentNullException()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentNullException>("item", () => collection.Insert(0, null));
     }
@@ -10283,7 +10283,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListInsert_OwnerHasDataSource_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -10299,7 +10299,7 @@ public class ListBoxObjectCollectionTests
         // Note that this is not an actual out of memory, we're artificially setting up an error case
         // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
 
-        using var owner = new CustomInsertStringListBox
+        using CustomInsertStringListBox owner = new()
         {
             InsertStringResult = (IntPtr)result
         };
@@ -10311,7 +10311,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -10355,7 +10355,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -10396,7 +10396,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -10443,7 +10443,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -10487,7 +10487,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemove_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -10559,7 +10559,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemove_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -10636,7 +10636,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemove_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -10711,7 +10711,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemove_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -10791,7 +10791,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -10829,7 +10829,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -10872,7 +10872,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemove_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -10924,7 +10924,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemove_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -10974,7 +10974,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_WithOneSelectedItemNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -11033,7 +11033,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_WithOneSelectedItemSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11097,7 +11097,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemove_WithMultipleSelectedItemsNotSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -11165,7 +11165,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemove_WithMultipleSelectedItemsSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -11231,7 +11231,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_OwnerHasDataSourceEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -11242,7 +11242,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemove_OwnerHasDataSourceNotEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = new object[] { 1 }
         };
@@ -11254,7 +11254,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_NotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(2);
         collection.Add(1);
@@ -11290,7 +11290,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_ItemsNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(2);
         collection.Add(1);
@@ -11324,7 +11324,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_Sorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11363,7 +11363,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_ItemsSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11400,7 +11400,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemoveAt_NotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -11457,7 +11457,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemoveAt_ItemsNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         Assert.NotEqual(IntPtr.Zero, owner.Handle);
         int invalidatedCallCount = 0;
@@ -11518,7 +11518,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemoveAt_SortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11578,7 +11578,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public unsafe void ListBoxObjectCollection_IListRemoveAt_ItemsSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11642,7 +11642,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_WithOneSelectedItemNotSorted_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -11680,7 +11680,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_WithOneSelectedItemSorted_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11723,7 +11723,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemoveAt_WithMultipleSelectedItemsNotSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -11775,7 +11775,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemoveAt_WithMultipleSelectedItemsSorted_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -11825,7 +11825,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_WithOneSelectedItemNotSortedWithHandle_Success()
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = owner.Items;
         collection.Add(0);
         collection.Add(1);
@@ -11884,7 +11884,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_WithOneSelectedItemSortedWithHandle_Success()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             Sorted = true
         };
@@ -11948,7 +11948,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemoveAt_WithMultipleSelectedItemsNotSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode
         };
@@ -12016,7 +12016,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(SelectionMode.MultiSimple)]
     public void ListBoxObjectCollection_IListRemoveAt_WithMultipleSelectedItemsSortedWithHandle_Success(SelectionMode selectionMode)
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             SelectionMode = selectionMode,
             Sorted = true
@@ -12085,7 +12085,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(1)]
     public void ListBoxObjectCollection_IListRemoveAt_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
     }
@@ -12096,7 +12096,7 @@ public class ListBoxObjectCollectionTests
     [InlineData(2)]
     public void ListBoxObjectCollection_IListRemoveAt_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
     {
-        using var owner = new ListBox();
+        using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
@@ -12105,7 +12105,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_OwnerHasDataSourceEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = Array.Empty<object>()
         };
@@ -12116,7 +12116,7 @@ public class ListBoxObjectCollectionTests
     [WinFormsFact]
     public void ListBoxObjectCollection_IListRemoveAt_OwnerHasDataSourceNotEmpty_ThrowsArgumentException()
     {
-        using var owner = new ListBox
+        using ListBox owner = new()
         {
             DataSource = new object[] { 1 }
         };

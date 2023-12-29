@@ -19,7 +19,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void ScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)
     {
-        using var scrollBar = new SubScrollBar();
+        using SubScrollBar scrollBar = new();
 
         if (createControl)
         {
@@ -36,7 +36,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [WinFormsFact]
     public void ScrollBarAccessibleObject_IsPatternSupported_Invoke_ReturnsExpected()
     {
-        using var scrollBar = new SubScrollBar();
+        using SubScrollBar scrollBar = new();
         scrollBar.CreateControl();
         AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
 
@@ -58,7 +58,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId, false)]
     public void ScrollBarAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
-        using var scrollBar = new SubScrollBar
+        using SubScrollBar scrollBar = new()
         {
             AccessibleName = "TestName",
             Name = "AutomId"
@@ -161,7 +161,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [InlineData(50d, 50d)]
     public void ScrollBarAccessibleObject_SetValue_Invoke_ReturnsExpected(int newValue, object expected)
     {
-        using var scrollBar = new SubScrollBar();
+        using SubScrollBar scrollBar = new();
         scrollBar.CreateControl();
         AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
 
@@ -178,7 +178,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [InlineData(-1)]
     public void ScrollBarAccessibleObject_SetValue_OutOfRangeValue_ThrowExceptionExpected(int newValue)
     {
-        using var scrollBar = new SubScrollBar();
+        using SubScrollBar scrollBar = new();
         scrollBar.CreateControl();
         AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
 

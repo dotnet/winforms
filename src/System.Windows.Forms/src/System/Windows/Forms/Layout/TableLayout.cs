@@ -26,7 +26,7 @@ internal partial class TableLayout : LayoutEngine
 
         if (array.Length > 1)
         {
-            SorterObjectArray sorter = new SorterObjectArray(array, comparer);
+            SorterObjectArray sorter = new(array, comparer);
             sorter.QuickSort(0, array.Length - 1);
         }
     }
@@ -152,7 +152,7 @@ internal partial class TableLayout : LayoutEngine
         // the reason to do so is that when we call ApplyStyles, we change the information
         // in the containerInfo. Specifically it will change the strip size so that the
         // size information may no longer be accurate.
-        ContainerInfo tempInfo = new ContainerInfo(containerInfo);
+        ContainerInfo tempInfo = new(containerInfo);
         int cellBorderWidth = containerInfo.CellBorderWidth;
 
         // pretend the last column is the size of the container if it is absolutely sized
@@ -173,7 +173,7 @@ internal partial class TableLayout : LayoutEngine
         EnsureRowAndColumnAssignments(container, tempInfo, doNotCache: true);
 
         // deduct the padding for cell border before doing layout
-        Size cellBorderSize = new Size(cellBorderWidth, cellBorderWidth);
+        Size cellBorderSize = new(cellBorderWidth, cellBorderWidth);
         proposedConstraints -= cellBorderSize;
         proposedConstraints.Width = Math.Max(proposedConstraints.Width, 1);
         proposedConstraints.Height = Math.Max(proposedConstraints.Height, 1);
@@ -321,7 +321,7 @@ internal partial class TableLayout : LayoutEngine
 
         int numColumns = 0;
         int numRows = 0;
-        ReservationGrid reservationGrid = new ReservationGrid();
+        ReservationGrid reservationGrid = new();
 
         int currentRow = 0;
         int currentCol = 0;
@@ -1246,7 +1246,7 @@ internal partial class TableLayout : LayoutEngine
                 height += containerInfo.Rows[rowIndex].MinSize;
             }
 
-            Rectangle cellBounds = new Rectangle((int)(startX + cellBorderWidth / 2.0f), (int)(top + cellBorderWidth / 2.0f), width - cellBorderWidth, height - cellBorderWidth);
+            Rectangle cellBounds = new((int)(startX + cellBorderWidth / 2.0f), (int)(top + cellBorderWidth / 2.0f), width - cellBorderWidth, height - cellBorderWidth);
 
             // We laid out the rows and columns with the element's margins included.
             // We now deflate the rect to get the actual element bounds.
@@ -1476,12 +1476,12 @@ internal partial class TableLayout : LayoutEngine
             LayoutInfo layoutInfo1 = layoutInfos[i];
 
             Rectangle elementBounds1 = layoutInfo1.Element.Bounds;
-            Rectangle cellsOccupied1 = new Rectangle(layoutInfo1.ColumnStart, layoutInfo1.RowStart, layoutInfo1.ColumnSpan, layoutInfo1.RowSpan);
+            Rectangle cellsOccupied1 = new(layoutInfo1.ColumnStart, layoutInfo1.RowStart, layoutInfo1.ColumnSpan, layoutInfo1.RowSpan);
             for (int j = i + 1; j < layoutInfos.Count; j++)
             {
                 LayoutInfo layoutInfo2 = layoutInfos[j];
                 Rectangle elementBounds2 = layoutInfo2.Element.Bounds;
-                Rectangle cellsOccupied2 = new Rectangle(layoutInfo2.ColumnStart, layoutInfo2.RowStart, layoutInfo2.ColumnSpan, layoutInfo2.RowSpan);
+                Rectangle cellsOccupied2 = new(layoutInfo2.ColumnStart, layoutInfo2.RowStart, layoutInfo2.ColumnSpan, layoutInfo2.RowSpan);
                 Debug.Assert(!cellsOccupied1.IntersectsWith(cellsOccupied2), "controls overlap in the same cell");
                 // The actual control overlaps horizontally. this can only happen if all columns are absolutely sized
                 if (LayoutUtils.IsIntersectHorizontally(elementBounds1, elementBounds2))

@@ -284,7 +284,7 @@ namespace System.Windows.Forms.Design
             _addNewCtrl.Dock = DockStyle.Fill;
             _addNewCtrl.LinkClicked += addNewCtrl_Click;
 
-            Bitmap addNewBitmap = new Bitmap(typeof(DesignBindingPicker), "AddNewDataSource.bmp");
+            Bitmap addNewBitmap = new(typeof(DesignBindingPicker), "AddNewDataSource.bmp");
             addNewBitmap.MakeTransparent(Color.Magenta);
             addNewBitmap = ScaleHelper.ScaleToDpi(addNewBitmap, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
 
@@ -679,7 +679,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Create node and add to specified nodes collection
-            DataSourceNode dataSourceNode = new DataSourceNode(this, dataSource, dataSource.Site?.Name);
+            DataSourceNode dataSourceNode = new(this, dataSource, dataSource.Site?.Name);
             nodes?.Add(dataSourceNode);
 
             // If this node matches the selected item, make it the selected node
@@ -727,7 +727,7 @@ namespace System.Windows.Forms.Design
             {
                 try
                 {
-                    BindingSource bindingSource = new BindingSource();
+                    BindingSource bindingSource = new();
                     bindingSource.DataSource = dataSource;
                     dataSource = bindingSource.List;
                 }
@@ -813,7 +813,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Create node and add to specified nodes collection
-            DataMemberNode dataMemberNode = new DataMemberNode(this, dataSource, dataMember, propertyName, isList);
+            DataMemberNode dataMemberNode = new(this, dataSource, dataMember, propertyName, isList);
             nodes?.Add(dataMemberNode);
 
             // If this node matches the selected item, make it the selected node
@@ -873,7 +873,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Add a data member sub-node for this property
-                DataMemberNode dataMemberNode = new DataMemberNode(this, dataSource, dataMember + "." + property.Name, property.Name, isSubList);
+                DataMemberNode dataMemberNode = new(this, dataSource, dataMember + "." + property.Name, property.Name, isSubList);
                 nodes.Add(dataMemberNode);
 
                 // Auto-select support...
@@ -970,7 +970,7 @@ namespace System.Windows.Forms.Design
         private void AddProjectGroup(TreeNodeCollection? nodes, DataSourceGroup group, bool addMembers)
         {
             // Create the group node, add its data sources, and wire it up
-            ProjectGroupNode groupNode = new ProjectGroupNode(this, group.Name, group.Image);
+            ProjectGroupNode groupNode = new(this, group.Name, group.Image);
             AddProjectGroupContents(groupNode.Nodes, group);
             nodes?.Add(groupNode);
 
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            ProjectDataSourceNode projectDataSourceNode = new ProjectDataSourceNode(this, descriptor, descriptor.Name, descriptor.Image);
+            ProjectDataSourceNode projectDataSourceNode = new(this, descriptor, descriptor.Name, descriptor.Image);
             nodes.Add(projectDataSourceNode);
 
             // Auto-select this new node if it corresponds to the current selection (ie. current value)
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Create the BindingSource
-            BindingSource bs = new BindingSource();
+            BindingSource bs = new();
             try
             {
                 bs.DataSource = dataSource;
@@ -1745,7 +1745,7 @@ namespace System.Windows.Forms.Design
         private void treeViewCtrl_MouseMove(object? sender, MouseEventArgs e)
         {
             // Get the tree node under the mouse
-            Point pt = new Point(e.X, e.Y);
+            Point pt = new(e.X, e.Y);
             TreeNode? node = _treeViewCtrl?.GetNodeAt(pt);
 
             // Make sure point is over the node label, since GetNodeAt() will return
@@ -1850,7 +1850,7 @@ namespace System.Windows.Forms.Design
             protected override void OnPaint(PaintEventArgs e)
             {
                 TextFormatFlags formatFlags = TextFormatFlags.WordBreak | TextFormatFlags.EndEllipsis | TextFormatFlags.TextBoxControl;
-                Rectangle rect = new Rectangle(ClientRectangle.Location, ClientRectangle.Size);
+                Rectangle rect = new(ClientRectangle.Location, ClientRectangle.Size);
                 rect.Inflate(-2, -2);
                 TextRenderer.DrawText(e.Graphics, Text, Font, rect, ForeColor, formatFlags);
             }

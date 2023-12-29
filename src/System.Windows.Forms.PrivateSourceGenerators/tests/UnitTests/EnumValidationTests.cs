@@ -290,7 +290,7 @@ namespace Paint
     {
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
 
-        List<MetadataReference> references = new List<MetadataReference>();
+        List<MetadataReference> references = [];
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
         foreach (Assembly assembly in assemblies)
         {

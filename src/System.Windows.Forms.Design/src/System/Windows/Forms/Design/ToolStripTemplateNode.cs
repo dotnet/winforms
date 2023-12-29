@@ -262,7 +262,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            BaseContextMenuStrip templateNodeContextMenu = new BaseContextMenuStrip(_component.Site)
+            BaseContextMenuStrip templateNodeContextMenu = new(_component.Site)
             {
                 Populated = false
             };
@@ -270,7 +270,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             templateNodeContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit });
             templateNodeContextMenu.Text = "CustomContextMenu";
 
-            TemplateNodeCustomMenuItemCollection templateNodeCustomMenuItemCollection = new TemplateNodeCustomMenuItemCollection(_component.Site, _controlHost);
+            TemplateNodeCustomMenuItemCollection templateNodeCustomMenuItemCollection = new(_component.Site, _controlHost);
             foreach (ToolStripItem item in templateNodeCustomMenuItemCollection)
             {
                 templateNodeContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
@@ -815,7 +815,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                     Rectangle invalidateBounds = designer.GetGlyphBounds();
                     ToolStripDesignerUtils.GetAdjustedBounds(curSel, ref invalidateBounds);
                     invalidateBounds.Inflate(GLYPHBORDER, GLYPHBORDER);
-                    Region rgn = new Region(invalidateBounds);
+                    Region rgn = new(invalidateBounds);
                     invalidateBounds.Inflate(-GLYPHINSET, -GLYPHINSET);
                     rgn.Exclude(invalidateBounds);
                     BehaviorService?.Invalidate(rgn);
@@ -1274,7 +1274,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             {
                 Point loc = BehaviorService.ControlToAdornerWindow(_miniToolStrip);
                 loc = BehaviorService.AdornerWindowPointToScreen(loc);
-                Rectangle translatedBounds = new Rectangle(loc, _miniToolStrip.Size);
+                Rectangle translatedBounds = new(loc, _miniToolStrip.Size);
                 _miniToolStrip.RaiseStateChangeEvent();
 
                 if (_contextMenu is null)
@@ -1769,21 +1769,21 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             {
                 case 1: // TemplateNodeSelected
                 case 4: // MouseOver
-                    using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.White, defaultBorderColor, LinearGradientMode.Vertical))
+                    using (LinearGradientBrush brush = new(bounds, Color.White, defaultBorderColor, LinearGradientMode.Vertical))
                     {
                         g.FillRectangle(brush, bounds);
                     }
 
                     break;
                 case 5: // MouseOverHotRegion
-                    using (SolidBrush b = new SolidBrush(dropDownMouseOverColor))
+                    using (SolidBrush b = new(dropDownMouseOverColor))
                     {
                         g.FillRectangle(b, hotRegion);
                     }
 
                     break;
                 case 6: // HotRegionSelected
-                    using (SolidBrush b = new SolidBrush(dropDownMouseDownColor))
+                    using (SolidBrush b = new(dropDownMouseDownColor))
                     {
                         g.FillRectangle(b, hotRegion);
                     }
@@ -1813,9 +1813,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
             Graphics g = e.Graphics;
-            Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
-            Pen selectborderPen = new Pen(toolStripBorderColor);
-            Rectangle drawRect = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+            Rectangle bounds = new(Point.Empty, e.ToolStrip.Size);
+            Pen selectborderPen = new(toolStripBorderColor);
+            Rectangle drawRect = new(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             g.DrawRectangle(selectborderPen, drawRect);
             selectborderPen.Dispose();
         }
@@ -1828,12 +1828,12 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             base.OnRenderLabelBackground(e);
             ToolStripItem item = e.Item;
             Graphics g = e.Graphics;
-            Rectangle bounds = new Rectangle(Point.Empty, item.Size);
-            Rectangle drawRect = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-            Pen borderPen = new Pen(defaultBorderColor);
+            Rectangle bounds = new(Point.Empty, item.Size);
+            Rectangle drawRect = new(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+            Pen borderPen = new(defaultBorderColor);
             if (state == (int)TemplateNodeSelectionState.TemplateNodeSelected) // state Template node is selected.
             {
-                using (SolidBrush brush = new SolidBrush(toolStripBorderColor))
+                using (SolidBrush brush = new(toolStripBorderColor))
                 {
                     g.FillRectangle(brush, drawRect);
                 }
@@ -1919,19 +1919,19 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 // Get the DropDownButton Bounds
                 Rectangle buttonBounds = splitButton.DropDownButtonBounds;
                 // Draw the White Divider Line...
-                using (Pen p = new Pen(toolStripBorderColor))
+                using (Pen p = new(toolStripBorderColor))
                 {
                     g.DrawLine(p, buttonBounds.Left, buttonBounds.Top + 1, buttonBounds.Left, buttonBounds.Bottom - 1);
                 }
 
-                Rectangle bounds = new Rectangle(Point.Empty, splitButton.Size);
+                Rectangle bounds = new(Point.Empty, splitButton.Size);
                 bool splitButtonSelected = false;
                 if (splitButton.DropDownButtonPressed)
                 {
                     // Button is pressed
                     state = 0;
-                    Rectangle fillRect = new Rectangle(buttonBounds.Left + 1, buttonBounds.Top, buttonBounds.Right, buttonBounds.Bottom);
-                    using (SolidBrush brush = new SolidBrush(dropDownMouseDownColor))
+                    Rectangle fillRect = new(buttonBounds.Left + 1, buttonBounds.Top, buttonBounds.Right, buttonBounds.Bottom);
+                    using (SolidBrush brush = new(dropDownMouseDownColor))
                     {
                         g.FillRectangle(brush, fillRect);
                     }
@@ -1940,7 +1940,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 }
                 else if (state == (int)TemplateNodeSelectionState.SplitButtonSelected)
                 {
-                    using (SolidBrush brush = new SolidBrush(dropDownMouseOverColor))
+                    using (SolidBrush brush = new(dropDownMouseOverColor))
                     {
                         g.FillRectangle(brush, splitButton.ButtonBounds);
                     }
@@ -1949,8 +1949,8 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 }
                 else if (state == (int)TemplateNodeSelectionState.DropDownSelected)
                 {
-                    Rectangle fillRect = new Rectangle(buttonBounds.Left + 1, buttonBounds.Top, buttonBounds.Right, buttonBounds.Bottom);
-                    using (SolidBrush brush = new SolidBrush(dropDownMouseOverColor))
+                    Rectangle fillRect = new(buttonBounds.Left + 1, buttonBounds.Top, buttonBounds.Right, buttonBounds.Bottom);
+                    using (SolidBrush brush = new(dropDownMouseOverColor))
                     {
                         g.FillRectangle(brush, fillRect);
                     }
@@ -1974,7 +1974,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                     selectborderPen = new Pen(defaultBorderColor);
                 }
 
-                Rectangle drawRect = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                Rectangle drawRect = new(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 g.DrawRectangle(selectborderPen, drawRect);
                 selectborderPen.Dispose();
 

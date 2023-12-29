@@ -50,7 +50,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_DefaultAction_ReturnsExpected_IfNodeIsParent(bool isExpanded)
     {
         using TreeView control = new() { CheckBoxes = false };
-        TreeNode node = new TreeNode("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
         control.Nodes.Add(node);
         if (isExpanded)
         {
@@ -96,7 +96,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_DoDefaultAction_ExpandOrCollapse_IfNodeIsNotLeaf(bool isExpanded)
     {
         using TreeView control = new();
-        TreeNode node = new TreeNode("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
         control.Nodes.Add(node);
         if (isExpanded)
         {
@@ -151,7 +151,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected(bool isExpanded)
     {
         using TreeView control = new();
-        TreeNode node = new TreeNode("Root node", new TreeNode[] { new(), new(), new() });
+        TreeNode node = new("Root node", [new(), new(), new()]);
         control.Nodes.Add(node);
         if (isExpanded)
         {
@@ -170,7 +170,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected(bool isExpanded)
     {
         using TreeView control = new();
-        TreeNode node = new TreeNode("Root node", new TreeNode[] { new(), new(), new() });
+        TreeNode node = new("Root node", [new(), new(), new()]);
         control.Nodes.Add(node);
         if (isExpanded)
         {

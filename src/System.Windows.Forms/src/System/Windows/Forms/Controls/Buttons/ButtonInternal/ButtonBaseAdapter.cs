@@ -49,7 +49,7 @@ internal abstract partial class ButtonBaseAdapter
     {
         LayoutOptions? options = default;
         using (var screen = GdiCache.GetScreenHdc())
-        using (PaintEventArgs e = new PaintEventArgs(screen, default))
+        using (PaintEventArgs e = new(screen, default))
         {
             options = Layout(e);
         }

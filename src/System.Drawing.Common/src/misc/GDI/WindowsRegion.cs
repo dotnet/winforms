@@ -38,7 +38,7 @@ internal sealed partial class WindowsRegion : MarshalByRefObject, ICloneable, ID
     /// </summary>
     public static WindowsRegion FromHregion(IntPtr hRegion, bool takeOwnership)
     {
-        WindowsRegion wr = new WindowsRegion();
+        WindowsRegion wr = new();
 
         // Note: Passing IntPtr.Zero for hRegion is ok.  GDI+ infinite regions will have hRegion == null.
         // GDI's SelectClipRgn interprets null region handle as resetting the clip region (all region will be available for painting).

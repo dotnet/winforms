@@ -667,7 +667,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(targetForm);
         key.ThrowIfNullOrEmpty();
 
-        ToolStripSettingsManager settingsManager = new ToolStripSettingsManager(targetForm, key);
+        ToolStripSettingsManager settingsManager = new(targetForm, key);
 
         settingsManager.Load();
     }
@@ -1398,7 +1398,7 @@ public static partial class ToolStripManager
 
         try
         {
-            Stack<ToolStrip> reApply = new Stack<ToolStrip>();
+            Stack<ToolStrip> reApply = new();
             foundToolStrip = false;
             while (targetToolStrip.MergeHistoryStack.Count > 0 && !foundToolStrip)
             {

@@ -16,7 +16,7 @@ public class AxHostConnectionPointCookieTests
     {
         Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
         object source = Activator.CreateInstance(type);
-        var sink = new CustomPropertyNotifySink();
+        CustomPropertyNotifySink sink = new();
         Type eventType = typeof(IPropertyNotifySink.Interface);
 
         // Just verify that creation succeeded.
@@ -79,7 +79,7 @@ public class AxHostConnectionPointCookieTests
     {
         Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
         object source = Activator.CreateInstance(type);
-        var sink = new CustomPropertyNotifySink();
+        CustomPropertyNotifySink sink = new();
         Type eventType = typeof(IPropertyNotifySink.Interface);
         var cookie = new AxHost.ConnectionPointCookie(source, sink, eventType);
         cookie.Disconnect();

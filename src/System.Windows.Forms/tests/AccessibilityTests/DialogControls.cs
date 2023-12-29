@@ -14,25 +14,25 @@ public partial class DialogControls : Form
 
     private void ColorDialog_Click(object sender, EventArgs e)
     {
-        ColorDialog colorDialog = new ColorDialog();
+        ColorDialog colorDialog = new();
         colorDialog.ShowDialog();
     }
 
     private void FolderBrowserDialog_Click(object sender, EventArgs e)
     {
-        FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+        FolderBrowserDialog folderBrowserDialog = new();
         folderBrowserDialog.ShowDialog();
     }
 
     private void OpenFileDialog_Click(object sender, EventArgs e)
     {
-        OpenFileDialog openFileDialog = new OpenFileDialog();
+        OpenFileDialog openFileDialog = new();
         openFileDialog.ShowDialog();
     }
 
     private void SaveFileDialog_Click(object sender, EventArgs e)
     {
-        SaveFileDialog saveFileDialog = new SaveFileDialog();
+        SaveFileDialog saveFileDialog = new();
         saveFileDialog.ShowDialog();
     }
 }

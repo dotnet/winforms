@@ -124,7 +124,7 @@ internal partial class ResourceCodeDomSerializer
         {
             if (manager.TryGetContext(out ComponentCache.Entry? entry))
             {
-                ComponentCache.ResourceEntry re = new ComponentCache.ResourceEntry(
+                ComponentCache.ResourceEntry re = new(
                     name,
                     value,
                     forceInvariant,

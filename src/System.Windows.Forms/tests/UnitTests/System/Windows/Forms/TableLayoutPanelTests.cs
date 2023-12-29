@@ -15,7 +15,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_Ctor_Default()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -130,7 +130,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -151,7 +151,7 @@ public class TableLayoutPanelTests
     [EnumData<BorderStyle>]
     public void TableLayoutPanel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
     {
-        using var control = new TableLayoutPanel()
+        using TableLayoutPanel control = new()
         {
             BorderStyle = value
         };
@@ -170,7 +170,7 @@ public class TableLayoutPanelTests
     [InlineData(BorderStyle.None, 0)]
     public void TableLayoutPanel_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value, int expectedInvalidatedCallCount)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -199,7 +199,7 @@ public class TableLayoutPanelTests
     [InvalidEnumData<BorderStyle>]
     public void TableLayoutPanel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.BorderStyle = value);
     }
 
@@ -221,7 +221,7 @@ public class TableLayoutPanelTests
     [MemberData(nameof(CellBorderStyle_Set_TestData))]
     public void TableLayoutPanel_CellBorderStyle_Set_GetReturnsExpected(bool resizeRedraw, TableLayoutPanelCellBorderStyle value, bool expectedResizeRedraw, int expectedLayoutCallCount)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -250,7 +250,7 @@ public class TableLayoutPanelTests
     [MemberData(nameof(CellBorderStyle_Set_TestData))]
     public void TableLayoutPanel_CellBorderStyle_SetWithHandle_GetReturnsExpected(bool resizeRedraw, TableLayoutPanelCellBorderStyle value, bool expectedResizeRedraw, int expectedLayoutCallCount)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -292,7 +292,7 @@ public class TableLayoutPanelTests
     [InvalidEnumData<TableLayoutPanelCellBorderStyle>]
     public void TableLayoutPanel_CellBorderStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelCellBorderStyle value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.CellBorderStyle = value);
     }
 
@@ -301,7 +301,7 @@ public class TableLayoutPanelTests
     [InlineData(1, 1)]
     public void TableLayoutPanel_ColumnCount_Set_GetReturnsExpected(int value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -326,7 +326,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_ColumnCount_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ColumnCount = -1);
     }
 
@@ -334,13 +334,13 @@ public class TableLayoutPanelTests
     public void TableLayoutPanel_Controls_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TableLayoutPanel))[nameof(Control.Controls)];
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.False(property.CanResetValue(control));
 
         Assert.Empty(control.Controls);
         Assert.False(property.CanResetValue(control));
 
-        using var child = new Control();
+        using Control child = new();
         control.Controls.Add(child);
         Assert.Same(child, Assert.Single(control.Controls));
         Assert.False(property.CanResetValue(control));
@@ -354,13 +354,13 @@ public class TableLayoutPanelTests
     public void TableLayoutPanel_Controls_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TableLayoutPanel))[nameof(Control.Controls)];
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         Assert.Empty(control.Controls);
         Assert.False(property.ShouldSerializeValue(control));
 
-        using var child = new Control();
+        using Control child = new();
         control.Controls.Add(child);
         Assert.Same(child, Assert.Single(control.Controls));
         Assert.True(property.ShouldSerializeValue(control));
@@ -376,7 +376,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns, 1)]
     public void TableLayoutPanel_GrowStyle_Set_GetReturnsExpected(TableLayoutPanelGrowStyle value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -402,17 +402,17 @@ public class TableLayoutPanelTests
     [InvalidEnumData<TableLayoutPanelGrowStyle>]
     public void TableLayoutPanel_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.GrowStyle = value);
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_LayoutSettings_SetEmptyStub_Success()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
 
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -441,14 +441,14 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_LayoutSettings_SetStubWithoutControls_Success()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
-        var columnStyle = new ColumnStyle(SizeType.Percent, 1);
-        var rowStyle = new RowStyle(SizeType.Percent, 1);
+        ColumnStyle columnStyle = new(SizeType.Percent, 1);
+        RowStyle rowStyle = new(SizeType.Percent, 1);
         settings.ColumnStyles.Add(columnStyle);
         settings.RowStyles.Add(rowStyle);
 
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -477,10 +477,10 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_LayoutSettings_SetStubWithControls_Success()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
-        var columnStyle = new ColumnStyle(SizeType.Percent, 1);
-        var rowStyle = new RowStyle(SizeType.Percent, 1);
+        ColumnStyle columnStyle = new(SizeType.Percent, 1);
+        RowStyle rowStyle = new(SizeType.Percent, 1);
 
         settings.SetColumnSpan("name", 1);
         settings.SetRowSpan("name", 2);
@@ -493,10 +493,10 @@ public class TableLayoutPanelTests
         settings.ColumnStyles.Add(columnStyle);
         settings.RowStyles.Add(rowStyle);
 
-        using var control = new TableLayoutPanel();
-        using var controlWithName = new Control { Name = "name" };
-        using var controlWithDefaultName = new Control();
-        using var controlWithoutName = new ControlWithNullName();
+        using TableLayoutPanel control = new();
+        using Control controlWithName = new() { Name = "name" };
+        using Control controlWithDefaultName = new();
+        using ControlWithNullName controlWithoutName = new();
         control.Controls.Add(controlWithName);
         control.Controls.Add(controlWithDefaultName);
         control.Controls.Add(controlWithoutName);
@@ -541,12 +541,12 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_LayoutSettings_SetStub_ResetsOriginalSettings()
     {
-        var converter = new TableLayoutSettingsTypeConverter();
+        TableLayoutSettingsTypeConverter converter = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />"));
         settings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1));
         settings.RowStyles.Add(new RowStyle(SizeType.Percent, 1));
 
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -575,16 +575,16 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_LayoutSettings_SetNull_ThrowsNNotSupportedException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<NotSupportedException>(() => control.LayoutSettings = null);
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_LayoutSettings_SetNonStub_ThrowsNNotSupportedException()
     {
-        var otherControl = new TableLayoutPanel();
+        TableLayoutPanel otherControl = new();
 
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<NotSupportedException>(() => control.LayoutSettings = otherControl.LayoutSettings);
     }
 
@@ -593,7 +593,7 @@ public class TableLayoutPanelTests
     [InlineData(1, 1)]
     public void TableLayoutPanel_RowCount_Set_GetReturnsExpected(int value, int expectedLayoutCallCount)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -618,14 +618,14 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_RowCount_SetNegative_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.RowCount = -1);
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_CreateControlsInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         TableLayoutControlCollection controls = Assert.IsType<TableLayoutControlCollection>(control.CreateControlsInstance());
         Assert.Empty(controls);
         Assert.Same(control, controls.Owner);
@@ -636,30 +636,30 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetCellPosition_NoSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         Assert.Equal(new TableLayoutPanelCellPosition(-1, -1), control.GetCellPosition(child));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetCellPosition_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.GetCellPosition(null));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetCellPosition_InvalidColumn_ThrowsArgumentOutOfRangeException()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetCellPosition(child, new TableLayoutPanelCellPosition { Column = -2 });
         Assert.Throws<ArgumentOutOfRangeException>("column", () => control.GetCellPosition(child));
     }
@@ -667,8 +667,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetCellPosition_InvalidRow_ThrowsArgumentOutOfRangeException()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetCellPosition(child, new TableLayoutPanelCellPosition { Row = -2 });
         Assert.Throws<ArgumentOutOfRangeException>("row", () => control.GetCellPosition(child));
     }
@@ -676,37 +676,37 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetColumn_NoSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         Assert.Equal(-1, control.GetColumn(child));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetColumn_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.GetColumn(null));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetColumnSpan_NoSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         Assert.Equal(1, control.GetColumnSpan(child));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetColumnSpan_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.GetColumnSpan(null));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetColumnWidths_NoColumns_ReturnsExpected()
     {
-        var panel = new TableLayoutPanel();
+        TableLayoutPanel panel = new();
         Assert.Empty(panel.GetColumnWidths());
     }
 
@@ -716,8 +716,8 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetColumnWidths_InvokeNoChildren_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new Button();
-        var panel = new TableLayoutPanel
+        using Button control = new();
+        TableLayoutPanel panel = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -732,8 +732,8 @@ public class TableLayoutPanelTests
     [InlineData(4, 4, 10, 11)]
     public void TableLayoutPanel_GetControlFromPosition_ControlExistsAddedToContainer_ReturnsExpected(int columnSpan, int rowSpan, int column, int row)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.Controls.Add(child);
         control.SetColumnSpan(child, columnSpan);
         control.SetRowSpan(child, rowSpan);
@@ -772,8 +772,8 @@ public class TableLayoutPanelTests
     [InlineData(4, 4, 9, 10)]
     public void TableLayoutPanel_GetControlFromPosition_OutOfRange_ReturnsNull(int columnSpan, int rowSpan, int column, int row)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.Controls.Add(child);
         control.SetColumnSpan(child, columnSpan);
         control.SetRowSpan(child, rowSpan);
@@ -792,11 +792,11 @@ public class TableLayoutPanelTests
     [InlineData(4, 4, 10, 11)]
     public void TableLayoutPanel_GetControlFromPosition_ControlExistsNotVisible_ReturnsNull(int columnSpan, int rowSpan, int column, int row)
     {
-        using var child = new Control
+        using Control child = new()
         {
             Visible = false
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         control.Controls.Add(child);
         control.SetColumnSpan(child, columnSpan);
         control.SetRowSpan(child, rowSpan);
@@ -815,11 +815,11 @@ public class TableLayoutPanelTests
     [InlineData(4, 4, 10, 11)]
     public void TableLayoutPanel_GetControlFromPosition_ControlExistsButNotAddedToContainer_ReturnsNull(int columnSpan, int rowSpan, int column, int row)
     {
-        using var child = new Control
+        using Control child = new()
         {
             Visible = false
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         control.SetColumnSpan(child, columnSpan);
         control.SetRowSpan(child, rowSpan);
         control.SetColumn(child, 10);
@@ -837,12 +837,12 @@ public class TableLayoutPanelTests
     [InlineData(4, 4, 10, 11)]
     public void TableLayoutPanel_GetControlFromPosition_ControlExistsButNotAddedToContainerWithChildren_ReturnsNull(int columnSpan, int rowSpan, int column, int row)
     {
-        using var otherChild = new Control();
-        using var child = new Control
+        using Control otherChild = new();
+        using Control child = new()
         {
             Visible = false
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         control.Controls.Add(otherChild);
         control.SetColumnSpan(child, columnSpan);
         control.SetRowSpan(child, rowSpan);
@@ -858,7 +858,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetControlFromPosition_NoSuchControl_ReturnsExpected()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Null(control.GetControlFromPosition(0, 0));
     }
 
@@ -867,7 +867,7 @@ public class TableLayoutPanelTests
     [InlineData(-1)]
     public void TableLayoutPanel_GetControlFromPosition_NegativeColumn_ThrowsArgumentOutOfRangeException(int column)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("column", () => control.GetControlFromPosition(column, 0));
     }
 
@@ -876,7 +876,7 @@ public class TableLayoutPanelTests
     [InlineData(-1)]
     public void TableLayoutPanel_GetControlFromPosition_NegativeRow_ThrowsArgumentOutOfRangeException(int row)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("row", () => control.GetControlFromPosition(0, row));
     }
 
@@ -885,8 +885,8 @@ public class TableLayoutPanelTests
     [InlineData(2, 3)]
     public void TableLayoutPanel_GetPositionFromControl_ControlExists_ReturnsExpected(int columnSpan, int rowSpan)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.Controls.Add(child);
         control.SetColumn(child, 1);
         control.SetRow(child, 2);
@@ -899,8 +899,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetPositionFromControl_NotVisibleSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.Controls.Add(child);
         control.SetColumn(child, 1);
         control.SetRow(child, 2);
@@ -911,8 +911,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetPositionFromControl_NoSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetColumn(child, 1);
         control.SetRow(child, 2);
 
@@ -922,29 +922,29 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetPositionFromControl_NullControl_ReturnsExpected()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Equal(new TableLayoutPanelCellPosition(-1, -1), control.GetPositionFromControl(null));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetRow_NoSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         Assert.Equal(-1, control.GetRow(child));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetRow_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.GetRow(null));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetRowHeights_NoRows_ReturnsExpected()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Empty(control.GetRowHeights());
     }
 
@@ -954,7 +954,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_InvokeNoChildren_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -969,7 +969,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomAutoSizeStyles_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -992,7 +992,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomAbsoluteStyles_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1014,7 +1014,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomPercentStyles_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1037,7 +1037,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomStylesPercentOverflow_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1057,7 +1057,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomStylesPercentAutoSize_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1077,7 +1077,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomStylesAbsoluteAutoSize_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1097,7 +1097,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomStylesAbsoluteOverflow_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1117,7 +1117,7 @@ public class TableLayoutPanelTests
     [InlineData(TableLayoutPanelGrowStyle.AddColumns)]
     public void TableLayoutPanel_GetRowHeights_CustomInvalidStyles_ReturnsExpected(TableLayoutPanelGrowStyle growStyle)
     {
-        using var control = new TableLayoutPanel
+        using TableLayoutPanel control = new()
         {
             ColumnCount = 3,
             RowCount = 2,
@@ -1137,15 +1137,15 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetRowSpan_NoSuchControl_ReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         Assert.Equal(1, control.GetRowSpan(child));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_GetRowSpan_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.GetRowSpan(null));
     }
 
@@ -1160,7 +1160,7 @@ public class TableLayoutPanelTests
     [InlineData((-1), false)]
     public void TableLayoutPanel_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -1187,7 +1187,7 @@ public class TableLayoutPanelTests
     [InlineData((ControlStyles)(-1), false)]
     public void TableLayoutPanel_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -1197,7 +1197,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -1205,7 +1205,7 @@ public class TableLayoutPanelTests
     {
         yield return new object[] { null };
 
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         Graphics graphics = Graphics.FromImage(image);
         yield return new object[] { new TableLayoutCellPaintEventArgs(graphics, Rectangle.Empty, Rectangle.Empty, 0, 0) };
     }
@@ -1214,7 +1214,7 @@ public class TableLayoutPanelTests
     [MemberData(nameof(OnCellPaint_TestData))]
     public void TableLayoutPanel_OnCellPaint_Invoke_CallsCellPaint(TableLayoutCellPaintEventArgs eventArgs)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         int callCount = 0;
         TableLayoutCellPaintEventHandler handler = (sender, e) =>
         {
@@ -1238,7 +1238,7 @@ public class TableLayoutPanelTests
     [NewAndDefaultData<EventArgs>]
     public void TableLayoutPanel_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1265,7 +1265,7 @@ public class TableLayoutPanelTests
     [NewAndDefaultData<EventArgs>]
     public void TableLayoutPanel_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1291,7 +1291,7 @@ public class TableLayoutPanelTests
     [NewAndDefaultData<EventArgs>]
     public void TableLayoutPanel_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1337,7 +1337,7 @@ public class TableLayoutPanelTests
     [MemberData(nameof(OnLayout_TestData))]
     public void TableLayoutPanel_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         int callCount = 0;
         LayoutEventHandler handler = (sender, e) =>
         {
@@ -1363,7 +1363,7 @@ public class TableLayoutPanelTests
     [MemberData(nameof(OnLayout_TestData))]
     public void TableLayoutPanel_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1401,7 +1401,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_OnLayout_InvokeNullE_ThrowsNullReferenceException()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.Throws<NullReferenceException>(() => control.OnLayout(null));
     }
 
@@ -1426,11 +1426,11 @@ public class TableLayoutPanelTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void TableLayoutPanel_OnPaintBackground_InvokeEmpty_Success(RightToLeft rightToLeft, TableLayoutPanelCellBorderStyle cellBorderStyle, bool hScroll, bool vScroll)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubTableLayoutPanel
+        using SubTableLayoutPanel control = new()
         {
             RightToLeft = rightToLeft,
             CellBorderStyle = cellBorderStyle,
@@ -1466,11 +1466,11 @@ public class TableLayoutPanelTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void TableLayoutPanel_OnPaintBackground_InvokeNotEmpty_Success(RightToLeft rightToLeft, TableLayoutPanelCellBorderStyle cellBorderStyle, bool hScroll, bool vScroll)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(15, 2, 5, 20));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(15, 2, 5, 20));
 
-        using var control = new SubTableLayoutPanel
+        using SubTableLayoutPanel control = new()
         {
             RightToLeft = rightToLeft,
             CellBorderStyle = cellBorderStyle,
@@ -1502,12 +1502,12 @@ public class TableLayoutPanelTests
             callCount++;
         };
 
-        using var child1 = new Control();
+        using Control child1 = new();
         control.Controls.Add(child1);
         control.SetRow(child1, 0);
         control.SetColumn(child1, 1);
 
-        using var child2 = new Control();
+        using Control child2 = new();
         control.Controls.Add(child2);
         control.SetRow(child2, 1);
         control.SetColumn(child2, 1);
@@ -1535,7 +1535,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
     {
-        using var control = new SubTableLayoutPanel();
+        using SubTableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
     }
 
@@ -1552,8 +1552,8 @@ public class TableLayoutPanelTests
     [MemberData(nameof(SetCellPosition_TestData))]
     public void TableLayoutPanel_SetCellPosition_Invoke_GetReturnsExpected(TableLayoutPanelCellPosition value)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1588,12 +1588,12 @@ public class TableLayoutPanelTests
     [MemberData(nameof(SetCellPosition_ControlWithParent_TestData))]
     public void TableLayoutPanel_SetCellPosition_InvokeControlWithParent_GetReturnsExpected(TableLayoutPanelCellPosition value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var child = new Control
+        using Control parent = new();
+        using Control child = new()
         {
             Parent = parent
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1639,8 +1639,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetCellPosition_InvokeMultipleTimes_GetReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetCellPosition(child, new TableLayoutPanelCellPosition(1, 1));
         Assert.Equal(new TableLayoutPanelCellPosition(1, 1), control.GetCellPosition(child));
 
@@ -1651,7 +1651,7 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetCellPosition_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.SetCellPosition(null, new TableLayoutPanelCellPosition()));
     }
 
@@ -1663,8 +1663,8 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue)]
     public void TableLayoutPanel_SetColumn_Invoke_GetReturnsExpected(int value)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1694,12 +1694,12 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue, 1)]
     public void TableLayoutPanel_SetColumn_InvokeControlWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var child = new Control
+        using Control parent = new();
+        using Control child = new()
         {
             Parent = parent
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1745,8 +1745,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetColumn_InvokeMultipleTimes_GetReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetColumn(child, 1);
         Assert.Equal(1, control.GetColumn(child));
 
@@ -1757,14 +1757,14 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetColumn_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.SetColumn(null, 1));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_SetColumn_InvalidColumn_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("column", () => control.SetColumn(new Control(), -2));
     }
 
@@ -1774,8 +1774,8 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue)]
     public void TableLayoutPanel_SetColumnSpan_Invoke_GetReturnsExpected(int value)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1803,12 +1803,12 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue, 1)]
     public void TableLayoutPanel_SetColumnSpan_InvokeControlWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var child = new Control
+        using Control parent = new();
+        using Control child = new()
         {
             Parent = parent
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1854,8 +1854,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetColumnSpan_InvokeMultipleTimes_GetReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
 
         control.SetColumnSpan(child, 1);
         Assert.Equal(1, control.GetColumnSpan(child));
@@ -1869,7 +1869,7 @@ public class TableLayoutPanelTests
     [InlineData(1)]
     public void TableLayoutPanel_SetColumnSpan_NullControl_ThrowsArgumentNullException(int value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.SetColumnSpan(null, value));
     }
 
@@ -1878,7 +1878,7 @@ public class TableLayoutPanelTests
     [InlineData(0)]
     public void TableLayoutPanel_SetColumnSpan_InvalidValue_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SetColumnSpan(new Control(), value));
     }
 
@@ -1890,8 +1890,8 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue)]
     public void TableLayoutPanel_SetRow_Invoke_GetReturnsExpected(int value)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1921,12 +1921,12 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue, 1)]
     public void TableLayoutPanel_SetRow_InvokeControlWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var child = new Control
+        using Control parent = new();
+        using Control child = new()
         {
             Parent = parent
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -1972,8 +1972,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetRow_InvokeMultipleTimes_GetReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetRow(child, 1);
         Assert.Equal(1, control.GetRow(child));
 
@@ -1984,14 +1984,14 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetRow_NullControl_ThrowsArgumentNullException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.SetRow(null, 1));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_SetRow_InvalidRow_ThrowsArgumentOutOfRangeException()
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("row", () => control.SetRow(new Control(), -2));
     }
 
@@ -2001,8 +2001,8 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue)]
     public void TableLayoutPanel_SetRowSpan_Invoke_GetReturnsExpected(int value)
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -2030,12 +2030,12 @@ public class TableLayoutPanelTests
     [InlineData(int.MaxValue, 1)]
     public void TableLayoutPanel_SetRowSpan_InvokeControlWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var child = new Control
+        using Control parent = new();
+        using Control child = new()
         {
             Parent = parent
         };
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int childLayoutCallCount = 0;
@@ -2081,8 +2081,8 @@ public class TableLayoutPanelTests
     [WinFormsFact]
     public void TableLayoutPanel_SetRowSpan_InvokeMultipleTimes_GetReturnsExpected()
     {
-        using var child = new Control();
-        using var control = new TableLayoutPanel();
+        using Control child = new();
+        using TableLayoutPanel control = new();
         control.SetRowSpan(child, 1);
         Assert.Equal(1, control.GetRowSpan(child));
 
@@ -2095,7 +2095,7 @@ public class TableLayoutPanelTests
     [InlineData(1)]
     public void TableLayoutPanel_SetRowSpan_NullControl_ThrowsArgumentNullException(int value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentNullException>("control", () => control.SetRowSpan(null, value));
     }
 
@@ -2104,15 +2104,15 @@ public class TableLayoutPanelTests
     [InlineData(0)]
     public void TableLayoutPanel_SetRowSpan_InvalidValue_ThrowsArgumentOutOfRangeException(int value)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SetRowSpan(new Control(), value));
     }
 
     [WinFormsFact]
     public void TableLayoutPanel_IExtenderProviderCanExtend_InvokeParent_ReturnsTrue()
     {
-        using var extendee = new Control();
-        using var control = new TableLayoutPanel();
+        using Control extendee = new();
+        using TableLayoutPanel control = new();
         extendee.Parent = control;
 
         IExtenderProvider extenderProvider = control;
@@ -2130,7 +2130,7 @@ public class TableLayoutPanelTests
     [MemberData(nameof(IExtenderProvider_CanExtend_TestData))]
     public void TableLayoutPanel_IExtenderProviderCanExtend_NotControl_ReturnsFalse(object obj)
     {
-        using var control = new TableLayoutPanel();
+        using TableLayoutPanel control = new();
         IExtenderProvider extenderProvider = control;
         Assert.False(extenderProvider.CanExtend(obj));
     }
@@ -2148,7 +2148,7 @@ public class TableLayoutPanelTests
 
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
         {
-            var mockDescriptor = new Mock<ICustomTypeDescriptor>(MockBehavior.Strict);
+            Mock<ICustomTypeDescriptor> mockDescriptor = new(MockBehavior.Strict);
             mockDescriptor
                 .Setup(c => c.GetProperties())
                 .Returns(new PropertyDescriptorCollection(Array.Empty<PropertyDescriptor>()));

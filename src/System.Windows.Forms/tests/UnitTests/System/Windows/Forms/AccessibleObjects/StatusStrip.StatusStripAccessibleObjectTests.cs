@@ -12,7 +12,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [WinFormsFact]
     public void StatusStripAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
     {
-        using var statusStrip = new StatusStrip()
+        using StatusStrip statusStrip = new()
         {
             Name = "Name1",
             AccessibleName = "Test Name"
@@ -27,7 +27,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [WinFormsFact]
     public void StatusStripAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
     {
-        using var statusStrip = new StatusStrip();
+        using StatusStrip statusStrip = new();
         AccessibleObject statusStripAccessibleObject = statusStrip.AccessibilityObject;
 
         bool supportsLegacyIAccessiblePatternId = statusStripAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
@@ -38,7 +38,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [WinFormsFact]
     public void StatusStripAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
     {
-        using var statusStrip = new StatusStrip()
+        using StatusStrip statusStrip = new()
         {
             AccessibleRole = AccessibleRole.Link
         };
@@ -52,7 +52,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [WinFormsFact]
     public void StatusStripAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
     {
-        using var statusStrip = new StatusStrip()
+        using StatusStrip statusStrip = new()
         {
             AccessibleDescription = "Test Description"
         };
@@ -66,7 +66,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [WinFormsFact]
     public void StatusStripAccessibleObject_ControlType_IsStatusBar_IfAccessibleRoleIsDefault()
     {
-        using StatusStrip statusStrip = new StatusStrip();
+        using StatusStrip statusStrip = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -78,7 +78,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [WinFormsFact]
     public void StatusStripAccessibleObject_Role_IsStatusBar_ByDefault()
     {
-        using StatusStrip statusStrip = new StatusStrip();
+        using StatusStrip statusStrip = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = statusStrip.AccessibilityObject.Role;
@@ -106,7 +106,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     [MemberData(nameof(StatusStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void StatusStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using StatusStrip statusStrip = new StatusStrip();
+        using StatusStrip statusStrip = new();
         statusStrip.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

@@ -11,7 +11,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
     [WinFormsFact]
     public void DataGridViewColumnHeaderCellAccessibleObject_Ctor_Default()
     {
-        var accessibleObject = new DataGridViewColumnHeaderCellAccessibleObject(null);
+        DataGridViewColumnHeaderCellAccessibleObject accessibleObject = new(null);
         Assert.Null(accessibleObject.Owner);
     }
 
@@ -124,7 +124,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void DataGridViewColumnHeaderCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
-        var accessibleObject = new DataGridViewColumnHeaderCellAccessibleObject(null);
+        DataGridViewColumnHeaderCellAccessibleObject accessibleObject = new(null);
 
         Assert.True((bool)accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -132,7 +132,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
     [WinFormsFact]
     public void DataGridViewColumnHeaderCellAccessibleObject_ControlType_ReturnsExpected()
     {
-        var accessibleObject = new DataGridViewColumnHeaderCellAccessibleObject(null);
+        DataGridViewColumnHeaderCellAccessibleObject accessibleObject = new(null);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }

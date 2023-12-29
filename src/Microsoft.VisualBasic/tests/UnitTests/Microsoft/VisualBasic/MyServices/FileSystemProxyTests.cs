@@ -313,7 +313,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     {
         var DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchTopLevelOnly, "*");
         Assert.Empty(DirectoryList);
-        var CreatedDirectories = new List<string>();
+        List<string> CreatedDirectories = new();
         for (int i = 0; i < 6; i++)
         {
             CreatedDirectories.Add(System.IO.Directory.CreateDirectory(System.IO.Path.Combine(TestDirectory, $"NewSubDirectory00{i}")).Name);
@@ -443,7 +443,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     {
         var FileList = _fileSystem.GetFiles(TestDirectory);
         Assert.Empty(FileList);
-        var TestFileList = new List<string>();
+        List<string> TestFileList = new();
         for (int i = 0; i < 6; i++)
         {
             TestFileList.Add(CreateTestFile(SourceData, PathFromBase: null, TestFileName: $"NewFile{i}{(i % 2 == 0 ? ".vb" : ".cs")}"));

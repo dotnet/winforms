@@ -13,7 +13,7 @@ public partial class IDispatchTests
     [StaFact]
     public unsafe void IDispatch_GetIDsOfNames_Invoke_Success()
     {
-        using var image = new Bitmap(16, 32);
+        using Bitmap image = new(16, 32);
         using var picture = IPictureDisp.CreateFromImage(image);
         Assert.False(picture.IsNull);
 
@@ -37,7 +37,7 @@ public partial class IDispatchTests
     [StaFact]
     public unsafe void IDispatch_GetTypeInfo_Invoke_Success()
     {
-        using var image = new Bitmap(16, 16);
+        using Bitmap image = new(16, 16);
         using var picture = IPictureDisp.CreateFromImage(image);
         Assert.False(picture.IsNull);
 
@@ -48,7 +48,7 @@ public partial class IDispatchTests
     [StaFact]
     public unsafe void IDispatch_GetTypeInfoCount_Invoke_Success()
     {
-        using var image = new Bitmap(16, 16);
+        using Bitmap image = new(16, 16);
         using var picture = IPictureDisp.CreateFromImage(image);
         Assert.False(picture.IsNull);
 
@@ -60,7 +60,7 @@ public partial class IDispatchTests
     [StaFact]
     public unsafe void IDispatch_Invoke_Invoke_Success()
     {
-        using var image = new Bitmap(16, 32);
+        using Bitmap image = new(16, 32);
         using var picture = IPictureDisp.CreateFromImage(image);
         Assert.False(picture.IsNull);
 

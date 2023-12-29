@@ -206,7 +206,7 @@ public abstract partial class PrintController
             pageBounds.Width - (pageSettings.Margins.Left + pageSettings.Margins.Right),
             pageBounds.Height - (pageSettings.Margins.Top + pageSettings.Margins.Bottom));
 
-        PrintPageEventArgs pageEvent = new PrintPageEventArgs(null, marginBounds, pageBounds, pageSettings);
+        PrintPageEventArgs pageEvent = new(null, marginBounds, pageBounds, pageSettings);
         return pageEvent;
     }
 

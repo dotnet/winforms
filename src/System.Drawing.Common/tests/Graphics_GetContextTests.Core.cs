@@ -11,7 +11,7 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_DefaultGraphics()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.GetContextInfo(out PointF offset);
@@ -26,9 +26,9 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_Clipping()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (Region initialClip = new Region(new Rectangle(1, 2, 9, 10)))
+        using (Region initialClip = new(new Rectangle(1, 2, 9, 10)))
         {
             graphics.Clip = initialClip;
 
@@ -46,7 +46,7 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_Transform()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.TransformElements = Matrix3x2.CreateTranslation(1, 2);
@@ -63,9 +63,9 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_ClipAndTransform()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (Region initialClip = new Region(new Rectangle(1, 2, 9, 10)))
+        using (Region initialClip = new(new Rectangle(1, 2, 9, 10)))
         {
             graphics.Clip = initialClip;
             graphics.TransformElements = Matrix3x2.CreateTranslation(1, 2);
@@ -84,9 +84,9 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_TransformAndClip()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (Region initialClip = new Region(new Rectangle(1, 2, 9, 10)))
+        using (Region initialClip = new(new Rectangle(1, 2, 9, 10)))
         {
             graphics.TransformElements = Matrix3x2.CreateTranslation(1, 2);
             graphics.Clip = initialClip;
@@ -105,9 +105,9 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_ClipAndTransformSaveState()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (Region initialClip = new Region(new Rectangle(1, 2, 9, 10)))
+        using (Region initialClip = new(new Rectangle(1, 2, 9, 10)))
         {
             graphics.Clip = initialClip;
             graphics.TransformElements = Matrix3x2.CreateTranslation(1, 2);
@@ -128,7 +128,7 @@ public partial class Graphics_GetContextTests
     [Fact]
     public void GetContextInfo_New_ClipAndTransformSaveAndRestoreState()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             graphics.SetClip(new Rectangle(1, 2, 9, 10));

@@ -17,7 +17,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Ctor_Default()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -175,7 +175,7 @@ public partial class ToolStripTests
     [MemberData(nameof(Ctor_ToolStripItemArray_TestData))]
     public void ToolStrip_Ctor_ToolStripItemArray(ToolStripItem[] items)
     {
-        using var control = new SubToolStrip(items);
+        using SubToolStrip control = new(items);
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -335,7 +335,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -356,7 +356,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowDrop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AllowDrop = value
         };
@@ -381,8 +381,8 @@ public partial class ToolStripTests
     [InlineData(false, false)]
     public void ToolStrip_AllowDrop_SetWithChildren_GetReturnsExpected(bool childAllowDrop, bool value)
     {
-        using var control = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip control = new();
+        using SubToolStripItem item = new()
         {
             AllowDrop = childAllowDrop
         };
@@ -410,7 +410,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowDrop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -447,7 +447,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -494,7 +494,7 @@ public partial class ToolStripTests
     [Fact] // x-thread
     public void ToolStrip_AllowDrop_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -526,8 +526,8 @@ public partial class ToolStripTests
     [InlineData(false, false)]
     public void ToolStrip_AllowDrop_SetWithChildrenWithHandle_GetReturnsExpected(bool childAllowDrop, bool value)
     {
-        using var control = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip control = new();
+        using SubToolStripItem item = new()
         {
             AllowDrop = childAllowDrop
         };
@@ -570,7 +570,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_AllowDrop_SetAllowItemReorder_ThrowsArgumentException()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AllowItemReorder = true
         };
@@ -585,7 +585,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowItemReorder_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AllowItemReorder = value
         };
@@ -606,7 +606,7 @@ public partial class ToolStripTests
     [Fact] // x-thread
     public void ToolStrip_AllowItemReorder_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -635,7 +635,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowItemReorder_SetWithHandleSTA_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -671,7 +671,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_AllowItemReorder_SetAllowDrop_ThrowsArgumentException()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AllowDrop = true
         };
@@ -686,7 +686,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowMerge_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AllowMerge = value
         };
@@ -708,7 +708,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AllowMerge_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -771,7 +771,7 @@ public partial class ToolStripTests
     [MemberData(nameof(Anchor_Set_TestData))]
     public void ToolStrip_Anchor_Set_GetReturnsExpected(AnchorStyles value, AnchorStyles expected, DockStyle expectedDock)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -799,7 +799,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AutoScroll_Set_ThrowsNotSupportedException(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<NotSupportedException>(() => control.AutoScroll = value);
         Assert.False(control.AutoScroll);
     }
@@ -816,7 +816,7 @@ public partial class ToolStripTests
     [MemberData(nameof(AutoScrollMargin_Set_TestData))]
     public void ToolStrip_AutoScrollMargin_Set_GetReturnsExpected(Size value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -843,7 +843,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_AutoScrollMinSize_Set_ThrowsNotSupportedException()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -865,7 +865,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
     public void ToolStrip_AutoScrollPosition_Set_GetReturnsExpected(Point value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AutoScrollPosition = value
         };
@@ -882,7 +882,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_AutoSize_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -909,8 +909,8 @@ public partial class ToolStripTests
     [InlineData(false, 2, 2, 3)]
     public void ToolStrip_AutoSize_SetWithParent_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2, int expectedLayoutCallCount3)
     {
-        using var parent = new Control();
-        using var control = new ToolStrip
+        using Control parent = new();
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -967,8 +967,8 @@ public partial class ToolStripTests
     [InlineData(false, 1)]
     public void ToolStrip_AutoSize_SetWithToolStripPanelParent_GetReturnsExpected(bool value, int expectedLayoutCallCount)
     {
-        using var parent = new ToolStripPanel();
-        using var control = new ToolStrip
+        using ToolStripPanel parent = new();
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1019,7 +1019,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_AutoSize_SetWithHandler_CallsAutoSizeChanged()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             AutoSize = true
         };
@@ -1064,7 +1064,7 @@ public partial class ToolStripTests
     [MemberData(nameof(BackColor_Set_TestData))]
     public void ToolStrip_BackColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             BackColor = value
         };
@@ -1080,12 +1080,12 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_BindingContext_GetWithParent_ReturnsExpected()
     {
-        var bindingContext = new BindingContext();
-        using var parent = new Control
+        BindingContext bindingContext = new();
+        using Control parent = new()
         {
             BindingContext = bindingContext
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1095,12 +1095,12 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_BindingContext_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        var bindingContext = new BindingContext();
-        using var parent = new SubAxHost("00000000-0000-0000-0000-000000000000")
+        BindingContext bindingContext = new();
+        using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             BindingContext = bindingContext
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1117,7 +1117,7 @@ public partial class ToolStripTests
     [MemberData(nameof(BindingContext_Set_TestData))]
     public void ToolStrip_BindingContext_Set_GetReturnsExpected(BindingContext value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             BindingContext = value
         };
@@ -1134,7 +1134,7 @@ public partial class ToolStripTests
     [MemberData(nameof(BindingContext_Set_TestData))]
     public void ToolStrip_BindingContext_SetWithNonNullBindingContext_GetReturnsExpected(BindingContext value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             BindingContext = new BindingContext()
         };
@@ -1152,7 +1152,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_BindingContext_SetWithHandler_CallsBindingContextChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1163,7 +1163,7 @@ public partial class ToolStripTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        var context1 = new BindingContext();
+        BindingContext context1 = new();
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -1174,7 +1174,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        var context2 = new BindingContext();
+        BindingContext context2 = new();
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -1195,7 +1195,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_CanOverflow_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
@@ -1222,7 +1222,7 @@ public partial class ToolStripTests
     [InlineData(false, 1)]
     public void ToolStrip_CanOverflow_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1270,7 +1270,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_CausesValidation_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             CausesValidation = value
         };
@@ -1291,7 +1291,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CausesValidation_SetWithHandler_CallsCausesValidationChanged()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             CausesValidation = true
         };
@@ -1330,7 +1330,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
     public void ToolStrip_Cursor_Set_GetReturnsExpected(Cursor value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Cursor = value
         };
@@ -1346,7 +1346,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Cursor_SetWithHandler_CallsCursorChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1357,7 +1357,7 @@ public partial class ToolStripTests
         control.CursorChanged += handler;
 
         // Set different.
-        using var cursor1 = new Cursor((IntPtr)1);
+        using Cursor cursor1 = new((IntPtr)1);
         control.Cursor = cursor1;
         Assert.Same(cursor1, control.Cursor);
         Assert.Equal(1, callCount);
@@ -1368,7 +1368,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var cursor2 = new Cursor((IntPtr)2);
+        using Cursor cursor2 = new((IntPtr)2);
         control.Cursor = cursor2;
         Assert.Same(cursor2, control.Cursor);
         Assert.Equal(2, callCount);
@@ -1388,7 +1388,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_Get_ReturnsSame()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotSame(Control.DefaultFont, control.Font);
         Assert.Same(control.Font, control.Font);
     }
@@ -1396,13 +1396,13 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_GetWithParent_ReturnsExpected()
     {
-        using var font1 = new Font("Arial", 8.25f);
-        using var font2 = new Font("Arial", 8.5f);
-        using var parent = new Control
+        using Font font1 = new("Arial", 8.25f);
+        using Font font2 = new("Arial", 8.5f);
+        using Control parent = new()
         {
             Font = font1
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1417,13 +1417,13 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_GetWithParentCantAccessProperties_ReturnsExpected()
     {
-        using var font1 = new Font("Arial", 8.25f);
-        using var font2 = new Font("Arial", 8.5f);
-        using var parent = new SubAxHost("00000000-0000-0000-0000-000000000000")
+        using Font font1 = new("Arial", 8.25f);
+        using Font font2 = new("Arial", 8.5f);
+        using SubAxHost parent = new("00000000-0000-0000-0000-000000000000")
         {
             Font = font1
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent
         };
@@ -1439,7 +1439,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
     public void ToolStrip_Font_Set_GetReturnsExpected(Font value)
     {
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             Font = value
         };
@@ -1457,7 +1457,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_SetWithHandler_CallsFontChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1468,7 +1468,7 @@ public partial class ToolStripTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(1, callCount);
@@ -1499,9 +1499,9 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_SetWithItemsWithHandler_CallsFontChanged()
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new ToolStrip();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using ToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -1515,7 +1515,7 @@ public partial class ToolStripTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Same(font1, item1.Font);
@@ -1556,17 +1556,17 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_SetWithItemsWithFontWithHandler_CallsFontChanged()
     {
-        using var childFont1 = new Font("Arial", 1);
-        using var childFont2 = new Font("Arial", 1);
-        using var child1 = new SubToolStripItem
+        using Font childFont1 = new("Arial", 1);
+        using Font childFont2 = new("Arial", 1);
+        using SubToolStripItem child1 = new()
         {
             Font = childFont1
         };
-        using var child2 = new SubToolStripItem
+        using SubToolStripItem child2 = new()
         {
             Font = childFont2
         };
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         control.Items.Add(child1);
         control.Items.Add(child2);
 
@@ -1580,7 +1580,7 @@ public partial class ToolStripTests
         control.FontChanged += handler;
 
         // Set different.
-        using var font1 = new Font("Arial", 8.25f);
+        using Font font1 = new("Arial", 8.25f);
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Same(childFont1, child1.Font);
@@ -1705,7 +1705,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_Get_TestData))]
     public void ToolStrip_DefaultDropDownDirection_Get_ReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = layoutStyle,
             Dock = dock,
@@ -1718,7 +1718,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_Get_TestData))]
     public void ToolStrip_DefaultDropDownDirection_GetDesignMode_ReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -1731,7 +1731,7 @@ public partial class ToolStripTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Site = mockSite.Object,
             LayoutStyle = layoutStyle,
@@ -1831,11 +1831,11 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_GetWithParent_TestData))]
     public void ToolStrip_DefaultDropDownDirection_GetWithParent_ReturnsExpected(DockStyle parentDock, ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        using var parent = new Control
+        using Control parent = new()
         {
             Dock = parentDock
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent,
             LayoutStyle = layoutStyle,
@@ -1849,7 +1849,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_GetWithParent_TestData))]
     public void ToolStrip_DefaultDropDownDirection_GetDesignModeWithParent_ReturnsExpected(DockStyle parentDock, ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -1862,11 +1862,11 @@ public partial class ToolStripTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var parent = new Control
+        using Control parent = new()
         {
             Dock = parentDock
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent,
             Site = mockSite.Object,
@@ -1967,11 +1967,11 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_GetWithToolStripPanelParent_TestData))]
     public void ToolStrip_DefaultDropDownDirection_GetWithToolStripPanelParent_ReturnsExpected(DockStyle parentDock, ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        using var parent = new ToolStripPanel
+        using ToolStripPanel parent = new()
         {
             Dock = parentDock
         };
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Parent = parent,
             LayoutStyle = layoutStyle,
@@ -2071,7 +2071,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_GetDesignModeWithToolStripPanelParent_TestData))]
     public void ToolStrip_DefaultDropDownDirection_GetDesignModeWithToolStripPanelParent_ReturnsExpected(DockStyle parentDock, ToolStripLayoutStyle layoutStyle, DockStyle dock, RightToLeft rightToLeft, ToolStripDropDownDirection expected)
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Default);
+        Mock<ISite> mockSite = new(MockBehavior.Default);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(null);
@@ -2084,12 +2084,12 @@ public partial class ToolStripTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var parent = new ToolStripPanel
+        using ToolStripPanel parent = new()
         {
             Site = mockSite.Object,
             Dock = parentDock
         };
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             Parent = parent,
             Site = mockSite.Object,
@@ -2116,7 +2116,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_Set_TestData))]
     public void ToolStrip_DefaultDropDownDirection_Set_GetReturnsExpected(ToolStripDropDownDirection value, ToolStripDropDownDirection expected)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             DefaultDropDownDirection = value
         };
@@ -2133,7 +2133,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DefaultDropDownDirection_Set_TestData))]
     public void ToolStrip_DefaultDropDownDirection_SetWithHandle_GetReturnsExpected(ToolStripDropDownDirection value, ToolStripDropDownDirection expected)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2162,7 +2162,7 @@ public partial class ToolStripTests
     public void ToolStrip_DefaultDropDownDirection_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.DefaultDropDownDirection)];
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.False(property.CanResetValue(control));
 
         control.DefaultDropDownDirection = ToolStripDropDownDirection.Right;
@@ -2178,7 +2178,7 @@ public partial class ToolStripTests
     public void ToolStrip_DefaultDropDownDirection_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.DefaultDropDownDirection)];
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.DefaultDropDownDirection = ToolStripDropDownDirection.Right;
@@ -2198,21 +2198,21 @@ public partial class ToolStripTests
     [InvalidEnumData<ToolStripDropDownDirection>]
     public void ToolStrip_DefaultDropDownDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripDropDownDirection value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.DefaultDropDownDirection = value);
     }
 
     [WinFormsFact]
     public void ToolStrip_DefaultGripMargin_Get_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Equal(new Padding(2, 2, 2, 2), control.DefaultGripMargin);
     }
 
     [WinFormsFact]
     public void ToolStrip_DefaultGripMargin_GetWithGrip_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Equal(new Padding(2, 2, 2, 2), control.GripMargin);
         Assert.Equal(new Padding(2, 2, 2, 2), control.DefaultGripMargin);
     }
@@ -2263,7 +2263,7 @@ public partial class ToolStripTests
     [MemberData(nameof(DisplayRectangle_TestData))]
     public void ToolStrip_DisplayRectangle_Get_ReturnsExpected(ToolStripLayoutStyle layoutStyle, ToolStripGripStyle gripStyle, RightToLeft rightToLeft, Rectangle expected)
     {
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             LayoutStyle = layoutStyle,
             GripStyle = gripStyle,
@@ -2277,7 +2277,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dock_GetDefaultDock_ReturnsExpected()
     {
-        using var control = new CustomDefaultDockToolStrip();
+        using CustomDefaultDockToolStrip control = new();
         Assert.Equal(DockStyle.Right, control.Dock);
     }
 
@@ -2329,7 +2329,7 @@ public partial class ToolStripTests
     [MemberData(nameof(Dock_Set_TestData))]
     public void ToolStrip_Dock_Set_GetReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle value, int expectedLayoutCallCount, Orientation expectedOrientation, int expectedLayoutStyleChangedCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             LayoutStyle = layoutStyle
         };
@@ -2412,8 +2412,8 @@ public partial class ToolStripTests
     [MemberData(nameof(Dock_SetWithParent_TestData))]
     public void ToolStrip_Dock_SetWithParent_GetReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle value, Orientation expectedOrientation, int expectedLayoutCallCount, int expectedLayoutStyleChangedCallCount, int expectedParentLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new ToolStrip
+        using Control parent = new();
+        using ToolStrip control = new()
         {
             LayoutStyle = layoutStyle,
             Parent = parent
@@ -2518,8 +2518,8 @@ public partial class ToolStripTests
     [MemberData(nameof(Dock_SetWithToolStripPanelParent_TestData))]
     public void ToolStrip_Dock_SetWithToolStripPanelParent_GetReturnsExpected(ToolStripLayoutStyle layoutStyle, DockStyle value, Orientation expectedOrientation, int expectedLayoutCallCount)
     {
-        using var parent = new ToolStripPanel();
-        using var control = new ToolStrip
+        using ToolStripPanel parent = new();
+        using ToolStrip control = new()
         {
             LayoutStyle = layoutStyle,
             Parent = parent
@@ -2584,7 +2584,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dock_SetWithHandler_CallsDockChanged()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Dock = DockStyle.None
         };
@@ -2623,7 +2623,7 @@ public partial class ToolStripTests
     [InvalidEnumData<DockStyle>]
     public void ToolStrip_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Dock = value);
     }
 
@@ -2631,7 +2631,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
     public void ToolStrip_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             ForeColor = value
         };
@@ -2647,7 +2647,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_ForeColor_SetWithHandler_CallsForeColorChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -2683,7 +2683,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStrip_GripMargin_Set_GetReturnsExpected(Padding value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         control.GripMargin = value;
         Assert.Equal(value, control.GripMargin);
         Assert.False(control.IsHandleCreated);
@@ -2701,7 +2701,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
     public void ToolStrip_GripMargin_SetWithGrip_GetReturnsExpected(Padding value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
 
         control.GripMargin = value;
@@ -2721,7 +2721,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripGripStyle.Visible, 0, 1)]
     public void ToolStrip_GripStyle_Set_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount, int expectedCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -2751,7 +2751,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripGripStyle.Visible, 0)]
     public void ToolStrip_GripStyle_SetWithGrip_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
@@ -2781,7 +2781,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripGripStyle.Visible, 0)]
     public void ToolStrip_GripStyle_SetWithHandle_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2820,7 +2820,7 @@ public partial class ToolStripTests
     [InvalidEnumData<ToolStripGripStyle>]
     public void ToolStrip_GripStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripGripStyle value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.GripStyle = value);
     }
 
@@ -2849,7 +2849,7 @@ public partial class ToolStripTests
     [MemberData(nameof(LayoutStyle_Set_TestData))]
     public void ToolStrip_LayoutStyle_Set_GetReturnsExpected(DockStyle dock, ToolStripLayoutStyle value, ToolStripLayoutStyle expected, Orientation expectedOrientation, ToolStripGripDisplayStyle expectedGripDisplayStyle, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Dock = dock
         };
@@ -2876,8 +2876,8 @@ public partial class ToolStripTests
     [MemberData(nameof(LayoutStyle_Set_TestData))]
     public void ToolStrip_LayoutStyle_SetWithParent_GetReturnsExpected(DockStyle dock, ToolStripLayoutStyle value, ToolStripLayoutStyle expected, Orientation expectedOrientation, ToolStripGripDisplayStyle expectedGripDisplayStyle, int expectedLayoutCallCount)
     {
-        using var parent = new Control();
-        using var control = new ToolStrip
+        using Control parent = new();
+        using ToolStrip control = new()
         {
             Parent = parent,
             Dock = dock
@@ -2940,8 +2940,8 @@ public partial class ToolStripTests
     [MemberData(nameof(LayoutStyle_SetWithToolStripPanelParent_TestData))]
     public void ToolStrip_LayoutStyle_SetWithToolStripPanelParent_GetReturnsExpected(DockStyle dock, ToolStripLayoutStyle value, ToolStripLayoutStyle expected, Orientation expectedOrientation, ToolStripGripDisplayStyle expectedGripDisplayStyle, int expectedLayoutCallCount)
     {
-        using var parent = new ToolStripPanel();
-        using var control = new ToolStrip
+        using ToolStripPanel parent = new();
+        using ToolStrip control = new()
         {
             Parent = parent,
             Dock = dock
@@ -3044,7 +3044,7 @@ public partial class ToolStripTests
     [MemberData(nameof(LayoutStyle_SetWithCustomOldValue_TestData))]
     public void ToolStrip_LayoutStyle_SetWithCustomOldValue_GetReturnsExpected(DockStyle dock, ToolStripLayoutStyle oldValue, ToolStripLayoutStyle value, ToolStripLayoutStyle expected, Orientation expectedOrientation, ToolStripGripDisplayStyle expectedGripDisplayStyle, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Dock = dock,
             LayoutStyle = oldValue
@@ -3105,7 +3105,7 @@ public partial class ToolStripTests
     [MemberData(nameof(LayoutStyle_SetWithHandle_TestData))]
     public void ToolStrip_LayoutStyle_SetWithHandle_GetReturnsExpected(DockStyle dock, ToolStripLayoutStyle value, ToolStripLayoutStyle expected, Orientation expectedOrientation, ToolStripGripDisplayStyle expectedGripDisplayStyle, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Dock = dock
         };
@@ -3144,7 +3144,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_LayoutStyle_SetWithHandler_CallsLayoutStyleChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3187,7 +3187,7 @@ public partial class ToolStripTests
     [MemberData(nameof(Renderer_Set_TestData))]
     public void ToolStrip_Renderer_Set_ReturnsExpected(ToolStripRenderer value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Renderer = value
         };
@@ -3210,7 +3210,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Renderer_SetWithHandler_CallsRendererChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3221,7 +3221,7 @@ public partial class ToolStripTests
         control.RendererChanged += handler;
 
         // Set different.
-        var renderer = new SubToolStripRenderer();
+        SubToolStripRenderer renderer = new();
         control.Renderer = renderer;
         Assert.Same(renderer, control.Renderer);
         Assert.Equal(1, callCount);
@@ -3254,7 +3254,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripRenderMode.System, typeof(ToolStripSystemRenderer))]
     public void ToolStrip_RenderMode_Set_ReturnsExpected(ToolStripRenderMode value, Type expectedRendererType)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int rendererChangedCallCount = 0;
         control.RendererChanged += (sender, e) =>
         {
@@ -3297,7 +3297,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripRenderMode.System, typeof(ToolStripSystemRenderer))]
     public void ToolStrip_RenderMode_SetWithCustomRenderer_ReturnsExpected(ToolStripRenderMode value, Type expectedRendererType)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Renderer = new SubToolStripRenderer()
         };
@@ -3333,7 +3333,7 @@ public partial class ToolStripTests
     public void ToolStrip_RenderMode_ResetValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.RenderMode)];
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.False(property.CanResetValue(control));
 
         control.RenderMode = ToolStripRenderMode.Professional;
@@ -3361,7 +3361,7 @@ public partial class ToolStripTests
     public void ToolStrip_RenderMode_ShouldSerializeValue_Success()
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.RenderMode)];
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.False(property.ShouldSerializeValue(control));
 
         control.RenderMode = ToolStripRenderMode.Professional;
@@ -3389,14 +3389,14 @@ public partial class ToolStripTests
     [InvalidEnumData<ToolStripRenderMode>]
     public void ToolStrip_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.RenderMode = value);
     }
 
     [WinFormsFact]
     public void ToolStrip_RenderMode_SetCustomThrowsInvalidEnumArgumentException()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<NotSupportedException>(() => control.RenderMode = ToolStripRenderMode.Custom);
     }
 
@@ -3406,7 +3406,7 @@ public partial class ToolStripTests
     [InlineData(RightToLeft.Inherit, RightToLeft.No, 0)]
     public void ToolStrip_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -3432,9 +3432,9 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
     public void ToolStrip_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new ToolStrip();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using ToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -3456,15 +3456,15 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
     public void ToolStrip_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
     {
-        using var item1 = new SubToolStripItem
+        using SubToolStripItem item1 = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var item2 = new SubToolStripItem
+        using SubToolStripItem item2 = new()
         {
             RightToLeft = RightToLeft.No
         };
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -3485,7 +3485,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -3521,14 +3521,14 @@ public partial class ToolStripTests
     [InvalidEnumData<RightToLeft>]
     public void ToolStrip_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
     }
 
     [WinFormsFact]
     public void ToolStrip_ShowToolTipItems_GetDefaultShowItemToolTips_ReturnsExpected()
     {
-        using var control = new CustomDefaultShowItemToolTipsToolStrip();
+        using CustomDefaultShowItemToolTipsToolStrip control = new();
         Assert.False(control.ShowItemToolTips);
     }
 
@@ -3541,7 +3541,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_ShowItemToolTips_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             ShowItemToolTips = value
         };
@@ -3564,8 +3564,8 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_ShowItemToolTips_SetWithItems_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
-        using var item = new SubToolStripItem();
+        using ToolStrip control = new();
+        using SubToolStripItem item = new();
         control.Items.Add(item);
 
         control.ShowItemToolTips = value;
@@ -3588,7 +3588,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_ShowItemToolTips_SetWithOverflowButton_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotNull(control.OverflowButton);
 
         control.ShowItemToolTips = value;
@@ -3613,7 +3613,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_Stretch_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Stretch = value
         };
@@ -3635,7 +3635,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_Stretch_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3672,7 +3672,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_TabStop_Set_GetReturnsExpected(bool value)
     {
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             TabStop = value
         };
@@ -3697,7 +3697,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_TabStop_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3736,7 +3736,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_TabStop_SetWithHandler_CallsTabStopChanged()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             TabStop = true
         };
@@ -3778,7 +3778,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStrip_TextDirection_Set_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -3807,7 +3807,7 @@ public partial class ToolStripTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStrip_TextDirection_SetWithHandle_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3849,9 +3849,9 @@ public partial class ToolStripTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStrip_TextDirection_SetWithItems_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using ToolStrip control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int layoutCallCount = 0;
@@ -3886,12 +3886,12 @@ public partial class ToolStripTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStrip_TextDirection_SetWithItemsWithTextDirection_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
-        using var item1 = new SubToolStripItem
+        using ToolStrip control = new();
+        using SubToolStripItem item1 = new()
         {
             TextDirection = ToolStripTextDirection.Vertical90
         };
-        using var item2 = new SubToolStripItem
+        using SubToolStripItem item2 = new()
         {
             TextDirection = ToolStripTextDirection.Vertical270
         };
@@ -3929,9 +3929,9 @@ public partial class ToolStripTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStrip_TextDirection_SetWithItemsWithHandle_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using ToolStrip control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -3988,12 +3988,12 @@ public partial class ToolStripTests
     [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270, 1)]
     public void ToolStrip_TextDirection_SetWithItemsWithTextDirectionWithHandle_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected, int expectedLayoutCallCount)
     {
-        using var control = new ToolStrip();
-        using var item1 = new SubToolStripItem
+        using ToolStrip control = new();
+        using SubToolStripItem item1 = new()
         {
             TextDirection = ToolStripTextDirection.Vertical90
         };
-        using var item2 = new SubToolStripItem
+        using SubToolStripItem item2 = new()
         {
             TextDirection = ToolStripTextDirection.Vertical270
         };
@@ -4050,7 +4050,7 @@ public partial class ToolStripTests
     [InvalidEnumData<ToolStripTextDirection>]
     public void ToolStrip_TextDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripTextDirection value)
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.TextDirection = value);
     }
 
@@ -4058,7 +4058,7 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_Visible_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Visible = value
         };
@@ -4089,7 +4089,7 @@ public partial class ToolStripTests
     [MemberData(nameof(Visible_SetWithHandle_TestData))]
     public void ToolStrip_Visible_SetWithHandle_GetReturnsExpected(bool userPaint, bool value, int expectedInvalidatedCallCount)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.SetStyle(ControlStyles.UserPaint, userPaint);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -4126,7 +4126,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Visible_SetWithHandler_CallsVisibleChanged()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Visible = true
         };
@@ -4164,7 +4164,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         ToolStrip.ToolStripAccessibleObject instance = Assert.IsType<ToolStrip.ToolStripAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
@@ -4176,7 +4176,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
     {
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             AccessibleRole = AccessibleRole.HelpBalloon
         };
@@ -4191,7 +4191,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateControlsInstance_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Control.ControlCollection controls = Assert.IsAssignableFrom<Control.ControlCollection>(control.CreateControlsInstance());
         Assert.Empty(controls);
         Assert.Same(control, controls.Owner);
@@ -4202,7 +4202,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateControlsInstance_InvokeDesignMode_ReturnsExpected()
     {
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
             .Returns(new AmbientProperties());
@@ -4212,7 +4212,7 @@ public partial class ToolStripTests
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             Site = mockSite.Object
         };
@@ -4236,7 +4236,7 @@ public partial class ToolStripTests
     [MemberData(nameof(CreateDefaultItem_Button_TestData))]
     public void ToolStrip_CreateDefaultItem_InvokeButton_Success(string text, Image image, EventHandler onClick)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         ToolStripButton button = Assert.IsType<ToolStripButton>(control.CreateDefaultItem(text, image, onClick));
         Assert.Equal(text, button.Text);
         Assert.Same(image, button.Image);
@@ -4254,7 +4254,7 @@ public partial class ToolStripTests
     [MemberData(nameof(CreateDefaultItem_Separator_TestData))]
     public void ToolStrip_CreateDefaultItem_InvokeSeparator_Success(Image image, EventHandler onClick)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         ToolStripSeparator separator = Assert.IsType<ToolStripSeparator>(control.CreateDefaultItem("-", image, onClick));
         Assert.Empty(separator.Text);
         Assert.Null(separator.Image);
@@ -4269,7 +4269,7 @@ public partial class ToolStripTests
     {
         int callCount = 0;
         EventHandler onClick = (sender, e) => callCount++;
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         ToolStripItem button = Assert.IsAssignableFrom<ToolStripItem>(control.CreateDefaultItem(text, null, onClick));
         button.PerformClick();
         Assert.Equal(expectedCallCount, callCount);
@@ -4278,7 +4278,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateLayoutSettings_InvokeFlow_ReturnsExpected()
     {
-        using var toolStrip = new SubToolStrip();
+        using SubToolStrip toolStrip = new();
         FlowLayoutSettings settings = Assert.IsType<FlowLayoutSettings>(toolStrip.CreateLayoutSettings(ToolStripLayoutStyle.Flow));
         Assert.Equal(FlowDirection.LeftToRight, settings.FlowDirection);
         Assert.NotNull(settings.LayoutEngine);
@@ -4289,7 +4289,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_CreateLayoutSettings_InvokeTable_ReturnsExpected()
     {
-        using var toolStrip = new SubToolStrip();
+        using SubToolStrip toolStrip = new();
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.CreateLayoutSettings(ToolStripLayoutStyle.Table));
         Assert.Equal(0, settings.ColumnCount);
         Assert.Empty(settings.ColumnStyles);
@@ -4307,14 +4307,14 @@ public partial class ToolStripTests
     [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow)]
     public void ToolStrip_CreateLayoutSettings_InvalidLayoutStyle_ReturnsNull(ToolStripLayoutStyle layoutStyle)
     {
-        using var toolStrip = new SubToolStrip();
+        using SubToolStrip toolStrip = new();
         Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
     }
 
     [WinFormsFact]
     public void ToolStrip_Dispose_Invoke_Success()
     {
-        using var control = new ToolStrip();
+        using ToolStrip control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -4365,7 +4365,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dispose_InvokeNotVisible_Success()
     {
-        using var control = new ToolStrip
+        using ToolStrip control = new()
         {
             Visible = false
         };
@@ -4419,9 +4419,9 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dispose_InvokeWithItems_Success()
     {
-        using var control = new ToolStrip();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using ToolStrip control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemRemovedCallCount = 0;
@@ -4499,7 +4499,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dispose_InvokeDisposing_Success()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e)
         {
@@ -4550,7 +4550,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dispose_InvokeNotDisposing_Success()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         void handler(object sender, EventArgs e) => callCount++;
         control.Disposed += handler;
@@ -4587,9 +4587,9 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dispose_InvokeDisposingWithItems_Success()
     {
-        using var control = new SubToolStrip();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using SubToolStrip control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemRemovedCallCount = 0;
@@ -4668,9 +4668,9 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Dispose_InvokeNotDisposingWithItems_Success()
     {
-        using var control = new SubToolStrip();
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
+        using SubToolStrip control = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemRemovedCallCount = 0;
@@ -4735,7 +4735,7 @@ public partial class ToolStripTests
     [EnumData<ArrowDirection>]
     public void ToolStrip_GetNextItem_NoItems_ReturnsNull(ArrowDirection direction)
     {
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         Assert.Null(toolStrip.GetNextItem(new SubToolStripItem(), direction));
         Assert.Null(toolStrip.GetNextItem(null, direction));
     }
@@ -4744,7 +4744,7 @@ public partial class ToolStripTests
     [InvalidEnumData<ArrowDirection>]
     public void ToolStrip_GetNextItem_InvalidDirection_ThrowsInvalidEnumArgumentException(ArrowDirection direction)
     {
-        using var toolStrip = new ToolStrip();
+        using ToolStrip toolStrip = new();
         Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(new SubToolStripItem(), direction));
         Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(null, direction));
     }
@@ -4858,7 +4858,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
     }
 
@@ -4873,7 +4873,7 @@ public partial class ToolStripTests
     [InlineData((-1), false)]
     public void ToolStrip_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -4900,7 +4900,7 @@ public partial class ToolStripTests
     [InlineData((ControlStyles)(-1), false)]
     public void ToolStrip_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -4910,7 +4910,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -4918,7 +4918,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnBeginDrag_Invoke_CallsBeginDrag(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -4946,7 +4946,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnBeginDrag_InvokeWithHandle_CallsBeginDrag(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4995,7 +4995,7 @@ public partial class ToolStripTests
     [MemberData(nameof(ControlEventArgs_TestData))]
     public void ToolStrip_OnControlAdded_Invoke_CallsControlAdded(ControlEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         ControlEventHandler handler = (sender, e) =>
         {
@@ -5019,7 +5019,7 @@ public partial class ToolStripTests
     [MemberData(nameof(ControlEventArgs_TestData))]
     public void ToolStrip_OnControlRemoved_Invoke_CallsControlRemoved(ControlEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         ControlEventHandler handler = (sender, e) =>
         {
@@ -5043,7 +5043,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5067,7 +5067,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnEndDrag_Invoke_CallsEndDrag(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5095,7 +5095,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnEndDrag_InvokeCalledBeginDrag_CallsEndDrag(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.OnBeginDrag(EventArgs.Empty);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -5124,7 +5124,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnEndDrag_InvokeWithHandle_CallsEndDrag(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5166,7 +5166,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnEndDrag_InvokeCalledBeginDragWithHandle_CallsEndDrag(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.OnBeginDrag(EventArgs.Empty);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -5209,7 +5209,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5237,9 +5237,9 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnFontChanged_InvokeWithChildren_CallsFontChanged(EventArgs eventArgs)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStrip();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -5266,17 +5266,17 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnFontChanged_InvokeWithChildrenWithFont_CallsFontChanged(EventArgs eventArgs)
     {
-        using var childFont1 = new Font("Arial", 1);
-        using var childFont2 = new Font("Arial", 2);
-        using var item1 = new SubToolStripItem
+        using Font childFont1 = new("Arial", 1);
+        using Font childFont2 = new("Arial", 2);
+        using SubToolStripItem item1 = new()
         {
             Font = childFont1
         };
-        using var item2 = new SubToolStripItem
+        using SubToolStripItem item2 = new()
         {
             Font = childFont2
         };
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -5303,7 +5303,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int layoutCompletedCallCount = 0;
         control.LayoutCompleted += (sender, e) =>
         {
@@ -5338,7 +5338,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithOverflowButton_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotNull(control.OverflowButton);
         int layoutCompletedCallCount = 0;
         control.LayoutCompleted += (sender, e) =>
@@ -5374,7 +5374,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDown_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.OverflowButton.DropDown = new ToolStripDropDown();
         int layoutCompletedCallCount = 0;
         control.LayoutCompleted += (sender, e) =>
@@ -5410,9 +5410,9 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithItems_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStrip();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         int itemLayoutCallCount1 = 0;
@@ -5464,7 +5464,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -5512,7 +5512,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotNull(control.OverflowButton);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -5561,7 +5561,7 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDownWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.OverflowButton.DropDown = new ToolStripDropDown();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -5610,9 +5610,9 @@ public partial class ToolStripTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
     public void ToolStrip_OnLayout_InvokeWithItemsWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStrip();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5677,7 +5677,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnLayoutCompleted_Invoke_CallsLayoutCompleted(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5701,7 +5701,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnLayoutStyleChanged_Invoke_CallsLayoutStyleChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5725,7 +5725,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5749,7 +5749,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -5773,11 +5773,11 @@ public partial class ToolStripTests
     [BoolData]
     public void ToolStrip_OnMouseLeave_UnselectsToolStripItem(bool toolStripItemEnabled)
     {
-        using var toolStrip = new SubToolStrip()
+        using SubToolStrip toolStrip = new()
         {
             GripStyle = ToolStripGripStyle.Hidden
         };
-        using var item = new SubToolStripItem()
+        using SubToolStripItem item = new()
         {
             Enabled = toolStripItemEnabled,
             Parent = toolStrip,
@@ -5798,7 +5798,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_OnPaint_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
     }
 
@@ -5828,11 +5828,11 @@ public partial class ToolStripTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void ToolStrip_OnPaintBackground_Invoke_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             HScroll = hScroll,
             VScroll = vScroll
@@ -5867,11 +5867,11 @@ public partial class ToolStripTests
 
     public static IEnumerable<object[]> OnPaintBackground_VisualStyles_off_WithParent_TestData()
     {
-        var control = new Control
+        Control control = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        var tabPage = new TabPage
+        TabPage tabPage = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
@@ -5915,11 +5915,11 @@ public partial class ToolStripTests
 
     public static IEnumerable<object[]> OnPaintBackground_VisualStyles_on_WithParent_TestData()
     {
-        var control = new Control
+        Control control = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        var tabPage = new TabPage
+        TabPage tabPage = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
@@ -5975,11 +5975,11 @@ public partial class ToolStripTests
     [MemberData(nameof(OnPaintBackground_VisualStyles_on_WithParent_TestData))]
     public void ToolStrip_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             Bounds = new Rectangle(0, 0, 30, 25),
             Parent = parent,
@@ -6026,11 +6026,11 @@ public partial class ToolStripTests
     [MemberData(nameof(OnPaintBackground_TestData))]
     public void ToolStrip_OnPaintBackground_InvokeWithHandle_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             HScroll = hScroll,
             VScroll = vScroll
@@ -6113,15 +6113,15 @@ public partial class ToolStripTests
     [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
     public void ToolStrip_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(1, 2, 3, 4));
 
-        using var parent = new Control
+        using Control parent = new()
         {
             Bounds = new Rectangle(1, 2, 30, 40)
         };
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             Bounds = new Rectangle(0, 0, 30, 25),
             Parent = parent,
@@ -6181,18 +6181,18 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
     }
 
     [WinFormsFact]
     public void ToolStrip_OnPaintGrip_Invoke_CallsPaintGrip()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -6217,11 +6217,11 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_OnPaintGrip_InvokeWithHandle_CallsPaintGrip()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6260,7 +6260,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_OnPaintGrip_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Throws<NullReferenceException>(() => control.OnPaintGrip(null));
     }
 
@@ -6268,7 +6268,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
@@ -6304,7 +6304,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6357,12 +6357,12 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnRightToLeftChanged_InvokeWithChildren_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new()
         {
             RightToLeft = RightToLeft.Inherit
         };
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -6407,15 +6407,15 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnRightToLeftChanged_InvokeWithItemsWithRightToLeft_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var item1 = new SubToolStripItem
+        using SubToolStripItem item1 = new()
         {
             RightToLeft = RightToLeft.Yes
         };
-        using var item2 = new SubToolStripItem
+        using SubToolStripItem item2 = new()
         {
             RightToLeft = RightToLeft.No
         };
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.Items.Add(item1);
         control.Items.Add(item2);
 
@@ -6460,7 +6460,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnRightToLeftChanged_InvokeWithOverflowButton_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
 
         int callCount = 0;
         int overflowButtonCallCount = 0;
@@ -6494,7 +6494,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnRightToLeftChanged_InvokeWithGrip_CallsRightToLeftChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
 
         int callCount = 0;
@@ -6541,7 +6541,7 @@ public partial class ToolStripTests
     [MemberData(nameof(OnScroll_TestData))]
     public void ToolStrip_OnScroll_Invoke_CallsHandler(ScrollEventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
         int callCount = 0;
@@ -6584,7 +6584,7 @@ public partial class ToolStripTests
     [MemberData(nameof(OnScroll_WithHandle_TestData))]
     public void ToolStrip_OnScroll_InvokeWithHandle_CallsHandler(ScrollEventArgs eventArgs, int expectedInvalidatedCallCount)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6648,9 +6648,9 @@ public partial class ToolStripTests
     [MemberData(nameof(OnScroll_WithItems_TestData))]
     public void ToolStrip_OnScroll_InvokeWithItems_Success(ScrollEventArgs eventArgs, Point expectedItem1Location, Point expectedItem2Location)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStrip
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStrip control = new()
         {
             Size = new Size(400, 500)
         };
@@ -6693,9 +6693,9 @@ public partial class ToolStripTests
     [MemberData(nameof(OnScroll_WithItemsWithHandle_TestData))]
     public void ToolStrip_OnScroll_InvokeWithItemsWithHandle_Success(ScrollEventArgs eventArgs, Point expectedItem1Location, Point expectedItem2Location, int expectedInvalidatedCallCount)
     {
-        using var item1 = new SubToolStripItem();
-        using var item2 = new SubToolStripItem();
-        using var control = new SubToolStrip
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+        using SubToolStrip control = new()
         {
             Size = new Size(400, 500)
         };
@@ -6726,7 +6726,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_OnScroll_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Throws<NullReferenceException>(() => control.OnScroll(null));
     }
 
@@ -6743,7 +6743,7 @@ public partial class ToolStripTests
     [MemberData(nameof(OnTabStopChanged_TestData))]
     public void ToolStrip_OnTabStopChanged_Invoke_CallsTabStopChanged(bool tabStop, EventArgs eventArgs)
     {
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             TabStop = tabStop
         };
@@ -6782,7 +6782,7 @@ public partial class ToolStripTests
     [MemberData(nameof(OnVisibleChanged_TestData))]
     public void ToolStrip_OnVisibleChanged_Invoke_CallsVisibleChanged(bool visible, EventArgs eventArgs)
     {
-        using var control = new SubToolStrip
+        using SubToolStrip control = new()
         {
             Visible = visible
         };
@@ -6808,7 +6808,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_OnVisibleChanged_InvokeInDisposing_DoesNotCallVisibleChanged()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         int callCount = 0;
         control.VisibleChanged += (sender, e) => callCount++;
 
@@ -6837,7 +6837,7 @@ public partial class ToolStripTests
     [NewAndDefaultData<EventArgs>]
     public void ToolStrip_OnVisibleChanged_InvokeDisposed_CallsVisibleChanged(EventArgs eventArgs)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.Dispose();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -6862,8 +6862,8 @@ public partial class ToolStripTests
     [InlineData(Keys.A)]
     public void ToolStrip_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
     {
-        using var control = new SubToolStrip();
-        var m = new Message();
+        using SubToolStrip control = new();
+        Message m = new();
         Assert.False(control.ProcessCmdKey(ref m, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -6876,12 +6876,12 @@ public partial class ToolStripTests
     [InlineData(Keys.Control & Keys.Tab)]
     public void ToolStrip_ProcessCmdKey_InvokeWithParent_ReturnsFalse(Keys keyData)
     {
-        using var parent = new Control();
-        using var control = new SubToolStrip
+        using Control parent = new();
+        using SubToolStrip control = new()
         {
             Parent = parent
         };
-        var msg = new Message();
+        Message msg = new();
         Assert.False(control.ProcessCmdKey(ref msg, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -6899,8 +6899,8 @@ public partial class ToolStripTests
     [InlineData(Keys.Control & Keys.Tab, false)]
     public void ToolStrip_ProcessCmdKey_InvokeWithCustomParent_ReturnsExpected(Keys keyData, bool result)
     {
-        using var control = new SubToolStrip();
-        var msg = new Message
+        using SubToolStrip control = new();
+        Message msg = new()
         {
             Msg = 1
         };
@@ -6913,7 +6913,7 @@ public partial class ToolStripTests
             return result;
         }
 
-        using var parent = new CustomProcessControl
+        using CustomProcessControl parent = new()
         {
             ProcessCmdKeyAction = action
         };
@@ -6930,7 +6930,7 @@ public partial class ToolStripTests
     [InlineData(-1, -2)]
     public void ToolStrip_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         Assert.False(control.IsHandleCreated);
 
@@ -6957,8 +6957,8 @@ public partial class ToolStripTests
     [MemberData(nameof(SetItemLocation_TestData))]
     public void ToolStrip_SetItemLocation_Invoke_GetReturnsExpected(Point location, int expectedLocationChangedCallCount)
     {
-        using var control = new SubToolStrip();
-        using var item = new SubToolStripItem
+        using SubToolStrip control = new();
+        using SubToolStripItem item = new()
         {
             Owner = control
         };
@@ -6999,8 +6999,8 @@ public partial class ToolStripTests
     [MemberData(nameof(SetItemLocation_TestData))]
     public void ToolStrip_SetItemLocation_InvokeWithHandle_GetReturnsExpected(Point location, int expectedLocationChangedCallCount)
     {
-        using var control = new ToolStrip();
-        using var item = new SubToolStripItem
+        using ToolStrip control = new();
+        using SubToolStripItem item = new()
         {
             Owner = control
         };
@@ -7053,24 +7053,24 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_SetItemLocation_NullItem_ThrowsArgumentNullException()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.Throws<ArgumentNullException>("item", () => control.SetItemLocation(null, Point.Empty));
     }
 
     [WinFormsFact]
     public void ToolStrip_SetItemLocation_ItemHasNoOwner_ThrowsNotSupportedException()
     {
-        using var control = new SubToolStrip();
-        using var item = new SubToolStripItem();
+        using SubToolStrip control = new();
+        using SubToolStripItem item = new();
         Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
     }
 
     [WinFormsFact]
     public void ToolStrip_SetItemLocation_ItemHasDifferentOwner_ThrowsNotSupportedException()
     {
-        using var control = new SubToolStrip();
-        using var otherControl = new ToolStrip();
-        using var item = new SubToolStripItem
+        using SubToolStrip control = new();
+        using ToolStrip otherControl = new();
+        using SubToolStripItem item = new()
         {
             Owner = otherControl
         };
@@ -7080,8 +7080,8 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_SetItemLocation_ItemHasSameParent_ThrowsNotSupportedException()
     {
-        using var control = new SubToolStrip();
-        using var item = new SubToolStripItem
+        using SubToolStrip control = new();
+        using SubToolStripItem item = new()
         {
             Parent = control
         };
@@ -7091,9 +7091,9 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_SetItemLocation_ItemHasDifferentParent_ThrowsNotSupportedException()
     {
-        using var control = new SubToolStrip();
-        using var otherControl = new ToolStrip();
-        using var item = new SubToolStripItem
+        using SubToolStrip control = new();
+        using ToolStrip otherControl = new();
+        using SubToolStripItem item = new()
         {
             Parent = otherControl
         };
@@ -7103,8 +7103,8 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_WndProc_InvokeMouseActivate_Success()
     {
-        using var control = new SubToolStrip();
-        var m = new Message
+        using SubToolStrip control = new();
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
@@ -7117,7 +7117,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -7126,7 +7126,7 @@ public partial class ToolStripTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
@@ -7142,7 +7142,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_WndProc_InvokeMouseHoverWithHandle_Success()
     {
-        using var control = new SubToolStrip();
+        using SubToolStrip control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -7158,7 +7158,7 @@ public partial class ToolStripTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250

@@ -12,7 +12,7 @@ public class LinkClickedEventArgsTests
     [InlineData("linkText")]
     public void Ctor_String(string linkText)
     {
-        var e = new LinkClickedEventArgs(linkText);
+        LinkClickedEventArgs e = new(linkText);
         Assert.Equal(linkText, e.LinkText);
     }
 }

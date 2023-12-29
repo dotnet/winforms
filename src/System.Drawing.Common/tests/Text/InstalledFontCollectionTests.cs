@@ -9,7 +9,7 @@ public class InstalledFontCollectionTests
     [Fact]
     public void Ctor_Default()
     {
-        using (var fontCollection = new InstalledFontCollection())
+        using (InstalledFontCollection fontCollection = new())
         {
             Assert.NotEmpty(fontCollection.Families);
         }
@@ -18,7 +18,7 @@ public class InstalledFontCollectionTests
     [Fact]
     public void Families_GetWhenDisposed_ReturnsNonEmpty()
     {
-        var fontCollection = new InstalledFontCollection();
+        InstalledFontCollection fontCollection = new();
         fontCollection.Dispose();
 
         Assert.NotEmpty(fontCollection.Families);
@@ -27,7 +27,7 @@ public class InstalledFontCollectionTests
     [Fact]
     public void Dispose_MultipleTimes_Nop()
     {
-        var fontCollection = new InstalledFontCollection();
+        InstalledFontCollection fontCollection = new();
         fontCollection.Dispose();
         fontCollection.Dispose();
     }

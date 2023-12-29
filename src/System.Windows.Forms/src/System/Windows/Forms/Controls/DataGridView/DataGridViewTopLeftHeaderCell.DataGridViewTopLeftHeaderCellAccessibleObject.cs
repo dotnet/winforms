@@ -29,7 +29,7 @@ public partial class DataGridViewTopLeftHeaderCell
                     return Rectangle.Empty;
                 }
 
-                Rectangle cellRect = Owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
+                Rectangle cellRect = Owner.DataGridView.GetCellDisplayRectangle(-1, -1, cutOverflow: false);
                 return Owner.DataGridView.RectangleToScreen(cellRect);
             }
         }
@@ -117,7 +117,7 @@ public partial class DataGridViewTopLeftHeaderCell
                 }
 
                 // If all the cells are selected, then the top left header cell accessible object is considered to be selected as well.
-                if (Owner.DataGridView is not null && Owner.DataGridView.AreAllCellsSelected(false /*includeInvisibleCells*/))
+                if (Owner.DataGridView is not null && Owner.DataGridView.AreAllCellsSelected(includeInvisibleCells: false))
                 {
                     resultState |= AccessibleStates.Selected;
                 }

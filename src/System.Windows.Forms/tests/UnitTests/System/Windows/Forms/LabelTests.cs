@@ -13,7 +13,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_Ctor_Default()
     {
-        using var control = new SubLabel();
+        using SubLabel control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -116,7 +116,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubLabel();
+        using SubLabel control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("Static", createParams.ClassName);
@@ -136,7 +136,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubLabel();
+        using SubLabel control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -163,7 +163,7 @@ public class LabelTests
     [InlineData((ControlStyles)(-1), false)]
     public void Label_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubLabel();
+        using SubLabel control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -173,7 +173,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubLabel();
+        using SubLabel control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -182,7 +182,7 @@ public class LabelTests
     {
         int index = -1;
 
-        using var control = new SubLabel();
+        using SubLabel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(index, control.ImageIndex);
         Assert.Equal(string.Empty, control.ImageKey);
@@ -199,7 +199,7 @@ public class LabelTests
     {
         string key = string.Empty;
 
-        using var control = new SubLabel();
+        using SubLabel control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(key, control.ImageKey);
         Assert.Equal(-1, control.ImageIndex);
@@ -214,15 +214,15 @@ public class LabelTests
     [WinFormsFact]
     public void Label_SupportsUiaProviders_returns_true()
     {
-        using var label = new Label();
+        using Label label = new();
         Assert.True(label.SupportsUiaProviders);
     }
 
     [WinFormsFact]
     public void Label_Invokes_SetToolTip_IfExternalToolTipIsSet()
     {
-        using Label label = new Label();
-        using ToolTip toolTip = new ToolTip();
+        using Label label = new();
+        using ToolTip toolTip = new();
         label.CreateControl();
 
         dynamic labelDynamic = label.TestAccessor().Dynamic;
@@ -241,7 +241,7 @@ public class LabelTests
     [InvalidEnumData<ContentAlignment>]
     public void Label_ImageAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
     {
-        using var control = new Label();
+        using Label control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImageAlign = value);
     }
 
@@ -260,7 +260,7 @@ public class LabelTests
     [MemberData(nameof(ImageAlign_Set_TestData))]
     public void Label_ImageAlign_Set_GetReturnsExpected(bool autoSize, ContentAlignment value)
     {
-        using var control = new Label
+        using Label control = new()
         {
             AutoSize = autoSize
         };
@@ -284,7 +284,7 @@ public class LabelTests
     [InlineData(true, false)]
     public void Label_AutoSize_BehavesExpected(bool autoSize, bool expected)
     {
-        using Form form = new Form();
+        using Form form = new();
         using Label label = new()
         {
             AutoSize = autoSize,

@@ -8,7 +8,7 @@ public class EncoderParametersTests
     [Fact]
     public void Ctor_Default()
     {
-        using (EncoderParameters ep = new EncoderParameters())
+        using (EncoderParameters ep = new())
         {
             Assert.NotNull(ep.Param);
             Assert.Equal(new EncoderParameter[1], ep.Param);
@@ -19,7 +19,7 @@ public class EncoderParametersTests
     [InlineData(1)]
     public void Ctor_Count_Default(int count)
     {
-        using (EncoderParameters ep = new EncoderParameters(count))
+        using (EncoderParameters ep = new(count))
         {
             Assert.NotNull(ep.Param);
             Assert.Equal(new EncoderParameter[count], ep.Param);
@@ -40,7 +40,7 @@ public class EncoderParametersTests
     [MemberData(nameof(Param_TestData))]
     public void Param_Success(EncoderParameter[] param)
     {
-        using (EncoderParameters ep = new EncoderParameters())
+        using (EncoderParameters ep = new())
         {
             ep.Param = param;
             Assert.Equal(param, ep.Param);
@@ -51,7 +51,7 @@ public class EncoderParametersTests
     [MemberData(nameof(Param_TestData))]
     public void Dispose_Success(EncoderParameter[] param)
     {
-        EncoderParameters ep = new EncoderParameters();
+        EncoderParameters ep = new();
         ep.Param = param;
         ep.Dispose();
         Assert.Null(ep.Param);

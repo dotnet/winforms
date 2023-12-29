@@ -172,7 +172,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
                     else
                     {
                         // Ok, we have an incomplete expression. That means we've created the object but we will need to set properties on it to configure it.  Therefore, we need to have a variable reference to it unless we were given a preset expression already.
-                        CodeStatementCollection statements = new CodeStatementCollection();
+                        CodeStatementCollection statements = new();
 
                         // We need to find out if SerializeCreationExpression returned a preset expression.
                         bool isPreset = manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value);
@@ -186,7 +186,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
                             string varName = GetUniqueName(manager, value);
                             string? varTypeName = TypeDescriptor.GetClassName(value);
 
-                            CodeVariableDeclarationStatement varDecl = new CodeVariableDeclarationStatement(varTypeName!, varName);
+                            CodeVariableDeclarationStatement varDecl = new(varTypeName!, varName);
                             Trace(TraceLevel.Verbose, $"Generating local : {varName}");
                             varDecl.InitExpression = expression;
                             statements.Add(varDecl);
@@ -213,7 +213,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
     public virtual object? SerializeAbsolute(IDesignerSerializationManager manager, object value)
     {
         object? data;
-        SerializeAbsoluteContext abs = new SerializeAbsoluteContext();
+        SerializeAbsoluteContext abs = new();
         manager.Context.Push(abs);
         try
         {
@@ -237,7 +237,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(owningObject);
         ArgumentNullException.ThrowIfNull(member);
 
-        CodeStatementCollection statements = new CodeStatementCollection();
+        CodeStatementCollection statements = new();
         // See if we have an existing expression for this member.  If not, fabricate one
         CodeExpression? expression = GetExpression(manager, owningObject);
         if (expression is null)
@@ -273,7 +273,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(member);
 
         CodeStatementCollection statements;
-        SerializeAbsoluteContext abs = new SerializeAbsoluteContext(member);
+        SerializeAbsoluteContext abs = new(member);
         manager.Context.Push(abs);
 
         try

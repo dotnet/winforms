@@ -430,7 +430,7 @@ public partial class CheckedListBox : ListBox
                                   ? CheckState.Unchecked
                                   : CheckState.Checked;
 
-            ItemCheckEventArgs itemCheckEvent = new ItemCheckEventArgs(index, newValue, currentValue);
+            ItemCheckEventArgs itemCheckEvent = new(index, newValue, currentValue);
             OnItemCheck(itemCheckEvent);
 
             // take whatever value the user set, and set that as the value.
@@ -537,7 +537,7 @@ public partial class CheckedListBox : ListBox
                 centeringFactor = bounds.Height - _idealCheckSize;
             }
 
-            Rectangle box = new Rectangle(
+            Rectangle box = new(
                 bounds.X + _listItemStartPosition,
                 bounds.Y + centeringFactor,
                 _idealCheckSize,
@@ -566,7 +566,7 @@ public partial class CheckedListBox : ListBox
             }
 
             // Determine bounds for the text portion of the item
-            Rectangle textBounds = new Rectangle(
+            Rectangle textBounds = new(
                 bounds.X + _idealCheckSize + (_listItemStartPosition * 2),
                 bounds.Y,
                 bounds.Width - (_idealCheckSize + (_listItemStartPosition * 2)),
@@ -623,7 +623,7 @@ public partial class CheckedListBox : ListBox
                 e.GraphicsInternal.FillRectangle(brush, textBounds);
             }
 
-            Rectangle stringBounds = new Rectangle(
+            Rectangle stringBounds = new(
                 textBounds.X + BORDER_SIZE,
                 textBounds.Y,
                 textBounds.Width - BORDER_SIZE,
@@ -631,7 +631,7 @@ public partial class CheckedListBox : ListBox
 
             if (UseCompatibleTextRendering)
             {
-                using StringFormat format = new StringFormat();
+                using StringFormat format = new();
                 if (UseTabStops)
                 {
                     // Set tab stops so it looks similar to a ListBox, at least with the default font size.
@@ -716,7 +716,7 @@ public partial class CheckedListBox : ListBox
         {
             Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
             Rectangle bounds = e.Bounds;
-            Rectangle emptyRectangle = new Rectangle(
+            Rectangle emptyRectangle = new(
                 bounds.X + BORDER_SIZE,
                 bounds.Y,
                 bounds.Width - BORDER_SIZE,
@@ -863,7 +863,7 @@ public partial class CheckedListBox : ListBox
 
         if (value != currentValue)
         {
-            ItemCheckEventArgs itemCheckEvent = new ItemCheckEventArgs(index, value, currentValue);
+            ItemCheckEventArgs itemCheckEvent = new(index, value, currentValue);
             OnItemCheck(itemCheckEvent);
 
             if (itemCheckEvent.NewValue != currentValue)

@@ -88,7 +88,7 @@ public class ArgumentValidationTests
     [Fact]
     public void ThrowIfNull_HDC_ParamIsNull()
     {
-        var param = new HDC(IntPtr.Zero);
+        HDC param = new(IntPtr.Zero);
         var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNull(param));
         Assert.Equal(nameof(param), exception.ParamName);
     }
@@ -96,14 +96,14 @@ public class ArgumentValidationTests
     [Fact]
     public void ThrowIfNull_HDC_ParamIsNotNull()
     {
-        var param = new HDC(new IntPtr(24));
+        HDC param = new(new IntPtr(24));
         ArgumentValidation.ThrowIfNull(param);
     }
 
     [Fact]
     public void ThrowIfNull_HDC_DifferentParamName()
     {
-        var param = new HDC(IntPtr.Zero);
+        HDC param = new(IntPtr.Zero);
         var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNull(param, "paramName"));
         Assert.Equal("paramName", exception.ParamName);
     }

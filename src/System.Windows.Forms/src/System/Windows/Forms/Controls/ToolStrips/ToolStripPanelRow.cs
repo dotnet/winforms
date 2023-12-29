@@ -61,7 +61,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 
         s_toolStripPanelRowCreationDebug.TraceVerbose("Created new ToolStripPanelRow");
 
-        using (LayoutTransaction lt = new LayoutTransaction(parent, this, null))
+        using (LayoutTransaction lt = new(parent, this, null))
         {
             Margin = DefaultMargin;
             CommonProperties.SetAutoSize(this, true);
@@ -256,7 +256,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     ///  whose value is not always set, you should store it in here to save
     ///  space.
     /// </summary>
-    internal PropertyStore Properties { get; } = new PropertyStore();
+    internal PropertyStore Properties { get; } = new();
 
     public ToolStripPanel ToolStripPanel { get; }
 

@@ -10,30 +10,30 @@ public class ToolStripItemCollectionTests
     [InlineData("NAME2")]
     public void ToolStripItemCollection_Find_InvokeKeyExists_ReturnsExpected(string key)
     {
-        using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+        using ToolStripMenuItem toolStrip = new();
 
-        var child1 = new ToolStripMenuItem
+        ToolStripMenuItem child1 = new()
         {
             Name = "name1"
         };
-        var child2 = new ToolStripMenuItem
+        ToolStripMenuItem child2 = new()
         {
             Name = "name2"
         };
-        var child3 = new ToolStripMenuItem
+        ToolStripMenuItem child3 = new()
         {
             Name = "name2"
         };
 
-        var grandchild1 = new ToolStripMenuItem
+        ToolStripMenuItem grandchild1 = new()
         {
             Name = "name1"
         };
-        var grandchild2 = new ToolStripMenuItem
+        ToolStripMenuItem grandchild2 = new()
         {
             Name = "name2"
         };
-        var grandchild3 = new ToolStripMenuItem
+        ToolStripMenuItem grandchild3 = new()
         {
             Name = "name2"
         };
@@ -65,17 +65,17 @@ public class ToolStripItemCollectionTests
     [InlineData("abcdef")]
     public void ToolStripItemCollection_Find_InvokeNoSuchKey_ReturnsEmpty(string key)
     {
-        using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+        using ToolStripMenuItem toolStrip = new();
 
-        var child1 = new ToolStripMenuItem()
+        ToolStripMenuItem child1 = new()
         {
             Name = "name1"
         };
-        var child2 = new ToolStripMenuItem()
+        ToolStripMenuItem child2 = new()
         {
             Name = "name2"
         };
-        var child3 = new ToolStripMenuItem()
+        ToolStripMenuItem child3 = new()
         {
             Name = "name2"
         };
@@ -92,7 +92,7 @@ public class ToolStripItemCollectionTests
     [NullAndEmptyStringData]
     public void ToolStripItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
     {
-        using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+        using ToolStripMenuItem toolStrip = new();
         var collection = toolStrip.DropDown.DisplayedItems;
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
@@ -101,8 +101,8 @@ public class ToolStripItemCollectionTests
     [WinFormsFact]
     public void ToolStripItemCollection_AddRange_ToolStripItemCollection_Success()
     {
-        using var contextMenuStrip = new ContextMenuStrip();
-        using var toolStripDropDownButton = new ToolStripDropDownButton();
+        using ContextMenuStrip contextMenuStrip = new();
+        using ToolStripDropDownButton toolStripDropDownButton = new();
 
         // Add 0 items.
         contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);

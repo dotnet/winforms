@@ -12,7 +12,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [WinFormsFact]
     public void MenuStripAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
     {
-        using var menuStrip = new MenuStrip()
+        using MenuStrip menuStrip = new()
         {
             Name = "Name1",
             AccessibleName = "Test Name"
@@ -47,7 +47,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [WinFormsFact]
     public void MenuStripAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
     {
-        using var menuStrip = new MenuStrip();
+        using MenuStrip menuStrip = new();
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
 
         bool supportsLegacyIAccessiblePatternId = menuStripAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
@@ -58,7 +58,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [WinFormsFact]
     public void MenuStripAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
     {
-        using var menuStrip = new MenuStrip()
+        using MenuStrip menuStrip = new()
         {
             AccessibleRole = AccessibleRole.Link
         };
@@ -72,7 +72,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [WinFormsFact]
     public void MenuStripAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
     {
-        using var menuStrip = new MenuStrip()
+        using MenuStrip menuStrip = new()
         {
             AccessibleDescription = "Test Description"
         };
@@ -86,7 +86,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [WinFormsFact]
     public void MenuStripAccessibleObject_ControlType_IsMenuBar_IfAccessibleRoleIsDefault()
     {
-        using MenuStrip menuStrip = new MenuStrip();
+        using MenuStrip menuStrip = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -98,7 +98,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [WinFormsFact]
     public void MenuStripAccessibleObject_Role_IsMenuBar_ByDefault()
     {
-        using MenuStrip menuStrip = new MenuStrip();
+        using MenuStrip menuStrip = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = menuStrip.AccessibilityObject.Role;
@@ -126,7 +126,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
     [MemberData(nameof(MenuStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void MenuStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using MenuStrip menuStrip = new MenuStrip();
+        using MenuStrip menuStrip = new();
         menuStrip.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

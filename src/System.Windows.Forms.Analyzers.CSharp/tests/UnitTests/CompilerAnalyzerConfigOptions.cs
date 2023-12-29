@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Analyzers.Tests;
 [ExcludeFromCodeCoverage]
 internal sealed class CompilerAnalyzerConfigOptions : AnalyzerConfigOptions
 {
-    public static CompilerAnalyzerConfigOptions Empty { get; } = new CompilerAnalyzerConfigOptions(ImmutableDictionary.Create<string, string>());
+    public static CompilerAnalyzerConfigOptions Empty { get; } = new(ImmutableDictionary.Create<string, string>());
 
     private readonly ImmutableDictionary<string, string> _backing;
 

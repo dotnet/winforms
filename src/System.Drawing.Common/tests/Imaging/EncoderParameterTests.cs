@@ -39,7 +39,7 @@ public class EncoderParameterTests
     [MemberData(nameof(Ctor_Encoder_Byte_TestData))]
     public void Ctor_Encoder_Byte(Encoder encoder, byte value)
     {
-        using (EncoderParameter ep = new EncoderParameter(encoder, value))
+        using (EncoderParameter ep = new(encoder, value))
         {
             CheckEncoderParameter(ep, encoder, EncoderParameterValueType.ValueTypeByte, 1);
         }
@@ -50,7 +50,7 @@ public class EncoderParameterTests
     [InlineData(true, EncoderParameterValueType.ValueTypeUndefined)]
     public void Ctor_Encoder_ByteValue_Bool(bool undefined, EncoderParameterValueType expected)
     {
-        EncoderParameter ep = new EncoderParameter(s_anyEncoder, 0, undefined);
+        EncoderParameter ep = new(s_anyEncoder, 0, undefined);
         CheckEncoderParameter(ep, s_anyEncoder, expected, 1);
     }
 
@@ -60,7 +60,7 @@ public class EncoderParameterTests
     [InlineData(short.MaxValue)]
     public void Ctor_Encoder_Short(short value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value))
+        using (EncoderParameter ep = new(s_anyEncoder, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeShort, 1);
         }
@@ -72,7 +72,7 @@ public class EncoderParameterTests
     [InlineData(long.MaxValue)]
     public void Ctor_Encoder_Long(long value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value))
+        using (EncoderParameter ep = new(s_anyEncoder, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeLong, 1);
         }
@@ -84,7 +84,7 @@ public class EncoderParameterTests
     [InlineData(-10, -5)]
     public void Ctor_Encoder_Numerator_Denominator(int numerator, int denominator)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, numerator, denominator))
+        using (EncoderParameter ep = new(s_anyEncoder, numerator, denominator))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeRational, 1);
         }
@@ -95,7 +95,7 @@ public class EncoderParameterTests
     [InlineData(1, 2, 3, 4)]
     public void Ctor_Encoder_Numerator1_Denominator1_Numerator2_Denominator2(int numerator1, int denominator1, int numerator2, int denominator2)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, numerator1, denominator1, numerator2, denominator2))
+        using (EncoderParameter ep = new(s_anyEncoder, numerator1, denominator1, numerator2, denominator2))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeRationalRange, 1);
         }
@@ -106,7 +106,7 @@ public class EncoderParameterTests
     [InlineData(1, 2)]
     public void Ctor_Encoder_RangeBegin_RangeEnd(long rangeBegin, long rangeEnd)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, rangeBegin, rangeEnd))
+        using (EncoderParameter ep = new(s_anyEncoder, rangeBegin, rangeEnd))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeLongRange, 1);
         }
@@ -117,7 +117,7 @@ public class EncoderParameterTests
     [InlineData("")]
     public void Ctor_Encoder_String(string value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value))
+        using (EncoderParameter ep = new(s_anyEncoder, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeAscii, value.Length);
         }
@@ -128,7 +128,7 @@ public class EncoderParameterTests
     [InlineData(new byte[] { 0, 1, 2, 3 })]
     public void Ctor_Encoder_ByteArray(byte[] value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value))
+        using (EncoderParameter ep = new(s_anyEncoder, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeByte, value.Length);
         }
@@ -139,7 +139,7 @@ public class EncoderParameterTests
     [InlineData(new byte[] { 1, 2 }, true, EncoderParameterValueType.ValueTypeUndefined)]
     public void Ctor_Encoder_ByteArray_Bool(byte[] value, bool undefined, EncoderParameterValueType expected)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value, undefined))
+        using (EncoderParameter ep = new(s_anyEncoder, value, undefined))
         {
             CheckEncoderParameter(ep, s_anyEncoder, expected, value.Length);
         }
@@ -150,7 +150,7 @@ public class EncoderParameterTests
     [InlineData(new short[] { 0, 1, 2, 3 })]
     public void Ctor_Encoder_ShortArray(short[] value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value))
+        using (EncoderParameter ep = new(s_anyEncoder, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeShort, value.Length);
         }
@@ -161,7 +161,7 @@ public class EncoderParameterTests
     [InlineData(new long[] { 0, 1, 2, 3 })]
     public void Ctor_Encoder_LongArray(long[] value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, value))
+        using (EncoderParameter ep = new(s_anyEncoder, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeLong, value.Length);
         }
@@ -171,7 +171,7 @@ public class EncoderParameterTests
     [InlineData(new int[] { 0, 1, 2, 3 }, new int[] { 5, 6, 7, 8 })]
     public void Ctor_Encoder_NumeratorArray_DenominatorArray(int[] numerator, int[] denominator)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, numerator, denominator))
+        using (EncoderParameter ep = new(s_anyEncoder, numerator, denominator))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeRational, numerator.Length);
         }
@@ -181,7 +181,7 @@ public class EncoderParameterTests
     [InlineData(new long[] { 0, 1, 2, 3 }, new long[] { 5, 6, 7, 8 })]
     public void Ctor_Encoder_RangeBeginArray_RangeEndArray(long[] rangeBegin, long[] rangeEnd)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, rangeBegin, rangeEnd))
+        using (EncoderParameter ep = new(s_anyEncoder, rangeBegin, rangeEnd))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeLongRange, rangeBegin.Length);
         }
@@ -191,7 +191,7 @@ public class EncoderParameterTests
     [InlineData(new int[] { 0, 1, 2, 3 }, new int[] { 4, 5, 6, 7 }, new int[] { 8, 9, 10, 11 }, new int[] { 12, 13, 14, 15 })]
     public void Ctor_Encoder_Numerator1Array_Denominator1Array_Numerator2Array_Denominator2Array(int[] numerator1, int[] denominator1, int[] numerator2, int[] denominator2)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, numerator1, denominator1, numerator2, denominator2))
+        using (EncoderParameter ep = new(s_anyEncoder, numerator1, denominator1, numerator2, denominator2))
         {
             CheckEncoderParameter(ep, s_anyEncoder, EncoderParameterValueType.ValueTypeRationalRange, numerator1.Length);
         }
@@ -217,7 +217,7 @@ public class EncoderParameterTests
     [MemberData(nameof(Encoder_NumberOfValues_TestData))]
     public void Ctor_Encoder_NumberOfValues_Type_Value(int numberOfValues, EncoderParameterValueType type, IntPtr value)
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, numberOfValues, type, value))
+        using (EncoderParameter ep = new(s_anyEncoder, numberOfValues, type, value))
         {
             CheckEncoderParameter(ep, s_anyEncoder, type, numberOfValues);
         }
@@ -226,8 +226,8 @@ public class EncoderParameterTests
     [Fact]
     public void Encoder_ReturnsExpecetd()
     {
-        Encoder encoder = new Encoder(Guid.NewGuid());
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, 0)
+        Encoder encoder = new(Guid.NewGuid());
+        using (EncoderParameter ep = new(s_anyEncoder, 0)
         {
             Encoder = encoder
         })
@@ -257,7 +257,7 @@ public class EncoderParameterTests
     [Fact]
     public void Encoder_Null_ThrowsNullReferenceException()
     {
-        using (EncoderParameter ep = new EncoderParameter(s_anyEncoder, 0))
+        using (EncoderParameter ep = new(s_anyEncoder, 0))
         {
             Assert.Throws<NullReferenceException>(() => ep.Encoder = null);
         }

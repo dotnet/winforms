@@ -137,7 +137,7 @@ public partial class FileDialog
             _fileNames = ProcessVistaFiles(dialog);
             if (ProcessFileNames(_fileNames))
             {
-                CancelEventArgs ceevent = new CancelEventArgs();
+                CancelEventArgs ceevent = new();
                 if (NativeWindow.WndProcShouldBeDebuggable)
                 {
                     OnFileOk(ceevent);

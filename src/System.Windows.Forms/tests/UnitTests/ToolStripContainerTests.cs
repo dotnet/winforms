@@ -8,7 +8,7 @@ public class ToolStripContainerTests
     [WinFormsFact]
     public void ToolStripContainer_Constructor()
     {
-        using var tsc = new ToolStripContainer();
+        using ToolStripContainer tsc = new();
 
         Assert.NotNull(tsc);
         Assert.NotNull(tsc.TopToolStripPanel);

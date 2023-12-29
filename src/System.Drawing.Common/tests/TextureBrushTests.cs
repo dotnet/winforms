@@ -20,8 +20,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(bitmap))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(bitmap))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(bitmap, brushImage);
@@ -40,7 +40,7 @@ public class TextureBrushTests
     [Fact]
     public void Ctor_BitmapFromIconHandle_Success()
     {
-        using (var icon = new Icon(Helpers.GetTestBitmapPath("10x16_one_entry_32bit.ico")))
+        using (Icon icon = new(Helpers.GetTestBitmapPath("10x16_one_entry_32bit.ico")))
         using (var image = Bitmap.FromHicon(icon.Handle))
         {
             Ctor_Bitmap(image, PixelFormat.Format32bppPArgb, new Size(11, 22));
@@ -65,8 +65,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, wrapMode))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, wrapMode))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -94,8 +94,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, rectangle))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, rectangle))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -117,8 +117,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, (RectangleF)rectangle))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, (RectangleF)rectangle))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -152,8 +152,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, wrapMode, rectangle))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, wrapMode, rectangle))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -175,8 +175,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, wrapMode, (RectangleF)rectangle))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, wrapMode, (RectangleF)rectangle))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -199,7 +199,7 @@ public class TextureBrushTests
             yield return new object[] { ((Image)data[0]).Clone(), data[1], null, WrapMode.Tile };
             yield return new object[] { ((Image)data[0]).Clone(), data[1], new ImageAttributes(), WrapMode.Clamp };
 
-            var customWrapMode = new ImageAttributes();
+            ImageAttributes customWrapMode = new();
             customWrapMode.SetWrapMode(WrapMode.TileFlipXY);
             yield return new object[] { ((Image)data[0]).Clone(), data[1], customWrapMode, WrapMode.TileFlipXY };
         }
@@ -211,8 +211,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, rectangle, attributes))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, rectangle, attributes))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -235,8 +235,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var brush = new TextureBrush(image, (RectangleF)rectangle, attributes))
-            using (var matrix = new Matrix())
+            using (TextureBrush brush = new(image, (RectangleF)rectangle, attributes))
+            using (Matrix matrix = new())
             {
                 Bitmap brushImage = Assert.IsType<Bitmap>(brush.Image);
                 Assert.NotSame(image, brushImage);
@@ -269,7 +269,7 @@ public class TextureBrushTests
     [Fact]
     public void Ctor_DisposedImage_ThrowsArgumentException()
     {
-        var image = new Bitmap(10, 10);
+        Bitmap image = new(10, 10);
         image.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => new TextureBrush(image));
@@ -287,7 +287,7 @@ public class TextureBrushTests
     [InlineData(WrapMode.Clamp + 1)]
     public void Ctor_InvalidWrapMode_ThrowsInvalidEnumArgumentException(WrapMode wrapMode)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             Assert.ThrowsAny<ArgumentException>(() => new TextureBrush(image, wrapMode));
             Assert.ThrowsAny<ArgumentException>(() => new TextureBrush(image, wrapMode, RectangleF.Empty));
@@ -306,8 +306,8 @@ public class TextureBrushTests
     [InlineData(0, 0, 0, 1)]
     public void Ctor_InvalidRectangle_ThrowsOutOfMemoryException(int x, int y, int width, int height)
     {
-        var rectangle = new Rectangle(x, y, width, height);
-        using (var image = new Bitmap(10, 10))
+        Rectangle rectangle = new(x, y, width, height);
+        using (Bitmap image = new(10, 10))
         {
             Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, rectangle));
             Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, (RectangleF)rectangle));
@@ -321,8 +321,8 @@ public class TextureBrushTests
     [Fact]
     public void Clone_Invoke_Success()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image, WrapMode.Clamp))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image, WrapMode.Clamp))
         {
             TextureBrush clone = Assert.IsType<TextureBrush>(brush.Clone());
             Assert.NotSame(brush, clone);
@@ -335,9 +335,9 @@ public class TextureBrushTests
     [Fact]
     public void Clone_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
@@ -347,9 +347,9 @@ public class TextureBrushTests
     [Fact]
     public void Image_GetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Image);
@@ -370,8 +370,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var image = new Bitmap(10, 10))
-            using (var brush = new TextureBrush(image))
+            using (Bitmap image = new(10, 10))
+            using (TextureBrush brush = new(image))
             using (var expected = (Matrix)originalTransform.Clone())
             {
                 expected.Multiply(matrix, matrixOrder);
@@ -398,8 +398,8 @@ public class TextureBrushTests
     [Fact]
     public void MultiplyTransform_NullMatrix_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("matrix", () => brush.MultiplyTransform(null));
             AssertExtensions.Throws<ArgumentNullException>("matrix", () => brush.MultiplyTransform(null, MatrixOrder.Prepend));
@@ -409,9 +409,9 @@ public class TextureBrushTests
     [Fact]
     public void MultiplyTransform_NotInvertibleMatrix_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
-        using (var matrix = new Matrix(123, 24, 82, 16, 47, 30))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
+        using (Matrix matrix = new(123, 24, 82, 16, 47, 30))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(matrix));
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(matrix, MatrixOrder.Prepend));
@@ -421,13 +421,13 @@ public class TextureBrushTests
     [Fact]
     public void MultiplyTransform_DisposedMatrix_Nop()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
         {
             brush.Transform = transform;
 
-            var matrix = new Matrix();
+            Matrix matrix = new();
             matrix.Dispose();
 
             brush.MultiplyTransform(matrix);
@@ -442,10 +442,10 @@ public class TextureBrushTests
     [InlineData(MatrixOrder.Append + 1)]
     public void MultiplyTransform_InvalidOrder_Nop(MatrixOrder matrixOrder)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
+        using (Matrix matrix = new())
         {
             brush.Transform = transform;
 
@@ -457,10 +457,10 @@ public class TextureBrushTests
     [Fact]
     public void MultiplyTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.MultiplyTransform(matrix));
@@ -471,10 +471,10 @@ public class TextureBrushTests
     [Fact]
     public void ResetTransform_Invoke_SetsTransformToZero()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
-        using (var transform = new Matrix(1, 2, 3, 4, 5, 6))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
+        using (Matrix transform = new(1, 2, 3, 4, 5, 6))
+        using (Matrix matrix = new())
         {
             brush.Transform = transform;
             brush.ResetTransform();
@@ -488,9 +488,9 @@ public class TextureBrushTests
     [Fact]
     public void ResetTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.ResetTransform());
@@ -515,8 +515,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var image = new Bitmap(10, 10))
-            using (var brush = new TextureBrush(image))
+            using (Bitmap image = new(10, 10))
+            using (TextureBrush brush = new(image))
             using (Matrix expected = originalTransform.Clone())
             {
                 expected.Rotate(angle, matrixOrder);
@@ -544,8 +544,8 @@ public class TextureBrushTests
     [InlineData(MatrixOrder.Append + 1)]
     public void RotateTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder matrixOrder)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.RotateTransform(10, matrixOrder));
         }
@@ -554,10 +554,10 @@ public class TextureBrushTests
     [Fact]
     public void RotateTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.RotateTransform(1));
@@ -585,8 +585,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var image = new Bitmap(10, 10))
-            using (var brush = new TextureBrush(image))
+            using (Bitmap image = new(10, 10))
+            using (TextureBrush brush = new(image))
             using (Matrix expected = originalTransform.Clone())
             {
                 expected.Scale(scaleX, scaleY, matrixOrder);
@@ -614,8 +614,8 @@ public class TextureBrushTests
     [InlineData(MatrixOrder.Append + 1)]
     public void ScaleTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder matrixOrder)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.ScaleTransform(1, 2, matrixOrder));
         }
@@ -624,10 +624,10 @@ public class TextureBrushTests
     [Fact]
     public void ScaleTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.ScaleTransform(1, 2));
@@ -638,9 +638,9 @@ public class TextureBrushTests
     [Fact]
     public void Transform_SetValid_GetReturnsExpected()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
-        using (var matrix = new Matrix(1, 2, 3, 4, 5, 6))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
+        using (Matrix matrix = new(1, 2, 3, 4, 5, 6))
         {
             brush.Transform = matrix;
             Assert.Equal(matrix, brush.Transform);
@@ -650,8 +650,8 @@ public class TextureBrushTests
     [Fact]
     public void Transform_SetNull_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("value", () => brush.Transform = null);
         }
@@ -660,10 +660,10 @@ public class TextureBrushTests
     [Fact]
     public void Transform_SetDisposedMatrix_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             matrix.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Transform = matrix);
@@ -673,10 +673,10 @@ public class TextureBrushTests
     [Fact]
     public void Transform_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Transform);
@@ -704,8 +704,8 @@ public class TextureBrushTests
     {
         try
         {
-            using (var image = new Bitmap(10, 10))
-            using (var brush = new TextureBrush(image))
+            using (Bitmap image = new(10, 10))
+            using (TextureBrush brush = new(image))
             using (Matrix expected = originalTransform.Clone())
             {
                 expected.Translate(dX, dY, matrixOrder);
@@ -733,8 +733,8 @@ public class TextureBrushTests
     [InlineData(MatrixOrder.Append + 1)]
     public void TranslateTransform_InvalidOrder_ThrowsArgumentException(MatrixOrder matrixOrder)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => brush.TranslateTransform(1, 2, matrixOrder));
         }
@@ -743,10 +743,10 @@ public class TextureBrushTests
     [Fact]
     public void TranslateTransform_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var matrix = new Matrix())
+        using (Bitmap image = new(10, 10))
+        using (Matrix matrix = new())
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.TranslateTransform(1, 2));
@@ -762,8 +762,8 @@ public class TextureBrushTests
     [InlineData(WrapMode.TileFlipY)]
     public void WrapMode_SetValid_GetReturnsExpected(WrapMode wrapMode)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             brush.WrapMode = wrapMode;
             Assert.Equal(wrapMode, brush.WrapMode);
@@ -775,8 +775,8 @@ public class TextureBrushTests
     [InlineData(WrapMode.Clamp + 1)]
     public void WrapMode_SetInvalid_ThrowsInvalidEnumArgumentException(WrapMode wrapMode)
     {
-        using (var image = new Bitmap(10, 10))
-        using (var brush = new TextureBrush(image))
+        using (Bitmap image = new(10, 10))
+        using (TextureBrush brush = new(image))
         {
             Assert.ThrowsAny<ArgumentException>(() => brush.WrapMode = wrapMode);
         }
@@ -785,9 +785,9 @@ public class TextureBrushTests
     [Fact]
     public void WrapMode_GetSetWhenDisposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
-            var brush = new TextureBrush(image);
+            TextureBrush brush = new(image);
             brush.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => brush.WrapMode);
@@ -878,15 +878,15 @@ public class TextureBrushTests
 
     private static void VerifyFillRect(WrapMode wrapMode, Color[][] expectedColors)
     {
-        using (var brushBitmap = new Bitmap(2, 2))
+        using (Bitmap brushBitmap = new(2, 2))
         {
             brushBitmap.SetPixel(0, 0, Color.Red);
             brushBitmap.SetPixel(1, 0, Color.Green);
             brushBitmap.SetPixel(0, 1, Color.Blue);
             brushBitmap.SetPixel(1, 1, Color.Yellow);
 
-            using (var brush = new TextureBrush(brushBitmap, wrapMode))
-            using (var targetImage = new Bitmap(4, 4))
+            using (TextureBrush brush = new(brushBitmap, wrapMode))
+            using (Bitmap targetImage = new(4, 4))
             using (Graphics targetGraphics = Graphics.FromImage(targetImage))
             {
                 targetGraphics.FillRectangle(brush, new Rectangle(0, 0, 4, 4));

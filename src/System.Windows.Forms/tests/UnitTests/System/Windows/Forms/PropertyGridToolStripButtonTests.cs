@@ -8,7 +8,7 @@ public class PropertyGridToolStripButtonTests
     [WinFormsFact]
     public void PropertyGridToolStripButton_AccessibilityObject_ReturnsPropertyGridToolStripButtonAccessibleObject()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
 
         Assert.IsType<PropertyGridToolStripButton.PropertyGridToolStripButtonAccessibleObject>(toolStripButtons[0].AccessibilityObject);

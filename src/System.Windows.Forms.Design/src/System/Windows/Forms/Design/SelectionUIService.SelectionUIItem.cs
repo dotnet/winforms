@@ -48,7 +48,7 @@ internal sealed partial class SelectionUIService
             Cursors.SizeNESW,   Cursors.SizeNS,   Cursors.SizeNWSE
         };
 
-        internal static readonly int[] s_inactiveSizeArray = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        internal static readonly int[] s_inactiveSizeArray = [0, 0, 0, 0, 0, 0, 0, 0];
         internal static readonly Cursor[] s_inactiveCursorArray = new Cursor[]
         {
             Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow,

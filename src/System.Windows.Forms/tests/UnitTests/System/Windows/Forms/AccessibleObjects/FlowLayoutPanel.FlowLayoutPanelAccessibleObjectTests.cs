@@ -10,7 +10,7 @@ public class FlowLayoutPanelAccessibilityObjectTests
     [WinFormsFact]
     public void FlowLayoutPanelAccessibilityObject_Ctor_Default()
     {
-        using FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel();
+        using FlowLayoutPanel flowLayoutPanel = new();
         flowLayoutPanel.CreateControl();
 
         Assert.NotNull(flowLayoutPanel.AccessibilityObject);
@@ -20,7 +20,7 @@ public class FlowLayoutPanelAccessibilityObjectTests
     [WinFormsFact]
     public void FlowLayoutPanelAccessibilityObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel();
+        using FlowLayoutPanel flowLayoutPanel = new();
         flowLayoutPanel.CreateControl();
         // AccessibleRole is not set = Default
 
@@ -33,7 +33,7 @@ public class FlowLayoutPanelAccessibilityObjectTests
     [WinFormsFact]
     public void FlowLayoutPanelAccessibilityObject_Role_IsClient_ByDefault()
     {
-        using FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel();
+        using FlowLayoutPanel flowLayoutPanel = new();
         flowLayoutPanel.CreateControl();
         // AccessibleRole is not set = Default
 

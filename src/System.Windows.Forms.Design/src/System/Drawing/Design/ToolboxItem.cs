@@ -549,7 +549,7 @@ public class ToolboxItem : ISerializable
             TypeName = type.FullName;
             AssemblyName assemblyName = type.Assembly.GetName(true);
 
-            Dictionary<string, AssemblyName> parents = new Dictionary<string, AssemblyName>();
+            Dictionary<string, AssemblyName> parents = new();
             Type? parentType = type;
 
             do

@@ -139,7 +139,7 @@ public partial class ToolStripComboBox
                     brush = SystemBrushes.GrayText;
                 }
 
-                Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
+                Point middle = new(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
 
                 // If the width is odd - favor pushing it over one pixel right.
                 middle.X += (dropDownRect.Width % 2);

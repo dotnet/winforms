@@ -19,7 +19,7 @@ public class LayoutEventArgsTests
     [MemberData(nameof(Ctor_IComponent_String_TestData))]
     public void Ctor_IComponent_String(IComponent affectedComponent, string affectedProperty)
     {
-        var e = new LayoutEventArgs(affectedComponent, affectedProperty);
+        LayoutEventArgs e = new(affectedComponent, affectedProperty);
         Assert.Equal(affectedComponent, e.AffectedComponent);
         Assert.Equal(affectedComponent as Control, e.AffectedControl);
         Assert.Equal(affectedProperty, e.AffectedProperty);
@@ -36,7 +36,7 @@ public class LayoutEventArgsTests
     [MemberData(nameof(Ctor_Control_String_TestData))]
     public void Ctor_Control_String(Control affectedControl, string affectedProperty)
     {
-        var e = new LayoutEventArgs(affectedControl, affectedProperty);
+        LayoutEventArgs e = new(affectedControl, affectedProperty);
         Assert.Equal(affectedControl, e.AffectedComponent);
         Assert.Equal(affectedControl, e.AffectedControl);
         Assert.Equal(affectedProperty, e.AffectedProperty);

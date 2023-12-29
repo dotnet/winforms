@@ -36,7 +36,7 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLine_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawLine(null, Point.Empty, Point.Empty));
@@ -49,10 +49,10 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLine_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawLine(pen, Point.Empty, Point.Empty));
@@ -65,9 +65,9 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLine_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -87,8 +87,8 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLine_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
@@ -103,7 +103,7 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLines_NullPen_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             AssertExtensions.Throws<ArgumentNullException>("pen", () => graphics.DrawLines(null, new Point[2]));
@@ -114,10 +114,10 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLines_DisposedPen_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var pen = new Pen(Color.Red);
+            Pen pen = new(Color.Red);
             pen.Dispose();
 
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawLines(pen, new Point[2]));
@@ -128,9 +128,9 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLines_NullPoints_ThrowsArgumentNullException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawLines(pen, (Point[])null));
             AssertExtensions.Throws<ArgumentNullException>("points", () => graphics.DrawLines(pen, (PointF[])null));
@@ -142,9 +142,9 @@ public class Graphics_DrawLineTests : DrawingTest
     [InlineData(1)]
     public void DrawLines_InvalidPointsLength_ThrowsArgumentException(int length)
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawLines(pen, new Point[length]));
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawLines(pen, new PointF[length]));
@@ -154,9 +154,9 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLines_Busy_ThrowsInvalidOperationException()
     {
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
-        using (var pen = new Pen(Color.Red))
+        using (Pen pen = new(Color.Red))
         {
             graphics.GetHdc();
             try
@@ -174,8 +174,8 @@ public class Graphics_DrawLineTests : DrawingTest
     [Fact]
     public void DrawLines_Disposed_ThrowsArgumentException()
     {
-        using (var image = new Bitmap(10, 10))
-        using (var pen = new Pen(Color.Red))
+        using (Bitmap image = new(10, 10))
+        using (Pen pen = new(Color.Red))
         {
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();

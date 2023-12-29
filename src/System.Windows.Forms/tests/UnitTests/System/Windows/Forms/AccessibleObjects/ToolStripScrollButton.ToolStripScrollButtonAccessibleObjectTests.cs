@@ -31,7 +31,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         }
 
         using ToolStripDropDownItem ownerItem = ReflectionHelper.InvokePublicConstructor<ToolStripDropDownItem>(itemType);
-        SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
+        SubToolStripDropDownMenu dropDownMenu = new(ownerItem, true, true);
 
         toolStrip.Items.Add(ownerItem);
         ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
@@ -93,7 +93,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         }
 
         using ToolStripDropDownItem ownerItem = ReflectionHelper.InvokePublicConstructor<ToolStripDropDownItem>(itemType);
-        SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, false);
+        SubToolStripDropDownMenu dropDownMenu = new(ownerItem, true, false);
 
         toolStrip.Items.Add(ownerItem);
         ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
@@ -131,7 +131,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
     {
         using ToolStrip toolStrip = new();
         using ToolStripDropDownItem ownerItem = new ToolStripDropDownButton();
-        SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
+        SubToolStripDropDownMenu dropDownMenu = new(ownerItem, true, true);
 
         toolStrip.Items.Add(ownerItem);
         ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;

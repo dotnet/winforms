@@ -17,7 +17,7 @@ namespace System.Resources;
 
 public sealed class ResXDataNode : ISerializable
 {
-    private static readonly char[] s_specialChars = new char[] { ' ', '\r', '\n' };
+    private static readonly char[] s_specialChars = [' ', '\r', '\n'];
 
     private DataNodeInfo? _nodeInfo;
 
@@ -198,7 +198,7 @@ public sealed class ResXDataNode : ISerializable
         if (raw.Length > lineWrap)
         {
             // Word wrap on lineWrap chars, \r\n
-            StringBuilder output = new StringBuilder(raw.Length + (raw.Length / lineWrap) * 3);
+            StringBuilder output = new(raw.Length + (raw.Length / lineWrap) * 3);
             int current = 0;
             for (; current < raw.Length - lineWrap; current += lineWrap)
             {
@@ -376,7 +376,7 @@ public sealed class ResXDataNode : ISerializable
         catch (NotSupportedException nse)
         {
             string newMessage = string.Format(SR.NotSupported, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X, nse.Message);
-            XmlException xml = new XmlException(newMessage, nse, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
+            XmlException xml = new(newMessage, nse, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
             throw new NotSupportedException(newMessage, xml);
         }
 

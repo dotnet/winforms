@@ -85,7 +85,7 @@ public sealed partial class TableLayoutSettings
                 return new List<ControlInformation>();
             }
 
-            List<ControlInformation> listOfControlInfo = new List<ControlInformation>(_controlsInfo.Count);
+            List<ControlInformation> listOfControlInfo = new(_controlsInfo.Count);
             foreach (object name in _controlsInfo.Keys)
             {
                 ControlInformation ci = _controlsInfo[name];

@@ -9,7 +9,7 @@ public class AudioTests
     public void Play()
     {
         string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
-        var audio = new Audio();
+        Audio audio = new();
         Assert.Throws<FileNotFoundException>(() => audio.Play(location));
     }
 
@@ -19,7 +19,7 @@ public class AudioTests
     [Fact]
     public void Stop()
     {
-        var audio = new Audio();
+        Audio audio = new();
         audio.Stop();
     }
 

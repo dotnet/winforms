@@ -558,12 +558,12 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// </summary>
     public override GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
     {
-        GlyphCollection glyphs = new GlyphCollection();
+        GlyphCollection glyphs = new();
 
         if (selectionType != GlyphSelectionType.NotSelected)
         {
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
-            Rectangle translatedBounds = new Rectangle(loc, ((Control)Component).Size);
+            Rectangle translatedBounds = new(loc, ((Control)Component).Size);
             bool primarySelection = (selectionType == GlyphSelectionType.SelectedPrimary);
 
             bool locked = false;
@@ -744,7 +744,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             host.Activated += new EventHandler(OnDesignerActivate);
             host.Deactivated += new EventHandler(OnDesignerDeactivate);
 
-            ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
+            ServiceCreatorCallback callback = new(OnCreateService);
             host.AddService<IEventHandlerService>(callback);
 
             // M3.2 CONTROL ARRAY IS CUT

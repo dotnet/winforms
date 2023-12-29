@@ -12,8 +12,8 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripLabelAccessibleObject_Ctor_Default()
     {
-        using ToolStripLabel toolStripLabel = new ToolStripLabel();
-        ToolStripLabelAccessibleObject accessibleObject = new ToolStripLabelAccessibleObject(toolStripLabel);
+        using ToolStripLabel toolStripLabel = new();
+        ToolStripLabelAccessibleObject accessibleObject = new(toolStripLabel);
 
         Assert.Equal(toolStripLabel, accessibleObject.Owner);
     }
@@ -23,7 +23,7 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_TextControlTypeId)]
     public void ToolStripLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
     {
-        using ToolStripLabel toolStripLabel = new ToolStripLabel();
+        using ToolStripLabel toolStripLabel = new();
         toolStripLabel.IsLink = isLink;
         // AccessibleRole is not set = Default
 
@@ -37,7 +37,7 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     [InlineData(false, AccessibleRole.StaticText)]
     public void ToolStripLabelAccessibleObject_Role_IsExpected_ByDefault(bool isLink, AccessibleRole expectedRole)
     {
-        using ToolStripLabel toolStripLabel = new ToolStripLabel();
+        using ToolStripLabel toolStripLabel = new();
         toolStripLabel.IsLink = isLink;
         // AccessibleRole is not set = Default
 
@@ -65,7 +65,7 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     [MemberData(nameof(ToolStripLabelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripLabelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripLabel toolStripLabel = new ToolStripLabel();
+        using ToolStripLabel toolStripLabel = new();
         toolStripLabel.AccessibleRole = role;
 
         Assert.Equal(AccessibleRoleControlTypeMap.GetControlType(role), (UIA_CONTROLTYPE_ID)(int)toolStripLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
@@ -77,7 +77,7 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     [InlineData(false, AccessibleStates.ReadOnly)]
     public void ToolStripLabelAccessibleObject_GetPropertyValue_LegacyIAccessibleStatePropertyId_ReturnsExpected(bool isLink, AccessibleStates expectedState)
     {
-        using ToolStripLabel toolStripLabel = new ToolStripLabel() { IsLink = isLink };
+        using ToolStripLabel toolStripLabel = new() { IsLink = isLink };
         var actual = (AccessibleStates)(int)toolStripLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId);
 
         Assert.Equal(expectedState, actual);

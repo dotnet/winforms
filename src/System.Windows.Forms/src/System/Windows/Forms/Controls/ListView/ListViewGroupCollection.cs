@@ -133,7 +133,7 @@ public class ListViewGroupCollection : IList
 
     public ListViewGroup Add(string? key, string? headerText)
     {
-        ListViewGroup group = new ListViewGroup(key, headerText);
+        ListViewGroup group = new(key, headerText);
         Add(group);
         return group;
     }

@@ -14,7 +14,7 @@ public class ResXFileRefTests
         var fileName = "SomeFile";
         var typeName = "SomeType";
 
-        var fileRef = new ResXFileRef(fileName, typeName);
+        ResXFileRef fileRef = new(fileName, typeName);
 
         Assert.Equal(fileName, fileRef.FileName);
         Assert.Equal(typeName, fileRef.TypeName);
@@ -28,7 +28,7 @@ public class ResXFileRefTests
         var typeName = "SomeType";
         Encoding encoding = Encoding.Default;
 
-        var fileRef = new ResXFileRef(fileName, typeName, encoding);
+        ResXFileRef fileRef = new(fileName, typeName, encoding);
 
         Assert.Equal(fileName, fileRef.FileName);
         Assert.Equal(typeName, fileRef.TypeName);

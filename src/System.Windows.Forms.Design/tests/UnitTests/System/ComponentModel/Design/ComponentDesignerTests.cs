@@ -2805,7 +2805,7 @@ public class ComponentDesignerTests
     public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithoutComponent_Nop(IDictionary properties)
     {
         using ComponentDesigner designer = new();
-        using Button button = new Button();
+        using Button button = new();
         designer.Initialize(button);
         IDesignerFilter filter = designer;
         filter.PreFilterProperties(properties);

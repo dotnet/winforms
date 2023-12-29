@@ -31,7 +31,7 @@ partial class AxHosts
     /// </summary>
     private void InitializeComponent()
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AxHosts));
+        System.ComponentModel.ComponentResourceManager resources = new(typeof(AxHosts));
         this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
         ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
         this.SuspendLayout();

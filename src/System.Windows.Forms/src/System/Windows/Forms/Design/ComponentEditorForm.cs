@@ -236,7 +236,7 @@ public partial class ComponentEditorForm : Form
 
         Text = caption;
 
-        Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
+        Rectangle pageHostBounds = new(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
                                                  _maxSize.Width, _maxSize.Height);
         _pageHost.Bounds = pageHostBounds;
         grayStrip.Bounds = new Rectangle(pageHostBounds.X, BUTTON_PAD,
@@ -244,7 +244,7 @@ public partial class ComponentEditorForm : Form
 
         if (_pageSites is not null)
         {
-            Rectangle pageBounds = new Rectangle(0, 0, pageHostBounds.Width, pageHostBounds.Height);
+            Rectangle pageBounds = new(0, 0, pageHostBounds.Width, pageHostBounds.Height);
             for (int n = 0; n < _pageSites.Length; n++)
             {
                 ComponentEditorPage page = _pageSites[n].GetPageControl();
@@ -254,7 +254,7 @@ public partial class ComponentEditorForm : Form
 
         int xFrame = SystemInformation.FixedFrameBorderSize.Width;
         Rectangle bounds = pageHostBounds;
-        Size size = new Size(bounds.Width + 3 * (BUTTON_PAD + xFrame) + selectorWidth,
+        Size size = new(bounds.Width + 3 * (BUTTON_PAD + xFrame) + selectorWidth,
                                bounds.Height + STRIP_HEIGHT + 4 * BUTTON_PAD + BUTTON_HEIGHT +
                                2 * xFrame + SystemInformation.CaptionHeight);
         Size = size;

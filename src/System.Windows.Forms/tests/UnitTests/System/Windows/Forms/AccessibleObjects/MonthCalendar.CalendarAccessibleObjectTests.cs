@@ -12,7 +12,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_ctor_default()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         int calendarIndex = 0;
         string name = "Test name";
@@ -27,7 +27,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_Bounds_ReturnsExpectedSize()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         control.CreateControl();
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
@@ -42,7 +42,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_CalendarBodyAccessibleObject_IsNotNull()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         control.CreateControl();
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
@@ -55,7 +55,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_CalendarHeaderAccessibleObject_IsNotNull()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         control.CreateControl();
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
@@ -96,7 +96,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [InlineData(700, 450, 5, 2)]
     public void CalendarAccessibleObject_Column_ReturnsExpected(int width, int height, int calendarIndex, int expected)
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         control.Size = new Size(width, height);
 
         control.CreateControl();
@@ -110,7 +110,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_ContainingGrid_IsControlAccessibleObject()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -133,7 +133,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [MemberData(nameof(CalendarAccessibleObject_DateRange_IsExpected_ForSpecificCalendar_InMonthView_TestData))]
     public void CalendarAccessibleObject_DateRange_IsExpected_ForSpecificCalendar_InMonthView(int calendarIndex, SelectionRange expected)
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         control.FirstDayOfWeek = Day.Sunday;
         control.Size = new Size(450, 450);
         control.SelectionStart = new DateTime(2021, 1, 1);
@@ -163,7 +163,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [InlineData(3)]
     public void CalendarAccessibleObject_GetChildId_ReturnsExpected(int calendarIndex)
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, calendarIndex, "Test name");
@@ -175,7 +175,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_GetColumnHeaderItems_ReturnsNull()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -189,7 +189,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [InlineData(false)]
     public void CalendarAccessibleObject_IsKeyboardFocusable_IsTrueIfEnabled(bool enabled)
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         control.Enabled = enabled;
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
@@ -202,7 +202,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_GetRowHeaderItems_ReturnsNull()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -214,7 +214,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_GridItemPattern_IsSupported()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -226,7 +226,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_TableItemPattern_IsSupported()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -238,7 +238,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_Name_HasInitValue()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         string initName = "Test name";
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
@@ -251,7 +251,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_Parent_IsControlAccessibleObject()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -263,7 +263,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_Role_IsClient()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
@@ -281,7 +281,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [InlineData(5, 2)]
     public void CalendarAccessibleObject_Row_IsExpected(int calendarIndex, int expected)
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         control.Size = new Size(450, 450);
 
         control.CreateControl();
@@ -304,7 +304,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
     [WinFormsFact]
     public void CalendarAccessibleObject_State_IsNone_IfControlIsNotEnabled()
     {
-        using MonthCalendar control = new MonthCalendar();
+        using MonthCalendar control = new();
         control.Enabled = false;
 
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;

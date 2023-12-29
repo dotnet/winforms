@@ -57,7 +57,7 @@ internal class ChangeToolStripParentVerb
                 }
 
                 // Get OleDragHandler ...
-                ToolboxItem toolboxItem = new ToolboxItem(typeof(ToolStripContainer));
+                ToolboxItem toolboxItem = new(typeof(ToolStripContainer));
                 OleDragDropHandler oleDragDropHandler = rootDesigner.GetOleDragHandler();
                 if (oleDragDropHandler is not null)
                 {

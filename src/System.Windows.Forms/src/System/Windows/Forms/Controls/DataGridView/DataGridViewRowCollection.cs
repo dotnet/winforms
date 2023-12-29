@@ -1499,7 +1499,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         Debug.Assert(DataGridView.NewRowIndex == -1 || rowIndex != Count);
         Debug.Assert(!dataGridViewRow.Selected);
 
-        Point newCurrentCell = new Point(-1, -1);
+        Point newCurrentCell = new(-1, -1);
 
         if (force)
         {
@@ -1609,7 +1609,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     private void InsertCopiesPrivate(DataGridViewRow rowTemplate, DataGridViewElementStates rowTemplateState, int indexDestination, int count)
     {
-        Point newCurrentCell = new Point(-1, -1);
+        Point newCurrentCell = new(-1, -1);
         if (rowTemplate.Index == -1)
         {
             if (count > 1)
@@ -1783,7 +1783,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new InvalidOperationException(SR.DataGridViewRowCollection_NoColumns);
         }
 
-        Point newCurrentCell = new Point(-1, -1);
+        Point newCurrentCell = new(-1, -1);
 
         // OnInsertingRows checks for Selected flag of each row, among other things.
         DataGridView.OnInsertingRows(rowIndex, dataGridViewRows, ref newCurrentCell);   // will throw an exception if the insertion is illegal
@@ -1908,7 +1908,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                                      int rowCount)
     {
         Debug.Assert(e.Action != CollectionChangeAction.Remove);
-        Point newCurrentCell = new Point(-1, -1);
+        Point newCurrentCell = new(-1, -1);
         DataGridViewRow? dataGridViewRow = (DataGridViewRow?)e.Element;
         int originalIndex = 0;
         if (dataGridViewRow is not null && e.Action == CollectionChangeAction.Add)
@@ -2213,7 +2213,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         Debug.Assert(!DataGridView.NoDimensionChangeAllowed);
 
         DataGridViewRow dataGridViewRow = SharedRow(index);
-        Point newCurrentCell = new Point(-1, -1);
+        Point newCurrentCell = new(-1, -1);
 
         if (IsCollectionChangedListenedTo || dataGridViewRow.GetDisplayed(index))
         {
@@ -2367,7 +2367,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         if (_items.Count > 0)
         {
-            RowComparer rowComparer = new RowComparer(this, customComparer, ascending);
+            RowComparer rowComparer = new(this, customComparer, ascending);
             _items.CustomSort(rowComparer);
             // Caller takes care of the dataGridView invalidation
         }

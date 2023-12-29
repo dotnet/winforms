@@ -317,7 +317,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
         bool retValue = base.OnMouseMove(g, button, mouseLoc);
 
         // identify where the new box should be...
-        Rectangle newRectangle = new Rectangle(mouseLoc.X - DesignerUtils.BOXIMAGESIZE / 2, mouseLoc.Y - DesignerUtils.BOXIMAGESIZE / 2,
+        Rectangle newRectangle = new(mouseLoc.X - DesignerUtils.BOXIMAGESIZE / 2, mouseLoc.Y - DesignerUtils.BOXIMAGESIZE / 2,
                                           DesignerUtils.BOXIMAGESIZE, DesignerUtils.BOXIMAGESIZE);
 
         // don't do anything if the loc is the same
@@ -333,7 +333,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             if (!lastRectangle.IsEmpty)
             {
                 // build up the invalid region
-                using Region invalidRegion = new Region(lastRectangle);
+                using Region invalidRegion = new(lastRectangle);
                 invalidRegion.Exclude(newRectangle);
                 behaviorService.Invalidate(invalidRegion);
             }
@@ -352,7 +352,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 if (baseControl is not null)
                 {
                     Point adornerServiceOrigin = behaviorService.MapAdornerWindowPoint(baseControl.Handle, new Point(0, 0));
-                    Rectangle statusRect = new Rectangle(newRectangle.X - adornerServiceOrigin.X, newRectangle.Y - adornerServiceOrigin.Y, 0, 0);
+                    Rectangle statusRect = new(newRectangle.X - adornerServiceOrigin.X, newRectangle.Y - adornerServiceOrigin.Y, 0, 0);
                     statusCommandUI?.SetStatusInformation(statusRect);
                 }
             }

@@ -324,7 +324,7 @@ internal partial class CommonProperties
     // Used by ToolStripControlHost.Size.
     internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height)
     {
-        Rectangle bounds = new Rectangle(x, y, width, height);
+        Rectangle bounds = new(x, y, width, height);
         element.Properties.SetRectangle(_specifiedBoundsProperty, bounds);
     }
 
@@ -726,7 +726,7 @@ internal partial class CommonProperties
         {
             if (element.Properties.GetObject(_lastKnownStateProperty) is Dictionary<string, string?> propertyHash)
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
 
                 foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
                 {

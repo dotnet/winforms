@@ -366,9 +366,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            false /*computeContentBounds*/,
-            true  /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: true,
+            paint: false);
         Debug.Assert(errBoundsDebug.Equals(errBounds));
 #endif
 
@@ -855,7 +855,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
                 {
                     if (image is not null)
                     {
-                        using ImageAttributes attr = new ImageAttributes();
+                        using ImageAttributes attr = new();
                         attr.SetWrapMode(WrapMode.TileFlipXY);
                         g.DrawImage(image, imageBounds, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attr);
                     }

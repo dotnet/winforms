@@ -5849,11 +5849,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Bu denetim üzerinde gerçekleştirilen eylem yanlış iş parçacığı tarafından çağrılıyor. Bu eylemi gerçekleştirmek için Control.Invoke veya Control.BeginInvoke kullanarak doğru iş parçacığına göre sıralayın.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidExBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' should be greater than {2} and less than {3}.</source>
-        <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}' değeri {2} değerinden büyük ve {3} değerinden küçük olmalıdır.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidFileFormat">
         <source>File format is not valid.</source>
         <target state="translated">Dosya biçimi geçerli değil.</target>
@@ -5872,26 +5867,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
         <target state="translated">Geçersiz HDC türü: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
-        <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}' değerinin {2} değerinden küçük olması gerekir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidHighBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</source>
-        <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}' değerinin {2} değerinden küçük veya eşit olması gerekir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgument">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</source>
-        <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}', {2} değerinden büyük olmalıdır.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="InvalidLowBoundArgumentEx">
-        <source>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</source>
-        <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}' değerinin {2} değerinden büyük veya eşit olması gerekir.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidNullArgument">

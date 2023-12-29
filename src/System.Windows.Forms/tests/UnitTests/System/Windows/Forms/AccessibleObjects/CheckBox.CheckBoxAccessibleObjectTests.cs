@@ -18,16 +18,16 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Ctor_InvalidTypeControl_ThrowsArgumentException()
     {
-        using var textBox = new TextBox();
+        using TextBox textBox = new();
         Assert.Throws<ArgumentException>(() => new CheckBoxAccessibleObject(textBox));
     }
 
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Ctor_Default()
     {
-        using var checkBox = new CheckBox();
+        using CheckBox checkBox = new();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.NotNull(checkBoxAccessibleObject.Owner);
         Assert.False(checkBox.IsHandleCreated);
@@ -36,14 +36,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_CustomDoDefaultAction_ReturnsExpected()
     {
-        using var checkBox = new CheckBox
+        using CheckBox checkBox = new()
         {
             Name = "CheckBox1",
             AccessibleDefaultActionDescription = "TestActionDescription"
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.Equal("TestActionDescription", checkBoxAccessibleObject.DefaultAction);
         Assert.False(checkBox.IsHandleCreated);
@@ -52,9 +52,9 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_DefaultRole_ReturnsExpected()
     {
-        using var checkBox = new CheckBox();
+        using CheckBox checkBox = new();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.Equal(AccessibleRole.CheckButton, checkBoxAccessibleObject.Role);
         Assert.False(checkBox.IsHandleCreated);
@@ -63,13 +63,13 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_CustomRole_ReturnsExpected()
     {
-        using var checkBox = new CheckBox
+        using CheckBox checkBox = new()
         {
             AccessibleRole = AccessibleRole.PushButton
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.Equal(AccessibleRole.PushButton, checkBoxAccessibleObject.Role);
         Assert.False(checkBox.IsHandleCreated);
@@ -80,14 +80,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [InlineData(false, AccessibleStates.None)]
     public void CheckBoxAccessibleObject_State_ReturnsExpected(bool createControl, AccessibleStates accessibleStates)
     {
-        using var checkBox = new CheckBox();
+        using CheckBox checkBox = new();
 
         if (createControl)
         {
             checkBox.CreateControl();
         }
 
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.Equal(accessibleStates, checkBoxAccessibleObject.State);
         Assert.Equal(createControl, checkBox.IsHandleCreated);
@@ -102,14 +102,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [InlineData(false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void CheckBoxAccessibleObject_ToggleState_ReturnsExpected(bool createControl, CheckState checkState, int toggleState)
     {
-        using var checkBox = new CheckBox() { CheckState = checkState };
+        using CheckBox checkBox = new() { CheckState = checkState };
 
         if (createControl)
         {
             checkBox.CreateControl();
         }
 
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
         Assert.Equal((ToggleState)toggleState, checkBoxAccessibleObject.ToggleState);
 
         Assert.Equal(createControl, checkBox.IsHandleCreated);
@@ -138,7 +138,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [MemberData(nameof(CheckBoxAccessibleObject_DoDefaultAction_Success_Data))]
     public void CheckBoxAccessibleObject_DoDefaultAction_Success(bool createControl, bool threeState, CheckState checkState, int toggleState)
     {
-        using var checkBox = new CheckBox()
+        using CheckBox checkBox = new()
         {
             ThreeState = threeState,
             CheckState = checkState
@@ -149,7 +149,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
             checkBox.CreateControl();
         }
 
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
         checkBoxAccessibleObject.DoDefaultAction();
 
         Assert.Equal((ToggleState)toggleState, checkBoxAccessibleObject.ToggleState);
@@ -159,13 +159,13 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Description_ReturnsExpected()
     {
-        using var checkBox = new CheckBox
+        using CheckBox checkBox = new()
         {
             AccessibleDescription = "TestDescription"
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.Equal("TestDescription", checkBoxAccessibleObject.Description);
         Assert.False(checkBox.IsHandleCreated);
@@ -174,13 +174,13 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Name_ReturnsExpected()
     {
-        using var checkBox = new CheckBox
+        using CheckBox checkBox = new()
         {
             AccessibleName = "TestName"
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.Equal("TestName", checkBoxAccessibleObject.Name);
         Assert.False(checkBox.IsHandleCreated);
@@ -194,14 +194,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "CheckBox1")]
     public void CheckBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
-        using var checkBox = new CheckBox
+        using CheckBox checkBox = new()
         {
             Name = "CheckBox1",
             AccessibleName = "TestName"
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
         using VARIANT value = checkBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value.ToObject());
@@ -213,9 +213,9 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void CheckBoxAccessibleObject_IsPatternSupported_Invoke_ReturnsExpected(int patternId)
     {
-        using var checkBox = new CheckBox();
+        using CheckBox checkBox = new();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
 
         Assert.True(checkBoxAccessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(checkBox.IsHandleCreated);
@@ -224,9 +224,9 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Toggle_Invoke_Success()
     {
-        using var checkBox = new CheckBox();
+        using CheckBox checkBox = new();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
         Assert.False(checkBox.Checked);
 
         checkBoxAccessibleObject.Toggle();
@@ -242,8 +242,8 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Toggle_Invoke_ThreeState_Success()
     {
-        using var checkBox = new CheckBox() { ThreeState = true };
-        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
+        using CheckBox checkBox = new() { ThreeState = true };
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
         Assert.Equal(CheckState.Unchecked, checkBox.CheckState);
 
         checkBoxAccessibleObject.Toggle();
@@ -279,7 +279,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [MemberData(nameof(CheckBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void CheckBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using CheckBox checkBox = new CheckBox();
+        using CheckBox checkBox = new();
         checkBox.AccessibleRole = role;
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 

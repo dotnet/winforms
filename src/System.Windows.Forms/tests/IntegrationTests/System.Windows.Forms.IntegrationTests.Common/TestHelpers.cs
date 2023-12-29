@@ -79,7 +79,7 @@ public static class TestHelpers
         if (!File.Exists(path))
             throw new FileNotFoundException("File does not exist", path);
 
-        var startInfo = new ProcessStartInfo
+        ProcessStartInfo startInfo = new()
         {
             FileName = path
         };
@@ -105,7 +105,7 @@ public static class TestHelpers
         if (!Directory.Exists(dotnetPath))
             throw new DirectoryNotFoundException($"{dotnetPath} directory cannot be found.");
 
-        var process = new Process();
+        Process process = new();
 
         // Set the dotnet_root for the exe being launched
         // This allows the exe to look for runtime dependencies (like the shared framework (NetCore.App))
@@ -390,7 +390,7 @@ public static class TestHelpers
         if (string.IsNullOrEmpty(culture))
             throw new ArgumentNullException(nameof(culture));
 
-        var cultureInfo = new CultureInfo(culture);
+        CultureInfo cultureInfo = new(culture);
         Thread.CurrentThread.CurrentCulture = cultureInfo;
         Thread.CurrentThread.CurrentUICulture = cultureInfo;
     }

@@ -54,7 +54,7 @@ public abstract partial class ToolStripItem
                 QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
                 if (handler is not null)
                 {
-                    QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
+                    QueryAccessibilityHelpEventArgs args = new();
                     handler(Owner, args);
                     return args.HelpString;
                 }
@@ -205,7 +205,7 @@ public abstract partial class ToolStripItem
 
             if (handler is not null)
             {
-                QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
+                QueryAccessibilityHelpEventArgs args = new();
                 handler(Owner, args);
 
                 fileName = args.HelpNamespace;

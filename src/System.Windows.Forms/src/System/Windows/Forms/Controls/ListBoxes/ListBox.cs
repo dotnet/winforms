@@ -585,10 +585,8 @@ public partial class ListBox : ListControl
 
         set
         {
-            if (value < 1 || value > 255)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 255);
 
             if (_itemHeight != value)
             {
@@ -849,12 +847,8 @@ public partial class ListBox : ListControl
         }
         set
         {
-            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
-
-            if (value < -1 || value >= itemCount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(value, _itemsCollection?.Count ?? 0);
 
             if (_selectionMode == SelectionMode.None)
             {
@@ -1961,7 +1955,7 @@ public partial class ListBox : ListControl
             {
                 for (int i = 0; i < cnt; i++)
                 {
-                    MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, i, ItemHeight);
+                    MeasureItemEventArgs mie = new(graphics, i, ItemHeight);
                     OnMeasureItem(mie);
                 }
             }
@@ -2336,7 +2330,7 @@ public partial class ListBox : ListControl
         if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
-            Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
+            Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);
             using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             g.DrawRectangle(pen, rect);
             rect.Inflate(-1, -1);

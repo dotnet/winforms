@@ -16,7 +16,7 @@ public class TextBoxBaseAccessibleObjectTests
         AccessibleObject textBoxAccessibleObject = textBoxBase.AccessibilityObject;
         Assert.NotNull(textBoxAccessibleObject);
 
-        TextBoxBase.TextBoxBaseAccessibleObject textBoxBaseAccessibleObject = new TextBoxBase.TextBoxBaseAccessibleObject(textBoxBase);
+        TextBoxBase.TextBoxBaseAccessibleObject textBoxBaseAccessibleObject = new(textBoxBase);
         Assert.NotNull(textBoxBaseAccessibleObject);
         Assert.False(textBoxBase.IsHandleCreated);
     }

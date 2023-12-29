@@ -8,7 +8,7 @@ public class MetaHeaderTests
     [Fact]
     public void Ctor_Default()
     {
-        MetaHeader mh = new MetaHeader();
+        MetaHeader mh = new();
         Assert.Equal(0, mh.HeaderSize);
         Assert.Equal(0, mh.MaxRecord);
         Assert.Equal(0, mh.NoObjects);
@@ -24,7 +24,7 @@ public class MetaHeaderTests
     [InlineData(short.MinValue)]
     public void ShortProperties_SetValues_ReturnsExpected(short value)
     {
-        MetaHeader mh = new MetaHeader();
+        MetaHeader mh = new();
         mh.HeaderSize = value;
         mh.NoObjects = value;
         mh.NoParameters = value;
@@ -43,7 +43,7 @@ public class MetaHeaderTests
     [InlineData(int.MinValue)]
     public void IntProperties_SetValues_ReturnsExpected(int value)
     {
-        MetaHeader mh = new MetaHeader();
+        MetaHeader mh = new();
         mh.Size = value;
         mh.MaxRecord = value;
         Assert.Equal(value, mh.Size);

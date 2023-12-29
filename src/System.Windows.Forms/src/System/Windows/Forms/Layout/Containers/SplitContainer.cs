@@ -747,10 +747,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
         set
         {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterIncrement), value, 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
             _splitterInc = value;
         }
@@ -991,7 +988,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                     Rectangle r = CalcSplitLine(_splitterDistance, 0);
                     int xSplit = r.X;
                     int ySplit = r.Y;
-                    SplitterCancelEventArgs se = new SplitterCancelEventArgs(Left + SplitterRectangle.X + SplitterRectangle.Width / 2, Top + SplitterRectangle.Y + SplitterRectangle.Height / 2, xSplit, ySplit);
+                    SplitterCancelEventArgs se = new(Left + SplitterRectangle.X + SplitterRectangle.Width / 2, Top + SplitterRectangle.Y + SplitterRectangle.Height / 2, xSplit, ySplit);
                     OnSplitterMoving(se);
                     if (se.Cancel)
                     {
@@ -1104,7 +1101,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 Rectangle r = CalcSplitLine(GetSplitterDistance(e.X, e.Y), 0);
                 int xSplit = r.X;
                 int ySplit = r.Y;
-                SplitterCancelEventArgs se = new SplitterCancelEventArgs(x, y, xSplit, ySplit);
+                SplitterCancelEventArgs se = new(x, y, xSplit, ySplit);
                 OnSplitterMoving(se);
                 if (se.Cancel)
                 {
@@ -1255,10 +1252,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplyPanel1MinSize(int value)
     {
-        if (value < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel1MinSize), value));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         if (Orientation == Orientation.Vertical)
         {
@@ -1287,10 +1281,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplyPanel2MinSize(int value)
     {
-        if (value < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         if (Orientation == Orientation.Vertical)
         {
@@ -1319,10 +1310,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     private void ApplySplitterWidth(int value)
     {
-        if (value < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterWidth), value, 1));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
         if (Orientation == Orientation.Vertical)
         {
@@ -1565,7 +1553,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
             Graphics g = CreateGraphicsInternal();
             if (BackgroundImage is not null)
             {
-                using TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile);
+                using TextureBrush textureBrush = new(BackgroundImage, WrapMode.Tile);
                 g.FillRectangle(textureBrush, ClientRectangle);
             }
             else

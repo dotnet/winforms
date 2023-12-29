@@ -23,7 +23,7 @@ public class WindowsFormsComponentEditorTests
     [MemberData(nameof(EditComponent_ObjectIWin32Window_TestData))]
     public void WindowsFormsComponentEditor_EditComponent_InvokeObjectIWin32Window_ReturnsFalse(Type[] pages, object component, IWin32Window owner)
     {
-        var editor = new CustomWindowsFormsComponentEditor
+        CustomWindowsFormsComponentEditor editor = new()
         {
             GetComponentEditorPagesResult = pages
         };
@@ -35,7 +35,7 @@ public class WindowsFormsComponentEditorTests
         yield return new object[] { null, null, null };
         yield return new object[] { Array.Empty<Type>(), null, null };
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         yield return new object[] { null, mockContext.Object, new object() };
         yield return new object[] { Array.Empty<Type>(), mockContext.Object, new object() };
     }
@@ -44,7 +44,7 @@ public class WindowsFormsComponentEditorTests
     [MemberData(nameof(EditComponent_ITypeDescriptorContextObject_TestData))]
     public void WindowsFormsComponentEditor_EditComponent_InvokeITypeDescriptorContextObject_ReturnsFalse(Type[] pages, ITypeDescriptorContext context, object component)
     {
-        var editor = new CustomWindowsFormsComponentEditor
+        CustomWindowsFormsComponentEditor editor = new()
         {
             GetComponentEditorPagesResult = pages
         };
@@ -56,7 +56,7 @@ public class WindowsFormsComponentEditorTests
         yield return new object[] { null, null, null, null };
         yield return new object[] { Array.Empty<Type>(), null, null, null };
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         var mockWindow = new Mock<IWin32Window>(MockBehavior.Strict);
         yield return new object[] { null, mockContext.Object, new object(), mockWindow.Object };
         yield return new object[] { Array.Empty<Type>(), mockContext.Object, new object(), mockWindow.Object };
@@ -66,7 +66,7 @@ public class WindowsFormsComponentEditorTests
     [MemberData(nameof(EditComponent_ITypeDescriptorContextObjectIWin32Window_TestData))]
     public void WindowsFormsComponentEditor_EditComponent_InvokeITypeDescriptorContextObjectIWin32Window_ReturnsFalse(Type[] pages, ITypeDescriptorContext context, object component, IWin32Window owner)
     {
-        var editor = new CustomWindowsFormsComponentEditor
+        CustomWindowsFormsComponentEditor editor = new()
         {
             GetComponentEditorPagesResult = pages
         };
@@ -78,7 +78,7 @@ public class WindowsFormsComponentEditorTests
     [InlineData("component")]
     public void EditComponent_NonComponentWithPages_ThrowsArgumentException(object component)
     {
-        var editor = new CustomWindowsFormsComponentEditor
+        CustomWindowsFormsComponentEditor editor = new()
         {
             GetComponentEditorPagesResult = new Type[] { typeof(int) }
         };
@@ -90,14 +90,14 @@ public class WindowsFormsComponentEditorTests
     [Fact]
     public void WindowsFormsComponentEditor_GetComponentEditorPages_Invoke_ReturnsNull()
     {
-        var editor = new SubWindowsFormsComponentEditor();
+        SubWindowsFormsComponentEditor editor = new();
         Assert.Null(editor.GetComponentEditorPages());
     }
 
     [Fact]
     public void WindowsFormsComponentEditor_GetInitialComponentEditorPageIndex_Invoke_ReturnsZero()
     {
-        var editor = new SubWindowsFormsComponentEditor();
+        SubWindowsFormsComponentEditor editor = new();
         Assert.Equal(0, editor.GetInitialComponentEditorPageIndex());
     }
 

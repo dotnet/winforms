@@ -88,7 +88,7 @@ public class ImageCodecInfoTests
 
     private void CheckImageCodecInfo(ImageFormat format, string CodecName, string DllName, string FilenameExtension, ImageCodecFlags Flags, string FormatDescription, string MimeType, int signatureLength, string mask, string pattern, string pattern2, ImageCodecInfo codecInfo)
     {
-        Regex extRegex = new Regex(@"^(\*\.\w+(;(\*\.\w+))*;)?" +
+        Regex extRegex = new(@"^(\*\.\w+(;(\*\.\w+))*;)?" +
             Regex.Escape(FilenameExtension) + @"(;\*\.\w+(;(\*\.\w+))*)?$",
             RegexOptions.IgnoreCase | RegexOptions.Singleline);
 

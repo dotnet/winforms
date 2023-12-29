@@ -404,7 +404,7 @@ public abstract partial class FileDialog : CommonDialog
                 return ok;
             }
 
-            CancelEventArgs ceevent = new CancelEventArgs();
+            CancelEventArgs ceevent = new();
             if (NativeWindow.WndProcShouldBeDebuggable)
             {
                 OnFileOk(ceevent);
@@ -462,7 +462,7 @@ public abstract partial class FileDialog : CommonDialog
             return [directory.ToString()];
         }
 
-        List<string> names = new List<string>();
+        List<string> names = new();
         var fileName = fileNames.SliceAtFirstNull();
         while (fileName.Length > 0)
         {

@@ -51,7 +51,7 @@ public partial class ControlPaintTests
     [WinFormsFact]
     public void ControlPaint_CreateHBitmap16Bit_InvokeSpecificPixels_Success()
     {
-        using var bitmap = new Bitmap(3, 1);
+        using Bitmap bitmap = new(3, 1);
         bitmap.SetPixel(0, 0, Color.FromArgb(255, 50, 100, 150));
         bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
         bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
@@ -122,14 +122,14 @@ public partial class ControlPaintTests
     [WinFormsFact]
     public void ControlPaint_CreateHBitmapColorMask_InvokeSpecificPixelsWithMonochromeMask_Success()
     {
-        using var mask = new Bitmap(3, 1);
+        using Bitmap mask = new(3, 1);
         mask.SetPixel(0, 0, Color.FromArgb(255, 255, 0, 0));
         mask.SetPixel(1, 0, Color.FromArgb(255, 0, 255, 0));
         mask.SetPixel(2, 0, Color.FromArgb(0, 0, 0, 255));
         HBITMAP monochromeMask = (HBITMAP)mask.GetHbitmap();
         try
         {
-            using var bitmap = new Bitmap(3, 1);
+            using Bitmap bitmap = new(3, 1);
             bitmap.SetPixel(0, 0, Color.FromArgb(255, 50, 100, 150));
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
@@ -162,7 +162,7 @@ public partial class ControlPaintTests
     [WinFormsFact]
     public void ControlPaint_CreateHBitmapColorMask_InvokeSpecificPixelsWithoutMonochromeMask_Success()
     {
-        using var bitmap = new Bitmap(3, 1);
+        using Bitmap bitmap = new(3, 1);
         bitmap.SetPixel(0, 0, Color.FromArgb(255, 50, 100, 150));
         bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
         bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
@@ -230,7 +230,7 @@ public partial class ControlPaintTests
     [WinFormsFact]
     public void ControlPaint_CreateHBitmapTransparencyMask_InvokeSpecificPixels_Success()
     {
-        using var bitmap = new Bitmap(3, 1);
+        using Bitmap bitmap = new(3, 1);
         bitmap.SetPixel(0, 0, Color.FromArgb(255, 50, 100, 150));
         bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
         bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
@@ -558,7 +558,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder_Graphics_Rectangle_Color_ButtonBorderStyle_TestData))]
     public void ControlPaint_DrawBorder_GraphicsRectangleColorButtonBorderStyle_Success(Rectangle bounds, Color color, ButtonBorderStyle style)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder(graphics, bounds, color, style);
 
@@ -571,7 +571,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonBorderStyle.None)]
     public void ControlPaint_DrawBorder_GraphicsRectangleColorButtonBorderStyleInvalidStyle_Nop(ButtonBorderStyle style)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder(graphics, new Rectangle(1, 2, 3, 4), Color.Red, style);
 
@@ -617,7 +617,7 @@ public partial class ControlPaintTests
         Color rightColor, int rightWidth, ButtonBorderStyle rightStyle,
         Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder(graphics, bounds, leftColor, leftWidth, leftStyle, topColor, topWidth, topStyle, rightColor, rightWidth, rightStyle, bottomColor, bottomWidth, bottomStyle);
 
@@ -659,7 +659,7 @@ public partial class ControlPaintTests
         Color rightColor, int rightWidth, ButtonBorderStyle rightStyle,
         Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>(() => ControlPaint.DrawBorder(graphics, bounds, leftColor, leftWidth, leftStyle, topColor, topWidth, topStyle, rightColor, rightWidth, rightStyle, bottomColor, bottomWidth, bottomStyle));
     }
@@ -697,7 +697,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder3D_Graphics_Rectangle_TestData))]
     public void ControlPaint_DrawBorder3D_InvokeGraphicsRectangle_Success(Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder3D(graphics, rectangle);
 
@@ -722,7 +722,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder3D_Graphics_RectangleBorder3DStyle_TestData))]
     public void ControlPaint_DrawBorder3D_InvokeGraphicsRectangleBorder3DStyle_Success(Rectangle rectangle, Border3DStyle style)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder3D(graphics, rectangle, style);
 
@@ -750,7 +750,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder3D_Graphics_RectangleBorder3DStyleBorder3DSide_TestData))]
     public void ControlPaint_DrawBorder3D_InvokeGraphicsRectangleBorder3DStyleBorder3DSide_Success(Rectangle rectangle, Border3DStyle style, Border3DSide side)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder3D(graphics, rectangle, style, side);
 
@@ -762,7 +762,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder3D_Graphics_Rectangle_TestData))]
     public void ControlPaint_DrawBorder3D_InvokeGraphicsIntIntIntInt_Success(Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
@@ -774,7 +774,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder3D_Graphics_RectangleBorder3DStyle_TestData))]
     public void ControlPaint_DrawBorder3D_InvokeGraphicsIntIntIntIntBorder3DStyleSuccess(Rectangle rectangle, Border3DStyle style)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, style);
 
@@ -786,7 +786,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawBorder3D_Graphics_RectangleBorder3DStyleBorder3DSide_TestData))]
     public void ControlPaint_DrawBorder3D_InvokeGraphicsIntIntIntIntBorder3DStyleBorder3DSide_Success(Rectangle rectangle, Border3DStyle style, Border3DSide side)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawBorder3D(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, style, side);
 
@@ -822,7 +822,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawButton_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawButton(graphics, rectangle, state);
 
@@ -834,7 +834,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawButton_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
 
@@ -860,7 +860,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.Normal)]
     public void ControlPaint_DrawButton_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, width, height), state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawButton(graphics, 0, 0, width, height, state));
@@ -871,7 +871,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawButton_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, -3, 4), state));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawButton(graphics, 0, 0, -3, 4, state));
@@ -882,7 +882,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawButton_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, 3, -4), state));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawButton(graphics, 0, 0, 3, -4, state));
@@ -906,7 +906,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawCaptionButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawCaptionButton_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, CaptionButton button, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawCaptionButton(graphics, rectangle, button, state);
 
@@ -918,7 +918,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawCaptionButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawCaptionButton_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, CaptionButton button, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawCaptionButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
 
@@ -943,7 +943,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.All)]
     public void ControlPaint_DrawCaptionButton_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, width, height), CaptionButton.Close, state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawCaptionButton(graphics, 0, 0, width, height, CaptionButton.Close, state));
@@ -954,7 +954,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawCaptionButton_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, -3, 4), CaptionButton.Close, state));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawCaptionButton(graphics, 0, 0, -3, 4, CaptionButton.Close, state));
@@ -965,7 +965,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawCaptionButton_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, 3, -4), CaptionButton.Close, state));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawCaptionButton(graphics, 0, 0, 3, -4, CaptionButton.Close, state));
@@ -986,7 +986,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawCheckBox_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawCheckBox_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawCheckBox(graphics, rectangle, state);
 
@@ -998,7 +998,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawCheckBox_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawCheckBox_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawCheckBox(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
 
@@ -1024,7 +1024,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.Normal)]
     public void ControlPaint_DrawCheckBox_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, width, height), state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawCheckBox(graphics, 0, 0, width, height, state));
@@ -1035,7 +1035,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal, "width")]
     public void ControlPaint_DrawCheckBox_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state, string expectedParamName)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>(expectedParamName, () => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, -3, 4), state));
         Assert.Throws<ArgumentOutOfRangeException>(expectedParamName, () => ControlPaint.DrawCheckBox(graphics, 0, 0, -3, 4, state));
@@ -1046,7 +1046,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal, "height")]
     public void ControlPaint_DrawCheckBox_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state, string expectedParamName)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>(expectedParamName, () => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, 3, -4), state));
         Assert.Throws<ArgumentOutOfRangeException>(expectedParamName, () => ControlPaint.DrawCheckBox(graphics, 0, 0, 3, -4, state));
@@ -1067,7 +1067,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawComboButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawComboButton_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawComboButton(graphics, rectangle, state);
 
@@ -1079,7 +1079,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawComboButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawComboButton_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawComboButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
 
@@ -1104,7 +1104,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.All)]
     public void ControlPaint_DrawComboButton_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, width, height), state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawComboButton(graphics, 0, 0, width, height, state));
@@ -1115,7 +1115,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawComboButton_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, -3, 4), state));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawComboButton(graphics, 0, 0, -3, 4, state));
@@ -1126,7 +1126,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawComboButton_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, 3, -4), state));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawComboButton(graphics, 0, 0, 3, -4, state));
@@ -1146,7 +1146,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawContainerGrabHandle_TestData))]
     public void ControlPaint_DrawContainerGrabHandle_Invoke_Success(Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawContainerGrabHandle(graphics, rectangle);
 
@@ -1174,7 +1174,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawFocusRectangle_Graphics_Rectangle_TestData))]
     public void ControlPaint_DrawFocusRectangle_InvokeGraphicsRectangle_Success(Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawFocusRectangle(graphics, rectangle);
 
@@ -1205,7 +1205,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawFocusRectangle_Graphics_Rectangle_Color_Color_TestData))]
     public void ControlPaint_DrawFocusRectangle_Invoke_Success(Rectangle rectangle, Color foreColor, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawFocusRectangle(graphics, rectangle, foreColor, backColor);
 
@@ -1240,7 +1240,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawGrabHandle_TestData))]
     public void ControlPaint_DrawGrabHandle_Invoke_Success(Rectangle rectangle, bool primary, bool enabled)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawGrabHandle(graphics, rectangle, primary, enabled);
 
@@ -1277,7 +1277,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawGrid_TestData))]
     public void ControlPaint_DrawGrid_Invoke_Success(Rectangle area, Size pixelsBetweenDots, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawGrid(graphics, area, pixelsBetweenDots, backColor);
 
@@ -1298,7 +1298,7 @@ public partial class ControlPaintTests
     [InlineData(1, -1)]
     public void ControlPaint_DrawGrid_InvalidPixelsBetweenDots_ThrowsArgumentOutOfRangeException(int width, int height)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("pixelsBetweenDots", () => ControlPaint.DrawGrid(graphics, new Rectangle(0, 0, width, height), new Size(width, height), Color.Red));
     }
@@ -1326,7 +1326,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawImageDisabled_TestData))]
     public void ControlPaint_DrawImageDisabled_Invoke_Success(Image image, int x, int y, Color background)
     {
-        using var sourceImage = new Bitmap(10, 10);
+        using Bitmap sourceImage = new(10, 10);
         using Graphics graphics = Graphics.FromImage(sourceImage);
         ControlPaint.DrawImageDisabled(graphics, image, x, y, background);
 
@@ -1337,14 +1337,14 @@ public partial class ControlPaintTests
     [WinFormsFact]
     public void ControlPaint_DrawImageDisabled_NullGraphics_ThrowsArgumentNullException()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         Assert.Throws<ArgumentNullException>("graphics", () => ControlPaint.DrawImageDisabled(null, image, 0, 0, Color.Red));
     }
 
     [WinFormsFact]
     public void ControlPaint_DrawImageDisabled_NullImage_ThrowsNullReferenceException()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<NullReferenceException>(() => ControlPaint.DrawImageDisabled(graphics, null, 0, 0, Color.Red));
     }
@@ -1366,7 +1366,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawLockedFrame_TestData))]
     public void ControlPaint_DrawLockedFrame_Invoke_Success(Rectangle rectangle, bool primary)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawLockedFrame(graphics, rectangle, primary);
 
@@ -1397,7 +1397,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawMenuGlyph_Graphics_Rectangle_MenuGlyph_TestData))]
     public void ControlPaint_DrawMenuGlyph_InvokeGraphicsRectangleMenuGlyph_Success(Rectangle rectangle, MenuGlyph glyph)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawMenuGlyph(graphics, rectangle, glyph);
 
@@ -1429,7 +1429,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawMenuGlyph_Graphics_Rectangle_MenuGlyph_Color_Color_TestData))]
     public void ControlPaint_DrawMenuGlyph_InvokeGraphicsRectangleMenuGlyphColorColor_Success(Rectangle rectangle, MenuGlyph glyph, Color foreColor, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawMenuGlyph(graphics, rectangle, glyph, foreColor, backColor);
 
@@ -1441,7 +1441,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawMenuGlyph_Graphics_Rectangle_MenuGlyph_TestData))]
     public void ControlPaint_DrawMenuGlyph_InvokeGraphicsIntIntIntIntMenuGlyph_Success(Rectangle rectangle, MenuGlyph glyph)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawMenuGlyph(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, glyph);
 
@@ -1453,7 +1453,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawMenuGlyph_Graphics_Rectangle_MenuGlyph_Color_Color_TestData))]
     public void ControlPaint_DrawMenuGlyph_InvokeGraphicsIntIntIntIntMenuGlyphColorColor_Success(Rectangle rectangle, MenuGlyph glyph, Color foreColor, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawMenuGlyph(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, glyph, foreColor, backColor);
 
@@ -1483,7 +1483,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, MenuGlyph.Checkmark)]
     public void ControlPaint_DrawMenuGlyph_EmptyRectangle_ThrowsArgumentException(int width, int height, MenuGlyph glyph)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, width, height), glyph));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawMenuGlyph(graphics, 0, 0, width, height, glyph));
@@ -1495,7 +1495,7 @@ public partial class ControlPaintTests
     [InlineData(MenuGlyph.Checkmark)]
     public void ControlPaint_DrawMenuGlyph_NegativeWidth_ThrowsArgumentOutOfRangeException(MenuGlyph glyph)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, -3, 4), glyph));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawMenuGlyph(graphics, 0, 0, -3, 4, glyph));
@@ -1507,7 +1507,7 @@ public partial class ControlPaintTests
     [InlineData(MenuGlyph.Checkmark)]
     public void ControlPaint_DrawMenuGlyph_NegativeHeight_ThrowsArgumentOutOfRangeException(MenuGlyph glyph)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, 3, -4), glyph));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawMenuGlyph(graphics, 0, 0, 3, -4, glyph));
@@ -1528,7 +1528,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawMixedCheckBox_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawMixedCheckBox_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawMixedCheckBox(graphics, rectangle, state);
 
@@ -1540,7 +1540,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawMixedCheckBox_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawMixedCheckBox_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawMixedCheckBox(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
 
@@ -1565,7 +1565,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.All)]
     public void ControlPaint_DrawMixedCheckBox_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, width, height), state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, width, height, state));
@@ -1576,7 +1576,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawMixedCheckBox_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, -3, 4), state));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, -3, 4, state));
@@ -1587,7 +1587,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawMixedCheckBox_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, 3, -4), state));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, 3, -4, state));
@@ -1608,7 +1608,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawRadioButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawRadioButton_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawRadioButton(graphics, rectangle, state);
 
@@ -1620,7 +1620,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawRadioButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawRadioButton_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawRadioButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, state);
 
@@ -1645,7 +1645,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.All)]
     public void ControlPaint_DrawRadioButton_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, width, height), state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawRadioButton(graphics, 0, 0, width, height, state));
@@ -1656,7 +1656,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawRadioButton_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, -3, 4), state));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawRadioButton(graphics, 0, 0, -3, 4, state));
@@ -1667,7 +1667,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawRadioButton_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, 3, -4), state));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawRadioButton(graphics, 0, 0, 3, -4, state));
@@ -1746,7 +1746,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawScrollButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawScrollButton_InvokeGraphicsRectangleButtonState_Success(Rectangle rectangle, ScrollButton button, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawScrollButton(graphics, rectangle, button, state);
 
@@ -1758,7 +1758,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawScrollButton_Graphics_Rectangle_ButtonState_TestData))]
     public void ControlPaint_DrawScrollButton_InvokeGraphicsIntIntIntIntButtonState_Success(Rectangle rectangle, ScrollButton button, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawScrollButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
 
@@ -1783,7 +1783,7 @@ public partial class ControlPaintTests
     [InlineData(0, 0, ButtonState.All)]
     public void ControlPaint_DrawScrollButton_EmptyRectangle_ThrowsArgumentException(int width, int height, ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, width, height), ScrollButton.Up, state));
         Assert.Throws<ArgumentException>(() => ControlPaint.DrawScrollButton(graphics, 0, 0, width, height, ScrollButton.Up, state));
@@ -1794,7 +1794,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawScrollButton_NegativeWidth_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, -3, 4), ScrollButton.Up, state));
         Assert.Throws<ArgumentOutOfRangeException>("width", () => ControlPaint.DrawScrollButton(graphics, 0, 0, -3, 4, ScrollButton.Up, state));
@@ -1805,7 +1805,7 @@ public partial class ControlPaintTests
     [InlineData(ButtonState.Normal)]
     public void ControlPaint_DrawScrollButton_NegativeHeight_ThrowsArgumentOutOfRangeException(ButtonState state)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, 3, -4), ScrollButton.Up, state));
         Assert.Throws<ArgumentOutOfRangeException>("height", () => ControlPaint.DrawScrollButton(graphics, 0, 0, 3, -4, ScrollButton.Up, state));
@@ -1831,7 +1831,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawSelectionFrame_TestData))]
     public void ControlPaint_DrawSelectionFrame_Invoke_Success(bool active, Rectangle outsideRect, Rectangle insideRect, Color backColor)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawSelectionFrame(graphics, active, outsideRect, insideRect, backColor);
 
@@ -1866,7 +1866,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawSizeGrip_Graphics_Color_Rectangle_TestData))]
     public void ControlPaint_DrawSizeGrip_InvokeGraphicsColorRectangle_Success(Color backColor, Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawSizeGrip(graphics, backColor, rectangle);
 
@@ -1878,7 +1878,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawSizeGrip_Graphics_Color_Rectangle_TestData))]
     public void ControlPaint_DrawSizeGrip_InvokeGraphicsColorIntIntIntInt_Success(Color backColor, Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawSizeGrip(graphics, backColor, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
@@ -1914,7 +1914,7 @@ public partial class ControlPaintTests
         string s, Font font, Color color,
         RectangleF layoutRectangle, StringFormat format)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawStringDisabled(graphics, s, font, color, layoutRectangle, format);
 
@@ -1926,7 +1926,7 @@ public partial class ControlPaintTests
     [NullAndEmptyStringData]
     public void ControlPaint_DrawStringDisabled_NullFontWithNullOrEmptyS_Nop(string s)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawStringDisabled(graphics, s, null, Color.Red, new RectangleF(1, 2, 3, 4), null);
 
@@ -1962,7 +1962,7 @@ public partial class ControlPaintTests
        string s, Font font, Color color,
        Rectangle layoutRectangle, TextFormatFlags format)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
 
@@ -1991,7 +1991,7 @@ public partial class ControlPaintTests
     [MemberData(nameof(DrawVisualStyleBorder_TestData))]
     public void ControlPaint_DrawVisualStyleBorder_Invoke_Success(Rectangle rectangle)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         ControlPaint.DrawVisualStyleBorder(graphics, rectangle);
 

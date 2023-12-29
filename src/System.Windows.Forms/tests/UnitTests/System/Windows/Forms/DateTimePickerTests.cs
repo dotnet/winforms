@@ -13,7 +13,7 @@ public class DateTimePickerTests
     [WinFormsFact]
     public void DateTimePicker_Ctor_Default()
     {
-        using var control = new SubDateTimePicker();
+        using SubDateTimePicker control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -119,7 +119,7 @@ public class DateTimePickerTests
     [WinFormsFact]
     public void DateTimePicker_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubDateTimePicker();
+        using SubDateTimePicker control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Equal("SysDateTimePick32", createParams.ClassName);
@@ -139,7 +139,7 @@ public class DateTimePickerTests
     [WinFormsFact]
     public void DateTimePicker_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubDateTimePicker();
+        using SubDateTimePicker control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
@@ -147,7 +147,7 @@ public class DateTimePickerTests
     [EnumData<DateTimePickerFormat>]
     public void DateTimePicker_Format_Set_GetReturnsExpected(DateTimePickerFormat value)
     {
-        using var control = new SubDateTimePicker();
+        using SubDateTimePicker control = new();
 
         control.Format = value;
         Assert.Equal(value, control.Format);
@@ -157,7 +157,7 @@ public class DateTimePickerTests
     [InvalidEnumData<DateTimePickerFormat>]
     public void DateTimePicker_Format_SetInvalid_ThrowsInvalidEnumArgumentException(DateTimePickerFormat value)
     {
-        using var control = new DateTimePicker();
+        using DateTimePicker control = new();
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Format = value);
     }
 
@@ -184,7 +184,7 @@ public class DateTimePickerTests
     [InlineData((ControlStyles)(-1), false)]
     public void DateTimePicker_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubDateTimePicker();
+        using SubDateTimePicker control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -194,7 +194,7 @@ public class DateTimePickerTests
     [WinFormsFact]
     public void DateTimePicker_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubDateTimePicker();
+        using SubDateTimePicker control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -207,7 +207,7 @@ public class DateTimePickerTests
         {
             // An empty SYSTEMTIME has year, month and day as 0, but DateTime can't have these parameters.
             // So an empty SYSTEMTIME is incorrect in this case.
-            SYSTEMTIME systemTime = new SYSTEMTIME();
+            SYSTEMTIME systemTime = new();
             DateTime dateTime = (DateTime)systemTime;
             Assert.Equal(DateTime.MinValue, dateTime);
         }

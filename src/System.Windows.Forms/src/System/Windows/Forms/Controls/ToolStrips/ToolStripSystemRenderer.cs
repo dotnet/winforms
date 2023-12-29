@@ -275,7 +275,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
     {
         Graphics g = e.Graphics;
-        Rectangle bounds = new Rectangle(Point.Empty, e.GripBounds.Size);
+        Rectangle bounds = new(Point.Empty, e.GripBounds.Size);
         bool verticalGrip = e.GripDisplayStyle == ToolStripGripDisplayStyle.Vertical;
 
         if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Gripper.Normal))
@@ -417,7 +417,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
 
         if (item is not null)
         {
-            Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+            Rectangle bounds = new(Point.Empty, item.Size);
             if (item.IsTopLevel && !ToolStripManager.VisualStylesEnabled)
             {
                 // Classic Mode (3D edges)
@@ -440,7 +440,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                 // Modern MODE (no 3D edges)
                 // Draw blue filled highlight for toplevel items in themed platforms
                 // or items parented to a drop down
-                Rectangle fillRect = new Rectangle(Point.Empty, item.Size);
+                Rectangle fillRect = new(Point.Empty, item.Size);
                 if (item.IsOnDropDown)
                 {
                     // Scoot in by 2 pixels when selected
@@ -527,7 +527,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         VisualStyleElement splitButtonDropDownPart = rightToLeft ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
         VisualStyleElement splitButtonPart = rightToLeft ? VisualStyleElement.ToolBar.DropDownButton.Normal : VisualStyleElement.ToolBar.SplitButton.Normal;
 
-        Rectangle bounds = new Rectangle(Point.Empty, splitButton.Size);
+        Rectangle bounds = new(Point.Empty, splitButton.Size);
 
         if (ToolStripManager.VisualStylesEnabled
             && VisualStyleRenderer.IsElementDefined(splitButtonDropDownPart)

@@ -28,7 +28,7 @@ internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
 
         LayoutOptions? options = default;
         using (var screen = GdiCache.GetScreenHdc())
-        using (PaintEventArgs pe = new PaintEventArgs(screen, clipRect: default))
+        using (PaintEventArgs pe = new(screen, clipRect: default))
         {
             options = Layout(pe);
         }

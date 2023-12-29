@@ -19,7 +19,7 @@ public class PropertyTabChangedEventArgsTests
     [MemberData(nameof(Ctor_PropertyTab_PropertyTab_TestData))]
     public void Ctor_PropertyTab_PropertyTab(PropertyTab oldTab, PropertyTab newTab)
     {
-        var e = new PropertyTabChangedEventArgs(oldTab, newTab);
+        PropertyTabChangedEventArgs e = new(oldTab, newTab);
         Assert.Equal(oldTab, e.OldTab);
         Assert.Equal(newTab, e.NewTab);
     }

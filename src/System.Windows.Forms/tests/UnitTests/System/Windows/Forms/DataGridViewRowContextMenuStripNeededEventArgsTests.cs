@@ -12,7 +12,7 @@ public class DataGridViewRowContextMenuStripNeededEventArgsTests
     [InlineData(1)]
     public void Ctor_Int(int rowIndex)
     {
-        var e = new DataGridViewRowContextMenuStripNeededEventArgs(rowIndex);
+        DataGridViewRowContextMenuStripNeededEventArgs e = new(rowIndex);
         Assert.Equal(rowIndex, e.RowIndex);
         Assert.Null(e.ContextMenuStrip);
     }
@@ -33,7 +33,7 @@ public class DataGridViewRowContextMenuStripNeededEventArgsTests
     [MemberData(nameof(ContextMenuStrip_TestData))]
     public void ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
     {
-        var e = new DataGridViewRowContextMenuStripNeededEventArgs(1)
+        DataGridViewRowContextMenuStripNeededEventArgs e = new(1)
         {
             ContextMenuStrip = value
         };

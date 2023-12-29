@@ -12,7 +12,7 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripNumericUpDownAccessibleObject_Ctor_Default()
     {
-        using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
+        using ToolStripNumericUpDown toolStripNumericUpDown = new();
         ToolStripHostedControlAccessibleObject accessibleObject = (ToolStripHostedControlAccessibleObject)toolStripNumericUpDown.Control.AccessibilityObject;
 
         ToolStripNumericUpDown actual = accessibleObject.TestAccessor().Dynamic._toolStripControlHost;
@@ -23,7 +23,7 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripNumericUpDownAccessibleObject_ControlType_IsSpinner_IfAccessibleRoleIsDefault()
     {
-        using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
+        using ToolStripNumericUpDown toolStripNumericUpDown = new();
         // AccessibleRole is not set = Default
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, (UIA_CONTROLTYPE_ID)(int)toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
@@ -35,7 +35,7 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
     [InlineData(false, AccessibleRole.None)]
     public void ToolStripNumericUpDownAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
-        using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
+        using ToolStripNumericUpDown toolStripNumericUpDown = new();
         // AccessibleRole is not set = Default
         Control control = toolStripNumericUpDown.Control;
 
@@ -69,7 +69,7 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
     [MemberData(nameof(ToolStripNumericUpDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripNumericUpDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
+        using ToolStripNumericUpDown toolStripNumericUpDown = new();
         toolStripNumericUpDown.AccessibleRole = role;
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripNumericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

@@ -18,8 +18,8 @@ public class ThreadContextTests
     public void ThreadContext_EmptyProcessFiltersWorks()
     {
         // Test that no filters at all does not throw, and that returns false from translation
-        Application.ThreadContext threadContext = new Application.ThreadContext();
-        var msg = new MSG();
+        Application.ThreadContext threadContext = new();
+        MSG msg = new();
         Assert.False(threadContext.PreTranslateMessage(ref msg));
     }
 
@@ -27,15 +27,15 @@ public class ThreadContextTests
     public void ThreadContext_WrongProcessFiltersPassesThrough()
     {
         // Test that a filter for the wrong ID returns false, but does get called
-        Application.ThreadContext threadContext = new Application.ThreadContext();
+        Application.ThreadContext threadContext = new();
 
         MessageId filterId = TestMessageId2;
-        var mockContext = new Mock<IMessageFilter>(MockBehavior.Strict);
+        Mock<IMessageFilter> mockContext = new(MockBehavior.Strict);
         mockContext.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                    .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId));
 
         threadContext.AddMessageFilter(mockContext.Object);
-        var msg = new MSG
+        MSG msg = new()
         {
             message = (uint)TestMessageId1
         };
@@ -47,15 +47,15 @@ public class ThreadContextTests
     public void ThreadContext_CorrectProcessFiltersProcesses()
     {
         // Test that a filter with the correct ID returns true
-        Application.ThreadContext threadContext = new Application.ThreadContext();
+        Application.ThreadContext threadContext = new();
 
         MessageId filterId = TestMessageId2;
-        var mockContext = new Mock<IMessageFilter>(MockBehavior.Strict);
+        Mock<IMessageFilter> mockContext = new(MockBehavior.Strict);
         mockContext.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                    .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId));
 
         threadContext.AddMessageFilter(mockContext.Object);
-        var msg = new MSG
+        MSG msg = new()
         {
             message = (uint)filterId
         };
@@ -67,21 +67,21 @@ public class ThreadContextTests
     public void ThreadContext_MultipleProcessFiltersProcesses()
     {
         // Test that multiple filters work
-        Application.ThreadContext threadContext = new Application.ThreadContext();
+        Application.ThreadContext threadContext = new();
 
         MessageId filterId2 = TestMessageId2;
-        var mockContext2 = new Mock<IMessageFilter>(MockBehavior.Strict);
+        Mock<IMessageFilter> mockContext2 = new(MockBehavior.Strict);
         mockContext2.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                    .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId2));
         threadContext.AddMessageFilter(mockContext2.Object);
 
         MessageId filterId3 = TestMessageId3;
-        var mockContext3 = new Mock<IMessageFilter>(MockBehavior.Strict);
+        Mock<IMessageFilter> mockContext3 = new(MockBehavior.Strict);
         mockContext3.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                    .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId3));
         threadContext.AddMessageFilter(mockContext3.Object);
 
-        var msg = new MSG
+        MSG msg = new()
         {
             message = (uint)TestMessageId1
         };

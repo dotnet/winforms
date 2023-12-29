@@ -27,7 +27,7 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
     /// <inheritdoc cref="AnalyzerVerifier{TAnalyzer, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
     public static async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
     {
-        var test = new Test
+        Test test = new()
         {
             TestCode = source,
         };

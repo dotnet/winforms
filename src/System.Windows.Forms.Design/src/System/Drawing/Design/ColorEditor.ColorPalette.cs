@@ -237,7 +237,7 @@ public partial class ColorEditor
         {
             Invalidate();
             _colorUI.EditorService!.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
-            CustomColorDialog dialog = new CustomColorDialog();
+            CustomColorDialog dialog = new();
 
             HWND hwndFocus = PInvoke.GetFocus();
             try

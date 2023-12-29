@@ -12,7 +12,7 @@ public class ColumnWidthChangedEventArgsTests
     [InlineData(1)]
     public void Ctor_Int(int columnIndex)
     {
-        var e = new ColumnWidthChangedEventArgs(columnIndex);
+        ColumnWidthChangedEventArgs e = new(columnIndex);
         Assert.Equal(columnIndex, e.ColumnIndex);
     }
 }

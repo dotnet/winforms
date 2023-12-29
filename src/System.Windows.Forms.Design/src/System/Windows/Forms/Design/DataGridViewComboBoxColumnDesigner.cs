@@ -79,7 +79,7 @@ internal class DataGridViewComboBoxColumnDesigner : DataGridViewColumnDesigner
 
         s_bindingContext ??= new BindingContext();
 
-        BindingMemberInfo bindingMemberInfo = new BindingMemberInfo(dataMember);
+        BindingMemberInfo bindingMemberInfo = new(dataMember);
         BindingManagerBase bindingManagerBase;
 
         try

@@ -428,7 +428,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     {
         if (s_rectThemeMargins.X == -1)
         {
-            Rectangle rectCell = new Rectangle(0, 0, ThemeMargin, ThemeMargin);
+            Rectangle rectCell = new(0, 0, ThemeMargin, ThemeMargin);
             Rectangle rectContent = DataGridViewHeaderCellRenderer.VisualStyleRenderer.GetBackgroundContentRectangle(g, rectCell);
             s_rectThemeMargins.X = rectContent.X;
             s_rectThemeMargins.Y = rectContent.Y;

@@ -156,7 +156,7 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
     [WinFormsFact]
     public void ComboBoxChildEditUiaProvider_GetPropertyValue_ReturnsExpected()
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
         comboBox.CreateControl();
         AccessibleObject accessibleObject = comboBox.ChildEditAccessibleObject;
 

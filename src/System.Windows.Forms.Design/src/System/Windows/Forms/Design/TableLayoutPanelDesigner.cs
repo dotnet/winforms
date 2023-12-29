@@ -321,14 +321,14 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private ToolStripDropDownMenu BuildMenu(bool isRow)
     {
-        ToolStripMenuItem add = new ToolStripMenuItem();
-        ToolStripMenuItem insert = new ToolStripMenuItem();
-        ToolStripMenuItem delete = new ToolStripMenuItem();
-        ToolStripSeparator separator = new ToolStripSeparator();
-        ToolStripLabel label = new ToolStripLabel();
-        ToolStripMenuItem absolute = new ToolStripMenuItem();
-        ToolStripMenuItem percent = new ToolStripMenuItem();
-        ToolStripMenuItem autosize = new ToolStripMenuItem();
+        ToolStripMenuItem add = new();
+        ToolStripMenuItem insert = new();
+        ToolStripMenuItem delete = new();
+        ToolStripSeparator separator = new();
+        ToolStripLabel label = new();
+        ToolStripMenuItem absolute = new();
+        ToolStripMenuItem percent = new();
+        ToolStripMenuItem autosize = new();
 
         add.Text = SR.TableLayoutPanelDesignerAddMenu;
         add.Tag = isRow;
@@ -368,7 +368,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         autosize.Name = "autosize";
         autosize.Click += new System.EventHandler(OnAutoSizeClick);
 
-        ToolStripDropDownMenu menu = new ToolStripDropDownMenu();
+        ToolStripDropDownMenu menu = new();
         menu.Items.AddRange(new ToolStripItem[] { add, insert, delete, separator, label, absolute, percent, autosize });
         menu.Tag = isRow;
         menu.Opening += new System.ComponentModel.CancelEventHandler(OnRowColMenuOpening);
@@ -410,7 +410,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
+            DesignerActionItemCollection items = new();
 
             // We don't promote these Items to DesignerVerbs, since we need to be able
             // to disable/enable the Remove entries, based on the number of Rows/Cols.
@@ -983,9 +983,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         // By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399557
         Point startingPoint = Table.PointToScreen(Table.DisplayRectangle.Location);
-        Rectangle bounds = new Rectangle(startingPoint, Table.DisplayRectangle.Size);
+        Rectangle bounds = new(startingPoint, Table.DisplayRectangle.Size);
 
-        Point position = new Point(-1, -1);
+        Point position = new(-1, -1);
 
         bool isRTL = Table.RightToLeft == RightToLeft.Yes;
         int offset = bounds.X;
@@ -1089,10 +1089,10 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             // get the correctly translated bounds
             // By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399689
             Point loc = BehaviorService.MapAdornerWindowPoint(Table.Handle, Table.DisplayRectangle.Location);
-            Rectangle bounds = new Rectangle(loc, Table.DisplayRectangle.Size);
+            Rectangle bounds = new(loc, Table.DisplayRectangle.Size);
 
             Point controlLoc = BehaviorService.ControlToAdornerWindow(Control);
-            Rectangle checkBounds = new Rectangle(controlLoc, Control.ClientSize); // Can't use Control.Size since that will include any scrollbar
+            Rectangle checkBounds = new(controlLoc, Control.ClientSize); // Can't use Control.Size since that will include any scrollbar
 
             int[] cw = Table.GetColumnWidths();
             int[] rh = Table.GetRowHeights();
@@ -1122,7 +1122,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                         startLoc += cw[i];// x offset of column line
                     }
 
-                    Rectangle gBounds = new Rectangle(startLoc - halfSize, checkBounds.Top, DesignerUtils.RESIZEGLYPHSIZE, checkBounds.Height);
+                    Rectangle gBounds = new(startLoc - halfSize, checkBounds.Top, DesignerUtils.RESIZEGLYPHSIZE, checkBounds.Height);
                     // Don't add glyphs for columns that are not within the clientrectangle.
                     if (!checkBounds.Contains(gBounds))
                     {
@@ -1132,7 +1132,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     Debug.Assert(Table.ColumnStyles[i] is not null, "Table's ColumnStyle[" + i + "] is null!");
                     if (Table.ColumnStyles[i] is not null)
                     {
-                        TableLayoutPanelResizeGlyph g = new TableLayoutPanelResizeGlyph(gBounds, Table.ColumnStyles[i], Cursors.VSplit, Behavior);
+                        TableLayoutPanelResizeGlyph g = new(gBounds, Table.ColumnStyles[i], Cursors.VSplit, Behavior);
                         glyphs.Add(g);
                     }
                 }
@@ -1149,7 +1149,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     }
 
                     startLoc += rh[i];// y offset of row line
-                    Rectangle gBounds = new Rectangle(checkBounds.Left, startLoc - halfSize, checkBounds.Width, DesignerUtils.RESIZEGLYPHSIZE);
+                    Rectangle gBounds = new(checkBounds.Left, startLoc - halfSize, checkBounds.Width, DesignerUtils.RESIZEGLYPHSIZE);
                     if (!checkBounds.Contains(gBounds))
                     {
                         continue;
@@ -1158,7 +1158,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     Debug.Assert(Table.RowStyles[i] is not null, "Table's RowStyle[" + i + "] is null!");
                     if (Table.RowStyles[i] is not null)
                     {
-                        TableLayoutPanelResizeGlyph g = new TableLayoutPanelResizeGlyph(gBounds, Table.RowStyles[i], Cursors.HSplit, Behavior);
+                        TableLayoutPanelResizeGlyph g = new(gBounds, Table.RowStyles[i], Cursors.HSplit, Behavior);
                         glyphs.Add(g);
                     }
                 }

@@ -31,7 +31,7 @@ namespace System.Drawing.Tests
         [MemberData(nameof(Ctor_FileName_TestData))]
         public void Ctor_FileName(string fileName, Size size)
         {
-            var attribute = new ToolboxBitmapAttribute(fileName);
+            ToolboxBitmapAttribute attribute = new(fileName);
 
             using (Image image = attribute.GetImage(null))
             {
@@ -53,7 +53,7 @@ namespace System.Drawing.Tests
         [InlineData(typeof(ToolboxBitmapAttributeTests), -1, -1)]
         public void Ctor_Type(Type type, int width, int height)
         {
-            var attribute = new ToolboxBitmapAttribute(type);
+            ToolboxBitmapAttribute attribute = new(type);
             using (Image image = attribute.GetImage(type))
             {
                 if (width == -1 && height == -1)
@@ -81,7 +81,7 @@ namespace System.Drawing.Tests
         [InlineData(typeof(ToolboxBitmapAttributeTests), "bitmap_173x183_indexed_8bit.bmp", 173, 183)]
         public void Ctor_Type_String(Type type, string fileName, int width, int height)
         {
-            var attribute = new ToolboxBitmapAttribute(type, fileName);
+            ToolboxBitmapAttribute attribute = new(type, fileName);
 
             using (Image image = attribute.GetImage(type, fileName, false))
             {
@@ -101,7 +101,7 @@ namespace System.Drawing.Tests
         [InlineData("48x48_multiple_entries_4bit.ico", 16, 16)]
         public void GetImage_TypeFileNameBool_ReturnsExpected(string fileName, int width, int height)
         {
-            var attribute = new ToolboxBitmapAttribute((string)null);
+            ToolboxBitmapAttribute attribute = new((string)null);
             using (Image image = attribute.GetImage(typeof(ToolboxBitmapAttributeTests), fileName, large: true))
             {
                 Assert.Equal(new Size(32, 32), image.Size);
@@ -116,7 +116,7 @@ namespace System.Drawing.Tests
         [Fact]
         public void GetImage_NullComponent_ReturnsNull()
         {
-            var attribute = new ToolboxBitmapAttribute((string)null);
+            ToolboxBitmapAttribute attribute = new((string)null);
             Assert.Null(attribute.GetImage((object)null));
             Assert.Null(attribute.GetImage((object)null, true));
         }
@@ -124,7 +124,7 @@ namespace System.Drawing.Tests
         [Fact]
         public void GetImage_Component_ReturnsExpected()
         {
-            ToolboxBitmapAttribute attribute = new ToolboxBitmapAttribute((string)null);
+            ToolboxBitmapAttribute attribute = new((string)null);
 
             using (Image smallImage = attribute.GetImage(new bitmap_173x183_indexed_8bit(), large: false))
             {
@@ -157,7 +157,7 @@ namespace System.Drawing.Tests
         [InlineData(typeof(Icon_toolboxBitmapAttributeTest), 256, 256)]
         public void GetImage_NoExtension(Type type, int width, int height)
         {
-            var attribute = new ToolboxBitmapAttribute(type);
+            ToolboxBitmapAttribute attribute = new(type);
             using (Image image = attribute.GetImage(type))
             {
                 if (width == -1 && height == -1)

@@ -22,7 +22,7 @@ public class PrintPreviewControlTests
     [InlineData(greenColorArgb, true, greenColorArgb)]
     public void ShowPrintPreviewControl_BackColorIsCorrect(int customBackColorArgb, bool isHighContrast, int expectedBackColorArgb)
     {
-        var control = new PrintPreviewControl();
+        PrintPreviewControl control = new();
 
         if (customBackColorArgb != emptyColorArgb)
         {

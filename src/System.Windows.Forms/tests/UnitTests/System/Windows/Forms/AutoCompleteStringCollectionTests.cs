@@ -10,7 +10,7 @@ public class AutoCompleteStringCollectionTests
     [Fact]
     public void Ctor_Default()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         Assert.Equal(0, collection.Count);
         Assert.False(collection.IsReadOnly);
     }
@@ -18,8 +18,8 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_AddRange_Invoke_Success()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
-        string[] values = new string[] { "1", "2", "3" };
+        AutoCompleteStringCollection collection = new();
+        string[] values = ["1", "2", "3"];
         collection.AddRange(values);
 
         foreach (string s in values)
@@ -31,14 +31,14 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_AddRange_NullValue_ThrowsArgumentNullException()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null));
     }
 
     [WinFormsFact]
     public void AutoCompleteStringCollection_Contains_Invoke_ReturnsExpected()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         string s = "value";
         collection.Add(s);
 
@@ -50,7 +50,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_Contains_Empty_ReturnsFalse()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
 
         Assert.False(collection.Contains("value"));
         Assert.False(collection.Contains(null));
@@ -78,7 +78,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_IndexOf_Invoke_ReturnsExpected()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         string s = "value";
         collection.Add(s);
 
@@ -90,7 +90,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_IndexOf_Empty_ReturnsFalse()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
 
         Assert.Equal(-1, collection.IndexOf("value"));
         Assert.Equal(-1, collection.IndexOf(null));
@@ -118,7 +118,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_Insert_String_Success()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         string s = "value1";
         collection.Add("value2");
         collection.Insert(1, s);
@@ -129,10 +129,10 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_Insert_AlreadyInOtherCollection_GetReturnsExpected()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         collection.Add("value1");
 
-        AutoCompleteStringCollection otherCollection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection otherCollection = new();
 
         string s = "value2";
         otherCollection.Add(s);
@@ -149,7 +149,7 @@ public class AutoCompleteStringCollectionTests
     [InlineData(1)]
     public void AutoCompleteStringCollection_Insert_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "value"));
     }
 
@@ -184,7 +184,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_Remove_String_Success()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         collection.Add("value");
 
         // Remove null.
@@ -228,7 +228,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_CopyTo_NonEmpty_Success()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         collection.Add("value");
 
         var array = new string[] { "1", "2", "3" };
@@ -239,7 +239,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_CopyTo_Empty_Nop()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         var array = new string[] { "1", "2", "3" };
         collection.CopyTo(array, 0);
         Assert.Equal(new string[] { "1", "2", "3" }, array);
@@ -248,7 +248,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_GetEnumerator_InvokeEmpty_ReturnsExpected()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
 
         IEnumerator enumerator = collection.GetEnumerator();
         for (int i = 0; i < 2; i++)
@@ -270,7 +270,7 @@ public class AutoCompleteStringCollectionTests
     [WinFormsFact]
     public void AutoCompleteStringCollection_GetEnumerator_InvokeNotEmpty_ReturnsExpected()
     {
-        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+        AutoCompleteStringCollection collection = new();
         collection.Add("2");
 
         IEnumerator enumerator = collection.GetEnumerator();

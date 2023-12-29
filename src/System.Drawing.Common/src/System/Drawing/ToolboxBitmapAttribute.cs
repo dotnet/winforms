@@ -141,8 +141,8 @@ public class ToolboxBitmapAttribute : Attribute
             return null;
         }
 
-        Icon ico = new Icon(stream);
-        Icon sizedico = new Icon(ico, large ? s_largeSize : s_smallSize);
+        Icon ico = new(stream);
+        Icon sizedico = new(ico, large ? s_largeSize : s_smallSize);
         Bitmap? b = sizedico.ToBitmap();
         if (DpiHelper.IsScalingRequired && scaled)
         {
@@ -326,7 +326,7 @@ public class ToolboxBitmapAttribute : Attribute
         Stream? stream = BitmapSelector.GetResourceStream(typeof(ToolboxBitmapAttribute), "DefaultComponent.bmp");
         Debug.Assert(stream is not null, "DefaultComponent.bmp must be present as an embedded resource.");
 
-        var bitmap = new Bitmap(stream);
+        Bitmap bitmap = new(stream);
         MakeBackgroundAlphaZero(bitmap);
         s_defaultComponent = new ToolboxBitmapAttribute(bitmap, null);
     }

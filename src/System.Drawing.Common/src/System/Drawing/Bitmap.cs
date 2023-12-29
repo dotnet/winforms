@@ -254,7 +254,7 @@ public sealed class Bitmap : Image
         using var graphics = Graphics.FromImage(result);
 
         graphics.Clear(Color.Transparent);
-        Rectangle rectangle = new Rectangle(0, 0, size.Width, size.Height);
+        Rectangle rectangle = new(0, 0, size.Width, size.Height);
 
         using (ImageAttributes attributes = new())
         {

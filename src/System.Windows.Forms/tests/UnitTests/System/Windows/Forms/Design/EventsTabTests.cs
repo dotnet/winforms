@@ -13,8 +13,8 @@ public class EventsTabTests
     [Fact]
     public void EventsTab_Ctor_IServiceProvider()
     {
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
-        var tab = new EventsTab(mockServiceProvider.Object);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
+        EventsTab tab = new(mockServiceProvider.Object);
         Assert.NotNull(tab.Bitmap);
         Assert.Null(tab.Components);
         Assert.Equal("Events", tab.HelpKeyword);
@@ -25,19 +25,19 @@ public class EventsTabTests
     [StringWithNullData]
     public void EventsTab_CanExtend_Invoke_ReturnsTrue(object extendee)
     {
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
-        var tab = new EventsTab(mockServiceProvider.Object);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
+        EventsTab tab = new(mockServiceProvider.Object);
         Assert.True(tab.CanExtend(extendee));
     }
 
     public static IEnumerable<object[]> GetDefaultProperty_TestData()
     {
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerEventService)))
             .Returns(null);
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerEventService)))
             .Returns(new object());
@@ -48,24 +48,24 @@ public class EventsTabTests
             yield return new object[] { new object(), provider, null };
             yield return new object[] { new ClassWithDefaultEvent(), provider, null };
 
-            var nullMockSite = new Mock<ISite>();
+            Mock<ISite> nullMockSite = new();
             nullMockSite
                 .Setup(s => s.GetService(typeof(IEventBindingService)))
                 .Returns(null);
             yield return new object[] { new ClassWithDefaultEvent { Site = nullMockSite.Object }, provider, null };
 
-            var invalidMockSite = new Mock<ISite>();
+            Mock<ISite> invalidMockSite = new();
             invalidMockSite
                 .Setup(s => s.GetService(typeof(IEventBindingService)))
                 .Returns(new object());
             yield return new object[] { new ClassWithDefaultEvent { Site = invalidMockSite.Object }, provider, null };
 
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(ClassWithDefaultEvent))[0];
-            var mockEventBindingService = new Mock<IEventBindingService>();
+            Mock<IEventBindingService> mockEventBindingService = new();
             mockEventBindingService
                 .Setup(e => e.GetEventProperty(TypeDescriptor.GetDefaultEvent(typeof(ClassWithDefaultEvent))))
                 .Returns(descriptor);
-            var mockSite = new Mock<ISite>();
+            Mock<ISite> mockSite = new();
             mockSite
                 .Setup(s => s.GetService(typeof(IEventBindingService)))
                 .Returns(mockEventBindingService.Object);
@@ -78,7 +78,7 @@ public class EventsTabTests
     [MemberData(nameof(GetDefaultProperty_TestData))]
     public void EventsTab_GetDefaultProperty_Invoke_ReturnsExpected(object obj, IServiceProvider serviceProvider, object expected)
     {
-        var tab = new EventsTab(serviceProvider);
+        EventsTab tab = new(serviceProvider);
         Assert.Same(expected, tab.GetDefaultProperty(obj));
 
         // Call again to test caching behavior.
@@ -87,21 +87,21 @@ public class EventsTabTests
 
     public static IEnumerable<object[]> GetDefaultProperty_IDesignerEventService_TestData()
     {
-        var nullMockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> nullMockDesignerHost = new(MockBehavior.Strict);
         nullMockDesignerHost
             .Setup(s => s.GetService(typeof(IEventBindingService)))
             .Returns(null);
-        var invalidMockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> invalidMockDesignerHost = new(MockBehavior.Strict);
         invalidMockDesignerHost
             .Setup(s => s.GetService(typeof(IEventBindingService)))
             .Returns(new object());
 
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(ClassWithDefaultEvent))[0];
-        var mockEventBindingService = new Mock<IEventBindingService>();
+        Mock<IEventBindingService> mockEventBindingService = new();
         mockEventBindingService
             .Setup(e => e.GetEventProperty(TypeDescriptor.GetDefaultEvent(typeof(ClassWithDefaultEvent))))
             .Returns(descriptor);
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(s => s.GetService(typeof(IEventBindingService)))
             .Returns(mockEventBindingService.Object);
@@ -124,12 +124,12 @@ public class EventsTabTests
     [MemberData(nameof(GetDefaultProperty_IDesignerEventService_TestData))]
     public void EventsTab_GetDefaultProperty_IDesignerEventService_Success(object obj, ActiveDesignerEventArgs e, object expected)
     {
-        using var service = new CustomDesignerEventService();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        using CustomDesignerEventService service = new();
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerEventService)))
             .Returns(service);
-        var tab = new EventsTab(mockServiceProvider.Object);
+        EventsTab tab = new(mockServiceProvider.Object);
         Assert.Null(tab.GetDefaultProperty(obj));
 
         service.OnActiveDesignerChanged(e);

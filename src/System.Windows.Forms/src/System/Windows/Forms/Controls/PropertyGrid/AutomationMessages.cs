@@ -31,8 +31,8 @@ internal static class AutomationMessages
         {
             try
             {
-                FileStream fs = new FileStream(fullFileName, FileMode.Create, FileAccess.Write);
-                StreamWriter sw = new StreamWriter(fs);
+                FileStream fs = new(fullFileName, FileMode.Create, FileAccess.Write);
+                StreamWriter sw = new(fs);
                 sw.WriteLine(text);
                 sw.Dispose();
                 fs.Dispose();
@@ -66,8 +66,8 @@ internal static class AutomationMessages
             {
                 try
                 {
-                    FileStream fs = new FileStream(fullFileName, FileMode.Open, FileAccess.Read);
-                    StreamReader sr = new StreamReader(fs);
+                    FileStream fs = new(fullFileName, FileMode.Open, FileAccess.Read);
+                    StreamReader sr = new(fs);
                     text = sr.ReadToEnd();
                     sr.Dispose();
                     fs.Dispose();
@@ -96,7 +96,7 @@ internal static class AutomationMessages
         {
             if (fileId == IntPtr.Zero) // Create id
             {
-                Random rnd = new Random(DateTime.Now.Millisecond);
+                Random rnd = new(DateTime.Now.Millisecond);
                 fileId = new IntPtr(rnd.Next());
             }
 

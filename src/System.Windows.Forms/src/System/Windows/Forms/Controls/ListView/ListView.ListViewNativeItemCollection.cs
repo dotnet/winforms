@@ -42,7 +42,7 @@ public partial class ListView
                 if (_owner.VirtualMode)
                 {
                     // if we are showing virtual items, we need to get the item from the user
-                    RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(displayIndex);
+                    RetrieveVirtualItemEventArgs rVI = new(displayIndex);
                     _owner.OnRetrieveVirtualItem(rVI);
                     rVI.Item!.SetItemIndex(_owner, displayIndex);
                     return rVI.Item;

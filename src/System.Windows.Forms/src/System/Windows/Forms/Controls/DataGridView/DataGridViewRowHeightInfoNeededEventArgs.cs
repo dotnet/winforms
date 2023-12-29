@@ -27,10 +27,7 @@ public class DataGridViewRowHeightInfoNeededEventArgs : EventArgs
                 value = _minimumHeight;
             }
 
-            if (value > DataGridViewBand.MaxBandThickness)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(Height), value, DataGridViewBand.MaxBandThickness));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, DataGridViewBand.MaxBandThickness);
 
             _height = value;
         }

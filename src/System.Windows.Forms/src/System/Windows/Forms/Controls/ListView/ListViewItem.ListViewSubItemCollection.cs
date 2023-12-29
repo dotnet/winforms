@@ -117,14 +117,14 @@ public partial class ListViewItem
 
         public ListViewSubItem Add(string? text)
         {
-            ListViewSubItem item = new ListViewSubItem(_owner, text);
+            ListViewSubItem item = new(_owner, text);
             Add(item);
             return item;
         }
 
         public ListViewSubItem Add(string? text, Color foreColor, Color backColor, Font font)
         {
-            ListViewSubItem item = new ListViewSubItem(_owner, text, foreColor, backColor, font);
+            ListViewSubItem item = new(_owner, text, foreColor, backColor, font);
             Add(item);
             return item;
         }

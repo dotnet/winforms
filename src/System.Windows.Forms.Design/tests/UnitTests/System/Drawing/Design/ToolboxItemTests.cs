@@ -1719,7 +1719,7 @@ public class ToolboxItemTests
             throw new NotImplementedException();
         }
 
-        public List<AssemblyName> ReferenceAssemblies { get; } = new List<AssemblyName>();
+        public List<AssemblyName> ReferenceAssemblies { get; } = new();
 
         public void ReferenceAssembly(AssemblyName name)
         {

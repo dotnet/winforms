@@ -11,7 +11,7 @@ public class ListControlConvertEventArgsTests
     [InlineData(null, null, null)]
     public void Ctor_Object_Type(object value, Type desiredType, object listItem)
     {
-        var e = new ListControlConvertEventArgs(value, desiredType, listItem);
+        ListControlConvertEventArgs e = new(value, desiredType, listItem);
         Assert.Equal(value, e.Value);
         Assert.Equal(desiredType, e.DesiredType);
         Assert.Equal(listItem, e.ListItem);

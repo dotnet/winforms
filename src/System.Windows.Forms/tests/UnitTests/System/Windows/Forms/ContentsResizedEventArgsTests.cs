@@ -19,7 +19,7 @@ public class ContentsResizedEventArgsTests
     [MemberData(nameof(Ctor_Rectangle_TestData))]
     public void Ctor_Rectangle(Rectangle newRectangle)
     {
-        var e = new ContentsResizedEventArgs(newRectangle);
+        ContentsResizedEventArgs e = new(newRectangle);
         Assert.Equal(newRectangle, e.NewRectangle);
     }
 }

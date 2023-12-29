@@ -28,19 +28,19 @@ partial class CommonControl2
     /// </summary>
     private void InitializeComponent()
     {
-        System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node10WinformsTeam");
-        System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node11");
-        System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Node1", new System.Windows.Forms.TreeNode[] {
+        System.Windows.Forms.TreeNode treeNode1 = new("Node10WinformsTeam");
+        System.Windows.Forms.TreeNode treeNode2 = new("Node11");
+        System.Windows.Forms.TreeNode treeNode3 = new("Node1", new [] {
         treeNode1,
         treeNode2});
-        System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Node20");
-        System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
+        System.Windows.Forms.TreeNode treeNode4 = new("Node20");
+        System.Windows.Forms.TreeNode treeNode5 = new("Node2", new [] {
         treeNode4});
-        System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
+        System.Windows.Forms.TreeNode treeNode6 = new("Node0", new [] {
         treeNode3,
         treeNode5});
-        System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Node4");
-        System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Node3", new System.Windows.Forms.TreeNode[] {
+        System.Windows.Forms.TreeNode treeNode7 = new("Node4");
+        System.Windows.Forms.TreeNode treeNode8 = new("Node3", new [] {
         treeNode7});
         this.label3 = new System.Windows.Forms.Label();
         this.pictureBox1 = new System.Windows.Forms.PictureBox();

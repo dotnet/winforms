@@ -338,7 +338,7 @@ internal static class DataGridViewUtilities
             }
         }
 
-        Size sizeCell = new Size(cellBounds.Width, cellBounds.Height);
+        Size sizeCell = new(cellBounds.Width, cellBounds.Height);
         Size sizeConstraint = TextRenderer.MeasureText(text, font, sizeCell, flags);
         if (sizeConstraint.Width > sizeCell.Width)
         {
@@ -364,7 +364,7 @@ internal static class DataGridViewUtilities
         TextFormatFlags flags,
         DataGridViewCellStyle cellStyle)
     {
-        Point ptTextLocation = new Point(0, 0);
+        Point ptTextLocation = new(0, 0);
 
         // now use the alignment on the cellStyle to determine the final text location
         DataGridViewContentAlignment alignment = cellStyle.Alignment;

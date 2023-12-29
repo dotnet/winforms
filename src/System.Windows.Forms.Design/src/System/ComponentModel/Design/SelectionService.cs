@@ -18,7 +18,7 @@ namespace System.ComponentModel.Design;
 internal sealed class SelectionService : ISelectionService, IDisposable
 {
     // These are the selection types we use for context help.
-    private static readonly string[] s_selectionKeywords = new string[] { "None", "Single", "Multiple" };
+    private static readonly string[] s_selectionKeywords = ["None", "Single", "Multiple"];
 
     // State flags for the selection service
     private static readonly int s_stateTransaction = BitVector32.CreateMask(); // Designer is in a transaction

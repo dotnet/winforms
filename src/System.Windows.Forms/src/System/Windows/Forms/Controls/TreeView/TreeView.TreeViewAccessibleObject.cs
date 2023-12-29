@@ -14,6 +14,9 @@ public partial class TreeView
     {
         public TreeViewAccessibleObject(TreeView owningTreeView) : base(owningTreeView) { }
 
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
+            owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
+
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 

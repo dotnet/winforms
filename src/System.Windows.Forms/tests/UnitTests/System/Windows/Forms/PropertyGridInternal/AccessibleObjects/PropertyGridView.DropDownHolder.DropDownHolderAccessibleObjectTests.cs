@@ -12,10 +12,10 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
     [WinFormsFact]
     public void DropDownHolder_AccessibilityObject_Constructor_initializes_fields()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
 
-        using PropertyGridView.DropDownHolder dropDownHolderControl = new PropertyGridView.DropDownHolder(propertyGridView);
+        using PropertyGridView.DropDownHolder dropDownHolderControl = new(propertyGridView);
         PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject dropDownHolderControlAccessibilityObject =
             Assert.IsAssignableFrom<PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject>(
                 dropDownHolderControl.AccessibilityObject);
@@ -51,7 +51,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
         Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
-        PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, property, false);
+        PropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, property, false);
         propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
         ownerControl.Visible = true;
@@ -65,9 +65,9 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
     [WinFormsFact]
     public void DropDownHolderAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGrid propertyGrid = new();
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using PropertyGridView.DropDownHolder dropDownControlHolder = new PropertyGridView.DropDownHolder(propertyGridView);
+        using PropertyGridView.DropDownHolder dropDownControlHolder = new(propertyGridView);
         // AccessibleRole is not set = Default
 
         VARIANT actual = dropDownControlHolder.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);

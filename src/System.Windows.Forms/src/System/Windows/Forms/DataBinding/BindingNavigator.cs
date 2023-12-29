@@ -138,9 +138,9 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         AddNewItem = new ToolStripButton();
         DeleteItem = new ToolStripButton();
 
-        ToolStripSeparator separator1 = new ToolStripSeparator();
-        ToolStripSeparator separator2 = new ToolStripSeparator();
-        ToolStripSeparator separator3 = new ToolStripSeparator();
+        ToolStripSeparator separator1 = new();
+        ToolStripSeparator separator2 = new();
+        ToolStripSeparator separator3 = new();
 
         //
         // Set up strings
@@ -540,7 +540,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
             if (AddNewItem is not null)
             {
-                EventHandler handler = new EventHandler(OnAddNewItemEnabledChanged);
+                EventHandler handler = new(OnAddNewItemEnabledChanged);
                 _addNewItem!.InternalEnabledChanged -= handler;
                 _addNewItem.Enabled = (_addNewItemUserEnabled && allowNew);
                 _addNewItem.InternalEnabledChanged += handler;
@@ -548,7 +548,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
             if (DeleteItem is not null)
             {
-                EventHandler handler = new EventHandler(OnDeleteItemEnabledChanged);
+                EventHandler handler = new(OnDeleteItemEnabledChanged);
                 _deleteItem!.InternalEnabledChanged -= handler;
                 _deleteItem.Enabled = (_deleteItemUserEnabled && allowRemove && count > 0);
                 _deleteItem.InternalEnabledChanged += handler;

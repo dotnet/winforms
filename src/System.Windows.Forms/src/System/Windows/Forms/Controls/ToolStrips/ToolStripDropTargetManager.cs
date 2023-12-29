@@ -275,7 +275,7 @@ internal class ToolStripDropTargetManager : IDropTarget
             _lastDropTarget = newTarget;
             if (newTarget is not null)
             {
-                DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect, e.DropImageType, e.Message, e.MessageReplacementToken)
+                DragEventArgs dragEnterArgs = new(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect, e.DropImageType, e.Message, e.MessageReplacementToken)
                 {
                     Effect = DragDropEffects.None,
                     DropImageType = DropImageType.Invalid,

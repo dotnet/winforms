@@ -71,7 +71,7 @@ internal class ListViewActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        DesignerActionItemCollection items = new();
         items.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
             SR.ListViewActionListEditItemsDisplayName,
             SR.PropertiesCategoryName,

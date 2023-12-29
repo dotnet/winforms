@@ -19,7 +19,7 @@ public class ImageConverterTest
         _image = Image.FromFile(Path.Combine("bitmaps", "TestImage.bmp"));
         _imageStr = _image.ToString();
 
-        using (MemoryStream destStream = new MemoryStream())
+        using (MemoryStream destStream = new())
         {
             _image.Save(destStream, _image.RawFormat);
             _imageBytes = destStream.ToArray();
@@ -35,7 +35,7 @@ public class ImageConverterTest
     [InlineData("pngwithheight_icon.ico")]
     public void ImageConverterFromIconTest(string name)
     {
-        using (var icon = new Icon(Helpers.GetTestBitmapPath(name)))
+        using (Icon icon = new(Helpers.GetTestBitmapPath(name)))
         {
             Bitmap IconBitmap = (Bitmap)_imgConv.ConvertFrom(icon);
             Assert.NotNull(IconBitmap);
@@ -51,10 +51,10 @@ public class ImageConverterTest
         string path = Path.Combine("bitmaps", "TestImageWithOleHeader.bmp");
         using (FileStream fileStream = File.Open(path, FileMode.Open))
         {
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new())
             {
                 fileStream.CopyTo(ms);
-                var converter = new ImageConverter();
+                ImageConverter converter = new();
                 object image = converter.ConvertFrom(ms.ToArray());
                 Assert.NotNull(image);
             }
@@ -191,8 +191,8 @@ public class ImageConverterTest
     [Fact]
     public void ConvertTo_FromBitmapToByteArray()
     {
-        Bitmap value = new Bitmap(64, 64);
-        ImageConverter converter = new ImageConverter();
+        Bitmap value = new(64, 64);
+        ImageConverter converter = new();
         byte[] converted = (byte[])converter.ConvertTo(value, typeof(byte[]));
         Assert.NotNull(converted);
     }

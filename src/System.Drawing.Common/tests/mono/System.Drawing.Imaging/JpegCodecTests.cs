@@ -40,7 +40,7 @@ public class JpegCodecTest
     public void Bitmap8bbpIndexedGreyscaleFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -86,7 +86,7 @@ public class JpegCodecTest
     public void Bitmap8bbpIndexedGreyscalePixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-7697782, bmp.GetPixel(0, 0).ToArgb());
@@ -112,7 +112,7 @@ public class JpegCodecTest
     public void Bitmap8bbpIndexedGreyscaleData()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -173,7 +173,7 @@ public class JpegCodecTest
     public void Bitmap24bitFeatures()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature24bits.jpg");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             GraphicsUnit unit = GraphicsUnit.World;
             RectangleF rect = bmp.GetBounds(ref unit);
@@ -207,7 +207,7 @@ public class JpegCodecTest
     public void Bitmap24bitPixels()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature24bits.jpg");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             // sampling values from a well known bitmap
             Assert.Equal(-10447423, bmp.GetPixel(0, 0).ToArgb());
@@ -233,7 +233,7 @@ public class JpegCodecTest
     public void Bitmap24bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
-        using (Bitmap bmp = new Bitmap(sInFile))
+        using (Bitmap bmp = new(sInFile))
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             try
@@ -357,10 +357,10 @@ public class JpegCodecTest
         string sOutFile = $"linerect-{expected}.jpeg";
 
         // Save
-        Bitmap bmp = new Bitmap(100, 100, original);
+        Bitmap bmp = new(100, 100, original);
         Graphics gr = Graphics.FromImage(bmp);
 
-        using (Pen p = new Pen(Color.Red, 2))
+        using (Pen p = new(Color.Red, 2))
         {
             gr.DrawLine(p, 10.0F, 10.0F, 90.0F, 90.0F);
             gr.DrawRectangle(p, 10.0F, 10.0F, 80.0F, 80.0F);
@@ -371,7 +371,7 @@ public class JpegCodecTest
             bmp.Save(sOutFile, ImageFormat.Jpeg);
 
             // Load
-            using (Bitmap bmpLoad = new Bitmap(sOutFile))
+            using (Bitmap bmpLoad = new(sOutFile))
             {
                 Assert.Equal(expected, bmpLoad.PixelFormat);
                 Color color = bmpLoad.GetPixel(10, 10);

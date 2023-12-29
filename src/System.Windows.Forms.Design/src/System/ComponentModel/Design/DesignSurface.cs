@@ -32,7 +32,7 @@ public class DesignSurface : IDisposable, IServiceProvider
         _serviceContainer = new DesignSurfaceServiceContainer(parentProvider);
 
         // Configure our default services
-        ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
+        ServiceCreatorCallback callback = new(OnCreateService);
         ServiceContainer.AddService<ISelectionService>(callback);
         ServiceContainer.AddService<IExtenderProviderService>(callback);
         ServiceContainer.AddService<IExtenderListService>(callback);
@@ -415,7 +415,7 @@ public class DesignSurface : IDisposable, IServiceProvider
             IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
             {
-                ArrayList newErrors = new ArrayList();
+                ArrayList newErrors = new();
                 Exception ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                 {
                     HelpLink = SR.DesignSurfaceNoRootComponent

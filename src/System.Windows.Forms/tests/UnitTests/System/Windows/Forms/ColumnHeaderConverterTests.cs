@@ -18,7 +18,7 @@ public class ColumnHeaderConverterTests
     [InlineData(typeof(ColumnHeader), false)]
     public void ColumnHeaderConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Equal(expected, converter.CanConvertFrom(sourceType));
     }
 
@@ -28,7 +28,7 @@ public class ColumnHeaderConverterTests
     [InlineData(null)]
     public void ColumnHeaderConverter_ConvertFrom_InvalidValue_ThrowsNotSupportedException(object value)
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertFrom(value));
     }
 
@@ -40,7 +40,7 @@ public class ColumnHeaderConverterTests
     [InlineData(null, false)]
     public void ColumnHeaderConverter_CanConvertTo_Invoke_ReturnsExpected(Type destinationType, bool expected)
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Equal(expected, converter.CanConvertTo(destinationType));
     }
 
@@ -94,7 +94,7 @@ public class ColumnHeaderConverterTests
     [MemberData(nameof(ConvertTo_InstanceDescriptor_TestData))]
     public void ColumnHeaderConverter_ConvertTo_InstanceDescriptor_ReturnsExpected(ColumnHeader value, Type[] parameterTypes, object[] arguments)
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(value, typeof(InstanceDescriptor)));
         Assert.Equal(value.GetType().GetConstructor(parameterTypes), descriptor.MemberInfo);
         Assert.Equal(arguments, descriptor.Arguments);
@@ -103,8 +103,8 @@ public class ColumnHeaderConverterTests
     [WinFormsFact]
     public void ColumnHeaderConverter_ConvertTo_NoPublicDefaultConstructor_ThrowsArgumentException()
     {
-        using var value = new PrivateDefaultConstructor(-1);
-        var converter = new ColumnHeaderConverter();
+        using PrivateDefaultConstructor value = new(-1);
+        ColumnHeaderConverter converter = new();
         Assert.Throws<ArgumentException>(() => converter.ConvertTo(value, typeof(InstanceDescriptor)));
     }
 
@@ -113,21 +113,21 @@ public class ColumnHeaderConverterTests
     [InlineData(1, "1")]
     public void ColumnHeaderConverter_ConvertTo_String_ReturnsExpected(object value, string expected)
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Equal(expected, converter.ConvertTo(value, typeof(string)));
     }
 
     [Fact]
     public void ColumnHeaderConverter_ConvertTo_NullDestinationType_ThrowsArgumentNullException()
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(new object(), null));
     }
 
     [Fact]
     public void ColumnHeaderConverter_ConvertTo_ValueNotThrowsNotSupportedException()
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(1, typeof(InstanceDescriptor)));
     }
 
@@ -136,43 +136,43 @@ public class ColumnHeaderConverterTests
     [InlineData(typeof(int))]
     public void ColumnHeaderConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new ColumnHeader(), destinationType));
     }
 
     [Fact]
     public void ColumnHeaderConverter_GetPropertiesSupported_Invoke_ReturnsTrue()
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.True(converter.GetPropertiesSupported(null));
     }
 
     [WinFormsFact]
     public void ColumnHeaderConverter_GetProperties_Invoke_ReturnsExpected()
     {
-        var converter = new ColumnHeaderConverter();
-        using var item = new ColumnHeader();
+        ColumnHeaderConverter converter = new();
+        using ColumnHeader item = new();
         Assert.Equal(TypeDescriptor.GetProperties(item, null).Count, converter.GetProperties(null, item, null).Count);
     }
 
     [Fact]
     public void ColumnHeaderConverter_GetStandardValues_Invoke_ReturnsNull()
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.Null(converter.GetStandardValues(null));
     }
 
     [Fact]
     public void ColumnHeaderConverter_GetStandardValuesExclusive_Invoke_ReturnsFalse()
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.False(converter.GetStandardValuesExclusive(null));
     }
 
     [Fact]
     public void ColumnHeaderConverter_GetStandardValuesSupported_Invoke_ReturnsFalse()
     {
-        var converter = new ColumnHeaderConverter();
+        ColumnHeaderConverter converter = new();
         Assert.False(converter.GetStandardValuesSupported(null));
     }
 
