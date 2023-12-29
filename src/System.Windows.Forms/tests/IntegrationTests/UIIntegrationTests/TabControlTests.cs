@@ -49,8 +49,7 @@ public class TabControlTests : ControlTestBase
         });
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/6654")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6654")]
+    [WinFormsFact]
     public async Task TabControl_TabPage_IsHoveredWithMouse_IsFalse_WhenMouseIs_OutsideMainScreenAsync()
     {
         await RunTestAsync(async (form, tabControl) =>
