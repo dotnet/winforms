@@ -40,7 +40,7 @@ public class DockingAttributeTests
         yield return new object[] { attribute, new DockingAttribute(DockingBehavior.Ask), true };
         yield return new object[] { attribute, new DockingAttribute(DockingBehavior.Never), false };
 
-        yield return new object[] { attribute, new object(), false };
+        yield return new object[] { attribute, new(), false };
         yield return new object[] { attribute, null, false };
     }
 

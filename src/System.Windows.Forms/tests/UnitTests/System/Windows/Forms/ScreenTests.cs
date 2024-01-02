@@ -42,7 +42,7 @@ public class ScreenTests
     public static IEnumerable<object[]> Equals_Object_TestData()
     {
         Screen screen = new((HMONITOR)1);
-        yield return new object[] { screen, new object(), false };
+        yield return new object[] { screen, new(), false };
         yield return new object[] { screen, null, false };
     }
 

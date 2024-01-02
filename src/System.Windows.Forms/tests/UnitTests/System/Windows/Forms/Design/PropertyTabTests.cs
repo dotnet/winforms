@@ -161,7 +161,7 @@ public class PropertyTabTests
     {
         yield return new object[] { null, null, null };
         Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
-        yield return new object[] { mockContext.Object, new object(), Array.Empty<Attribute>() };
+        yield return new object[] { mockContext.Object, new(), Array.Empty<Attribute>() };
     }
 
     [Theory]

@@ -384,7 +384,7 @@ public class PaddingTests
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 3), false };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1), false };
 
-        yield return new object[] { new Padding(1, 2, 3, 4), new object(), false };
+        yield return new object[] { new Padding(1, 2, 3, 4), new(), false };
         yield return new object[] { new Padding(1, 2, 3, 4), null, false };
     }
 

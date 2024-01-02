@@ -148,7 +148,7 @@ public class MessageTests
         yield return new object[]
         {
             Create((IntPtr)1, 2, (IntPtr)3, (IntPtr)4, (IntPtr)5),
-            new object(),
+            new(),
             false
         };
         yield return new object[]

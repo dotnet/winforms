@@ -452,7 +452,7 @@ public class CursorTests
         yield return new object[] { cursor, new Cursor(Cursors.AppStarting.Handle), true };
         yield return new object[] { cursor, new Cursor(Cursors.Arrow.Handle), false };
 
-        yield return new object[] { cursor, new object(), false };
+        yield return new object[] { cursor, new(), false };
         yield return new object[] { cursor, null, false };
     }
 

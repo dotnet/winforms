@@ -1695,7 +1695,7 @@ public class ImageCollectionTests
     public static IEnumerable<object[]> IListItem_SetNonImageValue_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -1740,7 +1740,7 @@ public class ImageCollectionTests
     public static IEnumerable<object[]> IListContains_NotImage_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Icon("bitmaps/10x16_one_entry_32bit.ico") };
     }
 
@@ -1771,7 +1771,7 @@ public class ImageCollectionTests
     public static IEnumerable<object[]> IListIndexOf_NotImage_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Icon("bitmaps/10x16_one_entry_32bit.ico") };
     }
 
@@ -1789,7 +1789,7 @@ public class ImageCollectionTests
         foreach (int index in new int[] { -1, 0, 1 })
         {
             yield return new object[] { index, null };
-            yield return new object[] { index, new object() };
+            yield return new object[] { index, new() };
             yield return new object[] { index, new Bitmap(10, 10) };
             yield return new object[] { index, new Metafile("bitmaps/telescope_01.wmf") };
             yield return new object[] { index, new Icon("bitmaps/10x16_one_entry_32bit.ico") };
@@ -1823,7 +1823,7 @@ public class ImageCollectionTests
     public static IEnumerable<object[]> IListRemove_NotImage_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Icon("bitmaps/10x16_one_entry_32bit.ico") };
     }
 

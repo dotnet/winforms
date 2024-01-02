@@ -1938,9 +1938,9 @@ public class ListControlTests
     public static IEnumerable<object[]> SelectedValue_NoMatchingValue_TestData()
     {
         yield return new object[] { new List<DataClass>(), "selected" };
-        yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, string.Empty };
-        yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, "selected" };
-        yield return new object[] { new List<DataClass> { new DataClass { Value = "NoSuchValue" } }, "nosuchvalue" };
+        yield return new object[] { new List<DataClass> { new() { Value = "NoSuchValue" } }, string.Empty };
+        yield return new object[] { new List<DataClass> { new() { Value = "NoSuchValue" } }, "selected" };
+        yield return new object[] { new List<DataClass> { new() { Value = "NoSuchValue" } }, "nosuchvalue" };
     }
 
     [WinFormsTheory]
@@ -2387,7 +2387,7 @@ public class ListControlTests
     {
         DataClass item = new() { Value = 3 };
         yield return new object[] { item, null, "3" };
-        yield return new object[] { item, new object(), "3" };
+        yield return new object[] { item, new(), "3" };
         yield return new object[] { item, item, "3" };
         yield return new object[] { item, "custom", "custom" };
     }
@@ -2429,7 +2429,7 @@ public class ListControlTests
     {
         DataClass item = new() { Value = 3 };
         yield return new object[] { item, null };
-        yield return new object[] { item, new object() };
+        yield return new object[] { item, new() };
         yield return new object[] { item, item };
         yield return new object[] { item, "custom" };
     }

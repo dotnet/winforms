@@ -27,7 +27,7 @@ public class ListViewGroupConverterTests
     public static IEnumerable<object[]> CanConvertFrom_Context_TestData()
     {
         yield return new object[] { null, false };
-        yield return new object[] { new object(), false };
+        yield return new object[] { new(), false };
         yield return new object[] { new ListViewItem(), true };
 
         ListView listView = new();
@@ -86,7 +86,7 @@ public class ListViewGroupConverterTests
     public static IEnumerable<object[]> ConvertFrom_InvalidContext_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new ListViewItem() };
 
         ListView listView = new();
@@ -140,7 +140,7 @@ public class ListViewGroupConverterTests
     public static IEnumerable<object[]> CanConvertTo_Context_TestData()
     {
         yield return new object[] { null, true };
-        yield return new object[] { new object(), true };
+        yield return new object[] { new(), true };
         yield return new object[] { new ListViewItem(), true };
 
         ListView listView = new();
@@ -256,7 +256,7 @@ public class ListViewGroupConverterTests
     public static IEnumerable<object[]> GetStandardValues_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), null };
+        yield return new object[] { new(), null };
         yield return new object[] { new ListViewItem(), null };
 
         ListView listView = new();

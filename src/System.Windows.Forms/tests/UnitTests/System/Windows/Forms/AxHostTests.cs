@@ -1756,10 +1756,10 @@ public class AxHostTests
     public static IEnumerable<object[]> InvokeEditMode_Site_TestData()
     {
         yield return new object[] { true, null, 2 };
-        yield return new object[] { true, new object(), 2 };
+        yield return new object[] { true, new(), 2 };
 
         yield return new object[] { false, null, 1 };
-        yield return new object[] { false, new object(), 1 };
+        yield return new object[] { false, new(), 1 };
         yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
     }
 
@@ -1807,10 +1807,10 @@ public class AxHostTests
     public static IEnumerable<object[]> InvokeEditMode_SiteWithParent_TestData()
     {
         yield return new object[] { true, null, 3 };
-        yield return new object[] { true, new object(), 3 };
+        yield return new object[] { true, new(), 3 };
 
         yield return new object[] { false, null, 1 };
-        yield return new object[] { false, new object(), 1 };
+        yield return new object[] { false, new(), 1 };
         yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
     }
 
@@ -2040,10 +2040,10 @@ public class AxHostTests
     public static IEnumerable<object[]> InvokeEditMode_SiteWithHandle_TestData()
     {
         yield return new object[] { true, null, 3 };
-        yield return new object[] { true, new object(), 3 };
+        yield return new object[] { true, new(), 3 };
 
         yield return new object[] { false, null, 1 };
-        yield return new object[] { false, new object(), 1 };
+        yield return new object[] { false, new(), 1 };
         yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
     }
 

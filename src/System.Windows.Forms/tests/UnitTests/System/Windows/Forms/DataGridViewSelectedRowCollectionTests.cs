@@ -258,7 +258,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListItem_SetTestData()
     {
         yield return new object[] { 0, null };
-        yield return new object[] { -1, new object() };
+        yield return new object[] { -1, new() };
         yield return new object[] { 1, new DataGridViewRow() };
     }
 
@@ -275,7 +275,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListAdd_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 
@@ -331,7 +331,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListContains_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 
@@ -421,7 +421,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListIndexOf_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 
@@ -461,7 +461,7 @@ public class DataGridViewSelectedRowCollectionTests
         foreach (int index in new int[] { -1, 0, 1 })
         {
             yield return new object[] { index, null };
-            yield return new object[] { index, new object() };
+            yield return new object[] { index, new() };
             yield return new object[] { index, new DataGridViewRow() };
         }
     }
@@ -479,7 +479,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListRemove_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 

@@ -50,7 +50,7 @@ public class BindingMemberInfoTests
         yield return new object[] { new BindingMemberInfo(), new BindingMemberInfo(""), true };
         yield return new object[] { new BindingMemberInfo(), new BindingMemberInfo("Some.Other"), false };
 
-        yield return new object[] { new BindingMemberInfo("Some.Other"), new object(), false };
+        yield return new object[] { new BindingMemberInfo("Some.Other"), new(), false };
         yield return new object[] { new BindingMemberInfo("Some.Other"), null, false };
     }
 
