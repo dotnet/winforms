@@ -287,4 +287,49 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         Assert.Equal(checkBox.AccessibilityObject.DefaultAction, ((BSTR)checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.False(checkBox.IsHandleCreated);
     }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/10516.
+    [WinFormsFact]
+    public void CheckBoxAccessibleObject_Value_Pattern_Success()
+    {
+        using CheckBox checkBox = new();
+        CheckBoxAccessibleObject checkBoxAccessibleObject = new(checkBox);
+        Assert.False(checkBox.Checked);
+        Assert.False(checkBox.ThreeState);
+
+        Assert.True(checkBoxAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ValuePatternId));
+        Assert.Equal("False", checkBoxAccessibleObject.Value);
+
+        checkBox.Checked = true;
+        Assert.Equal("True", checkBoxAccessibleObject.Value);
+
+        checkBox.ThreeState = true;
+
+        Assert.Equal("Checked", checkBoxAccessibleObject.Value);
+
+        checkBox.CheckState = CheckState.Unchecked;
+        Assert.Equal("Unchecked", checkBoxAccessibleObject.Value);
+
+        checkBox.CheckState = CheckState.Indeterminate;
+        Assert.Equal("Indeterminate", checkBoxAccessibleObject.Value);
+
+        checkBoxAccessibleObject.SetValue(CheckState.Indeterminate.ToString());
+        Assert.Equal(CheckState.Indeterminate, checkBox.CheckState);
+
+        checkBoxAccessibleObject.SetValue(CheckState.Unchecked.ToString());
+        Assert.Equal(CheckState.Unchecked, checkBox.CheckState);
+
+        checkBoxAccessibleObject.SetValue(CheckState.Checked.ToString());
+        Assert.Equal(CheckState.Checked, checkBox.CheckState);
+
+        checkBox.ThreeState = false;
+        Assert.True(checkBox.Checked);
+
+        checkBoxAccessibleObject.SetValue(false.ToString());
+        Assert.False(checkBox.Checked);
+
+        Assert.Throws<ArgumentException>(() => checkBoxAccessibleObject.SetValue("Microsoft"));
+
+        Assert.False(checkBox.IsHandleCreated);
+    }
 }
