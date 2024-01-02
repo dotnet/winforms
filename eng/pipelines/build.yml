@@ -140,14 +140,14 @@ jobs:
       condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
     #Publish code coverage results
-    #- task: PublishCodeCoverageResults@1
-    #  inputs:
-    #    codeCoverageTool: 'cobertura'
-    #    summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)\Cobertura.xml'
-    #    pathToSources: '$(Build.SourcesDirectory)'
-    #    reportDirectory: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)'
-    #  displayName: PublishCodeCoverageResults
-    #  condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)\Cobertura.xml'
+        pathToSources: '$(Build.SourcesDirectory)'
+        reportDirectory: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)'
+      displayName: PublishCodeCoverageResults
+      condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
       
     # Upload code coverage data
     - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
