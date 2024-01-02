@@ -26,7 +26,7 @@ public partial class CheckedListBox : ListBox
     ///  Decides whether or not to ignore the next LBN_SELCHANGE message - used to prevent cursor keys from
     ///  toggling checkboxes.
     /// </summary>
-    private bool _killnextselect;
+    private bool _killNextSelect;
 
     /// <summary>
     ///  Current listener of the onItemCheck event.
@@ -156,7 +156,7 @@ public partial class CheckedListBox : ListBox
     }
 
     /// <summary>
-    ///  Collection of items in this listbox.
+    ///  Collection of items in this <see cref="ListBox"/>
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -382,7 +382,7 @@ public partial class CheckedListBox : ListBox
     public bool GetItemChecked(int index) => GetItemCheckState(index) != CheckState.Unchecked;
 
     /// <summary>
-    ///  Invalidates the given item in the listbox
+    ///  Invalidates the given item in the <see cref="ListBox"/>
     /// </summary>
     private unsafe void InvalidateItem(int index)
     {
@@ -423,7 +423,7 @@ public partial class CheckedListBox : ListBox
         AccessibilityNotifyClients(AccessibleEvents.Selection, index);
 
         // # VS7 86
-        if (!_killnextselect && (index == _lastSelected || CheckOnClick))
+        if (!_killNextSelect && (index == _lastSelected || CheckOnClick))
         {
             CheckState currentValue = CheckedItems.GetCheckedState(index);
             CheckState newValue = (currentValue != CheckState.Unchecked)
@@ -451,7 +451,7 @@ public partial class CheckedListBox : ListBox
     /// </summary>
     protected override void OnClick(EventArgs e)
     {
-        _killnextselect = false;
+        _killNextSelect = false;
         base.OnClick(e);
     }
 
@@ -896,7 +896,7 @@ public partial class CheckedListBox : ListBox
                 break;
 
             case PInvoke.LBN_DBLCLK:
-                // We want double-clicks to change the checkstate on each click - just like the CheckBox control
+                // We want double-clicks to change the checkState on each click - just like the CheckBox control
                 LbnSelChange();
                 base.WmReflectCommand(ref m);
                 break;
@@ -924,10 +924,10 @@ public partial class CheckedListBox : ListBox
             case Keys.End:
             case Keys.Left:
             case Keys.Right:
-                _killnextselect = true;
+                _killNextSelect = true;
                 break;
             default:
-                _killnextselect = false;
+                _killNextSelect = false;
                 break;
         }
 
@@ -935,7 +935,7 @@ public partial class CheckedListBox : ListBox
     }
 
     /// <summary>
-    ///  The listbox's window procedure.  Inheriting classes can override this
+    ///  The listBox's window procedure.  Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
     ///  base.wndProc(m); to ensure the button continues to function properly.
     /// </summary>

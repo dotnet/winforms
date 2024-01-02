@@ -13,6 +13,7 @@
 *REMOVED*virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
 *REMOVED*virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
 *REMOVED*virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode![]! nodes) -> void
+override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.Value.get -> string!
 override System.Windows.Forms.LinkLabel.Dispose(bool disposing) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void

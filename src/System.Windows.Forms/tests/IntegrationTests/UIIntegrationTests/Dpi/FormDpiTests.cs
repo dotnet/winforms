@@ -25,7 +25,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -62,7 +62,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             var minSize = new Drawing.Size(100, 100);
@@ -96,7 +96,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             var minSize = new Drawing.Size(100, 100);
@@ -138,7 +138,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -174,7 +174,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -206,7 +206,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -234,7 +234,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
-        typeof(ScaleHelper).TestAccessor().Dynamic.Initialize();
+        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
