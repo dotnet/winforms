@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Drawing;
 
 namespace WinformsControlsTest
 {
@@ -369,9 +372,10 @@ namespace WinformsControlsTest
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            textBox1.Size = new Size(93, 41);
+            textBox1.Size = new Size(93, 65);
             textBox1.TabIndex = 9;
-            textBox1.Text = "zdffsdfsdfsdfsdfssdfsdfsdfsdfsdfsdfsdfsdfdfsdfsdfs";
+            textBox1.Text = "zdffsdfsd\r\nfsdfsdfss\r\ndfsdfsdfs\r\ndfsdfsdf\r\nsdfsdfd\r\nfsdfsdfsnfsdfsdfs";
+            textBox1.WordWrap = false;
             // 
             // treeView1
             // 
