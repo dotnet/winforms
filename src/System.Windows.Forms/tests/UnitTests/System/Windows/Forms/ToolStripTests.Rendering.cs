@@ -52,6 +52,6 @@ public partial class ToolStripTests
                 State.BrushColor(form.BackColor),
                 State.Clipping(expectedRects)));
 
-        var details = emf.RecordsToString();
+        string details = emf.RecordsToString();
     }
 }

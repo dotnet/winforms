@@ -131,7 +131,7 @@ public class DataGridViewSelectedRowCollectionTests
     {
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, 2, 3 }, array);
     }
@@ -149,7 +149,7 @@ public class DataGridViewSelectedRowCollectionTests
         control.Rows[2].Selected = true;
 
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, control.Rows[2], control.Rows[0] }, array);
     }
@@ -304,7 +304,7 @@ public class DataGridViewSelectedRowCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         iList.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, 2, 3 }, array);
     }
@@ -323,7 +323,7 @@ public class DataGridViewSelectedRowCollectionTests
 
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         iList.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, control.Rows[2], control.Rows[0] }, array);
     }

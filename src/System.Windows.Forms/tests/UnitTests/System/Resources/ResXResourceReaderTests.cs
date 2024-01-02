@@ -22,7 +22,7 @@ public class ResXResourceReaderTests
         {
             using ResourceWriter resourceWriter = new(resourceStream);
             using ResXResourceReader resxReader = new(resxPath);
-            var enumerator = resxReader.GetEnumerator();
+            IDictionaryEnumerator enumerator = resxReader.GetEnumerator();
 
             Assert.True(enumerator.MoveNext());
             string key = enumerator.Key.ToString();

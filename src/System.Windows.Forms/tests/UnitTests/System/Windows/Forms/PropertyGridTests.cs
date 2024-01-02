@@ -2716,7 +2716,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_Site_ShouldSaveSelectedTabIndex()
     {
         using PropertyGrid propertyGrid = new();
-        var propertyGridTestAccessor = propertyGrid.TestAccessor();
+        TestAccessors.PropertyGridTestAccessor propertyGridTestAccessor = propertyGrid.TestAccessor();
 
         propertyGrid.Site = CreateISiteObject();
         Assert.NotNull(propertyGrid.ActiveDesigner);
@@ -2739,9 +2739,9 @@ public partial class PropertyGridTests
     public void PropertyGrid_SiteChange_ShouldNotSaveSelectedTabIndex()
     {
         using PropertyGrid propertyGrid = new();
-        var propertyGridTestAccessor = propertyGrid.TestAccessor();
+        TestAccessors.PropertyGridTestAccessor propertyGridTestAccessor = propertyGrid.TestAccessor();
         propertyGrid.Site = CreateISiteObject();
-        var previousActiveDesigner = propertyGrid.ActiveDesigner;
+        IDesignerHost previousActiveDesigner = propertyGrid.ActiveDesigner;
         propertyGridTestAccessor.SaveSelectedTabIndex();
 
         // Set other Site

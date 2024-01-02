@@ -18,8 +18,8 @@ public class ResXResourceWriterTests
     [Fact]
     public void TestRoundTrip()
     {
-        var key = "Some.Key.Name";
-        var value = "Some.Key.Value";
+        string key = "Some.Key.Name";
+        string value = "Some.Key.Value";
 
         using (MemoryStream stream = new())
         {
@@ -28,7 +28,7 @@ public class ResXResourceWriterTests
                 writer.AddResource(key, value);
             }
 
-            var buffer = stream.ToArray();
+            byte[] buffer = stream.ToArray();
             using (ResXResourceReader reader = new(new MemoryStream(buffer)))
             {
                 var dictionary = new Dictionary<object, object>();
@@ -136,7 +136,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var metadataEnumerator = reader.GetMetadataEnumerator();
+        IDictionaryEnumerator metadataEnumerator = reader.GetMetadataEnumerator();
         Assert.True(metadataEnumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)metadataEnumerator.Current;
@@ -157,7 +157,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var metadataEnumerator = reader.GetMetadataEnumerator();
+        IDictionaryEnumerator metadataEnumerator = reader.GetMetadataEnumerator();
         Assert.True(metadataEnumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)metadataEnumerator.Current;
@@ -178,7 +178,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var metadataEnumerator = reader.GetMetadataEnumerator();
+        IDictionaryEnumerator metadataEnumerator = reader.GetMetadataEnumerator();
         Assert.True(metadataEnumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)metadataEnumerator.Current;
@@ -199,7 +199,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var enumerator = reader.GetEnumerator();
+        IDictionaryEnumerator enumerator = reader.GetEnumerator();
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
@@ -220,7 +220,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var enumerator = reader.GetEnumerator();
+        IDictionaryEnumerator enumerator = reader.GetEnumerator();
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
@@ -241,7 +241,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var enumerator = reader.GetEnumerator();
+        IDictionaryEnumerator enumerator = reader.GetEnumerator();
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
@@ -263,7 +263,7 @@ public class ResXResourceWriterTests
 
         // Assert
         using ResXResourceReader reader = new(_resxFileName);
-        var enumerator = reader.GetEnumerator();
+        IDictionaryEnumerator enumerator = reader.GetEnumerator();
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;

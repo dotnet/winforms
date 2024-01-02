@@ -1099,7 +1099,7 @@ public class ColumnHeaderCollectionTests
         using ColumnHeader header = new();
         collection.Add(header);
 
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, header, 3 }, array);
     }
@@ -1109,7 +1109,7 @@ public class ColumnHeaderCollectionTests
     {
         using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 0);
         Assert.Equal(new object[] { 1, 2, 3 }, array);
     }

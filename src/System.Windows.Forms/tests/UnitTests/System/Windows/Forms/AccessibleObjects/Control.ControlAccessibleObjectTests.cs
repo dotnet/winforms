@@ -1194,7 +1194,7 @@ public class Control_ControlAccessibleObjectTests
     public void ControlAccessibleObject_DoesntSupport_LegacyIAccessiblePattern()
     {
         using Control control = new();
-        var accessibleObject = control.AccessibilityObject;
+        AccessibleObject accessibleObject = control.AccessibilityObject;
 
         bool expected = control.SupportsUiaProviders;
         Assert.False(expected);
@@ -1233,7 +1233,7 @@ public class Control_ControlAccessibleObjectTests
         control.AccessibleRole = AccessibleRole.Link;
         AccessibleObject controlAccessibleObject = control.AccessibilityObject;
 
-        var accessibleObjectRole = controlAccessibleObject.Role;
+        AccessibleRole accessibleObjectRole = controlAccessibleObject.Role;
 
         Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
     }
@@ -1292,7 +1292,7 @@ public class Control_ControlAccessibleObjectTests
         control.AccessibleDescription = "Test Accessible Description";
         AccessibleObject controlAccessibleObject = control.AccessibilityObject;
 
-        var accessibleObjectDescription = controlAccessibleObject.Description;
+        string accessibleObjectDescription = controlAccessibleObject.Description;
 
         Assert.Equal("Test Accessible Description", accessibleObjectDescription);
     }
@@ -1641,10 +1641,10 @@ public class Control_ControlAccessibleObjectTests
     [MemberData(nameof(ControlAccessibleObject_Name_KeyboardShortcut_TestData))]
     public void ControlAccessibleObject_Shortcut_Invoke_ReturnsExpected(Type type)
     {
-        using var control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+        using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
         control.Text = "&control";
         control.TabIndex = 1;
-        var accessibleObject = control.AccessibilityObject;
+        AccessibleObject accessibleObject = control.AccessibilityObject;
 
         Assert.Equal("Alt+c", accessibleObject.KeyboardShortcut);
 
@@ -1685,9 +1685,9 @@ public class Control_ControlAccessibleObjectTests
     [MemberData(nameof(ControlAccessibleObject_Name_KeyboardShortcut_TestData))]
     public void ControlAccessibleObject_Name_Invoke_ReturnsExpected(Type type)
     {
-        using var control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+        using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
         control.Text = "&control";
-        var accessibleObject = control.AccessibilityObject;
+        AccessibleObject accessibleObject = control.AccessibilityObject;
 
         Assert.Equal("control", accessibleObject.Name);
 

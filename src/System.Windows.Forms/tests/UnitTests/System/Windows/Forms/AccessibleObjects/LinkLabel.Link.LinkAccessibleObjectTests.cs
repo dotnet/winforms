@@ -245,7 +245,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         using LinkLabel linkLabel = new();
         LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
 
-        var actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
+        bool actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
 
         Assert.False(actual);
         Assert.False(linkLabel.IsHandleCreated);
@@ -271,7 +271,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
     {
         using LinkLabel linkLabel = new();
         LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(linkLabel.IsHandleCreated);

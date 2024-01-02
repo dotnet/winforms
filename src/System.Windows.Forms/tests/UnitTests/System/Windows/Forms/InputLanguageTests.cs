@@ -94,7 +94,7 @@ public class InputLanguageTests
     [Fact]
     public void InputLanguage_FromCulture_NoSuchCulture_ReturnsNull()
     {
-        var invariantCulture = CultureInfo.InvariantCulture;
+        CultureInfo invariantCulture = CultureInfo.InvariantCulture;
         Assert.Null(InputLanguage.FromCulture(invariantCulture));
     }
 

@@ -79,7 +79,7 @@ public class ToolStripItemCollectionTests
         {
             Name = "name2"
         };
-        var collection = toolStrip.DropDown.DisplayedItems;
+        ToolStripItemCollection collection = toolStrip.DropDown.DisplayedItems;
         collection.Add(child1);
         collection.Add(child2);
         collection.Add(child3);
@@ -93,7 +93,7 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
     {
         using ToolStripMenuItem toolStrip = new();
-        var collection = toolStrip.DropDown.DisplayedItems;
+        ToolStripItemCollection collection = toolStrip.DropDown.DisplayedItems;
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
     }

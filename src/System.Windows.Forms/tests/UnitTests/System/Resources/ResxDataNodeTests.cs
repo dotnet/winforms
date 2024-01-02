@@ -15,7 +15,7 @@ public class ResxDataNodeTests
     [Fact]
     public void ResxDataNode_ResXFileRefConstructor()
     {
-        var nodeName = "Node";
+        string nodeName = "Node";
         ResXFileRef fileRef = new(string.Empty, string.Empty);
         ResXDataNode dataNode = new(nodeName, fileRef);
 
@@ -27,12 +27,12 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo_Framework()
     {
         using Bitmap bitmap = new(10, 10);
-        var converter = TypeDescriptor.GetConverter(bitmap);
+        TypeConverter converter = TypeDescriptor.GetConverter(bitmap);
         ResXDataNode temp = new("test", converter.ConvertTo(bitmap, typeof(byte[])));
-        var dataNodeInfo = temp.GetDataNodeInfo();
+        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
-        var bitmapBytes = dataNode.GetValue(typeResolver: null);
+        object? bitmapBytes = dataNode.GetValue(typeResolver: null);
         Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes!));
         Assert.Equal(bitmap.Size, result.Size);
     }
@@ -41,14 +41,14 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo_Core()
     {
         using Bitmap bitmap = new(10, 10);
-        var converter = TypeDescriptor.GetConverter(bitmap);
+        TypeConverter converter = TypeDescriptor.GetConverter(bitmap);
         ResXDataNode temp = new("test", converter.ConvertTo(bitmap, typeof(byte[])));
-        var dataNodeInfo = temp.GetDataNodeInfo();
+        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
         dataNodeInfo.TypeName = "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
-        var bitmapBytes = dataNode.GetValue(typeResolver: null);
-        var result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes!));
+        object? bitmapBytes = dataNode.GetValue(typeResolver: null);
+        Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes!));
         Assert.Equal(bitmap.Size, result.Size);
     }
 
@@ -56,10 +56,10 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_Null_FromDataNodeInfo()
     {
         ResXDataNode temp = new("test", value: null);
-        var dataNodeInfo = temp.GetDataNodeInfo();
+        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
-        var valueNull = dataNode.GetValue(typeResolver: null);
+        object? valueNull = dataNode.GetValue(typeResolver: null);
         Assert.Null(valueNull);
     }
 
@@ -67,10 +67,10 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_String_FromDataNodeInfo()
     {
         ResXDataNode temp = new("testName", "test");
-        var dataNodeInfo = temp.GetDataNodeInfo();
+        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
-        var valueString = dataNode.GetValue(typeResolver: null);
+        object? valueString = dataNode.GetValue(typeResolver: null);
         Assert.Equal("test", valueString);
     }
 

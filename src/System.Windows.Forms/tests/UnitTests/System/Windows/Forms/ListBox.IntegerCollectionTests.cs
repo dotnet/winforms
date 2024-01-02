@@ -1011,7 +1011,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { "1", "2", "3" }, array);
     }
@@ -1023,7 +1023,7 @@ public class ListBoxIntegerCollectionTests
         var collection = new ListBox.IntegerCollection(owner);
         collection.Add(1);
         collection.Add(2);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { "1", 1, 2 }, array);
     }

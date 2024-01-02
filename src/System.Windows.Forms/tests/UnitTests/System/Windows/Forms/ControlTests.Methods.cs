@@ -4057,7 +4057,7 @@ public partial class ControlTests
         using Control control = new();
         control.CreateControl();
 
-        var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+        DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
 
         /*
 
@@ -4124,7 +4124,7 @@ public partial class ControlTests
 
         await Task.Run(() =>
         {
-            var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+            DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
 
             /*
 

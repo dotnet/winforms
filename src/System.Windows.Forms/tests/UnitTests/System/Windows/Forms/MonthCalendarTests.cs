@@ -648,7 +648,7 @@ public class MonthCalendarTests
         Assert.False(calendar.IsHandleCreated);
 
         // Set same.
-        var previousCalendarDimensions = calendar.CalendarDimensions;
+        Size previousCalendarDimensions = calendar.CalendarDimensions;
         calendar.CalendarDimensions = value;
         Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
         Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
@@ -709,7 +709,7 @@ public class MonthCalendarTests
         Assert.Equal(0, createdCallCount);
 
         // Set same.
-        var previousCalendarDimensions = calendar.CalendarDimensions;
+        Size previousCalendarDimensions = calendar.CalendarDimensions;
         calendar.CalendarDimensions = value;
         Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
         Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);

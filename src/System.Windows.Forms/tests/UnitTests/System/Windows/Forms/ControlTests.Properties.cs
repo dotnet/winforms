@@ -5027,7 +5027,7 @@ public partial class ControlTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using var font2 = SystemFonts.DialogFont;
+        using Font font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Equal(2, callCount);
@@ -5098,7 +5098,7 @@ public partial class ControlTests
         Assert.Equal(1, childCallCount2);
 
         // Set different.
-        using var font2 = SystemFonts.DialogFont;
+        using Font font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Same(font2, child1.Font);
@@ -5191,7 +5191,7 @@ public partial class ControlTests
         Assert.Equal(0, childCallCount2);
 
         // Set different.
-        using var font2 = SystemFonts.DialogFont;
+        using Font font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Same(childFont1, child1.Font);
@@ -9254,7 +9254,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
 
-        var keyState = new byte[256];
+        byte[] keyState = new byte[256];
         fixed (byte* b = keyState)
         {
             Assert.True(PInvoke.GetKeyboardState(b));

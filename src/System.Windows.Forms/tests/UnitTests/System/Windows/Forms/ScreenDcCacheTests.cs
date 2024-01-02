@@ -16,7 +16,7 @@ public class ScreenDcCacheTests
             Thread.Sleep(random.Next(5));
             Task.Run(() =>
             {
-                using var screen = cache.Acquire();
+                using ScreenDcCache.ScreenDcScope screen = cache.Acquire();
                 Assert.False(screen.HDC.IsNull);
                 Thread.Sleep(random.Next(5));
             });

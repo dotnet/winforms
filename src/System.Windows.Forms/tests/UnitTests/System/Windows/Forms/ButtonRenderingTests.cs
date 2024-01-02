@@ -216,7 +216,7 @@ public class ButtonRenderingTests
         using EmfScope emf = new();
         form.PrintToMetafile(emf);
 
-        var details = emf.RecordsToString();
+        string details = emf.RecordsToString();
     }
 
     [WinFormsFact]

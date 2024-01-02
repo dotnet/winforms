@@ -63,7 +63,7 @@ public class CursorsTests
     [Fact]
     public void Cursors_Properties_Get_NotNull()
     {
-        foreach (var property in typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public))
+        foreach (PropertyInfo property in typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public))
         {
             object[] tempIndex = null;
             Assert.NotNull((Cursor)property.GetValue(null, tempIndex));

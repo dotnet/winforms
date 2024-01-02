@@ -48,13 +48,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         AccessibleObject rr = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
-        var accCellWidthSum = 0;
+        int accCellWidthSum = 0;
         for (int i = 0; i < 4; i++)
         {
             accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
         }
 
-        var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
+        int accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
         Assert.Equal(accCellWidthSum, accRowWidth - dataGridView.RowHeadersWidth);
         Assert.True(dataGridView.IsHandleCreated);
@@ -79,13 +79,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         AccessibleObject rr = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
-        var accCellWidthSum = 0;
+        int accCellWidthSum = 0;
         for (int i = 0; i < 4; i++)
         {
             accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
         }
 
-        var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
+        int accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
         Assert.Equal(0, accCellWidthSum);
         Assert.Equal(0, accRowWidth);
@@ -467,7 +467,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
             .Protected()
             .Setup("Dispose", ItExpr.IsAny<bool>());
 
-        var mockObj = mockCell.Object;
+        DataGridViewCell mockObj = mockCell.Object;
         DataGridViewCellAccessibleObject accessibleObject = new(mockObj);
         accessibleObject.Select(AccessibleSelection.None);
         // NB: asserts are implicit - check that nothing was called on the mock that we didn't anticipate
@@ -500,7 +500,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
             .Protected()
             .Setup("OnDataGridViewChanged");
 
-        var mockObj = mockCell.Object;
+        DataGridViewCell mockObj = mockCell.Object;
         mockObj.DataGridView = dataGridView;
 
         DataGridViewCellAccessibleObject accessibleObject = new(mockObj);
@@ -533,7 +533,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
             .Protected()
             .Setup("OnDataGridViewChanged");
 
-        var mockObj = mockCell.Object;
+        DataGridViewCell mockObj = mockCell.Object;
         mockObj.DataGridView = dataGridView;
 
         DataGridViewCellAccessibleObject accessibleObject = new(mockObj);
@@ -718,7 +718,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(dataGridView.IsHandleCreated);

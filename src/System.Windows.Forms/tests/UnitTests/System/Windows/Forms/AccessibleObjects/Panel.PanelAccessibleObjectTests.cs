@@ -28,7 +28,7 @@ public class Panel_PanelAccessibleObjectTests
     [WinFormsFact]
     public void PanelAccessibleObject_Description_ReturnsExpected()
     {
-        var expected = "PanelTestDescription";
+        string expected = "PanelTestDescription";
 
         using Panel panel = new()
         {
@@ -44,7 +44,7 @@ public class Panel_PanelAccessibleObjectTests
     [WinFormsFact]
     public void PanelAccessibleObject_Name_ReturnsExpected()
     {
-        var expected = "PanelTestName";
+        string expected = "PanelTestName";
 
         using Panel panel = new()
         {

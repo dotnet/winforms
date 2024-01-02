@@ -19,7 +19,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         };
 
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
-        var accessibleName = menuStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        global::Windows.Win32.System.Variant.VARIANT accessibleName = menuStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
@@ -64,7 +64,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         };
 
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
-        var accessibleObjectRole = menuStripAccessibleObject.Role;
+        AccessibleRole accessibleObjectRole = menuStripAccessibleObject.Role;
 
         Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
     }
@@ -78,7 +78,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         };
 
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
-        var accessibleObjectDescription = menuStripAccessibleObject.Description;
+        string accessibleObjectDescription = menuStripAccessibleObject.Description;
 
         Assert.Equal("Test Description", accessibleObjectDescription);
     }

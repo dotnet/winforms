@@ -4865,7 +4865,7 @@ public class DataGridViewCellTests
         using DataGridViewTextBoxColumn column1 = new();
         dataGridView.Columns.Add(column1);
         dataGridView.Rows.Add();
-        var cell = dataGridView.Rows[0].Cells[0];
+        DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
         cell.Selected = true;
 
         // Attach EditingControl.AccessibilityObject to cell
@@ -6554,7 +6554,7 @@ public class DataGridViewCellTests
             .Returns(true)
             .Verifiable();
 
-        var cellName = "TestCellName";
+        string cellName = "TestCellName";
 
         mockAccessibleObject
             .Setup(a => a.Name)

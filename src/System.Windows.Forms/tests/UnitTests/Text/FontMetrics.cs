@@ -22,7 +22,7 @@ public class FontMetrics
             return;
         }
 
-        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
+        using RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>.Scope hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
         Assert.Equal(height, hfont.Data.Height);
     }
 
@@ -41,7 +41,7 @@ public class FontMetrics
             return;
         }
 
-        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
+        using RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>.Scope hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
         DRAWTEXTPARAMS margins = hfont.GetTextMargins();
         Assert.Equal(left, margins.iLeftMargin);
         Assert.Equal(right, margins.iRightMargin);
@@ -62,8 +62,8 @@ public class FontMetrics
             return;
         }
 
-        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
-        using var screen = GdiCache.GetScreenHdc();
+        using RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>.Scope hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
+        using ScreenDcCache.ScreenDcScope screen = GdiCache.GetScreenHdc();
         Size extent = screen.HDC.GetTextExtent("Whizzo Butter", hfont);
         Assert.Equal(width, extent.Width);
         Assert.Equal(height, extent.Height);
@@ -80,8 +80,8 @@ public class FontMetrics
             return;
         }
 
-        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
-        using var screen = GdiCache.GetScreenHdc();
+        using RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>.Scope hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
+        using ScreenDcCache.ScreenDcScope screen = GdiCache.GetScreenHdc();
         Size measure = screen.HDC.MeasureText("Windows Foundation Classes", hfont, proposedSize, (TextFormatFlags)dt);
         Assert.Equal(expected, measure);
     }
@@ -137,8 +137,8 @@ public class FontMetrics
             return;
         }
 
-        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
-        using var screen = GdiCache.GetScreenHdc();
+        using RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>.Scope hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
+        using ScreenDcCache.ScreenDcScope screen = GdiCache.GetScreenHdc();
         using PInvoke.SelectObjectScope fontSelection = new(screen, hfont.Object);
 
         DRAWTEXTPARAMS param = default;

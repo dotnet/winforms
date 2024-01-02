@@ -139,7 +139,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)upDownButtons.AccessibilityObject;
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(upDownBase.IsHandleCreated);
     }

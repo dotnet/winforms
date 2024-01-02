@@ -29,7 +29,7 @@ public class ToolStripAccessibleObjectTests
         };
 
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
-        var accessibleName = toolStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        VARIANT accessibleName = toolStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
@@ -54,7 +54,7 @@ public class ToolStripAccessibleObjectTests
         };
 
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
-        var accessibleObjectRole = toolStripAccessibleObject.Role;
+        AccessibleRole accessibleObjectRole = toolStripAccessibleObject.Role;
 
         Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
     }
@@ -68,7 +68,7 @@ public class ToolStripAccessibleObjectTests
         };
 
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
-        var accessibleObjectDescription = toolStripAccessibleObject.Description;
+        string accessibleObjectDescription = toolStripAccessibleObject.Description;
 
         Assert.Equal("Test Description", accessibleObjectDescription);
     }
@@ -161,7 +161,7 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = new();
         toolStrip.CreateControl();
 
-        var accessibleObject = toolStrip.AccessibilityObject;
+        AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
         IRawElementProviderFragment.Interface firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);

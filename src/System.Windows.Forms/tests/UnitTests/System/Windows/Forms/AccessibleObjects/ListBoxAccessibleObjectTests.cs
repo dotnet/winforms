@@ -14,11 +14,11 @@ public class ListBoxAccessibleObjectTests
     {
         using ListBox listBox = InitializeListBoxWithItems();
 
-        var childCount = listBox.AccessibilityObject.GetChildCount();
+        int childCount = listBox.AccessibilityObject.GetChildCount();
 
         for (int i = 0; i < childCount; i++)
         {
-            var child = listBox.AccessibilityObject.GetChild(i);
+            AccessibleObject child = listBox.AccessibilityObject.GetChild(i);
             Assert.True(child.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId));
         }
     }
@@ -166,8 +166,8 @@ public class ListBoxAccessibleObjectTests
         listBox.SelectionMode = mode;
         listBox.CreateControl();
 
-        var listBoxAccessibleObject = listBox.AccessibilityObject;
-        var actual = listBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionIsSelectionRequiredPropertyId);
+        AccessibleObject listBoxAccessibleObject = listBox.AccessibilityObject;
+        VARIANT actual = listBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionIsSelectionRequiredPropertyId);
 
         Assert.Equal(expected, (bool)actual);
 
@@ -187,8 +187,8 @@ public class ListBoxAccessibleObjectTests
         listBox.SelectionMode = mode;
         listBox.CreateControl();
 
-        var listBoxAccessibleObject = listBox.AccessibilityObject;
-        var actual = listBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
+        AccessibleObject listBoxAccessibleObject = listBox.AccessibilityObject;
+        VARIANT actual = listBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
 
         Assert.Equal(expected, (bool)actual);
 
@@ -206,11 +206,11 @@ public class ListBoxAccessibleObjectTests
         listBox.SetSelected(0, value: true);
         listBox.SetSelected(2, value: true);
 
-        var listBoxAccessibleObject = listBox.AccessibilityObject;
+        AccessibleObject listBoxAccessibleObject = listBox.AccessibilityObject;
         ISelectionItemProvider.Interface provider = listBoxAccessibleObject.GetChild(0);
         provider.RemoveFromSelection();
 
-        var indices = listBox.SelectedIndices;
+        SelectedIndexCollection indices = listBox.SelectedIndices;
         Assert.Equal(1, indices.Count);
         Assert.True(indices.Contains(2));
     }

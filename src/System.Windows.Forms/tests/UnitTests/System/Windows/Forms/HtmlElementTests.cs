@@ -221,7 +221,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             Assert.True(iHTMLElement3.Value->put_disabled(disabled).Succeeded);
             Assert.Equal(!disabled, element.Enabled);
         }
@@ -244,7 +244,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             element.Enabled = value;
             Assert.Equal(value, element.Enabled);
             VARIANT_BOOL disabled;
@@ -348,7 +348,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR bstrId = new(id);
             Assert.True(iHTMLElement.Value->put_id(bstrId).Succeeded);
             Assert.Equal(expected, element.Id);
@@ -373,7 +373,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             element.Id = value;
             Assert.Equal(expected, element.Id);
             using BSTR id = default;
@@ -438,7 +438,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR innerHtml = new(value);
             Assert.True(iHTMLElement.Value->put_innerHTML(innerHtml).Succeeded);
             Assert.Equal(expected, element.InnerHtml);
@@ -464,7 +464,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             element.InnerHtml = value;
             Assert.Equal(expected, element.InnerHtml);
             using BSTR innerHtml = default;
@@ -559,7 +559,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR innerHtml = new(value);
             Assert.True(iHTMLElement.Value->put_innerHTML(innerHtml).Succeeded);
             Assert.Equal(expected, element.InnerText);
@@ -585,7 +585,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             element.InnerText = value;
             Assert.Equal(expected, element.InnerText);
             using BSTR innerText = default;
@@ -677,7 +677,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR name = new("name");
             using var variantId = (VARIANT)id;
             iHTMLElement.Value->setAttribute(name, variantId, 0);
@@ -703,7 +703,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR name = new("name");
 
             element.Name = value;
@@ -860,7 +860,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR innerHtml = new(value);
             Assert.True(iHTMLElement.Value->put_innerHTML(innerHtml).Succeeded);
             Assert.Equal(expected, element.OuterHtml);
@@ -891,7 +891,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             element.OuterHtml = value;
             Assert.Equal(expected, element.OuterHtml);
             using BSTR outerHTML = default;
@@ -971,7 +971,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR innerHtml = new(value);
             Assert.True(iHTMLElement.Value->put_innerHTML(innerHtml).Succeeded);
             Assert.Equal(expected, element.OuterText);
@@ -997,7 +997,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             element.OuterText = value;
             Assert.Equal(expected, element.OuterText);
             using BSTR outerText = default;
@@ -1100,7 +1100,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
+            using ComScope<IHTMLElement2> iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
             Assert.True(iHTMLElement2.Value->put_scrollLeft(value).Succeeded);
             Assert.Equal(0, element.ScrollLeft);
         }
@@ -1124,7 +1124,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
+            using ComScope<IHTMLElement2> iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
             element.ScrollLeft = value;
             Assert.Equal(0, element.ScrollLeft);
             int scrollLeft;
@@ -1190,7 +1190,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
+            using ComScope<IHTMLElement2> iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
             Assert.True(iHTMLElement2.Value->put_scrollTop(value).Succeeded);
             Assert.Equal(0, element.ScrollTop);
         }
@@ -1214,7 +1214,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
+            using ComScope<IHTMLElement2> iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
             element.ScrollTop = value;
             Assert.Equal(0, element.ScrollTop);
             int scrollTop;
@@ -1282,7 +1282,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using ComScope<IHTMLStyle> htmlStyle = new(null);
             Assert.True(iHTMLElement.Value->get_style(htmlStyle).Succeeded);
             using BSTR bstrStyle = new(style);
@@ -1320,7 +1320,7 @@ public class HtmlElementTests
 
         unsafe string GetStyleCssText()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using ComScope<IHTMLStyle> htmlStyle = new(null);
             Assert.True(iHTMLElement.Value->get_style(htmlStyle).Succeeded);
             using BSTR cssText = default;
@@ -1362,7 +1362,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
+            using ComScope<IHTMLElement2> iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
             Assert.True(iHTMLElement2.Value->put_tabIndex(value).Succeeded);
             Assert.Equal(value, element.TabIndex);
         }
@@ -1386,7 +1386,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
+            using ComScope<IHTMLElement2> iHTMLElement2 = ComHelpers.GetComScope<IHTMLElement2>(element.DomElement);
             element.TabIndex = value;
             Assert.Equal(value, element.TabIndex);
             short tabIndex;
@@ -1594,7 +1594,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR name = new(eventName);
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -1636,7 +1636,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
 
             using BSTR name = new(eventName);
             VARIANT eventObj = default;
@@ -1677,7 +1677,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR name = new(eventName);
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -1865,7 +1865,7 @@ public class HtmlElementTests
         setup();
         unsafe void setup()
         {
-            using var iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
+            using ComScope<IHTMLElement> iHTMLElement = ComHelpers.GetComScope<IHTMLElement>(element.DomElement);
             using BSTR id = new("id");
             using var attribute = (VARIANT)"id";
             iHTMLElement.Value->setAttribute(id, attribute, 1);
@@ -2560,7 +2560,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             element.Click += handler;
             using BSTR onClick = new("onclick");
             VARIANT eventObj = default;
@@ -2601,7 +2601,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             element.DoubleClick += handler;
             using BSTR ondblclick = new("ondblclick");
             VARIANT eventObj = default;
@@ -2642,7 +2642,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             element.Drag += handler;
             using BSTR onDrag = new("ondrag");
             VARIANT eventObj = default;
@@ -2683,7 +2683,7 @@ public class HtmlElementTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             element.DragEnd += handler;
             using BSTR onDragEnd = new("ondragend");
             VARIANT eventObj = default;
@@ -2725,7 +2725,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.DragLeave += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onDragLeave = new("ondragleave");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2766,7 +2766,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.DragOver += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onDragOver = new("ondragover");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2807,7 +2807,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.GotFocus += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onFocus = new("onfocus");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2848,7 +2848,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.Focusing += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onFocusin = new("onfocusin");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2889,7 +2889,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.LosingFocus += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onFocusOut = new("onfocusout");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2930,7 +2930,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.LostFocus += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onBlur = new("onblur");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2971,7 +2971,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.KeyDown += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onKeyDown = new("onkeydown");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3012,7 +3012,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.KeyPress += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onKeyPress = new("onkeypress");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3053,7 +3053,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.KeyUp += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onKeyUp = new("onkeyup");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3094,7 +3094,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.MouseDown += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onMouseDown = new("onmousedown");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3135,7 +3135,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.MouseEnter += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onMouseEnter = new("onmouseenter");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3176,7 +3176,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.MouseLeave += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onMouseLeave = new("onmouseleave");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3217,7 +3217,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.MouseMove += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
             using BSTR onMouseMove = new("onmousemove");
@@ -3258,7 +3258,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.MouseOver += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onMouseOver = new("onmouseover");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3299,7 +3299,7 @@ public class HtmlElementTests
         unsafe void validate()
         {
             element.MouseUp += handler;
-            using var iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
+            using ComScope<IHTMLElement3> iHTMLElement3 = ComHelpers.GetComScope<IHTMLElement3>(element.DomElement);
             using BSTR onMouseUp = new("onmouseup");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -3320,7 +3320,7 @@ public class HtmlElementTests
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-        using var file = CreateTempFile(html);
+        using TempFile file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 

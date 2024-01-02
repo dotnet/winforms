@@ -156,7 +156,7 @@ public class UpDownEditAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
-        var actual = (int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        int actual = (int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
         Assert.Equal(expectedType, actual);

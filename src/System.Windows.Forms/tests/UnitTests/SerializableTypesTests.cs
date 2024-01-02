@@ -24,7 +24,7 @@ public class SerializableTypesTests
 
         using (MemoryStream stream = new(256))
         {
-            var bytes = Encoding.UTF8.GetBytes(payload);
+            byte[] bytes = Encoding.UTF8.GetBytes(payload);
             using (BinaryWriter writer = new(stream))
             {
                 writer.Write(bytes.Length);
@@ -44,9 +44,9 @@ public class SerializableTypesTests
         unsafe void ValidateResult(string blob)
         {
             AxHost.State result = BinarySerialization.EnsureDeserialize<AxHost.State>(blob);
-            using var resultPropBag = result.GetPropBag();
+            using ComScope<global::Windows.Win32.System.Com.StructuredStorage.IPropertyBag> resultPropBag = result.GetPropBag();
             Assert.True(resultPropBag.IsNull);
-            using var statePropBag = state.GetPropBag();
+            using ComScope<global::Windows.Win32.System.Com.StructuredStorage.IPropertyBag> statePropBag = state.GetPropBag();
             Assert.True(statePropBag.IsNull);
 
             Assert.Equal(AxHost.StorageType.StreamInit, result.Type);
@@ -58,7 +58,7 @@ public class SerializableTypesTests
             Assert.Equal(licenseKey, result.LicenseKey);
             Assert.Equal(licenseKey, state.LicenseKey);
 
-            using var streamOut = result.GetStream();
+            using ComScope<global::Windows.Win32.System.Com.IStream> streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
             Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
@@ -108,7 +108,7 @@ public class SerializableTypesTests
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
         LinkArea linkArea = new(5, 7);
-        var netBlob = BinarySerialization.ToBase64String(linkArea);
+        string netBlob = BinarySerialization.ToBase64String(linkArea);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);
@@ -135,7 +135,7 @@ public class SerializableTypesTests
 
         listViewGroup.Items.Add(new ListViewItem("Item"));
 
-        var netBlob = BinarySerialization.ToBase64String(listViewGroup);
+        string netBlob = BinarySerialization.ToBase64String(listViewGroup);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);
@@ -250,7 +250,7 @@ public class SerializableTypesTests
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
         Padding padding = new(1, 2, 3, 4);
-        var netBlob = BinarySerialization.ToBase64String(padding);
+        string netBlob = BinarySerialization.ToBase64String(padding);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);
@@ -358,7 +358,7 @@ public class SerializableTypesTests
             NodeFont = new Font(FontFamily.GenericSansSerif, 9f)
         };
 
-        var netBlob = BinarySerialization.ToBase64String(treeNodeIn);
+        string netBlob = BinarySerialization.ToBase64String(treeNodeIn);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);

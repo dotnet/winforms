@@ -297,7 +297,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox comboBox = new();
         comboBox.CreateControl(false);
         ComboBox.ComboBoxAccessibleObject accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.True(comboBox.IsHandleCreated);

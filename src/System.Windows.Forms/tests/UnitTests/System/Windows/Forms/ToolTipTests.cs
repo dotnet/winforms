@@ -184,7 +184,7 @@ public class ToolTipTests
     {
         using ToolTip toolTip = new();
 
-        var properties = TypeDescriptor.GetProperties(typeof(ToolTip));
+        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ToolTip));
         PropertyDescriptor automaticProperty = properties[nameof(ToolTip.AutomaticDelay)];
         PropertyDescriptor initialProperty = properties[nameof(ToolTip.InitialDelay)];
         PropertyDescriptor reshowProperty = properties[nameof(ToolTip.ReshowDelay)];

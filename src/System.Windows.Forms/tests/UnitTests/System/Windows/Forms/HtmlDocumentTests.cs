@@ -91,7 +91,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
 
             using var variantValue = VARIANT.FromObject(value);
             Assert.True(iHTMLDocument2.Value->put_alinkColor(variantValue).Succeeded);
@@ -116,7 +116,7 @@ public class HtmlDocumentTests
         {
             document.ActiveLinkColor = value;
             Assert.Equal(expected, document.ActiveLinkColor);
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             VARIANT color = default;
             Assert.True(iHTMLDocument2.Value->get_alinkColor(&color).Succeeded);
             Assert.Equal(expectedNative, (string)color.ToObject());
@@ -221,7 +221,7 @@ public class HtmlDocumentTests
         blur();
         unsafe void blur()
         {
-            using var iHtmlElement2 = ComHelpers.GetComScope<IHTMLElement2>(active.DomElement);
+            using ComScope<IHTMLElement2> iHtmlElement2 = ComHelpers.GetComScope<IHTMLElement2>(active.DomElement);
             iHtmlElement2.Value->blur();
         }
 
@@ -307,7 +307,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using var variantValue = VARIANT.FromObject(value);
             Assert.True(iHTMLDocument2.Value->put_bgColor(variantValue).Succeeded);
             Assert.Equal(expected, document.BackColor);
@@ -339,7 +339,7 @@ public class HtmlDocumentTests
         {
             document.BackColor = value;
             Assert.Equal(expected, document.BackColor);
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             VARIANT color = default;
             Assert.True(iHTMLDocument2.Value->get_bgColor(&color).Succeeded);
             Assert.Equal(expectedNative, (string)color.ToObject());
@@ -405,8 +405,8 @@ public class HtmlDocumentTests
 
         unsafe void DomNodeRemoveChild()
         {
-            using var iHtmlDomNode = ComHelpers.GetComScope<IHTMLDOMNode>(element.Parent.DomElement);
-            using var domElement = ComHelpers.GetComScope<IHTMLDOMNode>(element.DomElement);
+            using ComScope<IHTMLDOMNode> iHtmlDomNode = ComHelpers.GetComScope<IHTMLDOMNode>(element.Parent.DomElement);
+            using ComScope<IHTMLDOMNode> domElement = ComHelpers.GetComScope<IHTMLDOMNode>(element.DomElement);
             using ComScope<IHTMLDOMNode> node = new(null);
             Assert.True(iHtmlDomNode.Value->removeChild(domElement, node).Succeeded);
         }
@@ -450,7 +450,7 @@ public class HtmlDocumentTests
         {
             document.Cookie = value;
             Assert.Equal(expected, document.Cookie);
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using BSTR cookie = default;
             Assert.True(iHTMLDocument2.Value->get_cookie(&cookie).Succeeded);
             Assert.Equal(expected, cookie.ToString());
@@ -508,7 +508,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using BSTR charSet = new("UTF-8");
             Assert.True(iHTMLDocument2.Value->put_defaultCharset(charSet).Succeeded);
             Assert.NotEmpty(document.DefaultEncoding);
@@ -613,7 +613,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope <IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope <IHTMLDocument2>(document.DomDocument);
             using BSTR charSet = new("UTF-8");
             Assert.True(iHTMLDocument2.Value->put_charset(charSet).Succeeded);
             Assert.Equal("utf-8", document.Encoding);
@@ -637,7 +637,7 @@ public class HtmlDocumentTests
 
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             document.Encoding = value;
             Assert.Equal(expected, document.Encoding);
             BSTR charset = default;
@@ -699,7 +699,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             iHTMLDocument4.Value->focus();
             Assert.False(document.Focused);
 
@@ -787,7 +787,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using var variantValue = VARIANT.FromObject(value);
             Assert.True(iHTMLDocument2.Value->put_fgColor(variantValue).Succeeded);
             Assert.Equal(expected, document.ForeColor);
@@ -810,7 +810,7 @@ public class HtmlDocumentTests
 
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             document.ForeColor = value;
             Assert.Equal(expected, document.ForeColor);
             VARIANT color = default;
@@ -976,7 +976,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using var variantValue = VARIANT.FromObject(value);
             Assert.True(iHTMLDocument2.Value->put_linkColor(variantValue).Succeeded);
             Assert.Equal(expected, document.LinkColor);
@@ -1000,7 +1000,7 @@ public class HtmlDocumentTests
         {
             document.LinkColor = value;
             Assert.Equal(expected, document.LinkColor);
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             VARIANT color = default;
             Assert.True(iHTMLDocument2.Value->get_linkColor(&color).Succeeded);
             Assert.Equal(expectedNative, (string)color.ToObject());
@@ -1113,7 +1113,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument3 = ComHelpers.GetComScope<IHTMLDocument3>(document.DomDocument);
+            using ComScope<IHTMLDocument3> iHTMLDocument3 = ComHelpers.GetComScope<IHTMLDocument3>(document.DomDocument);
             using BSTR bstrRtl = new(rtl);
             Assert.True(iHTMLDocument3.Value->put_dir(bstrRtl).Succeeded);
             Assert.Equal(expected, document.RightToLeft);
@@ -1138,7 +1138,7 @@ public class HtmlDocumentTests
         {
             document.RightToLeft = value;
             Assert.Equal(value, document.RightToLeft);
-            using var iHTMLDocument3 = ComHelpers.GetComScope<IHTMLDocument3>(document.DomDocument);
+            using ComScope<IHTMLDocument3> iHTMLDocument3 = ComHelpers.GetComScope<IHTMLDocument3>(document.DomDocument);
             using BSTR dir = default;
             Assert.True(iHTMLDocument3.Value->get_dir(&dir).Succeeded);
             Assert.Equal(expectedNative1, dir.ToString());
@@ -1202,7 +1202,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using BSTR bstrTitle = new(title);
             Assert.True(iHTMLDocument2.Value->put_title(bstrTitle).Succeeded);
             Assert.Equal(expected, document.Title);
@@ -1226,7 +1226,7 @@ public class HtmlDocumentTests
         {
             document.Title = value;
             Assert.Equal(expected, document.Title);
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using BSTR title = default;
             Assert.True(iHTMLDocument2.Value->get_title(&title).Succeeded);
             Assert.Equal(expected, title.ToString());
@@ -1253,7 +1253,7 @@ public class HtmlDocumentTests
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-        using var file = CreateTempFile(Html);
+        using TempFile file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1339,7 +1339,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using var variantValue = VARIANT.FromObject(value);
             Assert.True(iHTMLDocument2.Value->put_vlinkColor(variantValue).Succeeded);
             Assert.Equal(expected, document.VisitedLinkColor);
@@ -1363,7 +1363,7 @@ public class HtmlDocumentTests
         {
             document.VisitedLinkColor = value;
             Assert.Equal(expected, document.VisitedLinkColor);
-            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
+            using ComScope<IHTMLDocument2> iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             VARIANT color = default;
             Assert.True(iHTMLDocument2.Value->get_vlinkColor(&color).Succeeded);
             Assert.Equal(expectedNative, (string)color.ToObject());
@@ -1484,7 +1484,7 @@ public class HtmlDocumentTests
             document.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR name = new(eventName);
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2012,7 +2012,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             document.Click += handler;
             using BSTR onClick = new("onclick");
             VARIANT eventObj = default;
@@ -2051,7 +2051,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.ContextMenuShowing += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onContextMenu = new("oncontextmenu");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2089,7 +2089,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.Focusing += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onFocusing = new("onfocusin");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2127,7 +2127,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.LosingFocus += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onFocusOut = new("onfocusout");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2165,7 +2165,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.MouseDown += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onMouseDown = new("onmousedown");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2203,7 +2203,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.MouseLeave += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onMouseOut = new("onmouseout");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2241,7 +2241,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.MouseMove += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onMouseMove = new("onmousemove");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2279,7 +2279,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.MouseOver += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onMouseOver = new("onmouseover");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2317,7 +2317,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.MouseUp += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onMouseUp = new("onmouseup");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2355,7 +2355,7 @@ public class HtmlDocumentTests
         unsafe void validate()
         {
             document.Stop += handler;
-            using var iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
+            using ComScope<IHTMLDocument4> iHTMLDocument4 = ComHelpers.GetComScope<IHTMLDocument4>(document.DomDocument);
             using BSTR onStop = new("onstop");
             VARIANT eventObj = default;
             VARIANT_BOOL cancelled = default;
@@ -2374,7 +2374,7 @@ public class HtmlDocumentTests
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-        using var file = CreateTempFile(html);
+        using TempFile file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 

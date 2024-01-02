@@ -47,7 +47,7 @@ public unsafe class COM2PictureConverterTests
     public void ConvertNativeToManaged_NullHandle()
     {
         TestIPicture nullIPicture = new(0);
-        using var unknown = ComHelpers.GetComScope<IUnknown>(nullIPicture);
+        using ComScope<IUnknown> unknown = ComHelpers.GetComScope<IUnknown>(nullIPicture);
         Assert.Null(Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null));
     }
 
@@ -57,7 +57,7 @@ public unsafe class COM2PictureConverterTests
         Icon errorIcon = SystemIcons.Error;
         nint handle = errorIcon.Handle;
         TestIPicture iconIPicture = new(handle, PICTYPE.PICTYPE_ICON);
-        using var unknown = ComHelpers.GetComScope<IUnknown>(iconIPicture);
+        using ComScope<IUnknown> unknown = ComHelpers.GetComScope<IUnknown>(iconIPicture);
 
         using Icon icon = (Icon)Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null);
 
@@ -78,7 +78,7 @@ public unsafe class COM2PictureConverterTests
         TestIPicture bitmapIPicture = new(hBitmap, PICTYPE.PICTYPE_BITMAP);
         try
         {
-            using var unknown = ComHelpers.GetComScope<IUnknown>(bitmapIPicture);
+            using ComScope<IUnknown> unknown = ComHelpers.GetComScope<IUnknown>(bitmapIPicture);
             using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged((VARIANT)unknown.Value, property: null);
 
             Assert.Equal(bitmap.Height, errorIcon.Height);
@@ -100,7 +100,7 @@ public unsafe class COM2PictureConverterTests
         // The converter asserts, but doesn't throw. Suppress asserts so that we can validate it returns null as expected.
         using (new NoAssertContext())
         {
-            using var unknown = ComHelpers.GetComScope<IUnknown>(new TestIPicture(1, PICTYPE.PICTYPE_METAFILE));
+            using ComScope<IUnknown> unknown = ComHelpers.GetComScope<IUnknown>(new TestIPicture(1, PICTYPE.PICTYPE_METAFILE));
             Assert.Null(Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null));
         }
     }

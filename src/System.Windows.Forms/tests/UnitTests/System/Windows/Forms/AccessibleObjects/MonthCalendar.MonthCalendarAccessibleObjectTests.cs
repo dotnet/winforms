@@ -27,7 +27,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         };
         // AccessibleRole is not set = Default
 
-        var actual = (int)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        int actual = (int)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expected, actual);
         Assert.False(monthCalendar.IsHandleCreated);

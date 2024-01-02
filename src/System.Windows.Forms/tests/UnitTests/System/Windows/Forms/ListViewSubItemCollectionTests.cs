@@ -375,7 +375,7 @@ public class ListViewSubItemCollectionTests
     {
         ListViewItem item = new();
         var collection = new ListViewItem.ListViewSubItemCollection(item);
-        var items = new string[] { "text1", null, "text2" };
+        string[] items = new string[] { "text1", null, "text2" };
         collection.AddRange(items);
 
         Assert.Equal(2, collection.Count);
@@ -396,7 +396,7 @@ public class ListViewSubItemCollectionTests
     {
         ListViewItem item = new();
         var collection = new ListViewItem.ListViewSubItemCollection(item);
-        var items = new string[] { "text1", null, "text2" };
+        string[] items = new string[] { "text1", null, "text2" };
         collection.AddRange(items, foreColor, backColor, font);
 
         Assert.Equal(2, collection.Count);
@@ -858,7 +858,7 @@ public class ListViewSubItemCollectionTests
         var subItem = new ListViewItem.ListViewSubItem();
         collection.Add(subItem);
 
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, subItem, 3 }, array);
     }
@@ -868,7 +868,7 @@ public class ListViewSubItemCollectionTests
     {
         ListViewItem item = new();
         IList collection = new ListViewItem.ListViewSubItemCollection(item);
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, 0);
         Assert.Equal(new object[] { 1, 2, 3 }, array);
     }

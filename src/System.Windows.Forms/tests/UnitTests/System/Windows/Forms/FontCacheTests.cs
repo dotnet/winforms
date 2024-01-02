@@ -25,7 +25,7 @@ public class FontCacheTests
                 Thread.Sleep(random.Next(5));
                 Task.Run(() =>
                 {
-                    using var hfont = cache.GetEntry(
+                    using RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>.Scope hfont = cache.GetEntry(
                         fonts[random.Next(10)],
                         (FONT_QUALITY)random.Next(7));
 

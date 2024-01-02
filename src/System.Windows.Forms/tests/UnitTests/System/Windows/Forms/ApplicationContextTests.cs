@@ -376,7 +376,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void ApplicationContext_Subclasses_SuppressFinalizeCall()
     {
-        foreach (var type in typeof(ApplicationContext).Assembly.GetTypes().
+        foreach (Type type in typeof(ApplicationContext).Assembly.GetTypes().
             Where(type => type == typeof(ApplicationContext) || type.IsSubclassOf(typeof(ApplicationContext))))
         {
             Assert.True(type == typeof(ApplicationContext) || type == Application.s_typeOfModalApplicationContext,

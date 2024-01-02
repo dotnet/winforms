@@ -468,7 +468,7 @@ public class TrackBarAccessibleObjectTests
     {
         using TrackBar trackBar = new();
         TrackBar.TrackBarAccessibleObject accessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(trackBar.IsHandleCreated);
     }

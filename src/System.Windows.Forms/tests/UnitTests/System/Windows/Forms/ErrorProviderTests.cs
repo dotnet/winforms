@@ -1316,7 +1316,7 @@ public class ErrorProviderTests
         form.DataBindings.Add("Text", customDataSource, "Error");
         using ErrorProvider errorProvider = new(form);
 
-        var exception = Record.Exception(() => errorProvider.DataSource = customDataSource);
+        Exception exception = Record.Exception(() => errorProvider.DataSource = customDataSource);
 
         Assert.Null(exception);
     }
@@ -1326,7 +1326,7 @@ public class ErrorProviderTests
     {
         // Unit test for https://github.com/dotnet/winforms/issues/8513.
         using ErrorProvider provider = new();
-        var icon = provider.Icon;
+        Icon icon = provider.Icon;
 
         Assert.NotNull(icon);
 

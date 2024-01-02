@@ -149,7 +149,7 @@ public class TrackBar_TrackBarLastButtonAccessibleObjectTests
     {
         using TrackBar trackBar = GetTrackBar(orientation, rightToLeft, rightToLeftLayout, createControl, value, minimum, maximum);
         TrackBar.TrackBarLastButtonAccessibleObject accessibleObject = GetTrackBarLastButton(trackBar);
-        var bounds = accessibleObject.Bounds;
+        Rectangle bounds = accessibleObject.Bounds;
         AccessibleStates expectedState = accessibleObject.IsDisplayed || !trackBar.IsHandleCreated
                                             ? AccessibleStates.None
                                             : AccessibleStates.Invisible;

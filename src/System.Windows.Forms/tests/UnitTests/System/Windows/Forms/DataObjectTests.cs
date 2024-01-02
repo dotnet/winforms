@@ -573,7 +573,7 @@ public class DataObjectTests
         yield return new object[] { null, Array.Empty<string>() };
         yield return new object[] { new object(), Array.Empty<string>() };
 
-        var list = new string[] { "a", "  ", string.Empty, null };
+        string[] list = new string[] { "a", "  ", string.Empty, null };
         yield return new object[] { list, list };
     }
 
@@ -1030,8 +1030,8 @@ public class DataObjectTests
     [Fact]
     public void DataObject_SetData_MultipleSerializable_GetDataReturnsExpected()
     {
-        var data1 = new Mock<ISerializable>(MockBehavior.Strict).Object;
-        var data2 = new Mock<ISerializable>(MockBehavior.Strict).Object;
+        ISerializable data1 = new Mock<ISerializable>(MockBehavior.Strict).Object;
+        ISerializable data2 = new Mock<ISerializable>(MockBehavior.Strict).Object;
 
         DataObject dataObject = new();
         dataObject.SetData(data1);
@@ -1772,7 +1772,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[1];
-        var fetched = new int[1];
+        int[] fetched = new int[1];
 
         for (int i = 0; i < 2; i++)
         {
@@ -1827,7 +1827,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[2];
-        var fetched = new int[2];
+        int[] fetched = new int[2];
 
         for (int i = 0; i < 1; i++)
         {
@@ -1889,7 +1889,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[1];
-        var fetched = new int[1];
+        int[] fetched = new int[1];
 
         for (int i = 0; i < 2; i++)
         {
@@ -1914,7 +1914,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[1];
-        var fetched = new int[1];
+        int[] fetched = new int[1];
         Assert.Equal(HRESULT.S_FALSE, (HRESULT)enumerator.Skip(celt));
         Assert.Equal(HRESULT.S_FALSE, (HRESULT)enumerator.Next(1, result, fetched));
 
@@ -1936,7 +1936,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[1];
-        var fetched = new int[1];
+        int[] fetched = new int[1];
         Assert.Equal(HRESULT.S_OK, (HRESULT)enumerator.Skip(1));
         Assert.Equal(HRESULT.S_OK, (HRESULT)enumerator.Next(1, result, fetched));
         Assert.Equal(2, result[0].cfFormat);
@@ -1985,7 +1985,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[1];
-        var fetched = new int[1];
+        int[] fetched = new int[1];
 
         for (int i = 0; i < 2; i++)
         {
@@ -2014,7 +2014,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[2];
-        var fetched = new int[2];
+        int[] fetched = new int[2];
 
         for (int i = 0; i < 1; i++)
         {
@@ -2077,7 +2077,7 @@ public class DataObjectTests
         Assert.NotNull(enumerator);
 
         var result = new FORMATETC[1];
-        var fetched = new int[1];
+        int[] fetched = new int[1];
 
         for (int i = 0; i < 2; i++)
         {

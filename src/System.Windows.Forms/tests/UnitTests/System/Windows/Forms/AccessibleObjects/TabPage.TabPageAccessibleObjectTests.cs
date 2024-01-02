@@ -514,7 +514,7 @@ public class TabPage_TabPageAccessibilityObjectTests
     {
         using TabPage tabPage = new();
         TabPageAccessibleObject accessibleObject = (TabPageAccessibleObject)tabPage.AccessibilityObject;
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        global::Windows.Win32.System.Variant.VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(tabPage.IsHandleCreated);
     }

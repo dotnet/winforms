@@ -33,7 +33,7 @@ public class GridItemCollectionTests
     public void GridItemCollection_CopyTo_Empty_Nop(int index)
     {
         ICollection collection = GridItemCollection.Empty;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         collection.CopyTo(array, index);
         Assert.Equal(new object[] { 1, 2, 3 }, array);
     }

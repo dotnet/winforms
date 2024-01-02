@@ -45,8 +45,8 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
         control.Items.Add(listViewItem);
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
-        var firstChild = listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
-        var lastChild = listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface firstChild = listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface lastChild = listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.IsType<ListViewItemImageAccessibleObject>(firstChild);
         Assert.IsType<ListViewItemImageAccessibleObject>(lastChild);

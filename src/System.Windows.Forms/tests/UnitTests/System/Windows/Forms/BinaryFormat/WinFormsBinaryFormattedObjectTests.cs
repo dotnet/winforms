@@ -17,7 +17,7 @@ public class WinFormsBinaryFormattedObjectTests
         // Check that we can parse types that would hit the BinaryFormatter for property serialization.
         using (value as IDisposable)
         {
-            var format = value.SerializeAndParse();
+            BinaryFormattedObject format = value.SerializeAndParse();
         }
     }
 
@@ -44,7 +44,7 @@ public class WinFormsBinaryFormattedObjectTests
 
         using (value as IDisposable)
         {
-            var propertyDescriptors = TypeDescriptor.GetProperties(value, s_visible);
+            PropertyDescriptorCollection propertyDescriptors = TypeDescriptor.GetProperties(value, s_visible);
 
             List<string> binaryFormattedProperties = new();
             foreach (PropertyDescriptor property in propertyDescriptors)

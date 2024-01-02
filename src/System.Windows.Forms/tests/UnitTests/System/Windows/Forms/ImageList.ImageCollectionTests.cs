@@ -137,7 +137,7 @@ public class ImageCollectionTests
 
     public static IEnumerable<object[]> ImageCollection_VisualStyles_off_Item_Get32bppColorDepth_TestData()
     {
-        var pixelFormats = new[]
+        PixelFormat[] pixelFormats = new[]
         {
             PixelFormat.Format1bppIndexed,
             PixelFormat.Format24bppRgb,

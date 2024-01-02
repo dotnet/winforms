@@ -743,7 +743,7 @@ public class TabControl_TabControlAccessibilityObjectTests
             Enabled = enabled
         };
 
-        var actual = (bool)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
+        bool actual = (bool)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.Equal(tabControl.Enabled, actual);
         Assert.False(tabControl.IsHandleCreated);
@@ -786,7 +786,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     {
         using TabControl tabControl = new();
         TabControlAccessibleObject accessibleObject = (TabControlAccessibleObject)tabControl.AccessibilityObject;
-        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(tabControl.IsHandleCreated);
     }

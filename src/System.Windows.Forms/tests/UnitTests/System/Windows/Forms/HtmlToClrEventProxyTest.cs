@@ -13,7 +13,7 @@ public unsafe class HtmlToClrEventProxyTest
     public void HtmlToClrEventProxy_EnumerateDispId_NamesExpected()
     {
         HtmlToClrEventProxy proxy = new(null, "testEvent", (object sender, EventArgs e) => { });
-        using var dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
+        using ComScope<IDispatchEx> dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
 
         // Requests that the object enumerates all of the elements on IDispatchEx
         uint fdexEnumAll = 2;
@@ -40,7 +40,7 @@ public unsafe class HtmlToClrEventProxyTest
     public void HtmlToClrEventProxy_PropFlags_Expected()
     {
         HtmlToClrEventProxy proxy = new(null, "testEvent", (object sender, EventArgs e) => { });
-        using var dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
+        using ComScope<IDispatchEx> dispatchEx = ComHelpers.GetComScope<IDispatchEx>(proxy);
 
         FDEX_PROP_FLAGS methodFlags = FDEX_PROP_FLAGS.fdexPropCannotGet
             | FDEX_PROP_FLAGS.fdexPropCannotPut
@@ -69,7 +69,7 @@ public unsafe class HtmlToClrEventProxyTest
         string eventName = "testEvent";
         int count = 0;
         HtmlToClrEventProxy proxy = new(null, eventName, (object sender, EventArgs e) => count++);
-        using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+        using ComScope<IDispatch> dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
 
         VARIANT result = default;
         DISPPARAMS dispParams = default;

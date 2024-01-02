@@ -152,7 +152,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         control.Items.Add(item);
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
-        var actual = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
+        IRawElementProviderFragment.Interface actual = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(control.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -257,7 +257,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        using var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
+        using VARIANT actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
 
         Assert.Equal("WinForm", ((BSTR)actual).ToString());
         Assert.False(control.IsHandleCreated);
@@ -392,7 +392,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         listView.Items.Add(item);
         var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
 
-        var expected = $"{nameof(ListViewItem)}-{accessibleObject.CurrentIndex}";
+        string expected = $"{nameof(ListViewItem)}-{accessibleObject.CurrentIndex}";
         Assert.Equal(expected, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
         Assert.False(listView.IsHandleCreated);
     }

@@ -2019,17 +2019,17 @@ public class DataGridViewRowTests
     [WinFormsFact]
     public void DataGridViewRow_Height_IsEqualDefaultHeight_IfDefaultFontIsChanged()
     {
-        var oldApplicationDefaultFont = Application.DefaultFont;
+        Font oldApplicationDefaultFont = Application.DefaultFont;
         using Font font = new("Times New Roman", 12);
         using TestDataGridViewRow row = new();
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        dynamic applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
 
         try
         {
             applicationTestAccessor.s_defaultFont = font;
             Assert.NotEqual(oldApplicationDefaultFont, Application.DefaultFont);
 
-            var rowDefaultHeight = row.GetDefaultHeight();
+            int rowDefaultHeight = row.GetDefaultHeight();
             Assert.Equal(Control.DefaultFont.Height + 9, rowDefaultHeight);
             Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
         }

@@ -3966,7 +3966,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { "1", "2", "3" }, array);
     }
@@ -3978,7 +3978,7 @@ public class ListBoxObjectCollectionTests
         var collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         collection.Add(2);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { "1", 1, 2 }, array);
     }
@@ -9250,7 +9250,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { "1", "2", "3" }, array);
     }
@@ -9262,7 +9262,7 @@ public class ListBoxObjectCollectionTests
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Add(1);
         collection.Add(2);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = new object[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { "1", 1, 2 }, array);
     }
