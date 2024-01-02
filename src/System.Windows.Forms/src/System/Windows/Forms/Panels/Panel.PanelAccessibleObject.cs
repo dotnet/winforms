@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -13,6 +14,9 @@ public partial class Panel
         public PanelAccessibleObject(Panel owner) : base(owner)
         {
         }
+
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
+            owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
         internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
