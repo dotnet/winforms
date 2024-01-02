@@ -3,7 +3,7 @@
 
 namespace System;
 
-public static partial class TestAccessors
+internal static partial class InternalTestAccessors
 {
     internal class KeyboardToolTipStateMachineTestAccessor : TestAccessor<KeyboardToolTipStateMachine>
     {

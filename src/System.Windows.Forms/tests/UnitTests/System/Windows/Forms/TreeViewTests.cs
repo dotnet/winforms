@@ -6647,7 +6647,7 @@ public class TreeViewTests
         TreeNode treeNode1 = new();
         TreeNode treeNode2 = new();
         TreeNode treeNode3 = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         treeView.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
 
@@ -6666,7 +6666,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         treeView.Nodes.Add(treeNode);
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
@@ -6687,7 +6687,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
         treeView.Nodes.Add(treeNode);
@@ -6706,7 +6706,7 @@ public class TreeViewTests
         using TreeView treeView = new();
         treeView.ShowNodeToolTips = showNodeToolTips;
         TreeNode treeNode = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         treeView.Nodes.Add(treeNode);
         Assert.True(accessor.IsToolTracked(treeNode));
@@ -6726,7 +6726,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
         treeView.Nodes.Add(treeNode);
@@ -6766,7 +6766,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
         treeView.Nodes.Add(treeNode);

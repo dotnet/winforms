@@ -4834,7 +4834,7 @@ public class ListViewTests
         ListViewItem listViewItem1 = new();
         ListViewItem listViewItem2 = new();
         ListViewItem listViewItem3 = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         listView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3 });
 
@@ -4864,7 +4864,7 @@ public class ListViewTests
         using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ListViewItem listViewItem = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.IsToolTracked(listViewItem));
@@ -4881,7 +4881,7 @@ public class ListViewTests
         using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ListViewItem listViewItem = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.Dynamic.IsToolTracked(listViewItem));
@@ -4913,7 +4913,7 @@ public class ListViewTests
     {
         using ListView listView = new();
         ListViewItem listViewItem = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.IsToolTracked(listViewItem));
@@ -4927,7 +4927,7 @@ public class ListViewTests
     {
         using ListView listView = new() { VirtualMode = true };
         ListViewItem listViewItem = new();
-        TestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
         Assert.True(accessor.IsToolTracked(listViewItem));
