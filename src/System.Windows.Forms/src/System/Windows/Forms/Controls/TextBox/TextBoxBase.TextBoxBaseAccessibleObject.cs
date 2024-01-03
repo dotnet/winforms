@@ -22,7 +22,7 @@ public abstract partial class TextBoxBase
 
         internal void ClearObjects() => _textProvider = null;
 
-        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out TextBoxBase? owner) ?
             owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
