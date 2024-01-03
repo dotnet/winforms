@@ -392,16 +392,16 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             }
 
             // Fire the change on the owner.
-            if (entry is not null)
+            if (entry is PropertyDescriptorGridEntry property)
             {
-                owner = entry.GetValueOwner();
+                owner = property.GetValueOwner();
 
-                ComponentChangeService?.OnComponentChanging(owner, propertyEntry._propertyDescriptor);
-                ComponentChangeService?.OnComponentChanged(owner, propertyEntry._propertyDescriptor);
+                ComponentChangeService?.OnComponentChanging(owner, property._propertyDescriptor);
+                ComponentChangeService?.OnComponentChanged(owner, property._propertyDescriptor);
 
                 // Clear the value so it paints correctly next time.
-                entry.ClearCachedValues(clearChildren: false);
-                OwnerGridView?.InvalidateGridEntryValue(entry);
+                property.ClearCachedValues(clearChildren: false);
+                OwnerGridView?.InvalidateGridEntryValue(property);
             }
         }
     }
