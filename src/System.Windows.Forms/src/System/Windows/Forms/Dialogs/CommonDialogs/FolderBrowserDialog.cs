@@ -411,8 +411,7 @@ public sealed class FolderBrowserDialog : CommonDialog
                 if (!item.IsNull)
                 {
                     item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName);
-                    tempSelectedPaths.Add(new(ppszName));
-                    Marshal.FreeCoTaskMem((nint)(void*)ppszName);
+                    tempSelectedPaths.Add(ppszName.ToStringAndCoTaskMemFree());
                 }
             }
 
