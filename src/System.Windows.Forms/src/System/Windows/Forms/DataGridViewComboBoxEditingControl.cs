@@ -17,10 +17,12 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         TabStop = false;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance() =>
-        new DataGridViewComboBoxEditingControlAccessibleObject(this);
-
-    // IDataGridViewEditingControl interface implementation
+    protected override AccessibleObject CreateAccessibilityInstance()
+    {
+        var controlAccessibleObject = new DataGridViewComboBoxEditingControlAccessibleObject(this);
+        _dataGridView?.SetAccessibleObjectParent(controlAccessibleObject);
+        return controlAccessibleObject;
+    }
 
     public virtual DataGridView? EditingControlDataGridView
     {
@@ -126,12 +128,6 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-
-        // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
-        if (_dataGridView?.IsAccessibilityObjectCreated == true)
-        {
-            _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
-        }
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
