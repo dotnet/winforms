@@ -791,7 +791,7 @@ virtual System.Windows.Forms.DataGridView.OnUserAddedRow(System.Windows.Forms.Da
 virtual System.Windows.Forms.DataGridView.OnUserDeletedRow(System.Windows.Forms.DataGridViewRowEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnUserDeletingRow(System.Windows.Forms.DataGridViewRowCancelEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.PaintBackground(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle gridBounds) -> void
-~virtual System.Windows.Forms.DataGridView.ProcessDataGridViewKey(System.Windows.Forms.KeyEventArgs e) -> bool
+virtual System.Windows.Forms.DataGridView.ProcessDataGridViewKey(System.Windows.Forms.KeyEventArgs! e) -> bool
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Collections.IComparer comparer) -> void
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.ComponentModel.ListSortDirection direction) -> void
 virtual System.Windows.Forms.DataGridViewCell.AdjustCellBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
