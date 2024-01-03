@@ -235,7 +235,7 @@ public class TableLayoutSettingsTypeConverterTests
     public void TableLayoutSettingsTypeConverter_ConvertTo_HasControlChildWithoutNameProperty_ThrowsInvalidOperationException()
     {
         using TableLayoutPanel control = new();
-        TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(control.LayoutSettings);
+        var settings = Assert.IsType<TableLayoutSettings>(control.LayoutSettings);
 
         using ControlWithNullName child = new();
         control.Controls.Add(child);

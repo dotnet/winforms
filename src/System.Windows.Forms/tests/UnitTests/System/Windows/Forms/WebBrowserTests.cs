@@ -298,7 +298,7 @@ public class WebBrowserTests
         Assert.Equal(value, control.AllowWebBrowserDrop);
         Assert.NotNull(control.ActiveXInstance);
         VARIANT_BOOL register = default;
-        using ComScope<IWebBrowser2> webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
+        using var webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
         Assert.True(webBrowser.Value->get_RegisterAsDropTarget(&register).Succeeded);
         Assert.Equal(value, (bool)register);
         Assert.True(control.IsHandleCreated);
@@ -382,7 +382,7 @@ public class WebBrowserTests
         control.CanGoForwardChanged += (sender, e) => canGoForwardChangedCallCount++;
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file1 = CreateTempFile(Html);
+        using var file1 = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file1.Path));
         Assert.True(await source.Task);
 
@@ -417,7 +417,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file1 = CreateTempFile(Html);
+        using var file1 = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file1.Path));
         Assert.True(await source.Task);
 
@@ -461,7 +461,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         string html = $"<html><head>{titleHtml}</head></html>";
-        using TempFile file = CreateTempFile(html);
+        using var file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -530,7 +530,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -647,7 +647,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -886,7 +886,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         string html = $"<html><head>{titleHtml}</head></html>";
-        using TempFile file = CreateTempFile(html);
+        using var file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -952,7 +952,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1019,7 +1019,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1128,7 +1128,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1615,7 +1615,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1731,7 +1731,7 @@ public class WebBrowserTests
         control.ScriptErrorsSuppressed = value;
         Assert.Equal(value, control.ScriptErrorsSuppressed);
         Assert.NotNull(control.ActiveXInstance);
-        using ComScope<IWebBrowser2> webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
+        using var webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
         VARIANT_BOOL silent = default;
         Assert.True(webBrowser.Value->get_Silent(&silent).Succeeded);
         Assert.Equal(value, (bool)silent);
@@ -1866,7 +1866,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1932,7 +1932,7 @@ public class WebBrowserTests
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 
@@ -1972,7 +1972,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         int navigatingCallCount = 0;
         control.Navigating += (sender, e) =>
@@ -2067,7 +2067,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
@@ -2906,7 +2906,7 @@ public class WebBrowserTests
         };
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file1 = CreateTempFile(Html);
+        using var file1 = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file1.Path));
         Assert.True(await source.Task);
         Assert.False(control.CanGoBack);
@@ -2915,7 +2915,7 @@ public class WebBrowserTests
         Assert.Equal(0, canGoForwardChangedCallCount);
 
         // Navigate.
-        using TempFile file2 = CreateTempFile(Html);
+        using var file2 = CreateTempFile(Html);
         source = new TaskCompletionSource<bool>();
         await Task.Run(() => control.Navigate(file2.Path));
         Assert.True(await source.Task);
@@ -2925,7 +2925,7 @@ public class WebBrowserTests
         Assert.Equal(0, canGoForwardChangedCallCount);
 
         // Navigate again.
-        using TempFile file3 = CreateTempFile(Html);
+        using var file3 = CreateTempFile(Html);
         source = new TaskCompletionSource<bool>();
         await Task.Run(() => control.Navigate(file3.Path));
         Assert.True(await source.Task);
@@ -3023,14 +3023,14 @@ public class WebBrowserTests
         };
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file1 = CreateTempFile(Html);
+        using var file1 = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file1.Path));
         Assert.True(await source.Task);
         Assert.Equal(0, canGoBackChangedCallCount);
         Assert.Equal(0, canGoForwardChangedCallCount);
 
         // Navigate.
-        using TempFile file2 = CreateTempFile(Html);
+        using var file2 = CreateTempFile(Html);
         source = new TaskCompletionSource<bool>();
         await Task.Run(() => control.Navigate(file2.Path));
         Assert.True(await source.Task);
@@ -3040,7 +3040,7 @@ public class WebBrowserTests
         Assert.Equal(0, canGoForwardChangedCallCount);
 
         // Navigate again.
-        using TempFile file3 = CreateTempFile(Html);
+        using var file3 = CreateTempFile(Html);
         source = new TaskCompletionSource<bool>();
         await Task.Run(() => control.Navigate(file3.Path));
         Assert.True(await source.Task);
@@ -3194,7 +3194,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         int navigatingCallCount = 0;
         control.Navigating += (sender, e) =>
@@ -3283,7 +3283,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
@@ -3306,7 +3306,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         int navigatingCallCount = 0;
         control.Navigating += (sender, e) =>
@@ -3401,7 +3401,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
@@ -3436,14 +3436,14 @@ public class WebBrowserTests
         control.CanGoForwardChanged += (sender, e) => canGoForwardChangedCallCount++;
 
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file1 = CreateTempFile(Html);
+        using var file1 = CreateTempFile(Html);
         await Task.Run(() => control.Navigate(file1.Path));
         Assert.True(await source.Task);
         Assert.Equal(0, canGoBackChangedCallCount);
         Assert.Equal(0, canGoForwardChangedCallCount);
 
         // Navigate again.
-        using TempFile file2 = CreateTempFile(Html);
+        using var file2 = CreateTempFile(Html);
         source = new TaskCompletionSource<bool>();
         await Task.Run(() => control.Navigate(file2.Path));
         Assert.True(await source.Task);
@@ -3614,7 +3614,7 @@ public class WebBrowserTests
             Assert.Same(eventArgs, e);
             callCount++;
         };
-        using ComScope<IWebBrowser2> webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
+        using var webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
         Assert.True(webBrowser.Value->put_RegisterAsDropTarget(!allowWebBrowserDrop).Succeeded);
 
         // Call with handler.
@@ -3960,7 +3960,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
         control.DocumentCompleted += oldHandler;
@@ -4018,7 +4018,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
         control.DocumentCompleted += oldHandler;
@@ -4107,7 +4107,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
         control.DocumentCompleted += oldHandler;
@@ -4167,7 +4167,7 @@ public class WebBrowserTests
             Parent = parent
         };
         const string Html = "<html><head><title>NewDocument</title></head></html>";
-        using TempFile file = CreateTempFile(Html);
+        using var file = CreateTempFile(Html);
         TaskCompletionSource<bool> source = new();
         void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
         control.DocumentCompleted += oldHandler;

@@ -366,7 +366,7 @@ public class ErrorProviderTests
     public static IEnumerable<object[]> DataSource_Set_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new() };
+        yield return new object[] { new object() };
         yield return new object[] { new DataClass() };
     }
 
@@ -424,7 +424,7 @@ public class ErrorProviderTests
 
     public static IEnumerable<object[]> DataSource_SetWithContainerControl_TestData()
     {
-        foreach (object value in new object[] { null, new(), new DataClass() })
+        foreach (object value in new object[] { null, new object(), new DataClass() })
         {
             yield return new object[] { null, value };
             yield return new object[] { new ContainerControl(), value };
@@ -767,7 +767,7 @@ public class ErrorProviderTests
             foreach (string dataMember in new string[] { null, string.Empty, "dataMember" })
             {
                 yield return new object[] { containerControl, null, dataMember };
-                yield return new object[] { containerControl, new(), dataMember };
+                yield return new object[] { containerControl, new object(), dataMember };
                 yield return new object[] { containerControl, new DataClass(), dataMember };
             }
         }
@@ -796,7 +796,7 @@ public class ErrorProviderTests
         foreach (string dataMember in new string[] { null, string.Empty })
         {
             yield return new object[] { null, dataMember };
-            yield return new object[] { new(), dataMember };
+            yield return new object[] { new object(), dataMember };
             yield return new object[] { new DataClass(), dataMember };
         }
 
@@ -847,7 +847,7 @@ public class ErrorProviderTests
     public static IEnumerable<object[]> CanExtend_TestData()
     {
         yield return new object[] { null, false };
-        yield return new object[] { new(), false };
+        yield return new object[] { new object(), false };
         yield return new object[] { new Component(), false };
         yield return new object[] { new Form(), false };
         yield return new object[] { new Control(), true };
@@ -1316,7 +1316,7 @@ public class ErrorProviderTests
         form.DataBindings.Add("Text", customDataSource, "Error");
         using ErrorProvider errorProvider = new(form);
 
-        Exception exception = Record.Exception(() => errorProvider.DataSource = customDataSource);
+        var exception = Record.Exception(() => errorProvider.DataSource = customDataSource);
 
         Assert.Null(exception);
     }
@@ -1326,7 +1326,7 @@ public class ErrorProviderTests
     {
         // Unit test for https://github.com/dotnet/winforms/issues/8513.
         using ErrorProvider provider = new();
-        Icon icon = provider.Icon;
+        var icon = provider.Icon;
 
         Assert.NotNull(icon);
 

@@ -32,7 +32,7 @@ public class DataGridViewElementTests
 
     public static IEnumerable<object[]> DataGridViewElement_Subclasses_SuppressFinalizeCall_TestData()
     {
-        foreach (Type type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type =>
+        foreach (var type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type =>
             type == typeof(DataGridViewBand) || type == typeof(DataGridViewCell) ||
             type.IsSubclassOf(typeof(DataGridViewBand)) || type.IsSubclassOf(typeof(DataGridViewCell))))
         {

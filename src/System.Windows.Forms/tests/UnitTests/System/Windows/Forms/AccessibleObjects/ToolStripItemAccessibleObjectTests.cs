@@ -54,7 +54,7 @@ public class ToolStripItemAccessibleObjectTests
             item.AccessibleRole = AccessibleRole.Link;
             AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
-            AccessibleRole accessibleObjectRole = toolStripItemAccessibleObject.Role;
+            var accessibleObjectRole = toolStripItemAccessibleObject.Role;
 
             Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
         }

@@ -71,7 +71,7 @@ public unsafe class Control_ActiveXImplTests
 
         using MemoryStream memoryStream = new();
         using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
-        IStream* istreamPointer = istream.Value;
+        var istreamPointer = istream.Value;
         Assert.Throws<NotSupportedException>(() => persistStream.Save(istreamPointer, fClearDirty: BOOL.FALSE));
     }
 

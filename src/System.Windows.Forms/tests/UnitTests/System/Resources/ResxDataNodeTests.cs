@@ -27,9 +27,9 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo_Framework()
     {
         using Bitmap bitmap = new(10, 10);
-        TypeConverter converter = TypeDescriptor.GetConverter(bitmap);
+        var converter = TypeDescriptor.GetConverter(bitmap);
         ResXDataNode temp = new("test", converter.ConvertTo(bitmap, typeof(byte[])));
-        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
+        var dataNodeInfo = temp.GetDataNodeInfo();
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
         object? bitmapBytes = dataNode.GetValue(typeResolver: null);
@@ -41,14 +41,14 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_ByteArray_FromDataNodeInfo_Core()
     {
         using Bitmap bitmap = new(10, 10);
-        TypeConverter converter = TypeDescriptor.GetConverter(bitmap);
+        var converter = TypeDescriptor.GetConverter(bitmap);
         ResXDataNode temp = new("test", converter.ConvertTo(bitmap, typeof(byte[])));
-        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
+        var dataNodeInfo = temp.GetDataNodeInfo();
         dataNodeInfo.TypeName = "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
         object? bitmapBytes = dataNode.GetValue(typeResolver: null);
-        Bitmap result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes!));
+        var result = Assert.IsType<Bitmap>(converter.ConvertFrom(bitmapBytes!));
         Assert.Equal(bitmap.Size, result.Size);
     }
 
@@ -56,7 +56,7 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_Null_FromDataNodeInfo()
     {
         ResXDataNode temp = new("test", value: null);
-        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
+        var dataNodeInfo = temp.GetDataNodeInfo();
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
         object? valueNull = dataNode.GetValue(typeResolver: null);
@@ -67,7 +67,7 @@ public class ResxDataNodeTests
     public void ResxDataNode_GetValue_String_FromDataNodeInfo()
     {
         ResXDataNode temp = new("testName", "test");
-        DataNodeInfo dataNodeInfo = temp.GetDataNodeInfo();
+        var dataNodeInfo = temp.GetDataNodeInfo();
         ResXDataNode dataNode = new(dataNodeInfo, basePath: null);
 
         object? valueString = dataNode.GetValue(typeResolver: null);

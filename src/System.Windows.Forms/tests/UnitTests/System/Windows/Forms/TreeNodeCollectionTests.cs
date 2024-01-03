@@ -219,7 +219,7 @@ public class TreeNodeCollectionTests
     public void TreeNodeCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
     {
         using TreeView treeView = new();
-        TreeNodeCollection collection = treeView.Nodes;
+        var collection = treeView.Nodes;
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
     }

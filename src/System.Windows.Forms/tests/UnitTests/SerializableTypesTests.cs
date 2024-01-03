@@ -346,7 +346,7 @@ public class SerializableTypesTests
     public void TreeNodeAndPropertyBag_RoundTripAndExchangeWithNet()
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
-        var children = new TreeNode[] { new("node2"), new("node3") };
+        var children = new TreeNode[] { new TreeNode("node2"), new TreeNode("node3") };
         TreeNode treeNodeIn = new("node1", 1, 2, children)
         {
             ToolTipText = "tool tip text",

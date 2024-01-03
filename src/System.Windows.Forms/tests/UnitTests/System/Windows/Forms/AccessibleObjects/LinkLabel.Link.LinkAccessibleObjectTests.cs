@@ -271,7 +271,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
     {
         using LinkLabel linkLabel = new();
         LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
-        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(linkLabel.IsHandleCreated);

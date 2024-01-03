@@ -1644,7 +1644,7 @@ public class AxHostTests
         variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT);
         Assert.Equal(28332u, variant.data.uintVal);
 
-        Metafile result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));
+        var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));
         Assert.Equal(new Size(759, 1073), result.Size);
     }
 
@@ -1685,7 +1685,7 @@ public class AxHostTests
         Assert.Equal(default, curDc);
         Assert.Equal(0u, attributes);
 
-        Bitmap result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
+        var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
         Assert.Equal(original.Size, result.Size);
         Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
         Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
@@ -1712,7 +1712,7 @@ public class AxHostTests
         Assert.Throws<COMException>(() => iPicture.CurDC);
         Assert.Equal(3u, attributes);
 
-        Metafile result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
+        var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
         Assert.Equal(new Size(759, 1073), result.Size);
     }
 
@@ -1756,10 +1756,10 @@ public class AxHostTests
     public static IEnumerable<object[]> InvokeEditMode_Site_TestData()
     {
         yield return new object[] { true, null, 2 };
-        yield return new object[] { true, new(), 2 };
+        yield return new object[] { true, new object(), 2 };
 
         yield return new object[] { false, null, 1 };
-        yield return new object[] { false, new(), 1 };
+        yield return new object[] { false, new object(), 1 };
         yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
     }
 
@@ -1807,10 +1807,10 @@ public class AxHostTests
     public static IEnumerable<object[]> InvokeEditMode_SiteWithParent_TestData()
     {
         yield return new object[] { true, null, 3 };
-        yield return new object[] { true, new(), 3 };
+        yield return new object[] { true, new object(), 3 };
 
         yield return new object[] { false, null, 1 };
-        yield return new object[] { false, new(), 1 };
+        yield return new object[] { false, new object(), 1 };
         yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
     }
 
@@ -2040,10 +2040,10 @@ public class AxHostTests
     public static IEnumerable<object[]> InvokeEditMode_SiteWithHandle_TestData()
     {
         yield return new object[] { true, null, 3 };
-        yield return new object[] { true, new(), 3 };
+        yield return new object[] { true, new object(), 3 };
 
         yield return new object[] { false, null, 1 };
-        yield return new object[] { false, new(), 1 };
+        yield return new object[] { false, new object(), 1 };
         yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
     }
 

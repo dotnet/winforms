@@ -2622,11 +2622,11 @@ public partial class AccessibleObjectTests
 
         form.Controls.Add(button);
         form.Show();
-        Rectangle bounds = button.Bounds;
+        var bounds = button.Bounds;
         Point point = button.Location;
         point.Offset(bounds.Width / 2, bounds.Height / 2);
         point = button.PointToScreen(point);
-        HRESULT result = AccessibleObjectFromPoint(
+        var result = AccessibleObjectFromPoint(
             point,
             out object ppacc,
             out object varItem);
@@ -2653,11 +2653,11 @@ public partial class AccessibleObjectTests
 
         form.Controls.Add(comboBox);
         form.Show();
-        Rectangle bounds = comboBox.Bounds;
+        var bounds = comboBox.Bounds;
         Point point = comboBox.Location;
         point.Offset(bounds.Width / 2, bounds.Height / 2);
         point = comboBox.PointToScreen(point);
-        HRESULT result = AccessibleObjectFromPoint(
+        var result = AccessibleObjectFromPoint(
             point,
             out object ppacc,
             out object varItem);

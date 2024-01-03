@@ -75,12 +75,12 @@ public class CollectionHelperTests
 
         source.HashtableCopyTo(target, index: 0);
 
-        KeyValuePair<string, string> firstTargetItem = target[0];
+        var firstTargetItem = target[0];
         Assert.Equal(typeof(KeyValuePair<string, string>), firstTargetItem.GetType());
         Assert.Equal("key-one", firstTargetItem.Key);
         Assert.Equal("value-one", firstTargetItem.Value);
 
-        KeyValuePair<string, string> secondTargetItem = target[1];
+        var secondTargetItem = target[1];
         Assert.Equal(typeof(KeyValuePair<string, string>), secondTargetItem.GetType());
         Assert.Equal("key-two", secondTargetItem.Key);
         Assert.Equal("value-two", secondTargetItem.Value);
@@ -98,12 +98,12 @@ public class CollectionHelperTests
 
         source.HashtableCopyTo(target, index: 0);
 
-        DictionaryEntry firstTargetItem = target[0];
+        var firstTargetItem = target[0];
         Assert.Equal(typeof(DictionaryEntry), firstTargetItem.GetType());
         Assert.Equal("key-one", (string)firstTargetItem.Key);
         Assert.Equal("value-one", (string)firstTargetItem.Value);
 
-        DictionaryEntry secondTargetItem = target[1];
+        var secondTargetItem = target[1];
         Assert.Equal(typeof(DictionaryEntry), secondTargetItem.GetType());
         Assert.Equal("key-two", (string)secondTargetItem.Key);
         Assert.Equal("value-two", (string)secondTargetItem.Value);

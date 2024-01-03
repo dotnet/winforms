@@ -17,7 +17,7 @@ public class ListViewItem_IKeyboardToolTipTests
     public void ListViewItemKeyboardToolTip_InvokeAllowsToolTip_ReturnsExpected(bool insideListView, bool virtualMode, bool showItemToolTips)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode, showItemToolTips);
+        using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
             listViewItem = AssignItemToListView(listView, listViewItem);
@@ -39,7 +39,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool expectedResult)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode, showItemToolTips);
+        using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
             listViewItem = AssignItemToListView(listView, listViewItem);
@@ -61,7 +61,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool expectedResult)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode, showItemToolTips);
+        using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
             listViewItem = AssignItemToListView(listView, listViewItem);
@@ -84,7 +84,7 @@ public class ListViewItem_IKeyboardToolTipTests
     {
         using ToolTip toolTip = new();
         ListViewItem listViewItem = new() { ToolTipText = toolTipText };
-        using ListView listView = GetListView(virtualMode, showItemToolTips);
+        using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
             listViewItem = AssignItemToListView(listView, listViewItem);
@@ -103,7 +103,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool rectangleIsEmpty)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode);
+        using var listView = GetListView(virtualMode);
         if (insideListView)
         {
             listViewItem = AssignItemToListView(listView, listViewItem);
@@ -142,7 +142,7 @@ public class ListViewItem_IKeyboardToolTipTests
         int expectedWidthVisualStyleEnabled,
         int expectedWidthVisualStyleDisabled)
     {
-        using ListView listView = GetListView(virtualMode, view: view);
+        using var listView = GetListView(virtualMode, view: view);
         listView.Columns.Add(new ColumnHeader() { Width = 50 });
         ListViewItem listViewItem = AssignItemToListView(listView, new ListViewItem(new string('t', 500)));
         int expectedWidth = Application.UseVisualStyles
@@ -162,7 +162,7 @@ public class ListViewItem_IKeyboardToolTipTests
         View view)
     {
         int columnWidth = 50;
-        using ListView listView = GetListView(virtualMode, view: view);
+        using var listView = GetListView(virtualMode, view: view);
         listView.Columns.Add(new ColumnHeader() { Width = columnWidth });
         ListViewItem listViewItem = AssignItemToListView(listView, new ListViewItem(new string('t', 1)));
 
@@ -177,7 +177,7 @@ public class ListViewItem_IKeyboardToolTipTests
         ListViewItem listViewItem = new(new string('t', 20));
 
         listViewItem.SubItems.Add(new ListViewSubItem(listViewItem, new string('t', 10)));
-        using ListView listView = GetListView(virtualMode: false, view: View.Tile);
+        using var listView = GetListView(virtualMode: false, view: View.Tile);
         AssignItemToListView(listView, listViewItem);
 
         int expectedWidth = Application.UseVisualStyles
@@ -193,7 +193,7 @@ public class ListViewItem_IKeyboardToolTipTests
         ListViewItem listViewItem = new(new string('t', 10));
         ListViewSubItem listViewSubItem = new(listViewItem, new string('t', 20));
         listViewItem.SubItems.Add(listViewSubItem);
-        using ListView listView = GetListView(virtualMode: false, view: View.Tile);
+        using var listView = GetListView(virtualMode: false, view: View.Tile);
         AssignItemToListView(listView, listViewItem);
 
         int expectedWidth = Application.UseVisualStyles
@@ -216,7 +216,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [InlineData(false)]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewList_ReturnsEmptyList(bool virtualMode)
     {
-        using ListView listView = GetListView(virtualMode, view: View.List);
+        using var listView = GetListView(virtualMode, view: View.List);
         ListViewItem listViewItem = AssignItemToListView(listView, new ListViewItem());
 
         Assert.Equal(0, ((IKeyboardToolTip)listViewItem).GetNeighboringToolsRectangles().Count);
@@ -225,7 +225,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewTile_ReturnsEmptyList()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.Tile);
+        using var listView = GetListView(virtualMode: false, view: View.Tile);
         ListViewItem listViewItem = AssignItemToListView(listView, new ListViewItem());
 
         Assert.Equal(0, ((IKeyboardToolTip)listViewItem).GetNeighboringToolsRectangles().Count);
@@ -239,7 +239,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_FirstItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -257,7 +257,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_SecondItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -276,7 +276,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_ThirdItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -294,7 +294,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_FourthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -313,7 +313,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_FifthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -333,7 +333,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_SixthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -352,7 +352,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_SeventhItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -370,7 +370,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_EighthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -389,7 +389,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewLargeIcon_NinthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
+        using var listView = GetListView(virtualMode: false, view: View.LargeIcon, size: new Size(150, 150));
         AddListViewItems(listView, 9);
         listView.CreateControl();
 
@@ -407,7 +407,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_FirstItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -426,7 +426,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_SecondItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -447,7 +447,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_ThirdItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -467,7 +467,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_FourthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -488,7 +488,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_FifthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -510,7 +510,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_SixthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -531,7 +531,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_SeventhItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -551,7 +551,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_EighthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -571,7 +571,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [WinFormsFact]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewSmallIcon_NinthItem_ReturnsExpected()
     {
-        using ListView listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
+        using var listView = GetListView(virtualMode: false, view: View.SmallIcon, size: new Size(220, 150));
         listView.Columns.Add(new ColumnHeader());
         AddListViewItems(listView, 9);
         listView.CreateControl();
@@ -587,7 +587,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [InlineData(false)]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewDetails_FirstItem_ReturnsExpected(bool virtualMode)
     {
-        using ListView listView = GetListView(virtualMode: virtualMode, view: View.Details, virtualListSize: 3);
+        using var listView = GetListView(virtualMode: virtualMode, view: View.Details, virtualListSize: 3);
         listView.CreateControl();
         listView.Columns.Add(new ColumnHeader());
         AssignListItemsToListView(listView, 3);
@@ -604,7 +604,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [InlineData(false)]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewDetails_SecondItem_ReturnsExpected(bool virtualMode)
     {
-        using ListView listView = GetListView(virtualMode: virtualMode, view: View.Details, virtualListSize: 3);
+        using var listView = GetListView(virtualMode: virtualMode, view: View.Details, virtualListSize: 3);
         listView.CreateControl();
         listView.Columns.Add(new ColumnHeader());
         AssignListItemsToListView(listView, 3);
@@ -622,7 +622,7 @@ public class ListViewItem_IKeyboardToolTipTests
     [InlineData(false)]
     public void ListViewItemKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ViewDetails_ThirdItem_ReturnsExpected(bool virtualMode)
     {
-        using ListView listView = GetListView(virtualMode: virtualMode, view: View.Details, virtualListSize: 3);
+        using var listView = GetListView(virtualMode: virtualMode, view: View.Details, virtualListSize: 3);
         listView.CreateControl();
         listView.Columns.Add(new ColumnHeader());
         AssignListItemsToListView(listView, 3);
@@ -643,7 +643,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool virtualMode)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode);
+        using var listView = GetListView(virtualMode);
         IWin32Window expectedOwner = null;
 
         if (insideListView)
@@ -670,7 +670,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool expected)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode, rightToLeft: rightToLeft);
+        using var listView = GetListView(virtualMode, rightToLeft: rightToLeft);
 
         if (insideListView)
         {
@@ -696,7 +696,7 @@ public class ListViewItem_IKeyboardToolTipTests
         try
         {
             ListViewItem listViewItem = new();
-            using ListView listView = GetListView(virtualMode);
+            using var listView = GetListView(virtualMode);
 
             if (insideListView)
             {
@@ -734,7 +734,7 @@ public class ListViewItem_IKeyboardToolTipTests
         bool expectedResult)
     {
         ListViewItem listViewItem = new();
-        using ListView listView = GetListView(virtualMode, showItemToolTips);
+        using var listView = GetListView(virtualMode, showItemToolTips);
         if (insideListView)
         {
             listViewItem = AssignItemToListView(listView, listViewItem);

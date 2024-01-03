@@ -2548,7 +2548,7 @@ public partial class ControlTests
         foreach (object[] testData in GetScaledBounds_TestData())
         {
             yield return new object[] { testData[0], testData[1], testData[2], testData[3], null };
-            yield return new object[] { testData[0], testData[1], testData[2], testData[3], new() };
+            yield return new object[] { testData[0], testData[1], testData[2], testData[3], new object() };
 
             Mock<IDesignerHost> mockNullDesignerHost = new(MockBehavior.Strict);
             mockNullDesignerHost
@@ -4057,7 +4057,7 @@ public partial class ControlTests
         using Control control = new();
         control.CreateControl();
 
-        DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+        var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
 
         /*
 
@@ -4124,7 +4124,7 @@ public partial class ControlTests
 
         await Task.Run(() =>
         {
-            DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+            var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
 
             /*
 

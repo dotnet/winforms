@@ -4865,7 +4865,7 @@ public class DataGridViewCellTests
         using DataGridViewTextBoxColumn column1 = new();
         dataGridView.Columns.Add(column1);
         dataGridView.Rows.Add();
-        DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
+        var cell = dataGridView.Rows[0].Cells[0];
         cell.Selected = true;
 
         // Attach EditingControl.AccessibilityObject to cell

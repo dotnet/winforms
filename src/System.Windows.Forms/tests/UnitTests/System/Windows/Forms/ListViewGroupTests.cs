@@ -1424,7 +1424,7 @@ public class ListViewGroupTests
         ListViewItem listViewItem = new();
         ListViewItem listViewItemGroup = new();
         ListViewGroup listViewGroup = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Groups.Add(listViewGroup);
         listView.Items.Add(listViewItem);
         listViewGroup.Items.Add(listViewItemGroup);
@@ -1439,7 +1439,7 @@ public class ListViewGroupTests
         using ListView listView = new();
         ListViewItem listViewItem = new();
         ListViewGroup listViewGroup = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Groups.Add(listViewGroup);
         listView.Items.Add(listViewItem);
         listViewGroup.Items.Add(listViewItem);

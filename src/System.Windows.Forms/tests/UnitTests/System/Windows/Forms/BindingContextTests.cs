@@ -196,7 +196,7 @@ public class BindingContextTests
         reference2.Target = null;
 
         // Verify these weak references have been scrubbed.
-        object[] destArray = new object[] { 1, 2, 3, 4 };
+        object[] destArray = [1, 2, 3, 4];
         ((ICollection)context).CopyTo(destArray, 1);
         Assert.Equal(1, destArray[0]);
         Assert.IsType<DictionaryEntry>(destArray[1]);
@@ -429,7 +429,7 @@ public class BindingContextTests
     public void BindingContext_Item_GetArrayDataSource_AddsToCollection()
     {
         BindingContext context = new();
-        int[] dataSource = new int[] { 1, 2, 3 };
+        int[] dataSource = [1, 2, 3];
         CurrencyManager manager = Assert.IsType<CurrencyManager>(context[dataSource]);
         Assert.Same(dataSource, manager.List);
         Assert.Equal(1, manager.Current);

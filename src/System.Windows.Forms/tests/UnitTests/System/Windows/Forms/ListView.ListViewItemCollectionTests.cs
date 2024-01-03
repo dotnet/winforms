@@ -80,7 +80,7 @@ public class ListView_ListViewItemCollectionTests
         {
             Name = "name2"
         };
-        ListView.ListViewItemCollection collection = listView.Items;
+        var collection = listView.Items;
         collection.Add(child1);
         collection.Add(child2);
         collection.Add(child3);
@@ -94,7 +94,7 @@ public class ListView_ListViewItemCollectionTests
     public void ListViewItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
     {
         using ListView listView = new();
-        ListView.ListViewItemCollection collection = listView.Items;
+        var collection = listView.Items;
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllSubItems: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllSubItems: false));
     }

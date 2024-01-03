@@ -33,7 +33,7 @@ public class ToolStripPanelRowControlCollectionTests
         toolStripContainer.PerformLayout();
         form.ResumeLayout(false);
 
-        Exception exception = Record.Exception(() => form.Show());
+        var exception = Record.Exception(() => form.Show());
 
         Assert.Null(exception);
     }

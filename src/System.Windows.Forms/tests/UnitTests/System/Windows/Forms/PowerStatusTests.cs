@@ -29,7 +29,7 @@ public class PowerStatusTests
                 return true;
             }
 
-            BatteryChargeStatus values = Enum.GetValues(typeof(BatteryChargeStatus))
+            var values = Enum.GetValues(typeof(BatteryChargeStatus))
                 .OfType<BatteryChargeStatus>()
                 .Where(v => v != BatteryChargeStatus.Unknown)
                 .Aggregate((e1, e2) => (e1 | e2));

@@ -59,7 +59,7 @@ public class PaintEventArgsTests
     public void GraphicsIdentity()
     {
         // https://github.com/dotnet/winforms/issues/3910
-        using ScreenDcCache.ScreenDcScope hdc = GdiCache.GetScreenHdc();
+        using var hdc = GdiCache.GetScreenHdc();
         using PaintEventArgs args = new(hdc, default);
         Graphics g1 = args.Graphics;
         Graphics g2 = args.Graphics;

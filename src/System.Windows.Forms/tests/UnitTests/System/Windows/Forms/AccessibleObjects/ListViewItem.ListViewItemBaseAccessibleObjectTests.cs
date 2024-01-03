@@ -152,7 +152,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         control.Items.Add(item);
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
-        IRawElementProviderFragment.Interface actual = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
+        var actual = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(control.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -257,7 +257,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        using VARIANT actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
+        using var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
 
         Assert.Equal("WinForm", ((BSTR)actual).ToString());
         Assert.False(control.IsHandleCreated);

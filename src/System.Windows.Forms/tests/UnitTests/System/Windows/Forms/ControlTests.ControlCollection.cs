@@ -1335,7 +1335,7 @@ public class ControlControlCollectionTests
 
         try
         {
-            Control.ControlCollection collection = Assert.IsType<Control.ControlCollection>(iCloneable.Clone());
+            var collection = Assert.IsType<Control.ControlCollection>(iCloneable.Clone());
             Assert.NotSame(sourceCollection, collection);
             Assert.Equal(new Control[] { child1, child2, child3 }, sourceCollection.Cast<Control>());
             Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());

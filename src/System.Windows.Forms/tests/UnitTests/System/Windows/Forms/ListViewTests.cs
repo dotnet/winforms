@@ -1107,7 +1107,7 @@ public class ListViewTests
         using ImageList imageList = new();
 
         // simulate a short-living ListView by disposing it (returning a WeakReference to track finalization)
-        WeakReference listViewRef = CreateAndDisposeListViewWithImageListReference(imageList);
+        var listViewRef = CreateAndDisposeListViewWithImageListReference(imageList);
 
         GC.Collect(); // mark for finalization (also would clear normal weak references)
         GC.WaitForPendingFinalizers(); // wait until finalizer is executed
@@ -4544,7 +4544,7 @@ public class ListViewTests
 
             item2.Selected = true;
 
-            Keys key = key_s == "Keys.Down" ? Keys.Down : Keys.Up;
+            var key = key_s == "Keys.Down" ? Keys.Down : Keys.Up;
             KeyboardSimulator.KeyDown(control, key);
 
             Assert.False(control.GroupsEnabled);
@@ -4834,7 +4834,7 @@ public class ListViewTests
         ListViewItem listViewItem1 = new();
         ListViewItem listViewItem2 = new();
         ListViewItem listViewItem3 = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         listView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3 });
 
@@ -4864,7 +4864,7 @@ public class ListViewTests
         using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ListViewItem listViewItem = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.IsToolTracked(listViewItem));
@@ -4881,7 +4881,7 @@ public class ListViewTests
         using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ListViewItem listViewItem = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.Dynamic.IsToolTracked(listViewItem));
@@ -4913,7 +4913,7 @@ public class ListViewTests
     {
         using ListView listView = new();
         ListViewItem listViewItem = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.IsToolTracked(listViewItem));
@@ -4927,7 +4927,7 @@ public class ListViewTests
     {
         using ListView listView = new() { VirtualMode = true };
         ListViewItem listViewItem = new();
-        InternalTestAccessors.KeyboardToolTipStateMachineTestAccessor accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
         listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
         Assert.True(accessor.IsToolTracked(listViewItem));
@@ -4989,7 +4989,7 @@ public class ListViewTests
         listView.View = View.SmallIcon;
         listView.Size = new Size(200, 200);
 
-        ListViewItem listViewItemToTest = listItems[item];
+        var listViewItemToTest = listItems[item];
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Up, upitem);
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Right, rightitem);
@@ -5045,7 +5045,7 @@ public class ListViewTests
         listView.View = View.SmallIcon;
         listView.Size = new Size(200, 200);
 
-        ListViewItem listViewItemToTest = listItems[item];
+        var listViewItemToTest = listItems[item];
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Up, upitem);
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Right, rightitem);

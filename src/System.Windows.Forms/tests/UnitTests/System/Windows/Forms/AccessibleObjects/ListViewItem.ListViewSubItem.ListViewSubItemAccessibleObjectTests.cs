@@ -684,9 +684,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         list.Columns.AddRange(new ColumnHeader[]
         {
-            new(),
-            new(),
-            new()
+            new ColumnHeader(),
+            new ColumnHeader(),
+            new ColumnHeader()
         });
 
         list.Items.Add(listViewItem1);
@@ -725,9 +725,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         list.Columns.AddRange(new ColumnHeader[]
         {
-            new(),
-            new(),
-            new()
+            new ColumnHeader(),
+            new ColumnHeader(),
+            new ColumnHeader()
         });
 
         list.Items.Add(listViewItem1);
@@ -874,8 +874,8 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(new ListViewItem("Test item 11"));
         listView.Items[0].SubItems.Add("Test item 12");
 
-        AccessibleObject itemAccessibleObject = listView.Items[0].AccessibilityObject;
-        AccessibleObject subItemAccessibleObject = listView.Items[0].SubItems[0].AccessibilityObject;
+        var itemAccessibleObject = listView.Items[0].AccessibilityObject;
+        var subItemAccessibleObject = listView.Items[0].SubItems[0].AccessibilityObject;
 
         Assert.Equal(itemAccessibleObject.Bounds, subItemAccessibleObject.Bounds);
         Assert.True(listView.IsHandleCreated);
@@ -896,8 +896,8 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(new ListViewItem("Test item 11"));
         listView.Items[0].SubItems.Add("Test item 12");
 
-        AccessibleObject itemAccessibleObject = listView.Items[0].AccessibilityObject;
-        AccessibleObject subItemAccessibleObject = listView.Items[0].SubItems[0].AccessibilityObject;
+        var itemAccessibleObject = listView.Items[0].AccessibilityObject;
+        var subItemAccessibleObject = listView.Items[0].SubItems[0].AccessibilityObject;
 
         Assert.NotEqual(itemAccessibleObject.Bounds, subItemAccessibleObject.Bounds);
         Assert.True(listView.IsHandleCreated);
@@ -968,7 +968,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject accessibleObject = new(listViewSubItem, listViewItem);
-        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(listView.IsHandleCreated);
     }

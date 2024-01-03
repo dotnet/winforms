@@ -148,7 +148,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
     {
-        dynamic applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
         Assert.Null(Application.DefaultFont);
@@ -157,7 +157,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_DefaultFont_Returns_DefaultFont_IfNotScaled()
     {
-        dynamic applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
@@ -180,7 +180,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_DefaultFont_Returns_ScaledDefaultFont_IfScaled()
     {
-        dynamic applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
@@ -221,7 +221,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_SetDefaultFont_MustNotCloneSystemFont()
     {
-        dynamic applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
@@ -230,7 +230,7 @@ public class ApplicationTests
 
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
-        dynamic nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
         bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
 
         try

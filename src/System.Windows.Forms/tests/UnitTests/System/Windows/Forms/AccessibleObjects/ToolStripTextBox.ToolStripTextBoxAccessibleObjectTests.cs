@@ -17,7 +17,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
         };
 
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-        global::Windows.Win32.System.Variant.VARIANT accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        var accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
@@ -42,7 +42,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
         };
 
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-        AccessibleRole accessibleObjectRole = toolStripTextBoxAccessibleObject.Role;
+        var accessibleObjectRole = toolStripTextBoxAccessibleObject.Role;
 
         Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
     }

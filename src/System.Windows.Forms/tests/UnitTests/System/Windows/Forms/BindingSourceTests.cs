@@ -390,7 +390,7 @@ public class BindingSourceTests
             .Returns(syncRoot);
 
         ListSortDescriptionCollection sortDescriptions = new();
-        Mock<IBindingListView> mockListView = mockList.As<IBindingListView>();
+        var mockListView = mockList.As<IBindingListView>();
         mockListView
             .Setup(p => p.SortDescriptions)
             .Returns(sortDescriptions);

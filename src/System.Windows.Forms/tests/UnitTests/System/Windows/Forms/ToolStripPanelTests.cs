@@ -347,7 +347,7 @@ public class ToolStripPanelTests
         using ToolStrip toolStrip2 = new();
 
         toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip1);
-        Exception exception = Record.Exception(() => toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip2));
+        var exception = Record.Exception(() => toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip2));
 
         Assert.Null(exception);
     }

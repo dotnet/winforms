@@ -28,7 +28,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         using DataGridView control = new();
         control.Columns.Add(new DataGridViewCheckBoxColumn());
 
-        DataGridViewCell cell = control.Rows[0].Cells[0];
+        var cell = control.Rows[0].Cells[0];
         // Create control to check cell if it is needed.
         control.CreateControl();
 
@@ -72,7 +72,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     {
         using DataGridView control = new();
         control.Columns.Add(new DataGridViewCheckBoxColumn());
-        DataGridViewCell cell = control.Rows[0].Cells[0];
+        var cell = control.Rows[0].Cells[0];
         control.CreateControl();
         var accessibleObject = (DataGridViewCheckBoxCellAccessibleObject)cell.AccessibilityObject;
 
@@ -131,7 +131,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         using DataGridView control = new();
         control.Columns.Add(new DataGridViewCheckBoxColumn());
         control.Rows.Add(new DataGridViewRow());
-        DataGridViewCell cell = control.Rows[0].Cells[0];
+        var cell = control.Rows[0].Cells[0];
         // Create control to check cell if it is needed.
         control.CreateControl();
 
@@ -155,7 +155,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         using DataGridView control = new();
         control.Columns.Add(new DataGridViewCheckBoxColumn());
         control.Rows.Add(new DataGridViewRow());
-        DataGridViewCell cell = control.Rows[0].Cells[0];
+        var cell = control.Rows[0].Cells[0];
         // Create control to check cell if it is needed.
         control.CreateControl();
 
@@ -210,7 +210,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         using DataGridView control = new();
         control.Columns.Add(new DataGridViewCheckBoxColumn());
         control.Rows.Add(new DataGridViewRow());
-        DataGridViewCell cell = control.Rows[0].Cells[0];
+        var cell = control.Rows[0].Cells[0];
         if (createControl)
         {
             control.CreateControl();
@@ -256,7 +256,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
 
         DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
 
-        AccessibleObject checkBoxAccessibleObject = cell.AccessibilityObject;
+        var checkBoxAccessibleObject = cell.AccessibilityObject;
 
         Assert.Equal(ToggleState.ToggleState_Indeterminate, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();

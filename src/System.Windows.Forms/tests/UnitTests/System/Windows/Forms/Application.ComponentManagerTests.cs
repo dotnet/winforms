@@ -17,14 +17,14 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FDebugMessage_ReturnsTrue()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.True(manager.FDebugMessage(0, 0, default, default));
     }
 
     [Fact]
     public void QueryService_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
 
         // Shouldn't try and deref a null
         Assert.Equal(HRESULT.E_NOINTERFACE, manager.QueryService(null, null, null));
@@ -38,7 +38,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FRegisterComponent_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = default;
         UIntPtr id = default;
@@ -51,7 +51,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FRegisterComponent_RejectsUnsized()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = default;
         UIntPtr id = default;
@@ -63,7 +63,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FRegisterComponent_Cookies()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
@@ -81,7 +81,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FRevokeComponent()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
@@ -95,7 +95,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FUpdateComponentRegistration_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
@@ -107,7 +107,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FUpdateComponentRegistration()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
         UIntPtr id = default;
@@ -120,14 +120,14 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FOnComponentActivate_InvalidId()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.False(manager.FOnComponentActivate(default));
     }
 
     [Fact]
     public void FSetTrackingComponent_InvalidId()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.False(manager.FSetTrackingComponent(default, true));
         Assert.False(manager.FSetTrackingComponent(default, false));
     }
@@ -135,7 +135,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FSetTrackingComponent()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
 
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
@@ -158,14 +158,14 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void OnComponentEnterState_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         manager.OnComponentEnterState(default, default, default, default, null, default);
     }
 
     [Fact]
     public void OnComponentEnterState_Notification()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         mock.Setup(m => m.OnEnterState(msocstate.Modal, true));
 
@@ -187,14 +187,14 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FOnComponentExitState_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.False(manager.FOnComponentExitState(default, default, default, default, null));
     }
 
     [Fact]
     public void FOnComponentExitState_Notification()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Mock<IMsoComponent> mock = new(MockBehavior.Strict);
         mock.Setup(m => m.OnEnterState(msocstate.Modal, false));
 
@@ -216,7 +216,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FInState()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.True(manager.FInState(0, null));
         manager.OnComponentEnterState(default, msocstate.Modal, default, 0, null, 0);
         Assert.False(manager.FInState(0, null));
@@ -231,21 +231,21 @@ public unsafe class IMsoComponentManagerTests
     public void FContinueIdle()
     {
         // Making sure we don't crash- there may or may not be messages in the queue
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         manager.FContinueIdle();
     }
 
     [Fact]
     public void FPushMessageLoop_InvalidComponent()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.False(manager.FPushMessageLoop(default, default, null));
     }
 
     [Fact]
     public void FCreateSubComponentManager_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
 
         // Shouldn't try and deref a null
         Assert.False(manager.FCreateSubComponentManager(default, default, null, null));
@@ -259,7 +259,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FGetParentComponentManager_HandlesNull()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
 
         // Shouldn't try and deref a null
         Assert.False(manager.FGetParentComponentManager(null));
@@ -273,7 +273,7 @@ public unsafe class IMsoComponentManagerTests
     [Fact]
     public void FGetActiveComponent()
     {
-        IMsoComponentManager manager = CreateComponentManager();
+        var manager = CreateComponentManager();
         Assert.False(manager.FGetActiveComponent(msogac.Active, null, null, 0));
 
         Mock<IMsoComponent> mock1 = new(MockBehavior.Strict);

@@ -31,7 +31,7 @@ public unsafe class ComNativeDescriptorTests
     public void ComNativeDescriptor_GetProperties_FromIPictureDisp_ComWrappers()
     {
         using Bitmap bitmap = new(10, 20);
-        using ComScope<IPictureDisp> iPictureDisp = IPictureDisp.CreateFromImage(bitmap);
+        using var iPictureDisp = IPictureDisp.CreateFromImage(bitmap);
         Assert.False(iPictureDisp.IsNull);
 
         // The runtime needs to be updated to allow ComWrappers through
@@ -45,7 +45,7 @@ public unsafe class ComNativeDescriptorTests
         Assert.NotNull(properties);
         Assert.Equal(5, properties.Count);
 
-        PropertyDescriptor handleProperty = properties["Handle"];
+        var handleProperty = properties["Handle"];
         Assert.IsType<Com2PropertyDescriptor>(handleProperty);
         Assert.True(handleProperty.IsReadOnly);
         Assert.Equal("Misc", handleProperty.Category);
@@ -63,7 +63,7 @@ public unsafe class ComNativeDescriptorTests
         var converter = (Com2ExtendedTypeConverter)handleProperty.Converter;
         Assert.IsAssignableFrom<Int32Converter>(converter.InnerConverter);
 
-        PropertyDescriptor typeProperty = properties["Type"];
+        var typeProperty = properties["Type"];
         Assert.NotNull(typeProperty);
         Assert.True(typeProperty.IsReadOnly);
         Assert.Equal("Misc", typeProperty.Category);
@@ -83,7 +83,7 @@ public unsafe class ComNativeDescriptorTests
         object iPicture = IPicture.CreateObjectFromImage(bitmap);
         Assert.NotNull(iPicture);
 
-        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(iPicture);
+        var properties = TypeDescriptor.GetProperties(iPicture);
         Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)(short)properties["Type"].GetValue(iPicture));
     }
 
@@ -128,7 +128,7 @@ public unsafe class ComNativeDescriptorTests
     {
         Assert.Equal(25, properties.Count);
 
-        PropertyDescriptor urlProperty = properties["URL"];
+        var urlProperty = properties["URL"];
         Assert.IsType<Com2PropertyDescriptor>(urlProperty);
         Assert.False(urlProperty.IsReadOnly);
         Assert.Equal("Misc", urlProperty.Category);
@@ -167,14 +167,14 @@ public unsafe class ComNativeDescriptorTests
         object comWrapper = UnknownComWrappers.Instance.GetOrCreateObjectForComInstance(accessible, CreateObjectFlags.None);
 
         ComNativeDescriptor descriptor = new();
-        PropertyDescriptorCollection properties = descriptor.GetProperties(comWrapper);
+        var properties = descriptor.GetProperties(comWrapper);
         Assert.Equal(4, properties.Count);
 
-        PropertyDescriptor accChildCount = properties["accChildCount"];
+        var accChildCount = properties["accChildCount"];
         Assert.True(accChildCount.IsReadOnly);
         Assert.Equal(0, accChildCount.GetValue(comWrapper));
 
-        PropertyDescriptor accFocus = properties["accFocus"];
+        var accFocus = properties["accFocus"];
         Assert.True(accFocus.IsReadOnly);
         // VT_EMPTY - Nothing has focus
         Assert.Null(accFocus.GetValue(comWrapper));
@@ -190,15 +190,15 @@ public unsafe class ComNativeDescriptorTests
 
         object comWrapper = UnknownComWrappers.Instance.GetOrCreateObjectForComInstance(accessible, CreateObjectFlags.None);
         ComNativeDescriptor descriptor = new();
-        PropertyDescriptorCollection properties = descriptor.GetProperties(comWrapper);
+        var properties = descriptor.GetProperties(comWrapper);
 
         Assert.Equal(4, properties.Count);
 
-        PropertyDescriptor accChildCount = properties["accChildCount"];
+        var accChildCount = properties["accChildCount"];
         Assert.True(accChildCount.IsReadOnly);
         Assert.Equal(42, accChildCount.GetValue(comWrapper));
 
-        PropertyDescriptor accFocus = properties["accFocus"];
+        var accFocus = properties["accFocus"];
         Assert.True(accFocus.IsReadOnly);
         Assert.Equal((int)PInvoke.CHILDID_SELF, accFocus.GetValue(comWrapper));
     }
@@ -214,13 +214,13 @@ public unsafe class ComNativeDescriptorTests
         // Not much to see with this control, but it does exercise a fair amount of code.
         ComClasses.VisualBasicSimpleControl.CreateInstance(out object vbcontrol).ThrowOnFailure();
 
-        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(vbcontrol);
+        var properties = TypeDescriptor.GetProperties(vbcontrol);
         Assert.Empty(properties);
 
-        EventDescriptorCollection events = TypeDescriptor.GetEvents(vbcontrol);
+        var events = TypeDescriptor.GetEvents(vbcontrol);
         Assert.Empty(events);
 
-        AttributeCollection attributes = TypeDescriptor.GetAttributes(vbcontrol);
+        var attributes = TypeDescriptor.GetAttributes(vbcontrol);
         Assert.Equal(2, attributes.Count);
         BrowsableAttribute browsable = (BrowsableAttribute)attributes[0];
         Assert.True(browsable.Browsable);

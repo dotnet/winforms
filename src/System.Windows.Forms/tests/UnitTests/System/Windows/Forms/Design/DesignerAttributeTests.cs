@@ -45,19 +45,19 @@ public class DesignerAttributeTests
 
     public static IEnumerable<object[]> GetAttributeOfType_TestData(string assembly, Type attributeType)
     {
-        foreach (Type type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in Assembly.Load(assembly).GetTypes())
             foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type, attribute };
     }
 
     public static IEnumerable<object[]> GetAttributeOfTypeAndProperty_TestData(string assembly, Type attributeType)
     {
-        foreach (Type type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in Assembly.Load(assembly).GetTypes())
         {
             foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type.FullName, attribute };
 
-            foreach (PropertyInfo property in type.GetProperties())
+            foreach (var property in type.GetProperties())
                 foreach (object attribute in property.GetCustomAttributes(attributeType, false))
                     yield return new[] { $"{type.FullName}, property {property.Name}", attribute };
         }
@@ -65,15 +65,15 @@ public class DesignerAttributeTests
 
     public static IEnumerable<object[]> GetAttributeWithType_TestData(string assembly, Type attributeType)
     {
-        foreach (Type type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in Assembly.Load(assembly).GetTypes())
             foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type, attribute };
     }
 
     public static IEnumerable<object[]> GetAttributeWithProperty_TestData(string assembly, Type attributeType)
     {
-        foreach (Type type in Assembly.Load(assembly).GetTypes())
-            foreach (PropertyInfo property in type.GetProperties())
+        foreach (var type in Assembly.Load(assembly).GetTypes())
+            foreach (var property in type.GetProperties())
                 foreach (object attribute in property.GetCustomAttributes(attributeType, false))
                     yield return new[] { property, attribute };
     }
@@ -116,7 +116,7 @@ public class DesignerAttributeTests
     [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultPropertyAttribute))]
     public void DesignerAttributes_DefaultPropertyAttribute_PropertyExists(Type type, DefaultPropertyAttribute attribute)
     {
-        PropertyInfo propertyInfo = type.GetProperty(attribute.Name);
+        var propertyInfo = type.GetProperty(attribute.Name);
         _output.WriteLine($"{type.FullName}: {attribute.Name} --> {propertyInfo?.Name}");
 
         Assert.NotNull(propertyInfo);
@@ -126,7 +126,7 @@ public class DesignerAttributeTests
     [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultBindingPropertyAttribute))]
     public void DesignerAttributes_DefaultBindingPropertyAttribute_PropertyExists(Type type, DefaultBindingPropertyAttribute attribute)
     {
-        PropertyInfo propertyInfo = type.GetProperty(attribute.Name);
+        var propertyInfo = type.GetProperty(attribute.Name);
         _output.WriteLine($"{type.FullName}: {attribute.Name} --> {propertyInfo?.Name}");
 
         Assert.NotNull(propertyInfo);
@@ -136,7 +136,7 @@ public class DesignerAttributeTests
     [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultEventAttribute))]
     public void DesignerAttributes_DefaultEventAttribute_EventExists(Type type, DefaultEventAttribute attribute)
     {
-        EventInfo eventInfo = type.GetEvent(attribute.Name);
+        var eventInfo = type.GetEvent(attribute.Name);
         _output.WriteLine($"{type.FullName}: {attribute.Name} --> {eventInfo?.Name}");
 
         Assert.NotNull(eventInfo);

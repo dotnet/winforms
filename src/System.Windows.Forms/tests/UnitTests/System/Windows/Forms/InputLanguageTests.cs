@@ -70,7 +70,7 @@ public class InputLanguageTests
     public static IEnumerable<object[]> Equals_TestData()
     {
         yield return new object[] { InputLanguage.DefaultInputLanguage, InputLanguage.DefaultInputLanguage, true };
-        yield return new object[] { InputLanguage.DefaultInputLanguage, new(), false };
+        yield return new object[] { InputLanguage.DefaultInputLanguage, new object(), false };
         yield return new object[] { InputLanguage.DefaultInputLanguage, null, false };
     }
 
@@ -94,7 +94,7 @@ public class InputLanguageTests
     [Fact]
     public void InputLanguage_FromCulture_NoSuchCulture_ReturnsNull()
     {
-        CultureInfo invariantCulture = CultureInfo.InvariantCulture;
+        var invariantCulture = CultureInfo.InvariantCulture;
         Assert.Null(InputLanguage.FromCulture(invariantCulture));
     }
 

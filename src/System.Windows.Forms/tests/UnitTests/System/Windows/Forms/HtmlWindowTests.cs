@@ -94,7 +94,7 @@ public class HtmlWindowTests
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-        using TempFile file = CreateTempFile(html);
+        using var file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
         Assert.True(await source.Task);
 

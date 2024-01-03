@@ -1656,7 +1656,7 @@ public class RichTextBoxTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using Font font2 = SystemFonts.DialogFont;
+        using var font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Equal(2, callCount);
@@ -6789,7 +6789,7 @@ public class RichTextBoxTests
         // 0x0008 to 0x007F: https://www.unicode.org/charts/PDF/U0000.pdf
         // 0x2000 to 0x2069: https://www.unicode.org/charts/PDF/U2000.pdf
 
-        IEnumerable<int> chars = Enumerable.Range(0x0008, /* 0x0008 to 0x007F */ 0x007F - 0x0008 + 1).Union(
+        var chars = Enumerable.Range(0x0008, /* 0x0008 to 0x007F */ 0x007F - 0x0008 + 1).Union(
                     Enumerable.Range(0x2000, /* 0x2000 to 0x2069 */ 0x2069 - 0x2000 + 1));
 
         foreach (int i in chars)

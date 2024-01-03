@@ -11,7 +11,7 @@ public class ComboBox_ComboBoxChildNativeWindowTests
         using ComboBox comboBox = new() { DropDownStyle = ComboBoxStyle.DropDown };
         comboBox.CreateControl();
 
-        NativeWindow childNativeWindow = comboBox.GetListNativeWindow();
+        var childNativeWindow = comboBox.GetListNativeWindow();
         Type childWindowTypeEnum = typeof(ComboBox).GetNestedType("ChildWindowType", Reflection.BindingFlags.NonPublic);
 
         foreach (object childWindowType in Enum.GetValues(childWindowTypeEnum))

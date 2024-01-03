@@ -154,7 +154,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
     {
         using DataGridView control = new();
         control.Columns.Add("Column 1", "Header text 1");
-        AccessibleObject accessibleObject = control.Columns[0].HeaderCell.AccessibilityObject;
+        var accessibleObject = control.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject topRowAccessibleObject = control.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(topRowAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));

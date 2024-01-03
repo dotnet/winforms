@@ -786,7 +786,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     {
         using TabControl tabControl = new();
         TabControlAccessibleObject accessibleObject = (TabControlAccessibleObject)tabControl.AccessibilityObject;
-        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(tabControl.IsHandleCreated);
     }

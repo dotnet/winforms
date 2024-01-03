@@ -342,7 +342,7 @@ public class ApplicationContextTests
     public static IEnumerable<object[]> OnMainFormClosed_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new(), new EventArgs() };
+        yield return new object[] { new object(), new EventArgs() };
     }
 
     [WinFormsTheory]
@@ -376,7 +376,7 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void ApplicationContext_Subclasses_SuppressFinalizeCall()
     {
-        foreach (Type type in typeof(ApplicationContext).Assembly.GetTypes().
+        foreach (var type in typeof(ApplicationContext).Assembly.GetTypes().
             Where(type => type == typeof(ApplicationContext) || type.IsSubclassOf(typeof(ApplicationContext))))
         {
             Assert.True(type == typeof(ApplicationContext) || type == Application.s_typeOfModalApplicationContext,

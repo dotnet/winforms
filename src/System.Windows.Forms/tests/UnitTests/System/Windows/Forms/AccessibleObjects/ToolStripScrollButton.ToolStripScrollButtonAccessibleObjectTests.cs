@@ -145,7 +145,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         string expectedUpButtonName = SR.ToolStripScrollButtonUpAccessibleName;
         string expectedDownButtonName = SR.ToolStripScrollButtonDownAccessibleName;
         string expectedDefaultAction = SR.AccessibleActionPress;
-        UIA_CONTROLTYPE_ID expectedControlType = UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId;
+        var expectedControlType = UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId;
 
         Assert.Equal(expectedUpButtonName, upScrollButtonAccessibleObject.Name);
         Assert.Equal(expectedDefaultAction, upScrollButtonAccessibleObject.DefaultAction);

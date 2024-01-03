@@ -19,7 +19,7 @@ public class UserConfigDisposableFixture : IDisposable
 
     private static void DeleteUserConfig()
     {
-        Configuration.Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+        var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
         if (File.Exists(configuration.FilePath))
         {
             File.Delete(configuration.FilePath);

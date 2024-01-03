@@ -467,7 +467,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
             .Protected()
             .Setup("Dispose", ItExpr.IsAny<bool>());
 
-        DataGridViewCell mockObj = mockCell.Object;
+        var mockObj = mockCell.Object;
         DataGridViewCellAccessibleObject accessibleObject = new(mockObj);
         accessibleObject.Select(AccessibleSelection.None);
         // NB: asserts are implicit - check that nothing was called on the mock that we didn't anticipate
@@ -500,7 +500,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
             .Protected()
             .Setup("OnDataGridViewChanged");
 
-        DataGridViewCell mockObj = mockCell.Object;
+        var mockObj = mockCell.Object;
         mockObj.DataGridView = dataGridView;
 
         DataGridViewCellAccessibleObject accessibleObject = new(mockObj);
@@ -533,7 +533,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
             .Protected()
             .Setup("OnDataGridViewChanged");
 
-        DataGridViewCell mockObj = mockCell.Object;
+        var mockObj = mockCell.Object;
         mockObj.DataGridView = dataGridView;
 
         DataGridViewCellAccessibleObject accessibleObject = new(mockObj);
@@ -718,7 +718,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
-        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
         Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(dataGridView.IsHandleCreated);

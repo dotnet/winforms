@@ -1099,9 +1099,9 @@ public class ColumnHeaderCollectionTests
         using ColumnHeader header = new();
         collection.Add(header);
 
-        object[] array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, header, 3 }, array);
+        Assert.Equal([1, header, 3], array);
     }
 
     [WinFormsFact]
@@ -1109,8 +1109,8 @@ public class ColumnHeaderCollectionTests
     {
         using ListView listView = new();
         IList collection = new ListView.ColumnHeaderCollection(listView);
-        object[] array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 0);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 }

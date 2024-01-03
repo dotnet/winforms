@@ -1479,7 +1479,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using Font font2 = SystemFonts.DialogFont;
+        using var font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Equal(2, callCount);
@@ -1530,7 +1530,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using Font font2 = SystemFonts.DialogFont;
+        using var font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Same(font2, item1.Font);
@@ -1595,7 +1595,7 @@ public partial class ToolStripTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        using Font font2 = SystemFonts.DialogFont;
+        using var font2 = SystemFonts.DialogFont;
         control.Font = font2;
         Assert.Same(font2, control.Font);
         Assert.Same(childFont1, child1.Font);

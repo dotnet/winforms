@@ -936,7 +936,7 @@ public class ListView_ListViewAccessibleObjectTests
         listView.Items[1].Selected = true;
         listView.Items[3].Selected = true;
 
-        IRawElementProviderSimple.Interface[] listSelection = listView.AccessibilityObject.GetSelection();
+        var listSelection = listView.AccessibilityObject.GetSelection();
         Assert.Equal(listItem1.AccessibilityObject, listSelection[0]);
         Assert.Equal(listItem2.AccessibilityObject, listSelection[1]);
         Assert.Equal(listItem4.AccessibilityObject, listSelection[2]);
@@ -957,7 +957,7 @@ public class ListView_ListViewAccessibleObjectTests
         ListViewItem listItem1 = new();
         listView.Items.Add(listItem1);
 
-        IRawElementProviderSimple.Interface[] listSelection = listView.AccessibilityObject.GetSelection();
+        var listSelection = listView.AccessibilityObject.GetSelection();
         Assert.Equal(0, listSelection.Length);
         Assert.True(listView.IsHandleCreated);
     }
@@ -975,7 +975,7 @@ public class ListView_ListViewAccessibleObjectTests
         ListViewItem listItem1 = new();
         listView.Items.Add(listItem1);
 
-        IRawElementProviderSimple.Interface[] listSelection = listView.AccessibilityObject.GetSelection();
+        var listSelection = listView.AccessibilityObject.GetSelection();
         Assert.Equal(0, listSelection.Length);
 
         Assert.False(listView.IsHandleCreated);
@@ -1037,7 +1037,7 @@ public class ListView_ListViewAccessibleObjectTests
         listView.Items[1].Selected = true;
         listView.Items[3].Selected = true;
 
-        IRawElementProviderSimple.Interface[] listSelection = listView.AccessibilityObject.GetSelection();
+        var listSelection = listView.AccessibilityObject.GetSelection();
         Assert.Equal(listItem1.AccessibilityObject, listSelection[0]);
         Assert.Equal(listItem2.AccessibilityObject, listSelection[1]);
         Assert.Equal(listItem4.AccessibilityObject, listSelection[2]);
@@ -1070,7 +1070,7 @@ public class ListView_ListViewAccessibleObjectTests
         listView.CreateControl();
         listItem1.SetItemIndex(listView, 0);
 
-        IRawElementProviderSimple.Interface[] listSelection = listView.AccessibilityObject.GetSelection();
+        var listSelection = listView.AccessibilityObject.GetSelection();
         Assert.Equal(0, listSelection.Length);
         Assert.True(listView.IsHandleCreated);
     }
@@ -1100,7 +1100,7 @@ public class ListView_ListViewAccessibleObjectTests
 
         listItem1.SetItemIndex(listView, 0);
 
-        IRawElementProviderSimple.Interface[] listSelection = listView.AccessibilityObject.GetSelection();
+        var listSelection = listView.AccessibilityObject.GetSelection();
         Assert.Equal(0, listSelection.Length);
 
         Assert.False(listView.IsHandleCreated);
@@ -1765,8 +1765,8 @@ public class ListView_ListViewAccessibleObjectTests
         listView.MultiSelect = true;
         listView.CreateControl();
 
-        AccessibleObject listViewAccessibleObject = listView.AccessibilityObject;
-        global::Windows.Win32.System.Variant.VARIANT actual = listViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
+        var listViewAccessibleObject = listView.AccessibilityObject;
+        var actual = listViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
         Assert.True((bool)actual);
 
         ISelectionProvider.Interface provider = listViewAccessibleObject;

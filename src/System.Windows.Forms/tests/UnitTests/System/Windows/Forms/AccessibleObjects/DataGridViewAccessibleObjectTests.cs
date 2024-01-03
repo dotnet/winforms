@@ -1118,7 +1118,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add("Test 2", "Test 2");
         dataGridView.Columns.Add("Test 3", "Test 3");
 
-        IRawElementProviderSimple.Interface[] columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
+        var columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
 
         Assert.NotNull(columnHeaders);
         Assert.Equal(3, columnHeaders.Length);
@@ -1137,7 +1137,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add("Test 3", "Test 3");
         dataGridView.Columns[0].Visible = false;
 
-        IRawElementProviderSimple.Interface[] columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
+        var columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
 
         Assert.NotNull(columnHeaders);
         Assert.Equal(2, columnHeaders.Length);
@@ -1155,7 +1155,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add("Test 3", "Test 3");
         dataGridView.Columns[1].Visible = false;
 
-        IRawElementProviderSimple.Interface[] columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
+        var columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
 
         Assert.NotNull(columnHeaders);
         Assert.Equal(2, columnHeaders.Length);
@@ -1173,7 +1173,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add("Test 3", "Test 3");
         dataGridView.Columns[2].Visible = false;
 
-        IRawElementProviderSimple.Interface[] columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
+        var columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
 
         Assert.NotNull(columnHeaders);
         Assert.Equal(2, columnHeaders.Length);
@@ -1193,7 +1193,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        IRawElementProviderSimple.Interface[] columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
+        var columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
 
         Assert.NotNull(columnHeaders);
         Assert.Equal(0, columnHeaders.Length);
@@ -1209,7 +1209,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Rows.Add("Test 2");
         dataGridView.Rows.Add("Test 3");
 
-        IRawElementProviderSimple.Interface[] rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
+        var rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
 
         Assert.NotNull(rowHeaders);
         Assert.Equal(3, rowHeaders.Length);
@@ -1229,7 +1229,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Rows.Add("Test 3");
         dataGridView.Rows[0].Visible = false;
 
-        IRawElementProviderSimple.Interface[] rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
+        var rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
 
         Assert.NotNull(rowHeaders);
         Assert.Equal(2, rowHeaders.Length);
@@ -1248,7 +1248,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Rows.Add("Test 3");
         dataGridView.Rows[1].Visible = false;
 
-        IRawElementProviderSimple.Interface[] rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
+        var rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
 
         Assert.NotNull(rowHeaders);
         Assert.Equal(2, rowHeaders.Length);
@@ -1267,7 +1267,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Rows.Add("Test 3");
         dataGridView.Rows[2].Visible = false;
 
-        IRawElementProviderSimple.Interface[] rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
+        var rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
 
         Assert.NotNull(rowHeaders);
         Assert.Equal(2, rowHeaders.Length);
@@ -1288,7 +1288,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Rows[1].Visible = false;
         dataGridView.Rows[2].Visible = false;
 
-        IRawElementProviderSimple.Interface[] rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
+        var rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
 
         Assert.NotNull(rowHeaders);
         Assert.Equal(0, rowHeaders.Length);
@@ -1345,7 +1345,7 @@ public class DataGridViewAccessibleObjectTests
         AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
 
         AccessibleObject expected = dataGridView.Rows[0].Cells[0].AccessibilityObject;
-        IRawElementProviderSimple.Interface actual = accessibleObject.GetItem(0, 0);
+        var actual = accessibleObject.GetItem(0, 0);
         Assert.Equal(expected, actual);
 
         expected = dataGridView.Rows[0].Cells[2].AccessibilityObject;
