@@ -171,7 +171,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     }
 
     /// <summary>
-    /// Retrieves the paths of all selected folders in the dialog box.
+    ///  Retrieves the paths of all selected folders in the dialog box.
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
