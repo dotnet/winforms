@@ -231,7 +231,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             {
                 for (int i = 0; i < ownerArray.Length; i++)
                 {
-                    PropertyDescriptor propertyInfo = propertyEntry.PropertyDescriptor;
+                    PropertyDescriptor propertyInfo = entry.PropertyDescriptor;
 
                     if (propertyInfo is MergePropertyDescriptor descriptor)
                     {
@@ -248,8 +248,8 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             }
             else
             {
-                changeService.OnComponentChanging(owner, propertyEntry.PropertyDescriptor);
-                changeService.OnComponentChanged(owner, propertyEntry.PropertyDescriptor);
+                changeService.OnComponentChanging(owner, entry.PropertyDescriptor);
+                changeService.OnComponentChanged(owner, entry.PropertyDescriptor);
             }
         }
     }
