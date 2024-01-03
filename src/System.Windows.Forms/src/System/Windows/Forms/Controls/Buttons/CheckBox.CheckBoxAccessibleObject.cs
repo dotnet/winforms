@@ -41,7 +41,6 @@ public partial class CheckBox
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
             var p when p == UIA_PATTERN_ID.UIA_TogglePatternId => true,
-            UIA_PATTERN_ID.UIA_ValuePatternId => true,
             _ => base.IsPatternSupported(patternId)
         };
 
@@ -92,50 +91,5 @@ public partial class CheckBox
                 }
             }
         }
-
-        internal override void SetValue(string? newValue)
-        {
-            if (!this.TryGetOwnerAs(out CheckBox? owner))
-            {
-                return;
-            }
-
-            if (owner.ThreeState)
-            {
-                if (CheckState.Checked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    owner.CheckState = CheckState.Checked;
-                    return;
-                }
-                else if (CheckState.Unchecked.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    owner.CheckState = CheckState.Unchecked;
-                    return;
-                }
-                else if (CheckState.Indeterminate.ToString().Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    owner.CheckState = CheckState.Indeterminate;
-                    return;
-                }
-
-                throw new ArgumentException($"'{newValue}' does not specify a {nameof(CheckBox)} {nameof(CheckState)}.");
-            }
-            else if ("true".Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-            {
-                owner.Checked = true;
-                return;
-            }
-            else if ("false".Equals(newValue, StringComparison.InvariantCultureIgnoreCase))
-            {
-                owner.Checked = false;
-                return;
-            }
-
-            throw new ArgumentException($"'{newValue}' does not specify a {nameof(CheckBox)} {nameof(CheckState)}.");
-        }
-
-        public override string Value => this.TryGetOwnerAs(out CheckBox? owner)
-            ? owner.ThreeState ? owner.CheckState.ToString() : owner.Checked.ToString()
-            : string.Empty;
     }
 }

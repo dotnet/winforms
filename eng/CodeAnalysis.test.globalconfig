@@ -318,7 +318,7 @@ dotnet_diagnostic.xUnit1002.severity = warning
 dotnet_diagnostic.xUnit1003.severity = warning
 
 # xUnit1004: Test methods should not be skipped
-dotnet_diagnostic.xUnit1004.severity = none # TODO: warning
+dotnet_diagnostic.xUnit1004.severity = silent # TODO: warning
 
 # xUnit1005: Fact methods should not have test data
 dotnet_diagnostic.xUnit1005.severity = warning

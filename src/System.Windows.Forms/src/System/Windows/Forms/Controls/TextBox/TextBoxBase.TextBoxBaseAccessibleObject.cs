@@ -16,32 +16,10 @@ public abstract partial class TextBoxBase
 
         public TextBoxBaseAccessibleObject(TextBoxBase owner) : base(owner)
         {
-            _textProvider = new TextBoxBaseUiaTextProvider(owner);
+            _textProvider = new(owner);
         }
 
-        internal void ClearObjects()
-        {
-            _textProvider = null;
-
-            // A place for future memory leak fixing:
-            //
-            // 1) This method should be added to the ControlAccessibleObject class:
-            //    internal void ClearOwnerControl()
-            //    {
-            //        this.Owner = null;
-            //    }
-            //
-            // 2) Owner property shoud be changed from this
-            //        public Control Owner { get; }
-            //    to something like this
-            //        public Control? Owner { get; private set; }
-            //
-            // 3) These changes will produce different sorts of warnings:
-            //     non-nullable member will became nullable, additional checks for null should be added, etc.
-            //
-            // 4) This method call should be uncommented
-            //        ClearOwnerControl();
-        }
+        internal void ClearObjects() => _textProvider = null;
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
