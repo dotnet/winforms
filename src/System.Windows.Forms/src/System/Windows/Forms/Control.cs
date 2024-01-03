@@ -18,6 +18,7 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
+using HandleRef_HWND = HandleRef<Windows.Win32.Foundation.HWND>;
 
 namespace System.Windows.Forms;
 
@@ -5514,7 +5515,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Creates a <see cref="HandleRef{THandle}"/> for the given <paramref name="hwnd"/>, associating
+    ///  Creates a <see cref="HandleRef_HWND"/> for the given <paramref name="hwnd"/>, associating
     ///  it with the first parent <see cref="Control"/> if possible.
     /// </summary>
     internal static HandleRef<HWND> GetHandleRef(HWND hwnd) => new(FromChildHandle(hwnd), hwnd);
