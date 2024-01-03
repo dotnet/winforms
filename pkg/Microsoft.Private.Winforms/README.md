@@ -22,13 +22,13 @@ If the content of these files differ - the build will fail.
 To update the manifest run the following command and check in the updated files manifest:
 
 ```
-.\build.cmd -pack /p:GenerateManifest=true
+.\build.cmd -pack /p:_GenerateManifest=true
 ```
 
 To debug the script run the following command:
 
 ```
-dotnet build .\pkg\Microsoft.Private.Winforms\Microsoft.Private.Winforms.csproj /t:UpdateTransportPackage /p:GenerateManifest=true /v:m /bl /p:CommonLibrary_NativeInstallDir=$env:UserProfile\.netcoreeng\native\
+dotnet build .\pkg\Microsoft.Private.Winforms\Microsoft.Private.Winforms.csproj /t:UpdateTransportPackage /p:_GenerateManifest=true /v:m /bl /p:CommonLibrary_NativeInstallDir=$env:UserProfile\.netcoreeng\native\
 ```
 
 
