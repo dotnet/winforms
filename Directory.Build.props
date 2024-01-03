@@ -4,6 +4,7 @@
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
   <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
+  <Import Project="$(RepositoryEngineeringDir)Test.props" Condition="'$(IsTestProject)' == 'true'"/>
 
   <PropertyGroup>
     <TargetFramework>$(NetCurrent)</TargetFramework>
@@ -19,11 +20,6 @@
     <IsAnalyzerProject Condition="!$(IsTestProject) and
                                   ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
-  </PropertyGroup>
-
-  <!-- Making all tests run sequentially until we regroup tests. Tracked under issue https://github.com/dotnet/winforms/issues/8810. -->
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <XUnitCoreSettingsFile>$(RepositoryEngineeringDir)xunit.runner.json</XUnitCoreSettingsFile>
   </PropertyGroup>
 
   <!--
