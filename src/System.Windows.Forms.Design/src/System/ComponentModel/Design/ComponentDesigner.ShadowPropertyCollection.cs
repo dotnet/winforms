@@ -40,7 +40,7 @@ public partial class ComponentDesigner
             }
             set
             {
-                _properties ??= new();
+                _properties ??= [];
                 _properties[propertyName] = value;
             }
         }
@@ -55,14 +55,18 @@ public partial class ComponentDesigner
         /// </summary>
         private PropertyDescriptor? GetShadowedPropertyDescriptor(string propertyName)
         {
-            _descriptors ??= new();
+            _descriptors ??= [];
 
-            if (_descriptors.TryGetValue(propertyName, out PropertyDescriptor? property))
+            if (!_descriptors.TryGetValue(propertyName, out PropertyDescriptor? descriptor))
             {
-                return property;
+                descriptor = TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
+                if (descriptor is not null)
+                {
+                    _descriptors.Add(propertyName, descriptor);
+                }
             }
 
-            return TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
+            return descriptor;
         }
 
         /// <summary>
