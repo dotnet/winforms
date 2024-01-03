@@ -195,7 +195,7 @@ public class DataObjectTests
     public static IEnumerable<object[]> GetAudioStream_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), null };
+        yield return new object[] { new(), null };
 
         MemoryStream stream = new();
         yield return new object[] { stream, stream };
@@ -253,7 +253,7 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> GetData_InvokeStringMocked_TestData()
     {
-        foreach (object result in new object[] { new object(), null })
+        foreach (object result in new object[] { new(), null })
         {
             yield return new object[] { "format", result };
             yield return new object[] { "  ", result };
@@ -280,7 +280,7 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> GetData_StringIDataObject_TestData()
     {
-        foreach (object result in new object[] { new object(), null })
+        foreach (object result in new object[] { new(), null })
         {
             yield return new object[] { "format", result };
             yield return new object[] { "  ", result };
@@ -335,7 +335,7 @@ public class DataObjectTests
     {
         foreach (bool autoConvert in new bool[] { true, false })
         {
-            foreach (object result in new object[] { new object(), null })
+            foreach (object result in new object[] { new(), null })
             {
                 yield return new object[] { "format", autoConvert, result };
                 yield return new object[] { "  ", autoConvert, result };
@@ -370,7 +370,7 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> GetData_InvokeTypeMocked_TestData()
     {
-        foreach (object result in new object[] { new object(), null })
+        foreach (object result in new object[] { new(), null })
         {
             yield return new object[] { typeof(int), result, 1, result };
             yield return new object[] { null, result, 0, null };
@@ -571,7 +571,7 @@ public class DataObjectTests
     public static IEnumerable<object[]> GetFileDropList_TestData()
     {
         yield return new object[] { null, Array.Empty<string>() };
-        yield return new object[] { new object(), Array.Empty<string>() };
+        yield return new object[] { new(), Array.Empty<string>() };
 
         string[] list = ["a", "  ", string.Empty, null];
         yield return new object[] { list, list };
@@ -738,7 +738,7 @@ public class DataObjectTests
     public static IEnumerable<object[]> GetImage_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), null };
+        yield return new object[] { new(), null };
 
         Bitmap image = new(10, 10);
         yield return new object[] { image, image };
@@ -820,31 +820,31 @@ public class DataObjectTests
     public static IEnumerable<object[]> GetText_TextDataFormat_TestData()
     {
         yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, null, string.Empty };
-        yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, new object(), string.Empty };
+        yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, new(), string.Empty };
         yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, string.Empty, string.Empty };
         yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, "  ", "  " };
         yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, "a", "a" };
 
         yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, null, string.Empty };
-        yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, new object(), string.Empty };
+        yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, new(), string.Empty };
         yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, string.Empty, string.Empty };
         yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, "  ", "  " };
         yield return new object[] { TextDataFormat.UnicodeText, DataFormats.UnicodeText, "a", "a" };
 
         yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, null, string.Empty };
-        yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, new object(), string.Empty };
+        yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, new(), string.Empty };
         yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, string.Empty, string.Empty };
         yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, "  ", "  " };
         yield return new object[] { TextDataFormat.Rtf, DataFormats.Rtf, "a", "a" };
 
         yield return new object[] { TextDataFormat.Html, DataFormats.Html, null, string.Empty };
-        yield return new object[] { TextDataFormat.Html, DataFormats.Html, new object(), string.Empty };
+        yield return new object[] { TextDataFormat.Html, DataFormats.Html, new(), string.Empty };
         yield return new object[] { TextDataFormat.Html, DataFormats.Html, string.Empty, string.Empty };
         yield return new object[] { TextDataFormat.Html, DataFormats.Html, "  ", "  " };
         yield return new object[] { TextDataFormat.Html, DataFormats.Html, "a", "a" };
 
         yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, null, string.Empty };
-        yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, new object(), string.Empty };
+        yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, new(), string.Empty };
         yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, string.Empty, string.Empty };
         yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, "  ", "  " };
         yield return new object[] { TextDataFormat.CommaSeparatedValue, DataFormats.CommaSeparatedValue, "a", "a" };
@@ -995,7 +995,7 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> SetData_Object_TestData()
     {
-        yield return new object[] { new object(), typeof(object).FullName };
+        yield return new object[] { new(), typeof(object).FullName };
         yield return new object[] { new Bitmap(10, 10), typeof(Bitmap).FullName };
         yield return new object[] { new Mock<ISerializable>(MockBehavior.Strict).Object, DataFormats.Serializable };
     }
@@ -1049,7 +1049,7 @@ public class DataObjectTests
     public static IEnumerable<object[]> SetData_ObjectIDataObject_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -1141,7 +1141,7 @@ public class DataObjectTests
         foreach (string format in new string[] { "format", "  ", string.Empty, null })
         {
             yield return new object[] { format, null };
-            yield return new object[] { format, new object() };
+            yield return new object[] { format, new() };
         }
     }
 
@@ -1236,7 +1236,7 @@ public class DataObjectTests
             foreach (bool autoConvert in new bool[] { true, false })
             {
                 yield return new object[] { format, autoConvert, null };
-                yield return new object[] { format, autoConvert, new object() };
+                yield return new object[] { format, autoConvert, new() };
             }
         }
     }
@@ -1259,7 +1259,7 @@ public class DataObjectTests
         foreach (Type format in new Type[] { typeof(int), null })
         {
             yield return new object[] { format, null };
-            yield return new object[] { format, new object() };
+            yield return new object[] { format, new() };
         }
     }
 

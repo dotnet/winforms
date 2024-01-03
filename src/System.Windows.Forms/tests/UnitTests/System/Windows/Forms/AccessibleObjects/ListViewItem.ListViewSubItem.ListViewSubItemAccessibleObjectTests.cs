@@ -684,9 +684,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         list.Columns.AddRange(new ColumnHeader[]
         {
-            new ColumnHeader(),
-            new ColumnHeader(),
-            new ColumnHeader()
+            new(),
+            new(),
+            new()
         });
 
         list.Items.Add(listViewItem1);
@@ -725,9 +725,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         list.Columns.AddRange(new ColumnHeader[]
         {
-            new ColumnHeader(),
-            new ColumnHeader(),
-            new ColumnHeader()
+            new(),
+            new(),
+            new()
         });
 
         list.Items.Add(listViewItem1);
