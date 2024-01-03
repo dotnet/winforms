@@ -186,7 +186,7 @@ public unsafe class ComNativeDescriptorTests
         // Hitting the IProvideMultipleClassInfo with our stub object created over a system created IAccessible TypeInfo.
 
         StandardAccessibleObjectWithMultipleClassInfo value = new();
-        using ComScope<IAccessible> accessible = ComHelpers.GetComScope<IAccessible>(value);
+        using var accessible = ComHelpers.GetComScope<IAccessible>(value);
 
         object comWrapper = UnknownComWrappers.Instance.GetOrCreateObjectForComInstance(accessible, CreateObjectFlags.None);
         ComNativeDescriptor descriptor = new();

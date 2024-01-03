@@ -44,9 +44,9 @@ public class SerializableTypesTests
         unsafe void ValidateResult(string blob)
         {
             AxHost.State result = BinarySerialization.EnsureDeserialize<AxHost.State>(blob);
-            using ComScope<global::Windows.Win32.System.Com.StructuredStorage.IPropertyBag> resultPropBag = result.GetPropBag();
+            using var resultPropBag = result.GetPropBag();
             Assert.True(resultPropBag.IsNull);
-            using ComScope<global::Windows.Win32.System.Com.StructuredStorage.IPropertyBag> statePropBag = state.GetPropBag();
+            using var statePropBag = state.GetPropBag();
             Assert.True(statePropBag.IsNull);
 
             Assert.Equal(AxHost.StorageType.StreamInit, result.Type);
@@ -58,7 +58,7 @@ public class SerializableTypesTests
             Assert.Equal(licenseKey, result.LicenseKey);
             Assert.Equal(licenseKey, state.LicenseKey);
 
-            using ComScope<global::Windows.Win32.System.Com.IStream> streamOut = result.GetStream();
+            using var streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
             Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();

@@ -14,7 +14,7 @@ public class DataStreamFromComStreamTests
     public unsafe void Write_ThrowsInvalidCount(int bufferSize, int index, int count)
     {
         using MemoryStream memoryStream = new();
-        using ComScope<IStream> stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream));
+        using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream));
         using DataStreamFromComStream dataStream = new(stream);
         Assert.Throws<IOException>(() => dataStream.Write(new byte[bufferSize], index, count));
     }
@@ -27,7 +27,7 @@ public class DataStreamFromComStreamTests
     public unsafe void Write_DoesNotThrowCountZeroOrLess(int bufferSize, int index, int count)
     {
         using MemoryStream memoryStream = new();
-        using ComScope<IStream> stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream));
+        using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream));
         using DataStreamFromComStream dataStream = new(stream);
         dataStream.Write(new byte[bufferSize], index, count);
     }

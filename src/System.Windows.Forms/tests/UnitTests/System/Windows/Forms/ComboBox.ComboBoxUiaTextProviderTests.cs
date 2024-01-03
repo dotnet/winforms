@@ -890,7 +890,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             // RangeFromChild doesn't throw an exception
             using ComScope<ITextRangeProvider> range = new(null);
-            using ComScope<IRawElementProviderSimple> rawElementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(comboBox.AccessibilityObject);
+            using var rawElementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(comboBox.AccessibilityObject);
             Assert.True(provider.RangeFromChild(rawElementProvider, range).Succeeded);
             // RangeFromChild implementation can be changed so this test can be changed too
             Assert.True(range.IsNull);

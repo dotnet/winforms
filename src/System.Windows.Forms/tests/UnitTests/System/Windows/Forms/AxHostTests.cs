@@ -1607,7 +1607,7 @@ public class AxHostTests
         Bitmap original = new(10, 11);
         original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
         object disp = SubAxHost.GetIPictureDispFromPicture(original);
-        using ComScope<IDispatch> iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
+        using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
 
         VARIANT variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE);
         Assert.NotEqual(0u, variant.data.uintVal);
@@ -1620,7 +1620,7 @@ public class AxHostTests
         variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT);
         Assert.Equal(291u, variant.data.uintVal);
 
-        Bitmap result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
+        var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
         Assert.Equal(original.Size, result.Size);
         Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
         Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
@@ -1632,7 +1632,7 @@ public class AxHostTests
         Metafile original = new("bitmaps/milkmateya01.emf");
         object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
-        using ComScope<IDispatch> iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
+        using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
 
         VARIANT variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE);
         Assert.NotEqual(0u, variant.data.uintVal);
