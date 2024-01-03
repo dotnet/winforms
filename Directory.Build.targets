@@ -5,6 +5,7 @@
   <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.targets" />
+  <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
 
   <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->
   <ItemGroup>
@@ -41,12 +42,6 @@
     <_IsUnderTestsFolder>$(_ProjectDirectoryRelativePath.Contains("\tests\"))</_IsUnderTestsFolder>
     <IsShipping Condition="$(_IsUnderTestsFolder)">false</IsShipping>
 	<RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
-    <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
-    <Platform Condition="'$(Platform)' == 'AnyCPU' or '$(Platform)' == 'Any CPU'">$(TargetArchitecture)</Platform>
-    <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
   </PropertyGroup>
 
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">

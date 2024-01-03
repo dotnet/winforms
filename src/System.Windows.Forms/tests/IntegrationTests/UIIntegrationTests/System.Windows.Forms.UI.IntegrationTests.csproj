@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="$(MicrosoftVisualStudioThreadingVersion)" />
-    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
