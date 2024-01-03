@@ -1,8 +1,3 @@
-<#
-.SYNOPSIS
-Downloads 32-bit and 64-bit procdump executables and returns the path to where they were installed.
-eng\MergeCoverageData.ps1
-#>
 [CmdletBinding(PositionalBinding=$false)]
 Param(
   [string][Alias('c')]$configuration = "Debug",
