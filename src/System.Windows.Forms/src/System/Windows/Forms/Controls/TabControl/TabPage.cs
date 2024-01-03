@@ -502,10 +502,7 @@ public partial class TabPage : Panel
         return (TabPage?)c;
     }
 
-    internal Rectangle GetPageRectangle()
-    {
-        return base.GetToolNativeScreenRectangle();
-    }
+    internal Rectangle GetPageRectangle() => base.GetToolNativeScreenRectangle();
 
     internal override Rectangle GetToolNativeScreenRectangle()
     {
