@@ -4,6 +4,14 @@
 using System.Collections;
 
 namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  Adapter for bridging between generic and non-generic lists.
+///  It implements both the generic <see cref="IList&lt;T&gt;"/> and the non-generic
+///  <see cref="IWrapper&lt;IList&gt;"/> interfaces
+///  to provide a unified interface for working with IList collections.
+/// </summary>
+/// <typeparam name="T">The type of elements in the list.</typeparam>
 internal sealed class ListAdapter<T> : IList<T>, IWrapper<IList>
 {
     private readonly IList _list;
@@ -52,15 +60,4 @@ internal sealed class ListAdapter<T> : IList<T>, IWrapper<IList>
     }
 
     public IList Unwrap() => _list;
-}
-
-internal interface IWrapper<T>
-{
-    T Unwrap();
-}
-
-internal static class AdapterHelpers
-{
-    internal static IList Unwrap<T>(this IList<T> list) => list is IWrapper<IList> wrapper ? wrapper.Unwrap() : (IList)list;
-    internal static IList<T> Adapt<T>(this IList list) => list is IList<T> iList ? iList : new ListAdapter<T>(list);
 }
