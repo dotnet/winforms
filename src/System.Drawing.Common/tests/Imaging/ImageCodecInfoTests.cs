@@ -210,20 +210,20 @@ public class ImageCodecInfoTests
     }
 
     [Fact]
-    public void CountEncoders_ReturnsExcpected()
+    public void CountEncoders_ReturnsExpected()
     {
         Assert.Equal(5, _encoders.Count);
     }
 
     [Fact]
-    public void CountDecoders_ReturnsExcpected()
+    public void CountDecoders_ReturnsExpected()
     {
         Assert.Equal(8, _decoders.Count);
     }
 
     [Theory]
     [MemberData(nameof(CodecInfoTestData))]
-    public void CheckDecoderAndEncoder_ReturnsExpecetd(string clsid, ImageFormat format, string codecName, string dllName,
+    public void CheckDecoderAndEncoder_ReturnsExpected(string clsid, ImageFormat format, string codecName, string dllName,
         string fileNameExtension, ImageCodecFlags flags, string formatDescription,
         string mimeType, int version, int signatureLength, string mask, string pattern, string pattern2)
     {
