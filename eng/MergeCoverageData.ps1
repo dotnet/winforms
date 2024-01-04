@@ -12,6 +12,7 @@ $TestresultPath = Join-Path $artifactsDir "bin\CodeCoverage\coverage\Cobertura.x
 if(Test-Path -Path $TestresultPath){
   echo "Merge Data"
 }
+
 dotnet tool install dotnet-reportgenerator-globaltool --tool-path $converageToolsPath
 $converageTools = Join-Path $converageToolsPath "reportgenerator.exe"
 Test-Path -Path $converageTools
