@@ -6,7 +6,7 @@ using System.Collections;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Helpers for adapting between generic and non-generic lists.
+///  Helpers for adapting between generic and non-generic lists.
 /// </summary>
 internal static class AdapterHelpers
 {
