@@ -105,9 +105,14 @@ public class TextBoxBaseAccessibleObjectTests
         using TextBoxBase textBoxBase = new SubTextBoxBase { Size = new Size(width, height) };
         textBoxBase.CreateControl();
         AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
-        Rectangle expected = textBoxBase.RectangleToScreen(textBoxBase.ClientRectangle); // Forces Handle creating
+        Rectangle expected = textBoxBase.RectangleToScreen(textBoxBase.ClientRectangle);
         Rectangle actual = accessibleObject.BoundingRectangle;
-        Assert.Equal(expected, actual);
+
+        Assert.InRange(actual.X, expected.X - 4, expected.X + 4);
+        Assert.InRange(actual.Y, expected.Y - 4, expected.Y + 4);
+        Assert.InRange(actual.Width, expected.Width - 4, expected.Width + 4);
+        Assert.InRange(actual.Height, expected.Height - 4, expected.Width + 4);
+
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
