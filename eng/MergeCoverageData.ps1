@@ -8,11 +8,9 @@ $converageToolsPath = Join-Path $artifactsDir "tools"
 if (!(Test-Path -Path $converageToolsPath)) {
   New-Item -Path $converageToolsPath -ItemType Directory
 }
-if(Test-Path -Path "$(BaseOutputPath)coverage\Cobertura.xml"){
+$TestresultPath = Join-Path $artifactsDir "bin\CodeCoverage\coverage\Cobertura.xml"
+if(Test-Path -Path $TestresultPath){
   echo "Merge Data"
-}
-if(Test-Path -Path "$(PkgReportGenerator)\tools\net47\ReportGenerator.exe"){
-  echo "Test tools"
 }
 dotnet tool install dotnet-reportgenerator-globaltool --tool-path $converageToolsPath
 $converageTools = Join-Path $converageToolsPath "reportgenerator.exe"
