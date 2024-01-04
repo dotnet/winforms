@@ -11,6 +11,7 @@ using System.Windows.Forms.TestUtilities;
 using System.Runtime.CompilerServices;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.Tests;
 
@@ -2355,6 +2356,28 @@ public partial class PropertyGridTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertyTabCollection_AddAndRemoveTabType_Success()
+    {
+        using PropertyGrid grid = new();
+        Assert.Equal(1, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab));
+        Assert.Equal(2, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.RemoveTabType(typeof(TestPropertyTab));
+        Assert.Equal(1, grid.PropertyTabs.Count);
+    }
+
+    private class TestPropertyTab : PropertyTab
+    {
+        public override string TabName => "TestTabName";
+
+        public override Bitmap Bitmap => new(10, 10);
+
+        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes) => throw new NotImplementedException();
     }
 
     [WinFormsFact]
