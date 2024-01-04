@@ -143,11 +143,6 @@ jobs:
       displayName: Upload coverage to codecov.io
       condition: and(succeeded(), eq(variables._Coverage, 'true'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
-    # Merge code coverage data
-    - pwsh: eng\MergeCoverageData.ps1 -configuration $(_BuildConfig) -artifactsDir '$(Build.SourcesDirectory)\artifacts'
-      displayName: Merge Coverage Data
-      condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
-
     #Publish code coverage results
     - task: PublishCodeCoverageResults@1
       inputs:
