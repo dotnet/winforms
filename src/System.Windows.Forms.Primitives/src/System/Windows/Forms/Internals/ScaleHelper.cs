@@ -322,6 +322,23 @@ internal static partial class ScaleHelper
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
 
+    internal static Size LogicalSystemIconSize
+    {
+        get
+        {
+            Size logicalSystemIconSize = new(16, 16);
+
+            if (OsVersion.IsWindows10_1607OrGreater())
+            {
+                logicalSystemIconSize = new(
+                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXICON, OneHundredPercentLogicalDpi),
+                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CYICON, OneHundredPercentLogicalDpi));
+            }
+
+            return logicalSystemIconSize;
+        }
+    }
+
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
     /// </summary>
@@ -332,7 +349,7 @@ internal static partial class ScaleHelper
     ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
     internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(SystemIconSize, dpi));
+        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.
