@@ -26,7 +26,7 @@ public class DragDropFormatTests
         {
             pUnkForRelease = null,
             tymed = TYMED.TYMED_HGLOBAL,
-            unionmember = PInvoke.GlobalAlloc(
+            unionmember = PInvokeCore.GlobalAlloc(
                 GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 BOOL.Size)
         };
@@ -65,7 +65,7 @@ public class DragDropFormatTests
         {
             dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
             dragDropFormat.Dispose();
-            int handleSize = (int)PInvoke.GlobalSize((HGLOBAL)dragDropFormat.Medium.unionmember);
+            int handleSize = (int)PInvokeCore.GlobalSize((HGLOBAL)dragDropFormat.Medium.unionmember);
             Assert.Equal(0, handleSize);
             Assert.Null(dragDropFormat.Medium.pUnkForRelease);
             Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
@@ -173,12 +173,12 @@ public class DragDropFormatTests
     {
         try
         {
-            void* basePtr = PInvoke.GlobalLock(handle);
+            void* basePtr = PInvokeCore.GlobalLock(handle);
             *(BOOL*)basePtr = (BOOL)inDragLoop;
         }
         finally
         {
-            PInvoke.GlobalUnlock(handle);
+            PInvokeCore.GlobalUnlock(handle);
         }
     }
 }

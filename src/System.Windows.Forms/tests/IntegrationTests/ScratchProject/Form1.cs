@@ -9,8 +9,18 @@ namespace ScratchProject;
 [DesignerCategory("Default")]
 public partial class Form1 : Form
 {
+    private RichTextBox _textBox;
+
     public Form1()
     {
         InitializeComponent();
+
+        _textBox = new RichTextBox
+        {
+            Dock = DockStyle.Fill,
+            EnableAutoDragDrop = true
+        };
+
+        Controls.Add(_textBox);
     }
 }
