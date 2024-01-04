@@ -152,9 +152,9 @@ jobs:
     - task: PublishCodeCoverageResults@1
       inputs:
         codeCoverageTool: 'cobertura'
-        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)\Cobertura.xml'
+        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\Cobertura.xml'
         pathToSources: '$(Build.SourcesDirectory)'
-        reportDirectory: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)'
+        reportDirectory: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage'
       displayName: PublishCodeCoverageResults
       condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
