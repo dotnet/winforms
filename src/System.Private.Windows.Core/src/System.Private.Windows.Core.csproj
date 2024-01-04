@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <AssemblyName>System.Windows.Primitives</AssemblyName>
+    <AssemblyName>System.Private.Windows.Core</AssemblyName>
     <TargetFrameworks>$(NetCurrent);$(NetPrevious);$(NetMinimum)</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
@@ -16,11 +16,6 @@
       We don't care about CLS compliance since everything here is internal and we want to match native types.
     -->
     <NoWarn>$(NoWarn);CS3016</NoWarn>
-    <!--
-      IL Trim warnings which should be removed in order to make WinForms trimmable
-      See https://github.com/dotnet/winforms/issues/4649
-    <NoWarn>$(NoWarn);IL2026;IL2050</NoWarn>
-    -->
     <!--
       Libraries code has changed a number of APIs from `ref` to `in`. CSWin32 generates code that passes by `ref`
       to some of these. Disabling for now until we can get https://github.com/microsoft/CsWin32/issues/1014 resolved.

@@ -152,7 +152,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProject", "src\Syste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTest", "src\System.Windows.Forms\tests\IntegrationTests\TrimTest\TrimTest.csproj", "{BA61D5A8-29E9-41AA-A3FA-B7F0A7F9A191}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Primitives", "src\System.Windows.Primitives\src\System.Windows.Primitives.csproj", "{61376D2A-4AD5-48F4-BF99-2BB630E21945}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core", "src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj", "{61376D2A-4AD5-48F4-BF99-2BB630E21945}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}"
 	ProjectSection(SolutionItems) = preProject
@@ -163,6 +163,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{8B4B1E09-B3C
 		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
 		NuGet.Config = NuGet.Config
+		eng\packageContent.targets = eng\packageContent.targets
+		eng\Publishing.props = eng\Publishing.props
 		start-vs.cmd = start-vs.cmd
 		eng\Versions.props = eng\Versions.props
 	EndProjectSection

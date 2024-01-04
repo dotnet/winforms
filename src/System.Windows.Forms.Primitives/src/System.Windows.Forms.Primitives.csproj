@@ -35,7 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
     <ProjectReference Include="..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Primitives\src\System.Windows.Primitives.csproj" />
+    <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -320,7 +320,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <EmbeddedResource Include="Resources\System\Drawing\Printing\PrintDocument.bmp" />
     <EmbeddedResource Include="Resources\System\Drawing\ShieldIcon.ico" LogicalName="System.Drawing.ShieldIcon.ico" />
 
-    <ProjectReference Include="..\..\System.Windows.Primitives\src\System.Windows.Primitives.csproj">
+    <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj">
       <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
       <Pack>true</Pack>
     </ProjectReference>

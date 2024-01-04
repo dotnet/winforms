@@ -56,7 +56,7 @@
     </PropertyGroup>
 
     <!-- 
-      If this file does NOT exist, and the assembly is NOT a facade assembly, this is an error. 
+      If this file does NOT exist, and the assembly is NOT a facade assembly, this is an error.
       This means we build a real assembly that has no associated official intellisense docs.
       Contact the intellisense team for guidance.
     -->
@@ -97,6 +97,7 @@
           SkipUnchangedFiles="true" />
   </Target>
 
+  <!-- This is copied from runtime/eng/packaging.targets to allow adding additional project references to packages. -->
   <Target Name="IncludeProjectReferencesWithPackAttributeInPackage"
           Condition="'@(ProjectReference)' != '' and @(ProjectReference->AnyHaveMetadataValue('Pack', 'true'))"
           DependsOnTargets="BuildOnlySettings;ResolveReferences">
