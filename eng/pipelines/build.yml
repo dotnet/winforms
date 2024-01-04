@@ -133,11 +133,6 @@ jobs:
         $(_InternalRuntimeDownloadArgs)
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish-${{ parameters.targetArchitecture }}.binlog
       displayName: Pack, Sign, and Publish
-
-    # Merge code coverage data
-    #- pwsh: eng\MergeCoverageData.ps1 -configuration $(_BuildConfig) -artifactsDir '$(Build.SourcesDirectory)\artifacts'
-    #  displayName: Merge Coverage Data
-    #  condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
       
     # Upload code coverage data
     - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
@@ -148,11 +143,16 @@ jobs:
       displayName: Upload coverage to codecov.io
       condition: and(succeeded(), eq(variables._Coverage, 'true'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
+    # Merge code coverage data
+    - pwsh: eng\MergeCoverageData.ps1 -configuration $(_BuildConfig) -artifactsDir '$(Build.SourcesDirectory)\artifacts'
+      displayName: Merge Coverage Data
+      condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
+
     #Publish code coverage results
     - task: PublishCodeCoverageResults@1
       inputs:
         codeCoverageTool: 'cobertura'
-        summaryFileLocation: '$(BaseOutputPath)coverage\Cobertura.xml'
+        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)\Cobertura.xml'
         pathToSources: '$(Build.SourcesDirectory)'
         reportDirectory: '$(Build.SourcesDirectory)\artifacts\CoverageResult\$(_BuildConfig)'
       displayName: PublishCodeCoverageResults
