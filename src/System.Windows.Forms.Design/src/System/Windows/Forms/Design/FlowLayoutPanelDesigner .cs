@@ -617,8 +617,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             }
 
             // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
-            // List<Control> originalControls = new();
-            ArrayList originalControls = new();
+            List<Control> originalControls = [];
 
             // Remove the controls in the drag collection - don't need to do this if we are copying.
             if (!performCopy)
@@ -637,8 +636,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             else
             {
                 // We are doing a copy, so let's copy the controls.
-                List<Control> tempList = new();
-                tempList.AddRange(_dragControls);
+                List<Control> tempList = [.. _dragControls];
 
                 DesignerUtils.CopyDragObjects(tempList, Component.Site);
 
@@ -656,10 +654,10 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
                     // Remember to set the new primary control.
                     if (_primaryDragControl.Equals(_dragControls[j]))
                     {
-                        _primaryDragControl = tempList[j] as Control;
+                        _primaryDragControl = tempList[j];
                     }
 
-                    _dragControls[j] = tempList[j] as Control;
+                    _dragControls[j] = tempList[j];
                 }
             }
 
@@ -705,7 +703,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             {
                 for (int i = 0; i < originalControls.Count; i++)
                 {
-                    _dragControls[i] = (Control)originalControls[i];
+                    _dragControls[i] = originalControls[i];
                 }
             }
 
