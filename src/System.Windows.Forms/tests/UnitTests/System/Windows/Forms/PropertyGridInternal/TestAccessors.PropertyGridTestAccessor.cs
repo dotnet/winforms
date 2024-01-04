@@ -3,7 +3,7 @@
 
 namespace System;
 
-internal static partial class InternalTestAccessors
+public static partial class TestAccessors
 {
     public class PropertyGridTestAccessor : TestAccessor<Windows.Forms.PropertyGrid>
     {
