@@ -358,7 +358,7 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     public virtual IList SnapLines => EdgeAndMarginSnapLines().Unwrap();
 
-    internal IList<SnapLine> SnapLinesInternal => SnapLines.Adapt<SnapLine>();
+    internal IList<SnapLine> SnapLinesInternal => EdgeAndMarginSnapLines();
 
     internal IList<SnapLine> EdgeAndMarginSnapLines() => EdgeAndMarginSnapLines(Control.Margin);
 
