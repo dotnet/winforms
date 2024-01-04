@@ -14,8 +14,7 @@ $converageTools = Join-Path $converageToolsPath "reportgenerator.exe"
 Test-Path -Path $converageTools
 $reportCoverage = Join-Path $artifactsDir "bin\*\Debug\*\coverage\*.coverage"
 $resultDir = Join-Path $artifactsDir "CoverageResult\Debug"
-$reporttype = 'HtmlInline_AzurePipelines'
-$reporttypeXml = 'Cobertura'
+$reporttype = 'Cobertura'
 $assemblyFilters = '+System.Windows.Forms*;-*Tests.dll'
 $fileFilters = '-*.g.cs'
-& $converageTools -reports:$reportCoverage -targetDir:$resultDir -reporttypes:$reporttypeXml -assemblyfilters:$assemblyFilters -filefilters:$fileFilters
+& $converageTools -reports:$reportCoverage -targetDir:$resultDir -reporttypes:$reporttype -assemblyfilters:$assemblyFilters -filefilters:$fileFilters
