@@ -8,11 +8,11 @@ $converageToolsPath = Join-Path $artifactsDir "tools"
 if (!(Test-Path -Path $converageToolsPath)) {
   New-Item -Path $converageToolsPath -ItemType Directory
 }
-if(!(Test-Path -Path $(PkgReportGenerator))){
+if(!(Test-Path -Path $PkgReportGenerator)){
  echo 'Can not find the path'
 }
-if(Test-Path -Path $(PkgReportGenerator)){
- $reportTools = Join-Path $converageToolsPath "tools\net47\ReportGenerator.exe"
+if(Test-Path -Path $PkgReportGenerator){
+ $reportTools = Join-Path $PkgReportGenerator "tools\net47\ReportGenerator.exe"
   if(Test-Path -Path $reportTools){
   echo 'Can find the ReportGenerator'
   }
