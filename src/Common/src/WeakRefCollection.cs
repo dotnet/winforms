@@ -9,6 +9,7 @@ namespace System.Collections.Generic;
 internal sealed class WeakRefCollection<T>() : IEnumerable<T> where T : class
 {
     private readonly List<WeakReference<T>> _list = [];
+
     /// <summary>
     ///  If set to true, triggers the execution of ScavengeReferences during the next
     ///  <see cref="Add(T)"/> call to clean up dead weak references.
@@ -30,7 +31,7 @@ internal sealed class WeakRefCollection<T>() : IEnumerable<T> where T : class
     }
 
     /// <summary>
-    /// Cleans up dead weak references.
+    ///  Cleans up dead weak references.
     /// </summary>
     public void ScavengeReferences()
     {
