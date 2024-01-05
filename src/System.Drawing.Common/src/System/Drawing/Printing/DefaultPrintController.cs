@@ -11,7 +11,7 @@ namespace System.Drawing.Printing;
 /// <summary>
 ///  Specifies a print controller that sends information to a printer.
 /// </summary>
-public class StandardPrintController : PrintController
+public unsafe class StandardPrintController : PrintController
 {
     private DeviceContext? _dc;
     private Graphics? _graphics;
@@ -58,15 +58,15 @@ public class StandardPrintController : PrintController
 
         base.OnStartPage(document, e);
         e.PageSettings.CopyToHdevmode(_modeHandle);
-        IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, _modeHandle));
+        void* modePointer = PInvokeCore.GlobalLock(_modeHandle);
         try
         {
-            IntPtr result = Gdi32.ResetDC(new HandleRef(_dc, _dc.Hdc), new HandleRef(null, modePointer));
+            IntPtr result = Gdi32.ResetDC(new HandleRef(_dc, _dc.Hdc), new HandleRef(null, (nint)modePointer));
             Debug.Assert(result == _dc.Hdc, "ResetDC didn't return the same handle I gave it");
         }
         finally
         {
-            Kernel32.GlobalUnlock(new HandleRef(this, _modeHandle));
+            PInvokeCore.GlobalUnlock(_modeHandle);
         }
 
         _graphics = Graphics.FromHdcInternal(_dc.Hdc);

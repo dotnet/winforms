@@ -151,9 +151,9 @@ public class DataGridViewSelectedColumnCollectionTests
     {
         using DataGridView control = new();
         DataGridViewSelectedColumnCollection collection = control.SelectedColumns;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsFact]
@@ -174,9 +174,9 @@ public class DataGridViewSelectedColumnCollectionTests
         control.Columns[2].Selected = true;
 
         DataGridViewSelectedColumnCollection collection = control.SelectedColumns;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, control.Columns[2], control.Columns[0] }, array);
+        Assert.Equal([1, control.Columns[2], control.Columns[0]], array);
     }
 
     public static IEnumerable<object[]> Insert_TestData()
@@ -298,7 +298,7 @@ public class DataGridViewSelectedColumnCollectionTests
     public static IEnumerable<object[]> IListItem_SetTestData()
     {
         yield return new object[] { 0, null };
-        yield return new object[] { -1, new object() };
+        yield return new object[] { -1, new() };
         yield return new object[] { 1, new DataGridViewColumn() };
     }
 
@@ -315,7 +315,7 @@ public class DataGridViewSelectedColumnCollectionTests
     public static IEnumerable<object[]> IListAdd_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewColumn() };
     }
 
@@ -344,9 +344,9 @@ public class DataGridViewSelectedColumnCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedColumnCollection collection = control.SelectedColumns;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsFact]
@@ -368,15 +368,15 @@ public class DataGridViewSelectedColumnCollectionTests
 
         DataGridViewSelectedColumnCollection collection = control.SelectedColumns;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, control.Columns[2], control.Columns[0] }, array);
+        Assert.Equal([1, control.Columns[2], control.Columns[0]], array);
     }
 
     public static IEnumerable<object[]> IListContains_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewColumn() };
     }
 
@@ -476,7 +476,7 @@ public class DataGridViewSelectedColumnCollectionTests
     public static IEnumerable<object[]> IListIndexOf_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewColumn() };
     }
 
@@ -521,7 +521,7 @@ public class DataGridViewSelectedColumnCollectionTests
         foreach (int index in new int[] { -1, 0, 1 })
         {
             yield return new object[] { index, null };
-            yield return new object[] { index, new object() };
+            yield return new object[] { index, new() };
             yield return new object[] { index, new DataGridViewColumn() };
         }
     }
@@ -539,7 +539,7 @@ public class DataGridViewSelectedColumnCollectionTests
     public static IEnumerable<object[]> IListRemove_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewColumn() };
     }
 

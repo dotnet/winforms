@@ -684,9 +684,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         list.Columns.AddRange(new ColumnHeader[]
         {
-            new ColumnHeader(),
-            new ColumnHeader(),
-            new ColumnHeader()
+            new(),
+            new(),
+            new()
         });
 
         list.Items.Add(listViewItem1);
@@ -725,9 +725,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         list.Columns.AddRange(new ColumnHeader[]
         {
-            new ColumnHeader(),
-            new ColumnHeader(),
-            new ColumnHeader()
+            new(),
+            new(),
+            new()
         });
 
         list.Items.Add(listViewItem1);
@@ -854,7 +854,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listViewItem._listView = listView;
         ListViewItem.ListViewSubItem subItem = new(listViewItem, "Test subItem");
 
-        var actual = (int)subItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId);
+        int actual = (int)subItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId);
 
         Assert.Equal(Environment.ProcessId, actual);
         Assert.False(listView.IsHandleCreated);
@@ -939,7 +939,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
-        var actual = (bool)listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
+        bool actual = (bool)listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
 
         Assert.False(actual);
         Assert.False(listView.IsHandleCreated);

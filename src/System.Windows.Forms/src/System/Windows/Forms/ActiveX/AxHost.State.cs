@@ -134,8 +134,8 @@ public abstract partial class AxHost
             HGLOBAL hglobal = default;
             if (_buffer is not null)
             {
-                hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE, (uint)_length);
-                void* pointer = PInvoke.GlobalLock(hglobal);
+                hglobal = PInvokeCore.GlobalAlloc(GMEM_MOVEABLE, (uint)_length);
+                void* pointer = PInvokeCore.GlobalLock(hglobal);
                 try
                 {
                     if (pointer is not null)
@@ -145,14 +145,14 @@ public abstract partial class AxHost
                 }
                 finally
                 {
-                    PInvoke.GlobalUnlock(hglobal);
+                    PInvokeCore.GlobalUnlock(hglobal);
                 }
             }
 
             ILockBytes* lockBytes;
             if (PInvoke.CreateILockBytesOnHGlobal(hglobal, true, &lockBytes).Failed)
             {
-                PInvoke.GlobalFree(hglobal);
+                PInvokeCore.GlobalFree(hglobal);
                 return;
             }
 
@@ -175,7 +175,7 @@ public abstract partial class AxHost
             if (hr.Failed)
             {
                 lockBytes->Release();
-                PInvoke.GlobalFree(hglobal);
+                PInvokeCore.GlobalFree(hglobal);
             }
 
             _lockBytes = new(lockBytes, takeOwnership: true);
@@ -269,7 +269,7 @@ public abstract partial class AxHost
                 _buffer = new byte[_length];
                 HGLOBAL hglobal;
                 PInvoke.GetHGlobalFromILockBytes(lockBytes, &hglobal).ThrowOnFailure();
-                void* pointer = PInvoke.GlobalLock(hglobal);
+                void* pointer = PInvokeCore.GlobalLock(hglobal);
 
                 if (pointer is not null)
                 {
@@ -279,7 +279,7 @@ public abstract partial class AxHost
                     }
                     finally
                     {
-                        PInvoke.GlobalUnlock(hglobal);
+                        PInvokeCore.GlobalUnlock(hglobal);
                     }
                 }
                 else

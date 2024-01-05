@@ -217,7 +217,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         listView.Columns[columnIndex].DisplayIndex = value;
-        var result = new int[3];
+        int[] result = new int[3];
         Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNORDERARRAY, 3, ref result[0]));
         Assert.Equal(expectedDisplayIndices, result);
     }

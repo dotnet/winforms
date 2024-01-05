@@ -1,0 +1,6 @@
+DMBIN_*
+DMPAPER_*
+DMRES_*
+DocumentProperties
+GdiplusStartup
+GdiplusStartupInputEx

@@ -80,7 +80,7 @@ public class ToolStripItemAccessibleObjectTests
         item.AccessibleDescription = "Test Accessible Description";
         AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
-        var accessibleObjectDescription = toolStripItemAccessibleObject.Description;
+        string accessibleObjectDescription = toolStripItemAccessibleObject.Description;
 
         Assert.Equal("Test Accessible Description", accessibleObjectDescription);
     }

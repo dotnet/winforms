@@ -18,8 +18,8 @@ public class ResXResourceWriterTests
     [Fact]
     public void TestRoundTrip()
     {
-        var key = "Some.Key.Name";
-        var value = "Some.Key.Value";
+        string key = "Some.Key.Name";
+        string value = "Some.Key.Value";
 
         using (MemoryStream stream = new())
         {
@@ -28,7 +28,7 @@ public class ResXResourceWriterTests
                 writer.AddResource(key, value);
             }
 
-            var buffer = stream.ToArray();
+            byte[] buffer = stream.ToArray();
             using (ResXResourceReader reader = new(new MemoryStream(buffer)))
             {
                 var dictionary = new Dictionary<object, object>();

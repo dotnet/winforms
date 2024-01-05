@@ -24,7 +24,7 @@ public class DataGridViewRowConverterTests
         using DataGridViewRow row = new();
 
         TypeConverter converter = TypeDescriptor.GetConverter(row);
-        var descriptor = converter.ConvertTo(row, typeof(InstanceDescriptor));
+        object descriptor = converter.ConvertTo(row, typeof(InstanceDescriptor));
 
         Assert.NotNull(descriptor);
         Assert.IsType<InstanceDescriptor>(descriptor);

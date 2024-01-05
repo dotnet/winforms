@@ -24,7 +24,7 @@ public class SerializableTypesTests
 
         using (MemoryStream stream = new(256))
         {
-            var bytes = Encoding.UTF8.GetBytes(payload);
+            byte[] bytes = Encoding.UTF8.GetBytes(payload);
             using (BinaryWriter writer = new(stream))
             {
                 writer.Write(bytes.Length);
@@ -108,7 +108,7 @@ public class SerializableTypesTests
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
         LinkArea linkArea = new(5, 7);
-        var netBlob = BinarySerialization.ToBase64String(linkArea);
+        string netBlob = BinarySerialization.ToBase64String(linkArea);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);
@@ -135,7 +135,7 @@ public class SerializableTypesTests
 
         listViewGroup.Items.Add(new ListViewItem("Item"));
 
-        var netBlob = BinarySerialization.ToBase64String(listViewGroup);
+        string netBlob = BinarySerialization.ToBase64String(listViewGroup);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);
@@ -250,7 +250,7 @@ public class SerializableTypesTests
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
         Padding padding = new(1, 2, 3, 4);
-        var netBlob = BinarySerialization.ToBase64String(padding);
+        string netBlob = BinarySerialization.ToBase64String(padding);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);
@@ -346,7 +346,7 @@ public class SerializableTypesTests
     public void TreeNodeAndPropertyBag_RoundTripAndExchangeWithNet()
     {
         using BinaryFormatterScope formatterScope = new(enable: true);
-        var children = new TreeNode[] { new TreeNode("node2"), new TreeNode("node3") };
+        var children = new TreeNode[] { new("node2"), new("node3") };
         TreeNode treeNodeIn = new("node1", 1, 2, children)
         {
             ToolTipText = "tool tip text",
@@ -358,7 +358,7 @@ public class SerializableTypesTests
             NodeFont = new Font(FontFamily.GenericSansSerif, 9f)
         };
 
-        var netBlob = BinarySerialization.ToBase64String(treeNodeIn);
+        string netBlob = BinarySerialization.ToBase64String(treeNodeIn);
 
         // ensure we can deserialise NET serialised data and continue to match the payload
         ValidateResult(netBlob);

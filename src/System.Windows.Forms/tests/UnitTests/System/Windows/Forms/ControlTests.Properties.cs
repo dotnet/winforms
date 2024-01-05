@@ -9254,7 +9254,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
 
-        var keyState = new byte[256];
+        byte[] keyState = new byte[256];
         fixed (byte* b = keyState)
         {
             Assert.True(PInvoke.GetKeyboardState(b));

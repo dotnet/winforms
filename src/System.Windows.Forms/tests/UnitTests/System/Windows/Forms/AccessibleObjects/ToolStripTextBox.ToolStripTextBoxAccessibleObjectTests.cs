@@ -56,7 +56,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
         };
 
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-        var accessibleObjectDescription = toolStripTextBoxAccessibleObject.Description;
+        string accessibleObjectDescription = toolStripTextBoxAccessibleObject.Description;
 
         Assert.Equal("Test Description", accessibleObjectDescription);
     }

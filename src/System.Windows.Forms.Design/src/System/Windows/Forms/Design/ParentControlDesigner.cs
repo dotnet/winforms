@@ -295,9 +295,13 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     // We need to allocation new ArrayList and pass it to the caller..
     // So its ok to Suppress this.
     protected void AddPaddingSnapLines(ref ArrayList snapLines)
-    {
-        snapLines ??= new ArrayList(4);
+        => AddPaddingSnapLinesCommon((snapLines ??= new(4)).Adapt<SnapLine>());
 
+    internal void AddPaddingSnapLines(ref IList<SnapLine> snapLines)
+        => AddPaddingSnapLinesCommon(snapLines ??= new List<SnapLine>(4));
+
+    private void AddPaddingSnapLinesCommon(IList<SnapLine> snapLines)
+    {
         // In order to add padding, we need to get the offset from the usable client area of our control
         // and the actual origin of our control.  In other words: how big is the non-client area here?
         // Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
@@ -328,16 +332,16 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         get
         {
-            ArrayList snapLines = base.SnapLines as ArrayList;
+            IList<SnapLine> snapLines = SnapLinesInternal;
 
             if (snapLines is null)
             {
                 Debug.Fail("why did base.SnapLines return null?");
-                snapLines = new ArrayList(4);
+                snapLines = new List<SnapLine>(4);
             }
 
             AddPaddingSnapLines(ref snapLines);
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 

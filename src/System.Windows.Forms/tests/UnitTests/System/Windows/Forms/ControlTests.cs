@@ -959,7 +959,7 @@ public partial class ControlTests
         toolStrip1_ComboBox1.ComboBox.AssignParent(toolStrip1);
         toolStrip1_TextBox1.Control.AssignParent(toolStrip1);
 
-        var result = form.SelectNextControl(toolStrip1_ComboBox1.ComboBox, forward: true, tabStopOnly: true, nested: true, wrap: true);
+        bool result = form.SelectNextControl(toolStrip1_ComboBox1.ComboBox, forward: true, tabStopOnly: true, nested: true, wrap: true);
         Assert.True(result);
         Assert.True(toolStrip2_ComboBox1.Focused);
         Assert.True(toolStrip2.Items[0].Selected);
@@ -1016,7 +1016,7 @@ public partial class ControlTests
         toolStrip2_ComboBox1.ComboBox.AssignParent(toolStrip2);
         toolStrip2_ComboBox2.ComboBox.AssignParent(toolStrip2);
 
-        var result = form.SelectNextControl(toolStrip2_ComboBox2.ComboBox, forward: false, tabStopOnly: true, nested: true, wrap: true);
+        bool result = form.SelectNextControl(toolStrip2_ComboBox2.ComboBox, forward: false, tabStopOnly: true, nested: true, wrap: true);
         Assert.True(result);
         Assert.True(toolStrip1.Focused);
         Assert.True(toolStrip1.Items[0].Selected);

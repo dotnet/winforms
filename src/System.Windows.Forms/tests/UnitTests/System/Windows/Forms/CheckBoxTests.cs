@@ -419,9 +419,9 @@ public class CheckBoxTests
     public void CheckBox_ToStringTest()
     {
         using CheckBox box = new();
-        var expected = "System.Windows.Forms.CheckBox, CheckState: 0";
+        string expected = "System.Windows.Forms.CheckBox, CheckState: 0";
 
-        var actual = box.ToString();
+        string actual = box.ToString();
 
         Assert.Equal(expected, actual);
     }

@@ -45,7 +45,7 @@ public class EventsTabTests
         foreach (IServiceProvider provider in new object[] { null, nullMockServiceProvider.Object, invalidMockServiceProvider.Object })
         {
             yield return new object[] { null, provider, null };
-            yield return new object[] { new object(), provider, null };
+            yield return new object[] { new(), provider, null };
             yield return new object[] { new ClassWithDefaultEvent(), provider, null };
 
             Mock<ISite> nullMockSite = new();
@@ -114,7 +114,7 @@ public class EventsTabTests
             })
         {
             yield return new object[] { null, e, null };
-            yield return new object[] { new object(), e, null };
+            yield return new object[] { new(), e, null };
             yield return new object[] { new Component(), e, null };
             yield return new object[] { new ClassWithDefaultEvent(), e, e?.NewDesigner == mockDesignerHost.Object ? descriptor : null };
         }

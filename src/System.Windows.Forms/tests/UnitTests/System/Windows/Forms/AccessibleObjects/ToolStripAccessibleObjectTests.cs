@@ -68,7 +68,7 @@ public class ToolStripAccessibleObjectTests
         };
 
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
-        var accessibleObjectDescription = toolStripAccessibleObject.Description;
+        string accessibleObjectDescription = toolStripAccessibleObject.Description;
 
         Assert.Equal("Test Description", accessibleObjectDescription);
     }

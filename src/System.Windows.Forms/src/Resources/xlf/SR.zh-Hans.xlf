@@ -5205,6 +5205,11 @@ Do you want to replace it?</source>
         <target state="translated">显示在对话框的树视图控件上方的字符串。该字符串可用来指定显示给用户的指导信息。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">控制在用户导航视图或编辑文件名(如果适用)之前是否禁用对话框的“确定”按钮。注意: 禁用“确定”按钮不会阻止 Enter 键提交对话框。</target>
@@ -5218,6 +5223,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">对话框中最先选择的文件夹或用户最后选择的文件夹的路径。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">

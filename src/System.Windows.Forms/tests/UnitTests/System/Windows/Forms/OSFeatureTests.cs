@@ -41,7 +41,7 @@ public class OSFeatureTests
     {
         yield return new object[] { OSFeature.LayeredWindows, new Version(0, 0, 0, 0) };
         yield return new object[] { OSFeature.Themes, new Version(0, 0, 0, 0) };
-        yield return new object[] { new object(), null };
+        yield return new object[] { new(), null };
         yield return new object[] { null, null };
     }
 

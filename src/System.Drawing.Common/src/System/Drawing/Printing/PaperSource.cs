@@ -29,7 +29,7 @@ public partial class PaperSource
     /// <summary>
     ///  Gets a value indicating the type of paper source.
     /// </summary>
-    public PaperSourceKind Kind => (int)_kind >= SafeNativeMethods.DMBIN_USER ? PaperSourceKind.Custom : _kind;
+    public PaperSourceKind Kind => (int)_kind >= PInvoke.DMBIN_USER ? PaperSourceKind.Custom : _kind;
 
     /// <summary>
     ///  Same as Kind, but values larger than DMBIN_USER do not map to PaperSourceKind.Custom.

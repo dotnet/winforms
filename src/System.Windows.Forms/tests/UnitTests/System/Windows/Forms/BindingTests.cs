@@ -12,9 +12,9 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_TestData()
     {
         yield return new object[] { null, null, null };
-        yield return new object[] { string.Empty, new object(), string.Empty };
-        yield return new object[] { "propertyName", new object(), "dataMember" };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember" };
+        yield return new object[] { string.Empty, new(), string.Empty };
+        yield return new object[] { "propertyName", new(), "dataMember" };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember" };
     }
 
     [Theory]
@@ -41,9 +41,9 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_TestData()
     {
         yield return new object[] { null, null, null, true };
-        yield return new object[] { string.Empty, new object(), string.Empty, true };
-        yield return new object[] { "propertyName", new object(), "dataMember", false };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false };
+        yield return new object[] { string.Empty, new(), string.Empty, true };
+        yield return new object[] { "propertyName", new(), "dataMember", false };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false };
     }
 
     [Theory]
@@ -70,9 +70,9 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1 };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1 };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1 };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1 };
     }
 
     [Theory]
@@ -99,9 +99,9 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object() };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object() };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new() };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new() };
     }
 
     [Theory]
@@ -128,9 +128,9 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString" };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString" };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new(), "formatString" };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new(), "formatString" };
     }
 
     [Theory]
@@ -157,9 +157,9 @@ public class BindingTests
     public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_TestData()
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null, null };
-        yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture };
-        yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString", CultureInfo.InvariantCulture };
-        yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString", CultureInfo.CurrentCulture };
+        yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new(), "formatString", CultureInfo.InvariantCulture };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new(), "formatString", CultureInfo.CurrentCulture };
     }
 
     [Theory]
@@ -186,7 +186,7 @@ public class BindingTests
     public static IEnumerable<object[]> DataSourceNullValue_Set_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { DBNull.Value };
     }
 
@@ -295,7 +295,7 @@ public class BindingTests
     public static IEnumerable<object[]> NullValue_Set_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { DBNull.Value };
     }
 

@@ -16,6 +16,9 @@
 override System.Windows.Forms.LinkLabel.Dispose(bool disposing) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void
+System.Windows.Forms.FolderBrowserDialog.Multiselect.get -> bool
+System.Windows.Forms.FolderBrowserDialog.Multiselect.set -> void
+System.Windows.Forms.FolderBrowserDialog.SelectedPaths.get -> string![]!
 System.Windows.Forms.ImageList.ImageCollection.AddRange(params System.Drawing.Image![]! images) -> void
 System.Windows.Forms.ListBox.IntegerCollection.AddRange(params int[]! items) -> void
 System.Windows.Forms.ListBox.ObjectCollection.AddRange(params object![]! items) -> void

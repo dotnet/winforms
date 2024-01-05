@@ -114,7 +114,7 @@ public class SystemInformationTests
     public void SystemInformation_CursorSize_Get_ReturnsExpected()
     {
         Size size = SystemInformation.CursorSize;
-        Assert.Contains(size, new Size[] { new Size(32, 32), new Size(48, 48), new Size(64, 64) });
+        Assert.Contains(size, new Size[] { new(32, 32), new(48, 48), new(64, 64) });
         Assert.Equal(size, SystemInformation.CursorSize);
     }
 

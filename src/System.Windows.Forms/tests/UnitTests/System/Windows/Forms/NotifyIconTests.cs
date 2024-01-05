@@ -330,7 +330,7 @@ public class NotifyIconTests
     {
         foreach (bool visible in new bool[] { true, false })
         {
-            foreach (Icon icon in new Icon[] { null, new Icon("bitmaps/10x16_one_entry_32bit.ico") })
+            foreach (Icon icon in new Icon[] { null, new("bitmaps/10x16_one_entry_32bit.ico") })
             {
                 yield return new object[] { visible, icon, null, string.Empty };
                 yield return new object[] { visible, icon, string.Empty, string.Empty };
@@ -380,7 +380,7 @@ public class NotifyIconTests
     {
         foreach (bool visible in new bool[] { true, false })
         {
-            foreach (Icon icon in new Icon[] { null, new Icon("bitmaps/10x16_one_entry_32bit.ico") })
+            foreach (Icon icon in new Icon[] { null, new("bitmaps/10x16_one_entry_32bit.ico") })
             {
                 yield return new object[] { visible, icon, null, string.Empty, 0 };
                 yield return new object[] { visible, icon, string.Empty, string.Empty, 0 };
@@ -756,7 +756,7 @@ public class NotifyIconTests
     {
         foreach (bool visible in new bool[] { true, false })
         {
-            foreach (Icon icon in new Icon[] { null, new Icon("bitmaps/10x16_one_entry_32bit.ico") })
+            foreach (Icon icon in new Icon[] { null, new("bitmaps/10x16_one_entry_32bit.ico") })
             {
                 yield return new object[] { visible, icon };
             }

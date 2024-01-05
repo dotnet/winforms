@@ -2029,7 +2029,7 @@ public class DataGridViewRowTests
             applicationTestAccessor.s_defaultFont = font;
             Assert.NotEqual(oldApplicationDefaultFont, Application.DefaultFont);
 
-            var rowDefaultHeight = row.GetDefaultHeight();
+            int rowDefaultHeight = row.GetDefaultHeight();
             Assert.Equal(Control.DefaultFont.Height + 9, rowDefaultHeight);
             Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
         }

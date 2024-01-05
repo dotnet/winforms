@@ -49,7 +49,7 @@ internal class ButtonBaseDesigner : ControlDesigner
     {
         get
         {
-            ArrayList snapLines = base.SnapLines as ArrayList;
+            IList<SnapLine> snapLines = SnapLinesInternal;
             FlatStyle flatStyle = FlatStyle.Standard;
             ContentAlignment alignment = ContentAlignment.MiddleCenter;
 
@@ -103,7 +103,7 @@ internal class ButtonBaseDesigner : ControlDesigner
 
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 

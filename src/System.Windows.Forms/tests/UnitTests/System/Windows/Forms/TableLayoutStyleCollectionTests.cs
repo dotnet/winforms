@@ -287,8 +287,8 @@ public class TableLayoutStyleCollectionTests
         RowStyle style = new();
         collection.Add(style);
 
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, style, 3 }, array);
+        Assert.Equal([1, style, 3], array);
     }
 }

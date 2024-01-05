@@ -16,15 +16,15 @@ public enum Duplex
     /// <summary>
     ///  Single-sided printing.
     /// </summary>
-    Simplex = SafeNativeMethods.DMDUP_SIMPLEX,
+    Simplex = DEVMODE_DUPLEX.DMDUP_SIMPLEX,
 
     /// <summary>
     ///  Double-sided, horizontal printing.
     /// </summary>
-    Horizontal = SafeNativeMethods.DMDUP_HORIZONTAL,
+    Horizontal = DEVMODE_DUPLEX.DMDUP_HORIZONTAL,
 
     /// <summary>
     ///  Double-sided, vertical printing.
     /// </summary>
-    Vertical = SafeNativeMethods.DMDUP_VERTICAL,
+    Vertical = DEVMODE_DUPLEX.DMDUP_VERTICAL,
 }

@@ -231,7 +231,7 @@ public class AutoCompleteStringCollectionTests
         AutoCompleteStringCollection collection = new();
         collection.Add("value");
 
-        var array = new string[] { "1", "2", "3" };
+        string[] array = new string[] { "1", "2", "3" };
         collection.CopyTo(array, 1);
         Assert.Equal(new string[] { "1", "value", "3" }, array);
     }
@@ -240,7 +240,7 @@ public class AutoCompleteStringCollectionTests
     public void AutoCompleteStringCollection_CopyTo_Empty_Nop()
     {
         AutoCompleteStringCollection collection = new();
-        var array = new string[] { "1", "2", "3" };
+        string[] array = new string[] { "1", "2", "3" };
         collection.CopyTo(array, 0);
         Assert.Equal(new string[] { "1", "2", "3" }, array);
     }

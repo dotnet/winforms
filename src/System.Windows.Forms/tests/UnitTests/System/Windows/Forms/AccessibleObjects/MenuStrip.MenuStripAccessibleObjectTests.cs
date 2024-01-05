@@ -78,7 +78,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         };
 
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
-        var accessibleObjectDescription = menuStripAccessibleObject.Description;
+        string accessibleObjectDescription = menuStripAccessibleObject.Description;
 
         Assert.Equal("Test Description", accessibleObjectDescription);
     }

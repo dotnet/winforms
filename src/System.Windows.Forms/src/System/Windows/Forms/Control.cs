@@ -9012,7 +9012,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the screen point p in client coords.
+    ///  Computes the location of the screen point p in client coordinates.
     /// </summary>
     public Point PointToClient(Point p)
     {
@@ -9021,7 +9021,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the client point p in screen coords.
+    ///  Computes the location of the client point p in screen coordinates.
     /// </summary>
     public Point PointToScreen(Point p)
     {
@@ -9876,7 +9876,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the screen rectangle r in client coords.
+    ///  Computes the location of the screen rectangle r in client coordinates.
     /// </summary>
     public Rectangle RectangleToClient(Rectangle r)
     {
@@ -9886,7 +9886,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Computes the location of the client rectangle r in screen coords.
+    ///  Computes the location of the client rectangle r in screen coordinates.
     /// </summary>
     public Rectangle RectangleToScreen(Rectangle r)
     {
@@ -10759,7 +10759,7 @@ public unsafe partial class Control :
                         PInvoke.SetWindowPos(this, HWND.Null, x, y, width, height, flags);
 
                         // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
-                        // synchonously so we effectively end up in UpdateBounds immediately following
+                        // synchronously so we effectively end up in UpdateBounds immediately following
                         // SetWindowPos.
                         //
                         // UpdateBounds(x, y, width, height);

@@ -278,6 +278,9 @@ dotnet_diagnostic.IDE0082.severity = silent
 # IDE0084: Use pattern matching (IsNot operator)
 dotnet_diagnostic.IDE0084.severity = silent
 
+# IDE0090: Simplify new expression
+dotnet_diagnostic.IDE0090.severity = warning
+
 # IDE0100: Remove redundant equality
 dotnet_diagnostic.IDE0100.severity = silent
 

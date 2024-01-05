@@ -41,7 +41,7 @@ public class PropertyStoreTests
         yield return new object[] { s_ulong, 1UL };
         yield return new object[] { s_short, (short)1 };
         yield return new object[] { s_ushort, (ushort)1 };
-        yield return new object[] { s_object, new object() };
+        yield return new object[] { s_object, new() };
         yield return new object[] { s_color, Color.Red };
         yield return new object[] { s_formWindowState, FormWindowState.Maximized };
     }

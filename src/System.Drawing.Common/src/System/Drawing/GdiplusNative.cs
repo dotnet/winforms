@@ -20,10 +20,6 @@ internal static partial class SafeNativeMethods
     {
         private const string LibraryName = "gdiplus.dll";
 
-        // Imported functions
-        [LibraryImport(LibraryName)]
-        private static partial int GdiplusStartup(out IntPtr token, in StartupInputEx input, out StartupOutput output);
-
         [LibraryImport(LibraryName)]
         internal static partial int GdipBeginContainer(
 #if NET7_0_OR_GREATER

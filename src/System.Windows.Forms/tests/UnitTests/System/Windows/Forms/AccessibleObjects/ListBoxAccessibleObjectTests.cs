@@ -14,7 +14,7 @@ public class ListBoxAccessibleObjectTests
     {
         using ListBox listBox = InitializeListBoxWithItems();
 
-        var childCount = listBox.AccessibilityObject.GetChildCount();
+        int childCount = listBox.AccessibilityObject.GetChildCount();
 
         for (int i = 0; i < childCount; i++)
         {
