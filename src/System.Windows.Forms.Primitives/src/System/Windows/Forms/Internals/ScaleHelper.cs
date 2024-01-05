@@ -26,6 +26,7 @@ internal static partial class ScaleHelper
 
     // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
     private static bool s_processPerMonitorAware;
+    private static Size? _logicalSystemIconSize;
 
     /// <summary>
     ///  The initial primary monitor DPI (logical pixels per inch) for the process.
@@ -322,20 +323,28 @@ internal static partial class ScaleHelper
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
 
-    internal static Size LogicalSystemIconSize
+    [NotNull]
+    internal static Size? LogicalSystemIconSize
     {
         get
         {
-            Size logicalSystemIconSize = new(16, 16);
+            if (_logicalSystemIconSize is not null)
+            {
+                return _logicalSystemIconSize;
+            }
 
             if (OsVersion.IsWindows10_1607OrGreater())
             {
-                logicalSystemIconSize = new(
+                _logicalSystemIconSize = new(
                     PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXICON, OneHundredPercentLogicalDpi),
                     PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CYICON, OneHundredPercentLogicalDpi));
             }
+            else
+            {
+                _logicalSystemIconSize = new Size(16, 16);
+            }
 
-            return logicalSystemIconSize;
+            return _logicalSystemIconSize;
         }
     }
 
@@ -349,7 +358,7 @@ internal static partial class ScaleHelper
     ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
     internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSystemIconSize, dpi));
+        => GetIconResourceAsBitmap(type, resource, ScaleToDpi((Size)LogicalSystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.
