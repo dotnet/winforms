@@ -1143,7 +1143,11 @@ internal class ToolStripDesigner : ControlDesigner
                 _selectionService = null;
             }
 
-            EnableDragDrop(false);
+            if (HasComponent)
+            {
+                EnableDragDrop(false);
+            }
+
             // Dispose of the EditManager
             if (_editManager is not null)
             {
@@ -1181,11 +1185,14 @@ internal class ToolStripDesigner : ControlDesigner
             }
 
             // Always Remove all the glyphs we added
-            RemoveBodyGlyphsForOverflow();
-            // tear off the OverFlow if its being shown
-            if (ToolStrip.OverflowButton.DropDown.Visible)
+            if (HasComponent)
             {
-                ToolStrip.OverflowButton.HideDropDown();
+                RemoveBodyGlyphsForOverflow();
+                // tear off the OverFlow if its being shown
+                if (ToolStrip.OverflowButton.DropDown.Visible)
+                {
+                    ToolStrip.OverflowButton.HideDropDown();
+                }
             }
 
             if (_toolStripAdornerWindowService is not null)
