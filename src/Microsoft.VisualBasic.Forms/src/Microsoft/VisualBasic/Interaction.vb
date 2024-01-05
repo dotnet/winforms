@@ -279,10 +279,9 @@ Namespace Microsoft.VisualBasic
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
-            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbHost = HostServices.VBHost
+            Dim vbHost As IVbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
                 ParentWindow = vbHost.GetParentWindow()
             End If
@@ -393,7 +392,7 @@ Namespace Microsoft.VisualBasic
                         sTitle = vbHost.GetWindowTitle()
                     End If
                 Else
-                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgbox(prompt, Title:=1+5)
+                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
                 End If
             Catch ex As StackOverflowException
                 Throw
@@ -412,5 +411,6 @@ Namespace Microsoft.VisualBasic
                  CType(Buttons And &HFFFFF000, MessageBoxOptions)),
                  MsgBoxResult)
         End Function
+
     End Module
 End Namespace
