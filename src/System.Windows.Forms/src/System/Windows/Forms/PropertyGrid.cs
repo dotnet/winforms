@@ -3580,7 +3580,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         int tabIndex = -1;
         for (int i = 0; i < _tabs.Count; i++)
         {
-            if (tabType == _tabs[i].GetType())
+            if (tabType == _tabs[i].Tab.GetType())
             {
                 tabIndex = i;
                 break;
