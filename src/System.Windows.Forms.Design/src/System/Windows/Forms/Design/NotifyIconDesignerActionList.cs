@@ -22,7 +22,10 @@ namespace System.Windows.Forms.Design
         {
             DesignerActionItemCollection items =
             [
-                new DesignerActionMethodItem(this, nameof(ChooseIcon), SR.ChooseIconDisplayName, true)
+                new DesignerActionMethodItem(this,
+                    memberName: nameof(ChooseIcon),
+                    displayName: SR.ChooseIconDisplayName,
+                    includeAsDesignerVerb: true)
             ];
             return items;
         }

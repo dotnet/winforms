@@ -416,35 +416,35 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 // to disable/enable the Remove entries, based on the number of Rows/Cols.
                 // Unfortunately, you cannot do that via the DesignerAction stuff.
                 new DesignerActionMethodItem(this,
-                                             nameof(AddColumn), // method name
-                                             SR.TableLayoutPanelDesignerAddColumn, // display name
-                                             false), // promoteToDesignerVerb
+                    memberName: nameof(AddColumn),
+                    displayName: SR.TableLayoutPanelDesignerAddColumn,
+                    includeAsDesignerVerb: false),
                 new DesignerActionMethodItem(this,
-                                             nameof(AddRow), // method name
-                                             SR.TableLayoutPanelDesignerAddRow,  // display name
-                                             false), // promoteToDesignerVerb
+                    memberName: nameof(AddRow),
+                    displayName: SR.TableLayoutPanelDesignerAddRow,
+                    includeAsDesignerVerb: false),
             ];
 
             if (owner.Table.ColumnCount > 1)
             {
                 items.Add(new DesignerActionMethodItem(this,
-                                                       nameof(RemoveColumn), // method name
-                                                       SR.TableLayoutPanelDesignerRemoveColumn, // display name
-                                                       false)); // promoteToDesignerVerb
+                    memberName: nameof(RemoveColumn),
+                    displayName: SR.TableLayoutPanelDesignerRemoveColumn,
+                    includeAsDesignerVerb: false));
             }
 
             if (owner.Table.RowCount > 1)
             {
                 items.Add(new DesignerActionMethodItem(this,
-                                                       nameof(RemoveRow), // method name
-                                                       SR.TableLayoutPanelDesignerRemoveRow,  // display name
-                                                       false)); // promoteToDesignerVerb
+                    memberName: nameof(RemoveRow),
+                    displayName: SR.TableLayoutPanelDesignerRemoveRow,
+                    includeAsDesignerVerb: false));
             }
 
             items.Add(new DesignerActionMethodItem(this,
-                                                   nameof(EditRowAndCol), // method name
-                                                   SR.TableLayoutPanelDesignerEditRowAndCol,  // display name
-                                                   false)); // promoteToDesignerVerb
+                memberName: nameof(EditRowAndCol),
+                displayName: SR.TableLayoutPanelDesignerEditRowAndCol,
+                includeAsDesignerVerb: false));
 
             return items;
         }

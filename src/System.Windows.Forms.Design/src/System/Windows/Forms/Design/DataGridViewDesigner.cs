@@ -943,13 +943,13 @@ internal class DataGridViewDesigner : ControlDesigner
             DesignerActionItemCollection items =
             [
                 new DesignerActionMethodItem(this,
-                            nameof(EditColumns),              // method name
-                            SR.DataGridViewEditColumnsVerb,   // display name
-                            true),                            // promoteToDesignerVerb
+                    memberName: nameof(EditColumns),
+                    displayName: SR.DataGridViewEditColumnsVerb,
+                    includeAsDesignerVerb:true),
                 new DesignerActionMethodItem(this,
-                            nameof(AddColumn),                // method name
-                            SR.DataGridViewAddColumnVerb,     // display name
-                            true),                            // promoteToDesignerVerb
+                    memberName: nameof(AddColumn),
+                    displayName: SR.DataGridViewAddColumnVerb,
+                    includeAsDesignerVerb: true),
             ];
 
             return items;
