@@ -352,12 +352,11 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim vbHost As IVbHost
-            Dim ParentWindow As IWin32Window = Nothing
+            Dim parentWindow As IWin32Window = Nothing
 
-            vbHost = HostServices.VBHost
+            Dim vbHost As IVbHost = HostServices.VBHost
             If vbHost IsNot Nothing Then
-                ParentWindow = vbHost.GetParentWindow()
+                parentWindow = vbHost.GetParentWindow()
             End If
 
             'Only allow legal button combinations to be set, one choice from each group
@@ -404,7 +403,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(MessageBox.Show(ParentWindow, sPrompt, sTitle,
+            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),
