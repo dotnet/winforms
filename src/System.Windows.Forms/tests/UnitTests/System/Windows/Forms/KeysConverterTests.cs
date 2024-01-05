@@ -48,7 +48,7 @@ public class KeysConverterTests
     public void ConvertToString_ShouldConvertKeys(Keys keys, string expectedResult)
     {
         KeysConverter converter = new();
-        var result = converter.ConvertToString(null, CultureInfo.InvariantCulture, keys);
+        string result = converter.ConvertToString(null, CultureInfo.InvariantCulture, keys);
         Assert.Equal(expectedResult, result);
     }
 
@@ -81,7 +81,7 @@ public class KeysConverterTests
     public void ConvertToEnumArray_ShouldConvertKeys(Keys keys, Enum[] expectedResult)
     {
         KeysConverter converter = new();
-        var result = converter.ConvertTo(keys, typeof(Enum[]));
+        object result = converter.ConvertTo(keys, typeof(Enum[]));
         Assert.Equal(expectedResult, result);
     }
 }

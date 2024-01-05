@@ -33,7 +33,7 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
             dataGridView.BeginEdit(false);
         }
 
-        var actualPropertyValue = (bool)dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId);
+        bool actualPropertyValue = (bool)dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId);
 
         Assert.Equal(expectedValue, actualPropertyValue);
     }

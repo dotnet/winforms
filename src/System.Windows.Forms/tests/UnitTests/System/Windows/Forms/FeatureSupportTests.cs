@@ -11,9 +11,9 @@ public class FeatureSupportTests
 {
     public static IEnumerable<object[]> IsPresent_DefaultMinimumVersion_TestData()
     {
-        yield return new object[] { null, new object(), false };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), true };
+        yield return new object[] { null, new(), false };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), true };
     }
 
     [Theory]
@@ -35,15 +35,15 @@ public class FeatureSupportTests
 
     public static IEnumerable<object[]> IsPresent_CustomMinimumVersion_TestData()
     {
-        yield return new object[] { null, new object(), new Version(1, 2, 3, 4), false };
-        yield return new object[] { null, new object(), null, false };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), new Version(0, 0, 0, 0), true };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), new Version(1, 2, 3, 4), false };
-        yield return new object[] { new Version(0, 0, 0, 0), new object(), null, true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), new Version(1, 2, 3, 4), true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), new Version(1, 2, 3, 4), true };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), new Version(2, 3, 4, 5), false };
-        yield return new object[] { new Version(1, 2, 3, 4), new object(), null, true };
+        yield return new object[] { null, new(), new Version(1, 2, 3, 4), false };
+        yield return new object[] { null, new(), null, false };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), new Version(0, 0, 0, 0), true };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), new Version(1, 2, 3, 4), false };
+        yield return new object[] { new Version(0, 0, 0, 0), new(), null, true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), new Version(1, 2, 3, 4), true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), new Version(1, 2, 3, 4), true };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), new Version(2, 3, 4, 5), false };
+        yield return new object[] { new Version(1, 2, 3, 4), new(), null, true };
     }
 
     [Theory]

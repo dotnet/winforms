@@ -80,7 +80,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
             toolStripTextBoxControl.CreateControl();
         }
 
-        var actual = (int)toolStripTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        int actual = (int)toolStripTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedType, actual);
         Assert.Equal(createControl, toolStripTextBoxControl.IsHandleCreated);

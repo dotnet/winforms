@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Drawing.Printing;
 
@@ -28,27 +27,30 @@ public abstract partial class PrintController
             SetHandle(handle);
         }
 
-        public override bool IsInvalid => handle == IntPtr.Zero;
+        public override bool IsInvalid => handle == 0;
 
         protected override bool ReleaseHandle()
         {
             if (!IsInvalid)
             {
-                Kernel32.GlobalFree(new HandleRef(this, handle));
+                PInvokeCore.GlobalFree((HGLOBAL)handle);
             }
 
-            handle = IntPtr.Zero;
+            handle = 0;
             return true;
         }
 
         public static implicit operator IntPtr(SafeDeviceModeHandle handle)
         {
-            return (handle is null) ? IntPtr.Zero : handle.handle;
+            return (handle is null) ? 0 : handle.handle;
         }
 
         public static explicit operator SafeDeviceModeHandle(IntPtr handle)
         {
             return new SafeDeviceModeHandle(handle);
         }
+
+        public static implicit operator HGLOBAL(SafeDeviceModeHandle handle)
+            => (handle is null) ? HGLOBAL.Null : (HGLOBAL)handle.handle;
     }
 }

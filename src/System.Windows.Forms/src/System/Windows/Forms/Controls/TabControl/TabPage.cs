@@ -502,6 +502,8 @@ public partial class TabPage : Panel
         return (TabPage?)c;
     }
 
+    internal Rectangle GetPageRectangle() => base.GetToolNativeScreenRectangle();
+
     internal override Rectangle GetToolNativeScreenRectangle()
     {
         // Check SelectedIndex of the parental TabControl instead of SelectedTab

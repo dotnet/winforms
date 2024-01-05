@@ -5205,6 +5205,11 @@ Do you want to replace it?</source>
         <target state="translated">ダイアログ ボックスのツリー ビュー コントロールの上に表示される文字列です。この文字列は、ユーザーに手順を指定するのに使用されます。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">ユーザーがビュー内を移動するか、ファイル名を編集するまで (該当する場合)、ダイアログ ボックスの [OK] ボタンを無効にするかどうかを制御します。注: [OK] ボタンを無効にしても、Enter キーによってダイアログが送信されるのを防ぐことはできません。</target>
@@ -5218,6 +5223,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">ダイアログで最初に、またはユーザーによって最後に選択されたフォルダーのパスです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">

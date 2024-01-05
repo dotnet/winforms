@@ -58,7 +58,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         };
 
         AccessibleObject statusStripAccessibleObject = statusStrip.AccessibilityObject;
-        var accessibleObjectDescription = statusStripAccessibleObject.Description;
+        string accessibleObjectDescription = statusStripAccessibleObject.Description;
 
         Assert.Equal("Test Description", accessibleObjectDescription);
     }

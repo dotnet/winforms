@@ -181,12 +181,12 @@ internal class FormDocumentDesigner : DocumentDesigner
     {
         get
         {
-            ArrayList snapLines = null;
+            IList<SnapLine> snapLines = null;
             AddPaddingSnapLines(ref snapLines);
             if (snapLines is null)
             {
                 Debug.Fail("why did base.AddPaddingSnapLines return null?");
-                snapLines = new ArrayList(4);
+                snapLines = new List<SnapLine>(4);
             }
 
             // if the padding has not been set - then we'll auto-add padding to form - this is a Usability request
@@ -218,7 +218,7 @@ internal class FormDocumentDesigner : DocumentDesigner
                 }
             }
 
-            return snapLines;
+            return (IList)snapLines;
         }
     }
 

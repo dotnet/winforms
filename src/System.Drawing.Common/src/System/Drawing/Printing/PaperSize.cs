@@ -68,8 +68,8 @@ public partial class PaperSize
     ///  Gets the type of paper.
     /// </summary>
     public PaperKind Kind
-        => _kind is <= ((PaperKind)SafeNativeMethods.DMPAPER_LAST)
-            and not (((PaperKind)SafeNativeMethods.DMPAPER_RESERVED_48) or ((PaperKind)SafeNativeMethods.DMPAPER_RESERVED_49))
+        => _kind is <= ((PaperKind)PInvoke.DMPAPER_LAST)
+            and not (((PaperKind)PInvoke.DMPAPER_RESERVED_48) or ((PaperKind)PInvoke.DMPAPER_RESERVED_49))
             ? _kind
             : PaperKind.Custom;
 

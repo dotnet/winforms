@@ -342,8 +342,8 @@ public sealed class PageSetupDialog : CommonDialog
         }
         finally
         {
-            PInvoke.GlobalFree(dialogSettings.hDevMode);
-            PInvoke.GlobalFree(dialogSettings.hDevNames);
+            PInvokeCore.GlobalFree(dialogSettings.hDevMode);
+            PInvokeCore.GlobalFree(dialogSettings.hDevNames);
         }
     }
 }

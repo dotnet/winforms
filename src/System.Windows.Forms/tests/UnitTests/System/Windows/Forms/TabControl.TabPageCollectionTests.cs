@@ -1171,9 +1171,9 @@ public class TabControlTabPageCollectionTests
         IList iList = collection;
         iList.CopyTo(null, 0);
 
-        var array = new object[] { 1, 2, 3, 4 };
+        object[] array = [1, 2, 3, 4];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        Assert.Equal([1, 2, 3, 4], array);
     }
 
     [WinFormsFact]
@@ -1187,9 +1187,9 @@ public class TabControlTabPageCollectionTests
         iList.Add(child1);
         iList.Add(child2);
 
-        var array = new object[] { 1, 2, 3, 4 };
+        object[] array = [1, 2, 3, 4];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, child1, child2, 4 }, array);
+        Assert.Equal([1, child1, child2, 4], array);
     }
 
     [WinFormsFact]
@@ -1213,7 +1213,7 @@ public class TabControlTabPageCollectionTests
         IList iList = collection;
         iList.Add(child);
 
-        var array = new object[] { 1, 2 };
+        object[] array = [1, 2];
         Assert.Throws<ArgumentOutOfRangeException>("destinationIndex", () => iList.CopyTo(array, -1));
     }
 
@@ -1225,9 +1225,9 @@ public class TabControlTabPageCollectionTests
         IList iList = collection;
         iList.CopyTo(null, 0);
 
-        var array = new object[] { 1, 2, 3, 4 };
+        object[] array = [1, 2, 3, 4];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        Assert.Equal([1, 2, 3, 4], array);
     }
 
     [WinFormsFact]
@@ -1238,9 +1238,9 @@ public class TabControlTabPageCollectionTests
         IList iList = collection;
         iList.CopyTo(null, 0);
 
-        var array = new object[] { 1, 2, 3, 4 };
+        object[] array = [1, 2, 3, 4];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        Assert.Equal([1, 2, 3, 4], array);
     }
 
     [WinFormsFact]
@@ -1254,9 +1254,9 @@ public class TabControlTabPageCollectionTests
         iList.Add(child1);
         iList.Add(child2);
 
-        var array = new object[] { 1, 2, 3, 4 };
+        object[] array = [1, 2, 3, 4];
         Assert.Throws<ArgumentNullException>("sourceArray", () => iList.CopyTo(array, 1));
-        Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        Assert.Equal([1, 2, 3, 4], array);
     }
 
     [WinFormsFact]
@@ -1270,9 +1270,9 @@ public class TabControlTabPageCollectionTests
         iList.Add(child1);
         iList.Add(child2);
 
-        var array = new object[] { 1, 2, 3, 4 };
+        object[] array = [1, 2, 3, 4];
         Assert.Throws<InvalidCastException>(() => iList.CopyTo(array, 1));
-        Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        Assert.Equal([1, 2, 3, 4], array);
     }
 
     [WinFormsFact]

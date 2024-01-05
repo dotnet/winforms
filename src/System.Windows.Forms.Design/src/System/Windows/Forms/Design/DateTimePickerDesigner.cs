@@ -21,7 +21,7 @@ internal class DateTimePickerDesigner : ControlDesigner
     {
         get
         {
-            IList snapLines = base.SnapLines;
+            IList<SnapLine> snapLines = SnapLinesInternal;
 
             // A single text-baseline for the label (and linklabel) control.
             int baseline = DesignerUtils.GetTextBaseline(Control, ContentAlignment.MiddleLeft);
@@ -30,7 +30,7 @@ internal class DateTimePickerDesigner : ControlDesigner
             baseline += 2;
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 

@@ -122,7 +122,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
             Enabled = enabled
         };
 
-        var actual = (bool)scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
+        bool actual = (bool)scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.Equal(scrollBar.Enabled, actual);
         Assert.False(scrollBar.IsHandleCreated);
@@ -166,7 +166,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
 
         accessibleObject.SetValue(newValue);
-        var actual = (double)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId);
+        double actual = (double)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId);
 
         Assert.Equal(expected, actual);
         Assert.Equal(expected, (double)scrollBar.Value);

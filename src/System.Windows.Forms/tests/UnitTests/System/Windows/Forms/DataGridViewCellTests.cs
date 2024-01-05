@@ -6554,7 +6554,7 @@ public class DataGridViewCellTests
             .Returns(true)
             .Verifiable();
 
-        var cellName = "TestCellName";
+        string cellName = "TestCellName";
 
         mockAccessibleObject
             .Setup(a => a.Name)

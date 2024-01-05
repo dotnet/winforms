@@ -50,7 +50,7 @@ public partial class WindowsFormsSynchronizationContextTests
     public static IEnumerable<object[]> Send_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -109,7 +109,7 @@ public partial class WindowsFormsSynchronizationContextTests
     public static IEnumerable<object[]> Post_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]

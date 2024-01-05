@@ -135,9 +135,9 @@ public class DataGridViewSelectedCellCollectionTests
     {
         using DataGridView control = new();
         DataGridViewSelectedCellCollection collection = control.SelectedCells;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsFact]
@@ -154,9 +154,9 @@ public class DataGridViewSelectedCellCollectionTests
         control.Rows[2].Cells[0].Selected = true;
 
         DataGridViewSelectedCellCollection collection = control.SelectedCells;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, control.Rows[2].Cells[0], control.Rows[0].Cells[0] }, array);
+        Assert.Equal([1, control.Rows[2].Cells[0], control.Rows[0].Cells[0]], array);
     }
 
     public static IEnumerable<object[]> Insert_TestData()
@@ -266,7 +266,7 @@ public class DataGridViewSelectedCellCollectionTests
     public static IEnumerable<object[]> IListItem_SetTestData()
     {
         yield return new object[] { 0, null };
-        yield return new object[] { -1, new object() };
+        yield return new object[] { -1, new() };
         yield return new object[] { 1, new SubDataGridViewCell() };
     }
 
@@ -283,7 +283,7 @@ public class DataGridViewSelectedCellCollectionTests
     public static IEnumerable<object[]> IListAdd_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new SubDataGridViewCell() };
     }
 
@@ -312,9 +312,9 @@ public class DataGridViewSelectedCellCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedCellCollection collection = control.SelectedCells;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsFact]
@@ -332,15 +332,15 @@ public class DataGridViewSelectedCellCollectionTests
 
         DataGridViewSelectedCellCollection collection = control.SelectedCells;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         iList.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, control.Rows[2].Cells[0], control.Rows[0].Cells[0] }, array);
+        Assert.Equal([1, control.Rows[2].Cells[0], control.Rows[0].Cells[0]], array);
     }
 
     public static IEnumerable<object[]> IListContains_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new SubDataGridViewCell() };
     }
 
@@ -432,7 +432,7 @@ public class DataGridViewSelectedCellCollectionTests
     public static IEnumerable<object[]> IListIndexOf_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new SubDataGridViewCell() };
     }
 
@@ -473,7 +473,7 @@ public class DataGridViewSelectedCellCollectionTests
         foreach (int index in new int[] { -1, 0, 1 })
         {
             yield return new object[] { index, null };
-            yield return new object[] { index, new object() };
+            yield return new object[] { index, new() };
             yield return new object[] { index, new SubDataGridViewCell() };
         }
     }
@@ -491,7 +491,7 @@ public class DataGridViewSelectedCellCollectionTests
     public static IEnumerable<object[]> IListRemove_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new SubDataGridViewCell() };
     }
 

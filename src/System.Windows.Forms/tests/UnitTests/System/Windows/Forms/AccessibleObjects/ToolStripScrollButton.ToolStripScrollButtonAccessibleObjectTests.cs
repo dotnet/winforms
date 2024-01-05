@@ -142,9 +142,9 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         AccessibleObject upScrollButtonAccessibleObject = dropDownMenu.UpScrollButton.AccessibilityObject;
         AccessibleObject downScrollButtonAccessibleObject = dropDownMenu.DownScrollButton.AccessibilityObject;
 
-        var expectedUpButtonName = SR.ToolStripScrollButtonUpAccessibleName;
-        var expectedDownButtonName = SR.ToolStripScrollButtonDownAccessibleName;
-        var expectedDefaultAction = SR.AccessibleActionPress;
+        string expectedUpButtonName = SR.ToolStripScrollButtonUpAccessibleName;
+        string expectedDownButtonName = SR.ToolStripScrollButtonDownAccessibleName;
+        string expectedDefaultAction = SR.AccessibleActionPress;
         var expectedControlType = UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId;
 
         Assert.Equal(expectedUpButtonName, upScrollButtonAccessibleObject.Name);

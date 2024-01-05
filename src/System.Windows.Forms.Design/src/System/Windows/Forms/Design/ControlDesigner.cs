@@ -356,13 +356,15 @@ public partial class ControlDesigner : ComponentDesigner
     ///  Returns a list of SnapLine objects representing interesting alignment points for this control.
     ///  These SnapLines are used to assist in the positioning of the control on a parent's surface.
     /// </summary>
-    public virtual IList SnapLines => SnapLinesInternal();
+    public virtual IList SnapLines => EdgeAndMarginSnapLines().Unwrap();
 
-    internal IList SnapLinesInternal() => SnapLinesInternal(Control.Margin);
+    internal IList<SnapLine> SnapLinesInternal => SnapLines.Adapt<SnapLine>();
 
-    internal IList SnapLinesInternal(Padding margin)
+    internal IList<SnapLine> EdgeAndMarginSnapLines() => EdgeAndMarginSnapLines(Control.Margin);
+
+    internal IList<SnapLine> EdgeAndMarginSnapLines(Padding margin)
     {
-        ArrayList snapLines = new(4);
+        List<SnapLine> snapLines = new(8);
         int width = Control.Width;
         int height = Control.Height;
 

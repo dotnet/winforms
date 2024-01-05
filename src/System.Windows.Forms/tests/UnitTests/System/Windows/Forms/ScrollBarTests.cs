@@ -1747,7 +1747,7 @@ public class ScrollBarTests
     public void ScrollBar_Value_SetOutOfRange_ThrowsArgumentOutOfRangeException(int value)
     {
         using SubScrollBar control = new();
-        var paramName = "value";
+        string paramName = "value";
         ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(paramName, () => control.Value = value);
         string expectedMessage = new ArgumentOutOfRangeException(paramName, string.Format(SR.InvalidBoundArgument, nameof(control.Value), value, $"'{nameof(control.Minimum)}'", $"'{nameof(control.Maximum)}'")).Message;
         Assert.Equal(expectedMessage, ex.Message);

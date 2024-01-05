@@ -12,7 +12,7 @@ public class PaintValueEventArgsTests
     public static IEnumerable<object[]> Ctor_ITypeDescriptorContext_Object_Rectangle_TestData()
     {
         yield return new object[] { null, null, Rectangle.Empty };
-        yield return new object[] { new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, new object(), new Rectangle(1, 2, 3, 4) };
+        yield return new object[] { new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, new(), new Rectangle(1, 2, 3, 4) };
     }
 
     [Theory]

@@ -1011,21 +1011,23 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        var array = new object[] { "1", "2", "3" };
+        object[] array = ["1", "2", "3"];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { "1", "2", "3" }, array);
+        Assert.Equal(["1", "2", "3"], array);
     }
 
     [WinFormsFact]
     public void ListBoxIntegerCollection_CopyTo_InvokeNotEmpty_ReturnsExpected()
     {
         using ListBox owner = new();
-        var collection = new ListBox.IntegerCollection(owner);
-        collection.Add(1);
-        collection.Add(2);
-        var array = new object[] { "1", "2", "3" };
+        var collection = new ListBox.IntegerCollection(owner)
+        {
+            1,
+            2
+        };
+        object[] array = ["1", "2", "3"];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { "1", 1, 2 }, array);
+        Assert.Equal(["1", 1, 2], array);
     }
 
     [WinFormsFact]

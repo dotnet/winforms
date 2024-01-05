@@ -2,15 +2,15 @@
   <!-- 
     This project packages the output of the referenced projects into a single nupkg.
 
-    There are two main ways to work around this: 
-    
+    There are two main ways to work around this:
+
     1. A pull model where a single project pulls in everything that the package needs.
         a. This is the model we're using because it's less work and we only have a few more binaries coming in the future.
         b. An example of the pull model is at https://github.com/nuget/home/issues/3891#issuecomment-377319939, with official docs
-        at https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets#targetsfortfmspecificbuildoutput
+        at https://docs.microsoft.com/nuget/reference/msbuild-targets#targetsfortfmspecificbuildoutput
 
     2. A push model where projects control what they contribute to the package.
-        a. An example of the push model is at https://github.com/dotnet/machinelearning/blob/master/pkg/Directory.Build.props. 
+        a. An example of the push model is at https://github.com/dotnet/machinelearning/blob/master/pkg/Directory.Build.props.
   -->
 
   <PropertyGroup>
@@ -83,6 +83,9 @@
     <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
     <!-- Reference and Source System.Windows.Forms.Primitives -->
+    <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
+
+    <!-- Reference and Source System.Windows.Forms.Primitives -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
 
     <!-- Reference and Source System.Windows.Forms.Design -->
@@ -99,7 +102,7 @@
 
     <ProjectReference Include="..\..\src\Accessibility\src\Accessibility.ilproj" />
 
-    <!-- 
+    <!--
       Analyzers
     -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />

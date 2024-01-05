@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Windows.Forms.Design.Behavior;
 
@@ -16,25 +14,19 @@ internal class FlowPanelDesigner : PanelDesigner
     {
         get
         {
-            ArrayList snapLines = (ArrayList)base.SnapLines;
+            IList<SnapLine> snapLines = SnapLinesInternal;
 
-            // identify all the paddings to remove
-            ArrayList paddingsToRemove = new(4);
-            foreach (SnapLine line in snapLines)
+            // identify and remove all paddings
+            for (int i = snapLines.Count - 1; i >= 0; i--)
             {
-                if (line.Filter is not null && line.Filter.Contains(SnapLine.Padding))
+                if (snapLines[i] is SnapLine line
+                    && line.Filter?.Contains(SnapLine.Padding) == true)
                 {
-                    paddingsToRemove.Add(line);
+                    snapLines.RemoveAt(i);
                 }
             }
 
-            // remove all padding
-            foreach (SnapLine line in paddingsToRemove)
-            {
-                snapLines.Remove(line);
-            }
-
-            return snapLines;
+            return snapLines.Unwrap();
         }
     }
 
@@ -48,7 +40,7 @@ internal class FlowPanelDesigner : PanelDesigner
     {
         base.OnDragDrop(de);
 
-        SelectionManager sm = GetService(typeof(SelectionManager)) as SelectionManager;
+        SelectionManager? sm = GetService(typeof(SelectionManager)) as SelectionManager;
         sm?.Refresh();
     }
 }
