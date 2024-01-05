@@ -26,8 +26,8 @@ public sealed class FolderBrowserDialog : CommonDialog
     // Description text to show.
     private string _descriptionText;
 
-    // Folder picked by the user.
-    private string _selectedPath;
+    // Folders picked by the user.
+    private string[] _selectedPaths;
 
     // Initial folder.
     private string _initialDirectory;
@@ -67,6 +67,18 @@ public sealed class FolderBrowserDialog : CommonDialog
     {
         add => base.HelpRequest += value;
         remove => base.HelpRequest -= value;
+    }
+
+    /// <summary>
+    ///  Gets or sets a value indicating whether the dialog box allows multiple folders to be selected.
+    /// </summary>
+    [SRCategory(nameof(SR.CatBehavior))]
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.FolderBrowserDialogMultiSelectDescr))]
+    public bool Multiselect
+    {
+        get => GetOption(FOS_ALLOWMULTISELECT);
+        set => SetOption(FOS_ALLOWMULTISELECT, value);
     }
 
     /// <summary>
@@ -151,11 +163,20 @@ public sealed class FolderBrowserDialog : CommonDialog
     [Localizable(true)]
     [SRCategory(nameof(SR.CatFolderBrowsing))]
     [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]
+    [AllowNull]
     public string SelectedPath
     {
-        get => _selectedPath;
-        set => _selectedPath = value ?? string.Empty;
+        get => _selectedPaths.Length > 0 ? _selectedPaths[0] : string.Empty;
+        set => _selectedPaths = value is not null ? new string[] { value } : Array.Empty<string>();
     }
+
+    /// <summary>
+    ///  Retrieves the paths of all selected folders in the dialog box.
+    /// </summary>
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.FolderBrowserDialogSelectedPathsDescr))]
+    public string[] SelectedPaths => _selectedPaths.Length > 0 ? (string[])_selectedPaths.Clone() : Array.Empty<string>();
 
     /// <summary>
     ///  Gets or sets the initial directory displayed by the folder browser dialog.
@@ -228,14 +249,14 @@ public sealed class FolderBrowserDialog : CommonDialog
     ///  Resets all properties to their default values.
     /// </summary>
     [MemberNotNull(nameof(_descriptionText))]
-    [MemberNotNull(nameof(_selectedPath))]
+    [MemberNotNull(nameof(_selectedPaths))]
     [MemberNotNull(nameof(_initialDirectory))]
     public override void Reset()
     {
         _options = (FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST);
         _rootFolder = Environment.SpecialFolder.Desktop;
         _descriptionText = string.Empty;
-        _selectedPath = string.Empty;
+        _selectedPaths = Array.Empty<string>();
         _initialDirectory = string.Empty;
         ShowNewFolderButton = true;
         ClientGuid = null;
@@ -338,18 +359,22 @@ public sealed class FolderBrowserDialog : CommonDialog
             }
         }
 
-        if (!string.IsNullOrEmpty(_selectedPath))
+        if (_selectedPaths.Length > 0)
         {
-            string? parent = Path.GetDirectoryName(_selectedPath);
-            if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
+            string selectedPath = _selectedPaths[0];
+            if (!string.IsNullOrEmpty(selectedPath))
             {
-                dialog->SetFileName(_selectedPath);
-            }
-            else
-            {
-                string folder = Path.GetFileName(_selectedPath);
-                dialog->SetFolder(PInvoke.SHCreateItemFromParsingName(parent));
-                dialog->SetFileName(folder);
+                string? parent = Path.GetDirectoryName(selectedPath);
+                if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
+                {
+                    dialog->SetFileName(selectedPath);
+                }
+                else
+                {
+                    string folder = Path.GetFileName(selectedPath);
+                    dialog->SetFolder(PInvoke.SHCreateItemFromParsingName(parent));
+                    dialog->SetFileName(folder);
+                }
             }
         }
     }
@@ -373,13 +398,35 @@ public sealed class FolderBrowserDialog : CommonDialog
 
     private unsafe void GetResult(IFileOpenDialog* dialog)
     {
-        using ComScope<IShellItem> item = new(null);
-        dialog->GetResult(item);
-        if (!item.IsNull)
+        if (Multiselect)
         {
-            item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName);
-            _selectedPath = new(ppszName);
-            Marshal.FreeCoTaskMem((nint)(void*)ppszName);
+            using ComScope<IShellItemArray> itemArray = new(null);
+            dialog->GetResults(itemArray);
+            itemArray.Value->GetCount(out uint itemCount);
+            List<string> tempSelectedPaths = new();
+            for (uint itemIndex = 0; itemIndex < itemCount; itemIndex++)
+            {
+                using ComScope<IShellItem> item = new(null);
+                itemArray.Value->GetItemAt(itemIndex, item);
+                if (!item.IsNull)
+                {
+                    item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName);
+                    // An exception would've been received if GetDisplayName failed.
+                    tempSelectedPaths.Add(ppszName.ToStringAndCoTaskMemFree()!);
+                }
+            }
+
+            _selectedPaths = tempSelectedPaths.ToArray();
+        }
+        else
+        {
+            using ComScope<IShellItem> item = new(null);
+            dialog->GetResult(item);
+            if (!item.IsNull)
+            {
+                item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName);
+                SelectedPath = ppszName.ToStringAndCoTaskMemFree();
+            }
         }
     }
 
@@ -414,12 +461,12 @@ public sealed class FolderBrowserDialog : CommonDialog
 
             if (folder is not null)
             {
-                _selectedPath = folder;
+                SelectedPath = folder;
                 return true;
             }
             else
             {
-                _selectedPath = string.Empty;
+                SelectedPath = string.Empty;
                 return false;
             }
         }
@@ -449,10 +496,10 @@ public sealed class FolderBrowserDialog : CommonDialog
                     PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETEXPANDED, (WPARAM)(BOOL)true, instance._initialDirectory);
                 }
 
-                if (instance._selectedPath.Length != 0)
+                if (instance.SelectedPath.Length != 0)
                 {
                     // Try to select the folder specified by selectedPath
-                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETSELECTIONW, (WPARAM)(BOOL)true, instance._selectedPath);
+                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETSELECTIONW, (WPARAM)(BOOL)true, instance.SelectedPath);
                 }
 
                 break;
