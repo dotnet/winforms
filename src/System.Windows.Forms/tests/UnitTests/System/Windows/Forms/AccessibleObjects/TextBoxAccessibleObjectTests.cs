@@ -111,7 +111,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new();
         textBox.UseSystemPasswordChar = useSystemPasswordChar;
 
-        var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
 
         Assert.Equal(useSystemPasswordChar, actual);
         // Handle is recreated when setting UseSystemPasswordChar
@@ -170,7 +170,7 @@ public class TextBoxAccessibleObjectTests
         textBox.PasswordChar = passwordChar;
         textBox.Multiline = true;
 
-        var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);

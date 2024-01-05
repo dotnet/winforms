@@ -48,13 +48,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         AccessibleObject rr = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
-        var accCellWidthSum = 0;
+        int accCellWidthSum = 0;
         for (int i = 0; i < 4; i++)
         {
             accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
         }
 
-        var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
+        int accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
         Assert.Equal(accCellWidthSum, accRowWidth - dataGridView.RowHeadersWidth);
         Assert.True(dataGridView.IsHandleCreated);
@@ -79,13 +79,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         AccessibleObject rr = dataGridView.AccessibilityObject; // it is necessary to be in time to initialize elements
 
-        var accCellWidthSum = 0;
+        int accCellWidthSum = 0;
         for (int i = 0; i < 4; i++)
         {
             accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
         }
 
-        var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
+        int accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
         Assert.Equal(0, accCellWidthSum);
         Assert.Equal(0, accRowWidth);

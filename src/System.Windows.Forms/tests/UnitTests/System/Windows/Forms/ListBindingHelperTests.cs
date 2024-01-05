@@ -61,7 +61,7 @@ public class ListBindingHelperTests
             .Returns(emptySource.CurrencyManager);
         yield return new object[] { invalidCurrencyManagerProvider.Object, "CurrencyManager", null };
 
-        BindingSource validSource = new(new List<CustomCurrencyManagerProvider> { new CustomCurrencyManagerProvider { Property = 1 } }, null);
+        BindingSource validSource = new(new List<CustomCurrencyManagerProvider> { new() { Property = 1 } }, null);
         yield return new object[] { new CustomCurrencyManagerProvider { CurrencyManagerResult = validSource.CurrencyManager }, "Property", 1 };
     }
 
@@ -316,14 +316,14 @@ public class ListBindingHelperTests
         yield return new object[] { typeof(DataClass), TypeDescriptor.GetProperties(typeof(DataClass)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
 
         yield return new object[] { new ListDataClass(), TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
-        yield return new object[] { new ListDataClass() { ListProperty = new List<DataClass> { new DataClass() } }, TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
+        yield return new object[] { new ListDataClass() { ListProperty = new List<DataClass> { new() } }, TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
         yield return new object[] { typeof(ListDataClass), TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
 
         yield return new object[] { new MultiListDataClass(), TypeDescriptor.GetProperties(typeof(MultiListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "ListProperty" } };
-        yield return new object[] { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } }, TypeDescriptor.GetProperties(typeof(MultiListDataClass)).Cast<PropertyDescriptor>().Take(0).ToArray(), new string[] { "ParentListProperty" } };
+        yield return new object[] { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new() { ListProperty = new List<DataClass> { new() } } } }, TypeDescriptor.GetProperties(typeof(MultiListDataClass)).Cast<PropertyDescriptor>().Take(0).ToArray(), new string[] { "ParentListProperty" } };
 
         var inner = new PropertyDescriptor[] { TypeDescriptor.GetProperties(typeof(MultiListDataClass))[0], TypeDescriptor.GetProperties(typeof(ListDataClass))[0], TypeDescriptor.GetProperties(typeof(DataClass))[0] };
-        yield return new object[] { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } }, inner.Take(2).ToArray(), new string[] { "Property" } };
+        yield return new object[] { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new() { ListProperty = new List<DataClass> { new() } } } }, inner.Take(2).ToArray(), new string[] { "Property" } };
         yield return new object[] { typeof(MultiListDataClass), TypeDescriptor.GetProperties(typeof(MultiListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "ListProperty" } };
 
         yield return new object[] { typeof(DataClass), TypeDescriptor.GetProperties(typeof(ListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
@@ -345,9 +345,9 @@ public class ListBindingHelperTests
         yield return new object[] { new ArrayList { new MultiListDataClass() }, inner.Take(2).ToArray(), new string[] { "Property" } };
         yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass>() } }, inner.Take(0).ToArray(), new string[] { "ParentListProperty" } };
         yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass>() } }, inner.Take(2).ToArray(), new string[] { "Property" } };
-        yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(0).ToArray(), new string[] { "ParentListProperty" } };
-        yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(2).ToArray(), new string[] { "Property" } };
-        yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new ListDataClass { ListProperty = new List<DataClass> { new DataClass() } } } } }, inner.Take(3).ToArray(), Array.Empty<string>() };
+        yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new() { ListProperty = new List<DataClass> { new() } } } } }, inner.Take(0).ToArray(), new string[] { "ParentListProperty" } };
+        yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new() { ListProperty = new List<DataClass> { new() } } } } }, inner.Take(2).ToArray(), new string[] { "Property" } };
+        yield return new object[] { new ArrayList { new MultiListDataClass { ParentListProperty = new List<ListDataClass> { new() { ListProperty = new List<DataClass> { new() } } } } }, inner.Take(3).ToArray(), Array.Empty<string>() };
         yield return new object[] { new ArrayList { null }, descriptors, new string[] { "Property" } };
 
         // ITypedList.
@@ -361,27 +361,27 @@ public class ListBindingHelperTests
 
         yield return new object[] { new EnumerableITypedListImplementor(), descriptors, new string[] { "Property" } };
         yield return new object[] { typeof(EnumerableITypedListImplementor), descriptors, new string[] { "Property" } };
-        yield return new object[] { new EnumerableITypedListImplementor[] { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
-        yield return new object[] { new List<EnumerableITypedListImplementor> { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+        yield return new object[] { new EnumerableITypedListImplementor[] { new() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+        yield return new object[] { new List<EnumerableITypedListImplementor> { new() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { new ArrayList { new EnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { new IEnumerableWrapper(new object[] { new EnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(EnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { typeof(EnumerableITypedListImplementor[]), descriptors, new string[] { "Property" } };
 
         yield return new object[] { new NonEnumerableITypedListImplementor(), descriptors, new string[] { "Property" } };
         yield return new object[] { typeof(NonEnumerableITypedListImplementor), descriptors, new string[] { "Property" } };
-        yield return new object[] { new NonEnumerableITypedListImplementor[] { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
-        yield return new object[] { new List<NonEnumerableITypedListImplementor> { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+        yield return new object[] { new NonEnumerableITypedListImplementor[] { new() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
+        yield return new object[] { new List<NonEnumerableITypedListImplementor> { new() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { new ArrayList { new NonEnumerableITypedListImplementor() }, TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { new IEnumerableWrapper(new object[] { new NonEnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { typeof(NonEnumerableITypedListImplementor[]), descriptors, new string[] { "Property" } };
 
-        ITypedListDataClass typedListDataClass = new () { ListProperty = new List<EnumerableITypedListImplementor>() { new EnumerableITypedListImplementor() } };
+        ITypedListDataClass typedListDataClass = new () { ListProperty = new List<EnumerableITypedListImplementor>() { new() } };
         yield return new object[] { new ITypedListDataClass(), TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { typedListDataClass, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { typeof(ITypedListDataClass), TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
-        yield return new object[] { new ITypedListDataClass[] { new ITypedListDataClass() }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
+        yield return new object[] { new ITypedListDataClass[] { new() }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new ITypedListDataClass[] { typedListDataClass }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
-        yield return new object[] { new List<ITypedListDataClass> { new ITypedListDataClass() }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
+        yield return new object[] { new List<ITypedListDataClass> { new() }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new List<ITypedListDataClass> { typedListDataClass }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new ArrayList { new ITypedListDataClass() }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new ArrayList { typedListDataClass }, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
@@ -392,9 +392,9 @@ public class ListBindingHelperTests
         ITypedListParent typedListParent = new() { ListProperty = new EnumerableITypedListImplementor() };
         yield return new object[] { new ITypedListParent(), TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { typedListParent, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
-        yield return new object[] { new ITypedListParent[] { new ITypedListParent() }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
+        yield return new object[] { new ITypedListParent[] { new() }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new ITypedListParent[] { typedListParent }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
-        yield return new object[] { new List<ITypedListParent> { new ITypedListParent() }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
+        yield return new object[] { new List<ITypedListParent> { new() }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new List<ITypedListParent> { typedListParent }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };
         yield return new object[] { new ArrayList { new ITypedListParent() }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { new ArrayList { typedListParent }, TypeDescriptor.GetProperties(typeof(ITypedListParent)).Cast<PropertyDescriptor>().ToArray(), new string[] { "Property" } };

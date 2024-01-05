@@ -278,8 +278,8 @@ public class DockPaddingEdgesTests
         yield return new object[] { CreateClonedPadding(1, 2, 3, 4), CreatePadding(1, 2, 3, 5), false };
         yield return new object[] { CreateClonedPadding(1, 2, 3, 4), CreateClonedPadding(1, 2, 3, 5), false };
 
-        yield return new object[] { CreatePadding(1, 2, 3, 4), new object(), false };
-        yield return new object[] { CreateClonedPadding(1, 2, 3, 4), new object(), false };
+        yield return new object[] { CreatePadding(1, 2, 3, 4), new(), false };
+        yield return new object[] { CreateClonedPadding(1, 2, 3, 4), new(), false };
         yield return new object[] { CreatePadding(1, 2, 3, 4), null, false };
         yield return new object[] { CreateClonedPadding(1, 2, 3, 4), null, false };
     }

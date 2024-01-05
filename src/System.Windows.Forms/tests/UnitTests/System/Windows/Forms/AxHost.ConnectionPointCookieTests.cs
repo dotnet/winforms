@@ -27,7 +27,7 @@ public class AxHostConnectionPointCookieTests
     public static IEnumerable<object[]> Ctor_InvalidSource_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]
@@ -61,7 +61,7 @@ public class AxHostConnectionPointCookieTests
     public static IEnumerable<object[]> Ctor_InvalidSink_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]

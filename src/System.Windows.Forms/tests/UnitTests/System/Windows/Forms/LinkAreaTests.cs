@@ -67,7 +67,7 @@ public class LinkAreaTests
         yield return new object[] { new LinkArea(1, 2), new LinkArea(2, 2), false };
         yield return new object[] { new LinkArea(1, 2), new LinkArea(1, 3), false };
 
-        yield return new object[] { new LinkArea(1, 2), new object(), false };
+        yield return new object[] { new LinkArea(1, 2), new(), false };
         yield return new object[] { new LinkArea(1, 2), null, false };
     }
 

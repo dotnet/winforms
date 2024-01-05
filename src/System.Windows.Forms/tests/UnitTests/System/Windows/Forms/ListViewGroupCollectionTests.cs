@@ -1034,9 +1034,9 @@ public class ListViewGroupCollectionTests
         ListViewGroup group = new();
         collection.Add(group);
 
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, group, 3 }, array);
+        Assert.Equal([1, group, 3], array);
     }
 
     [WinFormsFact]
@@ -1044,9 +1044,9 @@ public class ListViewGroupCollectionTests
     {
         using ListView listView = new();
         ListViewGroupCollection collection = listView.Groups;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 0);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsTheory]

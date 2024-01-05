@@ -18,7 +18,7 @@ public class CollectionHelperTests
     public void HashtableCopyTo_throws_when_target_rank_greather_than_one()
     {
         Dictionary<string, string> source = new();
-        var target = new object[3, 3];
+        object[,] target = new object[3, 3];
 
         Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 0));
     }
@@ -27,7 +27,7 @@ public class CollectionHelperTests
     public void HashtableCopyTo_throws_when_index_less_than_zero()
     {
         Dictionary<string, string> source = new();
-        var target = new object[3];
+        object[] target = new object[3];
 
         Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index: -2));
     }
@@ -36,7 +36,7 @@ public class CollectionHelperTests
     public void HashtableCopyTo_throws_when_index_greather_than_target_length()
     {
         Dictionary<string, string> source = new();
-        var target = new object[3];
+        object[] target = new object[3];
 
         Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index: 5));
     }
@@ -58,7 +58,7 @@ public class CollectionHelperTests
             { "key-one", "value-one" },
             { "key-two", "value-two" },
         };
-        var target = new object[3];
+        object[] target = new object[3];
 
         Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 2));
     }
@@ -117,7 +117,7 @@ public class CollectionHelperTests
             { "key-one", "value-one" },
             { "key-two", "value-two" },
         };
-        var target = new object[2];
+        object[] target = new object[2];
 
         source.HashtableCopyTo(target, index: 0);
 

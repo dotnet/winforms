@@ -223,7 +223,7 @@ public class FlowLayoutPanelTests
     public static IEnumerable<object[]> CanExtend_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Control() };
         yield return new object[] { new Control { Parent = new() } };
     }

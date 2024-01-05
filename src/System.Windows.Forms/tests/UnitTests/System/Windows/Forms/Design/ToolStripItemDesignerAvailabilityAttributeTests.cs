@@ -52,7 +52,7 @@ public class ToolStripItemDesignerAvailabilityAttributeTests
         yield return new object[] { attribute, new ToolStripItemDesignerAvailabilityAttribute(ToolStripItemDesignerAvailability.All), true };
         yield return new object[] { attribute, new ToolStripItemDesignerAvailabilityAttribute(ToolStripItemDesignerAvailability.None), false };
 
-        yield return new object[] { attribute, new object(), false };
+        yield return new object[] { attribute, new(), false };
         yield return new object[] { attribute, null, false };
     }
 

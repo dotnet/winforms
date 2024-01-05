@@ -46,7 +46,7 @@ public class DesignerAttributeTests
     public static IEnumerable<object[]> GetAttributeOfType_TestData(string assembly, Type attributeType)
     {
         foreach (var type in Assembly.Load(assembly).GetTypes())
-            foreach (var attribute in type.GetCustomAttributes(attributeType, false))
+            foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type, attribute };
     }
 
@@ -54,11 +54,11 @@ public class DesignerAttributeTests
     {
         foreach (var type in Assembly.Load(assembly).GetTypes())
         {
-            foreach (var attribute in type.GetCustomAttributes(attributeType, false))
+            foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type.FullName, attribute };
 
             foreach (var property in type.GetProperties())
-                foreach (var attribute in property.GetCustomAttributes(attributeType, false))
+                foreach (object attribute in property.GetCustomAttributes(attributeType, false))
                     yield return new[] { $"{type.FullName}, property {property.Name}", attribute };
         }
     }
@@ -66,7 +66,7 @@ public class DesignerAttributeTests
     public static IEnumerable<object[]> GetAttributeWithType_TestData(string assembly, Type attributeType)
     {
         foreach (var type in Assembly.Load(assembly).GetTypes())
-            foreach (var attribute in type.GetCustomAttributes(attributeType, false))
+            foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type, attribute };
     }
 
@@ -74,7 +74,7 @@ public class DesignerAttributeTests
     {
         foreach (var type in Assembly.Load(assembly).GetTypes())
             foreach (var property in type.GetProperties())
-                foreach (var attribute in property.GetCustomAttributes(attributeType, false))
+                foreach (object attribute in property.GetCustomAttributes(attributeType, false))
                     yield return new[] { property, attribute };
     }
 

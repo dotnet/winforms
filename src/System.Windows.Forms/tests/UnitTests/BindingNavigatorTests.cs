@@ -95,7 +95,7 @@ public class BindingNavigatorTests
             SR.BindingNavigatorDeleteItemText
         };
 
-        for (var i = 0; i < items.Count; i++)
+        for (int i = 0; i < items.Count; i++)
         {
             ToolStripItem item = items[i];
             Assert.NotNull(item);
@@ -109,7 +109,7 @@ public class BindingNavigatorTests
         Assert.False(bn.PositionItem.AutoSize);
         Assert.Equal(50, bn.PositionItem.Width);
 
-        var index = 0;
+        int index = 0;
         Assert.Equal(11, bn.Items.Count);
         Assert.Equal(bn.MoveFirstItem, bn.Items[index++]);
         Assert.Equal(bn.MovePreviousItem, bn.Items[index++]);

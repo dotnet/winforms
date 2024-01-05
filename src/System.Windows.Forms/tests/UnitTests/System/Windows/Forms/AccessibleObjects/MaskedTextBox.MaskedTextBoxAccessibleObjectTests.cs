@@ -104,7 +104,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.Mask = "00/00/0000";
         maskedTextBox.AccessibleName = accessibleName;
 
-        var actual = ((BSTR)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
+        string actual = ((BSTR)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
 
         Assert.Equal(expectedAccessibleName, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -119,7 +119,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.Text = "000000";
         maskedTextBox.Mask = useMask ? "00/00/0000" : null;
 
-        var actual = ((BSTR)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree();
+        string actual = ((BSTR)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree();
 
         Assert.Equal(maskedTextBox.WindowText, actual);
         Assert.Equal(useMask, maskedTextBox.Mask?.Length == actual.Length);
@@ -147,7 +147,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         using MaskedTextBox maskedTextBox = new();
         maskedTextBox.UseSystemPasswordChar = useSystemPasswordChar;
 
-        var actual = (bool)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        bool actual = (bool)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
 
         Assert.Equal(useSystemPasswordChar, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -161,7 +161,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         using MaskedTextBox maskedTextBox = new();
         maskedTextBox.PasswordChar = passwordChar;
 
-        var actual = (bool)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        bool actual = (bool)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);

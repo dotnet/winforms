@@ -26,7 +26,7 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
         toolStripStatusLabel.IsLink = isLink;
         // AccessibleRole is not set = Default
 
-        var actual = (int)toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        int actual = (int)toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedType, actual);
     }

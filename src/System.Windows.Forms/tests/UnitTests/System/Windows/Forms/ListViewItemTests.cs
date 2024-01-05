@@ -194,8 +194,8 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_String_ListViewGroup_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), null, null, string.Empty, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, string.Empty, null, string.Empty, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", new ListViewGroup(), "imageKey", "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, string.Empty, null, string.Empty, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, "imageKey", new ListViewGroup(), "imageKey", "text" };
     }
 
     [Theory]
@@ -231,8 +231,8 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_Int_ListViewGroup_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), 0, null, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, 1, null, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, -1, new ListViewGroup(), "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, 1, null, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, -1, new ListViewGroup(), "text" };
     }
 
     [Theory]
@@ -420,8 +420,8 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_String_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), null, string.Empty, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, string.Empty, string.Empty, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, "imageKey", "imageKey", "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, string.Empty, string.Empty, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, "imageKey", "imageKey", "text" };
     }
 
     [Theory]
@@ -457,8 +457,8 @@ public class ListViewItemTests
     public static IEnumerable<object[]> Ctor_ListViewSubItemArray_Int_TestData()
     {
         yield return new object[] { Array.Empty<ListViewItem.ListViewSubItem>(), 0, string.Empty };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, 1, "text" };
-        yield return new object[] { new ListViewItem.ListViewSubItem[] { new ListViewItem.ListViewSubItem(null, "text") }, -1, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, 1, "text" };
+        yield return new object[] { new ListViewItem.ListViewSubItem[] { new(null, "text") }, -1, "text" };
     }
 
     [Theory]

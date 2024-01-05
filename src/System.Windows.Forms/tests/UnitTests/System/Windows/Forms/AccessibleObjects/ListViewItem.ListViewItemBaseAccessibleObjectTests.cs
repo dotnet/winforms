@@ -392,7 +392,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         listView.Items.Add(item);
         var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
 
-        var expected = $"{nameof(ListViewItem)}-{accessibleObject.CurrentIndex}";
+        string expected = $"{nameof(ListViewItem)}-{accessibleObject.CurrentIndex}";
         Assert.Equal(expected, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
         Assert.False(listView.IsHandleCreated);
     }

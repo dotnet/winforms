@@ -342,7 +342,7 @@ public class ApplicationContextTests
     public static IEnumerable<object[]> OnMainFormClosed_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), new EventArgs() };
+        yield return new object[] { new(), new EventArgs() };
     }
 
     [WinFormsTheory]

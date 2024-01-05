@@ -11,8 +11,8 @@ public class ResXFileRefTests
     [Fact]
     public void ResXFileRef_Constructor()
     {
-        var fileName = "SomeFile";
-        var typeName = "SomeType";
+        string fileName = "SomeFile";
+        string typeName = "SomeType";
 
         ResXFileRef fileRef = new(fileName, typeName);
 
@@ -24,8 +24,8 @@ public class ResXFileRefTests
     [Fact]
     public void ResXFileRef_EncodingConstructor()
     {
-        var fileName = "SomeFile";
-        var typeName = "SomeType";
+        string fileName = "SomeFile";
+        string typeName = "SomeType";
         Encoding encoding = Encoding.Default;
 
         ResXFileRef fileRef = new(fileName, typeName, encoding);

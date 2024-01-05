@@ -29,7 +29,7 @@ public class BaseCollectionTests
     public void BaseCollection_CopyTo_InvokeWithList_Success()
     {
         CustomBaseCollection collection = new(new ArrayList { 1, 2, 3 });
-        var array = new object[] { 0, 0, 0, 0, 4 };
+        object[] array = new object[] { 0, 0, 0, 0, 4 };
         collection.CopyTo(array, 1);
         Assert.Equal(new object[] { 0, 1, 2, 3, 4 }, array);
     }
