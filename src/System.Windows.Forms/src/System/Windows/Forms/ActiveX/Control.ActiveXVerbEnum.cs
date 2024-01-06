@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#if DEBUG
-using System.ComponentModel;
-#endif
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 
@@ -56,19 +53,6 @@ public partial class Control
                 *pceltFetched = fetched;
             }
 
-#if DEBUG
-            if (CompModSwitches.ActiveX.TraceInfo)
-            {
-                Debug.WriteLine($"AxSource:IEnumOLEVERB::Next returning {fetched} verbs:");
-                Debug.Indent();
-                for (uint i = _current - fetched; i < _current; i++)
-                {
-                    Debug.WriteLine($"{i}: {_verbs[i].lVerb} {_verbs[i].lpszVerbName.ToString() ?? string.Empty}");
-                }
-
-                Debug.Unindent();
-            }
-#endif
             return celt == 0 ? HRESULT.S_OK : HRESULT.S_FALSE;
         }
 
