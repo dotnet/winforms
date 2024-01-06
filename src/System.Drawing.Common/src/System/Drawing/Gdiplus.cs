@@ -158,16 +158,6 @@ internal static partial class SafeNativeMethods
     E_ACCESSDENIED = unchecked((int)0x80070005),
     DM_IN_BUFFER = 8,
     DM_OUT_BUFFER = 2,
-    DC_PAPERS = 2,
-    DC_PAPERSIZE = 3,
-    DC_BINS = 6,
-    DC_DUPLEX = 7,
-    DC_BINNAMES = 12,
-    DC_ENUMRESOLUTIONS = 13,
-    DC_PAPERNAMES = 16,
-    DC_ORIENTATION = 17,
-    DC_COPIES = 18,
-    DC_COLORDEVICE = 32,
     PD_ALLPAGES = 0x00000000,
     PD_SELECTION = 0x00000001,
     PD_PAGENUMS = 0x00000002,
@@ -184,10 +174,6 @@ internal static partial class SafeNativeMethods
     IDI_WARNING = 32515,
     IDI_ERROR = 32513,
     IDI_INFORMATION = 32516,
-    PRINTER_ENUM_LOCAL = 0x00000002,
-    PRINTER_ENUM_CONNECTIONS = 0x00000004,
-    SM_CXICON = 11,
-    SM_CYICON = 12,
     DEFAULT_CHARSET = 1;
 
     public const int ERROR_ACCESS_DENIED = 5;

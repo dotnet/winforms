@@ -882,7 +882,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         // Note: this assumes integral point sizes. violating this assumption would confuse the user
         // because they set something to 7 point but reports that it is, say 7.2 point, due to the rounding.
         using var dc = GetDcScope.ScreenDC;
-        int lpy = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+        int lpy = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
         return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
     }
 

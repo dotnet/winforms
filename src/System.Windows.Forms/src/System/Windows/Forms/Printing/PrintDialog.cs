@@ -409,7 +409,7 @@ public sealed class PrintDialog : CommonDialog
             // PrintDlgEx. So we have to strip them out.
             dialogSettings.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
 
-            HRESULT hr = PInvoke.PrintDlgEx(&dialogSettings);
+            HRESULT hr = PInvokeCore.PrintDlgEx(&dialogSettings);
             if (hr.Failed || dialogSettings.dwResultAction == PInvoke.PD_RESULT_CANCEL)
             {
                 return false;

@@ -739,7 +739,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
         // the monitor the application is currently on.
 
-        using PInvoke.CreateDcScope dc = new(default);
+        using CreateDcScope dc = new(default);
         if (dc.IsNull)
         {
             throw new Win32Exception();

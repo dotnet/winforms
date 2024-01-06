@@ -418,7 +418,7 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         get
         {
-            int cyhscroll = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYHSCROLL);
+            int cyhscroll = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYHSCROLL);
             return ((cyhscroll * 8) / 3);
         }
     }

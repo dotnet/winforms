@@ -19,7 +19,6 @@ namespace System.Drawing;
 /// </remarks>
 internal unsafe partial class DrawingCom : ComWrappers
 {
-    private const int S_OK = (int)HRESULT.S_OK;
     private static readonly Guid IID_IStream = new(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
     private static readonly ComInterfaceEntry* s_wrapperEntry = InitializeComInterfaceEntry();
@@ -56,7 +55,7 @@ internal unsafe partial class DrawingCom : ComWrappers
 
         Guid pictureIID = IPicture.IID;
         int hr = Marshal.QueryInterface(externalComObject, in pictureIID, out IntPtr comObject);
-        if (hr == S_OK)
+        if (hr == HRESULT.S_OK)
         {
             return new PictureWrapper(comObject);
         }
@@ -126,7 +125,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]
@@ -142,7 +141,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]
@@ -158,7 +157,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]
@@ -174,7 +173,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]
@@ -205,7 +204,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]
@@ -221,7 +220,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]
@@ -265,7 +264,7 @@ internal unsafe partial class DrawingCom : ComWrappers
                 return e.HResult;
             }
 
-            return S_OK;
+            return HRESULT.S_OK;
         }
 
         [UnmanagedCallersOnly]

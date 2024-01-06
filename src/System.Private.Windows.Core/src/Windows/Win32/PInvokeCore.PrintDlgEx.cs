@@ -6,7 +6,7 @@ using Windows.Win32.UI.Controls.Dialogs;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     [DllImport("COMDLG32.dll", ExactSpelling = true, EntryPoint = "PrintDlgExW")]
     internal static extern unsafe HRESULT PrintDlgEx(PRINTDLGEXW* pPD);
