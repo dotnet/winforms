@@ -803,7 +803,7 @@ public sealed partial class Application
     /// <summary>
     ///  Informs all message pumps that they are to terminate and then closes all
     ///  application windows after the messages have been processed. e.Cancel indicates
-    ///  whether any of the open forms cancelled the exit call.
+    ///  whether any of the open forms canceled the exit call.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static void Exit(CancelEventArgs? e)
@@ -826,11 +826,22 @@ public sealed partial class Application
             try
             {
                 // Raise the FormClosing and FormClosed events for each open form
-                if (s_forms is not null)
+                if (s_forms?.Count > 0)
                 {
-                    foreach (Form f in s_forms)
+                    HashSet<Form> processedForms = new(s_forms.Count);
+                    int version = s_forms.AddVersion;
+                    // We need to iterate in backward order to not violate MDI closing events rules
+                    for (int i = s_forms.Count - 1; i > -1; i--)
                     {
-                        if (f.RaiseFormClosingOnAppExit())
+                        Form? form = s_forms[i];
+                        if (form is null || processedForms.Contains(form))
+                        {
+                            continue;
+                        }
+
+                        processedForms.Add(form);
+                        // Here user can remove existing forms or add new
+                        if (form.RaiseFormClosingOnAppExit())
                         {
                             // A form refused to close
                             if (e is not null)
@@ -838,14 +849,35 @@ public sealed partial class Application
                                 e.Cancel = true;
                             }
 
+                            processedForms.Clear();
                             return;
+                        }
+
+                        if (version != s_forms.AddVersion) // A new form was added, we need to iterate again
+                        {
+                            version = s_forms.AddVersion;
+                            i = s_forms.Count;
+                        }
+                        else
+                        {
+                            i = Math.Min(i, s_forms.Count); // Form can be removed from the collection, we need to check it
                         }
                     }
 
+                    processedForms.Clear();
                     while (s_forms.Count > 0)
                     {
-                        // OnFormClosed removes the form from the FormCollection
-                        s_forms[0]!.RaiseFormClosedOnAppExit();
+                        // We need to iterate in backward order to not violate MDI closing events rules
+                        Form? form = s_forms[^1];
+                        if (form is not null)
+                        {
+                            // OnFormClosed removes the form from the FormCollection
+                            form.RaiseFormClosedOnAppExit();
+                        }
+                        else
+                        {
+                            s_forms.RemoveAt(s_forms.Count - 1);
+                        }
                     }
                 }
 
