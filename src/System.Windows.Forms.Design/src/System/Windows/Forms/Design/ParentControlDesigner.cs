@@ -682,7 +682,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
             EnableDragDrop(false);
 
-            if (Control is ScrollableControl control)
+            if (HasComponent && Control is ScrollableControl control)
             {
                 control.Scroll -= new ScrollEventHandler(OnScroll);
             }

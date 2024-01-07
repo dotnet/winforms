@@ -5,7 +5,6 @@ namespace System.ComponentModel;
 
 internal static class CompModSwitches
 {
-    private static TraceSwitch? activeX;
     private static TraceSwitch? flowLayout;
     private static TraceSwitch? dataCursor;
     private static TraceSwitch? dataGridCursor;
@@ -38,16 +37,6 @@ internal static class CompModSwitches
     private static TraceSwitch? s_handleLeak;
     private static BooleanSwitch? s_traceCollect;
     private static BooleanSwitch? s_commonDesignerServices;
-
-    public static TraceSwitch ActiveX
-    {
-        get
-        {
-            activeX ??= new TraceSwitch("ActiveX", "Debug ActiveX sourcing");
-
-            return activeX;
-        }
-    }
 
     public static TraceSwitch DataCursor
     {
