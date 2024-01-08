@@ -636,9 +636,9 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             else
             {
                 // We are doing a copy, so let's copy the controls.
-                List<Control> tempList = [.. _dragControls];
+                List<IComponent> tempList = [.. _dragControls];
 
-                DesignerUtils.CopyDragObjects(tempList, Component.Site);
+                tempList = DesignerUtils.CopyDragObjects(tempList, Component.Site);
 
                 if (tempList is null)
                 {
@@ -654,10 +654,10 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
                     // Remember to set the new primary control.
                     if (_primaryDragControl.Equals(_dragControls[j]))
                     {
-                        _primaryDragControl = tempList[j];
+                        _primaryDragControl = (Control)tempList[j];
                     }
 
-                    _dragControls[j] = tempList[j];
+                    _dragControls[j] = (Control)tempList[j];
                 }
             }
 
