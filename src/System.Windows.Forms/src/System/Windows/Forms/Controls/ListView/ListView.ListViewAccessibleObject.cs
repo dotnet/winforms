@@ -180,18 +180,6 @@ public partial class ListView
             };
         }
 
-        private UIA_CONTROLTYPE_ID GetControlType()
-        {
-            if (!this.IsOwnerHandleCreated(out ListView? owningListView))
-            {
-                return UIA_CONTROLTYPE_ID.UIA_ListControlTypeId;
-            }
-
-            return owningListView.View == View.Details
-                ? UIA_CONTROLTYPE_ID.UIA_TableControlTypeId
-                : UIA_CONTROLTYPE_ID.UIA_ListControlTypeId;
-        }
-
         internal override IRawElementProviderSimple.Interface[]? GetColumnHeaders()
         {
             if (!this.TryGetOwnerAs(out ListView? owningListView))
@@ -256,7 +244,9 @@ public partial class ListView
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => (VARIANT)(int)GetControlType(),
+                    => (VARIANT)(int)((this.TryGetOwnerAs(out ListView? owningListView) && owningListView.View == View.Details)
+                        ? UIA_CONTROLTYPE_ID.UIA_TableControlTypeId
+                        : UIA_CONTROLTYPE_ID.UIA_ListControlTypeId),
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => (VARIANT)GetItemStatus(),
