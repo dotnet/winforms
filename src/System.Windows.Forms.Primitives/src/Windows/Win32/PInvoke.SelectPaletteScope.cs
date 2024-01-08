@@ -35,7 +35,7 @@ internal static partial class PInvoke
 
         public static SelectPaletteScope HalftonePalette(HDC hdc, bool forceBackground, bool realizePalette)
         {
-            if (GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.BITSPIXEL) > 8)
+            if (PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.BITSPIXEL) > 8)
             {
                 // https://docs.microsoft.com/windows/win32/api/Gdiplusgraphics/nf-gdiplusgraphics-graphics-gethalftonepalette
                 // The purpose of the Graphics::GetHalftonePalette method is to enable GDI+ to produce a better

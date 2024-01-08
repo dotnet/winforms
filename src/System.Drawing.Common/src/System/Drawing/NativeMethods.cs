@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -10,9 +10,8 @@ internal static class NativeMethods
     internal static HandleRef NullHandleRef => new(null, IntPtr.Zero);
 
     public const int MAX_PATH = 260;
-    internal const int SM_REMOTESESSION = 0x1000;
 
-    internal const int  DIB_RGB_COLORS = 0;
+    internal const int DIB_RGB_COLORS = 0;
     internal const int BI_BITFIELDS = 3;
     internal const int BI_RGB = 0;
 

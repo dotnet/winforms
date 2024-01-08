@@ -244,7 +244,7 @@ internal readonly ref struct DeviceContextHdcScope
     {
         if (_savedHdcState != 0)
         {
-            PInvoke.RestoreDC(HDC, _savedHdcState);
+            PInvokeCore.RestoreDC(HDC, _savedHdcState);
         }
 
         // Note that Graphics keeps track of the HDC it passes back, so we don't need to pass it back in

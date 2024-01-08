@@ -66,7 +66,7 @@ internal static partial class WebBrowserHelper
             if (logPixelsX == -1)
             {
                 using var dc = GetDcScope.ScreenDC;
-                logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                logPixelsX = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             }
 
             return logPixelsX;
@@ -81,7 +81,7 @@ internal static partial class WebBrowserHelper
             if (logPixelsY == -1)
             {
                 using var dc = GetDcScope.ScreenDC;
-                logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+                logPixelsY = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
             }
 
             return logPixelsY;

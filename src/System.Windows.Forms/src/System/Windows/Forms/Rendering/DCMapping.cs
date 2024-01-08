@@ -105,7 +105,7 @@ internal struct DCMapping : IDisposable
     {
         if (!_hdc.IsNull)
         {
-            PInvoke.RestoreDC(_hdc, _savedState);
+            PInvokeCore.RestoreDC(_hdc, _savedState);
         }
     }
 }

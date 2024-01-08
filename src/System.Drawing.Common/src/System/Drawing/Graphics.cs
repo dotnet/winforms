@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Internal;
 using System.Drawing.Text;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -18,7 +17,7 @@ using static Interop;
 namespace System.Drawing;
 
 /// <summary>
-/// Encapsulates a GDI+ drawing surface.
+///  Encapsulates a GDI+ drawing surface.
 /// </summary>
 public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
 {
@@ -258,7 +257,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                     ReleaseHdc();
                 }
 
-                if (PrintingHelper is DeviceContext printerDC)
+                if (PrintingHelper is HdcHandle printerDC)
                 {
                     printerDC.Dispose();
                     _printingHelper = null;
@@ -3092,7 +3091,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         int destWidth = blockRegionSize.Width;
         int destHeight = blockRegionSize.Height;
 
-        nint screenDC = User32.GetDC(0);
+        using var screenDC = GetDcScope.ScreenDC;
         if (screenDC == 0)
         {
             // ERROR_INVALID_HANDLE - if you pass an empty handle to BitBlt you'll get this error.
@@ -3122,7 +3121,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         }
         finally
         {
-            User32.ReleaseDC(IntPtr.Zero, screenDC);
             if (targetDC != 0)
             {
                 ReleaseHdc();
@@ -3836,15 +3834,17 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     private static void CheckErrorStatus(int status)
     {
         if (status == Gdip.Ok)
+        {
             return;
+        }
 
         // Generic error from GDI+ can be GenericError or Win32Error.
-        if (status == Gdip.GenericError || status == Gdip.Win32Error)
+        if (status is Gdip.GenericError or Gdip.Win32Error)
         {
             int error = Marshal.GetLastWin32Error();
             if (error == SafeNativeMethods.ERROR_ACCESS_DENIED || error == SafeNativeMethods.ERROR_PROC_NOT_FOUND ||
-                    // Here, we'll check to see if we are in a terminal services session...
-                    (((User32.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
+                    // Here, we'll check to see if we are in a terminal services session.
+                    (((PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
             {
                 return;
             }

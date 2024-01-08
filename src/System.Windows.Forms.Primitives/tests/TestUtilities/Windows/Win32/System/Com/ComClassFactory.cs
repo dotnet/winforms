@@ -65,6 +65,6 @@ internal unsafe class ComClassFactory : IDisposable
     public void Dispose()
     {
         _classFactory->Release();
-        PInvoke.FreeLibrary(_instance);
+        PInvokeCore.FreeLibrary(_instance);
     }
 }

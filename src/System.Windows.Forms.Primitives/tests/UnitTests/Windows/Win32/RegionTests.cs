@@ -12,7 +12,7 @@ public class RegionTests
     public void GetClipRgn_NoRegion()
     {
         // Create a bitmap using the screen's stats
-        HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
+        HDC hdc = PInvokeCore.CreateCompatibleDC((HDC)default);
         Assert.False(hdc.IsNull);
 
         try
@@ -45,7 +45,7 @@ public class RegionTests
         }
         finally
         {
-            PInvoke.DeleteDC(hdc);
+            PInvokeCore.DeleteDC(hdc);
         }
     }
 
@@ -53,7 +53,7 @@ public class RegionTests
     public void RegionScope_NullWithNoClippingRegion()
     {
         // Create a bitmap using the screen's stats
-        HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
+        HDC hdc = PInvokeCore.CreateCompatibleDC((HDC)default);
         Assert.False(hdc.IsNull);
 
         try
@@ -73,7 +73,7 @@ public class RegionTests
         }
         finally
         {
-            PInvoke.DeleteDC(hdc);
+            PInvokeCore.DeleteDC(hdc);
         }
     }
 
@@ -81,7 +81,7 @@ public class RegionTests
     public unsafe void RegionScope_GetRegion()
     {
         // Create a bitmap using the screen's stats
-        HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
+        HDC hdc = PInvokeCore.CreateCompatibleDC((HDC)default);
         Assert.False(hdc.IsNull);
 
         try
@@ -107,7 +107,7 @@ public class RegionTests
         }
         finally
         {
-            PInvoke.DeleteDC(hdc);
+            PInvokeCore.DeleteDC(hdc);
         }
     }
 }

@@ -10,13 +10,13 @@ internal static class SpanHelpers
     ///  terminating with null and truncating <paramref name="source"/> to fit if
     ///  necessary.
     /// </summary>
-    public static void CopyAndTerminate(ReadOnlySpan<char> source, Span<char> destination)
+    public static void CopyAndTerminate(this ReadOnlySpan<char> source, Span<char> destination)
     {
         Debug.Assert(!destination.IsEmpty);
 
         if (source.Length >= destination.Length)
         {
-            source = source.Slice(0, destination.Length - 1);
+            source = source[..(destination.Length - 1)];
         }
 
         source.CopyTo(destination);
@@ -31,9 +31,7 @@ internal static class SpanHelpers
     public static ReadOnlySpan<char> SliceAtFirstNull(this ReadOnlySpan<char> span)
     {
         int index = span.IndexOf('\0');
-        return index == -1
-            ? span
-            : span.Slice(0, index);
+        return index == -1 ? span : span[..index];
     }
 
     /// <summary>
@@ -42,8 +40,6 @@ internal static class SpanHelpers
     public static Span<char> SliceAtFirstNull(this Span<char> span)
     {
         int index = span.IndexOf('\0');
-        return index == -1
-            ? span
-            : span.Slice(0, index);
+        return index == -1 ? span : span[..index];
     }
 }

@@ -508,11 +508,11 @@ public unsafe partial class DataObject :
             HBITMAP hbitmap = bitmap.GetHBITMAP();
 
             // Create a compatible DC to render the source bitmap.
-            using PInvoke.CreateDcScope sourceDC = new(screenDC);
+            using CreateDcScope sourceDC = new(screenDC);
             using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, hbitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            using PInvoke.CreateDcScope destinationDC = new(screenDC);
+            using CreateDcScope destinationDC = new(screenDC);
             HBITMAP compatibleBitmap = PInvoke.CreateCompatibleBitmap(screenDC, bitmap.Size.Width, bitmap.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
