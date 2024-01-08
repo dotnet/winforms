@@ -72,7 +72,7 @@ public static class SystemInformation
     /// <summary>
     ///  Gets the width of the vertical scroll bar in pixels.
     /// </summary>
-    public static int VerticalScrollBarWidth => PInvoke.GetSystemMetrics(SM_CXVSCROLL);
+    public static int VerticalScrollBarWidth => PInvokeCore.GetSystemMetrics(SM_CXVSCROLL);
 
     /// <summary>
     ///  Gets the width of the vertical scroll bar in pixels.
@@ -80,12 +80,12 @@ public static class SystemInformation
     public static int GetVerticalScrollBarWidthForDpi(int dpi)
         => ScaleHelper.IsThreadPerMonitorV2Aware
             ? PInvoke.GetCurrentSystemMetrics(SM_CXVSCROLL, (uint)dpi)
-            : PInvoke.GetSystemMetrics(SM_CXVSCROLL);
+            : PInvokeCore.GetSystemMetrics(SM_CXVSCROLL);
 
     /// <summary>
     ///  Gets the height of the horizontal scroll bar in pixels.
     /// </summary>
-    public static int HorizontalScrollBarHeight => PInvoke.GetSystemMetrics(SM_CYHSCROLL);
+    public static int HorizontalScrollBarHeight => PInvokeCore.GetSystemMetrics(SM_CYHSCROLL);
 
     /// <summary>
     ///  Gets the height of the horizontal scroll bar in pixels.
@@ -93,12 +93,12 @@ public static class SystemInformation
     public static int GetHorizontalScrollBarHeightForDpi(int dpi)
         => ScaleHelper.IsThreadPerMonitorV2Aware
             ? PInvoke.GetCurrentSystemMetrics(SM_CYHSCROLL, (uint)dpi)
-            : PInvoke.GetSystemMetrics(SM_CYHSCROLL);
+            : PInvokeCore.GetSystemMetrics(SM_CYHSCROLL);
 
     /// <summary>
     ///  Gets the height of the normal caption area of a window in pixels.
     /// </summary>
-    public static int CaptionHeight => PInvoke.GetSystemMetrics(SM_CYCAPTION);
+    public static int CaptionHeight => PInvokeCore.GetSystemMetrics(SM_CYCAPTION);
 
     /// <summary>
     ///  Gets the width and height of a window border in pixels.
@@ -124,12 +124,12 @@ public static class SystemInformation
     /// <summary>
     ///  Gets the height of the scroll box in a vertical scroll bar in pixels.
     /// </summary>
-    public static int VerticalScrollBarThumbHeight => PInvoke.GetSystemMetrics(SM_CYVTHUMB);
+    public static int VerticalScrollBarThumbHeight => PInvokeCore.GetSystemMetrics(SM_CYVTHUMB);
 
     /// <summary>
     ///  Gets the width of the scroll box in a horizontal scroll bar in pixels.
     /// </summary>
-    public static int HorizontalScrollBarThumbWidth => PInvoke.GetSystemMetrics(SM_CXHTHUMB);
+    public static int HorizontalScrollBarThumbWidth => PInvokeCore.GetSystemMetrics(SM_CXHTHUMB);
 
     /// <summary>
     ///  Gets the default dimensions of an icon in pixels.
@@ -181,7 +181,7 @@ public static class SystemInformation
     /// <summary>
     ///  Gets the height of a one line of a menu in pixels.
     /// </summary>
-    public static int MenuHeight => PInvoke.GetSystemMetrics(SM_CYMENU);
+    public static int MenuHeight => PInvokeCore.GetSystemMetrics(SM_CYMENU);
 
     /// <summary>
     ///  Returns the current system power status.
@@ -205,18 +205,18 @@ public static class SystemInformation
     ///  Gets the height, in pixels, of the Kanji window at the bottom of the screen
     ///  for double-byte (DBCS) character set versions of Windows.
     /// </summary>
-    public static int KanjiWindowHeight => PInvoke.GetSystemMetrics(SM_CYKANJIWINDOW);
+    public static int KanjiWindowHeight => PInvokeCore.GetSystemMetrics(SM_CYKANJIWINDOW);
 
     /// <summary>
     ///  Gets a value indicating whether the system has a mouse installed.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static bool MousePresent => PInvoke.GetSystemMetrics(SM_MOUSEPRESENT) != 0;
+    public static bool MousePresent => PInvokeCore.GetSystemMetrics(SM_MOUSEPRESENT) != 0;
 
     /// <summary>
     ///  Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
     /// </summary>
-    public static int VerticalScrollBarArrowHeight => PInvoke.GetSystemMetrics(SM_CYVSCROLL);
+    public static int VerticalScrollBarArrowHeight => PInvokeCore.GetSystemMetrics(SM_CYVSCROLL);
 
     /// <summary>
     ///  Gets the height of the vertical scroll bar arrow bitmap in pixels.
@@ -227,7 +227,7 @@ public static class SystemInformation
     /// <summary>
     ///  Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
     /// </summary>
-    public static int HorizontalScrollBarArrowWidth => PInvoke.GetSystemMetrics(SM_CXHSCROLL);
+    public static int HorizontalScrollBarArrowWidth => PInvokeCore.GetSystemMetrics(SM_CXHSCROLL);
 
     /// <summary>
     ///  Gets the width of the horizontal scroll bar arrow bitmap in pixels.
@@ -235,18 +235,18 @@ public static class SystemInformation
     public static int GetHorizontalScrollBarArrowWidthForDpi(int dpi)
         => ScaleHelper.IsThreadPerMonitorV2Aware
             ? PInvoke.GetCurrentSystemMetrics(SM_CXHSCROLL, (uint)dpi)
-            : PInvoke.GetSystemMetrics(SM_CXHSCROLL);
+            : PInvokeCore.GetSystemMetrics(SM_CXHSCROLL);
 
     /// <summary>
     ///  Gets a value indicating whether this is a debug version of the operating system.
     /// </summary>
-    public static bool DebugOS => PInvoke.GetSystemMetrics(SM_DEBUG) != 0;
+    public static bool DebugOS => PInvokeCore.GetSystemMetrics(SM_DEBUG) != 0;
 
     /// <summary>
     ///  Gets a value indicating whether the functions of the left and right mouse
     ///  buttons have been swapped.
     /// </summary>
-    public static bool MouseButtonsSwapped => PInvoke.GetSystemMetrics(SM_SWAPBUTTON) != 0;
+    public static bool MouseButtonsSwapped => PInvokeCore.GetSystemMetrics(SM_SWAPBUTTON) != 0;
 
     /// <summary>
     ///  Gets the minimum allowable dimensions of a window in pixels.
@@ -289,28 +289,28 @@ public static class SystemInformation
     ///  Gets a value indicating whether drop down menus should be right-aligned with the corresponding menu
     ///  bar item.
     /// </summary>
-    public static bool RightAlignedMenus => PInvoke.GetSystemMetrics(SM_MENUDROPALIGNMENT) != 0;
+    public static bool RightAlignedMenus => PInvokeCore.GetSystemMetrics(SM_MENUDROPALIGNMENT) != 0;
 
     /// <summary>
     ///  Gets a value indicating whether the Microsoft Windows for Pen computing extensions are installed.
     /// </summary>
-    public static bool PenWindows => PInvoke.GetSystemMetrics(SM_PENWINDOWS) != 0;
+    public static bool PenWindows => PInvokeCore.GetSystemMetrics(SM_PENWINDOWS) != 0;
 
     /// <summary>
     ///  Gets a value indicating whether the operating system is capable of handling
     ///  double-byte (DBCS) characters.
     /// </summary>
-    public static bool DbcsEnabled => PInvoke.GetSystemMetrics(SM_DBCSENABLED) != 0;
+    public static bool DbcsEnabled => PInvokeCore.GetSystemMetrics(SM_DBCSENABLED) != 0;
 
     /// <summary>
     ///  Gets the number of buttons on mouse.
     /// </summary>
-    public static int MouseButtons => PInvoke.GetSystemMetrics(SM_CMOUSEBUTTONS);
+    public static int MouseButtons => PInvokeCore.GetSystemMetrics(SM_CMOUSEBUTTONS);
 
     /// <summary>
     ///  Gets a value indicating whether security is present on this operating system.
     /// </summary>
-    public static bool Secure => PInvoke.GetSystemMetrics(SM_SECURE) != 0;
+    public static bool Secure => PInvokeCore.GetSystemMetrics(SM_SECURE) != 0;
 
     /// <summary>
     ///  Gets the dimensions in pixels, of a 3-D border.
@@ -330,7 +330,7 @@ public static class SystemInformation
     /// <summary>
     ///  Gets the height of a small caption in pixels.
     /// </summary>
-    public static int ToolWindowCaptionHeight => PInvoke.GetSystemMetrics(SM_CYSMCAPTION);
+    public static int ToolWindowCaptionHeight => PInvokeCore.GetSystemMetrics(SM_CYSMCAPTION);
 
     /// <summary>
     ///  Gets the dimensions of small caption buttons in pixels.
@@ -354,7 +354,7 @@ public static class SystemInformation
                 | ArrangeStartingPosition.Hide
                 | ArrangeStartingPosition.TopLeft
                 | ArrangeStartingPosition.TopRight;
-            int compoundValue = PInvoke.GetSystemMetrics(SM_ARRANGE);
+            int compoundValue = PInvokeCore.GetSystemMetrics(SM_ARRANGE);
             return mask & (ArrangeStartingPosition)compoundValue;
         }
     }
@@ -368,7 +368,7 @@ public static class SystemInformation
         {
             ArrangeDirection mask = ArrangeDirection.Down
                 | ArrangeDirection.Left | ArrangeDirection.Right | ArrangeDirection.Up;
-            int compoundValue = PInvoke.GetSystemMetrics(SM_ARRANGE);
+            int compoundValue = PInvokeCore.GetSystemMetrics(SM_ARRANGE);
             return mask & (ArrangeDirection)compoundValue;
         }
     }
@@ -393,14 +393,14 @@ public static class SystemInformation
     /// <summary>
     ///  Gets a value indicating whether this computer is connected to a network.
     /// </summary>
-    public static bool Network => (PInvoke.GetSystemMetrics(SM_NETWORK) & 0x00000001) != 0;
+    public static bool Network => (PInvokeCore.GetSystemMetrics(SM_NETWORK) & 0x00000001) != 0;
 
-    public static bool TerminalServerSession => (PInvoke.GetSystemMetrics(SM_REMOTESESSION) & 0x00000001) != 0;
+    public static bool TerminalServerSession => (PInvokeCore.GetSystemMetrics(SM_REMOTESESSION) & 0x00000001) != 0;
 
     /// <summary>
     ///  Gets a value that specifies how the system was started.
     /// </summary>
-    public static BootMode BootMode => (BootMode)PInvoke.GetSystemMetrics(SM_CLEANBOOT);
+    public static BootMode BootMode => (BootMode)PInvokeCore.GetSystemMetrics(SM_CLEANBOOT);
 
     /// <summary>
     ///  Gets the dimensions in pixels, of the rectangle that a drag operation must
@@ -413,7 +413,7 @@ public static class SystemInformation
     ///  information visually in situations where it would otherwise present the
     ///  information in audible form.
     /// </summary>
-    public static bool ShowSounds => PInvoke.GetSystemMetrics(SM_SHOWSOUNDS) != 0;
+    public static bool ShowSounds => PInvokeCore.GetSystemMetrics(SM_SHOWSOUNDS) != 0;
 
     /// <summary>
     ///  Gets the dimensions of the default size of a menu checkmark in pixels.
@@ -423,7 +423,7 @@ public static class SystemInformation
     /// <summary>
     ///  Gets a value indicating whether the system is enabled for Hebrew and Arabic languages.
     /// </summary>
-    public static bool MidEastEnabled => PInvoke.GetSystemMetrics(SM_MIDEASTENABLED) != 0;
+    public static bool MidEastEnabled => PInvokeCore.GetSystemMetrics(SM_MIDEASTENABLED) != 0;
 
     internal static bool MultiMonitorSupport
     {
@@ -431,7 +431,7 @@ public static class SystemInformation
         {
             if (!s_checkMultiMonitorSupport)
             {
-                s_multiMonitorSupport = PInvoke.GetSystemMetrics(SM_CMONITORS) != 0;
+                s_multiMonitorSupport = PInvokeCore.GetSystemMetrics(SM_CMONITORS) != 0;
                 s_checkMultiMonitorSupport = true;
             }
 
@@ -449,7 +449,7 @@ public static class SystemInformation
     ///   keep it equivalent to <see cref="MouseWheelPresent"/>.
     ///  </para>
     /// </remarks>
-    public static bool NativeMouseWheelSupport => PInvoke.GetSystemMetrics(SM_MOUSEWHEELPRESENT) != 0;
+    public static bool NativeMouseWheelSupport => PInvokeCore.GetSystemMetrics(SM_MOUSEWHEELPRESENT) != 0;
 
     /// <summary>
     ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
@@ -465,10 +465,10 @@ public static class SystemInformation
         {
             if (MultiMonitorSupport)
             {
-                return new(PInvoke.GetSystemMetrics(SM_XVIRTUALSCREEN),
-                    PInvoke.GetSystemMetrics(SM_YVIRTUALSCREEN),
-                    PInvoke.GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                    PInvoke.GetSystemMetrics(SM_CYVIRTUALSCREEN));
+                return new(PInvokeCore.GetSystemMetrics(SM_XVIRTUALSCREEN),
+                    PInvokeCore.GetSystemMetrics(SM_YVIRTUALSCREEN),
+                    PInvokeCore.GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                    PInvokeCore.GetSystemMetrics(SM_CYVIRTUALSCREEN));
             }
 
             Size size = PrimaryMonitorSize;
@@ -479,13 +479,13 @@ public static class SystemInformation
     /// <summary>
     ///  Gets the number of display monitors on the desktop.
     /// </summary>
-    public static int MonitorCount => MultiMonitorSupport ? PInvoke.GetSystemMetrics(SM_CMONITORS) : 1;
+    public static int MonitorCount => MultiMonitorSupport ? PInvokeCore.GetSystemMetrics(SM_CMONITORS) : 1;
 
     /// <summary>
     ///  Gets a value indicating whether all the display monitors have the same color format.
     /// </summary>
     public static bool MonitorsSameDisplayFormat
-        => !MultiMonitorSupport || PInvoke.GetSystemMetrics(SM_SAMEDISPLAYFORMAT) != 0;
+        => !MultiMonitorSupport || PInvokeCore.GetSystemMetrics(SM_SAMEDISPLAYFORMAT) != 0;
 
     /// <summary>
     ///  Gets the computer name of the current system.
@@ -731,22 +731,22 @@ public static class SystemInformation
     /// <summary>
     ///  The width of the left and right edges of the focus rectangle.
     /// </summary>
-    public static int VerticalFocusThickness => PInvoke.GetSystemMetrics(SM_CYFOCUSBORDER);
+    public static int VerticalFocusThickness => PInvokeCore.GetSystemMetrics(SM_CYFOCUSBORDER);
 
     /// <summary>
     ///  The width of the top and bottom edges of the focus rectangle.
     /// </summary>
-    public static int HorizontalFocusThickness => PInvoke.GetSystemMetrics(SM_CXFOCUSBORDER);
+    public static int HorizontalFocusThickness => PInvokeCore.GetSystemMetrics(SM_CXFOCUSBORDER);
 
     /// <summary>
     ///  The height of the vertical sizing border around the perimeter of the window that can be resized.
     /// </summary>
-    public static int VerticalResizeBorderThickness => PInvoke.GetSystemMetrics(SM_CYSIZEFRAME);
+    public static int VerticalResizeBorderThickness => PInvokeCore.GetSystemMetrics(SM_CYSIZEFRAME);
 
     /// <summary>
     ///  The width of the horizontal sizing border around the perimeter of the window that can be resized.
     /// </summary>
-    public static int HorizontalResizeBorderThickness => PInvoke.GetSystemMetrics(SM_CXSIZEFRAME);
+    public static int HorizontalResizeBorderThickness => PInvokeCore.GetSystemMetrics(SM_CXSIZEFRAME);
 
     /// <summary>
     ///  The orientation of the screen in degrees.
@@ -839,5 +839,5 @@ public static class SystemInformation
     }
 
     private static Size GetSize(SYSTEM_METRICS_INDEX x, SYSTEM_METRICS_INDEX y)
-        => new(PInvoke.GetSystemMetrics(x), PInvoke.GetSystemMetrics(y));
+        => new(PInvokeCore.GetSystemMetrics(x), PInvokeCore.GetSystemMetrics(y));
 }

@@ -160,8 +160,8 @@ public static partial class ControlPaint
         Size size = bitmap.Size;
 
         // Don't use the cached DC here as this isn't a common API and we're manipulating the state.
-        using PInvoke.CreateDcScope screen = new(default);
-        using PInvoke.CreateDcScope dc = new(screen);
+        using CreateDcScope screen = new(default);
+        using CreateDcScope dc = new(screen);
 
         HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
         PInvoke.GetObject(palette, out uint entryCount);
@@ -314,8 +314,8 @@ public static partial class ControlPaint
 
         HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
         using GetDcScope screenDC = new(HWND.Null);
-        using PInvoke.CreateDcScope sourceDC = new(screenDC);
-        using PInvoke.CreateDcScope targetDC = new(screenDC);
+        using CreateDcScope sourceDC = new(screenDC);
+        using CreateDcScope targetDC = new(screenDC);
         using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
         using PInvoke.SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
 
@@ -1842,7 +1842,7 @@ public static partial class ControlPaint
         }
 
         using GetDcScope desktopDC = new(
-            PInvoke.GetDesktopWindow(),
+            PInvokeCore.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
@@ -1869,7 +1869,7 @@ public static partial class ControlPaint
         R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
         using GetDcScope desktopDC = new(
-            PInvoke.GetDesktopWindow(),
+            PInvokeCore.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
@@ -2084,7 +2084,7 @@ public static partial class ControlPaint
         R2_MODE rop2 = R2_MODE.R2_NOT;
 
         using GetDcScope desktopDC = new(
-            PInvoke.GetDesktopWindow(),
+            PInvokeCore.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 

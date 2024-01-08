@@ -7,4 +7,6 @@ global using Windows.Win32;
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
 global using Windows.Win32.Graphics.GdiPlus;
+global using Windows.Win32.Storage.Xps;
 global using Windows.Win32.System.Memory;
+global using Windows.Win32.UI.WindowsAndMessaging;

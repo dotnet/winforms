@@ -483,22 +483,21 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         // Get the correct width and height.
         if (width == 0)
         {
-            width = User32.GetSystemMetrics(SafeNativeMethods.SM_CXICON);
+            width = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON);
         }
 
         if (height == 0)
         {
-            height = User32.GetSystemMetrics(SafeNativeMethods.SM_CYICON);
+            height = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON);
         }
 
         if (s_bitDepth == 0)
         {
-            IntPtr dc = User32.GetDC(IntPtr.Zero);
-            s_bitDepth = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.BITSPIXEL);
-            s_bitDepth *= Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.PLANES);
-            User32.ReleaseDC(IntPtr.Zero, dc);
+            using var hdc = GetDcScope.ScreenDC;
+            s_bitDepth = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+            s_bitDepth *= PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PLANES);
 
-            // If the bitdepth is 8, make it 4 because windows does not
+            // If the bit depth is 8, make it 4 because windows does not
             // choose a 256 color icon if the display is running in 256 color mode
             // due to palette flicker.
             if (s_bitDepth == 8)

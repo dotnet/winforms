@@ -1,10 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing.Internal;
-using System.Runtime.InteropServices;
-using static Interop;
-
 namespace System.Drawing.Printing;
 
 /// <summary>
@@ -69,21 +65,11 @@ public unsafe class PageSettings : ICloneable
     {
         get
         {
-            float hardMarginX = 0;
-            DeviceContext dc = _printerSettings.CreateDeviceContext(this);
+            using var hdc = _printerSettings.CreateDeviceContext(this);
 
-            try
-            {
-                int dpiX = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
-                int hardMarginX_DU = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETX);
-                hardMarginX = hardMarginX_DU * 100 / dpiX;
-            }
-            finally
-            {
-                dc.Dispose();
-            }
-
-            return hardMarginX;
+            int dpiX = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            int hardMarginX_DU = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX);
+            return hardMarginX_DU * 100 / dpiX;
         }
     }
 
@@ -94,10 +80,10 @@ public unsafe class PageSettings : ICloneable
     {
         get
         {
-            using DeviceContext dc = _printerSettings.CreateDeviceContext(this);
+            using var hdc = _printerSettings.CreateDeviceContext(this);
 
-            int dpiY = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
-            int hardMarginY_DU = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETY);
+            int dpiY = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+            int hardMarginY_DU = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY);
             return hardMarginY_DU * 100 / dpiY;
         }
     }
@@ -164,26 +150,25 @@ public unsafe class PageSettings : ICloneable
         get
         {
             RectangleF printableArea = default;
-            using DeviceContext dc = _printerSettings.CreateInformationContext(this);
-            HandleRef hdc = new(dc, dc.Hdc);
+            using var hdc = _printerSettings.CreateInformationContext(this);
 
-            int dpiX = Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX);
-            int dpiY = Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY);
+            int dpiX = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            int dpiY = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
             if (!Landscape)
             {
                 // Need to convert the printable area to 100th of an inch from the device units
-                printableArea.X = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETX) * 100 / dpiX;
-                printableArea.Y = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETY) * 100 / dpiY;
-                printableArea.Width = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.HORZRES) * 100 / dpiX;
-                printableArea.Height = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.VERTRES) * 100 / dpiY;
+                printableArea.X = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX) * 100 / dpiX;
+                printableArea.Y = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY) * 100 / dpiY;
+                printableArea.Width = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.HORZRES) * 100 / dpiX;
+                printableArea.Height = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.VERTRES) * 100 / dpiY;
             }
             else
             {
                 // Need to convert the printable area to 100th of an inch from the device units
-                printableArea.Y = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETX) * 100 / dpiX;
-                printableArea.X = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETY) * 100 / dpiY;
-                printableArea.Height = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.HORZRES) * 100 / dpiX;
-                printableArea.Width = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.VERTRES) * 100 / dpiY;
+                printableArea.Y = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX) * 100 / dpiX;
+                printableArea.X = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY) * 100 / dpiY;
+                printableArea.Height = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.HORZRES) * 100 / dpiX;
+                printableArea.Width = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.VERTRES) * 100 / dpiY;
             }
 
             return printableArea;
@@ -334,17 +319,20 @@ public unsafe class PageSettings : ICloneable
         // as it will cause a buffer overrun.
         if (devmode->dmDriverExtra >= ExtraBytes)
         {
-            int retCode = Winspool.DocumentProperties(
-                NativeMethods.NullHandleRef,
-                NativeMethods.NullHandleRef,
-                _printerSettings.PrinterName,
-                (nint)devmode,
-                (nint)devmode,
-                SafeNativeMethods.DM_IN_BUFFER | SafeNativeMethods.DM_OUT_BUFFER);
-
-            if (retCode < 0)
+            fixed (char* n = _printerSettings.PrinterName)
             {
-                PInvokeCore.GlobalFree((HGLOBAL)hdevmode);
+                int result = PInvoke.DocumentProperties(
+                    HWND.Null,
+                    HANDLE.Null,
+                    n,
+                    devmode,
+                    devmode,
+                    (uint)(DEVMODE_FIELD_FLAGS.DM_IN_BUFFER | DEVMODE_FIELD_FLAGS.DM_OUT_BUFFER));
+
+                if (result < 0)
+                {
+                    PInvokeCore.GlobalFree((HGLOBAL)hdevmode);
+                }
             }
         }
 

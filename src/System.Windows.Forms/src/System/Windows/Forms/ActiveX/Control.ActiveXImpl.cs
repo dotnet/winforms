@@ -272,8 +272,8 @@ public partial class Control
                 {
                     s_logPixels = default;
                     using var dc = GetDcScope.ScreenDC;
-                    s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
-                    s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+                    s_logPixels.X = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                    s_logPixels.Y = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 }
 
                 return s_logPixels;

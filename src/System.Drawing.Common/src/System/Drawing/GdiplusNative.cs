@@ -13,6 +13,8 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace System.Drawing;
 
+#pragma warning disable SYSLIB1092 // [LibraryImport] should use [In] and [Out] on array parameters
+
 // Raw function imports for gdiplus
 internal static partial class SafeNativeMethods
 {
@@ -4472,3 +4474,5 @@ internal static partial class SafeNativeMethods
 #endif
     }
 }
+
+#pragma warning restore SYSLIB1092

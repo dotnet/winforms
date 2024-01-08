@@ -61,7 +61,7 @@ internal static partial class ScaleHelper
             if (!OsVersion.IsWindows10_1607OrGreater())
             {
                 using var dc = GetDcScope.ScreenDC;
-                return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                return PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             }
 
             // This avoids needing to create a DC
@@ -319,8 +319,8 @@ internal static partial class ScaleHelper
         : new(ScaleToDpi(logicalSize.Width, dpi), ScaleToDpi(logicalSize.Height, dpi));
 
     internal static Size SystemIconSize => new(
-        PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
-        PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
+        PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
+        PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
