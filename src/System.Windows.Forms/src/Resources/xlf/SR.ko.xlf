@@ -5207,7 +5207,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">대화 상자에서 여러 폴더를 선택할 수 있는지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5227,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">대화 상자에서 선택한 모든 폴더의 경로를 검색합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">

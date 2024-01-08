@@ -5207,7 +5207,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">Steuert, ob mehrere Ordner im Dialogfeld ausgewählt werden können.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5227,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">Fragt die Pfade aller ausgewählten Ordner im Dialogfeld ab.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
