@@ -26,7 +26,8 @@ internal static partial class ScaleHelper
 
     // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
     private static bool s_processPerMonitorAware;
-    private static Size? _logicalSystemIconSize;
+    private static Size? s_logicalLargeSystemIconSize;
+    private static Size? s_logicalSmallSystemIconSize;
 
     /// <summary>
     ///  The initial primary monitor DPI (logical pixels per inch) for the process.
@@ -323,30 +324,17 @@ internal static partial class ScaleHelper
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
 
-    [NotNull]
-    internal static Size? LogicalSystemIconSize
-    {
-        get
-        {
-            if (_logicalSystemIconSize is not null)
-            {
-                return _logicalSystemIconSize;
-            }
+    internal static Size LogicalLargeSystemIconSize => s_logicalLargeSystemIconSize ??= OsVersion.IsWindows10_1607OrGreater()
+      ? new(
+          PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXICON, OneHundredPercentLogicalDpi),
+          PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CYICON, OneHundredPercentLogicalDpi))
+      : new(32, 32);
 
-            if (OsVersion.IsWindows10_1607OrGreater())
-            {
-                _logicalSystemIconSize = new(
-                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXICON, OneHundredPercentLogicalDpi),
-                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CYICON, OneHundredPercentLogicalDpi));
-            }
-            else
-            {
-                _logicalSystemIconSize = new Size(16, 16);
-            }
-
-            return _logicalSystemIconSize;
-        }
-    }
+    internal static Size LogicalSmallSystemIconSize => s_logicalSmallSystemIconSize ??= OsVersion.IsWindows10_1607OrGreater()
+     ? new(
+         PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi),
+         PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi))
+     : new(16, 16);
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
@@ -355,10 +343,16 @@ internal static partial class ScaleHelper
         => GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
 
     /// <summary>
-    ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
+    ///  Gets the given large icon (usually 32x32) resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
-    internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi((Size)LogicalSystemIconSize, dpi));
+    internal static Bitmap GetLargeIconResourceAsBitmap(Type type, string resource, int dpi)
+        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalLargeSystemIconSize, dpi));
+
+    /// <summary>
+    ///  Gets the given small icon (usually 16x16) resource as a <see cref="Bitmap"/> scaled to the specified dpi.
+    /// </summary>
+    internal static Bitmap GetSmallIconResourceAsBitmap(Type type, string resource, int dpi)
+        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSmallSystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.

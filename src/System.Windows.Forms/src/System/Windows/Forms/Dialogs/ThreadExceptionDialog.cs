@@ -36,7 +36,6 @@ public class ThreadExceptionDialog : Form
     private const int PICTUREWIDTH = 64;
     private const int PICTUREHEIGHT = 64;
     private const int EXCEPTIONMESSAGEVERTICALPADDING = 4;
-    private const int IconSize = 16;
 
     private readonly int _scaledMaxWidth = MAXWIDTH;
     private readonly int _scaledMaxHeight = MAXHEIGHT;
@@ -286,14 +285,14 @@ public class ThreadExceptionDialog : Form
         {
             button = _detailsButton;
 
-            _expandImage = ScaleHelper.GetIconResourceAsBitmap(
+            _expandImage = ScaleHelper.GetSmallIconResourceAsBitmap(
                 GetType(),
                 DownBitmapName,
-                ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
-            _collapseImage = ScaleHelper.GetIconResourceAsBitmap(
+                DeviceDpi);
+            _collapseImage = ScaleHelper.GetSmallIconResourceAsBitmap(
                 GetType(),
                 UpBitmapName,
-                ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
+                DeviceDpi);
 
             button.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
             button.Image = _expandImage;
@@ -336,8 +335,8 @@ public class ThreadExceptionDialog : Form
     private void ThreadExceptionDialog_DpiChanged(object? sender, DpiChangedEventArgs e)
     {
         _expandImage?.Dispose();
-        _expandImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), DownBitmapName, DeviceDpi);
-        _collapseImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), UpBitmapName, DeviceDpi);
+        _expandImage = ScaleHelper.GetSmallIconResourceAsBitmap(GetType(), DownBitmapName, DeviceDpi);
+        _collapseImage = ScaleHelper.GetSmallIconResourceAsBitmap(GetType(), UpBitmapName, DeviceDpi);
         _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
 
         if (e.DeviceDpiNew != e.DeviceDpiOld)

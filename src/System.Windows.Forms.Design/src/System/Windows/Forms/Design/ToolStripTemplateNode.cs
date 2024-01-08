@@ -1389,7 +1389,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             {
                 ItemTypeToolStripMenuItem firstItem = (ItemTypeToolStripMenuItem)_addItemButton.DropDownItems[0];
                 _addItemButton.ImageTransparentColor = Color.Lime;
-                _addItemButton.Image = ScaleHelper.GetIconResourceAsBitmap(
+                _addItemButton.Image = ScaleHelper.GetSmallIconResourceAsBitmap(
                     typeof(ToolStripTemplateNode),
                     "ToolStripTemplateNode",
                     ScaleHelper.InitialSystemDpi);

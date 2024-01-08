@@ -16,15 +16,14 @@ internal class InheritanceUI
     private static Bitmap s_inheritanceGlyph;
     private static Rectangle s_inheritanceGlyphRect;
     private ToolTip _tooltip;
-    private const int IconSize = 16;
 
     /// <summary>
     ///  The bitmap we use to show inheritance.
     /// </summary>
-    public static Bitmap InheritanceGlyph => s_inheritanceGlyph ??= ScaleHelper.GetIconResourceAsBitmap(
+    public static Bitmap InheritanceGlyph => s_inheritanceGlyph ??= ScaleHelper.GetSmallIconResourceAsBitmap(
         typeof(InheritanceUI),
         "InheritedGlyph",
-        ScaleHelper.ScaleToDpi(new Size(IconSize, IconSize), ScaleHelper.InitialSystemDpi));
+        ScaleHelper.InitialSystemDpi);
 
     /// <summary>
     ///  The rectangle surrounding the glyph.
