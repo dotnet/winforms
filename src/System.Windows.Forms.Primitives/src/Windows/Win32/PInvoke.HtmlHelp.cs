@@ -10,7 +10,7 @@ internal static partial class PInvoke
 {
     internal static unsafe HWND HtmlHelp(HWND hwndCaller, string? pszFile, HTML_HELP_COMMAND uCommand, nuint dwData)
     {
-        // Copied from generated code pending resolution of https://github.com/microsoft/win32metadata/issues/1799
+        // Copied from generated code pending resolution of https://github.com/microsoft/win32metadata/issues/1749
 
         fixed (char* p = pszFile)
         {
