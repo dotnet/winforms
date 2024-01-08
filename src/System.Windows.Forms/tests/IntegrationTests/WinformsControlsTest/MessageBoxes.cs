@@ -27,7 +27,7 @@ public partial class MessageBoxes : Form
                 MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
                     _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
                     _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
-                    "mspaint.chm", HelpNavigator.KeywordIndex, "ovals");
+                    "mmc.chm", HelpNavigator.KeywordIndex, "ovals");
             }
             else
             {
