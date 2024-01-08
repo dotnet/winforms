@@ -570,7 +570,7 @@ public partial class RichTextBox : TextBoxBase
     [DefaultValue(0)]
     [Localizable(true)]
     [SRDescription(nameof(SR.RichTextBoxRightMargin))]
-    public int RightMargin
+    public unsafe int RightMargin
     {
         get => _rightMargin;
         set
@@ -589,7 +589,7 @@ public partial class RichTextBox : TextBoxBase
                 }
                 else if (IsHandleCreated)
                 {
-                    using PInvoke.CreateDcScope hdc = new("DISPLAY");
+                    using CreateDcScope hdc = new("DISPLAY");
                     PInvoke.SendMessage(this, PInvoke.EM_SETTARGETDEVICE, (WPARAM)hdc, Pixel2Twip(value, true));
                 }
             }
@@ -2809,8 +2809,8 @@ public partial class RichTextBox : TextBoxBase
     private static void SetupLogPixels()
     {
         using var dc = GetDcScope.ScreenDC;
-        s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
-        s_logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+        s_logPixelsX = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+        s_logPixelsY = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
     }
 
     private static int Pixel2Twip(int v, bool xDirection)

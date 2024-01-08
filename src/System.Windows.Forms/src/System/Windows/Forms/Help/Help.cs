@@ -3,7 +3,8 @@
 
 using System.Drawing;
 using System.Globalization;
-using static Interop.Hhctl;
+using Windows.Win32.Data.HtmlHelp;
+using static Windows.Win32.Data.HtmlHelp.HTML_HELP_COMMAND;
 
 namespace System.Windows.Forms;
 
@@ -95,9 +96,9 @@ public static class Help
     {
         s_windowsFormsHelpTrace.TraceVerbose("Help:: ShowPopup");
 
-        HH_POPUPW pop = new()
+        HH_POPUP pop = new()
         {
-            cbStruct = sizeof(HH_POPUPW),
+            cbStruct = sizeof(HH_POPUP),
             pt = location,
             rcMargins = new RECT(-1, -1, -1, -1),               // Ignore
             clrForeground = new COLORREF(unchecked((uint)-1)),  // Ignore
@@ -109,8 +110,8 @@ public static class Help
 
         fixed (char* pszText = caption, pszFont = captionFont)
         {
-            pop.pszText = pszText;
-            pop.pszFont = pszFont;
+            pop.pszText = (sbyte*)pszText;
+            pop.pszFont = (sbyte*)pszFont;
             ShowHTML10Help(parent, null, HelpNavigator.Topic, pop);
         }
     }
@@ -160,48 +161,48 @@ public static class Help
         object? htmlParam;
         if (param is string stringParam)
         {
-            HH htmlCommand = MapCommandToHTMLCommand(command, stringParam, out htmlParam);
+            HTML_HELP_COMMAND htmlCommand = MapCommandToHTMLCommand(command, stringParam, out htmlParam);
             if (htmlParam is string stringHtmlParam)
             {
-                HtmlHelpW(handle, pathAndFileName, htmlCommand, stringHtmlParam);
+                PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, stringHtmlParam);
             }
             else if (htmlParam is int intParam)
             {
-                HtmlHelpW(handle, pathAndFileName, htmlCommand, intParam);
+                PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, in intParam);
             }
-            else if (htmlParam is HH_FTS_QUERYW query)
+            else if (htmlParam is HH_FTS_QUERY query)
             {
                 fixed (char* pszSearchQuery = stringParam)
                 {
-                    query.pszSearchQuery = pszSearchQuery;
-                    HtmlHelpW(handle, pathAndFileName, htmlCommand, ref query);
+                    query.pszSearchQuery = (sbyte*)pszSearchQuery;
+                    PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, in query);
                 }
             }
-            else if (htmlParam is HH_ALINKW aLink)
+            else if (htmlParam is HH_AKLINK aLink)
             {
                 // According to MSDN documentation, we have to ensure that the help window is up
                 // before we call ALINK lookup.
-                HtmlHelpW(IntPtr.Zero, pathAndFileName, HH.DISPLAY_TOPIC, IntPtr.Zero);
+                PInvoke.HtmlHelp(HWND.Null, pathAndFileName, HH_DISPLAY_TOPIC, null);
 
                 fixed (char* pszKeywords = stringParam)
                 {
-                    aLink.pszKeywords = pszKeywords;
-                    HtmlHelpW(handle, pathAndFileName, htmlCommand, ref aLink);
+                    aLink.pszKeywords = (sbyte*)pszKeywords;
+                    PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, in aLink);
                 }
             }
             else
             {
                 Debug.Fail($"Cannot handle HTML parameter of type: {htmlParam!.GetType()}");
-                HtmlHelpW(handle, pathAndFileName, htmlCommand, (string)param);
+                PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, (string)param);
             }
         }
         else if (param is null)
         {
-            HtmlHelpW(handle, pathAndFileName, MapCommandToHTMLCommand(command, null, out htmlParam), IntPtr.Zero);
+            PInvoke.HtmlHelp(handle, pathAndFileName, MapCommandToHTMLCommand(command, null, out htmlParam), null);
         }
-        else if (param is HH_POPUPW popup)
+        else if (param is HH_POPUP popup)
         {
-            HtmlHelpW(handle, pathAndFileName, HH.DISPLAY_TEXT_POPUP, ref popup);
+            PInvoke.HtmlHelp(handle, pathAndFileName, HH_DISPLAY_TEXT_POPUP, ref popup);
         }
         else if (param.GetType() == typeof(int))
         {
@@ -350,37 +351,38 @@ public static class Help
     /// <summary>
     ///  Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
     /// </summary>
-    private static unsafe HH MapCommandToHTMLCommand(HelpNavigator command, string? param, out object? htmlParam)
+    private static unsafe HTML_HELP_COMMAND MapCommandToHTMLCommand(HelpNavigator command, string? param, out object? htmlParam)
     {
         htmlParam = param;
 
         if (string.IsNullOrEmpty(param) && (command == HelpNavigator.AssociateIndex || command == HelpNavigator.KeywordIndex))
         {
-            return HH.DISPLAY_INDEX;
+            return HH_DISPLAY_INDEX;
         }
 
         switch (command)
         {
             case HelpNavigator.Topic:
-                return HH.DISPLAY_TOPIC;
+                return HH_DISPLAY_TOPIC;
 
             case HelpNavigator.TableOfContents:
-                return HH.DISPLAY_TOC;
+                return HH_DISPLAY_TOC;
 
             case HelpNavigator.Index:
-                return HH.DISPLAY_INDEX;
+                return HH_DISPLAY_INDEX;
 
             case HelpNavigator.Find:
                 {
-                    HH_FTS_QUERYW ftsQuery = new()
+                    HH_FTS_QUERY ftsQuery = new()
                     {
-                        cbStruct = sizeof(HH_FTS_QUERYW),
-                        iProximity = HH_FTS_QUERYW.DEFAULT_PROXIMITY,
+                        cbStruct = sizeof(HH_FTS_QUERY),
+                        iProximity = (int)HH_FTS_DEFAULT_PROXIMITY,
                         fExecute = true,
                         fUniCodeStrings = true
                     };
+
                     htmlParam = ftsQuery;
-                    return HH.DISPLAY_SEARCH;
+                    return HH_DISPLAY_SEARCH;
                 }
 
             case HelpNavigator.TopicId:
@@ -388,28 +390,28 @@ public static class Help
                     if (int.TryParse(param, out int htmlParamAsInt))
                     {
                         htmlParam = htmlParamAsInt;
-                        return HH.HELP_CONTEXT;
+                        return HH_HELP_CONTEXT;
                     }
 
                     // default to just showing the index
-                    return HH.DISPLAY_INDEX;
+                    return HH_DISPLAY_INDEX;
                 }
 
             case HelpNavigator.KeywordIndex:
             case HelpNavigator.AssociateIndex:
                 {
-                    HH_ALINKW alink = new()
+                    HH_AKLINK alink = new()
                     {
-                        cbStruct = sizeof(HH_ALINKW),
+                        cbStruct = sizeof(HH_AKLINK),
                         fIndexOnFail = true,
                         fReserved = false
                     };
                     htmlParam = alink;
-                    return command == HelpNavigator.KeywordIndex ? HH.KEYWORD_LOOKUP : HH.ALINK_LOOKUP;
+                    return command == HelpNavigator.KeywordIndex ? HH_KEYWORD_LOOKUP : HH_ALINK_LOOKUP;
                 }
 
             default:
-                return (HH)command;
+                return (HTML_HELP_COMMAND)command;
         }
     }
 }

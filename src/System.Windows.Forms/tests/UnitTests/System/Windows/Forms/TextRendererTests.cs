@@ -746,7 +746,7 @@ public class TextRendererTests
     [MemberData(nameof(TextRenderer_DrawText_ApplyState_TestData))]
     public void TextRenderer_DrawText_ApplyState(TextFormatFlags flags, Rectangle expectedBounds)
     {
-        using var hdc = new PInvoke.CreateDcScope(default);
+        using var hdc = new CreateDcScope(default);
         DeviceContextState state = new(hdc);
 
         using MemoryStream stream = new(1024);

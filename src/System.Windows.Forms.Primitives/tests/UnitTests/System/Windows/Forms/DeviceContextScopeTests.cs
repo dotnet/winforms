@@ -17,7 +17,7 @@ public class DeviceContextScopeTests
     public unsafe void Scope_ApplyGraphicsProperties()
     {
         // Create a bitmap using the screen's stats
-        using PInvoke.CreateDcScope dcScope = new(default);
+        using CreateDcScope dcScope = new(default);
         using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
         PInvoke.SelectObject(dcScope, bitmapScope);
 
@@ -57,7 +57,7 @@ public class DeviceContextScopeTests
     public void Graphics_HdcStatePersistence()
     {
         // Create a bitmap using the screen's stats
-        using PInvoke.CreateDcScope dcScope = new(default);
+        using CreateDcScope dcScope = new(default);
         using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
         HDC_MAP_MODE originalMapMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_HIMETRIC);
         PInvoke.SelectObject(dcScope, bitmapScope);

@@ -37,10 +37,10 @@ public partial class Control
 
             _hMetafileDC = hOriginalDC;
             _destRect = new(size);
-            HDC = PInvoke.CreateCompatibleDC((HDC)default);
+            HDC = PInvokeCore.CreateCompatibleDC(default);
 
-            int planes = PInvoke.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.PLANES);
-            int bitsPixel = PInvoke.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+            int planes = PInvokeCore.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.PLANES);
+            int bitsPixel = PInvokeCore.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
             _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
             _hOriginalBmp = (HBITMAP)PInvoke.SelectObject(HDC, _hBitmap);
         }
@@ -66,7 +66,7 @@ public partial class Control
                 PInvoke.SelectObject(HDC, _hOriginalBmp);
                 success = PInvoke.DeleteObject(_hBitmap);
                 Debug.Assert(success, "DeleteObject() failed.");
-                success = PInvoke.DeleteDC(HDC);
+                success = PInvokeCore.DeleteDC(HDC);
                 Debug.Assert(success, "DeleteObject() failed.");
             }
             finally
