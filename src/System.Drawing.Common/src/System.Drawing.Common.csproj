@@ -323,6 +323,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj">
       <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
       <Pack>true</Pack>
+      <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
 
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="$(MicrosoftWindowsCsWin32PackageVersion)">
