@@ -1,5 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Collections.Generic;
 
 namespace System.Drawing.Internal;
 
@@ -10,7 +12,7 @@ namespace System.Drawing.Internal;
 internal static class DeviceContexts
 {
     [ThreadStatic]
-    private static ClientUtils.WeakRefCollection? t_activeDeviceContexts;
+    private static WeakRefCollection<DeviceContext>? t_activeDeviceContexts;
 
     /// <summary>
     /// WindowsGraphicsCacheManager needs to track DeviceContext objects so it can ask them if a font is in use
@@ -18,10 +20,7 @@ internal static class DeviceContexts
     /// </summary>
     internal static void AddDeviceContext(DeviceContext dc)
     {
-        ClientUtils.WeakRefCollection wrc = t_activeDeviceContexts ??= new ClientUtils.WeakRefCollection()
-        {
-            RefCheckThreshold = 20
-        };
+        WeakRefCollection<DeviceContext> wrc = t_activeDeviceContexts ??= new();
 
         if (!wrc.Contains(dc))
         {
@@ -40,7 +39,5 @@ internal static class DeviceContexts
     }
 
     internal static void RemoveDeviceContext(DeviceContext dc)
-    {
-        t_activeDeviceContexts?.RemoveByHashCode(dc);
-    }
+        => t_activeDeviceContexts?.Remove(dc);
 }

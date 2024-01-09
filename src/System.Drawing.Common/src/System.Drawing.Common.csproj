@@ -299,6 +299,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
 
     <Compile Include="..\..\Common\src\LocalAppContextSwitches.Common.cs" Link="System\LocalAppContextSwitches.Common.cs" />
     <Compile Include="..\..\Common\src\ValueStringBuilder.cs" Link="System\Text\ValueStringBuilder.cs" />
+    <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
 
     <EmbeddedResource Include="Resources\System\Drawing\DefaultComponent.bmp" LogicalName="System.Drawing.DefaultComponent.bmp" />
     <EmbeddedResource Include="Resources\System\Drawing\Printing\PrintDocument.bmp" />

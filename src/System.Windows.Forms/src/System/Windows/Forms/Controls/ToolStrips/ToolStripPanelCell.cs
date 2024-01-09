@@ -41,7 +41,6 @@ internal class ToolStripPanelCell : ArrangedElement
 
         // Ensure 1:1 Cell/ToolStripPanel mapping
         _cellID = $"{control.Name}.{++t_cellCount}";
-        Debug.Assert(t_cellCount <= ToolStripManager.ToolStrips.Count, "who is allocating an extra toolstrippanel cell?");
 #endif
 
         ToolStripPanelRow = parent;
