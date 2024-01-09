@@ -1168,7 +1168,7 @@ public class DomainUpDownTests
     public static IEnumerable<object[]> OnChanged_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), new EventArgs() };
+        yield return new object[] { new(), new EventArgs() };
     }
 
     [WinFormsTheory]

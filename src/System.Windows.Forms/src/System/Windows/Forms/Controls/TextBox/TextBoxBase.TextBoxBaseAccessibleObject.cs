@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -16,32 +17,13 @@ public abstract partial class TextBoxBase
 
         public TextBoxBaseAccessibleObject(TextBoxBase owner) : base(owner)
         {
-            _textProvider = new TextBoxBaseUiaTextProvider(owner);
+            _textProvider = new(owner);
         }
 
-        internal void ClearObjects()
-        {
-            _textProvider = null;
+        internal void ClearObjects() => _textProvider = null;
 
-            // A place for future memory leak fixing:
-            //
-            // 1) This method should be added to the ControlAccessibleObject class:
-            //    internal void ClearOwnerControl()
-            //    {
-            //        this.Owner = null;
-            //    }
-            //
-            // 2) Owner property shoud be changed from this
-            //        public Control Owner { get; }
-            //    to something like this
-            //        public Control? Owner { get; private set; }
-            //
-            // 3) These changes will produce different sorts of warnings:
-            //     non-nullable member will became nullable, additional checks for null should be added, etc.
-            //
-            // 4) This method call should be uncommented
-            //        ClearOwnerControl();
-        }
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out TextBoxBase? owner) ?
+            owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {

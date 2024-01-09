@@ -61,7 +61,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     /// </summary>
     public override IList SnapLines =>
         // We don't want padding snaplines, so call directly to the internal method.
-        SnapLinesInternal();
+        EdgeAndMarginSnapLines().Unwrap();
 
     /// <summary>
     ///  Returns the number of internal control designers in the <see cref="SplitContainerDesigner"/>. An internal control is a control that is not in the

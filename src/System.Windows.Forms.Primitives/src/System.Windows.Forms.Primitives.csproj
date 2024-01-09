@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
     <ProjectReference Include="..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,10 @@
       <ManifestResourceName>System.Windows.Forms.Primitives.Resources.SR</ManifestResourceName>
       <GenerateSource>true</GenerateSource>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
   </ItemGroup>
 
 </Project>

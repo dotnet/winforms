@@ -3,17 +3,17 @@
 
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.Drawing.Internal;
 using System.IO;
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.Graphics.Printing;
+using Windows.Win32.UI.Controls.Dialogs;
 
 namespace System.Drawing.Printing;
 
 /// <summary>
 ///  Information about how a document should be printed, including which printer to print it on.
 /// </summary>
-public partial class PrinterSettings : ICloneable
+public unsafe partial class PrinterSettings : ICloneable
 {
     // All read/write data is stored in managed code, and whenever we need to call Win32,
     // we create new DEVMODE and DEVNAMES structures.  We don't store device capabilities,
@@ -24,7 +24,7 @@ public partial class PrinterSettings : ICloneable
 
     private string? _printerName; // default printer.
     private string _driverName = "";
-    private short _extraBytes;
+    private ushort _extraBytes;
     private byte[]? _extraInfo;
 
     private short _copies = -1;
@@ -37,7 +37,7 @@ public partial class PrinterSettings : ICloneable
     private int _minPage;
     private PrintRange _printRange;
 
-    private short _devmodeBytes;
+    private ushort _devmodeBytes;
     private byte[]? _cachedDevmode;
 
     /// <summary>
@@ -51,7 +51,7 @@ public partial class PrinterSettings : ICloneable
     /// <summary>
     ///  Gets a value indicating whether the printer supports duplex (double-sided) printing.
     /// </summary>
-    public bool CanDuplex => DeviceCapabilities(SafeNativeMethods.DC_DUPLEX, IntPtr.Zero, 0) == 1;
+    public bool CanDuplex => DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_DUPLEX) == 1;
 
     /// <summary>
     ///  Gets or sets the number of copies to print.
@@ -76,7 +76,7 @@ public partial class PrinterSettings : ICloneable
     public bool Collate
     {
         get => _collate.IsDefault
-            ? GetModeField(ModeField.Collate, SafeNativeMethods.DMCOLLATE_FALSE) == SafeNativeMethods.DMCOLLATE_TRUE
+            ? GetModeField(ModeField.Collate, (short)DEVMODE_COLLATE.DMCOLLATE_FALSE) == (short)DEVMODE_COLLATE.DMCOLLATE_TRUE
             : (bool)_collate;
         set => _collate = value;
     }
@@ -95,7 +95,7 @@ public partial class PrinterSettings : ICloneable
     /// </summary>
     public Duplex Duplex
     {
-        get => _duplex != Duplex.Default ? _duplex : (Duplex)GetModeField(ModeField.Duplex, SafeNativeMethods.DMDUP_SIMPLEX);
+        get => _duplex != Duplex.Default ? _duplex : (Duplex)GetModeField(ModeField.Duplex, (short)DEVMODE_DUPLEX.DMDUP_SIMPLEX);
         set
         {
             if (value is < Duplex.Default or > Duplex.Horizontal)
@@ -127,58 +127,65 @@ public partial class PrinterSettings : ICloneable
     /// <summary>
     ///  Gets the names of all printers installed on the machine.
     /// </summary>
-    public static unsafe StringCollection InstalledPrinters
+    public static StringCollection InstalledPrinters
     {
         get
         {
             int sizeOfStruct;
 
             // Note: The call to get the size of the buffer required for level 5 does not work properly on NT platforms.
-            const int Level = 4;
+            const uint Level = 4;
 
             // PRINTER_INFO_4 is 12 or 24 bytes in size depending on the architecture.
             sizeOfStruct = IntPtr.Size == 8
                 ? (IntPtr.Size * 2) + (sizeof(int) * 1) + Padding64Bit
                 : (IntPtr.Size * 2) + (sizeof(int) * 1);
 
-            Winspool.EnumPrinters(
-                SafeNativeMethods.PRINTER_ENUM_LOCAL | SafeNativeMethods.PRINTER_ENUM_CONNECTIONS,
-                null,
+            uint bytesNeeded;
+            bool success = PInvoke.EnumPrinters(
+                PInvoke.PRINTER_ENUM_LOCAL | PInvoke.PRINTER_ENUM_CONNECTIONS,
+                Name: null,
                 Level,
-                IntPtr.Zero,
+                pPrinterEnum: null,
                 0,
-                out int bufferSize,
-                out _);
+                &bytesNeeded,
+                pcReturned: null);
 
-            IntPtr buffer = Marshal.AllocCoTaskMem(bufferSize);
-            int returnCode = Winspool.EnumPrinters(
-                SafeNativeMethods.PRINTER_ENUM_LOCAL | SafeNativeMethods.PRINTER_ENUM_CONNECTIONS,
-                null,
-                Level,
-                buffer,
-                bufferSize,
-                out _,
-                out int count);
-
-            string[] array = new string[count];
-
-            if (returnCode == 0)
+            if (!success)
             {
-                Marshal.FreeCoTaskMem(buffer);
                 throw new Win32Exception();
             }
 
-            byte* pBuffer = (byte*)buffer;
-            for (int i = 0; i < count; i++)
+            using BufferScope<byte> buffer = new((int)bytesNeeded);
+            uint count;
+
+            fixed (byte* b = buffer)
             {
-                // The printer name is at offset 0
-                IntPtr namePointer = *(IntPtr*)(pBuffer + (nint)i * sizeOfStruct);
-                array[i] = Marshal.PtrToStringAuto(namePointer)!;
+                success = PInvoke.EnumPrinters(
+                    PInvoke.PRINTER_ENUM_LOCAL | PInvoke.PRINTER_ENUM_CONNECTIONS,
+                    Name: null,
+                    Level,
+                    b,
+                    (uint)buffer.Length,
+                    &bytesNeeded,
+                    &count);
+
+                if (!success)
+                {
+                    throw new Win32Exception();
+                }
+
+                string[] array = new string[count];
+
+                ReadOnlySpan<PRINTER_INFO_4W> info = new(b, (int)count);
+
+                for (int i = 0; i < count; i++)
+                {
+                    array[i] = new string(info[i].pServerName);
+                }
+
+                return new StringCollection(array);
             }
-
-            Marshal.FreeCoTaskMem(buffer);
-
-            return new StringCollection(array);
         }
     }
 
@@ -190,22 +197,22 @@ public partial class PrinterSettings : ICloneable
     /// <summary>
     ///  Gets a value indicating whether the printer is a plotter, as opposed to a raster printer.
     /// </summary>
-    public bool IsPlotter => GetDeviceCaps(Gdi32.DeviceCapability.TECHNOLOGY) == Gdi32.DeviceTechnology.DT_PLOTTER;
+    public bool IsPlotter => GetDeviceCaps(GET_DEVICE_CAPS_INDEX.TECHNOLOGY) == PInvoke.DT_PLOTTER;
 
     /// <summary>
     ///  Gets a value indicating whether the <see cref='PrinterName'/> property designates a valid printer.
     /// </summary>
-    public bool IsValid => DeviceCapabilities(SafeNativeMethods.DC_COPIES, IntPtr.Zero, -1) != -1;
+    public bool IsValid => DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_COPIES) != -1;
 
     /// <summary>
     ///  Gets the angle, in degrees, which the portrait orientation is rotated to produce the landscape orientation.
     /// </summary>
-    public int LandscapeAngle => DeviceCapabilities(SafeNativeMethods.DC_ORIENTATION, IntPtr.Zero, 0);
+    public int LandscapeAngle => DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_ORIENTATION, defaultValue: 0);
 
     /// <summary>
     ///  Gets the maximum number of copies allowed by the printer.
     /// </summary>
-    public int MaximumCopies => DeviceCapabilities(SafeNativeMethods.DC_COPIES, IntPtr.Zero, 1);
+    public int MaximumCopies => DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_COPIES, defaultValue: 1);
 
     /// <summary>
     ///  Gets or sets the highest <see cref='FromPage'/> or <see cref='ToPage'/> which may be selected in a print dialog box.
@@ -331,16 +338,35 @@ public partial class PrinterSettings : ICloneable
     /// </summary>
     public bool IsDirectPrintingSupported(ImageFormat imageFormat)
     {
-        if (imageFormat.Equals(ImageFormat.Jpeg) || imageFormat.Equals(ImageFormat.Png))
+        if (!imageFormat.Equals(ImageFormat.Jpeg) && !imageFormat.Equals(ImageFormat.Png))
         {
-            int nEscape = imageFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
-
-            using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
-            HandleRef hdc = new(dc, dc.Hdc);
-            return Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out int outData) > 0;
+            return false;
         }
 
-        return false;
+        using var hdc = CreateInformationContext(DefaultPageSettings);
+        return IsDirectPrintingSupported(hdc, imageFormat, out _);
+    }
+
+    private static bool IsDirectPrintingSupported(HDC hdc, ImageFormat imageFormat, out int escapeFunction)
+    {
+        Debug.Assert(imageFormat == ImageFormat.Jpeg || imageFormat == ImageFormat.Png);
+
+        escapeFunction = imageFormat.Equals(ImageFormat.Jpeg)
+            ? (int)PInvoke.CHECKJPEGFORMAT
+            : (int)PInvoke.CHECKPNGFORMAT;
+
+        fixed (int* function = &escapeFunction)
+        {
+            int result = PInvoke.ExtEscape(
+                hdc,
+                (int)PInvoke.QUERYESCSUPPORT,
+                sizeof(int),
+                (PCSTR)(void*)&function,
+                0,
+                null);
+
+            return result != 0;
+        }
     }
 
     /// <summary>
@@ -352,37 +378,46 @@ public partial class PrinterSettings : ICloneable
     /// </summary>
     public bool IsDirectPrintingSupported(Image image)
     {
-        bool isDirectPrintingSupported = false;
-        if (image.RawFormat.Equals(ImageFormat.Jpeg) || image.RawFormat.Equals(ImageFormat.Png))
+        ImageFormat imageFormat = image.RawFormat;
+
+        if (!imageFormat.Equals(ImageFormat.Jpeg) && !imageFormat.Equals(ImageFormat.Png))
         {
-            using MemoryStream stream = new();
-            image.Save(stream, image.RawFormat);
-
-            byte[] pvImage = stream.ToArray();
-
-            int nEscape = image.RawFormat.Equals(ImageFormat.Jpeg) ? Gdi32.CHECKJPEGFORMAT : Gdi32.CHECKPNGFORMAT;
-
-            using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
-            HandleRef hdc = new(dc, dc.Hdc);
-            bool querySupported = Gdi32.ExtEscape(hdc, Gdi32.QUERYESCSUPPORT, sizeof(int), ref nEscape, 0, out int outData) > 0;
-            if (querySupported)
-            {
-                isDirectPrintingSupported =
-                    Gdi32.ExtEscape(hdc, nEscape, pvImage.Length, pvImage, sizeof(int), out outData) > 0
-                    && (outData == 1);
-            }
+            return false;
         }
 
-        return isDirectPrintingSupported;
+        using var hdc = CreateInformationContext(DefaultPageSettings);
+
+        if (!IsDirectPrintingSupported(hdc, imageFormat, out int escapeFunction))
+        {
+            return false;
+        }
+
+        using MemoryStream stream = new();
+        image.Save(stream, image.RawFormat);
+
+        byte[] pvImage = stream.ToArray();
+
+        fixed (byte* b = pvImage)
+        {
+            uint driverReturnValue;
+            int result = PInvoke.ExtEscape(
+                hdc,
+                escapeFunction,
+                pvImage.Length,
+                (PCSTR)b,
+                sizeof(uint),
+                (PSTR)(void*)&driverReturnValue);
+
+            // -1 means some sort of failure
+            Debug.Assert(result != -1);
+            return result == 1;
+        }
     }
 
     /// <summary>
     ///  Gets a value indicating whether the printer supports color printing.
     /// </summary>
-    public bool SupportsColor => DeviceCapabilities(
-        capability: SafeNativeMethods.DC_COLORDEVICE,
-        pointerToBuffer: IntPtr.Zero,
-        defaultValue: 0) == 1;
+    public bool SupportsColor => DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_COLORDEVICE) == 1;
 
     /// <summary>
     ///  Gets or sets the last page to print.
@@ -411,59 +446,53 @@ public partial class PrinterSettings : ICloneable
         return clone;
     }
 
-    internal DeviceContext CreateDeviceContext(PageSettings pageSettings)
+    internal CreateDcScope CreateDeviceContext(PageSettings pageSettings)
     {
-        IntPtr modeHandle = GetHdevmodeInternal();
-        DeviceContext? dc = null;
+        HGLOBAL modeHandle = GetHdevmodeInternal();
 
         try
         {
             // Copy the PageSettings to the DEVMODE.
             pageSettings.CopyToHdevmode(modeHandle);
-            dc = CreateDeviceContext(modeHandle);
+            return CreateDeviceContext(modeHandle);
         }
         finally
         {
-            Kernel32.GlobalFree(modeHandle);
+            PInvokeCore.GlobalFree(modeHandle);
         }
-
-        return dc;
     }
 
-    internal DeviceContext CreateDeviceContext(IntPtr hdevmode)
+    internal CreateDcScope CreateDeviceContext(HGLOBAL hdevmode)
     {
-        IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        DeviceContext dc = DeviceContext.CreateDC(DriverName, PrinterNameInternal, fileName: null, modePointer);
-        Kernel32.GlobalUnlock(hdevmode);
-        return dc;
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(hdevmode);
+        CreateDcScope hdc = new(DriverName, PrinterNameInternal, devmode);
+        PInvokeCore.GlobalUnlock(hdevmode);
+        return hdc;
     }
 
     // A read-only DC, which is faster than CreateHdc
-    internal DeviceContext CreateInformationContext(PageSettings pageSettings)
+    internal CreateDcScope CreateInformationContext(PageSettings pageSettings)
     {
-        IntPtr modeHandle = GetHdevmodeInternal();
-        DeviceContext dc;
+        HGLOBAL modeHandle = GetHdevmodeInternal();
 
         try
         {
             // Copy the PageSettings to the DEVMODE.
             pageSettings.CopyToHdevmode(modeHandle);
-            dc = CreateInformationContext(modeHandle);
+            return CreateInformationContext(modeHandle);
         }
         finally
         {
-            Kernel32.GlobalFree(modeHandle);
+            PInvokeCore.GlobalFree(modeHandle);
         }
-
-        return dc;
     }
 
     // A read-only DC, which is faster than CreateHdc
-    internal DeviceContext CreateInformationContext(IntPtr hdevmode)
+    internal unsafe CreateDcScope CreateInformationContext(HGLOBAL hdevmode)
     {
-        IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        DeviceContext dc = DeviceContext.CreateIC(DriverName, PrinterNameInternal, fileName: null, modePointer);
-        Kernel32.GlobalUnlock(hdevmode);
+        void* modePointer = PInvokeCore.GlobalLock(hdevmode);
+        CreateDcScope dc = new(DriverName, PrinterNameInternal, (DEVMODEW*)modePointer, informationOnly: true);
+        PInvokeCore.GlobalUnlock(hdevmode);
         return dc;
     }
 
@@ -485,9 +514,9 @@ public partial class PrinterSettings : ICloneable
     public Graphics CreateMeasurementGraphics(PageSettings pageSettings)
     {
         // returns the Graphics object for the printer
-        DeviceContext dc = CreateDeviceContext(pageSettings);
-        Graphics g = Graphics.FromHdcInternal(dc.Hdc);
-        g.PrintingHelper = dc; // Graphics will dispose of the DeviceContext.
+        var hdc = CreateDeviceContext(pageSettings);
+        Graphics g = Graphics.FromHdcInternal(hdc);
+        g.PrintingHelper = new HdcHandle(hdc); // Graphics will dispose of the DeviceContext.
         return g;
     }
 
@@ -504,172 +533,72 @@ public partial class PrinterSettings : ICloneable
         return g;
     }
 
-    // Create a PRINTDLG with a few useful defaults.
-    // Try to keep this consistent with PrintDialog.CreatePRINTDLG.
-    private static unsafe void CreatePRINTDLGX86(out Comdlg32.PRINTDLGX86 data)
-    {
-        data = default;
-        data.lStructSize = sizeof(Comdlg32.PRINTDLGX86);
-        data.nFromPage = 1;
-        data.nToPage = 1;
-        data.nMinPage = 0;
-        data.nMaxPage = 9999;
-        data.nCopies = 1;
-    }
-
-    // Create a PRINTDLG with a few useful defaults.
-    // Try to keep this consistent with PrintDialog.CreatePRINTDLG.
-    private static unsafe void CreatePRINTDLG(out Comdlg32.PRINTDLG data)
-    {
-        data = default;
-        data.lStructSize = sizeof(Comdlg32.PRINTDLG);
-        data.nFromPage = 1;
-        data.nToPage = 1;
-        data.nMinPage = 0;
-        data.nMaxPage = 9999;
-        data.nCopies = 1;
-    }
-
     // Use FastDeviceCapabilities where possible -- computing PrinterName is quite slow
-    private int DeviceCapabilities(short capability, IntPtr pointerToBuffer, int defaultValue)
-    {
-        string printerName = PrinterName;
-        return FastDeviceCapabilities(capability, pointerToBuffer, defaultValue, printerName);
-    }
+    private int DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES capability, void* output = null, int defaultValue = -1)
+        => FastDeviceCapabilities(capability, PrinterName, output, defaultValue);
 
     // We pass PrinterName in as a parameter rather than computing it ourselves because it's expensive to compute.
     // We need to pass IntPtr.Zero since passing HDevMode is non-performant.
-    private static int FastDeviceCapabilities(short capability, IntPtr pointerToBuffer, int defaultValue, string printerName)
+    private static int FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES capability, string printerName, void* output = null, int defaultValue = -1)
     {
-        int result = Winspool.DeviceCapabilities(
+        int result = PInvoke.DeviceCapabilities(
             printerName,
             GetOutputPort(),
             capability,
-            pointerToBuffer,
-            IntPtr.Zero);
+            (PWSTR)output,
+            null);
 
         return result == -1 ? defaultValue : result;
     }
 
-    // Called by get_PrinterName
-    private static string GetDefaultPrinterName()
+    private static string GetDefaultPrinterName() => GetDefaultName(1);
+
+    private static string GetOutputPort() => GetDefaultName(2);
+
+    private static string GetDefaultName(int slot)
     {
-        if (IntPtr.Size == 8)
+        PRINTDLGEXW dialogSettings = new()
         {
-            CreatePRINTDLG(out Comdlg32.PRINTDLG data);
-            data.Flags = SafeNativeMethods.PD_RETURNDEFAULT;
-            bool status = Comdlg32.PrintDlg(ref data);
+            lStructSize = (uint)sizeof(PRINTDLGEXW),
+            Flags = PRINTDLGEX_FLAGS.PD_RETURNDEFAULT | PRINTDLGEX_FLAGS.PD_NOPAGENUMS,
+            // PrintDlgEx requires a valid HWND
+            hwndOwner = PInvokeCore.GetDesktopWindow(),
+            nStartPage = PInvokeCore.START_PAGE_GENERAL
+        };
 
-            if (!status)
-            {
-                return SR.NoDefaultPrinter;
-            }
-
-            IntPtr handle = data.hDevNames;
-            IntPtr names = Kernel32.GlobalLock(handle);
-            if (names == IntPtr.Zero)
-            {
-                throw new Win32Exception();
-            }
-
-            string name = ReadOneDEVNAME(names, 1);
-            Kernel32.GlobalUnlock(handle);
-
-            // Windows allocates them, but we have to free them
-            Kernel32.GlobalFree(data.hDevNames);
-            Kernel32.GlobalFree(data.hDevMode);
-
-            return name;
-        }
-        else
+        HRESULT status = PInvokeCore.PrintDlgEx(&dialogSettings);
+        if (status.Failed)
         {
-            CreatePRINTDLGX86(out Comdlg32.PRINTDLGX86 data);
-            data.Flags = SafeNativeMethods.PD_RETURNDEFAULT;
-            bool status = Comdlg32.PrintDlg(ref data);
-
-            if (!status)
-            {
-                return SR.NoDefaultPrinter;
-            }
-
-            IntPtr handle = data.hDevNames;
-            IntPtr names = Kernel32.GlobalLock(handle);
-            if (names == IntPtr.Zero)
-            {
-                throw new Win32Exception();
-            }
-
-            string name = ReadOneDEVNAME(names, 1);
-            Kernel32.GlobalUnlock(handle);
-
-            // Windows allocates them, but we have to free them
-            Kernel32.GlobalFree(data.hDevNames);
-            Kernel32.GlobalFree(data.hDevMode);
-
-            return name;
+            return SR.NoDefaultPrinter;
         }
+
+        HGLOBAL handle = dialogSettings.hDevNames;
+        DEVNAMES* names = (DEVNAMES*)PInvokeCore.GlobalLock(handle);
+        if (names is null)
+        {
+            throw new Win32Exception();
+        }
+
+        string name = slot switch
+        {
+            1 => new((char*)names + names->wDeviceOffset),
+            2 => new((char*)names + names->wOutputOffset),
+            _ => throw new InvalidOperationException()
+        };
+
+        PInvokeCore.GlobalUnlock(handle);
+
+        // Windows allocates them, but we have to free them
+        PInvokeCore.GlobalFree(dialogSettings.hDevNames);
+        PInvokeCore.GlobalFree(dialogSettings.hDevMode);
+
+        return name;
     }
 
-    // Called by get_OutputPort
-    private static string GetOutputPort()
+    private int GetDeviceCaps(GET_DEVICE_CAPS_INDEX capability)
     {
-        if (IntPtr.Size == 8)
-        {
-            CreatePRINTDLG(out Comdlg32.PRINTDLG data);
-            data.Flags = SafeNativeMethods.PD_RETURNDEFAULT;
-            bool status = Comdlg32.PrintDlg(ref data);
-            if (!status)
-                return SR.NoDefaultPrinter;
-
-            IntPtr handle = data.hDevNames;
-            IntPtr names = Kernel32.GlobalLock(handle);
-            if (names == IntPtr.Zero)
-                throw new Win32Exception();
-
-            string name = ReadOneDEVNAME(names, 2);
-
-            Kernel32.GlobalUnlock(handle);
-
-            // Windows allocates them, but we have to free them
-            Kernel32.GlobalFree(data.hDevNames);
-            Kernel32.GlobalFree(data.hDevMode);
-
-            return name;
-        }
-        else
-        {
-            CreatePRINTDLGX86(out Comdlg32.PRINTDLGX86 data);
-            data.Flags = SafeNativeMethods.PD_RETURNDEFAULT;
-            bool status = Comdlg32.PrintDlg(ref data);
-
-            if (!status)
-            {
-                return SR.NoDefaultPrinter;
-            }
-
-            IntPtr handle = data.hDevNames;
-            IntPtr names = Kernel32.GlobalLock(handle);
-            if (names == IntPtr.Zero)
-            {
-                throw new Win32Exception();
-            }
-
-            string name = ReadOneDEVNAME(names, 2);
-
-            Kernel32.GlobalUnlock(handle);
-
-            // Windows allocates them, but we have to free them
-            Kernel32.GlobalFree(data.hDevNames);
-            Kernel32.GlobalFree(data.hDevMode);
-
-            return name;
-        }
-    }
-
-    private int GetDeviceCaps(Gdi32.DeviceCapability capability)
-    {
-        using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
-        return Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), capability);
+        using var hdc = CreateInformationContext(DefaultPageSettings);
+        return PInvokeCore.GetDeviceCaps(hdc, capability);
     }
 
     /// <summary>
@@ -680,104 +609,104 @@ public partial class PrinterSettings : ICloneable
     /// </summary>
     public IntPtr GetHdevmode()
     {
-        IntPtr modeHandle = GetHdevmodeInternal();
+        HGLOBAL modeHandle = GetHdevmodeInternal();
         _defaultPageSettings.CopyToHdevmode(modeHandle);
         return modeHandle;
     }
 
-    internal IntPtr GetHdevmodeInternal()
+    internal unsafe HGLOBAL GetHdevmodeInternal()
     {
-        // getting the printer name is quite expensive if PrinterName is left default,
-        // because it needs to figure out what the default printer is
-        return GetHdevmodeInternal(PrinterNameInternal);
+        // Getting the printer name is quite expensive if PrinterName is left default,
+        // because it needs to figure out what the default printer is.
+        fixed (char* n = PrinterNameInternal)
+        {
+            return GetHdevmodeInternal(n);
+        }
     }
 
-    private unsafe IntPtr GetHdevmodeInternal(string printer)
+    private HGLOBAL GetHdevmodeInternal(char* printerName)
     {
+        int result = -1;
+
         // Create DEVMODE
-        int modeSize = Winspool.DocumentProperties(
-            NativeMethods.NullHandleRef,
-            NativeMethods.NullHandleRef,
-            printer,
-            IntPtr.Zero,
-            NativeMethods.NullHandleRef,
+        result = PInvoke.DocumentProperties(
+            default,
+            default,
+            printerName,
+            null,
+            (DEVMODEW*)null,
             0);
 
-        if (modeSize < 1)
+        if (result < 1)
         {
             throw new InvalidPrinterException(this);
         }
 
-        IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
-        IntPtr pointer = Kernel32.GlobalLock(handle);
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)result);
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(handle);
 
         // Get the DevMode only if its not cached.
         if (_cachedDevmode is not null)
         {
-            Marshal.Copy(_cachedDevmode, 0, pointer, _devmodeBytes);
+            Marshal.Copy(_cachedDevmode, 0, (nint)devmode, _devmodeBytes);
         }
         else
         {
-            int returnCode = Winspool.DocumentProperties(
-                NativeMethods.NullHandleRef,
-                NativeMethods.NullHandleRef,
-                printer,
-                pointer,
-                NativeMethods.NullHandleRef,
-                SafeNativeMethods.DM_OUT_BUFFER);
+            result = PInvoke.DocumentProperties(
+                default,
+                default,
+                printerName,
+                devmode,
+                (DEVMODEW*)null,
+                (uint)DEVMODE_FIELD_FLAGS.DM_OUT_BUFFER);
 
-            if (returnCode < 0)
+            if (result < 0)
             {
                 throw new Win32Exception();
             }
         }
 
-        Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
-
         if (_extraInfo is not null)
         {
             // Guard against buffer overrun attacks (since design allows client to set a new printer name without
             // updating the devmode)/ by checking for a large enough buffer size before copying the extra info buffer.
-            if (_extraBytes <= mode.dmDriverExtra)
+            if (_extraBytes <= devmode->dmDriverExtra)
             {
-                IntPtr pointerOffset = (IntPtr)((byte*)pointer + mode.dmSize);
-                Marshal.Copy(_extraInfo, 0, pointerOffset, _extraBytes);
+                Marshal.Copy(_extraInfo, 0, (nint)((byte*)devmode + devmode->dmSize), _extraBytes);
             }
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES && _copies != -1)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_COPIES) && _copies != -1)
         {
-            mode.dmCopies = _copies;
+            devmode->Anonymous1.Anonymous1.dmCopies = _copies;
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_DUPLEX) == SafeNativeMethods.DM_DUPLEX && unchecked((int)_duplex) != -1)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_DUPLEX) && (int)_duplex != -1)
         {
-            mode.dmDuplex = unchecked((short)_duplex);
+            devmode->dmDuplex = (DEVMODE_DUPLEX)_duplex;
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COLLATE) == SafeNativeMethods.DM_COLLATE && _collate.IsNotDefault)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_COLLATE) && _collate.IsNotDefault)
         {
-            mode.dmCollate = (short)(((bool)_collate) ? SafeNativeMethods.DMCOLLATE_TRUE : SafeNativeMethods.DMCOLLATE_FALSE);
+            devmode->dmCollate = _collate.IsTrue ? DEVMODE_COLLATE.DMCOLLATE_TRUE : DEVMODE_COLLATE.DMCOLLATE_FALSE;
         }
 
-        Marshal.StructureToPtr(mode, pointer, false);
+        result = PInvoke.DocumentProperties(
+            default,
+            default,
+            printerName,
+            devmode,
+            devmode,
+            (uint)(DEVMODE_FIELD_FLAGS.DM_IN_BUFFER | DEVMODE_FIELD_FLAGS.DM_OUT_BUFFER));
 
-        int retCode = Winspool.DocumentProperties(
-            NativeMethods.NullHandleRef,
-            NativeMethods.NullHandleRef,
-            printer,
-            pointer,
-            pointer,
-            SafeNativeMethods.DM_IN_BUFFER | SafeNativeMethods.DM_OUT_BUFFER);
-
-        if (retCode < 0)
+        if (result < 0)
         {
-            Kernel32.GlobalFree(handle);
-            Kernel32.GlobalUnlock(handle);
-            return IntPtr.Zero;
+            PInvokeCore.GlobalFree(handle);
+            PInvokeCore.GlobalUnlock(handle);
+            return default;
         }
 
-        Kernel32.GlobalUnlock(handle);
+        PInvokeCore.GlobalUnlock(handle);
         return handle;
     }
 
@@ -803,43 +732,52 @@ public partial class PrinterSettings : ICloneable
     /// </summary>
     public unsafe IntPtr GetHdevnames()
     {
-        string printerName = PrinterName; // the PrinterName property is slow when using the default printer
-        string driver = DriverName;  // make sure we are writing out exactly the same string as we got the length of
+        string printerName = PrinterName;
+        string driver = DriverName;
         string outPort = OutputPort;
 
-        // Create DEVNAMES structure
-        // +4 for null terminator
-        int namesCharacters = checked(4 + printerName.Length + driver.Length + outPort.Length);
+        // Create DEVNAMES structure, offsets are in characters, not bytes
 
-        // 8 = size of fixed portion of DEVNAMES
-        short offset = (short)(8 / Marshal.SystemDefaultCharSize); // Offsets are in characters, not bytes
-        uint namesSize = (uint)checked(Marshal.SystemDefaultCharSize * (offset + namesCharacters)); // always >0
-        IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE | SafeNativeMethods.GMEM_ZEROINIT, namesSize);
-        IntPtr namesPointer = Kernel32.GlobalLock(handle);
-        byte* pNamesPointer = (byte*)namesPointer;
+        // Add 4 for null terminators
+        int namesChars = checked(4 + printerName.Length + driver.Length + outPort.Length);
+        int offsetInChars = sizeof(DEVNAMES) / sizeof(char);
+        int sizeInChars = checked(offsetInChars + namesChars);
 
-        *(short*)(pNamesPointer) = offset; // wDriverOffset
-        offset += WriteOneDEVNAME(driver, namesPointer, offset);
-        *(short*)(pNamesPointer + 2) = offset; // wDeviceOffset
-        offset += WriteOneDEVNAME(printerName, namesPointer, offset);
-        *(short*)(pNamesPointer + 4) = offset; // wOutputOffset
-        offset += WriteOneDEVNAME(outPort, namesPointer, offset);
-        *(short*)(pNamesPointer + 6) = offset; // wDefault
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
+            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
+            (uint)(sizeof(char) * sizeInChars));
 
-        Kernel32.GlobalUnlock(handle);
+        DEVNAMES* devnames = (DEVNAMES*)PInvokeCore.GlobalLock(handle);
+        Span<char> names = new((char*)devnames, sizeInChars);
+
+        devnames->wDriverOffset = checked((ushort)offsetInChars);
+        driver.AsSpan().CopyTo(names.Slice(offsetInChars, driver.Length));
+        offsetInChars += (ushort)(driver.Length + 1);
+
+        devnames->wDeviceOffset = checked((ushort)offsetInChars);
+        printerName.AsSpan().CopyTo(names.Slice(offsetInChars, printerName.Length));
+        offsetInChars += (ushort)(printerName.Length + 1);
+
+        devnames->wOutputOffset = checked((ushort)offsetInChars);
+        outPort.AsSpan().CopyTo(names.Slice(offsetInChars, outPort.Length));
+        offsetInChars += (ushort)(outPort.Length + 1);
+
+        devnames->wDefault = checked((ushort)offsetInChars);
+
+        PInvokeCore.GlobalUnlock(handle);
         return handle;
     }
 
     // Handles creating then disposing a default DEVMODE
-    internal short GetModeField(ModeField field, short defaultValue) => GetModeField(field, defaultValue, IntPtr.Zero);
+    internal short GetModeField(ModeField field, short defaultValue) => GetModeField(field, defaultValue, modeHandle: default);
 
-    internal short GetModeField(ModeField field, short defaultValue, IntPtr modeHandle)
+    internal short GetModeField(ModeField field, short defaultValue, HGLOBAL modeHandle)
     {
         bool ownHandle = false;
         short result;
         try
         {
-            if (modeHandle == IntPtr.Zero)
+            if (modeHandle == 0)
             {
                 try
                 {
@@ -852,45 +790,44 @@ public partial class PrinterSettings : ICloneable
                 }
             }
 
-            IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
-            Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(modePointer)!;
+            DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(modeHandle);
             switch (field)
             {
                 case ModeField.Orientation:
-                    result = mode.dmOrientation;
+                    result = devmode->dmOrientation;
                     break;
                 case ModeField.PaperSize:
-                    result = mode.dmPaperSize;
+                    result = devmode->dmPaperSize;
                     break;
                 case ModeField.PaperLength:
-                    result = mode.dmPaperLength;
+                    result = devmode->dmPaperLength;
                     break;
                 case ModeField.PaperWidth:
-                    result = mode.dmPaperWidth;
+                    result = devmode->dmPaperWidth;
                     break;
                 case ModeField.Copies:
-                    result = mode.dmCopies;
+                    result = devmode->dmCopies;
                     break;
                 case ModeField.DefaultSource:
-                    result = mode.dmDefaultSource;
+                    result = devmode->dmDefaultSource;
                     break;
                 case ModeField.PrintQuality:
-                    result = mode.dmPrintQuality;
+                    result = devmode->dmPrintQuality;
                     break;
                 case ModeField.Color:
-                    result = mode.dmColor;
+                    result = (short)devmode->dmColor;
                     break;
                 case ModeField.Duplex:
-                    result = mode.dmDuplex;
+                    result = (short)devmode->dmDuplex;
                     break;
                 case ModeField.YResolution:
-                    result = mode.dmYResolution;
+                    result = devmode->dmYResolution;
                     break;
                 case ModeField.TTOption:
-                    result = mode.dmTTOption;
+                    result = (short)devmode->dmTTOption;
                     break;
                 case ModeField.Collate:
-                    result = mode.dmCollate;
+                    result = (short)devmode->dmCollate;
                     break;
                 default:
                     Debug.Fail("Invalid field in GetModeField");
@@ -898,13 +835,13 @@ public partial class PrinterSettings : ICloneable
                     break;
             }
 
-            Kernel32.GlobalUnlock(new HandleRef(this, modeHandle));
+            PInvokeCore.GlobalUnlock(modeHandle);
         }
         finally
         {
             if (ownHandle)
             {
-                Kernel32.GlobalFree(new HandleRef(this, modeHandle));
+                PInvokeCore.GlobalFree(modeHandle);
             }
         }
 
@@ -913,111 +850,109 @@ public partial class PrinterSettings : ICloneable
 
     internal unsafe PaperSize[] Get_PaperSizes()
     {
-        string printerName = PrinterName; // this is quite expensive if PrinterName is left default
+        // Cache the name as the name will be computed on every call if the name is default
+        string printerName = PrinterName;
 
-        int count = FastDeviceCapabilities(SafeNativeMethods.DC_PAPERNAMES, IntPtr.Zero, -1, printerName);
-        if (count == -1)
+        int result = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_PAPERNAMES, printerName);
+        if (result == -1)
         {
             return [];
         }
 
-        int stringSize = Marshal.SystemDefaultCharSize * 64;
-        IntPtr namesBuffer = Marshal.AllocCoTaskMem(checked(stringSize * count));
-        FastDeviceCapabilities(SafeNativeMethods.DC_PAPERNAMES, namesBuffer, -1, printerName);
+        int count = result;
 
-        Debug.Assert(
-            FastDeviceCapabilities(SafeNativeMethods.DC_PAPERS, IntPtr.Zero, -1, printerName) == count,
-            "Not the same number of paper kinds as paper names?");
-
-        IntPtr kindsBuffer = Marshal.AllocCoTaskMem(2 * count);
-        FastDeviceCapabilities(SafeNativeMethods.DC_PAPERS, kindsBuffer, -1, printerName);
-
-        Debug.Assert(
-            FastDeviceCapabilities(SafeNativeMethods.DC_PAPERSIZE, IntPtr.Zero, -1, printerName) == count,
-            "Not the same number of paper kinds as paper names?");
-
-        IntPtr dimensionsBuffer = Marshal.AllocCoTaskMem(8 * count);
-        FastDeviceCapabilities(SafeNativeMethods.DC_PAPERSIZE, dimensionsBuffer, -1, printerName);
-
-        PaperSize[] result = new PaperSize[count];
-        byte* pNamesBuffer = (byte*)namesBuffer;
-        short* pKindsBuffer = (short*)kindsBuffer;
-        int* pDimensionsBuffer = (int*)dimensionsBuffer;
-        for (int i = 0; i < count; i++)
+        // DC_PAPERNAMES is an array of fixed 64 char buffers
+        const int NameLength = 64;
+        using BufferScope<char> names = new(NameLength * count);
+        fixed (char* n = names)
         {
-            string name = Marshal.PtrToStringAuto((nint)(pNamesBuffer + stringSize * (nint)i), 64)!;
-            int index = name.IndexOf('\0');
-            if (index > -1)
-            {
-                name = name[..index];
-            }
-
-            short kind = pKindsBuffer[i];
-            int width = pDimensionsBuffer[i * 2];
-            int height = pDimensionsBuffer[i * 2 + 1];
-            result[i] = new PaperSize(
-                (PaperKind)kind,
-                name,
-                PrinterUnitConvert.Convert(width, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
-                PrinterUnitConvert.Convert(height, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
+            result = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_PAPERNAMES, printerName, n);
         }
 
-        Marshal.FreeCoTaskMem(namesBuffer);
-        Marshal.FreeCoTaskMem(kindsBuffer);
-        Marshal.FreeCoTaskMem(dimensionsBuffer);
-        return result;
+        Debug.Assert(
+            FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_PAPERS, printerName) == count,
+            "Not the same number of paper kinds as paper names?");
+
+        Span<ushort> kinds = stackalloc ushort[count];
+        fixed (ushort* k = kinds)
+        {
+            result = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_PAPERS, printerName, k);
+        }
+
+        Debug.Assert(
+            FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_PAPERSIZE, printerName) == count,
+            "Not the same number of paper sizes as paper names?");
+
+        Span<Size> sizes = stackalloc Size[count];
+        fixed (Size* s = sizes)
+        {
+            result = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_PAPERSIZE, printerName, s);
+        }
+
+        PaperSize[] paperSizes = new PaperSize[count];
+        for (int i = 0; i < count; i++)
+        {
+            paperSizes[i] = new PaperSize(
+                (PaperKind)kinds[i],
+                names.Slice(i * NameLength, NameLength).SliceAtFirstNull().ToString(),
+                PrinterUnitConvert.Convert(sizes[i].Width, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
+                PrinterUnitConvert.Convert(sizes[i].Height, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
+        }
+
+        return paperSizes;
     }
 
     internal unsafe PaperSource[] Get_PaperSources()
     {
-        string printerName = PrinterName; // this is quite expensive if PrinterName is left default
+        // Cache the name as the name will be computed on every call if the name is default
+        string printerName = PrinterName;
 
-        int count = FastDeviceCapabilities(SafeNativeMethods.DC_BINNAMES, IntPtr.Zero, -1, printerName);
-        if (count == -1)
+        int result = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_BINNAMES, printerName);
+        if (result == -1)
         {
             return [];
         }
 
+        int count = result;
+
         // Contrary to documentation, DeviceCapabilities returns char[count, 24],
         // not char[count][24]
-        int stringSize = Marshal.SystemDefaultCharSize * 24;
-        IntPtr namesBuffer = Marshal.AllocCoTaskMem(checked(stringSize * count));
-        FastDeviceCapabilities(SafeNativeMethods.DC_BINNAMES, namesBuffer, -1, printerName);
-
-        Debug.Assert(
-            FastDeviceCapabilities(SafeNativeMethods.DC_BINS, IntPtr.Zero, -1, printerName) == count,
-            "Not the same number of bin kinds as bin names?");
-
-        IntPtr kindsBuffer = Marshal.AllocCoTaskMem(2 * count);
-        FastDeviceCapabilities(SafeNativeMethods.DC_BINS, kindsBuffer, -1, printerName);
-
-        byte* pNamesBuffer = (byte*)namesBuffer;
-        short* pKindsBuffer = (short*)kindsBuffer;
-        PaperSource[] result = new PaperSource[count];
-        for (int i = 0; i < count; i++)
+        // DC_BINNAMES is an array of fixed 64 char buffers
+        const int NameLength = 24;
+        using BufferScope<char> names = new(NameLength * count);
+        fixed (char* n = names)
         {
-            string name = Marshal.PtrToStringAuto((nint)(pNamesBuffer + stringSize * (nint)i), 24)!;
-            int index = name.IndexOf('\0');
-            if (index > -1)
-            {
-                name = name[..index];
-            }
-
-            short kind = pKindsBuffer[i];
-            result[i] = new PaperSource((PaperSourceKind)kind, name);
+            result = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_BINNAMES, printerName, n);
         }
 
-        Marshal.FreeCoTaskMem(namesBuffer);
-        Marshal.FreeCoTaskMem(kindsBuffer);
-        return result;
+        Debug.Assert(
+            FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_BINS, printerName) == count,
+            "Not the same number of bin kinds as bin names?");
+
+        Span<ushort> kinds = stackalloc ushort[count];
+        fixed (ushort* k = kinds)
+        {
+            FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_BINS, printerName, k);
+        }
+
+        PaperSource[] paperSources = new PaperSource[count];
+        for (int i = 0; i < count; i++)
+        {
+            paperSources[i] = new PaperSource(
+                (PaperSourceKind)kinds[i],
+                names.Slice(i * NameLength, NameLength).SliceAtFirstNull().ToString());
+        }
+
+        return paperSources;
     }
 
     internal unsafe PrinterResolution[] Get_PrinterResolutions()
     {
-        string printerName = PrinterName; // this is quite expensive if PrinterName is left default
+        // Cache the name as the name will be computed on every call if the name is default
+        string printerName = PrinterName;
         PrinterResolution[] result;
 
-        int count = FastDeviceCapabilities(SafeNativeMethods.DC_ENUMRESOLUTIONS, IntPtr.Zero, -1, printerName);
+        int count = FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_ENUMRESOLUTIONS, printerName);
         if (count == -1)
         {
             // Just return the standard values if custom resolutions are absent.
@@ -1038,109 +973,87 @@ public partial class PrinterSettings : ICloneable
         result[2] = new(PrinterResolutionKind.Low, -2, -1);
         result[3] = new(PrinterResolutionKind.Draft, -1, -1);
 
-        IntPtr buffer = Marshal.AllocCoTaskMem(checked(8 * count));
-        FastDeviceCapabilities(SafeNativeMethods.DC_ENUMRESOLUTIONS, buffer, -1, printerName);
+        Span<Point> resolutions = stackalloc Point[count];
 
-        byte* pBuffer = (byte*)buffer;
-        for (int i = 0; i < count; i++)
+        fixed (Point* r = resolutions)
         {
-            int x = *(int*)(pBuffer + i * 8);
-            int y = *(int*)(pBuffer + i * 8 + 4);
-            result[i + 4] = new PrinterResolution(PrinterResolutionKind.Custom, x, y);
+            FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_ENUMRESOLUTIONS, printerName, r);
         }
 
-        Marshal.FreeCoTaskMem(buffer);
-        return result;
-    }
+        for (int i = 0; i < count; i++)
+        {
+            Point resolution = resolutions[i];
+            result[i + 4] = new PrinterResolution(PrinterResolutionKind.Custom, resolution.X, resolution.Y);
+        }
 
-    // names is pointer to DEVNAMES
-    private static unsafe string ReadOneDEVNAME(IntPtr pDevnames, int slot)
-    {
-        byte* bDevNames = (byte*)pDevnames;
-        int offset = Marshal.SystemDefaultCharSize * ((ushort*)bDevNames)[slot];
-        string result = Marshal.PtrToStringAuto((nint)(bDevNames + offset))!;
         return result;
     }
 
     /// <summary>
     ///  Copies the relevant information out of the handle and into the PrinterSettings.
     /// </summary>
-    public unsafe void SetHdevmode(IntPtr hdevmode)
+    public void SetHdevmode(IntPtr hdevmode)
     {
-        if (hdevmode == IntPtr.Zero)
+        if (hdevmode == 0)
             throw new ArgumentException(SR.Format(SR.InvalidPrinterHandle, hdevmode));
 
-        IntPtr pointer = Kernel32.GlobalLock(hdevmode);
-        Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock((HGLOBAL)hdevmode);
 
-        // Copy entire public devmode as a byte array...
-        _devmodeBytes = mode.dmSize;
+        // Copy entire public devmode as a byte array.
+        _devmodeBytes = devmode->dmSize;
         if (_devmodeBytes > 0)
         {
             _cachedDevmode = new byte[_devmodeBytes];
-            Marshal.Copy(pointer, _cachedDevmode, 0, _devmodeBytes);
+            Marshal.Copy((nint)devmode, _cachedDevmode, 0, _devmodeBytes);
         }
 
-        // Copy private devmode as a byte array..
-        _extraBytes = mode.dmDriverExtra;
+        // Copy private devmode as a byte array.
+        _extraBytes = devmode->dmDriverExtra;
         if (_extraBytes > 0)
         {
             _extraInfo = new byte[_extraBytes];
-            Marshal.Copy((nint)((byte*)pointer + mode.dmSize), _extraInfo, 0, _extraBytes);
+            Marshal.Copy((nint)((byte*)devmode + devmode->dmSize), _extraInfo, 0, _extraBytes);
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_COPIES))
         {
-            _copies = mode.dmCopies;
+            _copies = devmode->dmCopies;
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_DUPLEX) == SafeNativeMethods.DM_DUPLEX)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_DUPLEX))
         {
-            _duplex = (Duplex)mode.dmDuplex;
+            _duplex = (Duplex)devmode->dmDuplex;
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COLLATE) == SafeNativeMethods.DM_COLLATE)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_COLLATE))
         {
-            _collate = (mode.dmCollate == SafeNativeMethods.DMCOLLATE_TRUE);
+            _collate = devmode->dmCollate == DEVMODE_COLLATE.DMCOLLATE_TRUE;
         }
 
-        Kernel32.GlobalUnlock(hdevmode);
+        PInvokeCore.GlobalUnlock((HGLOBAL)hdevmode);
     }
 
     /// <summary>
-    /// Copies the relevant information out of the handle and into the PrinterSettings.
+    ///  Copies the relevant information out of the handle and into the PrinterSettings.
     /// </summary>
     public void SetHdevnames(IntPtr hdevnames)
     {
-        if (hdevnames == IntPtr.Zero)
+        if (hdevnames == 0)
         {
             throw new ArgumentException(SR.Format(SR.InvalidPrinterHandle, hdevnames));
         }
 
-        IntPtr namesPointer = Kernel32.GlobalLock(hdevnames);
+        DEVNAMES* names = (DEVNAMES*)PInvokeCore.GlobalLock((HGLOBAL)hdevnames);
 
-        _driverName = ReadOneDEVNAME(namesPointer, 0);
-        _printerName = ReadOneDEVNAME(namesPointer, 1);
-        OutputPort = ReadOneDEVNAME(namesPointer, 2);
+        _driverName = new((char*)names + names->wDriverOffset);
+        _printerName = new((char*)names + names->wDeviceOffset);
+        OutputPort = new((char*)names + names->wOutputOffset);
 
         PrintDialogDisplayed = true;
 
-        Kernel32.GlobalUnlock(hdevnames);
+        PInvokeCore.GlobalUnlock((HGLOBAL)hdevnames);
     }
 
     public override string ToString() =>
         $"[PrinterSettings {PrinterName} Copies={Copies} Collate={Collate} Duplex={Duplex} FromPage={FromPage} LandscapeAngle={LandscapeAngle} MaximumCopies={MaximumCopies} OutputPort={OutputPort} ToPage={ToPage}]";
-
-    // Write null terminated string, return length of string in characters (including null)
-    private static unsafe short WriteOneDEVNAME(string str, IntPtr bufferStart, int index)
-    {
-        str ??= "";
-        byte* address = (byte*)bufferStart + (nint)index * Marshal.SystemDefaultCharSize;
-
-        char[] data = str.ToCharArray();
-        Marshal.Copy(data, 0, (nint)address, data.Length);
-        *(short*)(address + data.Length * 2) = 0;
-
-        return checked((short)(str.Length + 1));
-    }
 }

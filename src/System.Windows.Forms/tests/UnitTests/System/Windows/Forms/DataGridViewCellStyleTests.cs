@@ -1025,7 +1025,7 @@ public class DataGridViewCellStyleTests
             false
         };
 
-        yield return new object[] { new DataGridViewCellStyle(), new object(), false };
+        yield return new object[] { new DataGridViewCellStyle(), new(), false };
         yield return new object[] { new DataGridViewCellStyle(), null, false };
     }
 

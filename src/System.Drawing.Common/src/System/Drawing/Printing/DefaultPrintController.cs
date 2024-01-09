@@ -2,26 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Drawing.Internal;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Drawing.Printing;
 
 /// <summary>
 ///  Specifies a print controller that sends information to a printer.
 /// </summary>
-public class StandardPrintController : PrintController
+public unsafe class StandardPrintController : PrintController, IHandle<HDC>
 {
-    private DeviceContext? _dc;
+    private HdcHandle? _hdc;
     private Graphics? _graphics;
+
+    HDC IHandle<HDC>.Handle => _hdc?.Handle ?? HDC.Null;
 
     /// <summary>
     ///  Implements StartPrint for printing to a physical printer.
     /// </summary>
     public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
-        Debug.Assert(_dc is null && _graphics is null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_hdc is null && _graphics is null, "PrintController methods called in the wrong order?");
 
         base.OnStartPrint(document, e);
 
@@ -29,22 +29,27 @@ public class StandardPrintController : PrintController
             throw new InvalidPrinterException(document.PrinterSettings);
 
         Debug.Assert(_modeHandle is not null, "_modeHandle should have been set by PrintController.OnStartPrint");
-        _dc = document.PrinterSettings.CreateDeviceContext(_modeHandle);
+        _hdc = new(document.PrinterSettings.CreateDeviceContext(_modeHandle));
 
-        Gdi32.DOCINFO info = new()
+        fixed (char* documentName = document.DocumentName)
+        fixed (char* outputPort = document.PrinterSettings.OutputPort)
         {
-            lpszDocName = document.DocumentName,
-            lpszDatatype = null,
-            fwType = 0,
-            // Print to file is "FILE:"
-            lpszOutput = document.PrinterSettings.PrintToFile ? document.PrinterSettings.OutputPort : null
-        };
+            DOCINFOW info = new()
+            {
+                lpszDocName = documentName,
+                lpszDatatype = null,
+                fwType = 0,
 
-        int result = Gdi32.StartDoc(new HandleRef(_dc, _dc.Hdc), info);
-        if (result <= 0)
-        {
-            int error = Marshal.GetLastPInvokeError();
-            e.Cancel = error == SafeNativeMethods.ERROR_CANCELLED ? true : throw new Win32Exception(error);
+                // Print to file is "FILE:"
+                lpszOutput = document.PrinterSettings.PrintToFile ? outputPort : null
+            };
+
+            int result = PInvoke.StartDoc(this, info);
+            if (result <= 0)
+            {
+                int error = Marshal.GetLastPInvokeError();
+                e.Cancel = error == (int)WIN32_ERROR.ERROR_CANCELLED ? true : throw new Win32Exception(error);
+            }
         }
     }
 
@@ -53,31 +58,31 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
     {
-        Debug.Assert(_dc is not null && _graphics is null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_hdc is not null && _graphics is null, "PrintController methods called in the wrong order?");
         Debug.Assert(_modeHandle is not null);
 
         base.OnStartPage(document, e);
         e.PageSettings.CopyToHdevmode(_modeHandle);
-        IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, _modeHandle));
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(_modeHandle);
         try
         {
-            IntPtr result = Gdi32.ResetDC(new HandleRef(_dc, _dc.Hdc), new HandleRef(null, modePointer));
-            Debug.Assert(result == _dc.Hdc, "ResetDC didn't return the same handle I gave it");
+            HDC result = PInvoke.ResetDCW(_hdc, devmode);
+            Debug.Assert(result == _hdc, "ResetDC didn't return the same handle");
         }
         finally
         {
-            Kernel32.GlobalUnlock(new HandleRef(this, _modeHandle));
+            PInvokeCore.GlobalUnlock(_modeHandle);
         }
 
-        _graphics = Graphics.FromHdcInternal(_dc.Hdc);
+        _graphics = Graphics.FromHdcInternal(_hdc);
 
         if (document.OriginAtMargins)
         {
             // Adjust the origin of the graphics object to be at the user-specified margin location.
-            int dpiX = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
-            int dpiY = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
-            int hardMarginX_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETX);
-            int hardMarginY_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETY);
+            int dpiX = PInvokeCore.GetDeviceCaps(_hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            int dpiY = PInvokeCore.GetDeviceCaps(_hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+            int hardMarginX_DU = PInvokeCore.GetDeviceCaps(_hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX);
+            int hardMarginY_DU = PInvokeCore.GetDeviceCaps(_hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY);
             float hardMarginX = hardMarginX_DU * 100 / dpiX;
             float hardMarginY = hardMarginY_DU * 100 / dpiY;
 
@@ -85,7 +90,7 @@ public class StandardPrintController : PrintController
             _graphics.TranslateTransform(document.DefaultPageSettings.Margins.Left, document.DefaultPageSettings.Margins.Top);
         }
 
-        int result2 = Gdi32.StartPage(new HandleRef(_dc, _dc.Hdc));
+        int result2 = PInvoke.StartPage(this);
         return result2 <= 0 ? throw new Win32Exception() : _graphics;
     }
 
@@ -94,11 +99,11 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
-        Debug.Assert(_dc is not null && _graphics is not null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_hdc is not null && _graphics is not null, "PrintController methods called in the wrong order?");
 
         try
         {
-            int result = Gdi32.EndPage(new HandleRef(_dc, _dc.Hdc));
+            int result = PInvoke.EndPage(this);
             if (result <= 0)
             {
                 throw new Win32Exception();
@@ -118,20 +123,20 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {
-        Debug.Assert(_dc is not null && _graphics is null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_hdc is not null && _graphics is null, "PrintController methods called in the wrong order?");
 
-        if (_dc is not null)
+        if (_hdc is not null)
         {
             try
             {
-                int result = (e.Cancel) ? Gdi32.AbortDoc(new HandleRef(_dc, _dc.Hdc)) : Gdi32.EndDoc(new HandleRef(_dc, _dc.Hdc));
+                int result = (e.Cancel) ? PInvoke.AbortDoc(this) : PInvoke.EndDoc(this);
                 if (result <= 0)
                     throw new Win32Exception();
             }
             finally
             {
-                _dc.Dispose();
-                _dc = null;
+                _hdc.Dispose();
+                _hdc = null;
             }
         }
 

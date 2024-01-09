@@ -39,7 +39,7 @@ internal static partial class PInvoke
         {
             if (_savedState != 0)
             {
-                RestoreDC(HDC, _savedState);
+                PInvokeCore.RestoreDC(HDC, _savedState);
             }
         }
     }

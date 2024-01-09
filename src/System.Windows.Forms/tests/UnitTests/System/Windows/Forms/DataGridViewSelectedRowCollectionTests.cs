@@ -131,9 +131,9 @@ public class DataGridViewSelectedRowCollectionTests
     {
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, 2, 3 }, array);
+        Assert.Equal([1, 2, 3], array);
     }
 
     [WinFormsFact]
@@ -149,9 +149,9 @@ public class DataGridViewSelectedRowCollectionTests
         control.Rows[2].Selected = true;
 
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = [1, 2, 3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 1, control.Rows[2], control.Rows[0] }, array);
+        Assert.Equal([1, control.Rows[2], control.Rows[0]], array);
     }
 
     public static IEnumerable<object[]> Insert_TestData()
@@ -258,7 +258,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListItem_SetTestData()
     {
         yield return new object[] { 0, null };
-        yield return new object[] { -1, new object() };
+        yield return new object[] { -1, new() };
         yield return new object[] { 1, new DataGridViewRow() };
     }
 
@@ -275,7 +275,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListAdd_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 
@@ -304,7 +304,7 @@ public class DataGridViewSelectedRowCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         iList.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, 2, 3 }, array);
     }
@@ -323,7 +323,7 @@ public class DataGridViewSelectedRowCollectionTests
 
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        var array = new object[] { 1, 2, 3 };
+        object[] array = new object[] { 1, 2, 3 };
         iList.CopyTo(array, 1);
         Assert.Equal(new object[] { 1, control.Rows[2], control.Rows[0] }, array);
     }
@@ -331,7 +331,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListContains_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 
@@ -421,7 +421,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListIndexOf_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 
@@ -461,7 +461,7 @@ public class DataGridViewSelectedRowCollectionTests
         foreach (int index in new int[] { -1, 0, 1 })
         {
             yield return new object[] { index, null };
-            yield return new object[] { index, new object() };
+            yield return new object[] { index, new() };
             yield return new object[] { index, new DataGridViewRow() };
         }
     }
@@ -479,7 +479,7 @@ public class DataGridViewSelectedRowCollectionTests
     public static IEnumerable<object[]> IListRemove_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DataGridViewRow() };
     }
 

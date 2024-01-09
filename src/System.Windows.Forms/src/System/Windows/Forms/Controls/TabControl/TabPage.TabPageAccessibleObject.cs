@@ -13,20 +13,8 @@ public partial class TabPage
     {
         public TabPageAccessibleObject(TabPage owningTabPage) : base(owningTabPage) { }
 
-        public override Rectangle Bounds
-        {
-            get
-            {
-                if (!this.IsOwnerHandleCreated(out TabPage? _))
-                {
-                    return Rectangle.Empty;
-                }
-
-                // The CHILDID_SELF constant returns to the id of the TabPage, which allows to use the native
-                // "accLocation" method to get the "Bounds" property
-                return SystemIAccessible.TryGetLocation(CHILDID_SELF);
-            }
-        }
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out TabPage? owner) ?
+            owner.GetPageRectangle() : Rectangle.Empty;
 
         public override AccessibleStates State => SystemIAccessible.TryGetState(GetChildId());
 

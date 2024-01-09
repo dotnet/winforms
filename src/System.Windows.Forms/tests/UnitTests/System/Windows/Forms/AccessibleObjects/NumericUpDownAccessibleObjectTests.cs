@@ -97,7 +97,7 @@ public class NumericUpDownAccessibleObjectTests
     {
         using NumericUpDown numericUpDown = new();
         AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
-        var actual = (int)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        int actual = (int)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(numericUpDown.IsHandleCreated);

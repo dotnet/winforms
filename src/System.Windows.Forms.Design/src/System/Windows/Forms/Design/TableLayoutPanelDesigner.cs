@@ -410,40 +410,41 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new();
-
-            // We don't promote these Items to DesignerVerbs, since we need to be able
-            // to disable/enable the Remove entries, based on the number of Rows/Cols.
-            // Unfortunately, you cannot do that via the DesignerAction stuff.
-            items.Add(new DesignerActionMethodItem(this,
-                                                     "AddColumn", // method name
-                                                      SR.TableLayoutPanelDesignerAddColumn, // display name
-                                                      false)); // promoteToDesignerVerb
-            items.Add(new DesignerActionMethodItem(this,
-                                                     "AddRow", // method name
-                                                      SR.TableLayoutPanelDesignerAddRow,  // display name
-                                                      false)); // promoteToDesignerVerb
+            DesignerActionItemCollection items =
+            [
+                // We don't promote these Items to DesignerVerbs, since we need to be able
+                // to disable/enable the Remove entries, based on the number of Rows/Cols.
+                // Unfortunately, you cannot do that via the DesignerAction stuff.
+                new DesignerActionMethodItem(this,
+                    memberName: nameof(AddColumn),
+                    displayName: SR.TableLayoutPanelDesignerAddColumn,
+                    includeAsDesignerVerb: false),
+                new DesignerActionMethodItem(this,
+                    memberName: nameof(AddRow),
+                    displayName: SR.TableLayoutPanelDesignerAddRow,
+                    includeAsDesignerVerb: false),
+            ];
 
             if (owner.Table.ColumnCount > 1)
             {
                 items.Add(new DesignerActionMethodItem(this,
-                                                     "RemoveColumn", // method name
-                                                      SR.TableLayoutPanelDesignerRemoveColumn, // display name
-                                                      false)); // promoteToDesignerVerb
+                    memberName: nameof(RemoveColumn),
+                    displayName: SR.TableLayoutPanelDesignerRemoveColumn,
+                    includeAsDesignerVerb: false));
             }
 
             if (owner.Table.RowCount > 1)
             {
                 items.Add(new DesignerActionMethodItem(this,
-                                                     "RemoveRow", // method name
-                                                      SR.TableLayoutPanelDesignerRemoveRow,  // display name
-                                                      false)); // promoteToDesignerVerb
+                    memberName: nameof(RemoveRow),
+                    displayName: SR.TableLayoutPanelDesignerRemoveRow,
+                    includeAsDesignerVerb: false));
             }
 
             items.Add(new DesignerActionMethodItem(this,
-                                                     "EditRowAndCol", // method name
-                                                      SR.TableLayoutPanelDesignerEditRowAndCol,  // display name
-                                                      false)); // promoteToDesignerVerb
+                memberName: nameof(EditRowAndCol),
+                displayName: SR.TableLayoutPanelDesignerEditRowAndCol,
+                includeAsDesignerVerb: false));
 
             return items;
         }

@@ -335,8 +335,8 @@ public sealed class PrintDialog : CommonDialog
         }
         finally
         {
-            PInvoke.GlobalFree(dialogSettings->hDevMode);
-            PInvoke.GlobalFree(dialogSettings->hDevNames);
+            PInvokeCore.GlobalFree(dialogSettings->hDevMode);
+            PInvokeCore.GlobalFree(dialogSettings->hDevNames);
         }
     }
 
@@ -409,7 +409,7 @@ public sealed class PrintDialog : CommonDialog
             // PrintDlgEx. So we have to strip them out.
             dialogSettings.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
 
-            HRESULT hr = PInvoke.PrintDlgEx(&dialogSettings);
+            HRESULT hr = PInvokeCore.PrintDlgEx(&dialogSettings);
             if (hr.Failed || dialogSettings.dwResultAction == PInvoke.PD_RESULT_CANCEL)
             {
                 return false;
@@ -447,12 +447,12 @@ public sealed class PrintDialog : CommonDialog
         {
             if (!dialogSettings.hDevMode.IsNull)
             {
-                PInvoke.GlobalFree(dialogSettings.hDevMode);
+                PInvokeCore.GlobalFree(dialogSettings.hDevMode);
             }
 
             if (dialogSettings.hDevNames.IsNull)
             {
-                PInvoke.GlobalFree(dialogSettings.hDevNames);
+                PInvokeCore.GlobalFree(dialogSettings.hDevNames);
             }
         }
     }

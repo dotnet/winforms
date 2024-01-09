@@ -61,14 +61,14 @@ public partial class DataObject
             {
                 string? stringData = null;
 
-                void* buffer = PInvoke.GlobalLock(hglobal);
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
                 try
                 {
                     stringData = unicode ? new string((char*)buffer) : new string((sbyte*)buffer);
                 }
                 finally
                 {
-                    PInvoke.GlobalUnlock(hglobal);
+                    PInvokeCore.GlobalUnlock(hglobal);
                 }
 
                 return stringData;
@@ -76,15 +76,15 @@ public partial class DataObject
 
             static unsafe string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
             {
-                void* buffer = PInvoke.GlobalLock(hglobal);
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
                 try
                 {
-                    int size = (int)PInvoke.GlobalSize(hglobal);
+                    int size = (int)PInvokeCore.GlobalSize(hglobal);
                     return Encoding.UTF8.GetString((byte*)buffer, size - 1);
                 }
                 finally
                 {
-                    PInvoke.GlobalUnlock(hglobal);
+                    PInvokeCore.GlobalUnlock(hglobal);
                 }
             }
 
@@ -152,7 +152,7 @@ public partial class DataObject
 
                 static unsafe Stream ReadByteStreamFromHGLOBAL(HGLOBAL hglobal, out bool isSerializedObject)
                 {
-                    void* buffer = PInvoke.GlobalLock(hglobal);
+                    void* buffer = PInvokeCore.GlobalLock(hglobal);
                     if (buffer is null)
                     {
                         throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
@@ -160,7 +160,7 @@ public partial class DataObject
 
                     try
                     {
-                        int size = (int)PInvoke.GlobalSize(hglobal);
+                        int size = (int)PInvokeCore.GlobalSize(hglobal);
                         byte[] bytes = new byte[size];
                         Marshal.Copy((nint)buffer, bytes, 0, size);
                         int index = 0;
@@ -177,7 +177,7 @@ public partial class DataObject
                     }
                     finally
                     {
-                        PInvoke.GlobalUnlock(hglobal);
+                        PInvokeCore.GlobalUnlock(hglobal);
                     }
                 }
             }
@@ -355,7 +355,7 @@ public partial class DataObject
                     using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.unionmember);
                     pStream.Value->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
 
-                    hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (uint)sstg.cbSize);
+                    hglobal = PInvokeCore.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (uint)sstg.cbSize);
 
                     // Not throwing here because the other out of memory condition on GlobalAlloc
                     // happens inside innerData.GetData and gets turned into a null return value.
@@ -364,9 +364,9 @@ public partial class DataObject
                         return null;
                     }
 
-                    void* ptr = PInvoke.GlobalLock(hglobal);
+                    void* ptr = PInvokeCore.GlobalLock(hglobal);
                     pStream.Value->Read((byte*)ptr, (uint)sstg.cbSize, null);
-                    PInvoke.GlobalUnlock(hglobal);
+                    PInvokeCore.GlobalUnlock(hglobal);
 
                     return GetDataFromHGLOBAL(hglobal, format);
                 }
@@ -374,7 +374,7 @@ public partial class DataObject
                 {
                     if (hglobal != 0)
                     {
-                        PInvoke.GlobalFree(hglobal);
+                        PInvokeCore.GlobalFree(hglobal);
                     }
 
                     Ole32.ReleaseStgMedium(ref medium);

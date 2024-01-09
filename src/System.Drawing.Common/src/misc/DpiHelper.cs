@@ -34,14 +34,9 @@ internal static class DpiHelper
             return;
         }
 
-        IntPtr hDC = Interop.User32.GetDC(IntPtr.Zero);
-        if (hDC != IntPtr.Zero)
-        {
-            s_deviceDpiX = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-            s_deviceDpiY = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
-
-            Interop.User32.ReleaseDC(IntPtr.Zero, hDC);
-        }
+        using var hdc = GetDcScope.ScreenDC;
+        s_deviceDpiX = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+        s_deviceDpiY = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
 
         s_isInitialized = true;
     }
@@ -157,7 +152,7 @@ internal static class DpiHelper
     /// <returns>The horizontal value in device units</returns>
     public static int LogicalToDeviceUnitsX(int value)
     {
-        return (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * (double)value);
+        return (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * value);
     }
 
     /// <summary>
@@ -169,7 +164,7 @@ internal static class DpiHelper
     /// <returns>The vertical value in device units</returns>
     public static int ScaleToInitialSystemDpi(int value)
     {
-        return (int)Math.Round(LogicalToDeviceUnitsScalingFactorY * (double)value);
+        return (int)Math.Round(LogicalToDeviceUnitsScalingFactorY * value);
     }
 
     /// <summary>
@@ -208,7 +203,7 @@ internal static class DpiHelper
     /// Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
     /// </summary>
     /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
-    public static void ScaleBitmapLogicalToDevice([NotNullIfNotNull(nameof(logicalBitmap))]ref Bitmap? logicalBitmap)
+    public static void ScaleBitmapLogicalToDevice([NotNullIfNotNull(nameof(logicalBitmap))] ref Bitmap? logicalBitmap)
     {
         if (logicalBitmap is null)
         {

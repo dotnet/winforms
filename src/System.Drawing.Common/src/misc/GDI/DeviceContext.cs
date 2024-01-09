@@ -125,17 +125,6 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
     }
 
     /// <summary>
-    /// CreateIC creates a DeviceContext object wrapping an hdc created with the Win32 CreateIC function.
-    /// </summary>
-    public static DeviceContext CreateIC(string driverName, string deviceName, string? fileName, IntPtr devMode)
-    {
-        // Note: All input params can be null but not at the same time.  See MSDN for information.
-
-        IntPtr hdc = Gdi32.CreateICW(driverName, deviceName, fileName, devMode);
-        return new DeviceContext(hdc, DeviceContextType.Information);
-    }
-
-    /// <summary>
     /// Used for wrapping an existing hdc.  In this case, this object doesn't own the hdc so calls to
     /// GetHdc/ReleaseHdc don't PInvoke into GDI.
     /// </summary>

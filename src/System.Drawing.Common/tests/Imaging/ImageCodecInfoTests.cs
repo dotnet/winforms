@@ -27,7 +27,6 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using System.Collections;
 using System.Text.RegularExpressions;
 
 namespace System.Drawing.Imaging.Tests;
@@ -43,29 +42,31 @@ public class ImageCodecInfoTests
     private const string WMF_CSID = "557cf404-1a04-11d3-9a73-0000f81ef32e";
     private const string TIF_CSID = "557cf405-1a04-11d3-9a73-0000f81ef32e";
 
-    private Hashtable decoders;
-    private Hashtable encoders;
+    private readonly Dictionary<Guid, ImageCodecInfo> _decoders;
+    private readonly Dictionary<Guid, ImageCodecInfo> _encoders;
 
     public ImageCodecInfoTests()
     {
-        decoders = new Hashtable();
-        encoders = new Hashtable();
+        _decoders = [];
+        _encoders = [];
 
         foreach (ImageCodecInfo decoder in ImageCodecInfo.GetImageDecoders())
-            decoders[decoder.Clsid] = decoder;
+            _decoders[decoder.Clsid] = decoder;
 
         foreach (ImageCodecInfo encoder in ImageCodecInfo.GetImageEncoders())
-            encoders[encoder.Clsid] = encoder;
+            _encoders[encoder.Clsid] = encoder;
     }
 
     private ImageCodecInfo GetEncoder(string clsid)
     {
-        return (ImageCodecInfo)encoders[new Guid(clsid)];
+        _encoders.TryGetValue(new Guid(clsid), out ImageCodecInfo encoder);
+        return encoder;
     }
 
     private ImageCodecInfo GetDecoder(string clsid)
     {
-        return (ImageCodecInfo)decoders[new Guid(clsid)];
+        _decoders.TryGetValue(new Guid(clsid), out ImageCodecInfo decoder);
+        return decoder;
     }
 
     private void CheckDecoderAndEncoder(string clsid, ImageFormat format, string CodecName, string DllName,
@@ -209,20 +210,20 @@ public class ImageCodecInfoTests
     }
 
     [Fact]
-    public void CountEncoders_ReturnsExcpected()
+    public void CountEncoders_ReturnsExpected()
     {
-        Assert.Equal(5, encoders.Count);
+        Assert.Equal(5, _encoders.Count);
     }
 
     [Fact]
-    public void CountDecoders_ReturnsExcpected()
+    public void CountDecoders_ReturnsExpected()
     {
-        Assert.Equal(8, decoders.Count);
+        Assert.Equal(8, _decoders.Count);
     }
 
     [Theory]
     [MemberData(nameof(CodecInfoTestData))]
-    public void CheckDecoderAndEncoder_ReturnsExpecetd(string clsid, ImageFormat format, string codecName, string dllName,
+    public void CheckDecoderAndEncoder_ReturnsExpected(string clsid, ImageFormat format, string codecName, string dllName,
         string fileNameExtension, ImageCodecFlags flags, string formatDescription,
         string mimeType, int version, int signatureLength, string mask, string pattern, string pattern2)
     {

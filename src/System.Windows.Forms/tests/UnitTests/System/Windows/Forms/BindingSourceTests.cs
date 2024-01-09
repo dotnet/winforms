@@ -121,7 +121,7 @@ public class BindingSourceTests
             List<int> emptyList = new() { };
             yield return new object[] { emptyList, dataMember, true, false, emptyList };
 
-            var emptyArray = Array.Empty<int>();
+            int[] emptyArray = Array.Empty<int>();
             yield return new object[] { emptyArray, dataMember, false, true, emptyArray };
 
             Mock<IListSource> mockEmptyListSource = new(MockBehavior.Strict);
@@ -194,7 +194,7 @@ public class BindingSourceTests
             SynchronizedList<int> synchronizedList = new() { 1, 2, 3 };
             yield return new object[] { synchronizedList, dataMember, true, false, true, false, false, true, synchronizedList };
 
-            var nonEmptyArray = new int[] { 1, 2, 3 };
+            int[] nonEmptyArray = new int[] { 1, 2, 3 };
             yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray };
 
             Mock<IListSource> mockNonEmptyListSource = new(MockBehavior.Strict);

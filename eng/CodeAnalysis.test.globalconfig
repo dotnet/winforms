@@ -278,6 +278,9 @@ dotnet_diagnostic.IDE0082.severity = silent
 # IDE0084: Use pattern matching (IsNot operator)
 dotnet_diagnostic.IDE0084.severity = silent
 
+# IDE0090: Simplify new expression
+dotnet_diagnostic.IDE0090.severity = warning
+
 # IDE0100: Remove redundant equality
 dotnet_diagnostic.IDE0100.severity = silent
 
@@ -318,7 +321,7 @@ dotnet_diagnostic.xUnit1002.severity = warning
 dotnet_diagnostic.xUnit1003.severity = warning
 
 # xUnit1004: Test methods should not be skipped
-dotnet_diagnostic.xUnit1004.severity = none # TODO: warning
+dotnet_diagnostic.xUnit1004.severity = silent # TODO: warning
 
 # xUnit1005: Fact methods should not have test data
 dotnet_diagnostic.xUnit1005.severity = warning

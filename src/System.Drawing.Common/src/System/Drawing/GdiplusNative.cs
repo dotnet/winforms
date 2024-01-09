@@ -13,16 +13,14 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace System.Drawing;
 
+#pragma warning disable SYSLIB1092 // [LibraryImport] should use [In] and [Out] on array parameters
+
 // Raw function imports for gdiplus
 internal static partial class SafeNativeMethods
 {
     internal static unsafe partial class Gdip
     {
         private const string LibraryName = "gdiplus.dll";
-
-        // Imported functions
-        [LibraryImport(LibraryName)]
-        private static partial int GdiplusStartup(out IntPtr token, in StartupInputEx input, out StartupOutput output);
 
         [LibraryImport(LibraryName)]
         internal static partial int GdipBeginContainer(
@@ -4476,3 +4474,5 @@ internal static partial class SafeNativeMethods
 #endif
     }
 }
+
+#pragma warning restore SYSLIB1092

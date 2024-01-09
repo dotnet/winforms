@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051;IDE0090;IDE0008</NoWarn>
+    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051;</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

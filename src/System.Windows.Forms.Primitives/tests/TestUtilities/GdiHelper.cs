@@ -11,8 +11,8 @@ public static class GdiHelper
     static GdiHelper()
     {
         using var dc = GetDcScope.ScreenDC;
-        LogicalPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
-        LogicalPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+        LogicalPixelsX = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+        LogicalPixelsY = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
     }
 
     /// <summary>

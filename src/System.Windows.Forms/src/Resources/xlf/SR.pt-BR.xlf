@@ -5205,6 +5205,11 @@ Deseja substituí-lo?</target>
         <target state="translated">A cadeia de caracteres exibida acima do controle do modo de exibição de árvore na caixa de diálogo. Esta cadeia de caracteres pode ser utilizada para especificar instruções para o usuário.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="translated">Controla se várias pastas podem ser selecionadas na caixa de diálogo.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Controla se o botão OK da caixa de diálogo está desabilitado até que o usuário navegue pela exibição ou edite o nome do arquivo (se aplicável). Observação: A desativação do botão OK não impede que a caixa de diálogo seja enviada pela tecla Enter.</target>
@@ -5218,6 +5223,11 @@ Deseja substituí-lo?</target>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">O caminho da pasta selecionado primeiro no diálogo ou o último caminho selecionado pelo usuário.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="translated">Recupera os caminhos de todas as pastas selecionadas na caixa de diálogo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">

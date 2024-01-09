@@ -22,7 +22,7 @@ public class UITypeEditorTests
         yield return new object[] { null, null, null };
         Mock<ITypeDescriptorContext> mockTypeDescriptorContext = new(MockBehavior.Strict);
         Mock<ITypeDescriptorContext> mockServiceProvider = new(MockBehavior.Strict);
-        yield return new object[] { mockTypeDescriptorContext.Object, mockServiceProvider.Object, new object() };
+        yield return new object[] { mockTypeDescriptorContext.Object, mockServiceProvider.Object, new() };
     }
 
     [Theory]
@@ -37,7 +37,7 @@ public class UITypeEditorTests
     {
         yield return new object[] { null, null };
         Mock<ITypeDescriptorContext> mockServiceProvider = new(MockBehavior.Strict);
-        yield return new object[] { mockServiceProvider.Object, new object() };
+        yield return new object[] { mockServiceProvider.Object, new() };
     }
 
     [Theory]
@@ -120,7 +120,7 @@ public class UITypeEditorTests
         Bitmap bitmap = new(10, 10);
         Graphics graphics = Graphics.FromImage(bitmap);
         yield return new object[] { null, graphics, Rectangle.Empty };
-        yield return new object[] { new object(), graphics, new Rectangle(1, 2, 3, 4) };
+        yield return new object[] { new(), graphics, new Rectangle(1, 2, 3, 4) };
     }
 
     [Theory]

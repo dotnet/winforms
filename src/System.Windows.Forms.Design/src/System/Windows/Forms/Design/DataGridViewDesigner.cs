@@ -940,15 +940,17 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items = new();
-            items.Add(new DesignerActionMethodItem(this,
-                        "EditColumns",                      // method name
-                        SR.DataGridViewEditColumnsVerb,   // display name
-                        true));                             // promoteToDesignerVerb
-            items.Add(new DesignerActionMethodItem(this,
-                        "AddColumn",                        // method name
-                        SR.DataGridViewAddColumnVerb,     // display name
-                        true));                             // promoteToDesignerVerb
+            DesignerActionItemCollection items =
+            [
+                new DesignerActionMethodItem(this,
+                    memberName: nameof(EditColumns),
+                    displayName: SR.DataGridViewEditColumnsVerb,
+                    includeAsDesignerVerb:true),
+                new DesignerActionMethodItem(this,
+                    memberName: nameof(AddColumn),
+                    displayName: SR.DataGridViewAddColumnVerb,
+                    includeAsDesignerVerb: true),
+            ];
 
             return items;
         }

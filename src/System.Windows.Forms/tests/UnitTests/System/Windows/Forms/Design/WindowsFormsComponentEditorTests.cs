@@ -15,8 +15,8 @@ public class WindowsFormsComponentEditorTests
         yield return new object[] { Array.Empty<Type>(), null, null };
 
         var mockWindow = new Mock<IWin32Window>(MockBehavior.Strict);
-        yield return new object[] { null, new object(), mockWindow.Object };
-        yield return new object[] { Array.Empty<Type>(), new object(), mockWindow.Object };
+        yield return new object[] { null, new(), mockWindow.Object };
+        yield return new object[] { Array.Empty<Type>(), new(), mockWindow.Object };
     }
 
     [Theory]
@@ -36,8 +36,8 @@ public class WindowsFormsComponentEditorTests
         yield return new object[] { Array.Empty<Type>(), null, null };
 
         Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
-        yield return new object[] { null, mockContext.Object, new object() };
-        yield return new object[] { Array.Empty<Type>(), mockContext.Object, new object() };
+        yield return new object[] { null, mockContext.Object, new() };
+        yield return new object[] { Array.Empty<Type>(), mockContext.Object, new() };
     }
 
     [Theory]
@@ -58,8 +58,8 @@ public class WindowsFormsComponentEditorTests
 
         Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         var mockWindow = new Mock<IWin32Window>(MockBehavior.Strict);
-        yield return new object[] { null, mockContext.Object, new object(), mockWindow.Object };
-        yield return new object[] { Array.Empty<Type>(), mockContext.Object, new object(), mockWindow.Object };
+        yield return new object[] { null, mockContext.Object, new(), mockWindow.Object };
+        yield return new object[] { Array.Empty<Type>(), mockContext.Object, new(), mockWindow.Object };
     }
 
     [Theory]

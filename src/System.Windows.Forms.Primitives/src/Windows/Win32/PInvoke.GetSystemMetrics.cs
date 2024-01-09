@@ -12,5 +12,5 @@ internal static partial class PInvoke
     ///  <paramref name="dpi"/> is ignored.
     /// </summary>
     public static int GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX nIndex, uint dpi)
-        => OsVersion.IsWindows10_1607OrGreater() ? GetSystemMetricsForDpi(nIndex, dpi) : GetSystemMetrics(nIndex);
+        => OsVersion.IsWindows10_1607OrGreater() ? GetSystemMetricsForDpi(nIndex, dpi) : PInvokeCore.GetSystemMetrics(nIndex);
 }

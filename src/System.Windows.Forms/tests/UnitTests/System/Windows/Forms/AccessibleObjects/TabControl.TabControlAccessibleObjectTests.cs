@@ -743,7 +743,7 @@ public class TabControl_TabControlAccessibilityObjectTests
             Enabled = enabled
         };
 
-        var actual = (bool)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
+        bool actual = (bool)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.Equal(tabControl.Enabled, actual);
         Assert.False(tabControl.IsHandleCreated);

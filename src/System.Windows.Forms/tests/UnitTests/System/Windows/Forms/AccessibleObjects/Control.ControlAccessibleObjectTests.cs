@@ -1292,7 +1292,7 @@ public class Control_ControlAccessibleObjectTests
         control.AccessibleDescription = "Test Accessible Description";
         AccessibleObject controlAccessibleObject = control.AccessibilityObject;
 
-        var accessibleObjectDescription = controlAccessibleObject.Description;
+        string accessibleObjectDescription = controlAccessibleObject.Description;
 
         Assert.Equal("Test Accessible Description", accessibleObjectDescription);
     }

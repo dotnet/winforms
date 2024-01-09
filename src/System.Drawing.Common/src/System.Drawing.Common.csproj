@@ -54,7 +54,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\CharacterRange.cs" />
     <Compile Include="System\Drawing\ContentAlignment.cs" />
     <Compile Include="System\Drawing\IDeviceContext.cs" />
-    <Compile Include="System\Drawing\GdiplusNative.Common.cs" />
     <Compile Include="System\Drawing\Graphics.cs" />
     <Compile Include="System\Drawing\GraphicsUnit.cs" />
     <Compile Include="System\Drawing\IconConverter.cs" />
@@ -227,7 +226,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Printing\PrintPageEventArgs.cs" />
     <Compile Include="System\Drawing\Printing\PrintPreviewGraphics.cs" />
     <Compile Include="System\Drawing\Printing\TriState.cs" />
-    <Compile Include="System\Drawing\ScreenDC.cs" />
     <Compile Include="System\Drawing\StockIconId.cs" />
     <Compile Include="System\Drawing\StockIconOptions.cs" />
     <Compile Include="System\Drawing\SystemIcons.cs" />
@@ -241,11 +239,8 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="misc\GDI\DeviceContextType.cs" />
     <Compile Include="misc\GDI\WindowsGraphics.cs" />
     <Compile Include="misc\GDI\WindowsRegion.cs" />
-
-    <Compile Include="Interop\Windows\Interop.BOOL.cs" />
     <Compile Include="Interop\Windows\Interop.Libraries.cs" />
     <Compile Include="Interop\Windows\Comdlg32\Interop.PrintDlg.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.AbortDoc.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.AddFontResourceEx.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.BITMAPINFO_FLAT.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.CombineRgn.cs" />
@@ -253,18 +248,12 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Gdi32\Interop.CreateCompatibleDC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.CreateDC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.CreateDIBSection.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.CreateIC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.CreateFontIndirect.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.CreateRectRgn.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.DeleteDC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.DeleteObject.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.DEVMODE.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.EndDoc.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.EndPage.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.ExtEscape.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.GetClipRgn.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.GetCurrentObject.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.GetDeviceCaps.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.GetDIBits.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.GetObject.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.GetObjectType.cs" />
@@ -272,9 +261,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Gdi32\Interop.GetRgnBox.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.GetStockObject.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.IntersectClipRect.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.ResetDC.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.StartDoc.cs" />
-    <Compile Include="Interop\Windows\Gdi32\Interop.StartPage.cs" />
     <Compile Include="Interop\Windows\Ole32\Interop.IStream.COMWrappers.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.ObjectType.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.OffsetViewportOrgEx.cs" />
@@ -285,9 +271,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Gdi32\Interop.SaveDC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.SelectClipRgn.cs" />
     <Compile Include="Interop\Windows\Kernel32\Interop.GetSystemDefaultLCID.cs" />
-    <Compile Include="Interop\Windows\Kernel32\Interop.GlobalAlloc.cs" />
-    <Compile Include="Interop\Windows\Kernel32\Interop.GlobalFree.cs" />
-    <Compile Include="Interop\Windows\Kernel32\Interop.GlobalLock.cs" />
     <Compile Include="Interop\Windows\Kernel32\Interop.SelectObject.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.BitBlt.cs" />
     <Compile Include="Interop\Windows\Ole32\Interop.STATSTG.cs" />
@@ -301,26 +284,37 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\User32\Interop.CreateIconFromResourceEx.cs" />
     <Compile Include="Interop\Windows\User32\Interop.DestroyIcon.cs" />
     <Compile Include="Interop\Windows\User32\Interop.DrawIconEx.cs" />
-    <Compile Include="Interop\Windows\User32\Interop.GetDC.cs" />
     <Compile Include="Interop\Windows\User32\Interop.GetIconInfo.cs" />
-    <Compile Include="Interop\Windows\User32\Interop.GetSystemMetrics.cs" />
     <Compile Include="Interop\Windows\User32\Interop.LoadIcon.cs" />
     <Compile Include="Interop\Windows\User32\Interop.ReleaseDC.cs" />
     <Compile Include="Interop\Windows\User32\Interop.SystemParametersInfo.cs" />
     <Compile Include="Interop\Windows\User32\Interop.NONCLIENTMETRICS.cs" />
     <Compile Include="Interop\Windows\User32\Interop.WindowFromDC.cs" />
-    <Compile Include="Interop\Windows\Winspool\Interop.DeviceCapabilities.cs" />
-    <Compile Include="Interop\Windows\Winspool\Interop.DocumentProperties.cs" />
-    <Compile Include="Interop\Windows\Winspool\Interop.EnumPrinters.cs" />
-    <Compile Include="Interop\Windows\Interop.HRESULT.cs" />
+
+    <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="Windows\Win32\**\*.cs" />
+
+    <Content Include="NativeMethods.json" />
+    <Content Include="NativeMethods.txt" />
 
     <Compile Include="..\..\Common\src\LocalAppContextSwitches.Common.cs" Link="System\LocalAppContextSwitches.Common.cs" />
     <Compile Include="..\..\Common\src\ValueStringBuilder.cs" Link="System\Text\ValueStringBuilder.cs" />
-
+    <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
 
     <EmbeddedResource Include="Resources\System\Drawing\DefaultComponent.bmp" LogicalName="System.Drawing.DefaultComponent.bmp" />
     <EmbeddedResource Include="Resources\System\Drawing\Printing\PrintDocument.bmp" />
     <EmbeddedResource Include="Resources\System\Drawing\ShieldIcon.ico" LogicalName="System.Drawing.ShieldIcon.ico" />
+
+    <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj">
+      <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+      <Pack>true</Pack>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="$(MicrosoftWindowsCsWin32PackageVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">

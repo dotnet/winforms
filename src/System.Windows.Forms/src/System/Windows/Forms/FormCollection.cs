@@ -12,6 +12,10 @@ namespace System.Windows.Forms;
 public class FormCollection : ReadOnlyCollectionBase
 {
     internal static object CollectionSyncRoot = new();
+    /// <summary>
+    /// Changes when a new form is added.
+    /// </summary>
+    internal int AddVersion { get; private set; }
 
     /// <summary>
     ///  Gets a form specified by name, if present, else returns null. If there are multiple
@@ -65,6 +69,7 @@ public class FormCollection : ReadOnlyCollectionBase
         lock (CollectionSyncRoot)
         {
             InnerList.Add(form);
+            AddVersion++;
         }
     }
 
@@ -83,13 +88,24 @@ public class FormCollection : ReadOnlyCollectionBase
     }
 
     /// <summary>
-    ///  Used internally to add a Form to the FormCollection
+    ///  Used internally to remove a Form from the FormCollection
     /// </summary>
     internal void Remove(Form form)
     {
         lock (CollectionSyncRoot)
         {
             InnerList.Remove(form);
+        }
+    }
+
+    /// <summary>
+    ///  Used internally to remove a Form from the FormCollection
+    /// </summary>
+    internal void RemoveAt(int index)
+    {
+        lock (CollectionSyncRoot)
+        {
+            InnerList.RemoveAt(index);
         }
     }
 }

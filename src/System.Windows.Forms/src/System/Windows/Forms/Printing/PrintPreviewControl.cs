@@ -475,8 +475,8 @@ public partial class PrintPreviewControl : Control
 
         using GetDcScope hdc = new(HWND);
         _screenDPI = new Point(
-            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
-            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
+            PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+            PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
 
         Size pageSize = _pageInfo[StartPage].PhysicalSize;
         Size controlPhysicalSize = PixelsToPhysical(Size, _screenDPI);

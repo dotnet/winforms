@@ -3151,7 +3151,8 @@ public partial class DataGridView : Control, ISupportInitialize
     private void ResetCurrentCell()
     {
         if (_ptCurrentCell.X != -1 && !SetCurrentCellAddressCore(
-            -1, -1,
+            -1,
+            -1,
             setAnchorCellAddress: true,
             validateCurrentCell: true,
             throughMouseClick: false))

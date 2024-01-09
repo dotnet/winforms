@@ -1,16 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing.Internal;
-using System.Runtime.InteropServices;
-using static Interop;
-
 namespace System.Drawing.Printing;
 
 /// <summary>
 ///  Specifies settings that apply to a single page.
 /// </summary>
-public class PageSettings : ICloneable
+public unsafe class PageSettings : ICloneable
 {
     private PrinterSettings _printerSettings;
     private TriState _color = TriState.Default;
@@ -43,10 +39,10 @@ public class PageSettings : ICloneable
     {
         get
         {
-            IntPtr modeHandle = _printerSettings.GetHdevmode();
+            HGLOBAL modeHandle = (HGLOBAL)_printerSettings.GetHdevmode();
             Rectangle pageBounds = GetBounds(modeHandle);
 
-            Kernel32.GlobalFree(new HandleRef(this, modeHandle));
+            PInvokeCore.GlobalFree(modeHandle);
             return pageBounds;
         }
     }
@@ -57,9 +53,9 @@ public class PageSettings : ICloneable
     public bool Color
     {
         get => _color.IsDefault
-            ? _printerSettings.GetModeField(ModeField.Color, SafeNativeMethods.DMCOLOR_MONOCHROME) == SafeNativeMethods.DMCOLOR_COLOR
+            ? _printerSettings.GetModeField(ModeField.Color, (short)DEVMODE_COLOR.DMCOLOR_MONOCHROME) == (short)DEVMODE_COLOR.DMCOLOR_MONOCHROME
             : (bool)_color;
-        set { _color = value; }
+        set => _color = value;
     }
 
     /// <summary>
@@ -69,21 +65,11 @@ public class PageSettings : ICloneable
     {
         get
         {
-            float hardMarginX = 0;
-            DeviceContext dc = _printerSettings.CreateDeviceContext(this);
+            using var hdc = _printerSettings.CreateDeviceContext(this);
 
-            try
-            {
-                int dpiX = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
-                int hardMarginX_DU = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETX);
-                hardMarginX = hardMarginX_DU * 100 / dpiX;
-            }
-            finally
-            {
-                dc.Dispose();
-            }
-
-            return hardMarginX;
+            int dpiX = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            int hardMarginX_DU = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX);
+            return hardMarginX_DU * 100 / dpiX;
         }
     }
 
@@ -94,10 +80,10 @@ public class PageSettings : ICloneable
     {
         get
         {
-            using DeviceContext dc = _printerSettings.CreateDeviceContext(this);
+            using var hdc = _printerSettings.CreateDeviceContext(this);
 
-            int dpiY = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
-            int hardMarginY_DU = Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETY);
+            int dpiY = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+            int hardMarginY_DU = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY);
             return hardMarginY_DU * 100 / dpiY;
         }
     }
@@ -108,7 +94,7 @@ public class PageSettings : ICloneable
     public bool Landscape
     {
         get => _landscape.IsDefault
-            ? _printerSettings.GetModeField(ModeField.Orientation, SafeNativeMethods.DMORIENT_PORTRAIT) == SafeNativeMethods.DMORIENT_LANDSCAPE
+            ? _printerSettings.GetModeField(ModeField.Orientation, (short)PInvokeCore.DMORIENT_PORTRAIT) == PInvokeCore.DMORIENT_LANDSCAPE
             : (bool)_landscape;
         set => _landscape = value;
     }
@@ -127,7 +113,7 @@ public class PageSettings : ICloneable
     /// </summary>
     public PaperSize PaperSize
     {
-        get => GetPaperSize(IntPtr.Zero);
+        get => GetPaperSize(HGLOBAL.Null);
         set => _paperSize = value;
     }
 
@@ -143,14 +129,13 @@ public class PageSettings : ICloneable
                 return _paperSource;
             }
 
-            IntPtr modeHandle = _printerSettings.GetHdevmode();
-            IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
-            Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(modePointer)!;
+            HGLOBAL modeHandle = (HGLOBAL)_printerSettings.GetHdevmode();
+            DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(modeHandle);
 
-            PaperSource result = PaperSourceFromMode(mode);
+            PaperSource result = PaperSourceFromMode(devmode);
 
-            Kernel32.GlobalUnlock(new HandleRef(this, modeHandle));
-            Kernel32.GlobalFree(new HandleRef(this, modeHandle));
+            PInvokeCore.GlobalUnlock(modeHandle);
+            PInvokeCore.GlobalFree(modeHandle);
 
             return result;
         }
@@ -165,26 +150,25 @@ public class PageSettings : ICloneable
         get
         {
             RectangleF printableArea = default;
-            using DeviceContext dc = _printerSettings.CreateInformationContext(this);
-            HandleRef hdc = new(dc, dc.Hdc);
+            using var hdc = _printerSettings.CreateInformationContext(this);
 
-            int dpiX = Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX);
-            int dpiY = Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY);
+            int dpiX = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            int dpiY = PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
             if (!Landscape)
             {
                 // Need to convert the printable area to 100th of an inch from the device units
-                printableArea.X = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETX) * 100 / dpiX;
-                printableArea.Y = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETY) * 100 / dpiY;
-                printableArea.Width = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.HORZRES) * 100 / dpiX;
-                printableArea.Height = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.VERTRES) * 100 / dpiY;
+                printableArea.X = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX) * 100 / dpiX;
+                printableArea.Y = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY) * 100 / dpiY;
+                printableArea.Width = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.HORZRES) * 100 / dpiX;
+                printableArea.Height = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.VERTRES) * 100 / dpiY;
             }
             else
             {
                 // Need to convert the printable area to 100th of an inch from the device units
-                printableArea.Y = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETX) * 100 / dpiX;
-                printableArea.X = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.PHYSICALOFFSETY) * 100 / dpiY;
-                printableArea.Height = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.HORZRES) * 100 / dpiX;
-                printableArea.Width = (float)Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.VERTRES) * 100 / dpiY;
+                printableArea.Y = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETX) * 100 / dpiX;
+                printableArea.X = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.PHYSICALOFFSETY) * 100 / dpiY;
+                printableArea.Height = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.HORZRES) * 100 / dpiX;
+                printableArea.Width = (float)PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.VERTRES) * 100 / dpiY;
             }
 
             return printableArea;
@@ -203,14 +187,12 @@ public class PageSettings : ICloneable
                 return _printerResolution;
             }
 
-            IntPtr modeHandle = _printerSettings.GetHdevmode();
-            IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
-            Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(modePointer)!;
+            HGLOBAL modeHandle = (HGLOBAL)_printerSettings.GetHdevmode();
+            DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(modeHandle);
+            PrinterResolution result = PrinterResolutionFromMode(devmode);
 
-            PrinterResolution result = PrinterResolutionFromMode(mode);
-
-            Kernel32.GlobalUnlock(new HandleRef(this, modeHandle));
-            Kernel32.GlobalFree(new HandleRef(this, modeHandle));
+            PInvokeCore.GlobalUnlock(modeHandle);
+            PInvokeCore.GlobalFree(modeHandle);
 
             return result;
         }
@@ -241,42 +223,46 @@ public class PageSettings : ICloneable
     /// </summary>
     public void CopyToHdevmode(IntPtr hdevmode)
     {
-        IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(modePointer)!;
-
-        if (_color.IsNotDefault && ((mode.dmFields & SafeNativeMethods.DM_COLOR) == SafeNativeMethods.DM_COLOR))
+        if (hdevmode == 0)
         {
-            mode.dmColor = unchecked((short)(((bool)_color) ? SafeNativeMethods.DMCOLOR_COLOR : SafeNativeMethods.DMCOLOR_MONOCHROME));
+            throw new ArgumentNullException(nameof(hdevmode));
         }
 
-        if (_landscape.IsNotDefault && ((mode.dmFields & SafeNativeMethods.DM_ORIENTATION) == SafeNativeMethods.DM_ORIENTATION))
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock((HGLOBAL)hdevmode);
+
+        if (_color.IsNotDefault && devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_COLOR))
         {
-            mode.dmOrientation = unchecked((short)(((bool)_landscape) ? SafeNativeMethods.DMORIENT_LANDSCAPE : SafeNativeMethods.DMORIENT_PORTRAIT));
+            devmode->dmColor = _color.IsTrue ? DEVMODE_COLOR.DMCOLOR_COLOR : DEVMODE_COLOR.DMCOLOR_MONOCHROME;
+        }
+
+        if (_landscape.IsNotDefault && devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_ORIENTATION))
+        {
+            devmode->dmOrientation = _landscape.IsTrue ? (short)PInvokeCore.DMORIENT_LANDSCAPE : (short)PInvokeCore.DMORIENT_PORTRAIT;
         }
 
         if (_paperSize is not null)
         {
-            if ((mode.dmFields & SafeNativeMethods.DM_PAPERSIZE) == SafeNativeMethods.DM_PAPERSIZE)
+            if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PAPERSIZE))
             {
-                mode.dmPaperSize = unchecked((short)_paperSize.RawKind);
+                devmode->dmPaperSize = (short)_paperSize.RawKind;
             }
 
             bool setWidth = false;
             bool setLength = false;
 
-            if ((mode.dmFields & SafeNativeMethods.DM_PAPERLENGTH) == SafeNativeMethods.DM_PAPERLENGTH)
+            if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PAPERLENGTH))
             {
                 // dmPaperLength is always in tenths of millimeter but paperSizes are in hundredth of inch ..
                 // so we need to convert :: use PrinterUnitConvert.Convert(value, PrinterUnit.TenthsOfAMillimeter /*fromUnit*/, PrinterUnit.Display /*ToUnit*/)
                 int length = PrinterUnitConvert.Convert(_paperSize.Height, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
-                mode.dmPaperLength = unchecked((short)length);
+                devmode->dmPaperLength = (short)length;
                 setLength = true;
             }
 
-            if ((mode.dmFields & SafeNativeMethods.DM_PAPERWIDTH) == SafeNativeMethods.DM_PAPERWIDTH)
+            if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PAPERWIDTH))
             {
                 int width = PrinterUnitConvert.Convert(_paperSize.Width, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
-                mode.dmPaperWidth = unchecked((short)width);
+                devmode->dmPaperWidth = (short)width;
                 setWidth = true;
             }
 
@@ -284,104 +270,104 @@ public class PageSettings : ICloneable
             {
                 if (!setLength)
                 {
-                    mode.dmFields |= SafeNativeMethods.DM_PAPERLENGTH;
+                    devmode->dmFields |= DEVMODE_FIELD_FLAGS.DM_PAPERLENGTH;
                     int length = PrinterUnitConvert.Convert(_paperSize.Height, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
-                    mode.dmPaperLength = unchecked((short)length);
+                    devmode->dmPaperLength = (short)length;
                 }
 
                 if (!setWidth)
                 {
-                    mode.dmFields |= SafeNativeMethods.DM_PAPERWIDTH;
+                    devmode->dmFields |= DEVMODE_FIELD_FLAGS.DM_PAPERWIDTH;
                     int width = PrinterUnitConvert.Convert(_paperSize.Width, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
-                    mode.dmPaperWidth = unchecked((short)width);
+                    devmode->dmPaperWidth = (short)width;
                 }
             }
         }
 
-        if (_paperSource is not null && ((mode.dmFields & SafeNativeMethods.DM_DEFAULTSOURCE) == SafeNativeMethods.DM_DEFAULTSOURCE))
+        if (_paperSource is not null && devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_DEFAULTSOURCE))
         {
-            mode.dmDefaultSource = unchecked((short)_paperSource.RawKind);
+            devmode->dmDefaultSource = (short)_paperSource.RawKind;
         }
 
         if (_printerResolution is not null)
         {
             if (_printerResolution.Kind == PrinterResolutionKind.Custom)
             {
-                if ((mode.dmFields & SafeNativeMethods.DM_PRINTQUALITY) == SafeNativeMethods.DM_PRINTQUALITY)
+                if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PRINTQUALITY))
                 {
-                    mode.dmPrintQuality = unchecked((short)_printerResolution.X);
+                    devmode->dmPrintQuality = (short)_printerResolution.X;
                 }
 
-                if ((mode.dmFields & SafeNativeMethods.DM_YRESOLUTION) == SafeNativeMethods.DM_YRESOLUTION)
+                if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_YRESOLUTION))
                 {
-                    mode.dmYResolution = unchecked((short)_printerResolution.Y);
+                    devmode->dmYResolution = (short)_printerResolution.Y;
                 }
             }
             else
             {
-                if ((mode.dmFields & SafeNativeMethods.DM_PRINTQUALITY) == SafeNativeMethods.DM_PRINTQUALITY)
+                if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PRINTQUALITY))
                 {
-                    mode.dmPrintQuality = unchecked((short)_printerResolution.Kind);
+                    devmode->dmPrintQuality = (short)_printerResolution.Kind;
                 }
             }
         }
-
-        Marshal.StructureToPtr(mode, modePointer, false);
 
         // It's possible this page has a DEVMODE for a different printer than the DEVMODE passed in here
         // (Ex: occurs when Doc.DefaultPageSettings.PrinterSettings.PrinterName != Doc.PrinterSettings.PrinterName)
         //
         // If the passed in devmode has fewer bytes than our buffer for the extra info, we want to skip the merge
         // as it will cause a buffer overrun.
-        if (mode.dmDriverExtra >= ExtraBytes)
+        if (devmode->dmDriverExtra >= ExtraBytes)
         {
-            int retCode = Winspool.DocumentProperties(
-                NativeMethods.NullHandleRef,
-                NativeMethods.NullHandleRef,
-                _printerSettings.PrinterName,
-                modePointer,
-                modePointer,
-                SafeNativeMethods.DM_IN_BUFFER | SafeNativeMethods.DM_OUT_BUFFER);
-
-            if (retCode < 0)
+            fixed (char* n = _printerSettings.PrinterName)
             {
-                Kernel32.GlobalFree(modePointer);
+                int result = PInvoke.DocumentProperties(
+                    HWND.Null,
+                    HANDLE.Null,
+                    n,
+                    devmode,
+                    devmode,
+                    (uint)(DEVMODE_FIELD_FLAGS.DM_IN_BUFFER | DEVMODE_FIELD_FLAGS.DM_OUT_BUFFER));
+
+                if (result < 0)
+                {
+                    PInvokeCore.GlobalFree((HGLOBAL)hdevmode);
+                }
             }
         }
 
-        Kernel32.GlobalUnlock(hdevmode);
+        PInvokeCore.GlobalUnlock((HGLOBAL)hdevmode);
     }
 
     private short ExtraBytes
     {
         get
         {
-            IntPtr modeHandle = _printerSettings.GetHdevmodeInternal();
-            IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
-            Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(modePointer)!;
+            HGLOBAL modeHandle = _printerSettings.GetHdevmodeInternal();
+            DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(modeHandle);
 
-            short result = mode?.dmDriverExtra ?? 0;
+            short result = devmode is null ? default : (short)devmode->dmDriverExtra;
 
-            Kernel32.GlobalUnlock(new HandleRef(this, modeHandle));
-            Kernel32.GlobalFree(new HandleRef(this, modeHandle));
+            PInvokeCore.GlobalUnlock(modeHandle);
+            PInvokeCore.GlobalFree(modeHandle);
 
             return result;
         }
     }
 
-    internal Rectangle GetBounds(IntPtr modeHandle)
+    internal Rectangle GetBounds(HGLOBAL modeHandle)
     {
         PaperSize size = GetPaperSize(modeHandle);
-        return GetLandscape(modeHandle)
+        return IsLandscape(modeHandle)
             ? new Rectangle(0, 0, size.Height, size.Width)
             : new Rectangle(0, 0, size.Width, size.Height);
+
+        bool IsLandscape(HGLOBAL modeHandle) => _landscape.IsDefault
+            ? _printerSettings.GetModeField(ModeField.Orientation, (short)PInvokeCore.DMORIENT_PORTRAIT, modeHandle) == PInvokeCore.DMORIENT_LANDSCAPE
+            : (bool)_landscape;
     }
 
-    private bool GetLandscape(IntPtr modeHandle) => _landscape.IsDefault
-        ? _printerSettings.GetModeField(ModeField.Orientation, SafeNativeMethods.DMORIENT_PORTRAIT, modeHandle) == SafeNativeMethods.DMORIENT_LANDSCAPE
-        : (bool)_landscape;
-
-    private PaperSize GetPaperSize(IntPtr modeHandle)
+    private PaperSize GetPaperSize(HGLOBAL modeHandle)
     {
         if (_paperSize is not null)
         {
@@ -389,35 +375,34 @@ public class PageSettings : ICloneable
         }
 
         bool ownHandle = false;
-        if (modeHandle == IntPtr.Zero)
+        if (modeHandle.IsNull)
         {
-            modeHandle = _printerSettings.GetHdevmode();
+            modeHandle = (HGLOBAL)_printerSettings.GetHdevmode();
             ownHandle = true;
         }
 
-        IntPtr modePointer = Kernel32.GlobalLock(modeHandle);
-        Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(modePointer)!;
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(modeHandle);
 
-        PaperSize result = PaperSizeFromMode(mode);
+        PaperSize result = PaperSizeFromMode(devmode);
 
-        Kernel32.GlobalUnlock(modeHandle);
+        PInvokeCore.GlobalUnlock(modeHandle);
 
         if (ownHandle)
         {
-            Kernel32.GlobalFree(modeHandle);
+            PInvokeCore.GlobalFree(modeHandle);
         }
 
         return result;
     }
 
-    private PaperSize PaperSizeFromMode(Gdi32.DEVMODE mode)
+    private PaperSize PaperSizeFromMode(DEVMODEW* devmode)
     {
         PaperSize[] sizes = _printerSettings.Get_PaperSizes();
-        if ((mode.dmFields & SafeNativeMethods.DM_PAPERSIZE) == SafeNativeMethods.DM_PAPERSIZE)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PAPERSIZE))
         {
             for (int i = 0; i < sizes.Length; i++)
             {
-                if (sizes[i].RawKind == mode.dmPaperSize)
+                if (sizes[i].RawKind == devmode->Anonymous1.Anonymous1.dmPaperSize)
                 {
                     return sizes[i];
                 }
@@ -427,47 +412,47 @@ public class PageSettings : ICloneable
         return new PaperSize(
             PaperKind.Custom,
             "custom",
-            PrinterUnitConvert.Convert(mode.dmPaperWidth, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
-            PrinterUnitConvert.Convert(mode.dmPaperLength, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
+            PrinterUnitConvert.Convert(devmode->Anonymous1.Anonymous1.dmPaperWidth, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
+            PrinterUnitConvert.Convert(devmode->Anonymous1.Anonymous1.dmPaperLength, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display));
     }
 
-    private PaperSource PaperSourceFromMode(Gdi32.DEVMODE mode)
+    private PaperSource PaperSourceFromMode(DEVMODEW* devmode)
     {
         PaperSource[] sources = _printerSettings.Get_PaperSources();
-        if ((mode.dmFields & SafeNativeMethods.DM_DEFAULTSOURCE) == SafeNativeMethods.DM_DEFAULTSOURCE)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_DEFAULTSOURCE))
         {
             for (int i = 0; i < sources.Length; i++)
             {
-                // the dmDefaultSource == to the RawKind in the Papersource.. and Not the Kind...
-                // if the PaperSource is populated with CUSTOM values...
-                if (unchecked((short)sources[i].RawKind) == mode.dmDefaultSource)
+                // The dmDefaultSource == to the RawKind in the PaperSource and not the Kind
+                // if the PaperSource is populated with CUSTOM values.
+                if ((short)sources[i].RawKind == devmode->dmDefaultSource)
                 {
                     return sources[i];
                 }
             }
         }
 
-        return new PaperSource((PaperSourceKind)mode.dmDefaultSource, "unknown");
+        return new PaperSource((PaperSourceKind)devmode->dmDefaultSource, "unknown");
     }
 
-    private PrinterResolution PrinterResolutionFromMode(Gdi32.DEVMODE mode)
+    private PrinterResolution PrinterResolutionFromMode(DEVMODEW* devmode)
     {
         PrinterResolution[] resolutions = _printerSettings.Get_PrinterResolutions();
         for (int i = 0; i < resolutions.Length; i++)
         {
-            if (mode.dmPrintQuality >= 0 && ((mode.dmFields & SafeNativeMethods.DM_PRINTQUALITY) == SafeNativeMethods.DM_PRINTQUALITY)
-                && ((mode.dmFields & SafeNativeMethods.DM_YRESOLUTION) == SafeNativeMethods.DM_YRESOLUTION))
+            if (devmode->dmPrintQuality >= 0
+                && devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PRINTQUALITY)
+                && devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_YRESOLUTION))
             {
-                if (resolutions[i].X == unchecked((int)(PrinterResolutionKind)mode.dmPrintQuality)
-                    && resolutions[i].Y == unchecked((int)(PrinterResolutionKind)mode.dmYResolution))
+                if (resolutions[i].X == devmode->dmPrintQuality && resolutions[i].Y == devmode->dmYResolution)
                 {
                     return resolutions[i];
                 }
             }
             else
             {
-                if ((mode.dmFields & SafeNativeMethods.DM_PRINTQUALITY) == SafeNativeMethods.DM_PRINTQUALITY
-                    && resolutions[i].Kind == (PrinterResolutionKind)mode.dmPrintQuality)
+                if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PRINTQUALITY)
+                    && resolutions[i].Kind == (PrinterResolutionKind)devmode->dmPrintQuality)
                 {
                     return resolutions[i];
                 }
@@ -476,8 +461,8 @@ public class PageSettings : ICloneable
 
         return new PrinterResolution(
             PrinterResolutionKind.Custom,
-            mode.dmPrintQuality,
-            mode.dmYResolution);
+            devmode->dmPrintQuality,
+            devmode->dmYResolution);
     }
 
     /// <summary>
@@ -485,29 +470,28 @@ public class PageSettings : ICloneable
     /// </summary>
     public void SetHdevmode(IntPtr hdevmode)
     {
-        if (hdevmode == IntPtr.Zero)
+        if (hdevmode == 0)
         {
             throw new ArgumentException(SR.Format(SR.InvalidPrinterHandle, hdevmode));
         }
 
-        IntPtr pointer = Kernel32.GlobalLock(hdevmode);
-        Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
+        DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock((HGLOBAL)hdevmode);
 
-        if ((mode.dmFields & SafeNativeMethods.DM_COLOR) == SafeNativeMethods.DM_COLOR)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_COLOR))
         {
-            _color = (mode.dmColor == SafeNativeMethods.DMCOLOR_COLOR);
+            _color = devmode->dmColor == DEVMODE_COLOR.DMCOLOR_COLOR;
         }
 
-        if ((mode.dmFields & SafeNativeMethods.DM_ORIENTATION) == SafeNativeMethods.DM_ORIENTATION)
+        if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_ORIENTATION))
         {
-            _landscape = (mode.dmOrientation == SafeNativeMethods.DMORIENT_LANDSCAPE);
+            _landscape = devmode->dmOrientation == PInvokeCore.DMORIENT_LANDSCAPE;
         }
 
-        _paperSize = PaperSizeFromMode(mode);
-        _paperSource = PaperSourceFromMode(mode);
-        _printerResolution = PrinterResolutionFromMode(mode);
+        _paperSize = PaperSizeFromMode(devmode);
+        _paperSource = PaperSourceFromMode(devmode);
+        _printerResolution = PrinterResolutionFromMode(devmode);
 
-        Kernel32.GlobalUnlock(hdevmode);
+        PInvokeCore.GlobalUnlock((HGLOBAL)hdevmode);
     }
 
     public override string ToString() =>

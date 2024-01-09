@@ -5205,6 +5205,11 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Ciąg wyświetlony w oknie dialogowym nad formantem widoku drzewa. Ten ciąg może posłużyć do określenia instrukcji dla użytkownika.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogMultiSelectDescr">
+        <source>Controls whether multiple folders can be selected in the dialog.</source>
+        <target state="translated">Określa, czy w oknie dialogowym można wybrać wiele folderów.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Określa, czy przycisk OK okna dialogowego jest wyłączony, dopóki użytkownik nie nawiguje po widoku lub nie edytuje nazwy pliku (jeśli ma zastosowanie). Uwaga: wyłączenie przycisku OK nie zapobiega przesyłaniu okna dialogowego przez klawisz Enter.</target>
@@ -5218,6 +5223,11 @@ Czy chcesz go zamienić?</target>
       <trans-unit id="FolderBrowserDialogSelectedPath">
         <source>The path of the folder first selected in the dialog or the last one selected by the user.</source>
         <target state="translated">Ścieżka do folderu wybranego jako pierwszy w tym oknie dialogowym lub wybranego ostatnio przez użytkownika.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
+        <source>Retrieves the paths of all selected folders in the dialog box.</source>
+        <target state="translated">Pobiera ścieżki wszystkich folderów zaznaczonych w oknie dialogowym.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">

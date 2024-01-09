@@ -46,5 +46,6 @@ public enum MainFormControlsTabOrder
     PasswordButton,
     ChartControlButton,
     ToolStripSeparatorPreferredSize,
-    CustomComCtl32Button
+    CustomComCtl32Button,
+    ScrollableControlsButton
 }
