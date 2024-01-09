@@ -324,35 +324,23 @@ internal static partial class ScaleHelper
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
         PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
 
-    internal static Size LogicalLargeSystemIconSize => s_logicalLargeSystemIconSize ??= OsVersion.IsWindows10_1607OrGreater()
-      ? new(
-          PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXICON, OneHundredPercentLogicalDpi),
-          PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CYICON, OneHundredPercentLogicalDpi))
-      : new(32, 32);
-
     internal static Size LogicalSmallSystemIconSize => s_logicalSmallSystemIconSize ??= OsVersion.IsWindows10_1607OrGreater()
-     ? new(
-         PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi),
-         PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi))
-     : new(16, 16);
+        ? new(
+            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi),
+            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi))
+        : new(16, 16);
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
     /// </summary>
-    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource)
-        => GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
-
-    /// <summary>
-    ///  Gets the given large icon (usually 32x32) resource as a <see cref="Bitmap"/> scaled to the specified dpi.
-    /// </summary>
-    internal static Bitmap GetLargeIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalLargeSystemIconSize, dpi));
+    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource) =>
+        GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
 
     /// <summary>
     ///  Gets the given small icon (usually 16x16) resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
-    internal static Bitmap GetSmallIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSmallSystemIconSize, dpi));
+    internal static Bitmap GetSmallIconResourceAsBitmap(Type type, string resource, int dpi) =>
+        GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSmallSystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.
