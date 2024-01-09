@@ -2375,7 +2375,6 @@ override System.Windows.Forms.ToolStrip.ToString() -> string!
 override System.Windows.Forms.ToolStrip.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripButton.DefaultAutoToolTip.get -> bool
-override System.Windows.Forms.ToolStripButton.Renderer.get -> System.Windows.Forms.ToolStripRenderer?
 override System.Windows.Forms.ToolStripButton.GetPreferredSize(System.Drawing.Size constrainingSize) -> System.Drawing.Size
 override System.Windows.Forms.ToolStripButton.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
@@ -13402,6 +13401,7 @@ virtual System.Windows.Forms.ToolStripItem.Pressed.get -> bool
 virtual System.Windows.Forms.ToolStripItem.ProcessCmdKey(ref System.Windows.Forms.Message m, System.Windows.Forms.Keys keyData) -> bool
 virtual System.Windows.Forms.ToolStripItem.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 virtual System.Windows.Forms.ToolStripItem.ProcessMnemonic(char charCode) -> bool
+virtual System.Windows.Forms.ToolStripItem.Renderer.get -> System.Windows.Forms.ToolStripRenderer?
 virtual System.Windows.Forms.ToolStripItem.ResetBackColor() -> void
 virtual System.Windows.Forms.ToolStripItem.ResetDisplayStyle() -> void
 virtual System.Windows.Forms.ToolStripItem.ResetFont() -> void
