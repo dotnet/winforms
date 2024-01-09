@@ -613,7 +613,7 @@ public partial class CheckedListBox : ListBox
             if (!backColor.HasTransparency())
             {
                 using DeviceContextHdcScope hdc = new(e);
-                using PInvoke.CreateBrushScope hbrush = new(backColor);
+                using CreateBrushScope hbrush = new(backColor);
                 hdc.FillRectangle(textBounds, hbrush);
             }
             else

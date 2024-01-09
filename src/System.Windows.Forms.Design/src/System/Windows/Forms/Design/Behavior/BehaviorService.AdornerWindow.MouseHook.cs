@@ -4,7 +4,6 @@
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
 

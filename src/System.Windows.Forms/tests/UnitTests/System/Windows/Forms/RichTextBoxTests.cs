@@ -11,7 +11,6 @@ using Moq;
 using Moq.Protected;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Controls.RichEdit;
-using static Interop;
 using static Interop.Richedit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;

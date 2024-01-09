@@ -11,7 +11,6 @@ using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -2407,7 +2406,7 @@ internal sealed partial class PropertyGridView :
             else
             {
                 using GetDcScope hdc = new(HWND);
-                using PInvoke.CreateBrushScope hbrush = new(color);
+                using CreateBrushScope hbrush = new(color);
                 hdc.FillRectangle(hbrush, clearRect);
             }
         }
@@ -3767,9 +3766,9 @@ internal sealed partial class PropertyGridView :
 
             // This creates a copy of the given Font, and as such we need to delete it
             var hFont = (HFONT)Font.ToHfont();
-            using (PInvoke.ObjectScope fontScope = new(hFont))
+            using (ObjectScope fontScope = new(hFont))
             {
-                using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
+                using SelectObjectScope fontSelection = new(hdc, hFont);
 
                 selectionIndex = GetCurrentValueIndex(gridEntry);
                 if (rgItems is not null && rgItems.Length > 0)

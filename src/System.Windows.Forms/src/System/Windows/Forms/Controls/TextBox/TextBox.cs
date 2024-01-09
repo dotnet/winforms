@@ -966,7 +966,7 @@ public partial class TextBox : TextBoxBase
                         PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
 
                         // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-                        using PInvoke.BeginPaintScope paintScope = new((HWND)Handle);
+                        using BeginPaintScope paintScope = new(HWND);
                         DrawPlaceholderText(paintScope);
 
                         PInvoke.ValidateRect(this, lpRect: null);

@@ -4,7 +4,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Moq;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -32,8 +31,8 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(1, 2), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
-            Assert.Equal(RegionType.SIMPLEREGION, regionType);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
+            Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, regionType);
             Assert.Equal(new Rectangle(-1, -2, 10, 10), (Rectangle)clipRect);
 
             Assert.Equal(g, scope.DeviceContext);
@@ -47,8 +46,8 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(0, 0), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
-            Assert.Equal(RegionType.SIMPLEREGION, regionType);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
+            Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, regionType);
             Assert.Equal(clipRectangle, (Rectangle)clipRect);
 
             Assert.Equal(g, scope.DeviceContext);
@@ -62,8 +61,8 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(1, 2), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
-            Assert.Equal(RegionType.SIMPLEREGION, regionType);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
+            Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, regionType);
             Assert.Equal(new Rectangle(0, -1, 5, 5), (Rectangle)clipRect);
 
             Assert.Equal(g, scope.DeviceContext);
@@ -77,8 +76,8 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(0, 0), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
-            Assert.Equal(RegionType.SIMPLEREGION, regionType);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
+            Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, regionType);
             Assert.Equal(new Rectangle(0, 0, 10, 10), (Rectangle)clipRect);
 
             Assert.Equal(g, scope.DeviceContext);
@@ -93,7 +92,7 @@ public class DeviceContextHdcScopeTests
     {
         using var hdc = GetDcScope.ScreenDC;
         RECT originalClipRect = default;
-        RegionType originalRegionType = (RegionType)PInvoke.GetClipBox(hdc, &originalClipRect);
+        GDI_REGION_TYPE originalRegionType = PInvoke.GetClipBox(hdc, &originalClipRect);
         Point originalOrigin = default;
         PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
 
@@ -115,7 +114,7 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(1, 2), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
             Assert.Equal(originalRegionType, regionType);
             Rectangle expectedClipRect = originalClipRect;
             expectedClipRect.X -= 1;
@@ -142,8 +141,8 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(0, 0), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
-            Assert.Equal(RegionType.SIMPLEREGION, regionType);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
+            Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, regionType);
             Assert.Equal(clipRectangle, (Rectangle)clipRect);
 
             Assert.Equal(g, scope.DeviceContext);
@@ -165,8 +164,8 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(1, 2), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
-            Assert.Equal(RegionType.SIMPLEREGION, regionType);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
+            Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, regionType);
             Assert.Equal(new Rectangle(0, -1, 5, 5), (Rectangle)clipRect);
 
             Assert.Equal(g, scope.DeviceContext);
@@ -188,7 +187,7 @@ public class DeviceContextHdcScopeTests
             Assert.Equal(new Point(0, 0), origin);
 
             RECT clipRect = default;
-            RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
+            GDI_REGION_TYPE regionType = PInvoke.GetClipBox(scope, &clipRect);
             Assert.Equal(originalRegionType, regionType);
             Assert.Equal((Rectangle)originalClipRect, (Rectangle)clipRect);
 

@@ -18,7 +18,7 @@ internal static partial class PInvoke
             return __retVal;
         }
 
-        [DllImport(Interop.Libraries.Hhctrl, ExactSpelling = true, EntryPoint = "HtmlHelpW")]
+        [DllImport(Libraries.Hhctrl, ExactSpelling = true, EntryPoint = "HtmlHelpW")]
         static extern HWND LocalExternFunction(HWND hwndCaller, PCWSTR pszFile, uint uCommand, nuint dwData);
     }
 

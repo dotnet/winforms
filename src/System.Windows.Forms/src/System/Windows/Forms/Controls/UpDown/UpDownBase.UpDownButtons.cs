@@ -321,7 +321,7 @@ public abstract partial class UpDownBase
                 Point pt2 = new(clientRect.Right, clientRect.Bottom - 1);
 
                 using DeviceContextHdcScope hdc = new(e);
-                using PInvoke.CreatePenScope hpen = new(color);
+                using CreatePenScope hpen = new(color);
                 hdc.DrawLine(hpen, pt1, pt2);
             }
 

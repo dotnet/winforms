@@ -302,7 +302,7 @@ public sealed partial class Application
 
             // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
             // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(context, DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
+            if (context.IsEquivalent(DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
             {
                 Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
 
@@ -312,7 +312,7 @@ public sealed partial class Application
             // Supported OS scenario.
             foreach (ParkingWindow p in _parkingWindows)
             {
-                if (PInvoke.AreDpiAwarenessContextsEqualInternal(p.DpiAwarenessContext, context))
+                if (context.IsEquivalent(p.DpiAwarenessContext))
                 {
                     return p;
                 }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -662,7 +661,7 @@ public static partial class ToolStripManager
                     case PInvoke.WM_NCMBUTTONDOWN:
                         // When a mouse button is pressed, we should determine if it is within the client coordinates
                         // of the active dropdown. If not, we should dismiss it.
-                        ProcessMouseButtonPressed((HWND)default, PARAM.ToPoint(m.LParamInternal));
+                        ProcessMouseButtonPressed(default, PARAM.ToPoint(m.LParamInternal));
                         break;
 
                     case PInvoke.WM_KEYDOWN:

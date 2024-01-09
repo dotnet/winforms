@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -292,7 +291,7 @@ public sealed partial class BehaviorService
                 case PInvoke.WM_PAINT:
                     {
                         // Stash off the region we have to update.
-                        using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
+                        using RegionScope hrgn = new(0, 0, 0, 0);
                         PInvoke.GetUpdateRgn(m.HWND, hrgn, true);
 
                         // The region we have to update in terms of the smallest rectangle that completely encloses

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.Interop.Oleaut32;
 

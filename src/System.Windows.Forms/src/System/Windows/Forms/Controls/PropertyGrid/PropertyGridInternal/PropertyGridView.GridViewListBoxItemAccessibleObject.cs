@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListBox;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 

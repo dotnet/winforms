@@ -5,7 +5,6 @@ using System.Drawing.Internal;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using static Interop;
 
 namespace System.Drawing;
 

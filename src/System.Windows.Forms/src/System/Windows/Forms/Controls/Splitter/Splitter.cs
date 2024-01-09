@@ -710,8 +710,8 @@ public partial class Splitter : Control
         Rectangle r = CalcSplitLine(_splitTarget, splitSize, 3);
         using GetDcScope dc = new(ParentInternal.HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-        using PInvoke.ObjectScope halftoneScope = new(halftone);
-        using PInvoke.SelectObjectScope selection = new(dc, halftone);
+        using ObjectScope halftoneScope = new(halftone);
+        using SelectObjectScope selection = new(dc, halftone);
         PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
 
         GC.KeepAlive(ParentInternal);

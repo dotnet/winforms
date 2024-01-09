@@ -561,7 +561,7 @@ public partial class GroupBox : Control
             else
             {
                 using DeviceContextHdcScope hdc = new(e);
-                using PInvoke.CreatePenScope hpen = new(boxColor);
+                using CreatePenScope hpen = new(boxColor);
                 hdc.DrawLines(hpen, lines);
             }
         }
@@ -586,9 +586,9 @@ public partial class GroupBox : Control
             ];
 
             using DeviceContextHdcScope hdc = new(e);
-            using PInvoke.CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
+            using CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
             hdc.DrawLines(hpenLight, lightLines);
-            using PInvoke.CreatePenScope hpenDark = new(ControlPaint.Dark(backColor, 0f));
+            using CreatePenScope hpenDark = new(ControlPaint.Dark(backColor, 0f));
             hdc.DrawLines(hpenDark, darkLines);
         }
     }
@@ -668,7 +668,7 @@ public partial class GroupBox : Control
         }
         else
         {
-            using var hbrush = new PInvoke.CreateBrushScope(backColor);
+            using var hbrush = new CreateBrushScope(backColor);
             PInvoke.FillRect((HDC)m.WParamInternal, rect, hbrush);
         }
 

@@ -176,8 +176,8 @@ public sealed partial class MultilineStringEditor
             get
             {
                 using var hdc = GetDcScope.ScreenDC;
-                using PInvoke.ObjectScope font = new(Font.ToHFONT());
-                using PInvoke.SelectObjectScope fontSelection = new(hdc, font);
+                using ObjectScope font = new(Font.ToHFONT());
+                using SelectObjectScope fontSelection = new(hdc, font);
 
                 RECT rect = default;
                 fixed (char* t = Text)
