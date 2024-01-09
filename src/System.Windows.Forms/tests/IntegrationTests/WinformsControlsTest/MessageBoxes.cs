@@ -35,7 +35,7 @@ public partial class MessageBoxes : Form
                     _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
                     _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options);
             }
-            };
+        };
 
         ToolStrip toolbar = GetToolbar();
         toolbar.Items.Add(new ToolStripSeparator { Visible = true });
