@@ -25784,11 +25784,11 @@ public partial class DataGridView
             if (nullValue is null
                 || (dataGridViewCurrentCell.FormattedValueType is not null && dataGridViewCurrentCell.FormattedValueType.IsAssignableFrom(nullValue.GetType())))
             {
-                if (EditingControl is not null)
+                if (EditingControl is IDataGridViewEditingControl dataGridViewEditingControl)
                 {
-                    ((IDataGridViewEditingControl)EditingControl).EditingControlFormattedValue = nullValue;
-                    ((IDataGridViewEditingControl)EditingControl).EditingControlValueChanged = true;
-                    ((IDataGridViewEditingControl)EditingControl).PrepareEditingControlForEdit(selectAll: true);
+                    dataGridViewEditingControl.EditingControlFormattedValue = nullValue;
+                    dataGridViewEditingControl.EditingControlValueChanged = true;
+                    dataGridViewEditingControl.PrepareEditingControlForEdit(selectAll: true);
                 }
                 else
                 {
