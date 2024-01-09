@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -239,17 +238,17 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Used for drawing the grabhandles around sizeable selected controls and components.
+    ///  Used for drawing the grab handles around sizeable selected controls and components.
     /// </summary>
     public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
         // Set our pen and brush based on primary selection
-        using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        using PInvoke.SelectObjectScope penSelection = new(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+        using SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+        using SelectObjectScope penSelection = new(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
-        // Draw our rounded rect grabhandle
+        // Draw our rounded rect grab handle
         PInvoke.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
     }
 
@@ -261,8 +260,8 @@ internal static class DesignerUtils
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
         // Set our pen and brush based on primary selection
-        using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
+        using SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+        using SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
         // Draw our rect no-resize handle
         PInvoke.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
@@ -275,10 +274,10 @@ internal static class DesignerUtils
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
-        using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
+        using SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
         // Upper rect - upper rect is always filled with the primary brush
-        using PInvoke.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
+        using SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
         PInvoke.RoundRect(
             hDC,
             bounds.Left + LOCKHANDLEUPPER_OFFSET,
@@ -536,8 +535,8 @@ internal static class DesignerUtils
 
         using Graphics g = ctrl.CreateGraphics();
         using DeviceContextHdcScope dc = new(g, applyGraphicsState: false);
-        using PInvoke.ObjectScope hFont = new(ctrl.Font.ToHFONT());
-        using PInvoke.SelectObjectScope hFontOld = new(dc, hFont);
+        using ObjectScope hFont = new(ctrl.Font.ToHFONT());
+        using SelectObjectScope hFontOld = new(dc, hFont);
 
         TEXTMETRICW metrics = default;
         PInvoke.GetTextMetrics(dc, &metrics);

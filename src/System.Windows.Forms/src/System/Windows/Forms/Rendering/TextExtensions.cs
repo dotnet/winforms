@@ -63,19 +63,19 @@ internal static class TextExtensions
         (DRAW_TEXT_FORMAT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
         // DrawText requires default text alignment.
-        using PInvoke.SetTextAlignmentScope alignment = new(hdc, default);
+        using SetTextAlignmentScope alignment = new(hdc, default);
 
         // Color empty means use the one currently selected in the dc.
-        using var textColor = foreColor.IsEmpty ? default : new PInvoke.SetTextColorScope(hdc, foreColor);
-        using PInvoke.SelectObjectScope fontSelection = new(hdc, (HFONT)font);
+        using var textColor = foreColor.IsEmpty ? default : new SetTextColorScope(hdc, foreColor);
+        using SelectObjectScope fontSelection = new(hdc, (HFONT)font);
 
         BACKGROUND_MODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent)
             ? BACKGROUND_MODE.TRANSPARENT
             : BACKGROUND_MODE.OPAQUE;
 
-        using PInvoke.SetBkModeScope backgroundMode = new(hdc, newBackGroundMode);
+        using SetBkModeScope backgroundMode = new(hdc, newBackGroundMode);
         using var backgroundColor = newBackGroundMode != BACKGROUND_MODE.TRANSPARENT
-            ? new PInvoke.SetBackgroundColorScope(hdc, backColor)
+            ? new SetBackgroundColorScope(hdc, backColor)
             : default;
 
         DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
@@ -243,7 +243,7 @@ internal static class TextExtensions
 
         RECT rect = new(proposedSize);
 
-        using PInvoke.SelectObjectScope fontSelection = new(hdc, font.Object);
+        using SelectObjectScope fontSelection = new(hdc, font.Object);
 
         // If proposedSize.Height == int.MaxValue it is assumed bounds are needed. If flags contain SINGLELINE and
         // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
@@ -287,7 +287,7 @@ internal static class TextExtensions
         }
 
         Size size = default;
-        using PInvoke.SelectObjectScope selectFont = new(hdc, hfont);
+        using SelectObjectScope selectFont = new(hdc, hfont);
 
         fixed (char* pText = text)
         {

@@ -33,8 +33,7 @@ internal static partial class ScaleHelper
                 return;
             }
 
-            // Unsupported DPI_AWARENESS_CONTEXT result in NotSupportedException.
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(context, DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
+            if (context.IsEquivalent(DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
             {
                 throw new NotSupportedException();
             }

@@ -104,9 +104,7 @@ internal static partial class ScaleHelper
                 // We can't cache this value because different top level windows can have different DPI awareness context
                 // for mixed mode applications.
                 DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
-                return PInvoke.AreDpiAwarenessContextsEqualInternal(
-                    dpiAwareness,
-                    DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                return dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             }
             else
             {
@@ -382,27 +380,27 @@ internal static partial class ScaleHelper
         {
             DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 return HighDpiMode.SystemAware;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
             {
                 return HighDpiMode.DpiUnaware;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
             {
                 return HighDpiMode.PerMonitorV2;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
             {
                 return HighDpiMode.PerMonitor;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
             {
                 return HighDpiMode.DpiUnawareGdiScaled;
             }

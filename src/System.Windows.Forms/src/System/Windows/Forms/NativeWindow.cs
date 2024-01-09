@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -500,7 +499,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     // based on the window properties and the behavior of the thread. For additional information, please refer to
                     // https://microsoft.visualstudio.com/OS/_git/os.2020?path=/clientcore/windows/Core/ntuser/kernel/windows/createw.cxx&version=GBofficial/main&line=881&lineEnd=882&lineStartColumn=1&lineEndColumn=1&lineStyle=plain&_a=contents
                     DPI_AWARENESS_CONTEXT controlHandleDpiContext = PInvoke.GetWindowDpiAwarenessContext(HWND);
-                    Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, controlHandleDpiContext),
+                    Debug.Assert(DpiAwarenessContext.IsEquivalent(controlHandleDpiContext),
                         $"Control's expected DpiAwarenessContext - {DpiAwarenessContext} is different from the DpiAwarenessContext on the Handle created for the control - {controlHandleDpiContext}");
                 }
 #endif

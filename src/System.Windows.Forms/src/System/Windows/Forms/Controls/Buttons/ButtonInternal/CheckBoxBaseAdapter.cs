@@ -46,7 +46,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
         using (DeviceContextHdcScope hdc = new(e))
         {
-            using PInvoke.CreatePenScope hpen = new(checkBorder);
+            using CreatePenScope hpen = new(checkBorder);
             hdc.DrawRectangle(bounds, hpen);
 
             // Now subtract, since the rest of the code is like Everett.
@@ -68,7 +68,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         else
         {
             using DeviceContextHdcScope hdc = new(e);
-            using PInvoke.CreateBrushScope hbrush = new(checkBackground);
+            using CreateBrushScope hbrush = new(checkBackground);
 
             // Even though we are using GDI here as opposed to GDI+ in VS 2003 (Everett), we still need to add 1.
             bounds.Width++;
@@ -108,7 +108,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             color = checkBackground;
         }
 
-        using PInvoke.CreateBrushScope hbrush = new(color);
+        using CreateBrushScope hbrush = new(color);
 
         RECT rect = bounds;
         PInvoke.FillRect(hdc, rect, hbrush);
@@ -212,9 +212,9 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
     internal static Rectangle DrawPopupBorder(HDC hdc, Rectangle r, ColorData colors)
     {
-        using PInvoke.CreatePenScope high = new(colors.Highlight);
-        using PInvoke.CreatePenScope shadow = new(colors.ButtonShadow);
-        using PInvoke.CreatePenScope face = new(colors.ButtonFace);
+        using CreatePenScope high = new(colors.Highlight);
+        using CreatePenScope shadow = new(colors.ButtonShadow);
+        using CreatePenScope face = new(colors.ButtonFace);
 
         hdc.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
         hdc.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);

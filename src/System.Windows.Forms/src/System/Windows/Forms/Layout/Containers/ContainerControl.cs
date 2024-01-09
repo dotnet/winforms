@@ -752,7 +752,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         // We must do the same here if our dialogs are to scale in a
         // similar fashion.
 
-        using PInvoke.SelectObjectScope fontSelection = new(dc, fontHandle);
+        using SelectObjectScope fontSelection = new(dc, fontHandle);
 
         TEXTMETRICW tm = default;
         PInvoke.GetTextMetrics(dc, &tm);

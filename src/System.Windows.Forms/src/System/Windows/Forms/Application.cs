@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Microsoft.Office;
-using static Interop;
 using Directory = System.IO.Directory;
 
 namespace System.Windows.Forms;

@@ -1595,8 +1595,8 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     public virtual int GetCharIndexFromPosition(Point pt)
     {
-        int index = (int)PInvoke.SendMessage(this, PInvoke.EM_CHARFROMPOS, 0, Interop.PARAM.FromPoint(pt));
-        index = Interop.PARAM.LOWORD(index);
+        int index = (int)PInvoke.SendMessage(this, PInvoke.EM_CHARFROMPOS, 0, PARAM.FromPoint(pt));
+        index = PARAM.LOWORD(index);
 
         if (index < 0)
         {
@@ -1638,7 +1638,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         int i = (int)PInvoke.SendMessage(this, PInvoke.EM_POSFROMCHAR, (WPARAM)index);
-        return new Point(Interop.PARAM.SignedLOWORD(i), Interop.PARAM.SignedHIWORD(i));
+        return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
     }
 
     /// <summary>
@@ -2104,7 +2104,7 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            client = PointToClient(Interop.PARAM.ToPoint(m.LParamInternal));
+            client = PointToClient(PARAM.ToPoint(m.LParamInternal));
         }
 
         // Only show the context menu when clicked in the client area.

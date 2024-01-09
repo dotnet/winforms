@@ -811,7 +811,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                                     DataGridView.Enabled).Calculate();
 
                                 using DeviceContextHdcScope hdc = new(g);
-                                using PInvoke.CreateBrushScope hbrush = new (
+                                using CreateBrushScope hbrush = new(
                                     colors.Options.HighContrast ? colors.ButtonShadow : colors.LowHighlight);
                                 hdc.FillRectangle(valBounds, hbrush);
                             }
@@ -819,7 +819,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                                 DataGridView.MouseEnteredCellAddress.X == ColumnIndex && s_mouseInContentBounds)
                             {
                                 using DeviceContextHdcScope hdc = new(g);
-                                using PInvoke.CreateBrushScope hbrush = new(SystemColors.ControlDark);
+                                using CreateBrushScope hbrush = new(SystemColors.ControlDark);
                                 hdc.FillRectangle(valBounds, hbrush);
                             }
                         }

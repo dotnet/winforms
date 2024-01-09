@@ -4,7 +4,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Variant;
-using ComWrappers = Interop.WinFormsComWrappers;
+using static WinFormsComWrappers;
 
 namespace Windows.Win32.System.Com;
 
@@ -18,19 +18,19 @@ internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
         vtable->Invoke_7 = &Invoke;
     }
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT GetTypeInfoCount(IDispatch* @this, uint* pctinfo)
-        => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetTypeInfoCount(pctinfo));
+        => UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetTypeInfoCount(pctinfo));
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT GetTypeInfo(IDispatch* @this, uint iTInfo, uint lcid, ITypeInfo** ppTInfo)
-        => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetTypeInfo(iTInfo, lcid, ppTInfo));
+        => UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetTypeInfo(iTInfo, lcid, ppTInfo));
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT GetIDsOfNames(IDispatch* @this, Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
-        => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId));
+        => UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId));
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static HRESULT Invoke(
         IDispatch* @this,
         int dispIdMember,
@@ -41,7 +41,7 @@ internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
         VARIANT* pVarResult,
         EXCEPINFO* pExcepInfo,
         uint* pArgErr)
-        => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(
+        => UnwrapAndInvoke<IDispatch, Interface>(
             @this,
             o => o.Invoke(dispIdMember, riid, lcid, dwFlags, pDispParams, pVarResult, pExcepInfo, pArgErr));
 

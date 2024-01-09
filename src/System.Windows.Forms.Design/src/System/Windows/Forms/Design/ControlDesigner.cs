@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 using Windows.Win32.System.SystemServices;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -2069,7 +2068,7 @@ public partial class ControlDesigner : ComponentDesigner
                     // First, save off the update region and call our base class.
 
                     RECT clip = default;
-                    using var hrgn = new PInvoke.RegionScope(0, 0, 0, 0);
+                    using var hrgn = new RegionScope(0, 0, 0, 0);
                     PInvoke.GetUpdateRgn(m.HWND, hrgn, false);
                     PInvoke.GetUpdateRect(m.HWND, &clip, false);
                     using Region region = hrgn.CreateGdiPlusRegion();
@@ -2102,7 +2101,7 @@ public partial class ControlDesigner : ComponentDesigner
                     }
                     else
                     {
-                        using PInvoke.BeginPaintScope scope = new((HWND)m.HWnd);
+                        using BeginPaintScope scope = new(m.HWND);
                         PaintException(pevent, _thrownException);
                     }
 
