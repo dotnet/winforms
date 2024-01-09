@@ -244,7 +244,9 @@ public partial class ListView
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
+                    => (VARIANT)(int)((this.TryGetOwnerAs(out ListView? owningListView) && owningListView.View == View.Details)
+                        ? UIA_CONTROLTYPE_ID.UIA_TableControlTypeId
+                        : UIA_CONTROLTYPE_ID.UIA_ListControlTypeId),
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => (VARIANT)GetItemStatus(),
