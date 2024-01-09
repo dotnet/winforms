@@ -2375,6 +2375,7 @@ override System.Windows.Forms.ToolStrip.ToString() -> string!
 override System.Windows.Forms.ToolStrip.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripButton.DefaultAutoToolTip.get -> bool
+override System.Windows.Forms.ToolStripButton.Renderer.get -> System.Windows.Forms.ToolStripRenderer?
 override System.Windows.Forms.ToolStripButton.GetPreferredSize(System.Drawing.Size constrainingSize) -> System.Drawing.Size
 override System.Windows.Forms.ToolStripButton.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
