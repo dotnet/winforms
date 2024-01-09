@@ -26,7 +26,6 @@ internal static partial class ScaleHelper
 
     // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
     private static bool s_processPerMonitorAware;
-    private static Size? s_logicalLargeSystemIconSize;
     private static Size? s_logicalSmallSystemIconSize;
 
     /// <summary>
