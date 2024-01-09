@@ -12,10 +12,10 @@ public static partial class ToolStripManager
     // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
     // use InitializeThread mechanism to initialize ThreadStatic members
     [ThreadStatic]
-    private static WeakRefCollection? t_toolStripWeakArrayList;
+    private static WeakRefCollection<ToolStrip>? t_activeToolStrips;
 
     [ThreadStatic]
-    private static WeakRefCollection? t_toolStripPanelWeakArrayList;
+    private static WeakRefCollection<ToolStripPanel>? t_activeToolStripPanels;
 
     [ThreadStatic]
     private static bool t_initialized;
@@ -124,8 +124,8 @@ public static partial class ToolStripManager
 
     internal static int CurrentDpi { get; set; } = ScaleHelper.InitialSystemDpi;
 
-    internal static WeakRefCollection ToolStrips
-        => t_toolStripWeakArrayList ??= new WeakRefCollection();
+    internal static WeakRefCollection<ToolStrip> ToolStrips
+        => t_activeToolStrips ??= [];
 
     /// <summary>Static events only!!!</summary>
     private static void AddEventHandler(int key, Delegate? value)
@@ -142,17 +142,15 @@ public static partial class ToolStripManager
     /// </summary>
     public static ToolStrip? FindToolStrip(string toolStripName)
     {
-        ToolStrip? result = null;
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
+            if (string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = toolStrip;
-                break;
+                return toolStrip;
             }
         }
 
-        return result;
+        return null;
     }
 
     /// <summary>
@@ -161,9 +159,9 @@ public static partial class ToolStripManager
     internal static ToolStrip? FindToolStrip(Form owningForm, string toolStripName)
     {
         ToolStrip? result = null;
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
+            if (string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
                 result = toolStrip;
                 if (result.FindForm() == owningForm)
@@ -258,7 +256,7 @@ public static partial class ToolStripManager
         => PInvoke.GetAncestor(control1, GET_ANCESTOR_FLAGS.GA_ROOT) == PInvoke.GetAncestor(control2, GET_ANCESTOR_FLAGS.GA_ROOT);
 
     internal static bool IsThreadUsingToolStrips()
-        => t_toolStripWeakArrayList is not null && t_toolStripWeakArrayList.Count > 0;
+        => t_activeToolStrips is not null && t_activeToolStrips.Count > 0;
 
     private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
     {
@@ -287,17 +285,9 @@ public static partial class ToolStripManager
 
     internal static void NotifyMenuModeChange(bool invalidateText, bool activationChange)
     {
-        bool toolStripPruneNeeded = false;
-
         // If we've toggled the ShowUnderlines value, we'll need to invalidate
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is not ToolStrip toolStrip)
-            {
-                toolStripPruneNeeded = true;
-                continue;
-            }
-
             if (invalidateText)
             {
                 toolStrip.InvalidateTextItems();
@@ -306,30 +296,6 @@ public static partial class ToolStripManager
             if (activationChange)
             {
                 toolStrip.KeyboardActive = false;
-            }
-        }
-
-        if (toolStripPruneNeeded)
-        {
-            PruneToolStripList();
-        }
-    }
-
-    /// <summary>
-    ///  Removes dead entries from the toolstrip weak reference collection.
-    /// </summary>
-    internal static void PruneToolStripList()
-    {
-        if (t_toolStripWeakArrayList is null || t_toolStripWeakArrayList.Count == 0)
-        {
-            return;
-        }
-
-        for (int i = t_toolStripWeakArrayList.Count - 1; i >= 0; i--)
-        {
-            if (t_toolStripWeakArrayList[i] is null)
-            {
-                t_toolStripWeakArrayList.RemoveAt(i);
             }
         }
     }
@@ -589,45 +555,37 @@ public static partial class ToolStripManager
 
     internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
     {
-        switch (renderMode)
+        return renderMode switch
         {
-            case ToolStripManagerRenderMode.System:
-                return new ToolStripSystemRenderer(isDefault: true);
-            case ToolStripManagerRenderMode.Professional:
-                return new ToolStripProfessionalRenderer(isDefault: true);
-            case ToolStripManagerRenderMode.Custom:
-            default:
-                return new ToolStripSystemRenderer(isDefault: true);
-        }
+            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+            _ => new ToolStripSystemRenderer(isDefault: true),
+        };
     }
 
     internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
     {
-        switch (renderMode)
+        return renderMode switch
         {
-            case ToolStripRenderMode.System:
-                return new ToolStripSystemRenderer(isDefault: true);
-            case ToolStripRenderMode.Professional:
-                return new ToolStripProfessionalRenderer(isDefault: true);
-            case ToolStripRenderMode.Custom:
-            default:
-                return new ToolStripSystemRenderer(isDefault: true);
-        }
+            ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+            ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+            _ => new ToolStripSystemRenderer(isDefault: true),
+        };
     }
 
-    internal static WeakRefCollection ToolStripPanels
-        => t_toolStripPanelWeakArrayList ??= new WeakRefCollection();
+    internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
+        => t_activeToolStripPanels ??= [];
 
     internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {
-        if (t_toolStripPanelWeakArrayList is not null)
+        if (t_activeToolStripPanels is not null)
         {
             ISupportToolStripPanel draggedItem = (ISupportToolStripPanel)draggedControl;
             bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
-            for (int i = 0; i < t_toolStripPanelWeakArrayList.Count; i++)
+            foreach (ToolStripPanel toolStripPanel in t_activeToolStripPanels)
             {
-                if (t_toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
+                if (toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                     toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                 {
                     // Ensure that we can't drag off one window to another.
@@ -695,17 +653,7 @@ public static partial class ToolStripManager
     }
 
     internal static bool ShowMenuFocusCues
-    {
-        get
-        {
-            if (!DisplayInformation.MenuAccessKeysUnderlined)
-            {
-                return ModalMenuFilter.Instance.ShowUnderlines;
-            }
-
-            return true;
-        }
-    }
+        => DisplayInformation.MenuAccessKeysUnderlined || ModalMenuFilter.Instance.ShowUnderlines;
 
     /// <summary>
     ///  Determines if the key combination is valid for a shortcut.
@@ -755,16 +703,13 @@ public static partial class ToolStripManager
     }
 
     internal static bool IsMenuKey(Keys keyData)
-    {
-        Keys keyCode = keyData & Keys.KeyCode;
-        return (keyCode == Keys.Menu || keyCode == Keys.F10);
-    }
+        => (keyData & Keys.KeyCode) is Keys.Menu or Keys.F10;
 
     public static bool IsShortcutDefined(Keys shortcut)
     {
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip t && t.Shortcuts.ContainsKey(shortcut))
+            if (toolStrip.Shortcuts.ContainsKey(shortcut))
             {
                 return true;
             }
@@ -849,21 +794,14 @@ public static partial class ToolStripManager
             }
 
             bool retVal = false;
-            bool needsPrune = false;
 
             // Now search the toolstrips
-            for (int i = 0; i < ToolStrips.Count; i++)
+            foreach (ToolStrip toolStrip in ToolStrips)
             {
                 bool isAssociatedContextMenu = false;
                 bool isDoublyAssignedContextMenuStrip = false;
 
-                if (ToolStrips[i] is not ToolStrip toolStrip)
-                {
-                    // Consider prune tree.
-                    needsPrune = true;
-                    continue;
-                }
-                else if (activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
+                if (activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
                 {
                     continue;
                 }
@@ -943,11 +881,6 @@ public static partial class ToolStripManager
                         }
                     }
                 }
-            }
-
-            if (needsPrune)
-            {
-                PruneToolStripList();
             }
 
             return retVal;
@@ -1146,15 +1079,14 @@ public static partial class ToolStripManager
 
     internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl? container)
     {
-        List<ToolStrip> result = new();
+        List<ToolStrip> result = [];
         if (container is not null)
         {
-            for (int i = 0; i < ToolStrips.Count; i++)
+            foreach (ToolStrip toolStrip in ToolStrips)
             {
-                ToolStrip? candidateTS = (ToolStrip?)ToolStrips[i];
-                if (candidateTS is not null && candidateTS.AllowMerge && container == candidateTS.FindForm())
+                if (toolStrip.AllowMerge && container == toolStrip.FindForm())
                 {
-                    result.Add(candidateTS);
+                    result.Add(toolStrip);
                 }
             }
         }
@@ -1165,7 +1097,7 @@ public static partial class ToolStripManager
     }
 
     private static bool IsSpecialMDIStrip(ToolStrip toolStrip)
-        => toolStrip is MdiControlStrip || toolStrip is MdiWindowListStrip;
+        => toolStrip is MdiControlStrip or MdiWindowListStrip;
 
     /// <summary>
     ///  Merge two toolstrips
@@ -1349,14 +1281,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(targetName);
 
         ToolStrip? target = FindToolStrip(targetName);
-        if (target is null)
-        {
-            return false;
-        }
-        else
-        {
-            return Merge(sourceToolStrip, target);
-        }
+        return target is not null && Merge(sourceToolStrip, target);
     }
 
     /// <remarks>
@@ -1469,23 +1394,11 @@ public static partial class ToolStripManager
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip)
-    {
-        ArgumentNullException.ThrowIfNull(sourceToolStrip);
-
-        return RevertMergeInternal(targetToolStrip, sourceToolStrip, revertMDIControls: false);
-    }
+        => RevertMergeInternal(targetToolStrip, sourceToolStrip.OrThrowIfNull(nameof(sourceToolStrip)), revertMDIControls: false);
 
     /// <summary>
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(string targetName)
-    {
-        ToolStrip? target = FindToolStrip(targetName);
-        if (target is null)
-        {
-            return false;
-        }
-
-        return RevertMerge(target);
-    }
+        => FindToolStrip(targetName) is ToolStrip target && RevertMerge(target);
 }
