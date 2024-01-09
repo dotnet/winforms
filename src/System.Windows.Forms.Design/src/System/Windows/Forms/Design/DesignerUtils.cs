@@ -744,7 +744,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
     /// </summary>
-    public static List<IComponent>? CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
+    public static List<IComponent>? CopyDragObjects(IReadOnlyList<IComponent> objects, IServiceProvider svcProvider)
     {
         if (objects is null || svcProvider is null)
         {
@@ -803,7 +803,7 @@ internal static class DesignerUtils
         return null;
     }
 
-    private static List<IComponent> GetCopySelection(ICollection objects, IDesignerHost host)
+    private static List<IComponent> GetCopySelection(IReadOnlyList<IComponent> objects, IDesignerHost host)
     {
         List<IComponent> copySelection = new();
         foreach (IComponent comp in objects)
