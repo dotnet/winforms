@@ -12,7 +12,6 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 

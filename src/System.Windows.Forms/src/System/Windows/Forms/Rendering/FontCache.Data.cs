@@ -37,7 +37,7 @@ internal sealed partial class FontCache
                 {
                     using var screenDC = GdiCache.GetScreenHdc();
                     HDC hdc = screenDC.HDC;
-                    using PInvoke.SelectObjectScope fontSelection = new(hdc, HFONT);
+                    using SelectObjectScope fontSelection = new(hdc, HFONT);
                     Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
 
                     TEXTMETRICW tm = default;

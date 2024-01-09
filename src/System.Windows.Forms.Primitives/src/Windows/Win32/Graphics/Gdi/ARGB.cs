@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms;
+namespace Windows.Win32.Graphics.Gdi;
 
 [StructLayout(LayoutKind.Explicit)]
 internal readonly struct ARGB

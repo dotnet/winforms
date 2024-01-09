@@ -2117,7 +2117,7 @@ public unsafe partial class Control :
     internal Font GetScaledFont(Font font, int newDpi, int oldDpi)
     {
         Debug.Assert(
-            PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
+            DpiAwarenessContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
             $"Fonts need to be cached only for PerMonitorV2 mode applications : {ScaleHelper.IsThreadPerMonitorV2Aware} : {DpiAwarenessContext}");
 
         _dpiFonts ??= new Dictionary<int, Font>
@@ -3075,7 +3075,7 @@ public unsafe partial class Control :
 
         // If we're an ActiveX control, clone the region so it can potentially be modified
         using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
-        using PInvoke.RegionScope regionHandle = new(regionCopy ?? region, Handle);
+        using RegionScope regionHandle = new(regionCopy ?? region, Handle);
 
         if (PInvoke.SetWindowRgn(this, regionHandle, PInvoke.IsWindowVisible(this)) != 0)
         {
@@ -3851,7 +3851,7 @@ public unsafe partial class Control :
             // If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
             // if we don't know, we shouldn't throw.
             if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE)
-                || (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE)
+                || (returnValue == false && Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_INVALID_HANDLE)
                 || AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
                 if (waitHandle.WaitOne(1, false))
@@ -6125,7 +6125,7 @@ public unsafe partial class Control :
             }
             else
             {
-                throw new Win32Exception(ERROR.INVALID_HANDLE);
+                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_HANDLE);
             }
         }
     }
@@ -6234,7 +6234,7 @@ public unsafe partial class Control :
         else if (IsHandleCreated)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            using PInvoke.RegionScope regionHandle = new(region, graphics);
+            using RegionScope regionHandle = new(region, graphics);
 
             if (invalidateChildren)
             {
@@ -7820,9 +7820,7 @@ public unsafe partial class Control :
 
         void HandleHighDpi()
         {
-            if (!PInvoke.AreDpiAwarenessContextsEqualInternal(
-                DpiAwarenessContext,
-                DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            if (!DpiAwarenessContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
             {
                 return;
             }
@@ -8648,7 +8646,7 @@ public unsafe partial class Control :
         if (!color.HasTransparency())
         {
             using DeviceContextHdcScope hdc = new(e);
-            using PInvoke.CreateBrushScope hbrush = new(hdc.FindNearestColor(color));
+            using CreateBrushScope hbrush = new(hdc.FindNearestColor(color));
             hdc.FillRectangle(rectangle, hbrush);
         }
         else if (!color.IsFullyTransparent())
@@ -8705,7 +8703,7 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-            using PInvoke.CreateBrushScope hbrush = new(SystemColors.Control);
+            using CreateBrushScope hbrush = new(SystemColors.Control);
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }
@@ -8746,7 +8744,7 @@ public unsafe partial class Control :
             rectangle.Height);
 
         using DeviceContextHdcScope hdc = new(e);
-        using PInvoke.SaveDcScope savedc = new(hdc);
+        using SaveDcScope savedc = new(hdc);
 
         PInvoke.OffsetViewportOrgEx(hdc, -Left, -Top, lppt: null);
 
@@ -9250,7 +9248,7 @@ public unsafe partial class Control :
         bool success = PInvoke.GetViewportOrgEx(hDC, &viewportOrg);
         Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-        using PInvoke.RegionScope hClippingRegion = new(
+        using RegionScope hClippingRegion = new(
             viewportOrg.X,
             viewportOrg.Y,
             viewportOrg.X + Width,
@@ -9259,9 +9257,9 @@ public unsafe partial class Control :
         Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
 
         // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-        RegionType selectResult = (RegionType)PInvoke.SelectClipRgn(hDC, hClippingRegion);
+        GDI_REGION_TYPE selectResult = PInvoke.SelectClipRgn(hDC, hClippingRegion);
         Debug.Assert(
-            selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
+            selectResult is GDI_REGION_TYPE.SIMPLEREGION or GDI_REGION_TYPE.NULLREGION,
             "SIMPLEREGION or NULLLREGION expected.");
 
         PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
@@ -12447,7 +12445,7 @@ public unsafe partial class Control :
         HDC dc = (HDC)(nint)m.WParamInternal;
 
         bool usingBeginPaint = dc.IsNull;
-        using var paintScope = usingBeginPaint ? new PInvoke.BeginPaintScope(HWND) : default;
+        using var paintScope = usingBeginPaint ? new BeginPaintScope(HWND) : default;
 
         if (usingBeginPaint)
         {
@@ -12470,7 +12468,7 @@ public unsafe partial class Control :
         PaintEventArgs? pevent = null;
 
         using var paletteScope = doubleBuffered || usingBeginPaint
-            ? PInvoke.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
+            ? SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
             : default;
 
         bool paintBackground = (usingBeginPaint && GetStyle(ControlStyles.AllPaintingInWmPaint)) || doubleBuffered;
@@ -12573,7 +12571,7 @@ public unsafe partial class Control :
         using GetDcScope dc = new(HWND);
 
         // We don't want to unset the palette in this case so we don't do this in a using
-        var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(
+        var paletteScope = SelectPaletteScope.HalftonePalette(
             dc,
             forceBackground: true,
             realizePalette: true);

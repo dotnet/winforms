@@ -11,7 +11,6 @@ using System.Windows.Forms.Layout;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -3593,7 +3592,7 @@ public partial class ComboBox : ListControl
         {
             PInvoke.GetClientRect(this, out RECT rect);
             HDC hdc = (HDC)m.WParamInternal;
-            using var hbrush = new PInvoke.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
+            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
             hdc.FillRectangle(rect, hbrush);
             m.ResultInternal = (LRESULT)1;
             return;
@@ -3874,8 +3873,8 @@ public partial class ComboBox : ListControl
                     && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
                     && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
                 {
-                    using PInvoke.RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
-                    using PInvoke.RegionScope windowRegion = new(Bounds);
+                    using RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
+                    using RegionScope windowRegion = new(Bounds);
 
                     // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
                     bool getRegionSucceeded = PInvoke.GetUpdateRgn(HWND, windowRegion, bErase: true) != GDI_REGION_TYPE.RGN_ERROR;
@@ -3886,11 +3885,11 @@ public partial class ComboBox : ListControl
 
                     // Call the base class to do its painting (with a clipped DC).
                     bool useBeginPaint = m.WParamInternal == 0u;
-                    using var paintScope = useBeginPaint ? new PInvoke.BeginPaintScope((HWND)Handle) : default;
+                    using var paintScope = useBeginPaint ? new BeginPaintScope(HWND) : default;
 
                     HDC dc = useBeginPaint ? paintScope! : (HDC)m.WParamInternal;
 
-                    using PInvoke.SaveDcScope savedDcState = new(dc);
+                    using SaveDcScope savedDcState = new(dc);
 
                     if (getRegionSucceeded)
                     {

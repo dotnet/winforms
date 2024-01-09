@@ -4,7 +4,6 @@
 #nullable enable
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles;
 

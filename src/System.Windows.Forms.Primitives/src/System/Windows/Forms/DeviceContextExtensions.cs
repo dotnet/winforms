@@ -30,9 +30,9 @@ internal static class DeviceContextExtensions
         int bottom,
         HPEN hpen)
     {
-        using PInvoke.SelectObjectScope penScope = new(hdc, hpen);
-        using PInvoke.SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
-        using PInvoke.SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+        using SelectObjectScope penScope = new(hdc, hpen);
+        using SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
+        using SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
         PInvoke.Rectangle(hdc, left, top, right, bottom);
     }
@@ -83,9 +83,9 @@ internal static class DeviceContextExtensions
     {
         Debug.Assert((lines.Length % 4) == 0);
 
-        using PInvoke.SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
-        using PInvoke.SetBkModeScope bkScope = new(hdc, BACKGROUND_MODE.TRANSPARENT);
-        using PInvoke.SelectObjectScope selection = new(hdc, (HGDIOBJ)hpen.Value);
+        using SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
+        using SetBkModeScope bkScope = new(hdc, BACKGROUND_MODE.TRANSPARENT);
+        using SelectObjectScope selection = new(hdc, (HGDIOBJ)hpen.Value);
 
         Point oldPoint = default;
 
@@ -140,8 +140,8 @@ internal static class DeviceContextExtensions
         int right,
         int bottom)
     {
-        using var penSelection = pen.IsNull ? default : new PInvoke.SelectObjectScope(hdc, (HGDIOBJ)pen.Value);
-        using var brushSelection = brush.IsNull ? default : new PInvoke.SelectObjectScope(hdc, (HGDIOBJ)brush.Value);
+        using var penSelection = pen.IsNull ? default : new SelectObjectScope(hdc, (HGDIOBJ)pen.Value);
+        using var brushSelection = brush.IsNull ? default : new SelectObjectScope(hdc, (HGDIOBJ)brush.Value);
 
         PInvoke.Ellipse(hdc, left, top, right, bottom);
     }

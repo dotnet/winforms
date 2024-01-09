@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

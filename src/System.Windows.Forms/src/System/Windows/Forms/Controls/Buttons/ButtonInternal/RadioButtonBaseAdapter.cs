@@ -75,8 +75,8 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
         double scale = GetDpiScaleRatio();
 
         using DeviceContextHdcScope hdc = new(e);
-        using PInvoke.CreatePenScope borderPen = new(border);
-        using PInvoke.CreateBrushScope fieldBrush = new(field);
+        using CreatePenScope borderPen = new(border);
+        using CreateBrushScope fieldBrush = new(field);
 
         if (scale > 1.1)
         {
@@ -144,7 +144,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
 
         double scale = GetDpiScaleRatio();
         using DeviceContextHdcScope hdc = new(e);
-        using PInvoke.CreateBrushScope brush = new(checkColor);
+        using CreateBrushScope brush = new(checkColor);
 
         // Circle drawing doesn't work at this size
         int offset = 5;

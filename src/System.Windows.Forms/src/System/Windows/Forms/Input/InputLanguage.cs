@@ -4,7 +4,6 @@
 using System.Globalization;
 using Microsoft.Win32;
 using Windows.Win32.UI.TextServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 

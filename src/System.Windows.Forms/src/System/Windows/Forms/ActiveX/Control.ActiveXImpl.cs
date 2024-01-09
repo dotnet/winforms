@@ -18,7 +18,6 @@ using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
 
 namespace System.Windows.Forms;
 

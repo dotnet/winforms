@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -2309,7 +2308,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             case (int)PInvoke.WM_PAINT:
                 if (OwnerDraw && !_isBalloon && !_trackPosition)
                 {
-                    using PInvoke.BeginPaintScope paintScope = new((HWND)Handle);
+                    using BeginPaintScope paintScope = new(HWND);
                     Rectangle bounds = paintScope.PaintRectangle;
                     if (bounds == Rectangle.Empty)
                     {

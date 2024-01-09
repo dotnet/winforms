@@ -9,7 +9,6 @@ using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
 using static Windows.Win32.System.Variant.VARENUM;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.Interop.Oleaut32;
 

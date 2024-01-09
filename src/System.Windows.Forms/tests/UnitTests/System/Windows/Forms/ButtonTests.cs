@@ -8,7 +8,6 @@ using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

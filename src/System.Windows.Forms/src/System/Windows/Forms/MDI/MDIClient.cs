@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -281,8 +280,8 @@ public sealed partial class MdiClient : Control
         AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
         Rectangle bounds = Bounds;
-        using PInvoke.RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
-        using PInvoke.RegionScope rgn2 = new(
+        using RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
+        using RegionScope rgn2 = new(
             -rect.left,
             -rect.top,
             bounds.Width - rect.right,
@@ -293,7 +292,7 @@ public sealed partial class MdiClient : Control
             throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
         }
 
-        if ((RegionType)PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == RegionType.ERROR)
+        if (PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == GDI_REGION_TYPE.RGN_ERROR)
         {
             throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
         }
