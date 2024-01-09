@@ -25861,6 +25861,7 @@ public partial class DataGridView
         object? val;
         try
         {
+            // We already check if cellStyle is null in ParseFormattedValueInternal.
             val = dataGridViewCurrentCell.ParseFormattedValue(
                 formattedValue,
                 dgvcpe.InheritedCellStyle!,
