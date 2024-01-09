@@ -3,19 +3,23 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Helper to scope getting a <see cref="HDC"/> from a <see cref="IDeviceContext"/> object. Releases
-///  the <see cref="HDC"/> when disposed, unlocking the parent <see cref="IDeviceContext"/> object.
-///
-///  Also saves and restores the state of the HDC.
+///  <para>
+///   Helper to scope getting a <see cref="HDC"/> from a <see cref="IDeviceContext"/> object. Releases
+///   the <see cref="HDC"/> when disposed, unlocking the parent <see cref="IDeviceContext"/> object.
+///  </para>
+///  <para>
+///   Also saves and restores the state of the HDC.
+///  </para>
 /// </summary>
 /// <remarks>
-///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by+
-///  <see langword="ref" /> to avoid duplicating the handle and risking a double release.
+///  <para>
+///   Use in a <see langword="using" /> statement. If you must pass this around, always pass by+
+///   <see langword="ref" /> to avoid duplicating the handle and risking a double release.
+///  </para>
 /// </remarks>
 #if DEBUG
 internal class DeviceContextHdcScope : DisposalTracking.Tracker, IDisposable
@@ -166,7 +170,7 @@ internal readonly ref struct DeviceContextHdcScope
             applyTransform = applyTransform && !offset.IsEmpty;
             applyClipping = clipRegion is not null;
 
-            using var graphicsRegion = applyClipping ? new PInvoke.RegionScope(clipRegion!, graphics) : default;
+            using var graphicsRegion = applyClipping ? new RegionScope(clipRegion!, graphics) : default;
             applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
 
             HDC = (HDC)graphics.GetHdc();
@@ -182,20 +186,20 @@ internal readonly ref struct DeviceContextHdcScope
                 // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
                 // Graphics.VisibleClipBounds.
 
-                RegionType type;
+                GDI_REGION_TYPE type;
 
-                using PInvoke.RegionScope dcRegion = new(HDC);
+                using RegionScope dcRegion = new(HDC);
                 if (!dcRegion.IsNull)
                 {
-                    type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
-                    if (type == RegionType.ERROR)
+                    type = PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
+                    if (type == GDI_REGION_TYPE.RGN_ERROR)
                     {
                         throw new Win32Exception();
                     }
                 }
 
-                type = (RegionType)PInvoke.SelectClipRgn(HDC, graphicsRegion!);
-                if (type == RegionType.ERROR)
+                type = PInvoke.SelectClipRgn(HDC, graphicsRegion!);
+                if (type == GDI_REGION_TYPE.RGN_ERROR)
                 {
                     throw new Win32Exception();
                 }

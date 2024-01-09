@@ -3,7 +3,6 @@
 
 using System.Globalization;
 using System.Reflection;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 

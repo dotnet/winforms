@@ -150,10 +150,8 @@ internal static class DpiHelper
     /// </summary>
     /// <param name="value">The horizontal value in logical units</param>
     /// <returns>The horizontal value in device units</returns>
-    public static int LogicalToDeviceUnitsX(int value)
-    {
-        return (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * value);
-    }
+    public static int LogicalToDeviceUnitsX(int value) =>
+        (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * value);
 
     /// <summary>
     /// Transforms a vertical integer coordinate from logical to device units
@@ -162,10 +160,8 @@ internal static class DpiHelper
     /// </summary>
     /// <param name="value">The vertical value in logical units</param>
     /// <returns>The vertical value in device units</returns>
-    public static int ScaleToInitialSystemDpi(int value)
-    {
-        return (int)Math.Round(LogicalToDeviceUnitsScalingFactorY * value);
-    }
+    public static int ScaleToInitialSystemDpi(int value) =>
+        (int)Math.Round(LogicalToDeviceUnitsScalingFactorY * value);
 
     /// <summary>
     /// Returns a new Size with the input's
@@ -174,11 +170,8 @@ internal static class DpiHelper
     /// </summary>
     /// <param name="logicalSize">Size in logical units</param>
     /// <returns>Size in device units</returns>
-    public static Size LogicalToDeviceUnits(Size logicalSize)
-    {
-        return new Size(LogicalToDeviceUnitsX(logicalSize.Width),
-                        ScaleToInitialSystemDpi(logicalSize.Height));
-    }
+    public static Size LogicalToDeviceUnits(Size logicalSize) =>
+        new Size(LogicalToDeviceUnitsX(logicalSize.Width), ScaleToInitialSystemDpi(logicalSize.Height));
 
     /// <summary>
     /// Create and return a new bitmap scaled to the specified size.

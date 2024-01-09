@@ -8,7 +8,7 @@ namespace Windows.Win32;
 
 internal static unsafe partial class ComHelpers
 {
-    // Note that ComScope<T> needs to be the return value to faciliate using in a `using`.
+    // Note that ComScope<T> needs to be the return value to facilitate using in a `using`.
     //
     //  using var stream = GetComScope<IStream>(obj, out bool success);
 
@@ -17,28 +17,28 @@ internal static unsafe partial class ComHelpers
     ///  return <see langword="false"/>.
     /// </summary>
     internal static bool BuiltInComSupported { get; }
-        = AppContext.TryGetSwitch("System.Runtime.InteropServices.BuiltInComInterop.IsSupported", out bool supported)
-            ? supported
-            : true;
+        // Presume it is supported if we can't get the switch.
+        = !AppContext.TryGetSwitch("System.Runtime.InteropServices.BuiltInComInterop.IsSupported", out bool supported)
+            || supported;
 
     /// <summary>
     ///  Gets a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>. Throws if
     ///  the desired pointer can not be obtained.
     /// </summary>
-    internal static ComScope<T> GetComScope<T>(object? @object) where T : unmanaged, IComIID
-        => new(GetComPointer<T>(@object));
+    internal static ComScope<T> GetComScope<T>(object? @object) where T : unmanaged, IComIID =>
+        new(GetComPointer<T>(@object));
 
     /// <summary>
     ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>.
     /// </summary>
-    internal static ComScope<T> TryGetComScope<T>(object? @object) where T : unmanaged, IComIID
-        => TryGetComScope<T>(@object, out _);
+    internal static ComScope<T> TryGetComScope<T>(object? @object) where T : unmanaged, IComIID =>
+        TryGetComScope<T>(@object, out _);
 
     /// <summary>
     ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>.
     /// </summary>
-    internal static ComScope<T> TryGetComScope<T>(object? @object, out HRESULT hr) where T : unmanaged, IComIID
-        => new(TryGetComPointer<T>(@object, out hr));
+    internal static ComScope<T> TryGetComScope<T>(object? @object, out HRESULT hr) where T : unmanaged, IComIID =>
+        new(TryGetComPointer<T>(@object, out hr));
 
     /// <summary>
     ///  Gets the specified <typeparamref name="T"/> interface for the given <paramref name="object"/>. Throws if
@@ -55,8 +55,8 @@ internal static unsafe partial class ComHelpers
     ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="object"/>.
     /// </summary>
     /// <returns>The requested pointer or <see langword="null"/> if unsuccessful.</returns>
-    internal static T* TryGetComPointer<T>(object? @object) where T : unmanaged, IComIID
-        => TryGetComPointer<T>(@object, out _);
+    internal static T* TryGetComPointer<T>(object? @object) where T : unmanaged, IComIID =>
+        TryGetComPointer<T>(@object, out _);
 
     /// <summary>
     ///  Queries for the given interface and releases it.
@@ -89,7 +89,7 @@ internal static unsafe partial class ComHelpers
         if (@object is IManagedWrapper)
         {
             // One of our classes that we can generate a CCW for.
-            ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(@object, CreateComInterfaceFlags.None);
+            ccw = (IUnknown*)WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(@object, CreateComInterfaceFlags.None);
         }
         else if (ComWrappers.TryGetComInstance(@object, out nint unknown))
         {
@@ -158,8 +158,8 @@ internal static unsafe partial class ComHelpers
     /// </summary>
     internal static bool TryGetObjectForIUnknown<TObject>(
         IUnknown* unknown,
-        [NotNullWhen(true)] out TObject? @object) where TObject : class
-        => TryGetObjectForIUnknown(unknown, takeOwnership: false, out @object);
+        [NotNullWhen(true)] out TObject? @object) where TObject : class =>
+        TryGetObjectForIUnknown(unknown, takeOwnership: false, out @object);
 
     /// <summary>
     ///  Attempts to get a managed wrapper of the specified type for the given COM interface.
@@ -236,8 +236,8 @@ internal static unsafe partial class ComHelpers
         }
         else
         {
-            // Analagous to ComInterfaceMarshaller<object>.ConvertToManaged(unknown), but we need our own strategy.
-            return Interop.WinFormsComStrategy.Instance.GetOrCreateObjectForComInstance((nint)unknown, CreateObjectFlags.Unwrap);
+            // Analogous to ComInterfaceMarshaller<object>.ConvertToManaged(unknown), but we need our own strategy.
+            return WinFormsComStrategy.Instance.GetOrCreateObjectForComInstance((nint)unknown, CreateObjectFlags.Unwrap);
         }
     }
 
@@ -245,10 +245,8 @@ internal static unsafe partial class ComHelpers
     ///  <see cref="IUnknown"/> vtable population hook for CsWin32's generated <see cref="IVTable"/> implementation.
     /// </summary>
     static partial void PopulateIUnknownImpl<TComInterface>(IUnknown.Vtbl* vtable)
-        where TComInterface : unmanaged
-    {
-        Interop.WinFormsComWrappers.PopulateIUnknownVTable(vtable);
-    }
+        where TComInterface : unmanaged =>
+        WinFormsComWrappers.PopulateIUnknownVTable(vtable);
 
     /// <summary>
     ///  Find the given interface's <see cref="ITypeInfo"/> from the specified type library.

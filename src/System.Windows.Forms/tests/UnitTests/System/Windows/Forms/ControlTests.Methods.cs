@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests;

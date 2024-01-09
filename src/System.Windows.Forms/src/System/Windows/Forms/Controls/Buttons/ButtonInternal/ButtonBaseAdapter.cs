@@ -140,7 +140,7 @@ internal abstract partial class ButtonBaseAdapter
         Point p4 = new(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
         // Top + left
-        using PInvoke.CreatePenScope penTopLeft = new(
+        using CreatePenScope penTopLeft = new(
             disabledHighContrast
             ? colors.WindowDisabled
             : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
@@ -149,7 +149,7 @@ internal abstract partial class ButtonBaseAdapter
         hdc.DrawLine(penTopLeft, p2, p3);           // Left (up-down)
 
         // Bottom + right
-        using PInvoke.CreatePenScope penBottomRight = new(
+        using CreatePenScope penBottomRight = new(
             disabledHighContrast
                 ? colors.WindowDisabled
                 : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
@@ -159,7 +159,7 @@ internal abstract partial class ButtonBaseAdapter
         hdc.DrawLine(penBottomRight, p4, p1);       // Right  (bottom-up)
 
         // Draw inset using the background color to make the top and left lines thinner
-        using PInvoke.CreatePenScope insetPen = new(
+        using CreatePenScope insetPen = new(
             stockColor
                 ? SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control
                 : SystemInformation.HighContrast ? colors.Highlight : colors.ButtonFace);
@@ -174,7 +174,7 @@ internal abstract partial class ButtonBaseAdapter
         hdc.DrawLine(insetPen, p2, p3);             // Left (up-down)
 
         // Bottom + right inset
-        using PInvoke.CreatePenScope bottomRightInsetPen = new(
+        using CreatePenScope bottomRightInsetPen = new(
             disabledHighContrast
             ? colors.WindowDisabled
             : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
@@ -195,19 +195,19 @@ internal abstract partial class ButtonBaseAdapter
         Point p4 = new(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
         // Top + left
-        using PInvoke.CreatePenScope shadowPen = new(colors.ButtonShadowDark);
+        using CreatePenScope shadowPen = new(colors.ButtonShadowDark);
         hdc.DrawLine(shadowPen, p1, p2);                                                    // Top (right-left)
         hdc.DrawLine(shadowPen, p2, p3);                                                    // Left(up-down)
 
         // Bottom + right
-        using PInvoke.CreatePenScope highlightPen = new(colors.Highlight);
+        using CreatePenScope highlightPen = new(colors.Highlight);
         p1.Offset(0, -1);                       // Need to paint last pixel too.
         hdc.DrawLine(highlightPen, p3, p4);     // Bottom (left-right)
         hdc.DrawLine(highlightPen, p4, p1);     // Right  (bottom-up)
 
         // Draw inset
 
-        using PInvoke.CreatePenScope facePen = new(colors.ButtonFace);
+        using CreatePenScope facePen = new(colors.ButtonFace);
 
         p1.Offset(-1, 2);
         p2.Offset(1, 1);
@@ -219,7 +219,7 @@ internal abstract partial class ButtonBaseAdapter
         hdc.DrawLine(facePen, p2, p3);          // Left (up-down)
 
         // Bottom + right inset
-        using PInvoke.CreatePenScope insetPen = new(
+        using CreatePenScope insetPen = new(
             colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor()
                 ? SystemColors.ControlLight
                 : colors.ButtonFace);
@@ -243,7 +243,7 @@ internal abstract partial class ButtonBaseAdapter
         Point p4 = new(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
         // Top + left
-        using PInvoke.CreatePenScope topLeftPen = new(
+        using CreatePenScope topLeftPen = new(
             disabledHighContrast
                 ? colors.WindowDisabled
                 : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
@@ -252,7 +252,7 @@ internal abstract partial class ButtonBaseAdapter
         hdc.DrawLine(topLeftPen, p2, p3);           // Left (up-down)
 
         // Bottom + right
-        using PInvoke.CreatePenScope bottomRightPen = new(
+        using CreatePenScope bottomRightPen = new(
             disabledHighContrast
             ? colors.WindowDisabled
             : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
@@ -267,7 +267,7 @@ internal abstract partial class ButtonBaseAdapter
         p3.Offset(1, -1);
         p4.Offset(-1, -1);
 
-        using PInvoke.CreatePenScope topLeftInsetPen = new(
+        using CreatePenScope topLeftInsetPen = new(
             !stockColor
                 ? colors.ButtonFace
                 : SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control);
@@ -278,7 +278,7 @@ internal abstract partial class ButtonBaseAdapter
 
         // Bottom + right inset
 
-        using PInvoke.CreatePenScope bottomRightInsetPen = new(
+        using CreatePenScope bottomRightInsetPen = new(
             disabledHighContrast
             ? colors.WindowDisabled
             : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
@@ -303,13 +303,13 @@ internal abstract partial class ButtonBaseAdapter
         Color color = GetContrastingBorderColor(colors.ButtonShadow);
 
         // Top, left
-        using PInvoke.CreatePenScope topLeftPen = new(up ? colors.Highlight : color);
+        using CreatePenScope topLeftPen = new(up ? colors.Highlight : color);
 
         hdc.DrawLine(topLeftPen, p1, p2);                   // top  (right-left)
         hdc.DrawLine(topLeftPen, p2, p3);                   // left (top-down)
 
         // Bottom, right
-        using PInvoke.CreatePenScope bottomRightPen = new(up ? color : colors.Highlight);
+        using CreatePenScope bottomRightPen = new(up ? color : colors.Highlight);
 
         p1.Offset(0, -1);                                   // Need to paint last pixel too.
         hdc.DrawLine(bottomRightPen, p3, p4);               // Bottom (left-right)
@@ -346,7 +346,7 @@ internal abstract partial class ButtonBaseAdapter
         }
 
         using DeviceContextHdcScope hdc = new(e);
-        using PInvoke.CreateBrushScope hbrush = new(color);
+        using CreateBrushScope hbrush = new(color);
         hdc.FillRectangle(left, hbrush);
         hdc.FillRectangle(right, hbrush);
         hdc.FillRectangle(top, hbrush);
@@ -356,7 +356,7 @@ internal abstract partial class ButtonBaseAdapter
     internal static void DrawFlatFocus(IDeviceContext deviceContext, Rectangle r, Color color)
     {
         using DeviceContextHdcScope hdc = new(deviceContext);
-        using PInvoke.CreatePenScope focusPen = new(color);
+        using CreatePenScope focusPen = new(color);
         hdc.DrawRectangle(r, focusPen);
     }
 
@@ -440,7 +440,7 @@ internal abstract partial class ButtonBaseAdapter
             }
         }
 
-        using PInvoke.CreatePenScope hpen = new(color);
+        using CreatePenScope hpen = new(color);
         using DeviceContextHdcScope hdc = new(deviceContext);
         hdc.DrawRectangle(r, hpen);
     }

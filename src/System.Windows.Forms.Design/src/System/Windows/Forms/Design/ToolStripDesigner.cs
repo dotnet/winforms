@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 

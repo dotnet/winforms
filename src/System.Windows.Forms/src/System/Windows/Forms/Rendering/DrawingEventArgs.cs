@@ -10,9 +10,11 @@ namespace System.Windows.Forms;
 ///  the same way.
 /// </summary>
 /// <remarks>
-///  We should consider making this a base class for the event args that use this rather than a nested struct.
-///  That would make things a little more robust, but would require API review as the class itself would have to
-///  be public. The internal functionality can obviously still be internal.
+///  <para>
+///   We should consider making this a base class for the event args that use this rather than a nested struct.
+///   That would make things a little more robust, but would require API review as the class itself would have to
+///   be public. The internal functionality can obviously still be internal.
+///  </para>
 /// </remarks>
 internal partial class DrawingEventArgs
 {
@@ -50,10 +52,10 @@ internal partial class DrawingEventArgs
 
 #if DEBUG
         OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(dc);
-        Debug.Assert(type == OBJ_TYPE.OBJ_DC
-            || type == OBJ_TYPE.OBJ_ENHMETADC
-            || type == OBJ_TYPE.OBJ_MEMDC
-            || type == OBJ_TYPE.OBJ_METADC);
+        Debug.Assert(type is OBJ_TYPE.OBJ_DC
+            or OBJ_TYPE.OBJ_ENHMETADC
+            or OBJ_TYPE.OBJ_MEMDC
+            or OBJ_TYPE.OBJ_METADC);
 #endif
 
         _hdc = dc;
@@ -97,14 +99,14 @@ internal partial class DrawingEventArgs
             Debug.Assert(!_hdc.IsNull);
 
             // We need to manually unset the palette here so this scope shouldn't be disposed
-            var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(
+            var paletteScope = SelectPaletteScope.HalftonePalette(
                 _hdc,
                 forceBackground: false,
                 realizePalette: false);
 
             GC.SuppressFinalize(paletteScope);
 
-            _oldPalette = paletteScope.HPalette;
+            _oldPalette = paletteScope.HPALETTE;
 
             _graphics = Graphics.FromHdcInternal((IntPtr)_hdc);
             _graphics.PageUnit = GraphicsUnit.Pixel;

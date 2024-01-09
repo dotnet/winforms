@@ -139,7 +139,7 @@ public class FontMetrics
 
         using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
         using var screen = GdiCache.GetScreenHdc();
-        using PInvoke.SelectObjectScope fontSelection = new(screen, hfont.Object);
+        using SelectObjectScope fontSelection = new(screen, hfont.Object);
 
         DRAWTEXTPARAMS param = default;
         Rectangle result = screen.HDC.AdjustForVerticalAlignment(

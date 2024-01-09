@@ -5,7 +5,6 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles;
 

@@ -78,8 +78,8 @@ internal sealed partial class DesignerActionPanel
                 // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
                 using (GetDcScope hdc = new((HWND)listBox.Handle))
                 {
-                    using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
-                    using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
+                    using ObjectScope hFont = new(listBox.Font.ToHFONT());
+                    using SelectObjectScope fontSelection = new(hdc, hFont);
 
                     TEXTMETRICW tm = default;
 

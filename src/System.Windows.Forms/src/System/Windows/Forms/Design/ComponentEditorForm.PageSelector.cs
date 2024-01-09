@@ -99,7 +99,7 @@ public partial class ComponentEditorForm
 
             // Select the font of the dialog, so we don't get the underlined font
             // when the item is being tracked
-            using PInvoke.SelectObjectScope fontSelection = new(
+            using SelectObjectScope fontSelection = new(
                 dc,
                 (state & STATE_HOT) != 0 ? (HGDIOBJ)Parent!.FontHandle : default);
 

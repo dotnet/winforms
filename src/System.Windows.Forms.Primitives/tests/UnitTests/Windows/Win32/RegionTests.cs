@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Primitives.Tests.Windows.Win32;
 
@@ -12,7 +11,7 @@ public class RegionTests
     public void GetClipRgn_NoRegion()
     {
         // Create a bitmap using the screen's stats
-        HDC hdc = PInvokeCore.CreateCompatibleDC((HDC)default);
+        HDC hdc = PInvokeCore.CreateCompatibleDC(default);
         Assert.False(hdc.IsNull);
 
         try
@@ -53,7 +52,7 @@ public class RegionTests
     public void RegionScope_NullWithNoClippingRegion()
     {
         // Create a bitmap using the screen's stats
-        HDC hdc = PInvokeCore.CreateCompatibleDC((HDC)default);
+        HDC hdc = PInvokeCore.CreateCompatibleDC(default);
         Assert.False(hdc.IsNull);
 
         try
@@ -63,7 +62,7 @@ public class RegionTests
 
             try
             {
-                using var hregion = new PInvoke.RegionScope(hdc);
+                using RegionScope hregion = new(hdc);
                 Assert.True(hregion.IsNull);
             }
             finally
@@ -81,7 +80,7 @@ public class RegionTests
     public unsafe void RegionScope_GetRegion()
     {
         // Create a bitmap using the screen's stats
-        HDC hdc = PInvokeCore.CreateCompatibleDC((HDC)default);
+        HDC hdc = PInvokeCore.CreateCompatibleDC(default);
         Assert.False(hdc.IsNull);
 
         try
@@ -92,12 +91,12 @@ public class RegionTests
             try
             {
                 Rectangle rectangle = new(1, 2, 3, 4);
-                using PInvoke.RegionScope originalRegion = new(rectangle);
+                using RegionScope originalRegion = new(rectangle);
                 PInvoke.SelectClipRgn(hdc, originalRegion);
-                using PInvoke.RegionScope retrievedRegion = new(hdc);
+                using RegionScope retrievedRegion = new(hdc);
                 RECT rect = default;
-                RegionType type = (RegionType)PInvoke.GetRgnBox(retrievedRegion, &rect);
-                Assert.Equal(RegionType.SIMPLEREGION, type);
+                GDI_REGION_TYPE type = PInvoke.GetRgnBox(retrievedRegion, &rect);
+                Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, type);
                 Assert.Equal(rectangle, (Rectangle)rect);
             }
             finally

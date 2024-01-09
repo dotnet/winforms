@@ -34,8 +34,8 @@ public class MixedDpiHostingTests
 
                 DPI_AWARENESS_CONTEXT controlDpiContext = PInvoke.GetWindowDpiAwarenessContext(control.HWND);
                 DPI_AWARENESS_CONTEXT formDpiContext = PInvoke.GetWindowDpiAwarenessContext(form.HWND);
-                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, controlDpiContext));
-                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, formDpiContext));
+                Assert.True(controlDpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE));
+                Assert.True(formDpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
             }
         }
         finally
