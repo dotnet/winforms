@@ -2658,19 +2658,19 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     List<ToolStripItem> dragComponents = data.DragComponents;
                     int primaryIndex = -1;
                     bool copy = (e.Effect == DragDropEffects.Copy);
-                    if (components.Count == 1)
+                    if (dragComponents.Count == 1)
                     {
-                        string name = TypeDescriptor.GetComponentName(components[0]);
+                        string name = TypeDescriptor.GetComponentName(dragComponents[0]);
                         if (name is null || name.Length == 0)
                         {
-                            name = components[0].GetType().Name;
+                            name = dragComponents[0].GetType().Name;
                         }
 
                         transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                     }
                     else
                     {
-                        transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                        transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, dragComponents.Count);
                     }
 
                     // create a transaction so this happens as an atomic unit.
