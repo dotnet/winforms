@@ -20,7 +20,7 @@ internal class InheritanceUI
     /// <summary>
     ///  The bitmap we use to show inheritance.
     /// </summary>
-    public static Bitmap InheritanceGlyph => s_inheritanceGlyph ??= ScaleHelper.GetIconResourceAsBitmap(
+    public static Bitmap InheritanceGlyph => s_inheritanceGlyph ??= ScaleHelper.GetSmallIconResourceAsBitmap(
         typeof(InheritanceUI),
         "InheritedGlyph",
         ScaleHelper.InitialSystemDpi);
