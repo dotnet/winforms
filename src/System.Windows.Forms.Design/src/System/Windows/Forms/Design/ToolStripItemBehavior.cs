@@ -653,7 +653,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 }
                 else
                 {
-                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, dragComponents.Count);
                 }
 
                 DesignerTransaction designerTransaction = designerHost.CreateTransaction(transDesc);
