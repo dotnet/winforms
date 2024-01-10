@@ -14,13 +14,13 @@
 
   <Target Name="BuildAxHosts" BeforeTargets="AfterBuild" DependsOnTargets="FindFrameworkMsbuild">
     <Exec
-      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs)"
+      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /v:m"
       WorkingDirectory="$(_MSBuildCurrentPath)"/>
   </Target>
 
   <Target Name="CleanAxHosts" BeforeTargets="AfterClean" DependsOnTargets="FindFrameworkMsbuild">
     <Exec
-      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /t:Clean"
+      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /t:Clean /v:m"
       WorkingDirectory="$(_MSBuildCurrentPath)"/>
   </Target>
 
