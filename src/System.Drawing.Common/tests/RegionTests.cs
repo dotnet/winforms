@@ -135,8 +135,16 @@ public class RegionTests
         AssertExtensions.Throws<ArgumentNullException>("rgnData", () => new Region((RegionData)null));
     }
 
+    [Fact]
+    public void Ctor_EmptyRegionData_ThrowsArgumentException()
+    {
+        using Region region = new();
+        RegionData regionData = region.GetRegionData();
+        regionData.Data = [];
+        AssertExtensions.Throws<ArgumentException>(null, () => new Region(regionData));
+    }
+
     [Theory]
-    [InlineData(0)]
     [InlineData(1)]
     [InlineData(7)]
     [InlineData(256)]

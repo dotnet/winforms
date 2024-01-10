@@ -462,13 +462,13 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     }
 
     /// <summary>
-    /// Gets or sets the geometrical transform for objects drawn with this <see cref='Pen'/>.
+    ///  Gets or sets the geometrical transform for objects drawn with this <see cref='Pen'/>.
     /// </summary>
-    public Matrix Transform
+    public Drawing2D.Matrix Transform
     {
         get
         {
-            Matrix matrix = new();
+            Drawing2D.Matrix matrix = new();
             int status = Gdip.GdipGetPenTransform(new HandleRef(this, NativePen), new HandleRef(matrix, matrix.NativeMatrix));
             Gdip.CheckStatus(status);
 
@@ -502,14 +502,14 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     }
 
     /// <summary>
-    /// Multiplies the transform matrix for this <see cref='Pen'/> by the specified <see cref='Matrix'/>.
+    ///  Multiplies the transform matrix for this <see cref='Pen'/> by the specified <see cref='Drawing2D.Matrix'/>.
     /// </summary>
-    public void MultiplyTransform(Matrix matrix) => MultiplyTransform(matrix, MatrixOrder.Prepend);
+    public void MultiplyTransform(Drawing2D.Matrix matrix) => MultiplyTransform(matrix, Drawing2D.MatrixOrder.Prepend);
 
     /// <summary>
-    /// Multiplies the transform matrix for this <see cref='Pen'/> by the specified <see cref='Matrix'/> in the specified order.
+    ///  Multiplies the transform matrix for this <see cref='Pen'/> by the specified <see cref='Drawing2D.Matrix'/> in the specified order.
     /// </summary>
-    public void MultiplyTransform(Matrix matrix, MatrixOrder order)
+    public void MultiplyTransform(Drawing2D.Matrix matrix, Drawing2D.MatrixOrder order)
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
@@ -529,12 +529,12 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     /// Translates the local geometrical transform by the specified dimensions. This method prepends the translation
     /// to the transform.
     /// </summary>
-    public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, MatrixOrder.Prepend);
+    public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, Drawing2D.MatrixOrder.Prepend);
 
     /// <summary>
     /// Translates the local geometrical transform by the specified dimensions in the specified order.
     /// </summary>
-    public void TranslateTransform(float dx, float dy, MatrixOrder order)
+    public void TranslateTransform(float dx, float dy, Drawing2D.MatrixOrder order)
     {
         int status = Gdip.GdipTranslatePenTransform(new HandleRef(this, NativePen),
                                                        dx, dy, order);
@@ -544,12 +544,12 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     /// <summary>
     /// Scales the local geometric transform by the specified amounts. This method prepends the scaling matrix to the transform.
     /// </summary>
-    public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, MatrixOrder.Prepend);
+    public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, Drawing2D.MatrixOrder.Prepend);
 
     /// <summary>
     /// Scales the local geometric transform by the specified amounts in the specified order.
     /// </summary>
-    public void ScaleTransform(float sx, float sy, MatrixOrder order)
+    public void ScaleTransform(float sx, float sy, Drawing2D.MatrixOrder order)
     {
         int status = Gdip.GdipScalePenTransform(new HandleRef(this, NativePen),
                                                    sx, sy, order);
@@ -559,12 +559,12 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
     /// <summary>
     /// Rotates the local geometric transform by the specified amount. This method prepends the rotation to the transform.
     /// </summary>
-    public void RotateTransform(float angle) => RotateTransform(angle, MatrixOrder.Prepend);
+    public void RotateTransform(float angle) => RotateTransform(angle, Drawing2D.MatrixOrder.Prepend);
 
     /// <summary>
     /// Rotates the local geometric transform by the specified amount in the specified order.
     /// </summary>
-    public void RotateTransform(float angle, MatrixOrder order)
+    public void RotateTransform(float angle, Drawing2D.MatrixOrder order)
     {
         int status = Gdip.GdipRotatePenTransform(new HandleRef(this, NativePen),
                                                     angle, order);

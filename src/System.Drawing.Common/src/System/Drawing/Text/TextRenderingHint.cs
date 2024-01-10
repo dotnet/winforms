@@ -1,40 +1,40 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Text;
 
 /// <summary>
-/// Specifies the quality of text rendering.
+///  Specifies the quality of text rendering.
 /// </summary>
 public enum TextRenderingHint
 {
     /// <summary>
-    /// Glyph with system default rendering hint.
+    ///  Glyph with system default rendering hint.
     /// </summary>
-    SystemDefault = 0,
+    SystemDefault = GdiPlus.TextRenderingHint.TextRenderingHintSystemDefault,
 
     /// <summary>
-    /// Glyph bitmap with hinting.
+    ///  Glyph bitmap with hinting.
     /// </summary>
-    SingleBitPerPixelGridFit,
+    SingleBitPerPixelGridFit = GdiPlus.TextRenderingHint.TextRenderingHintSingleBitPerPixelGridFit,
 
     /// <summary>
-    /// Glyph bitmap without hinting.
+    ///  Glyph bitmap without hinting.
     /// </summary>
-    SingleBitPerPixel,
+    SingleBitPerPixel = GdiPlus.TextRenderingHint.TextRenderingHintSingleBitPerPixel,
 
     /// <summary>
-    /// Anti-aliasing with hinting.
+    ///  Anti-aliasing with hinting.
     /// </summary>
-    AntiAliasGridFit,
+    AntiAliasGridFit = GdiPlus.TextRenderingHint.TextRenderingHintAntiAliasGridFit,
 
     /// <summary>
-    /// Glyph anti-alias bitmap without hinting.
+    ///  Glyph anti-alias bitmap without hinting.
     /// </summary>
-    AntiAlias,
+    AntiAlias = GdiPlus.TextRenderingHint.TextRenderingHintAntiAlias,
 
     /// <summary>
-    /// Glyph CT bitmap with hinting.
+    ///  Glyph CT bitmap with hinting.
     /// </summary>
-    ClearTypeGridFit
+    ClearTypeGridFit = GdiPlus.TextRenderingHint.TextRenderingHintClearTypeGridFit
 }

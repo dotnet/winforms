@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -138,11 +138,11 @@ public sealed class TextureBrush : Brush
         return new TextureBrush(cloneBrush);
     }
 
-    public Matrix Transform
+    public Drawing2D.Matrix Transform
     {
         get
         {
-            Matrix matrix = new();
+            Drawing2D.Matrix matrix = new();
             int status = Gdip.GdipGetTextureTransform(new HandleRef(this, NativeBrush), new HandleRef(matrix, matrix.NativeMatrix));
             Gdip.CheckStatus(status);
 
@@ -200,9 +200,9 @@ public sealed class TextureBrush : Brush
         Gdip.CheckStatus(status);
     }
 
-    public void MultiplyTransform(Matrix matrix) => MultiplyTransform(matrix, MatrixOrder.Prepend);
+    public void MultiplyTransform(Drawing2D.Matrix matrix) => MultiplyTransform(matrix, Drawing2D.MatrixOrder.Prepend);
 
-    public void MultiplyTransform(Matrix matrix, MatrixOrder order)
+    public void MultiplyTransform(Drawing2D.Matrix matrix, Drawing2D.MatrixOrder order)
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
@@ -219,9 +219,9 @@ public sealed class TextureBrush : Brush
         Gdip.CheckStatus(status);
     }
 
-    public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, MatrixOrder.Prepend);
+    public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, Drawing2D.MatrixOrder.Prepend);
 
-    public void TranslateTransform(float dx, float dy, MatrixOrder order)
+    public void TranslateTransform(float dx, float dy, Drawing2D.MatrixOrder order)
     {
         int status = Gdip.GdipTranslateTextureTransform(new HandleRef(this, NativeBrush),
                                                            dx,
@@ -230,9 +230,9 @@ public sealed class TextureBrush : Brush
         Gdip.CheckStatus(status);
     }
 
-    public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, MatrixOrder.Prepend);
+    public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, Drawing2D.MatrixOrder.Prepend);
 
-    public void ScaleTransform(float sx, float sy, MatrixOrder order)
+    public void ScaleTransform(float sx, float sy, Drawing2D.MatrixOrder order)
     {
         int status = Gdip.GdipScaleTextureTransform(new HandleRef(this, NativeBrush),
                                                        sx,
@@ -241,9 +241,9 @@ public sealed class TextureBrush : Brush
         Gdip.CheckStatus(status);
     }
 
-    public void RotateTransform(float angle) => RotateTransform(angle, MatrixOrder.Prepend);
+    public void RotateTransform(float angle) => RotateTransform(angle, Drawing2D.MatrixOrder.Prepend);
 
-    public void RotateTransform(float angle, MatrixOrder order)
+    public void RotateTransform(float angle, Drawing2D.MatrixOrder order)
     {
         int status = Gdip.GdipRotateTextureTransform(new HandleRef(this, NativeBrush),
                                                         angle,
