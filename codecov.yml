@@ -20,16 +20,29 @@ flags:                            # which files to include in the reporting
   production:
     paths:
       - src/Common/src/
+      - src/Microsoft.VisualBasic/src/
+      - src/Microsoft.VisualBasic.Forms/src/
       - src/System.Design/src/
       - src/System.Drawing/src/
+      - src/System.Drawing.Common/src/
       - src/System.Drawing.Design/src/
+      - src/System.Private.Windows.Core/src/
       - src/System.Windows.Forms/src/
+      - src/System.Windows.Forms.Analyzers/src/
+      - src/System.Windows.Forms.Analyzers.CSharp/src/
       - src/System.Windows.Forms.Design/src/
       - src/System.Windows.Forms.Design.Editors/src/
+      - src/System.Windows.Forms.Primitives/src/
+      - src/System.Windows.Forms.PrivateSourceGenerators/src/
   test:
     paths:
       - src/Common/tests/
-      - src/System.Drawing.Design/tests/
+      - src/Microsoft.VisualBasic/tests/
+      - src/Microsoft.VisualBasic.Forms/tests/
+      - src/System.Drawing.Common/tests/
       - src/System.Windows.Forms/tests/
+      - src/System.Windows.Forms.Analyzers/tests/
+      - src/System.Windows.Forms.Analyzers.CSharp/tests/
       - src/System.Windows.Forms.Design/tests/
-      - src/System.Windows.Forms.Design.Editors/tests/
+      - src/System.Windows.Forms.Primitives/tests/
+      - src/System.Windows.Forms.PrivateSourceGenerators/tests/
