@@ -4136,7 +4136,7 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Tiene lugar cuando DataGridView compara dos valores de celda para realizar una ordenación.</target>
+        <target state="new">Occurs when the DataGridView control completes a sorting operation.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
