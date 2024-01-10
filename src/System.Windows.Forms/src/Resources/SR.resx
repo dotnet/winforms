@@ -2188,7 +2188,7 @@ To replace this default dialog please handle the DataError event.</value>
     <value>Occurs when the DataGridView compares two cell values to perform a sort operation.</value>
   </data>
   <data name="DataGridView_SortedDescr" xml:space="preserve">
-    <value>Occurs when the DataGridView compares two cell values to perform a sort operation.</value>
+    <value>Occurs when the DataGridView control completes a sorting operation.</value>
   </data>
   <data name="DataGridView_StandardTabDescr" xml:space="preserve">
     <value>Indicates whether the TAB key moves the focus to the next control in the tab order rather than moving focus to the next cell in the control.</value>
