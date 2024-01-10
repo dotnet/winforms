@@ -919,7 +919,8 @@
             "parameters": {}
           }
         ]
-      }
+      },
+      "disabled": true
     },
     {
       "taskType": "trigger",
