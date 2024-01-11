@@ -84,9 +84,9 @@
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
-    <CoverletMSBuildPackageVersion>3.1.2</CoverletMSBuildPackageVersion>
-    <CodecovVersion>1.9.0</CodecovVersion>
-    <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
+    <CoverletMSBuildPackageVersion>6.0.0</CoverletMSBuildPackageVersion>
+    <CodecovVersion>1.12.3</CodecovVersion>
+    <ReportGeneratorVersion>4.3.6</ReportGeneratorVersion>
   </PropertyGroup>
   <!-- External Analyzers -->
   <PropertyGroup>
