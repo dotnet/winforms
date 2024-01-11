@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.UI.Shell;
 
 namespace System.Drawing;
 
@@ -19,23 +19,23 @@ public static class SystemIcons
     private static Icon? s_winlogo;
     private static Icon? s_shield;
 
-    public static Icon Application => GetIcon(ref s_application, SafeNativeMethods.IDI_APPLICATION);
+    public static Icon Application => GetIcon(ref s_application, PInvokeCore.IDI_APPLICATION);
 
-    public static Icon Asterisk => GetIcon(ref s_asterisk, SafeNativeMethods.IDI_ASTERISK);
+    public static Icon Asterisk => GetIcon(ref s_asterisk, PInvokeCore.IDI_ASTERISK);
 
-    public static Icon Error => GetIcon(ref s_error, SafeNativeMethods.IDI_ERROR);
+    public static Icon Error => GetIcon(ref s_error, PInvokeCore.IDI_ERROR);
 
-    public static Icon Exclamation => GetIcon(ref s_exclamation, SafeNativeMethods.IDI_EXCLAMATION);
+    public static Icon Exclamation => GetIcon(ref s_exclamation, PInvokeCore.IDI_EXCLAMATION);
 
-    public static Icon Hand => GetIcon(ref s_hand, SafeNativeMethods.IDI_HAND);
+    public static Icon Hand => GetIcon(ref s_hand, PInvokeCore.IDI_HAND);
 
-    public static Icon Information => GetIcon(ref s_information, SafeNativeMethods.IDI_INFORMATION);
+    public static Icon Information => GetIcon(ref s_information, PInvokeCore.IDI_INFORMATION);
 
-    public static Icon Question => GetIcon(ref s_question, SafeNativeMethods.IDI_QUESTION);
+    public static Icon Question => GetIcon(ref s_question, PInvokeCore.IDI_QUESTION);
 
-    public static Icon Warning => GetIcon(ref s_warning, SafeNativeMethods.IDI_WARNING);
+    public static Icon Warning => GetIcon(ref s_warning, PInvokeCore.IDI_WARNING);
 
-    public static Icon WinLogo => GetIcon(ref s_winlogo, SafeNativeMethods.IDI_WINLOGO);
+    public static Icon WinLogo => GetIcon(ref s_winlogo, PInvokeCore.IDI_WINLOGO);
 
     public static Icon Shield
     {
@@ -51,10 +51,8 @@ public static class SystemIcons
         }
     }
 
-    private static Icon GetIcon(ref Icon? icon, int iconId)
-    {
-        return icon ??= new Icon(User32.LoadIcon(NativeMethods.NullHandleRef, (nint)iconId));
-    }
+    private static Icon GetIcon(ref Icon? icon, PCWSTR iconId) =>
+        icon ??= new Icon(PInvokeCore.LoadIcon(HINSTANCE.Null, iconId));
 
 #if NET8_0_OR_GREATER
     /// <summary>
@@ -76,15 +74,15 @@ public static class SystemIcons
         // Note that we don't explicitly check for invalid StockIconId to allow for accessing newer ids introduced
         // in later OSes. The HRESULT returned for undefined ids gets converted to an ArgumentException.
 
-        Shell32.SHSTOCKICONINFO info = new()
+        SHSTOCKICONINFO info = new()
         {
-            cbSize = (uint)sizeof(Shell32.SHSTOCKICONINFO),
+            cbSize = (uint)sizeof(SHSTOCKICONINFO),
         };
 
-        HRESULT result = Shell32.SHGetStockIconInfo(
-            (uint)stockIcon,
-            (uint)options | Shell32.SHGSI_ICON,
-            ref info);
+        HRESULT result = PInvoke.SHGetStockIconInfo(
+            (SHSTOCKICONID)stockIcon,
+            (SHGSI_FLAGS)options | SHGSI_FLAGS.SHGSI_ICON,
+            &info);
 
         // This only throws if there is an error.
         Marshal.ThrowExceptionForHR((int)result);
@@ -102,21 +100,21 @@ public static class SystemIcons
         // Note that we don't explicitly check for invalid StockIconId to allow for accessing newer ids introduced
         // in later OSes. The HRESULT returned for undefined ids gets converted to an ArgumentException.
 
-        Shell32.SHSTOCKICONINFO info = new()
+        SHSTOCKICONINFO info = new()
         {
-            cbSize = (uint)sizeof(Shell32.SHSTOCKICONINFO),
+            cbSize = (uint)sizeof(SHSTOCKICONINFO),
         };
 
-        HRESULT result = Shell32.SHGetStockIconInfo(
-            (uint)stockIcon,
-            Shell32.SHGSI_ICONLOCATION,
-            ref info);
+        HRESULT result = PInvoke.SHGetStockIconInfo(
+            (SHSTOCKICONID)stockIcon,
+            SHGSI_FLAGS.SHGSI_ICONLOCATION,
+            &info);
 
         // This only throws if there is an error.
         Marshal.ThrowExceptionForHR((int)result);
 
-        nint hicon = 0;
-        result = Shell32.SHDefExtractIcon(
+        HICON hicon;
+        result = PInvoke.SHDefExtractIcon(
             info.szPath,
             info.iIcon,
             0,

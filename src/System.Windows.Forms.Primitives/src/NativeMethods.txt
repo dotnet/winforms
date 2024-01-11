@@ -9,9 +9,7 @@ ARW_*
 AUTOCOMPLETEOPTIONS
 BeginPaint
 BFFM_*
-BI_COMPRESSION
 BIF_*
-BitBlt
 BITMAP
 BlockInput
 BM_*
@@ -53,15 +51,12 @@ COMDLG_FILTERSPEC
 CommandStateChangeConstants
 CommDlgExtendedError
 COPYDATASTRUCT
-CopyImage
 CoRegisterMessageFilter
 CP_ACP
 CreateAcceleratorTableW
 CreateActCtx
 CreateBrushIndirect
-CreateDIBSection
 CreateEnhMetaFileW
-CreateFontIndirectW
 CreateHalftonePalette
 CreateILockBytesOnHGlobal
 CreateMenu
@@ -83,7 +78,6 @@ DeleteEnhMetaFile
 DESKTOP_ACCESS_FLAGS
 DestroyAcceleratorTable
 DestroyCursor
-DestroyIcon
 DestroyMenu
 DestroyWindow
 DISPATCH_CONSTRUCT
@@ -101,8 +95,6 @@ DragAcceptFiles
 DragQueryFile
 DrawEdge
 DrawFrameControl
-DrawIcon
-DrawIconEx
 DRAWITEMSTRUCT
 DrawMenuBar
 DrawText
@@ -198,7 +190,6 @@ GetFocus
 GetForegroundWindow
 GetGuiResources
 GetHGlobalFromILockBytes
-GetIconInfo
 GetKeyboardLayout
 GetKeyboardLayoutList
 GetKeyboardState
@@ -215,8 +206,6 @@ GetModuleFileName
 GetModuleHandle
 GetMonitorInfo
 GetNearestColor
-GetObjectW
-GetPaletteEntries
 GetParent
 GetPhysicalCursorPos
 GetProcAddress
@@ -228,7 +217,6 @@ GetROP2
 GetScrollInfo
 GetShortPathName
 GetStartupInfo
-GetStockObject
 GetSysColor
 GetSysColorBrush
 GetSystemMenu
@@ -291,7 +279,6 @@ HH_AKLINK
 HH_FTS_QUERY
 HH_POPUP
 HideCaret
-HIGHCONTRASTW
 HitTestThemeBackground
 HT*
 HTML_HELP_COMMAND
@@ -309,7 +296,6 @@ IConnectionPoint
 IConnectionPointContainer
 IDataObject
 IDC_*
-IDI_*
 IDispatchEx
 IDropSource
 IDropSourceNotify
@@ -456,7 +442,6 @@ LIST_VIEW_GROUP_STATE_FLAGS
 LIST_VIEW_ITEM_FLAGS
 LIST_VIEW_ITEM_STATE_FLAGS
 LoadCursor
-LoadIcon
 LoadLibraryEx
 LoadRegTypeLib
 LoadTypeLib
@@ -553,7 +538,6 @@ NMTTDISPINFOW
 NMTVCUSTOMDRAW
 NMTVDISPINFOW
 NMVIEWCHANGE
-NONCLIENTMETRICSW
 NOTIFY_ICON_DATA_FLAGS
 NOTIFY_ICON_INFOTIP_FLAGS
 NOTIFY_ICON_MESSAGE
@@ -589,8 +573,8 @@ PeekMessage
 POINTS
 PostMessage
 PostQuitMessage
-PostThreadMessage
 PostQuitMessage
+PostThreadMessage
 PRF_*
 PROGRESS_CLASS
 PROPERTYKEY
@@ -615,18 +599,11 @@ RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE
 RoundRect
 RowOrColumnMajor
 SAFEARRAY
-SafeArrayGetRecordInfo
-SC_*
-SCF_*
-SCROLLBAR_COMMAND
-ScrollWindow
-ScrollWindowEx
-SF_*
-SFF_*
 SafeArrayCreate
 SafeArrayCreateEx
 SafeArrayDestroy
 SafeArrayGetElement
+SafeArrayGetRecordInfo
 SafeArrayGetRecordInfo
 SafeArrayGetVartype
 SafeArrayLock
@@ -634,10 +611,15 @@ SafeArrayPutElement
 SafeArrayUnlock
 SaveDC
 SC_*
+SC_*
+SCF_*
 SCF_*
 ScreenToClient
 SCROLLBAR_COMMAND
+SCROLLBAR_COMMAND
 ScrollWindow
+ScrollWindow
+ScrollWindowEx
 ScrollWindowEx
 SelectObject
 SelectPalette
@@ -683,6 +665,8 @@ SetWindowText
 SetWindowTheme
 SetWinEventHook
 SF_*
+SF_*
+SFF_*
 SFF_*
 SHAutoComplete
 SHBrowseForFolder
@@ -717,8 +701,6 @@ STILL_ACTIVE
 StretchDIBits
 StructureChangeType
 SYSBUTTONSTATES
-SystemParametersInfo
-SystemParametersInfoForDpi
 SYSTEMTIME
 TAB_CONTROL_ITEM_STATE
 TASKDIALOG_ELEMENTS

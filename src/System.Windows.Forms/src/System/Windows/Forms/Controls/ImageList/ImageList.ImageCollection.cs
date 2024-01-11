@@ -164,8 +164,8 @@ public sealed partial class ImageList
                     }
                     finally
                     {
-                        PInvoke.DeleteObject((HGDIOBJ)hBitmap);
-                        PInvoke.DeleteObject((HGDIOBJ)hMask);
+                        PInvokeCore.DeleteObject((HGDIOBJ)hBitmap);
+                        PInvokeCore.DeleteObject((HGDIOBJ)hMask);
                     }
 
                     if (!ok)

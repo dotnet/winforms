@@ -166,16 +166,16 @@ internal static class DesignerUtils
         s_selectionBorderBrush.Dispose();
         s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
-        PInvoke.DeleteObject(s_grabHandleFillBrushPrimary);
+        PInvokeCore.DeleteObject(s_grabHandleFillBrushPrimary);
         s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
-        PInvoke.DeleteObject(s_grabHandleFillBrush);
+        PInvokeCore.DeleteObject(s_grabHandleFillBrush);
         s_grabHandleFillBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-        PInvoke.DeleteObject(s_grabHandlePenPrimary);
+        PInvokeCore.DeleteObject(s_grabHandlePenPrimary);
         s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-        PInvoke.DeleteObject(s_grabHandlePen);
+        PInvokeCore.DeleteObject(s_grabHandlePen);
         s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
     }
 
@@ -407,7 +407,7 @@ internal static class DesignerUtils
         using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
         // Perform our bitblit operation to push the image into the dest bitmap
-        PInvoke.BitBlt(
+        PInvokeCore.BitBlt(
             destDC,
             x: 0,
             y: 0,

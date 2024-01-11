@@ -381,7 +381,7 @@ public class FontDialog : CommonDialog
     {
         using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
-        LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
+        LOGFONTW logFont = Font.ToLogicalFont(graphics);
 
         CHOOSEFONTW cf = new()
         {

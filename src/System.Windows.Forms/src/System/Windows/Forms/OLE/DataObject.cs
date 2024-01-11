@@ -517,7 +517,7 @@ public unsafe partial class DataObject :
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
             using SelectObjectScope destinationBitmapSelection = new(destinationDC, compatibleBitmap);
-            PInvoke.BitBlt(
+            PInvokeCore.BitBlt(
                 destinationDC,
                 0,
                 0,

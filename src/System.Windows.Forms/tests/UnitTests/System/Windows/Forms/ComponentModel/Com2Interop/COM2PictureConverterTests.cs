@@ -90,7 +90,7 @@ public unsafe class COM2PictureConverterTests
         }
         finally
         {
-            PInvoke.DeleteObject((HGDIOBJ)hBitmap);
+            PInvokeCore.DeleteObject((HGDIOBJ)hBitmap);
         }
     }
 

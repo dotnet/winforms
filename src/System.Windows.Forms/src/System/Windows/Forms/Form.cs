@@ -4164,7 +4164,7 @@ public partial class Form : ContainerControl
         if (IsHandleCreated
             && Visible
             && (AcceptButton is not null)
-            && PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETSNAPTODEFBUTTON, ref data)
+            && PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETSNAPTODEFBUTTON, ref data)
             && data)
         {
             Control button = (Control)AcceptButton;

@@ -8,11 +8,8 @@ using System.Drawing.Text;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-#if NET7_0_OR_GREATER
 using System.Runtime.InteropServices.Marshalling;
-#endif
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-using static Interop;
 
 namespace System.Drawing;
 
@@ -48,7 +45,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     private object? _printingHelper;
 
     // GDI+'s preferred HPALETTE.
-    private static IntPtr s_halftonePalette;
+    private static HPALETTE s_halftonePalette;
 
     // pointer back to the Image backing a specific graphic object
     private Image? _backingImage;
@@ -2507,11 +2504,10 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
             throw new Win32Exception(6);
         }
 
-        nint targetDC = 0;
+        HDC targetDC = (HDC)GetHdc();
         try
         {
-            targetDC = GetHdc();
-            int result = Gdi32.BitBlt(
+            BOOL result = PInvokeCore.BitBlt(
                 targetDC,
                 destinationX,
                 destinationY,
@@ -2520,16 +2516,16 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
                 screenDC,
                 sourceX,
                 sourceY,
-                (Gdi32.RasterOp)copyPixelOperation);
+                (ROP_CODE)copyPixelOperation);
 
-            if (result == 0)
+            if (!result)
             {
                 throw new Win32Exception();
             }
         }
         finally
         {
-            if (targetDC != 0)
+            if (!targetDC.IsNull)
             {
                 ReleaseHdc();
             }
@@ -3283,10 +3279,10 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     // This is called from AppDomain.ProcessExit and AppDomain.DomainUnload.
     private static void OnDomainUnload(object? sender, EventArgs e)
     {
-        if (s_halftonePalette != IntPtr.Zero)
+        if (!s_halftonePalette.IsNull)
         {
-            Gdi32.DeleteObject(s_halftonePalette);
-            s_halftonePalette = IntPtr.Zero;
+            PInvokeCore.DeleteObject(s_halftonePalette);
+            s_halftonePalette = HPALETTE.Null;
         }
     }
 
@@ -3313,8 +3309,8 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         // Generic error from GDI+ can be GenericError or Win32Error.
         if (status is Status.GenericError or Status.Win32Error)
         {
-            int error = Marshal.GetLastWin32Error();
-            if (error == SafeNativeMethods.ERROR_ACCESS_DENIED || error == SafeNativeMethods.ERROR_PROC_NOT_FOUND ||
+            WIN32_ERROR error = (WIN32_ERROR)Marshal.GetLastWin32Error();
+            if (error == WIN32_ERROR.ERROR_ACCESS_DENIED || error == WIN32_ERROR.ERROR_PROC_NOT_FOUND ||
                     // Here, we'll check to see if we are in a terminal services session.
                     (((PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
             {

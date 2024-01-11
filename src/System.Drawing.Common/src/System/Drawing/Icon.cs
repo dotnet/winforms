@@ -4,12 +4,10 @@
 using System.Buffers;
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.Drawing.Internal;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using static Interop;
 
 namespace System.Drawing;
 
@@ -18,7 +16,7 @@ namespace System.Drawing;
 [TypeConverter(typeof(IconConverter))]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable
+public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
@@ -37,18 +35,18 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     private uint _bestBytesInRes;
     private bool? _isBestImagePng;
     private Size _iconSize = Size.Empty;
-    private IntPtr _handle = IntPtr.Zero;
+    private HICON _handle;
     private readonly bool _ownHandle = true;
 
     private Icon() { }
 
-    internal Icon(IntPtr handle) : this(handle, false)
+    internal Icon(HICON handle) : this(handle, false)
     {
     }
 
-    internal Icon(IntPtr handle, bool takeOwnership)
+    internal Icon(HICON handle, bool takeOwnership)
     {
-        if (handle == IntPtr.Zero)
+        if (handle.IsNull)
         {
             throw new ArgumentException(SR.Format(SR.InvalidGDIHandle, nameof(Icon)));
         }
@@ -90,7 +88,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         if (_iconData is null)
         {
             _iconSize = original.Size;
-            _handle = User32.CopyImage(new HandleRef(original, original.Handle), SafeNativeMethods.IMAGE_ICON, _iconSize.Width, _iconSize.Height, 0);
+            _handle = PInvokeCore.CopyIcon(original, _iconSize.Width, _iconSize.Height);
         }
         else
         {
@@ -102,11 +100,8 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         ArgumentNullException.ThrowIfNull(resource);
 
-        Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource);
-        if (stream is null)
-        {
-            throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
-        }
+        Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource)
+            ?? throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
 
         _iconData = new byte[(int)stream.Length];
         stream.Read(_iconData, 0, _iconData.Length);
@@ -145,25 +140,27 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
     private Icon(SerializationInfo info, StreamingContext context)
     {
-        _iconData = (byte[])info.GetValue("IconData", typeof(byte[]))!; // Do not rename (binary serialization)
-        _iconSize = (Size)info.GetValue("IconSize", typeof(Size))!; // Do not rename (binary serialization)
+        // Do not rename value names or change types (binary serialization)
+        _iconData = (byte[])info.GetValue("IconData", typeof(byte[]))!;
+        _iconSize = (Size)info.GetValue("IconSize", typeof(Size))!;
         Initialize(_iconSize.Width, _iconSize.Height);
     }
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
+        // Do not rename value names or change types (binary serialization)
         if (_iconData is not null)
         {
-            si.AddValue("IconData", _iconData, typeof(byte[])); // Do not rename (binary serialization)
+            si.AddValue("IconData", _iconData, typeof(byte[]));
         }
         else
         {
             MemoryStream stream = new();
             Save(stream);
-            si.AddValue("IconData", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
+            si.AddValue("IconData", stream.ToArray(), typeof(byte[]));
         }
 
-        si.AddValue("IconSize", _iconSize, typeof(Size)); // Do not rename (binary serialization)
+        si.AddValue("IconSize", _iconSize, typeof(Size));
     }
 
     public static Icon? ExtractAssociatedIcon(string filePath) => ExtractAssociatedIcon(filePath, 0);
@@ -185,39 +182,31 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         // look at the code it might be hard coded to 128 chars for some cases. Leaving the
         // historical MAX_PATH as a minimum to be safe.
 
-        char[] buffer = ArrayPool<char>.Shared.Rent(Math.Max(NativeMethods.MAX_PATH, filePath.Length));
+        char[] buffer = ArrayPool<char>.Shared.Rent(Math.Max((int)PInvokeCore.MAX_PATH, filePath.Length));
         filePath.CopyTo(0, buffer, 0, filePath.Length);
         buffer[filePath.Length] = '\0';
 
-        IntPtr hIcon;
+        HICON hIcon;
         fixed (char* b = buffer)
         {
-            hIcon = Shell32.ExtractAssociatedIcon(NativeMethods.NullHandleRef, b, ref index);
+            ushort piIcon = (ushort)index;
+            hIcon = PInvoke.ExtractAssociatedIcon(HINSTANCE.Null, b, &piIcon);
         }
 
         ArrayPool<char>.Shared.Return(buffer);
 
-        if (hIcon != IntPtr.Zero)
+        if (!hIcon.IsNull)
         {
-            return new Icon(hIcon, true);
+            return new Icon(hIcon, takeOwnership: true);
         }
 
         return null;
     }
 
     [Browsable(false)]
-    public IntPtr Handle
-    {
-        get
-        {
-            if (_handle == IntPtr.Zero)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
+    public IntPtr Handle => _handle.IsNull ? throw new ObjectDisposedException(GetType().Name) : (nint)_handle;
 
-            return _handle;
-        }
-    }
+    HICON IHandle<HICON>.Handle => (HICON)Handle;
 
     [Browsable(false)]
     public int Height => Size.Height;
@@ -226,34 +215,37 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         get
         {
-            if (_iconSize.IsEmpty)
+            if (!_iconSize.IsEmpty)
             {
-                User32.ICONINFO info = default;
-                User32.GetIconInfo(new HandleRef(this, Handle), ref info);
-                Gdi32.BITMAP bitmap = default;
+                return _iconSize;
+            }
 
-                if (info.hbmColor != IntPtr.Zero)
-                {
-                    Gdi32.GetObject(
-                        new HandleRef(null, info.hbmColor),
-                        sizeof(Gdi32.BITMAP),
-                        ref bitmap);
-                    Gdi32.DeleteObject(info.hbmColor);
-                    _iconSize = new Size((int)bitmap.bmWidth, (int)bitmap.bmHeight);
-                }
-                else if (info.hbmMask != IntPtr.Zero)
-                {
-                    Gdi32.GetObject(
-                        new HandleRef(null, info.hbmMask),
-                        sizeof(Gdi32.BITMAP),
-                        ref bitmap);
-                    _iconSize = new Size((int)bitmap.bmWidth, (int)(bitmap.bmHeight / 2));
-                }
+            ICONINFO info = PInvokeCore.GetIconInfo(this);
+            BITMAP bitmap = default;
 
-                if (info.hbmMask != IntPtr.Zero)
-                {
-                    Gdi32.DeleteObject(info.hbmMask);
-                }
+            if (!info.hbmColor.IsNull)
+            {
+                PInvokeCore.GetObject(
+                    info.hbmColor,
+                    sizeof(BITMAP),
+                    &bitmap);
+
+                PInvokeCore.DeleteObject(info.hbmColor);
+                _iconSize = new Size(bitmap.bmWidth, bitmap.bmHeight);
+            }
+            else if (!info.hbmMask.IsNull)
+            {
+                PInvokeCore.GetObject(
+                    info.hbmMask,
+                    sizeof(BITMAP),
+                    &bitmap);
+
+                _iconSize = new Size(bitmap.bmWidth, bitmap.bmHeight / 2);
+            }
+
+            if (!info.hbmMask.IsNull)
+            {
+                PInvokeCore.DeleteObject(info.hbmMask);
             }
 
             return _iconSize;
@@ -279,20 +271,21 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         if (_ownHandle)
         {
-            User32.DestroyIcon(new HandleRef(this, _handle));
-            _handle = IntPtr.Zero;
+            PInvokeCore.DestroyIcon(_handle);
+            _handle = HICON.Null;
+            GC.KeepAlive(this);
         }
     }
 
     public void Dispose()
     {
-        Dispose(true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
     private void Dispose(bool disposing)
     {
-        if (_handle != IntPtr.Zero)
+        if (!_handle.IsNull)
         {
 #if FINALIZATION_WATCH
             Debug.WriteLineIf(!disposing, $"""
@@ -309,7 +302,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     // object, but a graphics object generally has no idea how to render a given image.  So,
     // it passes the call to the actual image.  This version crops the image to the given
     // dimensions and allows the user to specify a rectangle within the image to draw.
-    private void DrawIcon(IntPtr dc, Rectangle imageRect, Rectangle targetRect, bool stretch)
+    private void DrawIcon(HDC hdc, Rectangle imageRect, Rectangle targetRect, bool stretch)
     {
         int imageX = 0;
         int imageY = 0;
@@ -370,45 +363,23 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         // The ROP is SRCCOPY, so we can be simple here and take
         // advantage of clipping regions.  Drawing the cursor
         // is merely a matter of offsetting and clipping.
-        IntPtr hSaveRgn = SaveClipRgn(dc);
+        using RegionScope clippingRegion = new(hdc);
         try
         {
-            Gdi32.IntersectClipRect(new HandleRef(this, dc), targetX, targetY, targetX + clipWidth, targetY + clipHeight);
-            User32.DrawIconEx(new HandleRef(null, dc),
-                                        targetX - imageX,
-                                        targetY - imageY,
-                                        new HandleRef(this, _handle),
-                                        drawWidth,
-                                        drawHeight,
-                                        0,
-                                        NativeMethods.NullHandleRef,
-                                        SafeNativeMethods.DI_NORMAL);
+            PInvokeCore.IntersectClipRect(hdc, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
+            PInvokeCore.DrawIconEx(
+                hdc,
+                targetX - imageX,
+                targetY - imageY,
+                this,
+                drawWidth,
+                drawHeight);
         }
         finally
         {
-            Gdi32.SelectClipRgn(dc, hSaveRgn);
             // We need to delete the region handle after restoring the region as GDI+ uses a copy of the handle.
-            Gdi32.DeleteObject(hSaveRgn);
+            PInvokeCore.SelectClipRgn(hdc, clippingRegion);
         }
-    }
-
-    private static IntPtr SaveClipRgn(IntPtr hDC)
-    {
-        IntPtr hTempRgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
-        IntPtr hSaveRgn = IntPtr.Zero;
-
-        int result = Gdi32.GetClipRgn(hDC, hTempRgn);
-        if (result > 0)
-        {
-            hSaveRgn = hTempRgn;
-        }
-        else
-        {
-            // if we fail to get the clip region delete the handle.
-            Gdi32.DeleteObject(hTempRgn);
-        }
-
-        return hSaveRgn;
     }
 
     internal void Draw(Graphics graphics, int x, int y)
@@ -430,10 +401,8 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
 
-        using var wg = WindowsGraphics.FromGraphics(graphics, ApplyGraphicsProperties.Clipping);
-
-        IntPtr dc = wg.GetHdc();
-        DrawIcon(dc, Rectangle.Empty, copy, true);
+        using DeviceContextHdcScope hdc = new(graphics, ApplyGraphicsProperties.Clipping);
+        DrawIcon(hdc, Rectangle.Empty, copy, true);
     }
 
     // Draws this image to a graphics object.  The drawing command originates on the graphics
@@ -448,20 +417,18 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
 
-        using var wg = WindowsGraphics.FromGraphics(graphics, ApplyGraphicsProperties.Clipping);
-
-        IntPtr dc = wg.GetHdc();
-        DrawIcon(dc, Rectangle.Empty, copy, false);
+        using DeviceContextHdcScope hdc = new(graphics, ApplyGraphicsProperties.Clipping);
+        DrawIcon(hdc, Rectangle.Empty, copy, false);
     }
 
-    ~Icon() => Dispose(false);
+    ~Icon() => Dispose(disposing: false);
 
     public static Icon FromHandle(IntPtr handle)
     {
         if (handle == IntPtr.Zero)
             throw new ArgumentException(null, nameof(handle));
 
-        return new Icon(handle);
+        return new Icon((HICON)handle);
     }
 
     // Initializes this Image object.  This is identical to calling the image's
@@ -469,7 +436,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     // which may be necessary in some instances.
     private unsafe void Initialize(int width, int height)
     {
-        if (_iconData is null || _handle != IntPtr.Zero)
+        if (_iconData is null || !_handle.IsNull)
         {
             throw new InvalidOperationException(SR.Format(SR.IllegalState, GetType().Name));
         }
@@ -565,8 +532,10 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     int bestDelta = Math.Abs(bestWidth - width) + Math.Abs(bestHeight - height);
                     int thisDelta = Math.Abs(entry.bWidth - width) + Math.Abs(entry.bHeight - height);
 
-                    if ((thisDelta < bestDelta) ||
-                        (thisDelta == bestDelta && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth) || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
+                    if ((thisDelta < bestDelta)
+                        || (thisDelta == bestDelta
+                            && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth)
+                                || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
                     {
                         fUpdateBestFit = true;
                     }
@@ -589,7 +558,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
             if (_bestBytesInRes > int.MaxValue)
             {
-                throw new Win32Exception(SafeNativeMethods.ERROR_INVALID_PARAMETER);
+                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
             }
 
             uint endOffset;
@@ -599,7 +568,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             }
             catch (OverflowException)
             {
-                throw new Win32Exception(SafeNativeMethods.ERROR_INVALID_PARAMETER);
+                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
             }
 
             if (endOffset > _iconData.Length)
@@ -616,7 +585,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
                 fixed (byte* pbAlignedBuffer = alignedBuffer)
                 {
-                    _handle = User32.CreateIconFromResourceEx(pbAlignedBuffer, _bestBytesInRes, true, 0x00030000, 0, 0, 0);
+                    _handle = PInvoke.CreateIconFromResourceEx(pbAlignedBuffer, _bestBytesInRes, true, 0x00030000, 0, 0, 0);
                 }
 
                 ArrayPool<byte>.Shared.Return(alignedBuffer);
@@ -625,15 +594,15 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             {
                 try
                 {
-                    _handle = User32.CreateIconFromResourceEx(checked(b + _bestImageOffset), _bestBytesInRes, true, 0x00030000, 0, 0, 0);
+                    _handle = PInvoke.CreateIconFromResourceEx(checked(b + _bestImageOffset), _bestBytesInRes, true, 0x00030000, 0, 0, 0);
                 }
                 catch (OverflowException)
                 {
-                    throw new Win32Exception(SafeNativeMethods.ERROR_INVALID_PARAMETER);
+                    throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
                 }
             }
 
-            if (_handle == IntPtr.Zero)
+            if (_handle.IsNull)
             {
                 throw new Win32Exception();
             }
@@ -701,51 +670,48 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         Bitmap? bitmap = null;
         if (_iconData is not null && _bestBitDepth == 32)
         {
-            // GDI+ doesnt handle 32 bpp icons with alpha properly
+            // GDI+ doesn't handle 32 bpp icons with alpha properly
             // we load the icon ourself from the byte table
             bitmap = new Bitmap(Size.Width, Size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Debug.Assert(_bestImageOffset >= 0 && (_bestImageOffset + _bestBytesInRes) <= _iconData.Length, "Illegal offset/length for the Icon data");
 
-            unsafe
-            {
-                BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, Size.Width, Size.Height),
-                    ImageLockMode.WriteOnly,
-                    PixelFormat.Format32bppArgb);
-                try
-                {
-                    uint* pixelPtr = (uint*)bmpdata.Scan0.ToPointer();
-
-                    // jumping the image header
-                    int newOffset = (int)(_bestImageOffset + sizeof(NativeMethods.BITMAPINFOHEADER));
-                    // there is no color table that we need to skip since we're 32bpp
-
-                    int lineLength = Size.Width * 4;
-                    int width = Size.Width;
-                    for (int j = (Size.Height - 1) * 4; j >= 0; j -= 4)
-                    {
-                        Marshal.Copy(_iconData, newOffset + j * width, (IntPtr)pixelPtr, lineLength);
-                        pixelPtr += width;
-                    }
-
-                    // note: we ignore the mask that's available after the pixel table
-                }
-                finally
-                {
-                    bitmap.UnlockBits(bmpdata);
-                }
-            }
-        }
-        else if (_bestBitDepth == 0 || _bestBitDepth == 32)
-        {
-            // This may be a 32bpp icon or an icon without any data.
-            User32.ICONINFO info = default;
-            User32.GetIconInfo(new HandleRef(this, _handle), ref info);
-            Gdi32.BITMAP bmp = default;
+            BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, Size.Width, Size.Height),
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppArgb);
             try
             {
-                if (info.hbmColor != IntPtr.Zero)
+                uint* pixelPtr = (uint*)bmpdata.Scan0.ToPointer();
+
+                // jumping the image header
+                int newOffset = (int)(_bestImageOffset + sizeof(BITMAPINFOHEADER));
+                // there is no color table that we need to skip since we're 32bpp
+
+                int lineLength = Size.Width * 4;
+                int width = Size.Width;
+                for (int j = (Size.Height - 1) * 4; j >= 0; j -= 4)
                 {
-                    Gdi32.GetObject(new HandleRef(null, info.hbmColor), sizeof(Gdi32.BITMAP), ref bmp);
+                    Marshal.Copy(_iconData, newOffset + j * width, (IntPtr)pixelPtr, lineLength);
+                    pixelPtr += width;
+                }
+
+                // note: we ignore the mask that's available after the pixel table
+            }
+            finally
+            {
+                bitmap.UnlockBits(bmpdata);
+            }
+        }
+        else if (_bestBitDepth is 0 or 32)
+        {
+            // This may be a 32bpp icon or an icon without any data.
+            ICONINFO info = PInvokeCore.GetIconInfo(this);
+            BITMAP bmp = default;
+
+            try
+            {
+                if (!info.hbmColor.IsNull)
+                {
+                    PInvokeCore.GetObject(info.hbmColor, sizeof(BITMAP), &bmp);
                     if (bmp.bmBitsPixel == 32)
                     {
                         Bitmap? tmpBitmap = null;
@@ -790,14 +756,14 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             }
             finally
             {
-                if (info.hbmColor != IntPtr.Zero)
+                if (!info.hbmColor.IsNull)
                 {
-                    Gdi32.DeleteObject(info.hbmColor);
+                    PInvokeCore.DeleteObject(info.hbmColor);
                 }
 
-                if (info.hbmMask != IntPtr.Zero)
+                if (!info.hbmMask.IsNull)
                 {
-                    Gdi32.DeleteObject(info.hbmMask);
+                    PInvokeCore.DeleteObject(info.hbmMask);
                 }
             }
         }
@@ -934,11 +900,11 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
         Debug.Assert(size is >= 0 and <= ushort.MaxValue);
 
-        nint hicon = 0;
+        HICON hicon = HICON.Null;
         HRESULT result;
         fixed (char* c = filePath)
         {
-            result = Shell32.SHDefExtractIcon(
+            result = PInvoke.SHDefExtractIcon(
                 c,
                 id,
                 0,

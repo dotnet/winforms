@@ -212,7 +212,7 @@ public partial class ErrorProvider
             {
                 ControlItem item = _items[i];
                 Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                PInvoke.DrawIconEx(
+                PInvokeCore.DrawIconEx(
                     hdc,
                     bounds.X - _windowBounds.X,
                     bounds.Y - _windowBounds.Y,
