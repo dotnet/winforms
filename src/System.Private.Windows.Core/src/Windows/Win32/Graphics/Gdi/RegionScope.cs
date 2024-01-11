@@ -18,7 +18,7 @@ namespace Windows.Win32.Graphics.Gdi;
 #if DEBUG
 internal unsafe class RegionScope : DisposalTracking.Tracker, IDisposable
 #else
-internal ref struct RegionScope
+internal unsafe ref struct RegionScope
 #endif
 {
     public HRGN Region { get; private set; }
