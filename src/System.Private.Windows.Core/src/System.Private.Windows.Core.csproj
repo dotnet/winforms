@@ -33,4 +33,11 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafePackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SR.resx">
+      <ManifestResourceName>System.Private.Windows.Core.Resources.SR</ManifestResourceName>
+      <GenerateSource>true</GenerateSource>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

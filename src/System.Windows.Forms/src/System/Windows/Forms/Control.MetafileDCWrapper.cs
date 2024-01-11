@@ -41,7 +41,7 @@ public partial class Control
 
             int planes = PInvokeCore.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.PLANES);
             int bitsPixel = PInvokeCore.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
-            _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
+            _hBitmap = PInvokeCore.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
             _hOriginalBmp = (HBITMAP)PInvoke.SelectObject(HDC, _hBitmap);
         }
 
@@ -88,7 +88,7 @@ public partial class Control
             long i;
 
             // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
-            HBITMAP hNullBitmap = PInvoke.CreateBitmap(1, 1, 1, 1, null);
+            HBITMAP hNullBitmap = PInvokeCore.CreateBitmap(1, 1, 1, 1, null);
             if (hNullBitmap.IsNull)
             {
                 return false;

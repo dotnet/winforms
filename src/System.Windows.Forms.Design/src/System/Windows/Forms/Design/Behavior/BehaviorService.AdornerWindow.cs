@@ -300,7 +300,7 @@ public sealed partial class BehaviorService
                         PInvoke.GetUpdateRect(m.HWND, &clip, true);
                         Rectangle paintRect = clip;
 
-                        using Region region = hrgn.CreateGdiPlusRegion();
+                        using Region region = hrgn.ToRegion();
 
                         // Call the base class to do its painting.
                         DefWndProc(ref m);

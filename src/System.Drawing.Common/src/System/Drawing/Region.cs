@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Drawing;
 
-public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePointer<GpRegion>
+public unsafe sealed class Region : MarshalByRefObject, IDisposable, IPointer<GpRegion>
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
@@ -16,7 +16,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
 
     internal GpRegion* NativeRegion { get; private set; }
 
-    GpRegion* INativePointer<GpRegion>.NativePointer => NativeRegion;
+    GpRegion* IPointer<GpRegion>.Pointer => NativeRegion;
 
     public Region()
     {
@@ -32,11 +32,8 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
         SetNativeRegion(region);
     }
 
-    public Region(Rectangle rect)
+    public Region(Rectangle rect) : this((RectangleF)rect)
     {
-        GpRegion* region = default;
-        CheckStatus(PInvoke.GdipCreateRegionRectI(rect, ref region));
-        SetNativeRegion(region);
     }
 
     public Region(GraphicsPath path)
@@ -105,7 +102,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     private void Dispose(bool disposing)
     {
 #if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && NativeRegion is null, $"""
+        Debug.WriteLineIf(!disposing && NativeRegion is not null, $"""
             **********************
             Disposed through finalization:
             {allocationSite}
@@ -142,8 +139,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     public void Intersect(RectangleF rect) =>
         CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeIntersect));
 
-    public void Intersect(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRectI(NativeRegion, (Rect*)&rect, GdiPlus.CombineMode.CombineModeIntersect));
+    public void Intersect(Rectangle rect) => Intersect((RectangleF)rect);
 
     public void Intersect(GraphicsPath path)
     {
@@ -162,8 +158,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     public void Union(RectangleF rect) =>
         CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeUnion));
 
-    public void Union(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRectI(NativeRegion, (Rect*)&rect, GdiPlus.CombineMode.CombineModeUnion));
+    public void Union(Rectangle rect) => Union((RectangleF)rect);
 
     public void Union(GraphicsPath path)
     {
@@ -182,8 +177,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     public void Xor(RectangleF rect) =>
         CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeXor));
 
-    public void Xor(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRectI(NativeRegion, (Rect*)&rect, GdiPlus.CombineMode.CombineModeXor));
+    public void Xor(Rectangle rect) => Xor((RectangleF)rect);
 
     public void Xor(GraphicsPath path)
     {
@@ -202,8 +196,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     public void Exclude(RectangleF rect) =>
         CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeExclude));
 
-    public void Exclude(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRectI(NativeRegion, (Rect*)&rect, GdiPlus.CombineMode.CombineModeExclude));
+    public void Exclude(Rectangle rect) => Exclude((RectangleF)rect);
 
     public void Exclude(GraphicsPath path)
     {
@@ -222,8 +215,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     public void Complement(RectangleF rect) =>
         CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeComplement));
 
-    public void Complement(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRectI(NativeRegion, (Rect*)&rect, GdiPlus.CombineMode.CombineModeComplement));
+    public void Complement(Rectangle rect) => Complement((RectangleF)rect);
 
     public void Complement(GraphicsPath path)
     {
@@ -241,7 +233,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
 
     public void Translate(float dx, float dy) => CheckStatus(PInvoke.GdipTranslateRegion(NativeRegion, dx, dy));
 
-    public void Translate(int dx, int dy) => CheckStatus(PInvoke.GdipTranslateRegionI(NativeRegion, dx, dy));
+    public void Translate(int dx, int dy) => Translate((float)dx, dy);
 
     public void Transform(Drawing2D.Matrix matrix)
     {
@@ -255,7 +247,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     {
         ArgumentNullException.ThrowIfNull(g);
         RectF bounds;
-        CheckStatus(PInvoke.GdipGetRegionBounds(NativeRegion, (GpGraphics*)g.NativeGraphics, &bounds));
+        CheckStatus(PInvoke.GdipGetRegionBounds(NativeRegion, g.NativeGraphics, &bounds));
         GC.KeepAlive(g);
         return bounds;
     }
@@ -264,7 +256,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     {
         ArgumentNullException.ThrowIfNull(g);
         HRGN hrgn;
-        CheckStatus(PInvoke.GdipGetRegionHRgn(NativeRegion, (GpGraphics*)g.NativeGraphics, &hrgn));
+        CheckStatus(PInvoke.GdipGetRegionHRgn(NativeRegion, g.NativeGraphics, &hrgn));
         GC.KeepAlive(g);
         return hrgn;
     }
@@ -273,7 +265,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     {
         ArgumentNullException.ThrowIfNull(g);
         BOOL isEmpty;
-        CheckStatus(PInvoke.GdipIsEmptyRegion(NativeRegion, (GpGraphics*)g.NativeGraphics, &isEmpty));
+        CheckStatus(PInvoke.GdipIsEmptyRegion(NativeRegion, g.NativeGraphics, &isEmpty));
         GC.KeepAlive(g);
         return isEmpty;
     }
@@ -282,7 +274,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
     {
         ArgumentNullException.ThrowIfNull(g);
         BOOL isInfinite;
-        CheckStatus(PInvoke.GdipIsInfiniteRegion(NativeRegion, (GpGraphics*)g.NativeGraphics, &isInfinite));
+        CheckStatus(PInvoke.GdipIsInfiniteRegion(NativeRegion, g.NativeGraphics, &isInfinite));
         return isInfinite;
     }
 
@@ -291,7 +283,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
         ArgumentNullException.ThrowIfNull(region);
         ArgumentNullException.ThrowIfNull(g);
         BOOL isEqual;
-        CheckStatus(PInvoke.GdipIsEqualRegion(NativeRegion, region.NativeRegion, (GpGraphics*)g.NativeGraphics, &isEqual));
+        CheckStatus(PInvoke.GdipIsEqualRegion(NativeRegion, region.NativeRegion, g.NativeGraphics, &isEqual));
         GC.KeepAlive(g);
         GC.KeepAlive(region);
         return isEqual;
@@ -357,18 +349,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
 
     public bool IsVisible(Point point) => IsVisible(point, null);
 
-    public bool IsVisible(Point point, Graphics? g)
-    {
-        BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRegionPointI(
-            NativeRegion,
-            point.X, point.Y,
-            g is null ? null : g.NativeGraphics,
-            &isVisible));
-
-        GC.KeepAlive(g);
-        return isVisible;
-    }
+    public bool IsVisible(Point point, Graphics? g) => IsVisible((PointF)point, g);
 
     public bool IsVisible(int x, int y, int width, int height) => IsVisible(new Rectangle(x, y, width, height), null);
 
@@ -376,18 +357,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, INativePoin
 
     public bool IsVisible(int x, int y, int width, int height, Graphics? g) => IsVisible(new Rectangle(x, y, width, height), g);
 
-    public bool IsVisible(Rectangle rect, Graphics? g)
-    {
-        BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRegionRectI(
-            NativeRegion,
-            rect.X, rect.Y, rect.Width, rect.Height,
-            g is null ? null : g.NativeGraphics,
-            &isVisible));
-
-        GC.KeepAlive(g);
-        return isVisible;
-    }
+    public bool IsVisible(Rectangle rect, Graphics? g) => IsVisible((RectangleF)rect, g);
 
     public RectangleF[] GetRegionScans(Drawing2D.Matrix matrix)
     {

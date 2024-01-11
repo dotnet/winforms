@@ -19,7 +19,7 @@ namespace System.Drawing;
 /// <summary>
 ///  Encapsulates a GDI+ drawing surface.
 /// </summary>
-public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
+public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext, IPointer<GpGraphics>
 {
 #if FINALIZATION_WATCH
     static readonly TraceSwitch GraphicsFinalization = new("GraphicsFinalization", "Tracks the creation and destruction of finalization");
@@ -60,36 +60,6 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     private HDC _nativeHdc;
 
     public delegate bool DrawImageAbort(IntPtr callbackdata);
-
-#if NET7_0_OR_GREATER
-    [CustomMarshaller(typeof(DrawImageAbort), MarshalMode.ManagedToUnmanagedIn, typeof(KeepAliveMarshaller))]
-    internal static class DrawImageAbortMarshaller
-    {
-        internal struct KeepAliveMarshaller
-        {
-            private delegate BOOL DrawImageAbortNative(IntPtr callbackdata);
-            private DrawImageAbortNative? _managed;
-            private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
-            public void FromManaged(DrawImageAbort? managed)
-            {
-                _managed = managed is null ? null : data => managed(data) ? BOOL.TRUE : BOOL.FALSE;
-                _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
-            }
-
-            public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
-            {
-                return _nativeFunction;
-            }
-
-            public void OnInvoked()
-            {
-                GC.KeepAlive(_managed);
-            }
-
-            public void Free() { }
-        }
-    }
-#endif
 
     /// <summary>
     /// Callback for EnumerateMetafile methods.
@@ -145,7 +115,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
 #endif
 
     /// <summary>
-    /// Constructor to initialize this object from a native GDI+ Graphics pointer.
+    ///  Constructor to initialize this object from a native GDI+ Graphics pointer.
     /// </summary>
     private Graphics(GpGraphics* gdipNativeGraphics)
     {
@@ -156,7 +126,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref='Graphics'/> class from the specified handle to a device context.
+    ///  Creates a new instance of the <see cref='Graphics'/> class from the specified handle to a device context.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdc(IntPtr hdc)
@@ -187,7 +157,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref='Graphics'/> class from a window handle.
+    ///  Creates a new instance of the <see cref='Graphics'/> class from a window handle.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHwnd(IntPtr hwnd) => FromHwndInternal(hwnd);
@@ -291,13 +261,14 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// </summary>
     internal GpGraphics* NativeGraphics { get; private set; }
 
+    GpGraphics* IPointer<GpGraphics>.Pointer => NativeGraphics;
+
     public Region Clip
     {
         get
         {
             Region region = new();
             CheckStatus(PInvoke.GdipGetClip(NativeGraphics, region.NativeRegion));
-
             return region;
         }
         set => SetClip(value, Drawing2D.CombineMode.Replace);
@@ -619,8 +590,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
 
     public void SetClip(Rectangle rect) => SetClip(rect, Drawing2D.CombineMode.Replace);
 
-    public void SetClip(Rectangle rect, Drawing2D.CombineMode combineMode) =>
-        CheckStatus(PInvoke.GdipSetClipRectI(NativeGraphics, rect.X, rect.Y, rect.Width, rect.Height, (GdiPlus.CombineMode)combineMode));
+    public void SetClip(Rectangle rect, Drawing2D.CombineMode combineMode) => SetClip((RectangleF)rect, combineMode);
 
     public void SetClip(RectangleF rect) => SetClip(rect, Drawing2D.CombineMode.Replace);
 
@@ -643,11 +613,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         GC.KeepAlive(region);
     }
 
-    public void IntersectClip(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipSetClipRectI(
-            NativeGraphics,
-            rect.X, rect.Y, rect.Width, rect.Height,
-            GdiPlus.CombineMode.CombineModeIntersect));
+    public void IntersectClip(Rectangle rect) => IntersectClip((RectangleF)rect);
 
     public void IntersectClip(RectangleF rect) =>
         CheckStatus(PInvoke.GdipSetClipRect(
@@ -663,7 +629,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     }
 
     public void ExcludeClip(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipSetClipRectI(
+        CheckStatus(PInvoke.GdipSetClipRect(
             NativeGraphics,
             rect.X, rect.Y, rect.Width, rect.Height,
             GdiPlus.CombineMode.CombineModeExclude));
@@ -683,39 +649,29 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
 
     public bool IsVisible(int x, int y) => IsVisible(new Point(x, y));
 
-    public bool IsVisible(Point point)
+    public bool IsVisible(Point point) => IsVisible(point.X, point.Y);
+
+    public bool IsVisible(float x, float y)
     {
         BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisiblePointI(NativeGraphics, point.X, point.Y, &isVisible));
+        CheckStatus(PInvoke.GdipIsVisiblePoint(NativeGraphics, x, y, &isVisible));
         return isVisible;
     }
 
-    public bool IsVisible(float x, float y) => IsVisible(new PointF(x, y));
+    public bool IsVisible(PointF point) => IsVisible(point.X, point.Y);
 
-    public bool IsVisible(PointF point)
+    public bool IsVisible(int x, int y, int width, int height) => IsVisible((float)x, y, width, height);
+
+    public bool IsVisible(Rectangle rect) => IsVisible((float)rect.X, rect.Y, rect.Width, rect.Height);
+
+    public bool IsVisible(float x, float y, float width, float height)
     {
         BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisiblePoint(NativeGraphics, point.X, point.Y, &isVisible));
+        CheckStatus(PInvoke.GdipIsVisibleRect(NativeGraphics, x, y, width, height, &isVisible));
         return isVisible;
     }
 
-    public bool IsVisible(int x, int y, int width, int height) => IsVisible(new Rectangle(x, y, width, height));
-
-    public bool IsVisible(Rectangle rect)
-    {
-        BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRectI(NativeGraphics, rect.X, rect.Y, rect.Width, rect.Height, &isVisible));
-        return isVisible;
-    }
-
-    public bool IsVisible(float x, float y, float width, float height) => IsVisible(new RectangleF(x, y, width, height));
-
-    public bool IsVisible(RectangleF rect)
-    {
-        BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRect(NativeGraphics, rect.X, rect.Y, rect.Width, rect.Height, &isVisible));
-        return isVisible;
-    }
+    public bool IsVisible(RectangleF rect) => IsVisible(rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
     ///  Resets the world transform to identity.
@@ -779,18 +735,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// Draws an arc from the specified ellipse.
     /// </summary>
     public void DrawArc(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-
-        CheckErrorStatus(PInvoke.GdipDrawArcI(
-            NativeGraphics,
-            (GpPen*)pen.NativePen,
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-
-        GC.KeepAlive(pen);
-    }
+        => DrawArc(pen, (float)x, y, width, height, startAngle, sweepAngle);
 
     /// <summary>
     ///  Draws an arc from the specified ellipse.
@@ -851,11 +796,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     ///  Draws the outline of the specified rectangle.
     /// </summary>
     public void DrawRectangle(Pen pen, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawRectangleI(NativeGraphics, (GpPen*)pen.NativePen, x, y, width, height));
-        GC.KeepAlive(pen);
-    }
+        => DrawRectangle(pen, (float)x, y, width, height);
 
     /// <summary>
     ///  Draws the outlines of a series of rectangles.
@@ -907,17 +848,12 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// <summary>
     ///  Draws the outline of an ellipse specified by a bounding rectangle.
     /// </summary>
-    public void DrawEllipse(Pen pen, Rectangle rect) => DrawEllipse(pen, rect.X, rect.Y, rect.Width, rect.Height);
+    public void DrawEllipse(Pen pen, Rectangle rect) => DrawEllipse(pen, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
     ///  Draws the outline of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void DrawEllipse(Pen pen, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawEllipseI(NativeGraphics, (GpPen*)pen.NativePen, x, y, width, height));
-        GC.KeepAlive(pen);
-    }
+    public void DrawEllipse(Pen pen, int x, int y, int width, int height) => DrawEllipse(pen, (float)x, y, width, height);
 
     /// <summary>
     ///  Draws the outline of a pie section defined by an ellipse and two radial lines.
@@ -944,12 +880,8 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// <summary>
     ///  Draws the outline of a pie section defined by an ellipse and two radial lines.
     /// </summary>
-    public void DrawPie(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawPieI(NativeGraphics, (GpPen*)pen.NativePen, x, y, width, height, startAngle, sweepAngle));
-        GC.KeepAlive(pen);
-    }
+    public void DrawPie(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle) =>
+        DrawPie(pen, (float)x, y, width, height, startAngle, sweepAngle);
 
     /// <summary>
     ///  Draws the outline of a polygon defined by an array of points.
@@ -1222,22 +1154,12 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// <summary>
     ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
     /// </summary>
-    public void FillRectangle(Brush brush, Rectangle rect) => FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
+    public void FillRectangle(Brush brush, Rectangle rect) => FillRectangle(brush, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
     ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
     /// </summary>
-    public void FillRectangle(Brush brush, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-
-        CheckErrorStatus(PInvoke.GdipFillRectangleI(
-            NativeGraphics,
-            (GpBrush*)brush.NativeBrush,
-            x, y, width, height));
-
-        GC.KeepAlive(brush);
-    }
+    public void FillRectangle(Brush brush, int x, int y, int width, int height) => FillRectangle(brush, (float)x, y, width, height);
 
     /// <summary>
     ///  Fills the interiors of a series of rectangles with a <see cref='Brush'/>.
@@ -1317,6 +1239,8 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
                 (GdiPlus.Point*)p, points.Length,
                 (GdiPlus.FillMode)fillMode));
         }
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
@@ -1342,22 +1266,12 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// <summary>
     ///  Fills the interior of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void FillEllipse(Brush brush, Rectangle rect) => FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
+    public void FillEllipse(Brush brush, Rectangle rect) => FillEllipse(brush, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
     /// <summary>
     ///  Fills the interior of an ellipse defined by a bounding rectangle.
     /// </summary>
-    public void FillEllipse(Brush brush, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-
-        CheckErrorStatus(PInvoke.GdipFillEllipseI(
-            NativeGraphics,
-            (GpBrush*)brush.NativeBrush,
-            x, y, width, height));
-
-        GC.KeepAlive(brush);
-    }
+    public void FillEllipse(Brush brush, int x, int y, int width, int height) => FillEllipse(brush, (float)x, y, width, height);
 
     /// <summary>
     ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
@@ -1396,18 +1310,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     public void FillPie(Brush brush, int x, int y, int width, int height, int startAngle, int sweepAngle)
-    {
-        ArgumentNullException.ThrowIfNull(brush);
-
-        CheckErrorStatus(PInvoke.GdipFillPieI(
-            NativeGraphics,
-            (GpBrush*)brush.NativeBrush,
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-
-        GC.KeepAlive(brush);
-    }
+        => FillPie(brush, (float)x, y, width, height, startAngle, sweepAngle);
 
     /// <summary>
     ///  Fills the interior a closed curve defined by an array of points.
@@ -1424,6 +1327,8 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
                 (GpBrush*)brush.NativeBrush,
                 (GdiPlus.PointF*)p, points.Length));
         }
+
+        GC.KeepAlive(brush);
     }
 
     /// <summary>
@@ -1465,6 +1370,8 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
                 (GpBrush*)brush.NativeBrush,
                 (GdiPlus.Point*)p, points.Length));
         }
+
+        GC.KeepAlive(brush);
     }
 
     public void FillClosedCurve(Brush brush, Point[] points, Drawing2D.FillMode fillmode) =>
@@ -1924,25 +1831,13 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         CheckErrorStatus(status);
     }
 
-    public void DrawImage(Image image, Point point) => DrawImage(image, point.X, point.Y);
+    public void DrawImage(Image image, Point point) => DrawImage(image, (float)point.X, point.Y);
 
-    public void DrawImage(Image image, int x, int y)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-        Status status = PInvoke.GdipDrawImageI(NativeGraphics, (GpImage*)image._nativeImage, x, y);
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+    public void DrawImage(Image image, int x, int y) => DrawImage(image, (float)x, y);
 
-    public void DrawImage(Image image, Rectangle rect) => DrawImage(image, rect.X, rect.Y, rect.Width, rect.Height);
+    public void DrawImage(Image image, Rectangle rect) => DrawImage(image, (float)rect.X, rect.Y, rect.Width, rect.Height);
 
-    public void DrawImage(Image image, int x, int y, int width, int height)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-        Status status = PInvoke.GdipDrawImageRectI(NativeGraphics, (GpImage*)image._nativeImage, x, y, width, height);
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+    public void DrawImage(Image image, int x, int y, int width, int height) => DrawImage(image, (float)x, y, width, height);
 
     public void DrawImageUnscaled(Image image, Point point) => DrawImage(image, point.X, point.Y);
 
@@ -2025,19 +1920,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     }
 
     public void DrawImage(Image image, int x, int y, Rectangle srcRect, GraphicsUnit srcUnit)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-
-        Status status = PInvoke.GdipDrawImagePointRectI(
-            NativeGraphics,
-            (GpImage*)image._nativeImage,
-            x, y,
-            srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-            (Unit)srcUnit);
-
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+        => DrawImage(image, x, y, (RectangleF)srcRect, srcUnit);
 
     public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit srcUnit)
     {
@@ -2254,7 +2137,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         int srcY,
         int srcWidth,
         int srcHeight,
-        GraphicsUnit srcUnit) => DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, null);
+        GraphicsUnit srcUnit) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, null);
 
     public void DrawImage(
         Image image,
@@ -2264,7 +2147,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         int srcWidth,
         int srcHeight,
         GraphicsUnit srcUnit,
-        ImageAttributes? imageAttr) => DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, null);
+        ImageAttributes? imageAttr) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, null);
 
     public void DrawImage(
         Image image,
@@ -2275,7 +2158,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         int srcHeight,
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttr,
-        DrawImageAbort? callback) => DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, callback, IntPtr.Zero);
+        DrawImageAbort? callback) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttr, callback, IntPtr.Zero);
 
     public void DrawImage(
         Image image,
@@ -2287,26 +2170,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         GraphicsUnit srcUnit,
         ImageAttributes? imageAttrs,
         DrawImageAbort? callback,
-        IntPtr callbackData)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-
-        Status status = PInvoke.GdipDrawImageRectRectI(
-            NativeGraphics,
-            (GpImage*)image._nativeImage,
-            destRect.X, destRect.Y, destRect.Width, destRect.Height,
-            srcX, srcY, srcWidth, srcHeight,
-            (Unit)srcUnit,
-            imageAttrs is null ? null : (GpImageAttributes*)imageAttrs.nativeImageAttributes,
-            callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
-            (void*)callbackData);
-
-        GC.KeepAlive(imageAttrs);
-        GC.KeepAlive(callback);
-
-        IgnoreMetafileErrors(image, ref status);
-        CheckErrorStatus(status);
-    }
+        IntPtr callbackData) => DrawImage(image, destRect, (float)srcX, srcY, srcWidth, srcHeight, srcUnit, imageAttrs, callback, callbackData);
 
     /// <summary>
     ///  Draws a line connecting the two specified points.
@@ -2332,17 +2196,13 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     /// <summary>
     ///  Draws a line connecting the two specified points.
     /// </summary>
-    public void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawLineI(NativeGraphics, (GpPen*)pen.NativePen, x1, y1, x2, y2));
-        GC.KeepAlive(pen);
-    }
+    public void DrawLine(Pen pen, int x1, int y1, int x2, int y2) =>
+        DrawLine(pen, (float)x1, y1, x2, y2);
 
     /// <summary>
     ///  Draws a line connecting the two specified points.
     /// </summary>
-    public void DrawLine(Pen pen, Point pt1, Point pt2) => DrawLine(pen, pt1.X, pt1.Y, pt2.X, pt2.Y);
+    public void DrawLine(Pen pen, Point pt1, Point pt2) => DrawLine(pen, (float)pt1.X, pt1.Y, pt2.X, pt2.Y);
 
     /// <summary>
     ///  Draws a series of line segments that connect an array of points.
@@ -3322,22 +3182,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     }
 
     public GraphicsContainer BeginContainer(Rectangle dstrect, Rectangle srcrect, GraphicsUnit unit)
-    {
-        GraphicsContext context = new(this);
-        uint state;
-        Status status = PInvoke.GdipBeginContainerI(NativeGraphics, (Rect*)&dstrect, (Rect*)&srcrect, (Unit)unit, &state);
-
-        if (status != Status.Ok)
-        {
-            context.Dispose();
-            throw Gdip.StatusException(status);
-        }
-
-        context.State = (int)state;
-        PushContext(context);
-
-        return new GraphicsContainer((int)state);
-    }
+        => BeginContainer((RectangleF)dstrect, (RectangleF)srcrect, unit);
 
     public void AddMetafileComment(byte[] data)
     {

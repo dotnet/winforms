@@ -31,7 +31,7 @@ internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
             }
 
             // Create compatible bitmap with the correct size.
-            _cachedItemBitmap = PInvoke.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+            _cachedItemBitmap = PInvokeCore.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
             HGDIOBJ oldBitmap = PInvoke.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
             // Delete the old bitmap

@@ -1642,7 +1642,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
                 int planes = PInvokeCore.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.PLANES);
                 int bitsPixel = PInvokeCore.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
-                using HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
+                using HBITMAP compatibleBitmap = PInvokeCore.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                 using SelectObjectScope targetBitmapSelection = new(compatibleDC, compatibleBitmap);
 
                 using CreateBrushScope brush = new(backgroundColor);
