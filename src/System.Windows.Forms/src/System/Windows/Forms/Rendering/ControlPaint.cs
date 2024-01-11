@@ -298,7 +298,7 @@ public static partial class ControlPaint
         // Create 1bpp.
         fixed (byte* pBits = bits)
         {
-            return (IntPtr)PInvoke.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, pBits);
+            return (IntPtr)PInvokeCore.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, pBits);
         }
     }
 

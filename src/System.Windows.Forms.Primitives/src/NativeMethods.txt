@@ -59,9 +59,7 @@ CoRegisterMessageFilter
 CP_ACP
 CreateAcceleratorTableW
 CreateActCtx
-CreateBitmap
 CreateBrushIndirect
-CreateCompatibleBitmap
 CreateDIBSection
 CreateEnhMetaFileW
 CreateFontIndirectW

@@ -29,7 +29,7 @@ internal readonly ref struct ObjectScope
     {
         if (!HGDIOBJ.IsNull)
         {
-            PInvoke.DeleteObject(HGDIOBJ);
+            PInvokeCore.DeleteObject(HGDIOBJ);
         }
 
         DisposalTracking.SuppressFinalize(this!);

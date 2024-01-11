@@ -9,7 +9,7 @@
 ///   This should never be put on a struct.
 ///  </para>
 /// </remarks>
-internal unsafe interface INativePointer<TPointer> where TPointer : unmanaged
+internal unsafe interface IPointer<TPointer> where TPointer : unmanaged
 {
-    TPointer* NativePointer { get; }
+    TPointer* Pointer { get; }
 }
