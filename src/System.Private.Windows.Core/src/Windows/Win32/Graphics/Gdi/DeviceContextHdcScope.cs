@@ -1,10 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms;
+namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
 ///  <para>
@@ -27,7 +26,7 @@ internal class DeviceContextHdcScope : DisposalTracking.Tracker, IDisposable
 internal readonly ref struct DeviceContextHdcScope
 #endif
 {
-    public IDeviceContext DeviceContext { get; }
+    public IHdcContext DeviceContext { get; }
     public HDC HDC { get; }
 
     private readonly int _savedHdcState;
@@ -38,7 +37,7 @@ internal readonly ref struct DeviceContextHdcScope
     /// <remarks>
     ///  <para>
     ///   When a <see cref="Graphics"/> object is created from a <see cref="HDC"/> the clipping region and
-    ///   the viewport origin are applied (<see cref="PInvoke.GetViewportExtEx(HDC, SIZE*)"/>). The clipping
+    ///   the viewport origin are applied (<see cref="PInvokeCore.GetViewportExtEx(HDC, SIZE*)"/>). The clipping
     ///   region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
     ///  </para>
     ///  <para>
@@ -54,7 +53,7 @@ internal readonly ref struct DeviceContextHdcScope
     ///  When true, saves and restores the <see cref="HDC"/> state.
     /// </param>
     public DeviceContextHdcScope(
-        IDeviceContext deviceContext,
+        IHdcContext deviceContext,
         bool applyGraphicsState = true,
         bool saveHdcState = false) : this(
             deviceContext,
@@ -72,7 +71,7 @@ internal readonly ref struct DeviceContextHdcScope
     ///  </para>
     /// </remarks>
     public unsafe DeviceContextHdcScope(
-        IDeviceContext deviceContext,
+        IHdcContext deviceContext,
         ApplyGraphicsProperties applyGraphicsState,
         bool saveHdcState = false)
     {
@@ -93,7 +92,7 @@ internal readonly ref struct DeviceContextHdcScope
         HDC = default;
 
         IGraphicsHdcProvider? provider = deviceContext as IGraphicsHdcProvider;
-        Graphics? graphics = deviceContext as Graphics;
+        IGraphics? graphics = deviceContext as IGraphics;
 
         // There are three states of IDeviceContext that come into this class:
         //
@@ -126,7 +125,7 @@ internal readonly ref struct DeviceContextHdcScope
         {
             // We have a provider, grab the underlying HDC if possible unless we know we've created and
             // modified a Graphics object around it.
-            HDC = needToApplyProperties ? default : provider.GetHDC();
+            HDC = needToApplyProperties ? default : provider.GetHdc();
 
             if (HDC.IsNull)
             {
@@ -142,74 +141,16 @@ internal readonly ref struct DeviceContextHdcScope
 
         if (!needToApplyProperties || graphics is null)
         {
-            HDC = HDC.IsNull ? (HDC)DeviceContext.GetHdc() : HDC;
+            HDC = HDC.IsNull ? DeviceContext.GetHdc() : HDC;
             ValidateHDC();
-            _savedHdcState = saveHdcState ? PInvoke.SaveDC(HDC) : 0;
+            _savedHdcState = saveHdcState ? PInvokeCore.SaveDC(HDC) : 0;
             return;
         }
 
         // We have a Graphics object (either directly passed in or given to us by IGraphicsHdcProvider)
         // that needs properties applied.
 
-        bool applyTransform = applyGraphicsState.HasFlag(ApplyGraphicsProperties.TranslateTransform);
-        bool applyClipping = applyGraphicsState.HasFlag(ApplyGraphicsProperties.Clipping);
-
-        Region? clipRegion = null;
-        PointF offset = default;
-        if (applyClipping)
-        {
-            graphics.GetContextInfo(out offset, out clipRegion);
-        }
-        else if (applyTransform)
-        {
-            graphics.GetContextInfo(out offset);
-        }
-
-        using (clipRegion)
-        {
-            applyTransform = applyTransform && !offset.IsEmpty;
-            applyClipping = clipRegion is not null;
-
-            using var graphicsRegion = applyClipping ? new RegionScope(clipRegion!, graphics) : default;
-            applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
-
-            HDC = (HDC)graphics.GetHdc();
-
-            if (saveHdcState || applyClipping || applyTransform)
-            {
-                _savedHdcState = PInvoke.SaveDC(HDC);
-            }
-
-            if (applyClipping)
-            {
-                // If the Graphics object was created from a native DC the actual clipping region is the intersection
-                // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
-                // Graphics.VisibleClipBounds.
-
-                GDI_REGION_TYPE type;
-
-                using RegionScope dcRegion = new(HDC);
-                if (!dcRegion.IsNull)
-                {
-                    type = PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
-                    if (type == GDI_REGION_TYPE.RGN_ERROR)
-                    {
-                        throw new Win32Exception();
-                    }
-                }
-
-                type = PInvoke.SelectClipRgn(HDC, graphicsRegion!);
-                if (type == GDI_REGION_TYPE.RGN_ERROR)
-                {
-                    throw new Win32Exception();
-                }
-            }
-
-            if (applyTransform)
-            {
-                PInvoke.OffsetViewportOrgEx(HDC, (int)offset.X, (int)offset.Y, lppt: null);
-            }
-        }
+        (HDC, _savedHdcState) = graphics.GetHdc(applyGraphicsState, saveHdcState);
     }
 
     public static implicit operator HDC(in DeviceContextHdcScope scope) => scope.HDC;
@@ -228,7 +169,7 @@ internal readonly ref struct DeviceContextHdcScope
             throw new InvalidOperationException("Null HDC");
         }
 
-        OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(HDC);
+        OBJ_TYPE type = (OBJ_TYPE)PInvokeCore.GetObjectType(HDC);
         switch (type)
         {
             case OBJ_TYPE.OBJ_DC:

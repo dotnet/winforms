@@ -1,5 +1,6 @@
 BOOL
 CLIPBRD_E_BAD_DATA
+CombineRgn
 CreateBitmap
 CreateCompatibleBitmap
 CreateCompatibleDC
@@ -55,8 +56,11 @@ GetDC
 GetDCEx
 GetDesktopWindow
 GetDeviceCaps
+GetObjectType
 GetRegionData
 GetSystemMetrics
+GetViewportExtEx
+GetViewportOrgEx
 GlobalAlloc
 GlobalFree
 GlobalLock
@@ -81,13 +85,15 @@ HWND_*
 INPLACE_E_NOTOOLSPACE
 IUnknown
 LPARAM
+OBJ_TYPE
+OffsetViewportOrgEx
 OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
 PRINTDLGEX_FLAGS
-Rect
 RECT
+Rect
 RectF
 REGDB_E_CLASSNOTREG
 ReleaseDC
@@ -96,6 +102,7 @@ RPC_E_CHANGED_MODE
 S_FALSE
 S_OK
 SaveDC
+SelectClipRgn
 SelectObject
 START_PAGE_GENERAL
 STG_E_FILENOTFOUND

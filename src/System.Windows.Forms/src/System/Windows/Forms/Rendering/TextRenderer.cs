@@ -304,7 +304,7 @@ public static class TextRenderer
         // This MUST come before retrieving the HDC, which locks the Graphics object
         FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
-        using DeviceContextHdcScope hdc = new(dc, GetApplyStateFlags(dc, flags));
+        using DeviceContextHdcScope hdc = dc.ToHdcScope(GetApplyStateFlags(dc, flags));
 
         DrawTextInternal(hdc, text, font, bounds, foreColor, quality, backColor, flags);
     }
@@ -538,7 +538,7 @@ public static class TextRenderer
 
         // Applying state may not impact text size measurements. Rather than risk missing some
         // case we'll apply as we have historically to avoid surprise regressions.
-        using DeviceContextHdcScope hdc = new(dc, GetApplyStateFlags(dc, flags));
+        using DeviceContextHdcScope hdc = dc.ToHdcScope(GetApplyStateFlags(dc, flags));
         using var hfont = GdiCache.GetHFONT(font, quality, hdc);
         return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
     }

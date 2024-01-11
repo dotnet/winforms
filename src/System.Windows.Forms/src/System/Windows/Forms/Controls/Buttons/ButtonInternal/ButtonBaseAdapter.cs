@@ -131,7 +131,7 @@ internal abstract partial class ButtonBaseAdapter
         bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
         bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
         // Draw counter-clock-wise
         Point p1 = new(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
@@ -186,7 +186,7 @@ internal abstract partial class ButtonBaseAdapter
 
     private static void Draw3DBorderNormal(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
     {
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
         // Draw counter-clock-wise
         Point p1 = new(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
@@ -234,7 +234,7 @@ internal abstract partial class ButtonBaseAdapter
         bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
         bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
         // Draw counter-clock-wise.
         Point p1 = new(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
@@ -293,7 +293,7 @@ internal abstract partial class ButtonBaseAdapter
     /// </summary>
     protected internal static void Draw3DLiteBorder(IDeviceContext deviceContext, Rectangle r, ColorData colors, bool up)
     {
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
         // Draw counter-clock-wise.
         Point p1 = new(r.Right - 1, r.Top);           // Upper inner right
@@ -355,7 +355,7 @@ internal abstract partial class ButtonBaseAdapter
 
     internal static void DrawFlatFocus(IDeviceContext deviceContext, Rectangle r, Color color)
     {
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
         using CreatePenScope focusPen = new(color);
         hdc.DrawRectangle(r, focusPen);
     }
@@ -441,7 +441,7 @@ internal abstract partial class ButtonBaseAdapter
         }
 
         using CreatePenScope hpen = new(color);
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
         hdc.DrawRectangle(r, hpen);
     }
 

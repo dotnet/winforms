@@ -53,7 +53,7 @@ public class RegionTests
 
         Rectangle rectangle = new(1, 2, 3, 4);
         using RegionScope originalRegion = new(rectangle);
-        PInvoke.SelectClipRgn(hdc, originalRegion);
+        PInvokeCore.SelectClipRgn(hdc, originalRegion);
         using RegionScope retrievedRegion = new(hdc);
         RECT rect = default;
         GDI_REGION_TYPE type = PInvoke.GetRgnBox(retrievedRegion, &rect);

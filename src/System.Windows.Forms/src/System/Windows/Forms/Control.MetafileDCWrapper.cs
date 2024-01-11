@@ -27,7 +27,7 @@ public partial class Control
 
         internal unsafe MetafileDCWrapper(HDC hOriginalDC, Size size)
         {
-            Debug.Assert((OBJ_TYPE)PInvoke.GetObjectType(hOriginalDC) == OBJ_TYPE.OBJ_ENHMETADC,
+            Debug.Assert((OBJ_TYPE)PInvokeCore.GetObjectType(hOriginalDC) == OBJ_TYPE.OBJ_ENHMETADC,
                 "Why wrap a non-Enhanced MetaFile DC?");
 
             if (size.Width < 0 || size.Height < 0)
