@@ -8,7 +8,7 @@ using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Drawing2D;
 
-public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
+public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
 {
     internal IntPtr _nativePath;
 
@@ -122,15 +122,17 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetPathFillMode(new HandleRef(this, _nativePath), out FillMode fillmode));
-            return fillmode;
+            GdiPlus.FillMode fillMode;
+            Gdip.CheckStatus(PInvoke.GdipGetPathFillMode((GpPath*)_nativePath, &fillMode));
+            GC.KeepAlive(this);
+            return (FillMode)fillMode;
         }
         set
         {
-            if (value < FillMode.Alternate || value > FillMode.Winding)
+            if (value is < FillMode.Alternate or > FillMode.Winding)
                 throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(FillMode));
 
-            Gdip.CheckStatus(Gdip.GdipSetPathFillMode(new HandleRef(this, _nativePath), value));
+            Gdip.CheckStatus(PInvoke.GdipSetPathFillMode((GpPath*)_nativePath, (GdiPlus.FillMode)value));
         }
     }
 
@@ -212,7 +214,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
         Gdip.CheckStatus(Gdip.GdipIsVisiblePathPoint(
             new HandleRef(this, _nativePath),
             pt.X, pt.Y,
-            new HandleRef(graphics, graphics?.NativeGraphics ?? IntPtr.Zero),
+            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
             out bool isVisible));
 
         return isVisible;
@@ -229,7 +231,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
         Gdip.CheckStatus(Gdip.GdipIsVisiblePathPointI(
             new HandleRef(this, _nativePath),
             pt.X, pt.Y,
-            new HandleRef(graphics, graphics?.NativeGraphics ?? IntPtr.Zero),
+            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
             out bool isVisible));
 
         return isVisible;
@@ -252,7 +254,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
             new HandleRef(this, _nativePath),
             pt.X, pt.Y,
             new HandleRef(pen, pen.NativePen),
-            new HandleRef(graphics, graphics?.NativeGraphics ?? IntPtr.Zero),
+            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
             out bool isVisible));
 
         return isVisible;
@@ -272,7 +274,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
             new HandleRef(this, _nativePath),
             pt.X, pt.Y,
             new HandleRef(pen, pen.NativePen),
-            new HandleRef(graphics, graphics?.NativeGraphics ?? IntPtr.Zero),
+            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
             out bool isVisible));
 
         return isVisible;

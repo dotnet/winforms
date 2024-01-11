@@ -3,7 +3,6 @@
 
 using System.Drawing.Imaging;
 using System.IO;
-using DpiHelper = System.Windows.Forms.DpiHelper;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;

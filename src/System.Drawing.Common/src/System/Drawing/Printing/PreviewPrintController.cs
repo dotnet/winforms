@@ -1,9 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Text;
 
 namespace System.Drawing.Printing;
 
@@ -95,8 +93,8 @@ public class PreviewPrintController : PrintController
 
         if (UseAntiAlias)
         {
-            _graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-            _graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            _graphics.TextRenderingHint = Text.TextRenderingHint.AntiAlias;
+            _graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias;
         }
 
         return _graphics;
