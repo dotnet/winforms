@@ -7,8 +7,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
-using Windows.Win32.System.Ole;
 using Moq;
+using Windows.Win32.System.Ole;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Point = System.Drawing.Point;
 
@@ -2425,5 +2425,127 @@ public class DataObjectTests
         };
         COMException ex = Assert.Throws<COMException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
         Assert.Equal(HRESULT.DV_E_FORMATETC, (HRESULT)ex.HResult);
+    }
+
+    private class DerivedDataObject : DataObject { }
+
+    private class CustomDataObject : IComDataObject, IDataObject
+    {
+        public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+        public void DUnadvise(int connection) => throw new NotImplementedException();
+        public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
+        public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
+        public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
+        public void GetData(ref FORMATETC format, out STGMEDIUM medium) => throw new NotImplementedException();
+        public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
+        public object GetData(string format) => throw new NotImplementedException();
+        public object GetData(Type format) => throw new NotImplementedException();
+        public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => throw new NotImplementedException();
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+        public string[] GetFormats() => throw new NotImplementedException();
+        public int QueryGetData(ref FORMATETC format) => throw new NotImplementedException();
+        public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
+        public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+        public void SetData(string format, object data) => throw new NotImplementedException();
+        public void SetData(Type format, object data) => throw new NotImplementedException();
+        public void SetData(object data) => throw new NotImplementedException();
+    }
+
+    public static IEnumerable<object[]> DataObjectMockRoundTripData()
+    {
+        yield return new object[] { new DataObject() };
+        yield return new object[] { new DerivedDataObject() };
+        yield return new object[] { new CustomDataObject() };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(DataObjectMockRoundTripData))]
+    public void DataObject_MockRoundTrip_IsSame(object data)
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+
+        IComDataObject inData = controlAccessor.PrepareIncomingDragData(data);
+        inData.Should().BeSameAs(data);
+
+        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        outData.Should().BeSameAs(data);
+    }
+
+    [WinFormsFact]
+    public void DataObject_StringData_MockRoundTrip_IsWrapped()
+    {
+        string testString = "Test";
+        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+
+        IComDataObject inData = accessor.PrepareIncomingDragData(testString);
+        inData.Should().BeAssignableTo<DataObject>();
+
+        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        outData.Should().BeSameAs(inData);
+        outData.GetData(typeof(string)).Should().Be(testString);
+    }
+
+    [WinFormsFact]
+    public void DataObject_IDataObject_MockRoundTrip_IsWrapped()
+    {
+        CustomIDataObject data = new();
+        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+
+        IComDataObject inData = accessor.PrepareIncomingDragData(data);
+        inData.Should().BeAssignableTo<DataObject>();
+        inData.Should().NotBeSameAs(data);
+
+        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        outData.Should().BeSameAs(inData);
+    }
+
+    private class CustomIDataObject : IDataObject
+    {
+        public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
+        public object GetData(string format) => throw new NotImplementedException();
+        public object GetData(Type format) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => throw new NotImplementedException();
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+        public string[] GetFormats() => throw new NotImplementedException();
+        public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+        public void SetData(string format, object data) => throw new NotImplementedException();
+        public void SetData(Type format, object data) => throw new NotImplementedException();
+        public void SetData(object data) => throw new NotImplementedException();
+    }
+
+    [WinFormsFact]
+    public void DataObject_ComTypesIDataObject_MockRoundTrip_IsWrapped()
+    {
+        CustomComTypesDataObject data = new();
+        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+
+        IComDataObject inData = accessor.PrepareIncomingDragData(data);
+        inData.Should().BeSameAs(data);
+
+        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        outData.Should().BeAssignableTo<DataObject>();
+        outData.Should().NotBeSameAs(inData);
+    }
+
+    private class CustomComTypesDataObject : IComDataObject
+    {
+        public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+        public void DUnadvise(int connection) => throw new NotImplementedException();
+        public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
+        public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
+        public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
+        public void GetData(ref FORMATETC format, out STGMEDIUM medium) => throw new NotImplementedException();
+        public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
+        public int QueryGetData(ref FORMATETC format) => throw new NotImplementedException();
+        public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
     }
 }
