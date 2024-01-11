@@ -140,7 +140,7 @@ public sealed class ImageAttributes : ICloneable, IDisposable
     }
 
     /// <summary>
-    /// Sets the 5 X 5 color adjust matrix to the specified <see cref='Matrix'/>.
+    ///  Sets the 5 X 5 color adjust matrix to the specified <see cref='Drawing2D.Matrix'/>.
     /// </summary>
     public void SetColorMatrix(ColorMatrix newColorMatrix)
     {

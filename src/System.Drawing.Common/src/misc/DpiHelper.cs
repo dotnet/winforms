@@ -1,10 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
-using System.Drawing.Drawing2D;
-
-namespace System.Windows.Forms;
+namespace System.Drawing;
 
 /// <summary>
 /// Helper class for scaling coordinates and images according to current DPI scaling set in Windows for the primary screen.
@@ -25,7 +22,7 @@ internal static class DpiHelper
 
     private static double s_logicalToDeviceUnitsScalingFactorX;
     private static double s_logicalToDeviceUnitsScalingFactorY;
-    private static InterpolationMode s_interpolationMode = InterpolationMode.Invalid;
+    private static Drawing2D.InterpolationMode s_interpolationMode = Drawing2D.InterpolationMode.Invalid;
 
     private static void Initialize()
     {
@@ -69,31 +66,31 @@ internal static class DpiHelper
         }
     }
 
-    private static InterpolationMode InterpolationMode
+    private static Drawing2D.InterpolationMode InterpolationMode
     {
         get
         {
-            if (s_interpolationMode == InterpolationMode.Invalid)
+            if (s_interpolationMode == Drawing2D.InterpolationMode.Invalid)
             {
                 int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * 100);
 
                 // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
-                // This produces sharp edges in the scaled image and doesn't cause distorsions of the original image.
+                // This produces sharp edges in the scaled image and doesn't cause distortions of the original image.
                 // For any other scale factors we will prefer a high quality resizing algorithm. While that introduces fuzziness in the resulting image,
                 // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
                 // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better
                 // results because it uses less neighboring pixels.
                 if ((dpiScalePercent % 100) == 0)
                 {
-                    s_interpolationMode = InterpolationMode.NearestNeighbor;
+                    s_interpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
                 }
                 else if (dpiScalePercent < 100)
                 {
-                    s_interpolationMode = InterpolationMode.HighQualityBilinear;
+                    s_interpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear;
                 }
                 else
                 {
-                    s_interpolationMode = InterpolationMode.HighQualityBicubic;
+                    s_interpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic;
                 }
             }
 

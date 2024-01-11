@@ -66,7 +66,7 @@ public partial class ComponentEditorForm
                 unchecked((short)0x5555)
             };
 
-            HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
+            HBITMAP hbitmapTemp = PInvokeCore.CreateBitmap(8, 8, 1, 1, patternBits);
             Debug.Assert(
                 !hbitmapTemp.IsNull,
                 "could not create dither bitmap. Page selector UI will not be correct");

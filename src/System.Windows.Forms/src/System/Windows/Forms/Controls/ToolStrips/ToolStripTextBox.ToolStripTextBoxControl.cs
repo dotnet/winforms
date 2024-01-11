@@ -122,7 +122,7 @@ public partial class ToolStripTextBox
                 absoluteClientRectangle.bottom);
             using RegionScope hNonClientRegion = new(0, 0, 0, 0);
 
-            PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
+            PInvokeCore.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
 
             // Call RedrawWindow with the region.
             PInvoke.RedrawWindow(

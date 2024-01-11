@@ -3,7 +3,6 @@
 
 using System.Buffers;
 using System.ComponentModel;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
 using System.IO;
@@ -426,7 +425,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         Rectangle copy = targetRect;
 
-        using Matrix transform = graphics.Transform;
+        using Drawing2D.Matrix transform = graphics.Transform;
         PointF offset = transform.Offset;
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
@@ -444,7 +443,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     internal void DrawUnstretched(Graphics graphics, Rectangle targetRect)
     {
         Rectangle copy = targetRect;
-        using Matrix transform = graphics.Transform;
+        using Drawing2D.Matrix transform = graphics.Transform;
         PointF offset = transform.Offset;
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;

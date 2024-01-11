@@ -75,7 +75,7 @@ public static class CheckBoxRenderer
     {
         InitializeRenderer((int)state);
 
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
         Rectangle glyphBounds = new(glyphLocation, GetGlyphSize(hdc, state, hwnd));
         t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
     }
@@ -236,7 +236,7 @@ public static class CheckBoxRenderer
             return new Size(13, 13);
         }
 
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
         return GetGlyphSize(hdc, state, hwnd);
     }
 

@@ -3075,7 +3075,7 @@ public unsafe partial class Control :
 
         // If we're an ActiveX control, clone the region so it can potentially be modified
         using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
-        using RegionScope regionHandle = new(regionCopy ?? region, Handle);
+        using RegionScope regionHandle = new(regionCopy ?? region, HWND);
 
         if (PInvoke.SetWindowRgn(this, regionHandle, PInvoke.IsWindowVisible(this)) != 0)
         {
@@ -8746,7 +8746,7 @@ public unsafe partial class Control :
         using DeviceContextHdcScope hdc = new(e);
         using SaveDcScope savedc = new(hdc);
 
-        PInvoke.OffsetViewportOrgEx(hdc, -Left, -Top, lppt: null);
+        PInvokeCore.OffsetViewportOrgEx(hdc, -Left, -Top, lppt: null);
 
         using PaintEventArgs newArgs = new(hdc, newClipRect);
 
@@ -9234,18 +9234,18 @@ public unsafe partial class Control :
 
     private unsafe void PrintToMetaFile(HDC hDC, IntPtr lParam)
     {
-        Debug.Assert((OBJ_TYPE)PInvoke.GetObjectType(hDC) == OBJ_TYPE.OBJ_ENHMETADC,
+        Debug.Assert((OBJ_TYPE)PInvokeCore.GetObjectType(hDC) == OBJ_TYPE.OBJ_ENHMETADC,
             "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
         Debug.Assert((lParam & (long)PInvoke.PRF_CHILDREN) != 0,
             "PrintToMetaFile() called without PRF_CHILDREN.");
 
         // Strip the PRF_CHILDREN flag.  We will manually walk our children and print them.
-        lParam = (IntPtr)(lParam & (long)~PInvoke.PRF_CHILDREN);
+        lParam = (nint)(lParam & (long)~PInvoke.PRF_CHILDREN);
 
         // We're the root control, so we need to set up our clipping region.  Retrieve the
         // x-coordinates and y-coordinates of the viewport origin for the specified device context.
         Point viewportOrg = default;
-        bool success = PInvoke.GetViewportOrgEx(hDC, &viewportOrg);
+        bool success = PInvokeCore.GetViewportOrgEx(hDC, &viewportOrg);
         Debug.Assert(success, "GetViewportOrgEx() failed.");
 
         using RegionScope hClippingRegion = new(
@@ -9257,7 +9257,7 @@ public unsafe partial class Control :
         Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
 
         // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-        GDI_REGION_TYPE selectResult = PInvoke.SelectClipRgn(hDC, hClippingRegion);
+        GDI_REGION_TYPE selectResult = PInvokeCore.SelectClipRgn(hDC, hClippingRegion);
         Debug.Assert(
             selectResult is GDI_REGION_TYPE.SIMPLEREGION or GDI_REGION_TYPE.NULLREGION,
             "SIMPLEREGION or NULLLREGION expected.");

@@ -16,6 +16,11 @@
     <FrameworkListFileClass Include="System.Windows.Forms.Design.Editors.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Primitives.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Private.Windows.Core.dll" Profile="WindowsForms" />
+  </ItemGroup>
+  <!--
+    Private assemblies should not be referenced.
+  -->
+  <ItemGroup>
+    <IgnoredReference Include="System.Private.Windows.Core" />
   </ItemGroup>
 </Project>

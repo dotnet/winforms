@@ -35,7 +35,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -60,7 +60,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -106,7 +106,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -138,7 +138,7 @@ public partial class ControlPaintTests
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -171,7 +171,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -214,7 +214,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
@@ -239,7 +239,7 @@ public partial class ControlPaintTests
         try
         {
             Assert.False(hBitmap.IsNull);
-            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
+            Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
             using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);

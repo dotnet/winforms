@@ -31,7 +31,7 @@ internal readonly ref struct SaveDcScope
     /// <param name="hdc"></param>
     public SaveDcScope(HDC hdc)
     {
-        _savedState = PInvoke.SaveDC(hdc);
+        _savedState = PInvokeCore.SaveDC(hdc);
         HDC = hdc;
     }
 
