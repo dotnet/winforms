@@ -4,8 +4,8 @@
 namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
-///  Helper to scope lifetime of a <see cref="HBITMAP"/> created via <see cref="CreateBitmap"/>
-///  Deletes the <see cref="HBITMAP"/> (if any) when disposed.
+///  Helper to scope lifetime of a <see cref="Gdi.HBITMAP"/> created via <see cref="PInvokeCore.CreateBitmap"/>
+///  Deletes the <see cref="Gdi.HBITMAP"/> (if any) when disposed.
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -22,15 +22,15 @@ internal readonly ref struct CreateBitmapScope
     public HBITMAP HBITMAP { get; }
 
     /// <summary>
-    ///  Creates a bitmap using <see cref="CreateBitmap"/>
+    ///  Creates a bitmap using <see cref="PInvokeCore.CreateBitmap"/>
     /// </summary>
     public unsafe CreateBitmapScope(int nWidth, int nHeight, uint nPlanes, uint nBitCount, void* lpvBits) =>
-        HBITMAP = PInvoke.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
+        HBITMAP = PInvokeCore.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
 
     /// <summary>
-    ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="CreateCompatibleBitmap(HDC, int, int)"/>
+    ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="PInvokeCore.CreateCompatibleBitmap(HDC, int, int)"/>
     /// </summary>
-    public CreateBitmapScope(HDC hdc, int cx, int cy) => HBITMAP = PInvoke.CreateCompatibleBitmap(hdc, cx, cy);
+    public CreateBitmapScope(HDC hdc, int cx, int cy) => HBITMAP = PInvokeCore.CreateCompatibleBitmap(hdc, cx, cy);
 
     public static implicit operator HBITMAP(in CreateBitmapScope scope) => scope.HBITMAP;
     public static implicit operator HGDIOBJ(in CreateBitmapScope scope) => scope.HBITMAP;
@@ -42,7 +42,7 @@ internal readonly ref struct CreateBitmapScope
     {
         if (!HBITMAP.IsNull)
         {
-            PInvoke.DeleteObject(HBITMAP);
+            PInvokeCore.DeleteObject(HBITMAP);
         }
 
 #if DEBUG

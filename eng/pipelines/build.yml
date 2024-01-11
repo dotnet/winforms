@@ -28,9 +28,12 @@ jobs:
             _BuildConfig: Debug
             # override some variables for debug
             _SignType: test
-            # Code coverage uploads fail on internal PRs
-            ${{ if eq(variables['System.TeamProject'], 'public') }}:
+            # Only collect coverage for external Debug-x64 builds. Uploads fail on internal builds, and coverage
+            # collection on additional legs produces unnecessary performance overhead.
+            ${{ if and(eq(variables['System.TeamProject'], 'public'), eq(parameters.targetArchitecture, 'x64')) }}:
               _Coverage: true
+            ${{ else }}:
+              _Coverage: false
         Release:
           _BuildConfig: Release
           _Coverage: false

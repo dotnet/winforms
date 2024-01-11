@@ -1,10 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Windows.Forms;
+namespace System.Drawing;
 
 /// <summary>
-///  Enumeration defining the different Graphics properties to apply to a WindowsGraphics when creating it
+///  Enumeration defining the different Graphics properties to apply to an <see cref="HDC"/> when creating it
 ///  from a Graphics object.
 /// </summary>
 [Flags]

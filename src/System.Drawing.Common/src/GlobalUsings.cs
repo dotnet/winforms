@@ -12,3 +12,5 @@ global using Windows.Win32.Graphics.GdiPlus;
 global using Windows.Win32.Storage.Xps;
 global using Windows.Win32.System.Memory;
 global using Windows.Win32.UI.WindowsAndMessaging;
+
+global using GdiPlus = Windows.Win32.Graphics.GdiPlus;

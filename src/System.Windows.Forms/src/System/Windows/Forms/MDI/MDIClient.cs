@@ -292,7 +292,7 @@ public sealed partial class MdiClient : Control
             throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
         }
 
-        if (PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == GDI_REGION_TYPE.RGN_ERROR)
+        if (PInvokeCore.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == GDI_REGION_TYPE.RGN_ERROR)
         {
             throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
         }

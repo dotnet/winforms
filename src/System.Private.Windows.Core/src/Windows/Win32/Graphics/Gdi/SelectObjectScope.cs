@@ -38,7 +38,7 @@ internal readonly ref struct SelectObjectScope
         else
         {
             _hdc = hdc;
-            PreviousObject = PInvoke.SelectObject(hdc, @object);
+            PreviousObject = PInvokeCore.SelectObject(hdc, @object);
         }
     }
 
@@ -46,7 +46,7 @@ internal readonly ref struct SelectObjectScope
     {
         if (!_hdc.IsNull)
         {
-            PInvoke.SelectObject(_hdc, PreviousObject);
+            PInvokeCore.SelectObject(_hdc, PreviousObject);
         }
 
 #if DEBUG

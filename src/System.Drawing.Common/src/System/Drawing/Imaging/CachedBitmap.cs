@@ -27,7 +27,7 @@ namespace System.Drawing.Imaging;
 ///   <see cref="CachedBitmap"/> cannot be used to draw to a printer or metafile.
 ///  </para>
 /// </remarks>
-public sealed class CachedBitmap : IDisposable
+public unsafe sealed class CachedBitmap : IDisposable
 {
     private nint _handle;
 
@@ -45,7 +45,7 @@ public sealed class CachedBitmap : IDisposable
 
         Gdip.CheckStatus(Gdip.GdipCreateCachedBitmap(
             new(bitmap, bitmap._nativeImage),
-            new(graphics, graphics.NativeGraphics),
+            new(graphics, (nint)graphics.NativeGraphics),
             out _handle));
     }
 

@@ -35,7 +35,7 @@ internal readonly struct DCMapping : IDisposable
 
         // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
         Point viewportOrg = default;
-        bool success = PInvoke.GetViewportOrgEx(hdc, &viewportOrg);
+        bool success = PInvokeCore.GetViewportOrgEx(hdc, &viewportOrg);
         Debug.Assert(success, "GetViewportOrgEx() failed.");
 
         // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -72,7 +72,7 @@ internal readonly struct DCMapping : IDisposable
                 {
                     // Find the intersection of our clipping region and the current clipping region (our parent's)
 
-                    GDI_REGION_TYPE combineResult = PInvoke.CombineRgn(
+                    GDI_REGION_TYPE combineResult = PInvokeCore.CombineRgn(
                         clippingRegion,
                         clippingRegion,
                         originalRegion,
@@ -90,7 +90,7 @@ internal readonly struct DCMapping : IDisposable
             }
 
             // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-            GDI_REGION_TYPE selectResult = PInvoke.SelectClipRgn(hdc, clippingRegion);
+            GDI_REGION_TYPE selectResult = PInvokeCore.SelectClipRgn(hdc, clippingRegion);
             Debug.Assert(
                 selectResult is GDI_REGION_TYPE.SIMPLEREGION or GDI_REGION_TYPE.NULLREGION,
                 "SIMPLEREGION or NULLLREGION expected.");

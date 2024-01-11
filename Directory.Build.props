@@ -70,11 +70,10 @@
     <SingleHit>true</SingleHit>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
-    <Include>[System.Windows.*]*,[System.Drawing.Common.*]*,[System.Private.*]*,[Microsoft.VisualBasic.*]*</Include>
-    <!-- Exclude dependencies that embed their symbol information -->
-    <Exclude>[Microsoft.DotNet.XUnitExtensions]*,[InternalUtilitiesForTests*]*,[xunit*]*</Exclude>
-    <!-- Exclude anything tagged with Obsolete or with ExcludeFromCodeCoverage !!Avoid using this!! -->
-    <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
+    <Include></Include>
+    <Exclude></Exclude>
+    <!-- Exclude anything tagged with ExcludeFromCodeCoverage !!Avoid using this!! -->
+    <ExcludeByAttribute>ExcludeFromCodeCoverage</ExcludeByAttribute>
     <ExcludeByFile />
   </PropertyGroup>
 

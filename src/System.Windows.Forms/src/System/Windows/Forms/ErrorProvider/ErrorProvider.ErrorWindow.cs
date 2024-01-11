@@ -193,7 +193,7 @@ public partial class ErrorProvider
                 PInvoke.GetViewportExtEx(hdc, &originalExtents);
                 PInvoke.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
                 Point originalOrigin = default;
-                PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
+                PInvokeCore.GetViewportOrgEx(hdc, &originalOrigin);
                 PInvoke.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
             }
         }

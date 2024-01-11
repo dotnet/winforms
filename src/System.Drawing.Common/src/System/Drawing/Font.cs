@@ -18,7 +18,7 @@ namespace System.Drawing;
 [TypeConverter(typeof(FontConverter))]
 [Serializable]
 [System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
+public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
 {
     private IntPtr _nativeFont;
     private float _fontSize;
@@ -201,12 +201,12 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
     public float GetHeight(Graphics graphics)
     {
         ArgumentNullException.ThrowIfNull(graphics);
-        if (graphics.NativeGraphics == IntPtr.Zero)
+        if (graphics.NativeGraphics is null)
         {
             throw new ArgumentException(nameof(graphics));
         }
 
-        int status = Gdip.GdipGetFontHeight(new HandleRef(this, NativeFont), new HandleRef(graphics, graphics.NativeGraphics), out float height);
+        int status = Gdip.GdipGetFontHeight(new HandleRef(this, NativeFont), new HandleRef(graphics, (nint)graphics.NativeGraphics), out float height);
         Gdip.CheckStatus(status);
 
         return height;
@@ -305,7 +305,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
         logFont = default;
         Gdip.CheckStatus(Gdip.GdipGetLogFontW(
             new HandleRef(this, NativeFont),
-            new HandleRef(graphics, graphics.NativeGraphics),
+            new HandleRef(graphics, (nint)graphics.NativeGraphics),
             ref logFont));
 
         // Prefix the string with '@' if this is a gdiVerticalFont.

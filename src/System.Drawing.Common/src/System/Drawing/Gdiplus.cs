@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -83,78 +82,12 @@ internal static partial class SafeNativeMethods
 
         internal static Exception StatusException(int status) => StatusException((Status)status);
 
-        internal static void CheckStatus(Status status)
-        {
-            if (status != Ok)
-                throw StatusException(status);
-        }
+        internal static void CheckStatus(Status status) => status.ThrowIfFailed();
 
-        internal static Exception StatusException(Status status)
-        {
-            Debug.Assert(status != Ok, "Throwing an exception for an 'Ok' return code");
-
-            switch (status)
-            {
-                case Status.GenericError:
-                    return new ExternalException(SR.GdiplusGenericError, E_FAIL);
-                case Status.InvalidParameter:
-                    return new ArgumentException(SR.GdiplusInvalidParameter);
-                case Status.OutOfMemory:
-                    return new OutOfMemoryException(SR.GdiplusOutOfMemory);
-                case Status.ObjectBusy:
-                    return new InvalidOperationException(SR.GdiplusObjectBusy);
-                case Status.InsufficientBuffer:
-                    return new OutOfMemoryException(SR.GdiplusInsufficientBuffer);
-                case Status.NotImplemented:
-                    return new NotImplementedException(SR.GdiplusNotImplemented);
-                case Status.Win32Error:
-                    return new ExternalException(SR.GdiplusGenericError, E_FAIL);
-                case Status.WrongState:
-                    return new InvalidOperationException(SR.GdiplusWrongState);
-                case Status.Aborted:
-                    return new ExternalException(SR.GdiplusAborted, E_ABORT);
-                case Status.FileNotFound:
-                    return new FileNotFoundException(SR.GdiplusFileNotFound);
-                case Status.ValueOverflow:
-                    return new OverflowException(SR.GdiplusOverflow);
-                case Status.AccessDenied:
-                    return new ExternalException(SR.GdiplusAccessDenied, E_ACCESSDENIED);
-                case Status.UnknownImageFormat:
-                    return new ArgumentException(SR.GdiplusUnknownImageFormat);
-                case Status.PropertyNotFound:
-                    return new ArgumentException(SR.GdiplusPropertyNotFoundError);
-                case Status.PropertyNotSupported:
-                    return new ArgumentException(SR.GdiplusPropertyNotSupportedError);
-
-                case Status.FontFamilyNotFound:
-                    Debug.Fail("We should be special casing FontFamilyNotFound so we can provide the font name");
-                    return new ArgumentException(SR.Format(SR.GdiplusFontFamilyNotFound, "?"));
-
-                case Status.FontStyleNotFound:
-                    Debug.Fail("We should be special casing FontStyleNotFound so we can provide the font name");
-                    return new ArgumentException(SR.Format(SR.GdiplusFontStyleNotFound, "?", "?"));
-
-                case Status.NotTrueTypeFont:
-                    Debug.Fail("We should be special casing NotTrueTypeFont so we can provide the font name");
-                    return new ArgumentException(SR.GdiplusNotTrueTypeFont_NoName);
-
-                case Status.UnsupportedGdiplusVersion:
-                    return new ExternalException(SR.GdiplusUnsupportedGdiplusVersion, E_FAIL);
-
-                case Status.GdiplusNotInitialized:
-                    return new ExternalException(SR.GdiplusNotInitialized, E_FAIL);
-            }
-
-            return new ExternalException($"{SR.GdiplusUnknown} [{status}]", E_UNEXPECTED);
-        }
+        internal static Exception StatusException(Status status) => status.GetException();
     }
 
     public const int
-    E_UNEXPECTED = unchecked((int)0x8000FFFF),
-    E_NOTIMPL = unchecked((int)0x80004001),
-    E_ABORT = unchecked((int)0x80004004),
-    E_FAIL = unchecked((int)0x80004005),
-    E_ACCESSDENIED = unchecked((int)0x80070005),
     DM_IN_BUFFER = 8,
     DM_OUT_BUFFER = 2,
     PD_ALLPAGES = 0x00000000,

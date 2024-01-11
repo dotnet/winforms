@@ -2071,7 +2071,7 @@ public partial class ControlDesigner : ComponentDesigner
                     using var hrgn = new RegionScope(0, 0, 0, 0);
                     PInvoke.GetUpdateRgn(m.HWND, hrgn, false);
                     PInvoke.GetUpdateRect(m.HWND, &clip, false);
-                    using Region region = hrgn.CreateGdiPlusRegion();
+                    using Region region = hrgn.ToRegion();
 
                     // Call the base class to do its own painting.
                     if (_thrownException is null)

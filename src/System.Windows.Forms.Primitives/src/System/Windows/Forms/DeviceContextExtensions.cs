@@ -8,10 +8,10 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Drawing helpers for device contexts. All methods restore original state unless otherwise specified.
 /// </summary>
-internal static class DeviceContextExtensions
+internal static partial class DeviceContextExtensions
 {
-    internal static void DrawRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HPEN hpen)
-        => DrawRectangle(hdc.HDC, rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom, hpen);
+    internal static void DrawRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HPEN hpen) =>
+        DrawRectangle(hdc.HDC, rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom, hpen);
 
     internal static void DrawRectangle(
         this DeviceContextHdcScope hdc,
@@ -19,8 +19,8 @@ internal static class DeviceContextExtensions
         int top,
         int right,
         int bottom,
-        HPEN hpen)
-        => DrawRectangle(hdc.HDC, left, top, right, bottom, hpen);
+        HPEN hpen) =>
+        DrawRectangle(hdc.HDC, left, top, right, bottom, hpen);
 
     internal static void DrawRectangle(
         this HDC hdc,
@@ -37,8 +37,8 @@ internal static class DeviceContextExtensions
         PInvoke.Rectangle(hdc, left, top, right, bottom);
     }
 
-    internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HBRUSH hbrush)
-        => FillRectangle(hdc.HDC, rectangle, hbrush);
+    internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HBRUSH hbrush) =>
+        FillRectangle(hdc.HDC, rectangle, hbrush);
 
     internal static void FillRectangle(this HDC hdc, Rectangle rectangle, HBRUSH hbrush)
     {
@@ -50,19 +50,17 @@ internal static class DeviceContextExtensions
             hbrush);
     }
 
-    internal static void DrawLine(this DeviceContextHdcScope hdc, HPEN hpen, Point p1, Point p2)
-        => DrawLine(hdc.HDC, hpen, p1.X, p1.Y, p2.X, p2.Y);
+    internal static void DrawLine(this DeviceContextHdcScope hdc, HPEN hpen, Point p1, Point p2) =>
+        DrawLine(hdc.HDC, hpen, p1.X, p1.Y, p2.X, p2.Y);
 
-    internal static void DrawLine(this HDC hdc, HPEN hpen, Point p1, Point p2)
-        => DrawLine(hdc, hpen, p1.X, p1.Y, p2.X, p2.Y);
+    internal static void DrawLine(this HDC hdc, HPEN hpen, Point p1, Point p2) =>
+        DrawLine(hdc, hpen, p1.X, p1.Y, p2.X, p2.Y);
 
-    internal static void DrawLine(this DeviceContextHdcScope hdc, HPEN hpen, int x1, int y1, int x2, int y2)
-        => DrawLine(hdc.HDC, hpen, x1, y1, x2, y2);
+    internal static void DrawLine(this DeviceContextHdcScope hdc, HPEN hpen, int x1, int y1, int x2, int y2) =>
+        DrawLine(hdc.HDC, hpen, x1, y1, x2, y2);
 
-    internal static void DrawLine(this HDC hdc, HPEN hpen, int x1, int y1, int x2, int y2)
-    {
-        DrawLines(hdc, hpen, [ x1, y1, x2, y2 ]);
-    }
+    internal static void DrawLine(this HDC hdc, HPEN hpen, int x1, int y1, int x2, int y2) =>
+        DrawLines(hdc, hpen, [x1, y1, x2, y2]);
 
     /// <summary>
     ///  Draws lines with the <paramref name="hpen"/> using points defined in <paramref name="lines"/>.
@@ -70,8 +68,8 @@ internal static class DeviceContextExtensions
     /// <param name="lines">
     ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
     /// </param>
-    internal static void DrawLines(this DeviceContextHdcScope hdc, HPEN hpen, ReadOnlySpan<int> lines)
-        => DrawLines(hdc.HDC, hpen, lines);
+    internal static void DrawLines(this DeviceContextHdcScope hdc, HPEN hpen, ReadOnlySpan<int> lines) =>
+        DrawLines(hdc.HDC, hpen, lines);
 
     /// <summary>
     ///  Draws lines with the <paramref name="hpen"/> using points defined in <paramref name="lines"/>.
@@ -97,8 +95,7 @@ internal static class DeviceContextExtensions
         }
     }
 
-    internal static Color FindNearestColor(this DeviceContextHdcScope hdc, Color color)
-        => FindNearestColor(hdc.HDC, color);
+    internal static Color FindNearestColor(this DeviceContextHdcScope hdc, Color color) => FindNearestColor(hdc.HDC, color);
 
     /// <summary>
     ///  Calls <see cref="PInvoke.GetNearestColor(HDC, COLORREF)"/> to get the nearest color for the given
@@ -106,13 +103,16 @@ internal static class DeviceContextExtensions
     ///  the state of the color.
     /// </summary>
     /// <remarks>
-    ///  This is important as the color only changes if <paramref name="hdc"/> is a very low color depth. This
-    ///  is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
-    ///  state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
-    ///  us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).
-    ///
-    ///  Ideally we'd drop checking at all and just support full color drawing to improve performance for the
-    ///  expected normal case (more than 8 BITSPIXEL for the HDC).
+    ///  <para>
+    ///   This is important as the color only changes if <paramref name="hdc"/> is a very low color depth. This
+    ///   is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
+    ///   state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
+    ///   us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).
+    ///  </para>
+    ///  <para>
+    ///   Ideally we'd drop checking at all and just support full color drawing to improve performance for the
+    ///   expected normal case (more than 8 BITSPIXEL for the HDC).
+    ///  </para>
     /// </remarks>
     internal static Color FindNearestColor(this HDC hdc, Color color)
     {
@@ -128,8 +128,8 @@ internal static class DeviceContextExtensions
         this DeviceContextHdcScope hdc,
         HPEN pen,
         HBRUSH brush,
-        Rectangle bounds)
-        => DrawAndFillEllipse(hdc.HDC, pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+        Rectangle bounds) =>
+        DrawAndFillEllipse(hdc.HDC, pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
     internal static void DrawAndFillEllipse(
         this HDC hdc,
@@ -146,8 +146,8 @@ internal static class DeviceContextExtensions
         PInvoke.Ellipse(hdc, left, top, right, bottom);
     }
 
-    internal static void FillRectangle(this GetDcScope hdc, HBRUSH hbrush, Rectangle rectangle)
-        => FillRectangle(hdc.HDC, hbrush, rectangle);
+    internal static void FillRectangle(this GetDcScope hdc, HBRUSH hbrush, Rectangle rectangle) =>
+        FillRectangle(hdc.HDC, hbrush, rectangle);
 
     internal static void FillRectangle(this HDC hdc, HBRUSH hbrush, Rectangle rectangle)
     {
@@ -166,14 +166,23 @@ internal static class DeviceContextExtensions
     ///  Will create the <see cref="Graphics"/> if possible and it is not already created.
     /// </param>
     /// <remarks>
-    ///  Do NOT dispose of the <see cref="Graphics"/> object. If it was created, the object creating it owns it.
+    ///  <para>
+    ///   Do NOT dispose of the <see cref="Graphics"/> object. If it was created, the object creating it owns it.
+    ///   </para>
     /// </remarks>
-    internal static Graphics? TryGetGraphics(this IDeviceContext deviceContext, bool create = false)
-        => deviceContext switch
+    internal static Graphics? TryGetGraphics(this IDeviceContext deviceContext, bool create = false) => deviceContext switch
+    {
+        Graphics graphics => graphics,
+        IGraphicsHdcProvider provider => (Graphics?)provider.GetGraphics(create),
+        _ => AssertNoGraphics(create)
+    };
+
+    internal static DeviceContextHdcScope ToHdcScope(
+        this IDeviceContext deviceContext,
+        ApplyGraphicsProperties applyProperties = ApplyGraphicsProperties.All) => deviceContext switch
         {
-            Graphics graphics => graphics,
-            IGraphicsHdcProvider provider => provider.GetGraphics(create),
-            _ => AssertNoGraphics(create)
+            IHdcContext hdc => new(hdc, applyProperties),
+            _ => new(new IDeviceContextAdapter(deviceContext), applyProperties)
         };
 
     private static Graphics? AssertNoGraphics(bool create)
