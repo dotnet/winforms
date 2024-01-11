@@ -34,7 +34,7 @@ public partial class DataGridView
 
         public override AccessibleObject? GetChild(int index) =>
             _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected)
-                ? owner.SelectedCell(index).AccessibilityObject
+                ? owner.SelectedCell(index)?.AccessibilityObject
                 : null;
 
         public override int GetChildCount() =>
@@ -57,12 +57,12 @@ public partial class DataGridView
             {
                 case AccessibleNavigation.FirstChild:
                     return _parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0
-                        ? owner.SelectedCell(0).AccessibilityObject
+                        ? owner.SelectedCell(0)?.AccessibilityObject
                         : null;
 
                 case AccessibleNavigation.LastChild:
                     return _parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0
-                        ? owner.SelectedCell(owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject
+                        ? owner.SelectedCell(owner.GetCellCount(DataGridViewElementStates.Selected) - 1)?.AccessibilityObject
                         : null;
 
                 default:

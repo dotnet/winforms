@@ -26,6 +26,7 @@ internal static partial class ScaleHelper
 
     // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
     private static bool s_processPerMonitorAware;
+    private static Size? s_logicalSmallSystemIconSize;
 
     /// <summary>
     ///  The initial primary monitor DPI (logical pixels per inch) for the process.
@@ -320,17 +321,23 @@ internal static partial class ScaleHelper
         PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
         PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
 
+    internal static Size LogicalSmallSystemIconSize => s_logicalSmallSystemIconSize ??= OsVersion.IsWindows10_1607OrGreater()
+        ? new(
+            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi),
+            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi))
+        : new(16, 16);
+
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
     /// </summary>
-    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource)
-        => GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
+    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource) =>
+        GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
 
     /// <summary>
-    ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
+    ///  Gets the given small icon (usually 16x16) resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
-    internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(SystemIconSize, dpi));
+    internal static Bitmap GetSmallIconResourceAsBitmap(Type type, string resource, int dpi) =>
+        GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSmallSystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.

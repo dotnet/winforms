@@ -23,8 +23,8 @@
 
     <!-- Merge multiple coverlet reports into a single Cobertura report before uploading to codecov.io, in order to
       reduce upload size and load on the codecov.io processing servers. -->
-    <Message Importance="high" Text="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage -reporttypes:Cobertura" />
-    <Exec Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage -reporttypes:Cobertura" />
+    <Message Importance="high" Text="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage -reporttypes:Cobertura -filefilters:-*.g.cs" />
+    <Exec Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage -reporttypes:Cobertura -filefilters:-*.g.cs" />
 
     <ItemGroup>
       <_CodecovArgs Include="-f;$(BaseOutputPath)coverage\Cobertura.xml" />
