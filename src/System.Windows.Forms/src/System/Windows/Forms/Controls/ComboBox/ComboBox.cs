@@ -3879,7 +3879,7 @@ public partial class ComboBox : ListControl
                     // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
                     bool getRegionSucceeded = PInvoke.GetUpdateRgn(HWND, windowRegion, bErase: true) != GDI_REGION_TYPE.RGN_ERROR;
 
-                    PInvoke.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
+                    PInvokeCore.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
                     RECT updateRegionBoundingRect = default;
                     PInvoke.GetRgnBox(windowRegion, &updateRegionBoundingRect);
 
@@ -3893,7 +3893,7 @@ public partial class ComboBox : ListControl
 
                     if (getRegionSucceeded)
                     {
-                        PInvoke.SelectClipRgn(dc, dropDownRegion);
+                        PInvokeCore.SelectClipRgn(dc, dropDownRegion);
                     }
 
                     m.WParamInternal = (WPARAM)dc;
@@ -3901,7 +3901,7 @@ public partial class ComboBox : ListControl
 
                     if (getRegionSucceeded)
                     {
-                        PInvoke.SelectClipRgn(dc, windowRegion);
+                        PInvokeCore.SelectClipRgn(dc, windowRegion);
                     }
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);

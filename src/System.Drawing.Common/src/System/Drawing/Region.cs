@@ -256,7 +256,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(g);
         HRGN hrgn;
-        CheckStatus(PInvoke.GdipGetRegionHRgn(NativeRegion, g.NativeGraphics, &hrgn));
+        CheckStatus(PInvokeCore.GdipGetRegionHRgn(NativeRegion, g.NativeGraphics, &hrgn));
         GC.KeepAlive(g);
         return hrgn;
     }
@@ -274,7 +274,7 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(g);
         BOOL isInfinite;
-        CheckStatus(PInvoke.GdipIsInfiniteRegion(NativeRegion, g.NativeGraphics, &isInfinite));
+        CheckStatus(PInvokeCore.GdipIsInfiniteRegion(NativeRegion, g.NativeGraphics, &isInfinite));
         return isInfinite;
     }
 

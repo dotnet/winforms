@@ -96,7 +96,7 @@ public static class ButtonRenderer
         {
             InitializeRenderer((int)state);
 
-            using DeviceContextHdcScope hdc = new(deviceContext);
+            using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
             t_visualStyleRenderer.DrawBackground(hdc, bounds, hwnd);
             contentBounds = t_visualStyleRenderer.GetBackgroundContentRectangle(hdc, bounds);
         }

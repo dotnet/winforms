@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 ///  including the item index, the <see cref="Rectangle"/> in which the drawing should be done, and the
 ///  <see cref="Graphics"/> object with which the drawing should be done.
 /// </summary>
-public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider
+public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider, IHdcContext
 {
     private readonly DrawingEventArgs _event;
 
@@ -159,8 +159,10 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
     internal HDC HDC => _event.HDC;
 
     IntPtr IDeviceContext.GetHdc() => Graphics?.GetHdc() ?? IntPtr.Zero;
+    HDC IHdcContext.GetHdc() => (HDC)((IDeviceContext)this).GetHdc();
     void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
-    HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
-    Graphics? IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
+    void IHdcContext.ReleaseHdc() => ((IDeviceContext)this).ReleaseHdc();
+    IGraphics? IGraphicsHdcProvider.GetGraphics(bool createIfNeeded) => _event.GetGraphics(createIfNeeded);
+    HDC IGraphicsHdcProvider.GetHdc() => _event.GetHDC();
     bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
 }

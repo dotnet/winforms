@@ -108,7 +108,7 @@ internal abstract partial class ButtonBaseAdapter
                 colors.WindowText = colors.WindowFrame;
             }
 
-            using DeviceContextHdcScope hdc = new(_deviceContext, applyGraphicsState: false);
+            using DeviceContextHdcScope hdc = _deviceContext.ToHdcScope(ApplyGraphicsProperties.None);
 
             colors.ButtonFace = hdc.FindNearestColor(colors.ButtonFace);
             colors.ButtonShadow = hdc.FindNearestColor(colors.ButtonShadow);

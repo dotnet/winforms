@@ -21,7 +21,6 @@ GdipCombineRegionRegion
 GdipComment
 GdipCreateFromHDC
 GdipCreateFromHDC2
-GdipCreateFromHWND
 GdipCreateHalftonePalette
 GdipCreateMatrix
 GdipCreateRegion
@@ -29,7 +28,6 @@ GdipCreateRegionHrgn
 GdipCreateRegionPath
 GdipCreateRegionRect
 GdipCreateRegionRgnData
-GdipDeleteGraphics
 GdipDeleteMatrix
 GdipDeleteRegion
 GdipDrawArc
@@ -100,7 +98,6 @@ GdipGetPixelOffsetMode
 GdipGetRegionBounds
 GdipGetRegionData
 GdipGetRegionDataSize
-GdipGetRegionHRgn
 GdipGetRegionScans
 GdipGetRegionScansCount
 GdipGetRenderingOrigin
@@ -114,7 +111,6 @@ GdipGraphicsClear
 GdipIsClipEmpty
 GdipIsEmptyRegion
 GdipIsEqualRegion
-GdipIsInfiniteRegion
 GdipIsVisibleClipEmpty
 GdipIsVisiblePoint
 GdipIsVisibleRect

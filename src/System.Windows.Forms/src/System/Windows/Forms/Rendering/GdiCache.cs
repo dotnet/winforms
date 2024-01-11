@@ -53,11 +53,11 @@ internal static partial class GdiCache
             // for easier diagnosis.
             ArgumentValidation.ThrowIfNull(scope.HDC, "hdc");
 
-            OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(scope.HDC);
-            if (type == OBJ_TYPE.OBJ_DC
-                || type == OBJ_TYPE.OBJ_ENHMETADC
-                || type == OBJ_TYPE.OBJ_MEMDC
-                || type == OBJ_TYPE.OBJ_METADC)
+            OBJ_TYPE type = (OBJ_TYPE)PInvokeCore.GetObjectType(scope.HDC);
+            if (type is OBJ_TYPE.OBJ_DC
+                or OBJ_TYPE.OBJ_ENHMETADC
+                or OBJ_TYPE.OBJ_MEMDC
+                or OBJ_TYPE.OBJ_METADC)
             {
                 // Not sure what is wrong in this case, throw the original.
                 throw;

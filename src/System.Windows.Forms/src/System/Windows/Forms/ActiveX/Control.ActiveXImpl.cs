@@ -422,7 +422,7 @@ public partial class Control
             // supported on classic metafiles.  We throw VIEW_E_DRAW in the hope that
             // the caller figures it out and sends us a different DC.
 
-            OBJ_TYPE hdcType = (OBJ_TYPE)PInvoke.GetObjectType(hdcDraw);
+            OBJ_TYPE hdcType = (OBJ_TYPE)PInvokeCore.GetObjectType(hdcDraw);
             if (hdcType == OBJ_TYPE.OBJ_METADC)
             {
                 return HRESULT.VIEW_E_DRAW;

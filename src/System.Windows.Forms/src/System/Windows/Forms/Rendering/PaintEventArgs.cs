@@ -11,9 +11,11 @@ namespace System.Windows.Forms;
 ///  Provides data for the <see cref="Control.Paint"/> event.
 /// </summary>
 /// <remarks>
-///  Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
+///  <para>
+///   Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
+///  </para>
 /// </remarks>
-public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider
+public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider, IHdcContext
 {
     private readonly DrawingEventArgs _event;
 
@@ -126,8 +128,10 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
     internal HDC HDC => _event.HDC;
 
     IntPtr IDeviceContext.GetHdc() => Graphics?.GetHdc() ?? IntPtr.Zero;
+    HDC IHdcContext.GetHdc() => (HDC)((IDeviceContext)this).GetHdc();
     void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
-    HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
-    Graphics? IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
+    void IHdcContext.ReleaseHdc() => ((IDeviceContext)this).ReleaseHdc();
+    IGraphics? IGraphicsHdcProvider.GetGraphics(bool createIfNeeded) => _event.GetGraphics(createIfNeeded);
+    HDC IGraphicsHdcProvider.GetHdc() => _event.GetHDC();
     bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
 }

@@ -19,7 +19,7 @@ namespace System.Drawing;
 /// <summary>
 ///  Encapsulates a GDI+ drawing surface.
 /// </summary>
-public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext, IPointer<GpGraphics>
+public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext, IGraphics
 {
 #if FINALIZATION_WATCH
     static readonly TraceSwitch GraphicsFinalization = new("GraphicsFinalization", "Tracks the creation and destruction of finalization");
@@ -166,7 +166,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     public static Graphics FromHwndInternal(IntPtr hwnd)
     {
         GpGraphics* nativeGraphics;
-        Gdip.CheckStatus(PInvoke.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
+        Gdip.CheckStatus(PInvokeCore.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
@@ -238,7 +238,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
 #if DEBUG
                 Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                PInvoke.GdipDeleteGraphics(NativeGraphics);
+                PInvokeCore.GdipDeleteGraphics(NativeGraphics);
 
 #if DEBUG
                 Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
@@ -551,6 +551,8 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
             }
         }
     }
+
+    HDC IHdcContext.GetHdc() => (HDC)GetHdc();
 
     public IntPtr GetHdc()
     {
@@ -2426,7 +2428,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
             BOOL isInfinite;
             PInvoke.GdipGetClip(NativeGraphics, regionHandle);
 
-            CheckStatus(PInvoke.GdipIsInfiniteRegion(
+            CheckStatus(PInvokeCore.GdipIsInfiniteRegion(
                 regionHandle,
                 NativeGraphics,
                 &isInfinite));
@@ -2459,7 +2461,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         get => _printingHelper;
         set
         {
-            Debug.Assert(_printingHelper is null, "WARNING: Overwritting the printing helper reference!");
+            Debug.Assert(_printingHelper is null, "WARNING: Overwriting the printing helper reference!");
             _printingHelper = value;
         }
     }
@@ -2944,9 +2946,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     ///  WARNING: This method is for internal FX support only.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-#if NETCOREAPP
     [Obsolete("Use the Graphics.GetContextInfo overloads that accept arguments for better performance and fewer allocations.", DiagnosticId = "SYSLIB0016", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
-#endif
     [SupportedOSPlatform("windows")]
     public object GetContextInfo()
     {
@@ -3024,6 +3024,74 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
             // If we don't have a cumulative clip, we're infinite, and translation on infinite regions is a no-op.
             cumulativeClip?.Translate(-totalOffset.X, -totalOffset.Y);
         }
+    }
+
+    (HDC hdc, int saveState) IGraphicsContextInfo.GetHdc(ApplyGraphicsProperties apply, bool alwaysSaveState)
+    {
+        bool applyTransform = apply.HasFlag(ApplyGraphicsProperties.TranslateTransform);
+        bool applyClipping = apply.HasFlag(ApplyGraphicsProperties.Clipping);
+
+        int saveState = 0;
+        HDC hdc = HDC.Null;
+
+        Region? clipRegion = null;
+        PointF offset = default;
+        if (applyClipping)
+        {
+            GetContextInfo(out offset, out clipRegion);
+        }
+        else if (applyTransform)
+        {
+            GetContextInfo(out offset);
+        }
+
+        using (clipRegion)
+        {
+            applyTransform = applyTransform && !offset.IsEmpty;
+            applyClipping = clipRegion is not null;
+
+            using var graphicsRegion = applyClipping ? new RegionScope(clipRegion!, this) : default;
+            applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
+
+            hdc = (HDC)GetHdc();
+
+            if (alwaysSaveState || applyClipping || applyTransform)
+            {
+                saveState = PInvokeCore.SaveDC(hdc);
+            }
+
+            if (applyClipping)
+            {
+                // If the Graphics object was created from a native DC the actual clipping region is the intersection
+                // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
+                // Graphics.VisibleClipBounds.
+
+                GDI_REGION_TYPE type;
+
+                using RegionScope dcRegion = new(hdc);
+                if (!dcRegion.IsNull)
+                {
+                    type = PInvokeCore.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
+                    if (type == GDI_REGION_TYPE.RGN_ERROR)
+                    {
+                        throw new Win32Exception();
+                    }
+                }
+
+                type = PInvokeCore.SelectClipRgn(hdc, graphicsRegion!);
+                if (type == GDI_REGION_TYPE.RGN_ERROR)
+                {
+                    throw new Win32Exception();
+                }
+            }
+
+            if (applyTransform)
+            {
+                PInvokeCore.OffsetViewportOrgEx(hdc, (int)offset.X, (int)offset.Y, lppt: null);
+            }
+        }
+
+        return (hdc, saveState);
     }
 
     /// <summary>

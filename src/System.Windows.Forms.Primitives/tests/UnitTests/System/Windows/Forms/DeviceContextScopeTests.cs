@@ -22,7 +22,7 @@ public class DeviceContextScopeTests
 
         // Select a clipping region into the DC
         using RegionScope dcRegion = new(2, 1, 4, 7);
-        GDI_REGION_TYPE type = PInvoke.SelectClipRgn(dcScope, dcRegion);
+        GDI_REGION_TYPE type = PInvokeCore.SelectClipRgn(dcScope, dcRegion);
         Assert.Equal(GDI_REGION_TYPE.SIMPLEREGION, type);
 
         using RegionScope test = new(0, 0, 0, 0);

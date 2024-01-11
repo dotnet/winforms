@@ -87,7 +87,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         Color checkBackground,
         bool disabledColors)
     {
-        using DeviceContextHdcScope hdc = new(deviceContext);
+        using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
         Color color;
 
