@@ -24,7 +24,15 @@ public class KeysConverter : TypeConverter, IComparer
     {
         _cultureToDisplayOrder = new();
         _cultureToKeyName = new();
-        AddLocalizedKeyNames(CultureInfo.InvariantCulture);
+
+        if (CultureToKeyName.ContainsKey(CultureInfo.CurrentCulture))
+        {
+            AddLocalizedKeyNames(CultureInfo.CurrentCulture);
+        }
+        else
+        {
+            AddLocalizedKeyNames(CultureInfo.InvariantCulture);
+        }
     }
 
     private void AddLocalizedKeyNames(CultureInfo cultureInfo)
@@ -363,6 +371,21 @@ public class KeysConverter : TypeConverter, IComparer
     {
         if (_values is null)
         {
+            Keys[] list = CultureToKeyName[CultureInfo.InvariantCulture].Values.ToArray();
+            Array.Sort(list, this);
+            _values = new StandardValuesCollection(list);
+        }
+
+        return _values;
+    }
+
+    public StandardValuesCollection GetStandardValuesByCulture()
+    {
+        if (_values is null)
+        {
+            if (!CultureToKeyName.ContainsKey(CultureInfo.CurrentCulture))
+                AddLocalizedKeyNames(CultureInfo.CurrentCulture);
+
             Keys[] list = CultureToKeyName[CultureInfo.CurrentCulture].Values.ToArray();
             Array.Sort(list, this);
             _values = new StandardValuesCollection(list);
