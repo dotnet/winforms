@@ -15,7 +15,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
     private IDataObject? _lastDataObject;
     private DragDropEffects _lastEffect = DragDropEffects.None;
     private DragEventArgs? _lastDragEventArgs;
-    private readonly IntPtr _hwndTarget;
+    private readonly HWND _hwndTarget;
     private readonly IDropTarget _owner;
 
     public DropTarget(IDropTarget owner)
@@ -25,13 +25,13 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
         if (_owner is Control control && control.IsHandleCreated)
         {
-            _hwndTarget = control.Handle;
+            _hwndTarget = control.HWND;
         }
         else if (_owner is ToolStripDropTargetManager toolStripTargetManager
             && toolStripTargetManager?.Owner is ToolStrip toolStrip
             && toolStrip.IsHandleCreated)
         {
-            _hwndTarget = toolStrip.Handle;
+            _hwndTarget = toolStrip.HWND;
         }
     }
 

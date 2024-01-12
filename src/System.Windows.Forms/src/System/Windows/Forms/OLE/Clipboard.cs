@@ -4,7 +4,7 @@
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
+using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
@@ -29,7 +29,7 @@ public static class Clipboard
     ///  Places data on the system <see cref="Clipboard"/> and uses copy to specify whether the data
     ///  should remain on the <see cref="Clipboard"/> after the application exits.
     /// </summary>
-    public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
+    public static unsafe void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
     {
         if (Application.OleRequired() != ApartmentState.STA)
         {
@@ -40,11 +40,14 @@ public static class Clipboard
         ArgumentOutOfRangeException.ThrowIfNegative(retryTimes);
         ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
 
-        IComDataObject dataObject = data as IComDataObject ?? new DataObject(data);
+        using var dataObject = ComHelpers.GetComScope<Com.IDataObject>(data is IComDataObject ? data : new DataObject(data));
+
+        using var testUnknown = dataObject.Query<Com.IUnknown>();
+        using var testCallableWrapper = dataObject.Query<Com.IComCallableWrapper>();
 
         HRESULT hr;
         int retry = retryTimes;
-        while ((hr = Ole32.OleSetClipboard(dataObject)) != HRESULT.S_OK)
+        while ((hr = PInvoke.OleSetClipboard(dataObject)).Failed)
         {
             if (--retry < 0)
             {
@@ -57,7 +60,7 @@ public static class Clipboard
         if (copy)
         {
             retry = retryTimes;
-            while ((hr = PInvoke.OleFlushClipboard()) != HRESULT.S_OK)
+            while ((hr = PInvoke.OleFlushClipboard()).Failed)
             {
                 if (--retry < 0)
                 {
@@ -72,7 +75,7 @@ public static class Clipboard
     /// <summary>
     ///  Retrieves the data that is currently on the system <see cref="Clipboard"/>.
     /// </summary>
-    public static IDataObject? GetDataObject()
+    public static unsafe IDataObject? GetDataObject()
     {
         if (Application.OleRequired() != ApartmentState.STA)
         {
@@ -82,9 +85,9 @@ public static class Clipboard
         }
 
         int retryTimes = 10;
-        IComDataObject? dataObject = null;
+        ComScope<Com.IDataObject> dataObjectScope = new(null);
         HRESULT hr;
-        while ((hr = Ole32.OleGetClipboard(ref dataObject)) != HRESULT.S_OK)
+        while ((hr = PInvoke.OleGetClipboard(dataObjectScope)).Failed)
         {
             if (--retryTimes < 0)
             {
@@ -94,9 +97,25 @@ public static class Clipboard
             Thread.Sleep(millisecondsTimeout: 100);
         }
 
-        return dataObject is null
-            ? null
-            : dataObject is IDataObject ido && !Marshal.IsComObject(dataObject)
+        IComDataObject? dataObject = null;
+
+        if (dataObjectScope.SupportsInterface<Com.IComCallableWrapper>())
+        {
+            ComHelpers.TryGetObjectForIUnknown(dataObjectScope.Query<Com.IComCallableWrapper>().AsUnknown, out dataObject);
+        }
+        else
+        {
+            // COM object
+            ComHelpers.TryGetObjectForIUnknown(dataObjectScope.AsUnknown, out dataObject);
+        }
+
+        if (dataObject is null)
+        {
+            dataObjectScope.Dispose();
+            return null;
+        }
+
+        return dataObject is IDataObject ido && !Marshal.IsComObject(dataObject)
                 ? ido
                 : new DataObject(dataObject);
     }

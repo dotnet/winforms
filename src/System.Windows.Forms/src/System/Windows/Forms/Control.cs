@@ -14,9 +14,8 @@ using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
-using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
 
 namespace System.Windows.Forms;
