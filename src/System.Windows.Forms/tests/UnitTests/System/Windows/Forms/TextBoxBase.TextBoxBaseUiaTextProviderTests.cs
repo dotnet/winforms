@@ -362,7 +362,7 @@ public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
             textBoxBase.CreateControl();
             TextBoxBaseUiaTextProvider provider = new(textBoxBase);
 
-            LOGFONTW expected = LOGFONTW.FromFont(textBoxBase.Font);
+            LOGFONTW expected = textBoxBase.Font.ToLogicalFont();
             LOGFONTW actual = provider.Logfont;
             Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
             Assert.Equal(expected, actual);

@@ -38,7 +38,7 @@ internal readonly ref struct CreatePenScope
     {
         if (!HPEN.IsNull)
         {
-            PInvoke.DeleteObject(HPEN);
+            PInvokeCore.DeleteObject(HPEN);
         }
 
 #if DEBUG

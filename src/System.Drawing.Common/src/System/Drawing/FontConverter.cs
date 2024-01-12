@@ -91,7 +91,7 @@ public class FontConverter : TypeConverter
                 {
                     argCount = 6;
                 }
-                else if (font.GdiCharSet != SafeNativeMethods.DEFAULT_CHARSET)
+                else if (font.GdiCharSet != (byte)FONT_CHARSET.DEFAULT_CHARSET)
                 {
                     argCount = 5;
                 }

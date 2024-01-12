@@ -521,7 +521,7 @@ this is the third line.";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         using Font font = new("Segoe UI", 9, FontStyle.Regular);
-        providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+        providerMock.Setup(m => m.Logfont).Returns(font.ToLogicalFont());
         providerMock.Setup(m => m.WindowStyle).Returns(PInvoke.ES_LEFT);
         providerMock.Setup(m => m.IsReadOnly).Returns(false);
         UiaTextProvider provider = providerMock.Object;
@@ -608,7 +608,7 @@ this is the third line.";
         providerMock.Setup(p => p.TextLength).Returns(3);
         providerMock.Setup(p => p.PointToScreen(It.IsAny<Point>())).Returns(Point.Empty);
         using Font font = new("Arial", 9f, FontStyle.Regular);
-        providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+        providerMock.Setup(m => m.Logfont).Returns(font.ToLogicalFont());
         UiaTextProvider provider = providerMock.Object;
 
         UiaTextRange textRange = new(enclosingElement, provider, start: 3, end: 3);
@@ -701,7 +701,7 @@ and numbers 12345";
         providerMock.Setup(m => m.FirstVisibleLine).Returns(0);
         providerMock.Setup(m => m.LinesPerPage).Returns(9);
         using Font font = new("Arial", 9f, FontStyle.Regular);
-        providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+        providerMock.Setup(m => m.Logfont).Returns(font.ToLogicalFont());
 
         // Offset by enclosing element's coordinates
         providerMock.Setup(m => m.RectangleToScreen(It.IsAny<Rectangle>()))
@@ -783,7 +783,7 @@ and numbers 12345";
         providerMock.Setup(m => m.FirstVisibleLine).Returns(0);
         providerMock.Setup(m => m.LinesPerPage).Returns(9);
         using Font font = new("Arial", 9f, FontStyle.Regular);
-        providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+        providerMock.Setup(m => m.Logfont).Returns(font.ToLogicalFont());
 
         // Offset by enclosing element's coordinates
         providerMock.Setup(m => m.RectangleToScreen(It.IsAny<Rectangle>()))
@@ -1190,7 +1190,7 @@ This is the line 3";
         IRawElementProviderSimple.Interface enclosingElement = new Mock<IRawElementProviderSimple.Interface>(MockBehavior.Strict).Object;
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
         using Font font = new("Arial", fontSize, FontStyle.Regular);
-        providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+        providerMock.Setup(m => m.Logfont).Returns(font.ToLogicalFont());
         UiaTextProvider provider = providerMock.Object;
         UiaTextRange textRange = new(enclosingElement, provider, 5, 20);
 

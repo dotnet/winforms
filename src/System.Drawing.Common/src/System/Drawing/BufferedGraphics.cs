@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Drawing;
 
@@ -81,7 +80,7 @@ public sealed class BufferedGraphics : IDisposable
     }
 
     /// <summary>
-    /// Internal method that renders the specified buffer into the target.
+    ///  Internal method that renders the specified buffer into the target.
     /// </summary>
     private void RenderInternal(HandleRef refTargetDC)
     {
@@ -89,16 +88,18 @@ public sealed class BufferedGraphics : IDisposable
 
         try
         {
-            Gdi32.BitBlt(
-                refTargetDC,
+            PInvokeCore.BitBlt(
+                (HDC)refTargetDC.Handle,
                 _targetLoc.X,
                 _targetLoc.Y,
                 _virtualSize.Width,
                 _virtualSize.Height,
-                new HandleRef(Graphics, sourceDC),
+                (HDC)sourceDC,
                 0,
                 0,
-                Gdi32.RasterOp.SRCCOPY);
+                ROP_CODE.SRCCOPY);
+
+            GC.KeepAlive(refTargetDC.Wrapper);
         }
         finally
         {
@@ -107,12 +108,12 @@ public sealed class BufferedGraphics : IDisposable
     }
 
     /// <summary>
-    /// Determines if we need to dispose of the Context when this is disposed.
+    ///  Determines if we need to dispose of the Context when this is disposed.
     /// </summary>
     internal bool DisposeContext { get; set; }
 
     /// <summary>
-    /// Renders the buffer to the original graphics used to allocate the buffer.
+    ///  Renders the buffer to the original graphics used to allocate the buffer.
     /// </summary>
     public void Render()
     {
@@ -127,7 +128,7 @@ public sealed class BufferedGraphics : IDisposable
     }
 
     /// <summary>
-    /// Renders the buffer to the specified target HDC.
+    ///  Renders the buffer to the specified target HDC.
     /// </summary>
     public void Render(IntPtr targetDC) => RenderInternal(new HandleRef(null, targetDC));
 }

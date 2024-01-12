@@ -4,22 +4,21 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
-using static Interop;
 
 namespace System.Drawing;
 
 /// <summary>
-/// The BufferedGraphicsContext class can be used to perform standard double buffer rendering techniques.
+///  The BufferedGraphicsContext class can be used to perform standard double buffer rendering techniques.
 /// </summary>
-public sealed class BufferedGraphicsContext : IDisposable
+public unsafe sealed class BufferedGraphicsContext : IDisposable
 {
     private Size _maximumBuffer;
     private Size _bufferSize = Size.Empty;
     private Size _virtualSize;
     private Point _targetLoc;
-    private IntPtr _compatDC;
-    private IntPtr _dib;
-    private IntPtr _oldBitmap;
+    private HDC _compatDC;
+    private HBITMAP _dib;
+    private HBITMAP _oldBitmap;
     private Graphics? _compatGraphics;
     private BufferedGraphics? _buffer;
     private int _busy;
@@ -34,7 +33,7 @@ public sealed class BufferedGraphicsContext : IDisposable
     /// </summary>
     public BufferedGraphicsContext()
     {
-        // By defualt, the size of our maxbuffer will be 3 x standard button size.
+        // By default, the size of our max buffer will be 3 x standard button size.
         _maximumBuffer.Width = 75 * 3;
         _maximumBuffer.Height = 32 * 3;
     }
@@ -75,10 +74,10 @@ public sealed class BufferedGraphicsContext : IDisposable
     {
         if (ShouldUseTempManager(targetRectangle))
         {
-            return AllocBufferInTempManager(targetGraphics, IntPtr.Zero, targetRectangle);
+            return AllocBufferInTempManager(targetGraphics, HDC.Null, targetRectangle);
         }
 
-        return AllocBuffer(targetGraphics, IntPtr.Zero, targetRectangle);
+        return AllocBuffer(targetGraphics, HDC.Null, targetRectangle);
     }
 
     /// <summary>
@@ -88,23 +87,22 @@ public sealed class BufferedGraphicsContext : IDisposable
     {
         if (ShouldUseTempManager(targetRectangle))
         {
-            return AllocBufferInTempManager(null, targetDC, targetRectangle);
+            return AllocBufferInTempManager(null, (HDC)targetDC, targetRectangle);
         }
 
-        return AllocBuffer(null, targetDC, targetRectangle);
+        return AllocBuffer(null, (HDC)targetDC, targetRectangle);
     }
 
     /// <summary>
     /// Returns a BufferedGraphics that is matched for the specified target HDC object.
     /// </summary>
-    private BufferedGraphics AllocBuffer(Graphics? targetGraphics, IntPtr targetDC, Rectangle targetRectangle)
+    private BufferedGraphics AllocBuffer(Graphics? targetGraphics, HDC targetDC, Rectangle targetRectangle)
     {
         int oldBusy = Interlocked.CompareExchange(ref _busy, BufferBusyPainting, BufferFree);
 
         // In the case were we have contention on the buffer - i.e. two threads
         // trying to use the buffer at the same time, we just create a temp
-        // buffermanager and have the buffer dispose of it when it is done.
-        //
+        // buffer manager and have the buffer dispose of it when it is done.
         if (oldBusy != BufferFree)
         {
             return AllocBufferInTempManager(targetGraphics, targetDC, targetRectangle);
@@ -120,7 +118,7 @@ public sealed class BufferedGraphicsContext : IDisposable
                 IntPtr destDc = targetGraphics.GetHdc();
                 try
                 {
-                    surface = CreateBuffer(destDc, targetRectangle.Width, targetRectangle.Height);
+                    surface = CreateBuffer((HDC)destDc, targetRectangle.Width, targetRectangle.Height);
                 }
                 finally
                 {
@@ -147,7 +145,7 @@ public sealed class BufferedGraphicsContext : IDisposable
     /// <summary>
     /// Returns a BufferedGraphics that is matched for the specified target HDC object.
     /// </summary>
-    private static BufferedGraphics AllocBufferInTempManager(Graphics? targetGraphics, IntPtr targetDC, Rectangle targetRectangle)
+    private static BufferedGraphics AllocBufferInTempManager(Graphics? targetGraphics, HDC targetDC, Rectangle targetRectangle)
     {
         BufferedGraphicsContext? tempContext = null;
         BufferedGraphics? tempBuffer = null;
@@ -188,140 +186,126 @@ public sealed class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Fills in the fields of a BITMAPINFO so that we can create a bitmap
-    /// that matches the format of the display.
-    ///
-    /// This is done by creating a compatible bitmap and calling GetDIBits
-    /// to return the color masks. This is done with two calls. The first
-    /// call passes in biBitCount = 0 to GetDIBits which will fill in the
-    /// base BITMAPINFOHEADER data. The second call to GetDIBits (passing
-    /// in the BITMAPINFO filled in by the first call) will return the color
-    /// table or bitmasks, as appropriate.
+    ///  Fills in the fields of a BITMAPINFO so that we can create a bitmap
+    ///  that matches the format of the display.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is done by creating a compatible bitmap and calling GetDIBits
+    ///   to return the color masks. This is done with two calls. The first
+    ///   call passes in biBitCount = 0 to GetDIBits which will fill in the
+    ///   base BITMAPINFOHEADER data. The second call to GetDIBits (passing
+    ///   in the BITMAPINFO filled in by the first call) will return the color
+    ///   table or bitmasks, as appropriate.
+    ///  </para>
+    /// </remarks>
     /// <returns>True if successful, false otherwise.</returns>
-    private unsafe bool FillBitmapInfo(IntPtr hdc, IntPtr hpal, ref Gdi32.BITMAPINFO_FLAT pbmi)
+    private bool FillBitmapInfo(HDC hdc, HPALETTE hpalette, BITMAPINFO* bitmapInfo)
     {
-        IntPtr hbm = IntPtr.Zero;
-        bool bRet = false;
-        try
+        // Create a dummy bitmap from which we can query color format info about the device surface.
+        using CreateBitmapScope hbm = new(hdc, 1, 1);
+
+        if (hbm.IsNull)
         {
-            // Create a dummy bitmap from which we can query color format info
-            // about the device surface.
-            hbm = Gdi32.CreateCompatibleBitmap(new HandleRef(null, hdc), 1, 1);
-
-            if (hbm == IntPtr.Zero)
-            {
-                throw new OutOfMemoryException(SR.GraphicsBufferQueryFail);
-            }
-
-            pbmi.bmiHeader_biSize = sizeof(NativeMethods.BITMAPINFOHEADER);
-
-            // Call first time to fill in BITMAPINFO header.
-            Gdi32.GetDIBits(
-                new HandleRef(null, hdc),
-                new HandleRef(null, hbm),
-                0,
-                0,
-                IntPtr.Zero,
-                ref pbmi,
-                NativeMethods.DIB_RGB_COLORS);
-
-            if (pbmi.bmiHeader_biBitCount <= 8)
-            {
-                bRet = FillColorTable(hdc, hpal, ref pbmi);
-            }
-            else
-            {
-                if (pbmi.bmiHeader_biCompression == NativeMethods.BI_BITFIELDS)
-                {
-                    // Call a second time to get the color masks.
-                    Gdi32.GetDIBits(
-                        new HandleRef(null, hdc),
-                        new HandleRef(null, hbm),
-                        0,
-                        pbmi.bmiHeader_biHeight,
-                        IntPtr.Zero,
-                        ref pbmi,
-                        NativeMethods.DIB_RGB_COLORS);
-                }
-
-                bRet = true;
-            }
+            throw new OutOfMemoryException(SR.GraphicsBufferQueryFail);
         }
-        finally
+
+        bitmapInfo->bmiHeader.biSize = (uint)sizeof(BITMAPINFOHEADER);
+
+        // Call first time to fill in BITMAPINFO header.
+        PInvoke.GetDIBits(
+            hdc,
+            hbm,
+            0,
+            0,
+            null,
+            bitmapInfo,
+            DIB_USAGE.DIB_RGB_COLORS);
+
+        if (bitmapInfo->bmiHeader.biBitCount <= 8)
         {
-            if (hbm != IntPtr.Zero)
+            return FillColorTable(hdc, hpalette, bitmapInfo);
+        }
+        else
+        {
+            if (bitmapInfo->bmiHeader.biCompression == (uint)BI_COMPRESSION.BI_BITFIELDS)
             {
-                Gdi32.DeleteObject(hbm);
+                // Call a second time to get the color masks.
+                PInvoke.GetDIBits(
+                    hdc,
+                    hbm,
+                    0,
+                    (uint)bitmapInfo->bmiHeader.biHeight,
+                    null,
+                    bitmapInfo,
+                    DIB_USAGE.DIB_RGB_COLORS);
             }
         }
 
-        return bRet;
+        return true;
     }
 
     /// <summary>
-    /// Initialize the color table of the BITMAPINFO pointed to by pbmi. Colors
-    /// are set to the current system palette.
-    ///
-    /// Note: call only valid for displays of 8bpp or less.
+    ///  Initialize the color table of the <see cref="BITMAPINFO"/>. Colors
+    ///  are set to the current system palette.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Note: call only valid for displays of 8bpp or less.
+    ///  </para>
+    /// </remarks>
     /// <returns>True is successful, false otherwise.</returns>
-    private unsafe bool FillColorTable(IntPtr hdc, IntPtr hpal, ref Gdi32.BITMAPINFO_FLAT pbmi)
+    private bool FillColorTable(HDC hdc, HPALETTE hpalette, BITMAPINFO* bitmapInfo)
     {
-        byte[] aj = new byte[sizeof(NativeMethods.PALETTEENTRY) * 256];
-
-        fixed (byte* pcolors = pbmi.bmiColors)
+        int colorCount = 1 << bitmapInfo->bmiHeader.biBitCount;
+        if (colorCount > 256)
         {
-            fixed (byte* ppal = aj)
-            {
-                NativeMethods.RGBQUAD* prgb = (NativeMethods.RGBQUAD*)pcolors;
-                NativeMethods.PALETTEENTRY* lppe = (NativeMethods.PALETTEENTRY*)ppal;
-
-                int cColors = 1 << pbmi.bmiHeader_biBitCount;
-                if (cColors <= 256)
-                {
-                    // Note: we don't support 4bpp displays.
-                    uint palRet;
-                    IntPtr palHalftone = IntPtr.Zero;
-                    if (hpal == IntPtr.Zero)
-                    {
-                        palHalftone = Graphics.GetHalftonePalette();
-                        palRet = Gdi32.GetPaletteEntries(new HandleRef(null, palHalftone), 0, cColors, aj);
-                    }
-                    else
-                    {
-                        palRet = Gdi32.GetPaletteEntries(new HandleRef(null, hpal), 0, cColors, aj);
-                    }
-
-                    if (palRet != 0)
-                    {
-                        for (int i = 0; i < cColors; i++)
-                        {
-                            prgb[i].rgbRed = lppe[i].peRed;
-                            prgb[i].rgbGreen = lppe[i].peGreen;
-                            prgb[i].rgbBlue = lppe[i].peBlue;
-                            prgb[i].rgbReserved = 0;
-                        }
-
-                        return true;
-                    }
-                }
-            }
+            return false;
         }
 
-        return false;
+        PALETTEENTRY* paletteEntries = stackalloc PALETTEENTRY[colorCount];
+        Span<RGBQUAD> rgbQuads = new((RGBQUAD*)&bitmapInfo->bmiColors, colorCount);
+
+        // Note: we don't support 4bpp displays.
+        uint entries;
+
+        if (hpalette.IsNull)
+        {
+            HPALETTE halftonePalette = (HPALETTE)Graphics.GetHalftonePalette();
+            entries = PInvokeCore.GetPaletteEntries(halftonePalette, 0, (uint)colorCount, paletteEntries);
+        }
+        else
+        {
+            entries = PInvokeCore.GetPaletteEntries(hpalette, 0, (uint)colorCount, paletteEntries);
+        }
+
+        if (entries == 0)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < colorCount; i++)
+        {
+            // Unfortunately, the structs' fields are not in the same order.
+            rgbQuads[i].rgbRed = paletteEntries[i].peRed;
+            rgbQuads[i].rgbGreen = paletteEntries[i].peGreen;
+            rgbQuads[i].rgbBlue = paletteEntries[i].peBlue;
+            rgbQuads[i].rgbReserved = 0;
+        }
+
+        return true;
     }
 
     /// <summary>
-    /// Returns a Graphics object representing a buffer.
+    ///  Returns a Graphics object representing a buffer.
     /// </summary>
-    private Graphics CreateBuffer(IntPtr src, int width, int height)
+    private Graphics CreateBuffer(HDC src, int width, int height)
     {
         // Create the compat DC.
         _busy = BufferBusyDisposing;
         DisposeDC();
         _busy = BufferBusyPainting;
-        _compatDC = Gdi32.CreateCompatibleDC(src);
+        _compatDC = PInvokeCore.CreateCompatibleDC(src);
 
         // Recreate the bitmap if necessary.
         if (width > _bufferSize.Width || height > _bufferSize.Height)
@@ -333,19 +317,19 @@ public sealed class BufferedGraphicsContext : IDisposable
             DisposeBitmap();
             _busy = BufferBusyPainting;
 
-            IntPtr pvbits = IntPtr.Zero;
-            _dib = CreateCompatibleDIB(src, IntPtr.Zero, optWidth, optHeight, ref pvbits);
+            _dib = CreateCompatibleDIB(src, HPALETTE.Null, optWidth, optHeight);
             _bufferSize = new Size(optWidth, optHeight);
         }
 
         // Select the bitmap.
-        _oldBitmap = Kernel32.SelectObject(new HandleRef(this, _compatDC), new HandleRef(this, _dib));
+        _oldBitmap = (HBITMAP)PInvokeCore.SelectObject(_compatDC, _dib);
 
         // Create compat graphics.
         _compatGraphics = Graphics.FromHdcInternal(_compatDC);
         _compatGraphics.TranslateTransform(-_targetLoc.X, -_targetLoc.Y);
         _virtualSize = new Size(width, height);
 
+        GC.KeepAlive(this);
         return _compatGraphics;
     }
 
@@ -363,105 +347,107 @@ public sealed class BufferedGraphicsContext : IDisposable
     ///       the identity palette mapping between the DIB and the display.
     /// </summary>
     /// <returns>A valid bitmap handle if successful, IntPtr.Zero otherwise.</returns>
-    private IntPtr CreateCompatibleDIB(IntPtr hdc, IntPtr hpal, int ulWidth, int ulHeight, ref IntPtr ppvBits)
+    private HBITMAP CreateCompatibleDIB(HDC hdc, HPALETTE hpalette, int ulWidth, int ulHeight)
     {
-        if (hdc == IntPtr.Zero)
+        if (hdc.IsNull)
         {
             throw new ArgumentNullException(nameof(hdc));
         }
 
-        IntPtr hbmRet = IntPtr.Zero;
-        Gdi32.BITMAPINFO_FLAT pbmi = default;
+        HBITMAP hbitmap = HBITMAP.Null;
+
+        // Reserve enough space for all RGBQUADS
+        byte* buffer = stackalloc byte[sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD)];
+        BITMAPINFO* bitmapInfo = (BITMAPINFO*)buffer;
 
         // Validate hdc.
-        Gdi32.ObjectType objType = Gdi32.GetObjectType(hdc);
+        OBJ_TYPE objType = (OBJ_TYPE)PInvokeCore.GetObjectType(hdc);
         switch (objType)
         {
-            case Gdi32.ObjectType.OBJ_DC:
-            case Gdi32.ObjectType.OBJ_METADC:
-            case Gdi32.ObjectType.OBJ_MEMDC:
-            case Gdi32.ObjectType.OBJ_ENHMETADC:
+            case OBJ_TYPE.OBJ_DC:
+            case OBJ_TYPE.OBJ_METADC:
+            case OBJ_TYPE.OBJ_MEMDC:
+            case OBJ_TYPE.OBJ_ENHMETADC:
                 break;
             default:
                 throw new ArgumentException(SR.DCTypeInvalid);
         }
 
-        if (FillBitmapInfo(hdc, hpal, ref pbmi))
+        if (FillBitmapInfo(hdc, hpalette, bitmapInfo))
         {
             // Change bitmap size to match specified dimensions.
-            pbmi.bmiHeader_biWidth = ulWidth;
-            pbmi.bmiHeader_biHeight = ulHeight;
-            if (pbmi.bmiHeader_biCompression == NativeMethods.BI_RGB)
+            bitmapInfo->bmiHeader.biWidth = ulWidth;
+            bitmapInfo->bmiHeader.biHeight = ulHeight;
+            if (bitmapInfo->bmiHeader.biCompression == (uint)BI_COMPRESSION.BI_RGB)
             {
-                pbmi.bmiHeader_biSizeImage = 0;
+                bitmapInfo->bmiHeader.biSizeImage = 0;
             }
             else
             {
-                if (pbmi.bmiHeader_biBitCount == 16)
+                if (bitmapInfo->bmiHeader.biBitCount == 16)
                 {
-                    pbmi.bmiHeader_biSizeImage = ulWidth * ulHeight * 2;
+                    bitmapInfo->bmiHeader.biSizeImage = (uint)(ulWidth * ulHeight * 2);
                 }
-                else if (pbmi.bmiHeader_biBitCount == 32)
+                else if (bitmapInfo->bmiHeader.biBitCount == 32)
                 {
-                    pbmi.bmiHeader_biSizeImage = ulWidth * ulHeight * 4;
+                    bitmapInfo->bmiHeader.biSizeImage = (uint)(ulWidth * ulHeight * 4);
                 }
                 else
                 {
-                    pbmi.bmiHeader_biSizeImage = 0;
+                    bitmapInfo->bmiHeader.biSizeImage = 0;
                 }
             }
 
-            pbmi.bmiHeader_biClrUsed = 0;
-            pbmi.bmiHeader_biClrImportant = 0;
+            bitmapInfo->bmiHeader.biClrUsed = 0;
+            bitmapInfo->bmiHeader.biClrImportant = 0;
 
-            // Create the DIB section. Let Win32 allocate the memory and return
-            // a pointer to the bitmap surface.
-            hbmRet = Gdi32.CreateDIBSection(new HandleRef(null, hdc), ref pbmi, NativeMethods.DIB_RGB_COLORS, ref ppvBits, IntPtr.Zero, 0);
-            Win32Exception? ex = null;
-            if (hbmRet == IntPtr.Zero)
-            {
-                ex = new Win32Exception(Marshal.GetLastWin32Error());
-            }
+            // Create the DIB section. Let Win32 allocate the memory and return a pointer to the bitmap surface.
 
-            if (ex is not null)
+            void* pvBits = null;
+            hbitmap = PInvokeCore.CreateDIBSection(hdc, bitmapInfo, DIB_USAGE.DIB_RGB_COLORS, &pvBits, HANDLE.Null, 0);
+            if (hbitmap.IsNull)
             {
-                throw ex;
+                throw new Win32Exception(Marshal.GetLastWin32Error());
             }
         }
 
-        return hbmRet;
+        return hbitmap;
     }
 
     /// <summary>
-    /// Disposes the DC, but leaves the bitmap alone.
+    ///  Disposes the DC, but leaves the bitmap alone.
     /// </summary>
     private void DisposeDC()
     {
-        if (_oldBitmap != IntPtr.Zero && _compatDC != IntPtr.Zero)
+        if (!_oldBitmap.IsNull && !_compatDC.IsNull)
         {
-            Kernel32.SelectObject(new HandleRef(this, _compatDC), new HandleRef(this, _oldBitmap));
-            _oldBitmap = IntPtr.Zero;
+            PInvokeCore.SelectObject(_compatDC, _oldBitmap);
+            _oldBitmap = HBITMAP.Null;
         }
 
-        if (_compatDC != IntPtr.Zero)
+        if (!_compatDC.IsNull)
         {
-            Gdi32.DeleteDC(new HandleRef(this, _compatDC));
-            _compatDC = IntPtr.Zero;
+            PInvokeCore.DeleteDC(_compatDC);
+            _compatDC = HDC.Null;
         }
+
+        GC.KeepAlive(this);
     }
 
     /// <summary>
-    /// Disposes the bitmap, will ASSERT if bitmap is being used (checks oldbitmap). if ASSERTed, call DisposeDC() first.
+    ///  Disposes the bitmap, will ASSERT if bitmap is being used (checks oldbitmap). if ASSERTed, call DisposeDC() first.
     /// </summary>
     private void DisposeBitmap()
     {
-        if (_dib != IntPtr.Zero)
+        if (!_dib.IsNull)
         {
-            Debug.Assert(_oldBitmap == IntPtr.Zero);
+            Debug.Assert(_oldBitmap.IsNull);
 
-            Gdi32.DeleteObject(new HandleRef(this, _dib));
-            _dib = IntPtr.Zero;
+            PInvokeCore.DeleteObject(_dib);
+            _dib = HBITMAP.Null;
         }
+
+        GC.KeepAlive(this);
     }
 
     /// <summary>

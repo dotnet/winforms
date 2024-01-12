@@ -3638,7 +3638,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return (FONTDESC)cachedFDesc;
         }
 
-        LOGFONTW logfont = LOGFONTW.FromFont(font);
+        LOGFONTW logfont = font.ToLogicalFont();
         FONTDESC fdesc = new()
         {
             cbSizeofstruct = (uint)sizeof(FONTDESC),

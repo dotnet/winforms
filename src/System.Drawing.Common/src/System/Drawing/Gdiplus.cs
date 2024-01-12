@@ -87,32 +87,6 @@ internal static partial class SafeNativeMethods
         internal static Exception StatusException(Status status) => status.GetException();
     }
 
-    public const int
-    DM_IN_BUFFER = 8,
-    DM_OUT_BUFFER = 2,
-    PD_ALLPAGES = 0x00000000,
-    PD_SELECTION = 0x00000001,
-    PD_PAGENUMS = 0x00000002,
-    PD_CURRENTPAGE = 0x00400000,
-    PD_RETURNDEFAULT = 0x00000400,
-    DI_NORMAL = 0x0003,
-    IMAGE_ICON = 1,
-    IDI_APPLICATION = 32512,
-    IDI_HAND = 32513,
-    IDI_QUESTION = 32514,
-    IDI_EXCLAMATION = 32515,
-    IDI_ASTERISK = 32516,
-    IDI_WINLOGO = 32517,
-    IDI_WARNING = 32515,
-    IDI_ERROR = 32513,
-    IDI_INFORMATION = 32516,
-    DEFAULT_CHARSET = 1;
-
-    public const int ERROR_ACCESS_DENIED = 5;
-    public const int ERROR_INVALID_PARAMETER = 87;
-    public const int ERROR_PROC_NOT_FOUND = 127;
-    public const int ERROR_CANCELLED = 1223;
-
     [StructLayout(LayoutKind.Sequential)]
     public struct ENHMETAHEADER
     {

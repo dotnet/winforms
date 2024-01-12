@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-using static Interop;
 
 namespace System.Drawing;
 
@@ -90,7 +88,8 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, IPointer<Gp
             throw new ArgumentNullException(nameof(regionHandle));
         }
 
-        Gdi32.DeleteObject(new HandleRef(this, regionHandle));
+        PInvokeCore.DeleteObject((HRGN)regionHandle);
+        GC.KeepAlive(this);
     }
 
     public void Dispose()

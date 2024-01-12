@@ -59,7 +59,7 @@ internal class WindowClass
 
         if (icon.IsNull)
         {
-            icon = PInvoke.LoadIcon((HINSTANCE)0, (PCWSTR)(char*)PInvoke.IDI_APPLICATION);
+            icon = PInvokeCore.LoadIcon((HINSTANCE)0, (PCWSTR)(char*)PInvokeCore.IDI_APPLICATION);
         }
         else if (icon == (-1))
         {
