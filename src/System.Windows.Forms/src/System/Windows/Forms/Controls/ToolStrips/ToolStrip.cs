@@ -2792,7 +2792,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
 
         // Now BLT the result to the destination bitmap.
-        PInvoke.BitBlt(
+        PInvokeCore.BitBlt(
             hDC,
             bounds.X,
             bounds.Y,
@@ -3743,7 +3743,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
                             // PERF - consider - we only actually need to copy the clipping rect.
                             // copy the background from the toolstrip onto the offscreen bitmap
-                            PInvoke.BitBlt(
+                            PInvokeCore.BitBlt(
                                 ItemHdcInfo,
                                 0,
                                 0,
@@ -3761,7 +3761,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                             }
 
                             // copy the item back onto the toolstrip
-                            PInvoke.BitBlt(
+                            PInvokeCore.BitBlt(
                                 toolStripHDC,
                                 item.Bounds.X,
                                 item.Bounds.Y,

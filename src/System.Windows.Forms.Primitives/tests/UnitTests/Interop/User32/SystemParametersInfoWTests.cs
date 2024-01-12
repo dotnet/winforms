@@ -12,7 +12,7 @@ public class SystemParametersInfoWTests
     {
         NONCLIENTMETRICSW data = default;
 
-        bool result = PInvoke.SystemParametersInfo(ref data);
+        bool result = PInvokeCore.SystemParametersInfo(ref data);
         Assert.True(result);
 
         Font captionFont = Font.FromLogFont(data.lfCaptionFont);

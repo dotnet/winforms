@@ -44,7 +44,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -72,7 +72,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -115,7 +115,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -150,12 +150,12 @@ public partial class ControlPaintTests
             }
             finally
             {
-                PInvoke.DeleteObject(hBitmap);
+                PInvokeCore.DeleteObject(hBitmap);
             }
         }
         finally
         {
-            PInvoke.DeleteObject(monochromeMask);
+            PInvokeCore.DeleteObject(monochromeMask);
         }
     }
 
@@ -183,7 +183,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -223,7 +223,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 
@@ -251,7 +251,7 @@ public partial class ControlPaintTests
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hBitmap);
         }
     }
 

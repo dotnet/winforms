@@ -11,10 +11,10 @@ public class GetStockObjectTests
     [InlineData((int)GET_STOCK_OBJECT_FLAGS.WHITE_BRUSH, 0x00FFFFFF, (uint)BRUSH_STYLE.BS_SOLID)]
     public void GetStockBrushes(int id, uint color, uint brushStyle)
     {
-        HGDIOBJ hgdiobj = PInvoke.GetStockObject((GET_STOCK_OBJECT_FLAGS)id);
+        HGDIOBJ hgdiobj = PInvokeCore.GetStockObject((GET_STOCK_OBJECT_FLAGS)id);
         Assert.False(hgdiobj.IsNull);
 
-        PInvoke.GetObject(hgdiobj, out LOGBRUSH logBrush);
+        PInvokeCore.GetObject(hgdiobj, out LOGBRUSH logBrush);
         Assert.Equal(color, logBrush.lbColor);
         Assert.Equal((BRUSH_STYLE)brushStyle, logBrush.lbStyle);
     }

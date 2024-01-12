@@ -35,7 +35,7 @@ public partial class Control
         {
             if (!_handle.IsNull)
             {
-                PInvoke.DeleteObject(_handle);
+                PInvokeCore.DeleteObject(_handle);
                 _handle = default;
             }
         }

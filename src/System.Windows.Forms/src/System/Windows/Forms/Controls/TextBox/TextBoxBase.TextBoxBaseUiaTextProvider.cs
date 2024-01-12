@@ -262,7 +262,7 @@ public abstract partial class TextBoxBase
 
         public override LOGFONTW Logfont
             => Owner is not null && Owner.IsHandleCreated
-                ? LOGFONTW.FromFont(Owner.Font)
+                ? Owner.Font.ToLogicalFont()
                 : default;
 
         public override string Text

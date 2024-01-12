@@ -389,7 +389,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-            LOGFONTW expected = LOGFONTW.FromFont(comboBox.Font);
+            LOGFONTW expected = comboBox.Font.ToLogicalFont();
             LOGFONTW actual = provider.Logfont;
             Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
             Assert.Equal(expected, actual);

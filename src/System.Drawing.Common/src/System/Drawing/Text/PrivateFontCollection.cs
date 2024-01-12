@@ -4,17 +4,16 @@
 using System.Runtime.InteropServices;
 using System.IO;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-using static Interop;
 
 namespace System.Drawing.Text;
 
 /// <summary>
-/// Encapsulates a collection of <see cref='System.Drawing.Font'/> objects.
+///  Encapsulates a collection of <see cref='Font'/> objects.
 /// </summary>
 public sealed class PrivateFontCollection : FontCollection
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref='System.Drawing.Text.PrivateFontCollection'/> class.
+    ///  Initializes a new instance of the <see cref='PrivateFontCollection'/> class.
     /// </summary>
     public PrivateFontCollection() : base()
     {
@@ -23,7 +22,7 @@ public sealed class PrivateFontCollection : FontCollection
     }
 
     /// <summary>
-    /// Cleans up Windows resources for this <see cref='System.Drawing.Text.PrivateFontCollection'/>.
+    ///  Cleans up Windows resources for this <see cref='PrivateFontCollection'/>.
     /// </summary>
     protected override void Dispose(bool disposing)
     {
@@ -52,7 +51,7 @@ public sealed class PrivateFontCollection : FontCollection
     }
 
     /// <summary>
-    /// Adds a font from the specified file to this <see cref='System.Drawing.Text.PrivateFontCollection'/>.
+    ///  Adds a font from the specified file to this <see cref='PrivateFontCollection'/>.
     /// </summary>
     public void AddFontFile(string filename)
     {
@@ -86,7 +85,7 @@ public sealed class PrivateFontCollection : FontCollection
     }
 
     /// <summary>
-    /// Adds a font contained in system memory to this <see cref='System.Drawing.Text.PrivateFontCollection'/>.
+    ///  Adds a font contained in system memory to this <see cref='PrivateFontCollection'/>.
     /// </summary>
     public void AddMemoryFont(IntPtr memory, int length)
     {
@@ -95,6 +94,6 @@ public sealed class PrivateFontCollection : FontCollection
 
     private static void GdiAddFontFile(string filename)
     {
-        Gdi32.AddFontFile(filename);
+        PInvoke.AddFontResourceEx(filename, FONT_RESOURCE_CHARACTERISTICS.FR_PRIVATE);
     }
 }

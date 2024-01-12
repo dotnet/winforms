@@ -90,7 +90,7 @@ public partial class ComboBox
 
         public override LOGFONTW Logfont
             => _owningComboBox.IsHandleCreated
-                ? LOGFONTW.FromFont(_owningComboBox.Font)
+                ? _owningComboBox.Font.ToLogicalFont()
                 : default;
 
         public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
