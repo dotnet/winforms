@@ -34,8 +34,8 @@ public class LOGFONTWTests
     public unsafe void CreateFontIndirect()
     {
         LOGFONTW logFont = default;
-        HFONT handle = PInvoke.CreateFontIndirect(&logFont);
+        HFONT handle = PInvokeCore.CreateFontIndirect(&logFont);
         Assert.False(handle.IsNull);
-        Assert.True(PInvoke.DeleteObject(handle));
+        Assert.True(PInvokeCore.DeleteObject(handle));
     }
 }

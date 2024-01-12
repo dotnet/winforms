@@ -44,7 +44,7 @@ internal readonly ref struct CreateBrushScope
         if (!HBRUSH.IsNull)
         {
             // Note that this is a no-op if the original brush was a system brush
-            PInvoke.DeleteObject(HBRUSH);
+            PInvokeCore.DeleteObject(HBRUSH);
         }
 
 #if DEBUG

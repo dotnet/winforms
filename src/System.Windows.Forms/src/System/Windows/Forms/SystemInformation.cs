@@ -34,7 +34,7 @@ public static class SystemInformation
     ///  Gets a value indicating whether the user has enabled full window drag.
     /// </summary>
     public static bool DragFullWindows
-        => PInvoke.SystemParametersInfoBool(SPI_GETDRAGFULLWINDOWS);
+        => PInvokeCore.SystemParametersInfoBool(SPI_GETDRAGFULLWINDOWS);
 
     /// <summary>
     ///  Gets a value indicating whether the user has selected to run in high contrast.
@@ -48,7 +48,7 @@ public static class SystemInformation
             {
                 HIGHCONTRASTW data = default;
 
-                s_highContrast = PInvoke.SystemParametersInfo(ref data)
+                s_highContrast = PInvokeCore.SystemParametersInfo(ref data)
                     && data.dwFlags.HasFlag(HIGHCONTRASTW_FLAGS.HCF_HIGHCONTRASTON);
 
                 s_systemEventsDirty = false;
@@ -62,7 +62,7 @@ public static class SystemInformation
     ///  Gets the number of lines to scroll when the mouse wheel is rotated.
     /// </summary>
     public static int MouseWheelScrollLines
-        => PInvoke.SystemParametersInfoInt(SPI_GETWHEELSCROLLLINES);
+        => PInvokeCore.SystemParametersInfoInt(SPI_GETWHEELSCROLLLINES);
 
     /// <summary>
     ///  Gets the dimensions of the primary display monitor in pixels.
@@ -159,8 +159,8 @@ public static class SystemInformation
         NONCLIENTMETRICSW data = default;
 
         bool result = useDpi
-            ? PInvoke.TrySystemParametersInfoForDpi(ref data, dpi)
-            : PInvoke.SystemParametersInfo(ref data);
+            ? PInvokeCore.TrySystemParametersInfoForDpi(ref data, dpi)
+            : PInvokeCore.SystemParametersInfo(ref data);
 
         if (result)
         {
@@ -196,7 +196,7 @@ public static class SystemInformation
         get
         {
             RECT workingArea = default;
-            PInvoke.SystemParametersInfo(SPI_GETWORKAREA, ref workingArea);
+            PInvokeCore.SystemParametersInfo(SPI_GETWORKAREA, ref workingArea);
             return workingArea;
         }
     }
@@ -553,168 +553,168 @@ public static class SystemInformation
     /// <summary>
     ///  Gets whether the drop shadow effect in enabled.
     /// </summary>
-    public static bool IsDropShadowEnabled => PInvoke.SystemParametersInfoBool(SPI_GETDROPSHADOW);
+    public static bool IsDropShadowEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETDROPSHADOW);
 
     /// <summary>
     ///  Gets whether the native user menus have a flat menu appearance.
     /// </summary>
-    public static bool IsFlatMenuEnabled => PInvoke.SystemParametersInfoBool(SPI_GETFLATMENU);
+    public static bool IsFlatMenuEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETFLATMENU);
 
     /// <summary>
     ///  Gets whether font smoothing is enabled.
     /// </summary>
-    public static bool IsFontSmoothingEnabled => PInvoke.SystemParametersInfoBool(SPI_GETFONTSMOOTHING);
+    public static bool IsFontSmoothingEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETFONTSMOOTHING);
 
     /// <summary>
     ///  Returns the ClearType smoothing contrast value.
     /// </summary>
-    public static int FontSmoothingContrast => PInvoke.SystemParametersInfoInt(SPI_GETFONTSMOOTHINGCONTRAST);
+    public static int FontSmoothingContrast => PInvokeCore.SystemParametersInfoInt(SPI_GETFONTSMOOTHINGCONTRAST);
 
     /// <summary>
     ///  Returns a type of Font smoothing.
     /// </summary>
-    public static int FontSmoothingType => PInvoke.SystemParametersInfoInt(SPI_GETFONTSMOOTHINGTYPE);
+    public static int FontSmoothingType => PInvokeCore.SystemParametersInfoInt(SPI_GETFONTSMOOTHINGTYPE);
 
     /// <summary>
     ///  Retrieves the width in pixels of an icon cell.
     /// </summary>
-    public static int IconHorizontalSpacing => PInvoke.SystemParametersInfoInt(SPI_ICONHORIZONTALSPACING);
+    public static int IconHorizontalSpacing => PInvokeCore.SystemParametersInfoInt(SPI_ICONHORIZONTALSPACING);
 
     /// <summary>
     ///  Retrieves the height in pixels of an icon cell.
     /// </summary>
-    public static int IconVerticalSpacing => PInvoke.SystemParametersInfoInt(SPI_ICONVERTICALSPACING);
+    public static int IconVerticalSpacing => PInvokeCore.SystemParametersInfoInt(SPI_ICONVERTICALSPACING);
 
     /// <summary>
     ///  Gets whether icon title wrapping is enabled.
     /// </summary>
-    public static bool IsIconTitleWrappingEnabled => PInvoke.SystemParametersInfoBool(SPI_GETICONTITLEWRAP);
+    public static bool IsIconTitleWrappingEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETICONTITLEWRAP);
 
     /// <summary>
     ///  Gets whether menu access keys are underlined.
     /// </summary>
-    public static bool MenuAccessKeysUnderlined => PInvoke.SystemParametersInfoBool(SPI_GETKEYBOARDCUES);
+    public static bool MenuAccessKeysUnderlined => PInvokeCore.SystemParametersInfoBool(SPI_GETKEYBOARDCUES);
 
     /// <summary>
     ///  Retrieves the Keyboard repeat delay setting, which is a value in the range
     ///  from 0 through 3. The actual delay associated with each value may vary
     ///  depending on the hardware.
     /// </summary>
-    public static int KeyboardDelay => PInvoke.SystemParametersInfoInt(SPI_GETKEYBOARDDELAY);
+    public static int KeyboardDelay => PInvokeCore.SystemParametersInfoInt(SPI_GETKEYBOARDDELAY);
 
     /// <summary>
     ///  Gets whether the user relies on keyboard instead of mouse and wants
     ///  applications to display keyboard interfaces that would be otherwise hidden.
     /// </summary>
-    public static bool IsKeyboardPreferred => PInvoke.SystemParametersInfoBool(SPI_GETKEYBOARDPREF);
+    public static bool IsKeyboardPreferred => PInvokeCore.SystemParametersInfoBool(SPI_GETKEYBOARDPREF);
 
     /// <summary>
     ///  Retrieves the Keyboard repeat speed setting, which is a value in the range
     ///  from 0 through 31. The actual rate may vary depending on the hardware.
     /// </summary>
-    public static int KeyboardSpeed => PInvoke.SystemParametersInfoInt(SPI_GETKEYBOARDSPEED);
+    public static int KeyboardSpeed => PInvokeCore.SystemParametersInfoInt(SPI_GETKEYBOARDSPEED);
 
     /// <summary>
     ///  Gets the <see cref="Size"/> in pixels of the rectangle within which the mouse
     ///  pointer has to stay to be considered hovering.
     /// </summary>
     public static Size MouseHoverSize
-        => new(PInvoke.SystemParametersInfoInt(SPI_GETMOUSEHOVERWIDTH),
-            PInvoke.SystemParametersInfoInt(SPI_GETMOUSEHOVERHEIGHT));
+        => new(PInvokeCore.SystemParametersInfoInt(SPI_GETMOUSEHOVERWIDTH),
+            PInvokeCore.SystemParametersInfoInt(SPI_GETMOUSEHOVERHEIGHT));
 
     /// <summary>
     ///  Gets the time, in milliseconds, that the mouse pointer has to stay in the hover
     ///  rectangle to be considered hovering.
     /// </summary>
-    public static int MouseHoverTime => PInvoke.SystemParametersInfoInt(SPI_GETMOUSEHOVERTIME);
+    public static int MouseHoverTime => PInvokeCore.SystemParametersInfoInt(SPI_GETMOUSEHOVERTIME);
 
     /// <summary>
     ///  Gets the current mouse speed.
     /// </summary>
-    public static int MouseSpeed => PInvoke.SystemParametersInfoInt(SPI_GETMOUSESPEED);
+    public static int MouseSpeed => PInvokeCore.SystemParametersInfoInt(SPI_GETMOUSESPEED);
 
     /// <summary>
     ///  Determines whether the snap-to-default-button feature is enabled.
     /// </summary>
-    public static bool IsSnapToDefaultEnabled => PInvoke.SystemParametersInfoBool(SPI_GETSNAPTODEFBUTTON);
+    public static bool IsSnapToDefaultEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETSNAPTODEFBUTTON);
 
     /// <summary>
     ///  Determines whether the popup menus are left aligned or right aligned.
     /// </summary>
     public static LeftRightAlignment PopupMenuAlignment
-        => PInvoke.SystemParametersInfoBool(SPI_GETMENUDROPALIGNMENT)
+        => PInvokeCore.SystemParametersInfoBool(SPI_GETMENUDROPALIGNMENT)
             ? LeftRightAlignment.Left : LeftRightAlignment.Right;
 
     /// <summary>
     ///  Determines whether the menu fade animation feature is enabled.
     /// </summary>
-    public static bool IsMenuFadeEnabled => PInvoke.SystemParametersInfoBool(SPI_GETMENUFADE);
+    public static bool IsMenuFadeEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETMENUFADE);
 
     /// <summary>
     ///  Indicates the time, in milliseconds, that the system waits before displaying
     ///  a shortcut menu.
     /// </summary>
-    public static int MenuShowDelay => PInvoke.SystemParametersInfoInt(SPI_GETMENUSHOWDELAY);
+    public static int MenuShowDelay => PInvokeCore.SystemParametersInfoInt(SPI_GETMENUSHOWDELAY);
 
     /// <summary>
     ///  Indicates whether the slide open effect for combo boxes is enabled.
     /// </summary>
-    public static bool IsComboBoxAnimationEnabled => PInvoke.SystemParametersInfoBool(SPI_GETCOMBOBOXANIMATION);
+    public static bool IsComboBoxAnimationEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETCOMBOBOXANIMATION);
 
     /// <summary>
     ///  Indicates whether the gradient effect for windows title bars is enabled.
     /// </summary>
-    public static bool IsTitleBarGradientEnabled => PInvoke.SystemParametersInfoBool(SPI_GETGRADIENTCAPTIONS);
+    public static bool IsTitleBarGradientEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETGRADIENTCAPTIONS);
 
     /// <summary>
     ///  Indicates whether the hot tracking of user interface elements is enabled.
     /// </summary>
-    public static bool IsHotTrackingEnabled => PInvoke.SystemParametersInfoBool(SPI_GETHOTTRACKING);
+    public static bool IsHotTrackingEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETHOTTRACKING);
 
     /// <summary>
     ///  Indicates whether the smooth scrolling effect for listbox is enabled.
     /// </summary>
-    public static bool IsListBoxSmoothScrollingEnabled => PInvoke.SystemParametersInfoBool(SPI_GETLISTBOXSMOOTHSCROLLING);
+    public static bool IsListBoxSmoothScrollingEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETLISTBOXSMOOTHSCROLLING);
 
     /// <summary>
     ///  Indicates whether the menu animation feature is enabled.
     /// </summary>
-    public static bool IsMenuAnimationEnabled => PInvoke.SystemParametersInfoBool(SPI_GETMENUANIMATION);
+    public static bool IsMenuAnimationEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETMENUANIMATION);
 
     /// <summary>
     ///  Indicates whether the selection fade effect is enabled.
     /// </summary>
-    public static bool IsSelectionFadeEnabled => PInvoke.SystemParametersInfoBool(SPI_GETSELECTIONFADE);
+    public static bool IsSelectionFadeEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETSELECTIONFADE);
 
     /// <summary>
     ///  Indicates whether tool tip animation is enabled.
     /// </summary>
-    public static bool IsToolTipAnimationEnabled => PInvoke.SystemParametersInfoBool(SPI_GETTOOLTIPANIMATION);
+    public static bool IsToolTipAnimationEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETTOOLTIPANIMATION);
 
     /// <summary>
     ///  Indicates whether UI effects are enabled.
     /// </summary>
-    public static bool UIEffectsEnabled => PInvoke.SystemParametersInfoBool(SPI_GETUIEFFECTS);
+    public static bool UIEffectsEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETUIEFFECTS);
 
     /// <summary>
     ///  Indicates whether the windows tracking (activating the window the mouse in on) is ON or OFF.
     /// </summary>
-    public static bool IsActiveWindowTrackingEnabled => PInvoke.SystemParametersInfoBool(SPI_GETACTIVEWINDOWTRACKING);
+    public static bool IsActiveWindowTrackingEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETACTIVEWINDOWTRACKING);
 
     /// <summary>
     ///  Retrieves the active window tracking delay in milliseconds.
     /// </summary>
-    public static int ActiveWindowTrackingDelay => PInvoke.SystemParametersInfoInt(SPI_GETACTIVEWNDTRKTIMEOUT);
+    public static int ActiveWindowTrackingDelay => PInvokeCore.SystemParametersInfoInt(SPI_GETACTIVEWNDTRKTIMEOUT);
 
     /// <summary>
     ///  Indicates whether windows minimize/restore animation is enabled.
     /// </summary>
-    public static bool IsMinimizeRestoreAnimationEnabled => PInvoke.SystemParametersInfoBool(SPI_GETANIMATION);
+    public static bool IsMinimizeRestoreAnimationEnabled => PInvokeCore.SystemParametersInfoBool(SPI_GETANIMATION);
 
     /// <summary>
     ///  Retrieves the border multiplier factor that determines the width of a window's sizing border.
     /// </summary>
-    public static int BorderMultiplierFactor => PInvoke.SystemParametersInfoInt(SPI_GETBORDER);
+    public static int BorderMultiplierFactor => PInvokeCore.SystemParametersInfoInt(SPI_GETBORDER);
 
     /// <summary>
     ///  Indicates the caret blink time.
@@ -724,7 +724,7 @@ public static class SystemInformation
     /// <summary>
     ///  Indicates the caret width in edit controls.
     /// </summary>
-    public static int CaretWidth => PInvoke.SystemParametersInfoInt(SPI_GETCARETWIDTH);
+    public static int CaretWidth => PInvokeCore.SystemParametersInfoInt(SPI_GETCARETWIDTH);
 
     public static int MouseWheelScrollDelta => (int)PInvoke.WHEEL_DELTA;
 
@@ -779,7 +779,7 @@ public static class SystemInformation
         get
         {
             NONCLIENTMETRICSW data = default;
-            return PInvoke.SystemParametersInfo(ref data)
+            return PInvokeCore.SystemParametersInfo(ref data)
                 && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
         }
     }
@@ -792,7 +792,7 @@ public static class SystemInformation
         get
         {
             NONCLIENTMETRICSW data = default;
-            return PInvoke.SystemParametersInfo(ref data)
+            return PInvokeCore.SystemParametersInfo(ref data)
                 && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0
                     ? new Size(data.iSmCaptionWidth, data.iSmCaptionHeight)
                     : Size.Empty;
@@ -807,7 +807,7 @@ public static class SystemInformation
         get
         {
             NONCLIENTMETRICSW data = default;
-            return PInvoke.SystemParametersInfo(ref data)
+            return PInvokeCore.SystemParametersInfo(ref data)
                 && data.iMenuHeight > 0 && data.iMenuWidth > 0
                     ? new Size(data.iMenuWidth, data.iMenuHeight)
                     : Size.Empty;

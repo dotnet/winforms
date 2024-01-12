@@ -79,7 +79,7 @@ public partial class ComponentEditorForm
                     !_hbrushDither.IsNull,
                     "Unable to created dithered brush. Page selector UI will not be correct");
 
-                PInvoke.DeleteObject(hbitmapTemp);
+                PInvokeCore.DeleteObject(hbitmapTemp);
             }
         }
 
@@ -252,7 +252,7 @@ public partial class ComponentEditorForm
 
             if (!RecreatingHandle && !_hbrushDither.IsNull)
             {
-                PInvoke.DeleteObject(_hbrushDither);
+                PInvokeCore.DeleteObject(_hbrushDither);
                 _hbrushDither = default;
             }
         }

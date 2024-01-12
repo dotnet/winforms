@@ -32,7 +32,7 @@ internal static partial class DeviceContextExtensions
     {
         using SelectObjectScope penScope = new(hdc, hpen);
         using SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
-        using SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+        using SelectObjectScope brushScope = new(hdc, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
         PInvoke.Rectangle(hdc, left, top, right, bottom);
     }

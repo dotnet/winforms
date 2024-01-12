@@ -164,7 +164,7 @@ public static partial class ControlPaint
         using CreateDcScope dc = new(screen);
 
         HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
-        PInvoke.GetObject(palette, out uint entryCount);
+        PInvokeCore.GetObject(palette, out uint entryCount);
 
         using BufferScope<byte> bitmapInfoBuffer = new
             (checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
@@ -184,7 +184,7 @@ public static partial class ControlPaint
 
             Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
             Span<PALETTEENTRY> entries = stackalloc PALETTEENTRY[(int)entryCount];
-            PInvoke.GetPaletteEntries(palette, entries);
+            PInvokeCore.GetPaletteEntries(palette, entries);
 
             // Set up color table
             for (int i = 0; i < entryCount; i++)
@@ -198,10 +198,10 @@ public static partial class ControlPaint
                 };
             }
 
-            PInvoke.DeleteObject(palette);
+            PInvokeCore.DeleteObject(palette);
 
             void* bitsBuffer;
-            hbitmap = PInvoke.CreateDIBSection(
+            hbitmap = PInvokeCore.CreateDIBSection(
                 screen,
                 (BITMAPINFO*)bi,
                 DIB_USAGE.DIB_RGB_COLORS,
@@ -226,7 +226,7 @@ public static partial class ControlPaint
                 throw new Win32Exception();
             }
 
-            PInvoke.DeleteObject(previousBitmap);
+            PInvokeCore.DeleteObject(previousBitmap);
 
             using Graphics graphics = dc.CreateGraphics();
             using var brush = background.GetCachedSolidBrushScope();
@@ -236,7 +236,7 @@ public static partial class ControlPaint
         catch
         {
             // As we're throwing out, we can't return this and need to delete it.
-            PInvoke.DeleteObject(hbitmap);
+            PInvokeCore.DeleteObject(hbitmap);
             throw;
         }
 
@@ -326,7 +326,7 @@ public static partial class ControlPaint
 
         PInvoke.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
         PInvoke.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
-        PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
+        PInvokeCore.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
         // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
         return (IntPtr)colorMask;
@@ -1854,7 +1854,7 @@ public static partial class ControlPaint
         });
 
         using SetRop2Scope rop2Scope = new(desktopDC, rop2);
-        using SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+        using SelectObjectScope brushSelection = new(desktopDC, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
         using SelectObjectScope penSelection = new(desktopDC, pen);
 
         PInvoke.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
@@ -1875,7 +1875,7 @@ public static partial class ControlPaint
 
         using ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using SetRop2Scope ropScope = new(desktopDC, rop2);
-        using SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+        using SelectObjectScope brushSelection = new(desktopDC, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
         using SelectObjectScope penSelection = new(desktopDC, pen);
 
         PInvoke.MoveToEx(desktopDC, start.X, start.Y, lppt: null);

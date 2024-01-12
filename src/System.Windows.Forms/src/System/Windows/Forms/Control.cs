@@ -5066,7 +5066,7 @@ public unsafe partial class Control :
                 HBRUSH p = (HBRUSH)backBrush;
                 if (!p.IsNull)
                 {
-                    PInvoke.DeleteObject(p);
+                    PInvokeCore.DeleteObject(p);
                 }
 
                 Properties.SetObject(s_backBrushProperty, value: null);
@@ -5280,7 +5280,7 @@ public unsafe partial class Control :
         // Now BLT the result to the destination bitmap.
         using Graphics destGraphics = Graphics.FromImage(bitmap);
         using DeviceContextHdcScope desthDC = new(destGraphics, applyGraphicsState: false);
-        PInvoke.BitBlt(
+        PInvokeCore.BitBlt(
             desthDC,
             targetBounds.X,
             targetBounds.Y,
@@ -6205,7 +6205,7 @@ public unsafe partial class Control :
             return BackColorBrush;
         }
 
-        return (HBRUSH)PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);
+        return (HBRUSH)PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);
     }
 
     /// <summary>
@@ -7036,7 +7036,7 @@ public unsafe partial class Control :
                 HBRUSH p = (HBRUSH)backBrush;
                 if (!p.IsNull)
                 {
-                    PInvoke.DeleteObject(p);
+                    PInvokeCore.DeleteObject(p);
                 }
             }
 
@@ -7938,7 +7938,7 @@ public unsafe partial class Control :
                     HBRUSH p = (HBRUSH)backBrush;
                     if (!p.IsNull)
                     {
-                        PInvoke.DeleteObject(p);
+                        PInvokeCore.DeleteObject(p);
                     }
                 }
             }

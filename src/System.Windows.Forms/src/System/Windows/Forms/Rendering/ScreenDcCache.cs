@@ -102,7 +102,7 @@ internal sealed partial class ScreenDcCache : IDisposable
 
         HRGN hrgn = PInvoke.CreateRectRgn(0, 0, 0, 0);
         Debug.Assert(PInvoke.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
-        PInvoke.DeleteObject(hrgn);
+        PInvokeCore.DeleteObject(hrgn);
 
         Point point;
         PInvokeCore.GetViewportOrgEx(hdc, &point);

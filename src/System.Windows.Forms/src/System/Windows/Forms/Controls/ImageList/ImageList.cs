@@ -219,7 +219,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
             // need to get the image bpp
             if (PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo))
             {
-                PInvoke.GetObject(imageInfo.hbmImage, out BITMAP bmp);
+                PInvokeCore.GetObject(imageInfo.hbmImage, out BITMAP bmp);
                 _colorDepth = bmp.bmBitsPixel switch
                 {
                     4 => ColorDepth.Depth4Bit,
@@ -387,8 +387,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
         }
         finally
         {
-            PInvoke.DeleteObject(hBitmap);
-            PInvoke.DeleteObject(hMask);
+            PInvokeCore.DeleteObject(hBitmap);
+            PInvokeCore.DeleteObject(hMask);
         }
 
         if (index == -1)

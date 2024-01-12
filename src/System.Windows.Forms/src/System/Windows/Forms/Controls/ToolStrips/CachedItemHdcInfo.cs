@@ -37,7 +37,7 @@ internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
             // Delete the old bitmap
             if (!oldBitmap.IsNull)
             {
-                PInvoke.DeleteObject(oldBitmap);
+                PInvokeCore.DeleteObject(oldBitmap);
             }
 
             // remember what size we created.
@@ -53,7 +53,7 @@ internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
         {
             if (!_cachedItemBitmap.IsNull)
             {
-                PInvoke.DeleteObject(_cachedItemBitmap);
+                PInvokeCore.DeleteObject(_cachedItemBitmap);
             }
 
             PInvokeCore.DeleteDC(_cachedItemHDC);

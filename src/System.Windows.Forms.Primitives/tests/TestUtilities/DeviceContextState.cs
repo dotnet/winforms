@@ -41,15 +41,15 @@ internal unsafe class DeviceContextState
         BrushOrigin = point;
 
         var hfont = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
-        PInvoke.GetObject(hfont, out LOGFONTW logfont);
+        PInvokeCore.GetObject(hfont, out LOGFONTW logfont);
         SelectedFont = logfont;
 
         var hpen = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_PEN);
-        PInvoke.GetObject(hpen, out LOGPEN logpen);
+        PInvokeCore.GetObject(hpen, out LOGPEN logpen);
         SelectedPen = logpen;
 
         var hbrush = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_BRUSH);
-        PInvoke.GetObject(hbrush, out LOGBRUSH logbrush);
+        PInvokeCore.GetObject(hbrush, out LOGBRUSH logbrush);
         SelectedBrush = logbrush;
     }
 
@@ -140,7 +140,7 @@ internal unsafe class DeviceContextState
 
         if (selectionRecord->IsStockObject)
         {
-            HGDIOBJ hgdiobj = PInvoke.GetStockObject(selectionRecord->StockObject);
+            HGDIOBJ hgdiobj = PInvokeCore.GetStockObject(selectionRecord->StockObject);
 
             switch (selectionRecord->StockObject)
             {
@@ -151,7 +151,7 @@ internal unsafe class DeviceContextState
                 case GET_STOCK_OBJECT_FLAGS.DEVICE_DEFAULT_FONT:
                 case GET_STOCK_OBJECT_FLAGS.SYSTEM_FIXED_FONT:
                 case GET_STOCK_OBJECT_FLAGS.DEFAULT_GUI_FONT:
-                    PInvoke.GetObject(hgdiobj, out LOGFONTW logfont);
+                    PInvokeCore.GetObject(hgdiobj, out LOGFONTW logfont);
                     SelectedFont = logfont;
                     break;
                 case GET_STOCK_OBJECT_FLAGS.WHITE_BRUSH:
@@ -161,14 +161,14 @@ internal unsafe class DeviceContextState
                 case GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH:
                 case GET_STOCK_OBJECT_FLAGS.NULL_BRUSH:
                 case GET_STOCK_OBJECT_FLAGS.DC_BRUSH:
-                    PInvoke.GetObject(hgdiobj, out LOGBRUSH logBrush);
+                    PInvokeCore.GetObject(hgdiobj, out LOGBRUSH logBrush);
                     SelectedBrush = logBrush;
                     break;
                 case GET_STOCK_OBJECT_FLAGS.WHITE_PEN:
                 case GET_STOCK_OBJECT_FLAGS.BLACK_PEN:
                 case GET_STOCK_OBJECT_FLAGS.NULL_PEN:
                 case GET_STOCK_OBJECT_FLAGS.DC_PEN:
-                    PInvoke.GetObject(hgdiobj, out LOGPEN logPen);
+                    PInvokeCore.GetObject(hgdiobj, out LOGPEN logPen);
                     SelectedPen = logPen;
                     break;
                 case GET_STOCK_OBJECT_FLAGS.DEFAULT_PALETTE:

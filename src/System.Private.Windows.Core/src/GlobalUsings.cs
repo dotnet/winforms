@@ -3,6 +3,7 @@
 
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Private.Windows.Core;
 #pragma warning disable IDE0005 // Using directive is unnecessary.
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
@@ -10,5 +11,5 @@ global using Windows.Win32.Graphics.Gdi;
 // global using Windows.Win32.UI.HiDpi;
 // global using Windows.Win32.UI.Shell;
 // global using Windows.Win32.UI.Shell.Common;
-// global using Windows.Win32.UI.WindowsAndMessaging;
+global using Windows.Win32.UI.WindowsAndMessaging;
 #pragma warning restore IDE0005

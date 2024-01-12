@@ -328,7 +328,7 @@ public class MdiControlStripTests
         // Force size change with large icon
         HICON hicon = (HICON)new Bitmap(256, 256).GetHicon();
         Icon largeIcon = (Icon)Icon.FromHandle(hicon).Clone();
-        PInvoke.DestroyIcon(hicon);
+        PInvokeCore.DestroyIcon(hicon);
         mdiChild.Icon = largeIcon;
 
         MdiControlStrip currentMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;

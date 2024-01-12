@@ -28,7 +28,7 @@ internal partial struct PICTDESC
         };
 
         desc.Anonymous.icon.hicon = copy ?
-            (HICON)PInvoke.CopyImage(
+            (HICON)PInvokeCore.CopyImage(
                 (HANDLE)icon.Handle,
                 GDI_IMAGE_TYPE.IMAGE_ICON,
                 icon.Width,

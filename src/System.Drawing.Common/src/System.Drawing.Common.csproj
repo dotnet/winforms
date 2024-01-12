@@ -48,7 +48,6 @@
     <Compile Include="**\*.cs" Exclude="Special\**\*.cs" />
     <Compile Include="..\..\Common\src\LocalAppContextSwitches.Common.cs" Link="System\LocalAppContextSwitches.Common.cs" />
     <Compile Include="..\..\Common\src\ValueStringBuilder.cs" Link="System\Text\ValueStringBuilder.cs" />
-    <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
 
     <Content Include="NativeMethods.json" />
     <Content Include="NativeMethods.txt" />

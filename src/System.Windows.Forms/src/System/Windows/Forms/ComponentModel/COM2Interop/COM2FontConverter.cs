@@ -124,7 +124,7 @@ internal sealed unsafe class Com2FontConverter : Com2DataTypeToManagedDataTypeCo
             targetChanged = true;
         }
 
-        LOGFONTW logfont = LOGFONTW.FromFont(source);
+        LOGFONTW logfont = source.ToLogicalFont();
 
         if (target->Weight != (short)logfont.lfWeight)
         {

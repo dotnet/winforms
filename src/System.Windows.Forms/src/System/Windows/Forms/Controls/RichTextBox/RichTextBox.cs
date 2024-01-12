@@ -2787,7 +2787,7 @@ public partial class RichTextBox : TextBoxBase
             dwEffects |= CFE_EFFECTS.CFE_UNDERLINE;
         }
 
-        LOGFONTW logFont = LOGFONTW.FromFont(value);
+        LOGFONTW logFont = value.ToLogicalFont();
         CHARFORMAT2W charFormat = new()
         {
             cbSize = (uint)sizeof(CHARFORMAT2W),
@@ -2795,14 +2795,14 @@ public partial class RichTextBox : TextBoxBase
             dwEffects = dwEffects,
             yHeight = (int)(value.SizeInPoints * 20),
             bCharSet = (byte)logFont.lfCharSet,
-            bPitchAndFamily = (byte)logFont.lfPitchAndFamily,
+            bPitchAndFamily = logFont.lfPitchAndFamily,
             FaceName = logFont.FaceName
         };
 
         PInvoke.SendMessage(
             this,
             PInvoke.EM_SETCHARFORMAT,
-            (WPARAM)(uint)(selectionOnly ? PInvoke.SCF_SELECTION : PInvoke.SCF_ALL),
+            (WPARAM)(selectionOnly ? PInvoke.SCF_SELECTION : PInvoke.SCF_ALL),
             ref charFormat);
     }
 

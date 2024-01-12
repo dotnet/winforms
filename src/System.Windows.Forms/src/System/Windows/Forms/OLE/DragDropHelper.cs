@@ -390,7 +390,7 @@ internal static class DragDropHelper
         }
         catch
         {
-            PInvoke.DeleteObject(hbmpDragImage);
+            PInvokeCore.DeleteObject(hbmpDragImage);
             return;
         }
         finally
