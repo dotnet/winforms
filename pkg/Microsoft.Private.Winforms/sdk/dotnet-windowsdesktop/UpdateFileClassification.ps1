@@ -75,12 +75,6 @@ else {
             $output += "    <FrameworkListFileClass Include=`"$assembly`" Profile=`"WindowsForms`" />`r`n"
         }
     $output += "  </ItemGroup>
-  <!--
-    Private assemblies should not be referenced.
-  -->
-  <ItemGroup>
-    <IgnoredReference Include=`"System.Private.Windows.Core`" />
-  </ItemGroup>
 </Project>";
     $output | Out-File -FilePath $TargetFile -Encoding utf8 -Force;
 }
