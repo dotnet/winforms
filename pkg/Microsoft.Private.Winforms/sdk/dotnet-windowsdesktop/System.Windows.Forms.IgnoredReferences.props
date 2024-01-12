@@ -3,7 +3,7 @@
     pkg\windowsdesktop\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj.
    -->
 <Project>
-  <ItemGroup>
+  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
     <IgnoredReference Include="System.Private.Windows.Core" />
   </ItemGroup>
 </Project>
