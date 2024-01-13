@@ -299,15 +299,10 @@ public unsafe sealed class Bitmap : Image
 
     public Color GetPixel(int x, int y)
     {
-        if (x < 0 || x >= Width)
-        {
-            throw new ArgumentOutOfRangeException(nameof(x), SR.ValidRangeX);
-        }
-
-        if (y < 0 || y >= Height)
-        {
-            throw new ArgumentOutOfRangeException(nameof(y), SR.ValidRangeY);
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(x);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(x, Width);
+        ArgumentOutOfRangeException.ThrowIfNegative(y);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(y, Height);
 
         int color;
         int status = Gdip.GdipBitmapGetPixel(new HandleRef(this, _nativeImage), x, y, out color);
@@ -323,15 +318,10 @@ public unsafe sealed class Bitmap : Image
             throw new InvalidOperationException(SR.GdiplusCannotSetPixelFromIndexedPixelFormat);
         }
 
-        if (x < 0 || x >= Width)
-        {
-            throw new ArgumentOutOfRangeException(nameof(x), SR.ValidRangeX);
-        }
-
-        if (y < 0 || y >= Height)
-        {
-            throw new ArgumentOutOfRangeException(nameof(y), SR.ValidRangeY);
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(x);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(x, Width);
+        ArgumentOutOfRangeException.ThrowIfNegative(y);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(y, Height);
 
         int status = Gdip.GdipBitmapSetPixel(new HandleRef(this, _nativeImage), x, y, color.ToArgb());
         Gdip.CheckStatus(status);

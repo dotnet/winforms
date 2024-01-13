@@ -287,12 +287,6 @@
   <data name="InvalidPrinterHandle" xml:space="preserve">
     <value>Handle {0} is not valid.</value>
   </data>
-  <data name="ValidRangeX" xml:space="preserve">
-    <value>Parameter must be positive and &lt; Width.</value>
-  </data>
-  <data name="ValidRangeY" xml:space="preserve">
-    <value>Parameter must be positive and &lt; Height.</value>
-  </data>
   <data name="NativeHandle0" xml:space="preserve">
     <value>Native handle is 0.</value>
   </data>
