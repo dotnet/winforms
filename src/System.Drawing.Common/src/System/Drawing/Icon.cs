@@ -204,7 +204,14 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     }
 
     [Browsable(false)]
-    public IntPtr Handle => _handle.IsNull ? throw new ObjectDisposedException(GetType().Name) : (nint)_handle;
+    public IntPtr Handle
+    {
+        get
+        {
+            ObjectDisposedException.ThrowIf(_handle.IsNull, this);
+            return (nint)_handle;
+        }
+    }
 
     HICON IHandle<HICON>.Handle => (HICON)Handle;
 
