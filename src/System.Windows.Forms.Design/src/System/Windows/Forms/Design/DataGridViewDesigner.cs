@@ -315,7 +315,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
             if (propertyDescriptor is not null)
             {
-                componentChangeService?.OnComponentChanged(dataGridView, propertyDescriptor, previousDataMember, "");
+                componentChangeService?.OnComponentChanged(dataGridView, propertyDescriptor, previousDataMember, string.Empty);
             }
         }
     }
@@ -510,7 +510,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 }
             }
 
-            changeService?.OnComponentChanged(dataGridView, columnsProp, null, null);
+            changeService?.OnComponentChanged(dataGridView, columnsProp, oldValue: null, newValue: null);
         }
 
         return similarSchema;
@@ -605,7 +605,7 @@ internal class DataGridViewDesigner : ControlDesigner
         }
 
         // 3. OnComponentChanged DataGridView.Columns
-        changeService?.OnComponentChanged(dataGridView, columnsProp, null, null);
+        changeService?.OnComponentChanged(dataGridView, columnsProp, oldValue: null, newValue: null);
 
         // 4. IContainer.Remove(dataGridView.Columns)
         if (currentContainer is not null)
@@ -619,6 +619,7 @@ internal class DataGridViewDesigner : ControlDesigner
         List<DataGridViewColumn>? columnsToBeAdded = null;
         if (dataGridView.DataSource is not null)
         {
+            // backEndProps is not null here because _currencyManager cannot be null if dataGridView.DataSource is not null
             columnsToBeAdded = new List<DataGridViewColumn>(backEndProps!.Count);
             for (int i = 0; i < backEndProps.Count; i++)
             {
