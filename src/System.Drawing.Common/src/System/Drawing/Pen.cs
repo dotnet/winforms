@@ -482,10 +482,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             int status = Gdip.GdipSetPenTransform(new HandleRef(this, NativePen), new HandleRef(value, value.NativeMatrix));
             Gdip.CheckStatus(status);
@@ -686,10 +683,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             int status = Gdip.GdipSetPenBrushFill(new HandleRef(this, NativePen),
                 new HandleRef(value, value.NativeBrush));

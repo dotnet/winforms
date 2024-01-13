@@ -464,8 +464,7 @@ public sealed class LinearGradientBrush : Brush
         }
         set
         {
-            if (value is null)
-                throw new ArgumentNullException(nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             Gdip.CheckStatus(Gdip.GdipSetLineTransform(new HandleRef(this, NativeBrush), new HandleRef(value, value.NativeMatrix)));
         }

@@ -150,10 +150,7 @@ public sealed class TextureBrush : Brush
         }
         set
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             int status = Gdip.GdipSetTextureTransform(new HandleRef(this, NativeBrush), new HandleRef(value, value.NativeMatrix));
             Gdip.CheckStatus(status);

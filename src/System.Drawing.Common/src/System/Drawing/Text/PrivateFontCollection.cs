@@ -64,10 +64,7 @@ public sealed class PrivateFontCollection : FontCollection
 #pragma warning restore CA2208
         }
 
-        if (filename is null)
-        {
-            throw new ArgumentNullException(nameof(filename));
-        }
+        ArgumentNullException.ThrowIfNull(filename);
 
         // this ensure the filename is valid (or throw the correct exception)
         string fullPath = Path.GetFullPath(filename);
