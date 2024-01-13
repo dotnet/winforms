@@ -141,6 +141,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub SimpleFileDownloadWithUI_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+            Directory.CreateDirectory(tmpFilePath)
+            File.Create(destinationFileName)
             My.Computer.Network.DownloadFile(DownloadFileUrl,
                                              destinationFileName,
                                              "",
@@ -149,6 +151,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                              100000,
                                              True
                                             )
+            CleanupTempDirectory(tmpFilePath)
         End Sub
 
     End Class
