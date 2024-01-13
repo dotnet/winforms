@@ -881,9 +881,11 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     ///  <paramref name="filePath"/> is null.
     /// </exception>
     public static unsafe Icon? ExtractIcon(string filePath, int id, int size)
-        => size is <= 0 or > ushort.MaxValue
-            ? throw new ArgumentOutOfRangeException(nameof(size))
-            : ExtractIcon(filePath, id, size, smallIcon: false);
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(size, ushort.MaxValue);
+        return ExtractIcon(filePath, id, size, smallIcon: false);
+    }
 
     /// <param name="smallIcon">
     ///  If <see langword="true"/>, gets the <see cref="Icon"/> at the current system small icon size setting. If

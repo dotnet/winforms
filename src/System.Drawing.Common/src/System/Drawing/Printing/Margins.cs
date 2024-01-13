@@ -41,10 +41,10 @@ public partial class Margins : ICloneable
     /// </summary>
     public Margins(int left, int right, int top, int bottom)
     {
-        CheckMargin(left, nameof(left));
-        CheckMargin(right, nameof(right));
-        CheckMargin(top, nameof(top));
-        CheckMargin(bottom, nameof(bottom));
+        ArgumentOutOfRangeException.ThrowIfNegative(left);
+        ArgumentOutOfRangeException.ThrowIfNegative(right);
+        ArgumentOutOfRangeException.ThrowIfNegative(top);
+        ArgumentOutOfRangeException.ThrowIfNegative(bottom);
 
         _left = left;
         _right = right;
@@ -65,7 +65,7 @@ public partial class Margins : ICloneable
         get => _left;
         set
         {
-            CheckMargin(value, nameof(value));
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
             _left = value;
             _doubleLeft = value;
         }
@@ -79,7 +79,7 @@ public partial class Margins : ICloneable
         get => _right;
         set
         {
-            CheckMargin(value, nameof(value));
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
             _right = value;
             _doubleRight = value;
         }
@@ -93,7 +93,7 @@ public partial class Margins : ICloneable
         get => _top;
         set
         {
-            CheckMargin(value, nameof(value));
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
             _top = value;
             _doubleTop = value;
         }
@@ -107,7 +107,7 @@ public partial class Margins : ICloneable
         get => _bottom;
         set
         {
-            CheckMargin(value, nameof(value));
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
             _bottom = value;
             _doubleBottom = value;
         }
@@ -162,14 +162,6 @@ public partial class Margins : ICloneable
         {
             Bottom = (int)Math.Round(value);
             _doubleBottom = value;
-        }
-    }
-
-    private static void CheckMargin(int margin, string name)
-    {
-        if (margin < 0)
-        {
-            throw new ArgumentOutOfRangeException(name, margin, SR.Format(SR.InvalidLowBoundArgumentEx, name, margin, 0));
         }
     }
 
