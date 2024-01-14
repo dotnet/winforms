@@ -47,7 +47,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return folder
         End Function
 
-        <WinFormsFact> 'Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact>
         Public Sub FileDownloadWithJustUriAndDestinationFileName_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName = Path.Combine(tmpFilePath, "testing.md")
@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
-        <WinFormsFact> '(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact>
         Public Sub FileDownloadWithJustUrlAndDestinationFileName_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
@@ -71,7 +71,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
-        <WinFormsFact> 'Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact>
         Public Sub FileDownloadWithUriAndDestinationFileNameUserNamePassword_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
@@ -95,12 +95,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                              True)
         End Sub
 
-        <WinFormsFact> 'Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact>
         Public Sub SimpleFileDownloadWithExpectedTimeOut_method()
             Assert.Throws(Of WebException)(AddressOf timeoutTest)
         End Sub
 
-        <WinFormsFact> 'Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact>
         Public Sub SimpleFileDownloadWithJustUriAndDestinationFileName_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
@@ -133,7 +133,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Try
         End Sub
 
-        <WinFormsFact> 'Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact>
         Public Sub SimpleFileDownloadWithJustUrlAndDestinationFileName_method()
             Assert.Throws(Of IO.IOException)(AddressOf NoOverWriteTest)
         End Sub
