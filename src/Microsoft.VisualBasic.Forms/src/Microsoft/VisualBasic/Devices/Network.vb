@@ -374,7 +374,7 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             'Throw if the file exists and the user doesn't want to overwrite
-            If IO.File.Exists(fullFilename) And Not overwrite Then
+            If Not overwrite AndAlso IO.File.Exists(fullFilename) Then
                 Throw New IO.IOException(Utils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
             End If
 

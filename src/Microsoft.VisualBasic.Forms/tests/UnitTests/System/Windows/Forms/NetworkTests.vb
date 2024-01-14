@@ -116,7 +116,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
             Directory.CreateDirectory(tmpFilePath)
-            File.Create(destinationFileName)
+            Dim destinationStream As FileStream = File.Create(destinationFileName)
+            destinationStream.Close()
             Try
                 My.Computer.Network.DownloadFile(DownloadFileUrl,
                                               destinationFileName,
@@ -142,7 +143,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
             Directory.CreateDirectory(tmpFilePath)
-            File.Create(destinationFileName)
+            Dim destinationStream As FileStream = File.Create(destinationFileName)
+            destinationStream.Close()
             My.Computer.Network.DownloadFile(DownloadFileUrl,
                                              destinationFileName,
                                              "",
