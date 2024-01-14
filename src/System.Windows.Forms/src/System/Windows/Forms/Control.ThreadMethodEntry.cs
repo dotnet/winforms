@@ -128,9 +128,9 @@ public partial class Control
                 base.Dispose(explicitDisposing);
                 if (explicitDisposing)
                 {
-                    // The owner (ThreadMethodEntry) need to free only this WH.
+                    // The owner (ThreadMethodEntry) need to free only this waitHandle.
                     // But ThreadMethodEntry can't be Disposed directly because it exposed though IAsyncResult interface.
-                    // So after freeing this WH we mark owner ThreadMethodEntry to suppress finalization.
+                    // So after freeing this waitHandle we mark owner ThreadMethodEntry to suppress finalization.
                     GC.SuppressFinalize(_owner);
                 }
             }

@@ -4184,7 +4184,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Invoke_SameThread_ThreadMethodEntry_Finalizeation_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
         Action method = () => { };
         control.Invoke(method);
@@ -4197,7 +4197,7 @@ public partial class ControlTests
     [WinFormsFact]
     public async Task Control_Invoke_OtherThread_ThreadMethodEntry_Finalizeation_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
         await Task.Run(() =>
             {
@@ -4213,7 +4213,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BeginInvoke_SameThread_ThreadMethodEntry_Finalizeation_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
         Action method = () => { };
         control.BeginInvoke(method);
@@ -4226,18 +4226,18 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_BeginInvoke_WH_SameThread_ThreadMethodEntry_Finalizeation_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
         Action method = () => { };
-        var res = control.BeginInvoke(method);
-        var w = res.AsyncWaitHandle;
-        while (!w.WaitOne(1))
+        IAsyncResult res = control.BeginInvoke(method);
+        WaitHandle waitHandle = res.AsyncWaitHandle;
+        while (!waitHandle.WaitOne(1))
         {
             Application.DoEvents();
         }
 
-        w.Close();
-        w = null;
+        waitHandle.Close();
+        waitHandle = null;
         GC.Collect();
         GC.WaitForPendingFinalizers();
         GC.Collect();
@@ -4247,13 +4247,13 @@ public partial class ControlTests
     [WinFormsFact]
     public async Task Control_BeginInvoke_OtherThread_ThreadMethodEntry_Finalizeation_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
         await Task.Run(
             () =>
             {
                 Action method = () => { };
-                var res = control.BeginInvoke(method);
+                IAsyncResult res = control.BeginInvoke(method);
                 while (!res.IsCompleted)
                 {
                     Thread.Sleep(1);
@@ -4269,12 +4269,12 @@ public partial class ControlTests
     [WinFormsFact]
     public async Task Control_BeginInvoke_WH_OtherThread_ThreadMethodEntry_Finalizeation_Success()
     {
-        using var control = new Control();
+        using Control control = new();
         control.CreateControl();
         await Task.Run(() =>
             {
                 Action method = () => { };
-                var res = control.BeginInvoke(method);
+                IAsyncResult res = control.BeginInvoke(method);
                 res.AsyncWaitHandle.WaitOne();
                 res.AsyncWaitHandle.Close();
             }).ConfigureAwait(true);

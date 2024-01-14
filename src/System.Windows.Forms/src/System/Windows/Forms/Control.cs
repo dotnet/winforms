@@ -6927,9 +6927,9 @@ public unsafe partial class Control :
         {
             if (!tme.IsCompleted)
             {
-                // In synchronous call we not need WH after wait.
-                using var wH = tme.AsyncWaitHandle;
-                WaitForWaitHandle(wH);
+                // In synchronous call we not need waitHandle after wait.
+                using WaitHandle waitHandle = tme.AsyncWaitHandle;
+                WaitForWaitHandle(waitHandle);
             }
 
             if (tme._exception is not null)
