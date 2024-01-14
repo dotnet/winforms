@@ -47,40 +47,47 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return folder
         End Function
 
-        <WinFormsFact>
-        Public Sub FileDownloadWithJustUriAndDestinationFileName_method()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFileName = Path.Combine(tmpFilePath, "testing.md")
-            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl), destinationFileName)
-            Assert.True(Directory.Exists(tmpFilePath))
-            Dim fileInfo As New FileInfo(destinationFileName)
-            Assert.True(fileInfo.Exists)
-            Assert.True(fileInfo.Length = 18135)
-            CleanupTempDirectory(tmpFilePath)
-        End Sub
-
-        <WinFormsFact>
-        Public Sub FileDownloadWithJustUrlAndDestinationFileName_method()
+        Private Sub NoOverWriteTest()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
-            My.Computer.Network.DownloadFile(DownloadFileUrl, destinationFileName)
-            Assert.True(Directory.Exists(tmpFilePath))
-            Dim fileInfo As New FileInfo(destinationFileName)
-            Assert.True(fileInfo.Exists)
-            Assert.True(fileInfo.Length = 18135)
-            CleanupTempDirectory(tmpFilePath)
+            Directory.CreateDirectory(tmpFilePath)
+            Dim destinationStream As FileStream = File.Create(destinationFileName)
+            destinationStream.Close()
+            Try
+                My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                 destinationFileName,
+                                                 "",
+                                                 "",
+                                                 False,
+                                                 connectionTimeout:=100000,
+                                                 overwrite:=False)
+            Catch ex As Exception
+                Throw
+            Finally
+                CleanupTempDirectory(tmpFilePath)
+            End Try
         End Sub
 
-        <WinFormsFact>
-        Public Sub FileDownloadWithUriAndDestinationFileNameUserNamePassword_method()
+        Private Sub NoOverWriteTestWithUI()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
-            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl), destinationFileName, "TDB", "TBD")
-            Assert.True(Directory.Exists(tmpFilePath))
-            Dim fileInfo As New FileInfo(destinationFileName)
-            Assert.True(fileInfo.Exists)
-            Assert.True(fileInfo.Length = 18135)
-            CleanupTempDirectory(tmpFilePath)
+            Directory.CreateDirectory(tmpFilePath)
+            Dim destinationStream As FileStream = File.Create(destinationFileName)
+            destinationStream.Close()
+            Try
+                My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                 destinationFileName,
+                                                 "",
+                                                 "",
+                                                 True,
+                                                 100000,
+                                                 False
+                                                )
+            Catch ex As Exception
+                Throw
+            Finally
+                CleanupTempDirectory(tmpFilePath)
+            End Try
         End Sub
 
         Private Sub timeoutTest()
@@ -96,6 +103,47 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub FileDownloadWithJustUriAndDestinationFileName_method()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFileName = Path.Combine(tmpFilePath, "testing.md")
+            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl),
+                                             destinationFileName)
+            Assert.True(Directory.Exists(tmpFilePath))
+            Dim fileInfo As New FileInfo(destinationFileName)
+            Assert.True(fileInfo.Exists)
+            Assert.True(fileInfo.Length = 18135)
+            CleanupTempDirectory(tmpFilePath)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub FileDownloadWithJustUrlAndDestinationFileName_method()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+            My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                             destinationFileName)
+            Assert.True(Directory.Exists(tmpFilePath))
+            Dim fileInfo As New FileInfo(destinationFileName)
+            Assert.True(fileInfo.Exists)
+            Assert.True(fileInfo.Length = 18135)
+            CleanupTempDirectory(tmpFilePath)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub FileDownloadWithUriAndDestinationFileNameUserNamePassword_method()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl),
+                                             destinationFileName,
+                                             "TDB",
+                                             "TBD")
+            Assert.True(Directory.Exists(tmpFilePath))
+            Dim fileInfo As New FileInfo(destinationFileName)
+            Assert.True(fileInfo.Exists)
+            Assert.True(fileInfo.Length = 18135)
+            CleanupTempDirectory(tmpFilePath)
+        End Sub
+
+        <WinFormsFact>
         Public Sub SimpleFileDownloadWithExpectedTimeOut_method()
             Assert.Throws(Of WebException)(AddressOf timeoutTest)
         End Sub
@@ -104,33 +152,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub SimpleFileDownloadWithJustUriAndDestinationFileName_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
-            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl), destinationFileName)
+            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl),
+                                             destinationFileName)
             Assert.True(Directory.Exists(tmpFilePath))
             Dim fileInfo As New FileInfo(destinationFileName)
             Assert.True(fileInfo.Exists)
             Assert.True(fileInfo.Length = 18135)
             CleanupTempDirectory(tmpFilePath)
-        End Sub
-
-        Private Sub NoOverWriteTest()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
-            Directory.CreateDirectory(tmpFilePath)
-            Dim destinationStream As FileStream = File.Create(destinationFileName)
-            destinationStream.Close()
-            Try
-                My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                              destinationFileName,
-                                              "",
-                                              "",
-                                              False,
-                                              connectionTimeout:=100000,
-                                              overwrite:=False)
-            Catch ex As Exception
-                Throw
-            Finally
-                CleanupTempDirectory(tmpFilePath)
-            End Try
         End Sub
 
         <WinFormsFact>
@@ -154,6 +182,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                              True
                                             )
             CleanupTempDirectory(tmpFilePath)
+        End Sub
+
+        <WinFormsFact(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        Public Sub SimpleFileDownloadWithUIDoNotOverwrite_method()
+            Assert.Throws(Of IO.IOException)(AddressOf NoOverWriteTestWithUI)
         End Sub
 
     End Class

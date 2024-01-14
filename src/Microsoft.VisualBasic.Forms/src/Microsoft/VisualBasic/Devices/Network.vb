@@ -232,13 +232,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Private Shared Async Function DownloadFileAsync(address As String,
-                                             destinationFileName As String,
-                                             userName As String,
-                                             password As String,
-                                             dialog As ProgressDialog,
-                                             connectionTimeout As Integer,
-                                             overwrite As Boolean,
-                                             onUserCancel As UICancelOption) As Task
+                                            destinationFileName As String,
+                                            userName As String,
+                                            password As String,
+                                            dialog As ProgressDialog,
+                                            connectionTimeout As Integer,
+                                            overwrite As Boolean,
+                                            onUserCancel As UICancelOption) As Task
 
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
@@ -251,8 +251,13 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials,
-                                    dialog, connectionTimeout, overwrite, onUserCancel
+            Await DownloadFileAsync(addressUri,
+                                    destinationFileName,
+                                    networkCredentials,
+                                    dialog,
+                                    connectionTimeout,
+                                    overwrite,
+                                    onUserCancel
                                    ).ConfigureAwait(False)
         End Function
 
@@ -274,8 +279,13 @@ Namespace Microsoft.VisualBasic.Devices
                                              connectionTimeout As Integer,
                                              overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(addressUri, destinationFileName, userName,
-                                    password, dialog, connectionTimeout, overwrite,
+            Await DownloadFileAsync(addressUri,
+                                    destinationFileName,
+                                    userName,
+                                    password,
+                                    dialog,
+                                    connectionTimeout,
+                                    overwrite,
                                     UICancelOption.ThrowException).ConfigureAwait(False)
         End Function
 
@@ -302,8 +312,12 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials,
-                                    dialog, connectionTimeout, overwrite,
+            Await DownloadFileAsync(addressUri,
+                                    destinationFileName,
+                                    networkCredentials,
+                                    dialog,
+                                    connectionTimeout,
+                                    overwrite,
                                     onUserCancel).ConfigureAwait(False)
         End Function
 
@@ -395,7 +409,8 @@ Namespace Microsoft.VisualBasic.Devices
 
             'Download the file
             Try
-                Await copier.DownloadFileAsync(addressUri, fullFilename).ConfigureAwait(False)
+                Await copier.DownloadFileAsync(addressUri,
+                                               fullFilename).ConfigureAwait(False)
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
                     Throw
@@ -494,12 +509,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         Public Sub DownloadFile(address As String,
-                         destinationFileName As String,
-                         userName As String,
-                         password As String,
-                         showUI As Boolean,
-                         connectionTimeout As Integer,
-                         overwrite As Boolean)
+                               destinationFileName As String,
+                               userName As String,
+                               password As String,
+                               showUI As Boolean,
+                               connectionTimeout As Integer,
+                               overwrite As Boolean)
             Dim dialog As ProgressDialog = Nothing
             Try
                 If showUI AndAlso Environment.UserInteractive Then
@@ -511,12 +526,19 @@ Namespace Microsoft.VisualBasic.Devices
                 }
                 End If
 
-                Dim t As Task = DownloadFileAsync(address, destinationFileName, userName, password,
-                                              dialog, connectionTimeout, overwrite,
+                Dim t As Task = DownloadFileAsync(address,
+                                                  destinationFileName,
+                                                  userName,
+                                                  password,
+                                                  dialog, connectionTimeout, overwrite,
                                               UICancelOption.ThrowException
                                              )
-                dialog?.ShowProgressDialog()
-                t.Wait()
+                If t.IsFaulted Then
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -539,13 +561,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub DownloadFile(address As String,
-                         destinationFileName As String,
-                         userName As String,
-                         password As String,
-                         showUI As Boolean,
-                         connectionTimeout As Integer,
-                         overwrite As Boolean,
-                         onUserCancel As UICancelOption)
+                                destinationFileName As String,
+                                userName As String,
+                                password As String,
+                                showUI As Boolean,
+                                connectionTimeout As Integer,
+                                overwrite As Boolean,
+                                onUserCancel As UICancelOption)
 
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
@@ -573,8 +595,12 @@ Namespace Microsoft.VisualBasic.Devices
                                               networkCredentials, dialog, connectionTimeout,
                                               overwrite, onUserCancel
                                              )
-                dialog?.ShowProgressDialog()
-                t.Wait()
+                If t.IsFaulted Then
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -596,12 +622,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         Public Sub DownloadFile(address As Uri,
-                 destinationFileName As String,
-                 userName As String,
-                 password As String,
-                 showUI As Boolean,
-                 connectionTimeout As Integer,
-                 overwrite As Boolean)
+                                destinationFileName As String,
+                                userName As String,
+                                password As String,
+                                showUI As Boolean,
+                                connectionTimeout As Integer,
+                                overwrite As Boolean)
 
             Dim dialog As ProgressDialog = Nothing
             Try
@@ -613,12 +639,21 @@ Namespace Microsoft.VisualBasic.Devices
                 .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
             }
                 End If
-                Dim t As Task = DownloadFileAsync(address, destinationFileName, userName, password,
-                                              dialog, connectionTimeout, overwrite,
+                Dim t As Task = DownloadFileAsync(address,
+                                                  destinationFileName,
+                                                  userName,
+                                                  password,
+                                                  dialog,
+                                                  connectionTimeout,
+                                                  overwrite,
                                               UICancelOption.ThrowException
                                              )
-                dialog?.ShowProgressDialog()
-                t.Wait()
+                If t.IsFaulted Then
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -641,13 +676,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub DownloadFile(address As Uri,
-                 destinationFileName As String,
-                 userName As String,
-                 password As String,
-                 showUI As Boolean,
-                 connectionTimeout As Integer,
-                 overwrite As Boolean,
-                 onUserCancel As UICancelOption)
+                                destinationFileName As String,
+                                userName As String,
+                                password As String,
+                                showUI As Boolean,
+                                connectionTimeout As Integer,
+                                overwrite As Boolean,
+                                onUserCancel As UICancelOption)
 
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
@@ -663,12 +698,19 @@ Namespace Microsoft.VisualBasic.Devices
                 }
                 End If
 
-                Dim t As Task = DownloadFileAsync(address, destinationFileName,
-                                              networkCredentials, dialog, connectionTimeout,
-                                              overwrite, onUserCancel
-                                             )
-                dialog?.ShowProgressDialog()
-                t.Wait()
+                Dim t As Task = DownloadFileAsync(address,
+                                                  destinationFileName,
+                                                  networkCredentials,
+                                                  dialog,
+                                                  connectionTimeout,
+                                                  overwrite,
+                                                  onUserCancel)
+                If t.IsFaulted Then
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -690,11 +732,11 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
         Public Sub DownloadFile(address As Uri,
-                destinationFileName As String,
-                networkCredentials As ICredentials,
-                showUI As Boolean,
-                connectionTimeout As Integer,
-                overwrite As Boolean)
+                                destinationFileName As String,
+                                networkCredentials As ICredentials,
+                                showUI As Boolean,
+                                connectionTimeout As Integer,
+                                overwrite As Boolean)
 
             Dim dialog As ProgressDialog = Nothing
             Try
@@ -707,12 +749,20 @@ Namespace Microsoft.VisualBasic.Devices
                 }
                 End If
 
-                Dim t As Task = DownloadFileAsync(address, destinationFileName, networkCredentials,
-                                              dialog, connectionTimeout, overwrite,
+                Dim t As Task = DownloadFileAsync(address,
+                                                  destinationFileName,
+                                                  networkCredentials,
+                                                  dialog,
+                                                  connectionTimeout,
+                                                  overwrite,
                                               UICancelOption.ThrowException
                                              )
-                dialog?.ShowProgressDialog()
-                t.Wait()
+                If t.IsFaulted Then
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -735,12 +785,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
         Public Sub DownloadFile(address As Uri,
-                destinationFileName As String,
-                networkCredentials As ICredentials,
-                showUI As Boolean,
-                connectionTimeout As Integer,
-                overwrite As Boolean,
-                onUserCancel As UICancelOption)
+                                destinationFileName As String,
+                                networkCredentials As ICredentials,
+                                showUI As Boolean,
+                                connectionTimeout As Integer,
+                                overwrite As Boolean,
+                                onUserCancel As UICancelOption)
             If connectionTimeout <= 0 Then
                 Throw ExUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
@@ -760,12 +810,20 @@ Namespace Microsoft.VisualBasic.Devices
                 }
                 End If
 
-                Dim t As Task = DownloadFileAsync(address, destinationFileName, networkCredentials,
-                                              dialog, connectionTimeout, overwrite,
-                                              onUserCancel
-                                             )
-                dialog?.ShowProgressDialog()
-                t.Wait()
+                Dim t As Task = DownloadFileAsync(address,
+                                                  destinationFileName,
+                                                  networkCredentials,
+                                                  dialog,
+                                                  connectionTimeout,
+                                                  overwrite,
+                                                  onUserCancel
+                                                 )
+                If t.IsFaulted Then
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
