@@ -188,13 +188,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Assert.Throws(Of WebException)(Sub()
                                                Dim tmpFilePath As String = CreateTempDirectory()
                                                Dim destinationFileName = Path.Combine(tmpFilePath, "testing.md")
-                                               My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                             destinationFileName,
-                                             "",
-                                             "",
-                                             False,
-                                             1,
-                                             True)
+                                               My.Computer.Network.DownloadFile(DownloadLargeFileUrl,
+                                                                                destinationFileName,
+                                                                                "",
+                                                                                "",
+                                                                                False,
+                                                                                1,
+                                                                                True)
                                            End Sub
                                            )
         End Sub
@@ -226,7 +226,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                                                       "",
                                                                                       "",
                                                                                       False,
-                                                                                      connectionTimeout:=100000,
+                                                                                      100000,
                                                                                       overwrite:=False)
                                               Catch ex As Exception
                                                   Throw
@@ -273,8 +273,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                  100000,
                                                  False
                                                 )
-                                              Catch ex As Exception
-                                                  Throw
                                               Finally
                                                   CleanupTempDirectory(tmpFilePath)
                                               End Try
