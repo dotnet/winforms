@@ -47,59 +47,98 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return folder
         End Function
 
-        Private Sub NoOverWriteTest()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
-            Directory.CreateDirectory(tmpFilePath)
-            Dim destinationStream As FileStream = File.Create(destinationFileName)
-            destinationStream.Close()
-            Try
-                My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                 destinationFileName,
-                                                 "",
-                                                 "",
-                                                 False,
-                                                 connectionTimeout:=100000,
-                                                 overwrite:=False)
-            Catch ex As Exception
-                Throw
-            Finally
-                CleanupTempDirectory(tmpFilePath)
-            End Try
+        <WinFormsFact>
+        Public Sub DownloadWithNegativeTimeout()
+            Assert.Throws(Of ArgumentException)(
+                Sub()
+                    Dim tmpFilePath As String = CreateTempDirectory()
+                    Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+                    My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                     destinationFileName,
+                                                     "",
+                                                     "",
+                                                     True,
+                                                     -1,
+                                                     False
+                                                    )
+                End Sub)
         End Sub
 
-        Private Sub NoOverWriteTestWithUI()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
-            Directory.CreateDirectory(tmpFilePath)
-            Dim destinationStream As FileStream = File.Create(destinationFileName)
-            destinationStream.Close()
-            Try
-                My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                 destinationFileName,
-                                                 "",
-                                                 "",
-                                                 True,
-                                                 100000,
-                                                 False
-                                                )
-            Catch ex As Exception
-                Throw
-            Finally
-                CleanupTempDirectory(tmpFilePath)
-            End Try
+        <WinFormsFact>
+        Public Sub DownloadWithNothingDestinationFile()
+            Assert.Throws(Of ArgumentNullException)(
+                Sub()
+                    My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                     Nothing,
+                                                     "",
+                                                     "",
+                                                     True,
+                                                     100000,
+                                                     False
+                                                    )
+                End Sub)
         End Sub
 
-        Private Sub timeoutTest()
+        <WinFormsFact>
+        Public Sub DownloadWithNothingPassword()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFileName = Path.Combine(tmpFilePath, "testing.md")
+            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
             My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                             destinationFileName,
-                                             "",
-                                             "",
-                                             False,
-                                             1,
-                                             True)
+                                                destinationFileName,
+                                                "",
+                                                Nothing,
+                                                True,
+                                                100000,
+                                                False
+                                            )
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadWithNothingURI()
+            Assert.Throws(Of NullReferenceException)(
+                Sub()
+                    Dim tmpFilePath As String = CreateTempDirectory()
+                    Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+                    My.Computer.Network.DownloadFile(CType(Nothing, Uri),
+                                                     destinationFileName,
+                                                     "",
+                                                     "",
+                                                     True,
+                                                     100000,
+                                                     False
+                                                    )
+                End Sub)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadWithNothingUsername()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+            My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                destinationFileName,
+                                                Nothing,
+                                                "",
+                                                True,
+                                                100000,
+                                                False
+                                            )
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadWithNothingWebAddress()
+            Assert.Throws(Of ArgumentNullException)(
+                Sub()
+                    Dim tmpFilePath As String = CreateTempDirectory()
+                    Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+                    My.Computer.Network.DownloadFile(CStr(Nothing),
+                                                     destinationFileName,
+                                                     "",
+                                                     "",
+                                                     True,
+                                                     100000,
+                                                     False
+                                                    )
+                End Sub)
         End Sub
 
         <WinFormsFact>
@@ -145,7 +184,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub SimpleFileDownloadWithExpectedTimeOut_method()
-            Assert.Throws(Of WebException)(AddressOf timeoutTest)
+            Assert.Throws(Of WebException)(Sub()
+                                               Dim tmpFilePath As String = CreateTempDirectory()
+                                               Dim destinationFileName = Path.Combine(tmpFilePath, "testing.md")
+                                               My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                             destinationFileName,
+                                             "",
+                                             "",
+                                             False,
+                                             1,
+                                             True)
+                                           End Sub
+                                           )
         End Sub
 
         <WinFormsFact>
@@ -163,7 +213,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub SimpleFileDownloadWithJustUrlAndDestinationFileName_method()
-            Assert.Throws(Of IO.IOException)(AddressOf NoOverWriteTest)
+            Assert.Throws(Of IOException)(Sub()
+                                              Dim tmpFilePath As String = CreateTempDirectory()
+                                              Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+                                              Directory.CreateDirectory(tmpFilePath)
+                                              Dim destinationStream As FileStream = File.Create(destinationFileName)
+                                              destinationStream.Close()
+                                              Try
+                                                  My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                                                      destinationFileName,
+                                                                                      "",
+                                                                                      "",
+                                                                                      False,
+                                                                                      connectionTimeout:=100000,
+                                                                                      overwrite:=False)
+                                              Catch ex As Exception
+                                                  Throw
+                                              Finally
+                                                  CleanupTempDirectory(tmpFilePath)
+                                              End Try
+                                          End Sub
+                                             )
+
         End Sub
 
         <WinFormsFact(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
@@ -186,7 +257,27 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
         Public Sub SimpleFileDownloadWithUIDoNotOverwrite_method()
-            Assert.Throws(Of IO.IOException)(AddressOf NoOverWriteTestWithUI)
+            Assert.Throws(Of IOException)(Sub()
+                                              Dim tmpFilePath As String = CreateTempDirectory()
+                                              Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
+                                              Directory.CreateDirectory(tmpFilePath)
+                                              Dim destinationStream As FileStream = File.Create(destinationFileName)
+                                              destinationStream.Close()
+                                              Try
+                                                  My.Computer.Network.DownloadFile(DownloadFileUrl,
+                                                 destinationFileName,
+                                                 "",
+                                                 "",
+                                                 True,
+                                                 100000,
+                                                 False
+                                                )
+                                              Catch ex As Exception
+                                                  Throw
+                                              Finally
+                                                  CleanupTempDirectory(tmpFilePath)
+                                              End Try
+                                          End Sub)
         End Sub
 
     End Class
