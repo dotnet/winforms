@@ -34,6 +34,7 @@ public partial class LinkLabel : Label, IButtonControl
     private Font? _linkFont;
     private Font? _hoverLinkFont;
 
+    private bool _textLayoutValid;
     private bool _receivedDoubleClick;
     private readonly List<Link> _links = new(2);
 
@@ -509,7 +510,7 @@ public partial class LinkLabel : Label, IButtonControl
     {
         Debug.Assert(g is not null);
 
-        if (_textRegion is not null)
+        if (_textLayoutValid)
         {
             return _textRegion;
         }
@@ -520,6 +521,7 @@ public partial class LinkLabel : Label, IButtonControl
         {
             Links.Clear();
             Links.Add(new Link(0, -1));   // default 'magic' link.
+            _textLayoutValid = true;
             return null;
         }
 
@@ -592,6 +594,7 @@ public partial class LinkLabel : Label, IButtonControl
             _textRegion = visualRegion;
         }
 
+        _textLayoutValid = true;
         return _textRegion;
     }
 
@@ -719,6 +722,7 @@ public partial class LinkLabel : Label, IButtonControl
 
     private void InvalidateTextLayout()
     {
+        _textLayoutValid = false;
         _textRegion?.Dispose();
         _textRegion = null;
     }
