@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Globalization;
+using static System.ComponentModel.TypeConverter;
 
 namespace System.Windows.Forms.Tests;
 
@@ -83,5 +84,13 @@ public class KeysConverterTests
         KeysConverter converter = new();
         object result = converter.ConvertTo(keys, typeof(Enum[]));
         Assert.Equal(expectedResult, result);
+    }
+
+    [WinFormsFact]
+    public void GetStandardValues()
+    {
+        KeysConverter converter = new();
+        var standardValuesCollection = (StandardValuesCollection)converter.GetStandardValues();
+        Assert.Equal(34, standardValuesCollection.Count);
     }
 }
