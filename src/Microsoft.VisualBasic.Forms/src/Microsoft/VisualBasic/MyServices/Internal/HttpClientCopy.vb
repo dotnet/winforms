@@ -58,8 +58,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 Else
                     Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
                 End If
-            Catch ex As Exception
-                Throw
             End Try
             Dim contentLength? As Long = response?.Content.Headers.ContentLength
             If contentLength.HasValue Then
@@ -81,8 +79,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                 End If
                                 bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
                             Loop
-                        Catch ex As Exception
-                            Throw
                         Finally
                             CloseProgressDialog()
                         End Try
