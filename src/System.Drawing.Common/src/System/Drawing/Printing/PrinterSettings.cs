@@ -15,13 +15,6 @@ namespace System.Drawing.Printing;
 /// </summary>
 public unsafe partial class PrinterSettings : ICloneable
 {
-    // All read/write data is stored in managed code, and whenever we need to call Win32,
-    // we create new DEVMODE and DEVNAMES structures.  We don't store device capabilities,
-    // though.
-    //
-    // Also, all properties have hidden tri-state logic -- yes/no/default
-    private const int Padding64Bit = 4;
-
     private string? _printerName; // default printer.
     private string _driverName = "";
     private ushort _extraBytes;

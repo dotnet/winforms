@@ -8,7 +8,9 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 
+#if DEBUG
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
+#endif
 
 namespace System.Drawing;
 
