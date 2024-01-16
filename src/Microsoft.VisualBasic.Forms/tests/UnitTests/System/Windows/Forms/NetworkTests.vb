@@ -10,7 +10,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Partial Public Class NetworkTests
 
-        Private Const DownloadLargeFileUrl As String = "https://ash-speed.hetzner.com/1GB.bin"
+        Private Const DownloadLargeFileUrl As String = "https://ash-speed.hetzner.com/100MB.bin"
         Private Const DownloadFileUrl As String = "https://raw.githubusercontent.com/dotnet/winforms/main/docs/testing.md"
         Private ReadOnly _baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
 
@@ -245,7 +245,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Directory.CreateDirectory(tmpFilePath)
             Dim destinationStream As FileStream = File.Create(destinationFileName)
             destinationStream.Close()
-            My.Computer.Network.DownloadFile(DownloadFileUrl,
+            My.Computer.Network.DownloadFile(DownloadLargeFileUrl,
                                              destinationFileName,
                                              "",
                                              "",

@@ -74,7 +74,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
                                 Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
                                 If m_ProgressDialog IsNot Nothing Then
-                                    Dim percentage As Integer = CInt(contentLength.Value / totalBytesRead * 100)
+                                    Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
                                     InvokeIncrement(percentage)
                                 End If
                                 bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
