@@ -28686,7 +28686,7 @@ public partial class DataGridView
 
     private void SortDataBoundDataGridView_PerformCheck(DataGridViewColumn dataGridViewColumn)
     {
-        if (!(DataConnection?.List is IBindingList ibl))
+        if (DataConnection?.List is not IBindingList ibl)
         {
             throw new InvalidOperationException(SR.DataGridView_CannotSortDataBoundDataGridViewBoundToNonIBindingList);
         }
@@ -28764,12 +28764,12 @@ public partial class DataGridView
                 // So we simply reset their displayed state before the sort.
                 UpdateRowsDisplayedState(displayed: false);
 
-                // comparer will not be null in this case.
+                // Callers pass non-null comparer when DataSource is null.
                 Rows.Sort(comparer!, direction == ListSortDirection.Ascending);
             }
             else
             {
-                // dataGridViewColumn and DataConnection will not be null in this case.
+                // Callers pass non-null dataGridViewColumn when DataConnection is non-null.
                 SortDataBoundDataGridView_PerformCheck(dataGridViewColumn!);
 
                 // The check passed, do the sorting.
