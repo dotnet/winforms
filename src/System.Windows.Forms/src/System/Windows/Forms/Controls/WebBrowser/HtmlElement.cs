@@ -571,12 +571,12 @@ public sealed unsafe partial class HtmlElement
                 return null;
             }
 
-            int dispid = PInvoke.DISPID_UNKNOWN;
+            int dispid = PInvokeCore.DISPID_UNKNOWN;
 
             fixed (char* n = methodName)
             {
-                hr = scriptDispatch.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
-                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+                hr = scriptDispatch.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvokeCore.GetThreadLocale(), &dispid);
+                if (!hr.Succeeded || dispid == PInvokeCore.DISPID_UNKNOWN)
                 {
                     return null;
                 }
@@ -604,7 +604,7 @@ public sealed unsafe partial class HtmlElement
                 hr = scriptDispatch.Value->Invoke(
                     dispid,
                     IID.NULL(),
-                    PInvoke.GetThreadLocale(),
+                    PInvokeCore.GetThreadLocale(),
                     DISPATCH_FLAGS.DISPATCH_METHOD,
                     &dispParams,
                     &result,

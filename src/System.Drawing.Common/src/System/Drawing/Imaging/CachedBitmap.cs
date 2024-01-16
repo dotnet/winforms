@@ -44,7 +44,7 @@ public unsafe sealed class CachedBitmap : IDisposable
         ArgumentNullException.ThrowIfNull(graphics);
 
         Gdip.CheckStatus(Gdip.GdipCreateCachedBitmap(
-            new(bitmap, bitmap._nativeImage),
+            new(bitmap, (nint)bitmap._nativeImage),
             new(graphics, (nint)graphics.NativeGraphics),
             out _handle));
     }

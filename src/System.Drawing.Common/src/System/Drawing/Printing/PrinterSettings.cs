@@ -131,17 +131,12 @@ public unsafe partial class PrinterSettings : ICloneable
     {
         get
         {
-            int sizeOfStruct;
-
             // Note: The call to get the size of the buffer required for level 5 does not work properly on NT platforms.
             const uint Level = 4;
 
-            // PRINTER_INFO_4 is 12 or 24 bytes in size depending on the architecture.
-            sizeOfStruct = IntPtr.Size == 8
-                ? (IntPtr.Size * 2) + (sizeof(int) * 1) + Padding64Bit
-                : (IntPtr.Size * 2) + (sizeof(int) * 1);
-
             uint bytesNeeded;
+            uint count;
+
             bool success = PInvoke.EnumPrinters(
                 PInvoke.PRINTER_ENUM_LOCAL | PInvoke.PRINTER_ENUM_CONNECTIONS,
                 Name: null,
@@ -149,15 +144,18 @@ public unsafe partial class PrinterSettings : ICloneable
                 pPrinterEnum: null,
                 0,
                 &bytesNeeded,
-                pcReturned: null);
+                &count);
 
             if (!success)
             {
-                throw new Win32Exception();
+                WIN32_ERROR error = (WIN32_ERROR)Marshal.GetLastPInvokeError();
+                if (error != WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER)
+                {
+                    throw new Win32Exception((int)error);
+                }
             }
 
             using BufferScope<byte> buffer = new((int)bytesNeeded);
-            uint count;
 
             fixed (byte* b = buffer)
             {
@@ -181,7 +179,7 @@ public unsafe partial class PrinterSettings : ICloneable
 
                 for (int i = 0; i < count; i++)
                 {
-                    array[i] = new string(info[i].pServerName);
+                    array[i] = new string(info[i].pPrinterName);
                 }
 
                 return new StringCollection(array);
@@ -541,14 +539,12 @@ public unsafe partial class PrinterSettings : ICloneable
     // We need to pass IntPtr.Zero since passing HDevMode is non-performant.
     private static int FastDeviceCapabilities(PRINTER_DEVICE_CAPABILITIES capability, string printerName, void* output = null, int defaultValue = -1)
     {
-        int result = PInvoke.DeviceCapabilities(
-            printerName,
-            GetOutputPort(),
-            capability,
-            (PWSTR)output,
-            null);
-
-        return result == -1 ? defaultValue : result;
+        fixed (char* pn = printerName)
+        fixed (char* op = GetOutputPort())
+        {
+            int result = PInvoke.DeviceCapabilities(pn, op, capability, (PWSTR)output, null);
+            return result == -1 ? defaultValue : result;
+        }
     }
 
     private static string GetDefaultPrinterName() => GetDefaultName(1);

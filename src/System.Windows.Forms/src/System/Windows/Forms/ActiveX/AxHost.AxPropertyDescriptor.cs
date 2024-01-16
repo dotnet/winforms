@@ -89,7 +89,7 @@ public abstract partial class AxHost
         internal int Dispid
             => _baseDescriptor.TryGetAttribute(out DispIdAttribute? dispid)
                 ? dispid.Value
-                : PInvoke.DISPID_UNKNOWN;
+                : PInvokeCore.DISPID_UNKNOWN;
 
         public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
 

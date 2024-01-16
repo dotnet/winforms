@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.Serialization;
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -183,7 +183,7 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
         lock (s_syncObject)
         {
             PInvoke.InitCommonControls();
-            _nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(memoryStream));
+            _nativeImageList = new ImageList.NativeImageList(new ComManagedStream(memoryStream));
         }
 
         if (_nativeImageList.HIMAGELIST.IsNull)
@@ -241,14 +241,14 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
             return PInvoke.ImageList.WriteEx(
                 new HandleRef<HIMAGELIST>(this, handle),
                 IMAGE_LIST_WRITE_STREAM_FLAGS.ILP_DOWNLEVEL,
-                new Ole32.GPStream(stream)).Succeeded;
+                new ComManagedStream(stream)).Succeeded;
         }
         catch (EntryPointNotFoundException)
         {
             // WriteEx wasn't found - that's fine - we will use Write.
         }
 
-        return PInvoke.ImageList.Write(new HandleRef<HIMAGELIST>(this, handle), new Ole32.GPStream(stream));
+        return PInvoke.ImageList.Write(new HandleRef<HIMAGELIST>(this, handle), new ComManagedStream(stream));
     }
 
     /// <summary>

@@ -803,19 +803,19 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
-        AmbientChanged(PInvoke.DISPID_AMBIENT_FONT);
+        AmbientChanged(PInvokeCore.DISPID_AMBIENT_FONT);
     }
 
     protected override void OnForeColorChanged(EventArgs e)
     {
         base.OnForeColorChanged(e);
-        AmbientChanged(PInvoke.DISPID_AMBIENT_FORECOLOR);
+        AmbientChanged(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
     }
 
     protected override void OnBackColorChanged(EventArgs e)
     {
         base.OnBackColorChanged(e);
-        AmbientChanged(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+        AmbientChanged(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
     }
 
     private void AmbientChanged(int dispid)
@@ -855,7 +855,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             // If it is, call DISPID_AMBIENT_DISPLAYNAME directly on the control itself.
             if (GetOcx() is IOleControl.Interface oleCtl)
             {
-                oleCtl.OnAmbientPropertyChange(PInvoke.DISPID_AMBIENT_DISPLAYNAME);
+                oleCtl.OnAmbientPropertyChange(PInvokeCore.DISPID_AMBIENT_DISPLAYNAME);
             }
         }
     }
@@ -1900,7 +1900,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 case StorageType.Stream:
                 case StorageType.StreamInit:
                     ms = new MemoryStream();
-                    using (var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(ms)))
+                    using (var stream = ms.ToIStream())
                     {
                         if (_storageType == StorageType.Stream)
                         {
@@ -2099,46 +2099,46 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         switch (dispid)
         {
-            case PInvoke.DISPID_AMBIENT_USERMODE:
+            case PInvokeCore.DISPID_AMBIENT_USERMODE:
                 return IsUserMode();
-            case PInvoke.DISPID_AMBIENT_AUTOCLIP:
+            case PInvokeCore.DISPID_AMBIENT_AUTOCLIP:
                 return true;
-            case PInvoke.DISPID_AMBIENT_MESSAGEREFLECT:
+            case PInvokeCore.DISPID_AMBIENT_MESSAGEREFLECT:
                 return true;
-            case PInvoke.DISPID_AMBIENT_UIDEAD:
+            case PInvokeCore.DISPID_AMBIENT_UIDEAD:
                 return false;
-            case PInvoke.DISPID_AMBIENT_DISPLAYASDEFAULT:
+            case PInvokeCore.DISPID_AMBIENT_DISPLAYASDEFAULT:
                 return false;
-            case PInvoke.DISPID_AMBIENT_FONT:
+            case PInvokeCore.DISPID_AMBIENT_FONT:
                 if (richParent is not null)
                 {
                     return GetIFontFromFont(richParent.Font);
                 }
 
                 return null;
-            case PInvoke.DISPID_AMBIENT_SHOWGRABHANDLES:
+            case PInvokeCore.DISPID_AMBIENT_SHOWGRABHANDLES:
                 return false;
-            case PInvoke.DISPID_AMBIENT_SHOWHATCHING:
+            case PInvokeCore.DISPID_AMBIENT_SHOWHATCHING:
                 return false;
-            case PInvoke.DISPID_AMBIENT_BACKCOLOR:
+            case PInvokeCore.DISPID_AMBIENT_BACKCOLOR:
                 if (richParent is not null)
                 {
                     return GetOleColorFromColor(richParent.BackColor);
                 }
 
                 return null;
-            case PInvoke.DISPID_AMBIENT_FORECOLOR:
+            case PInvokeCore.DISPID_AMBIENT_FORECOLOR:
                 if (richParent is not null)
                 {
                     return GetOleColorFromColor(richParent.ForeColor);
                 }
 
                 return null;
-            case PInvoke.DISPID_AMBIENT_DISPLAYNAME:
+            case PInvokeCore.DISPID_AMBIENT_DISPLAYNAME:
                 return AxContainer.GetNameForControl(this) ?? string.Empty;
-            case PInvoke.DISPID_AMBIENT_LOCALEID:
-                return PInvoke.GetThreadLocale();
-            case PInvoke.DISPID_AMBIENT_RIGHTTOLEFT:
+            case PInvokeCore.DISPID_AMBIENT_LOCALEID:
+                return PInvokeCore.GetThreadLocale();
+            case PInvokeCore.DISPID_AMBIENT_RIGHTTOLEFT:
                 Control? control = this;
                 while (control is not null)
                 {
@@ -2277,7 +2277,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private void CreateWithoutLicense(Guid clsid)
     {
         IUnknown* unknown;
-        HRESULT hr = PInvoke.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             &clsid,
             (IUnknown*)null,
             CLSCTX.CLSCTX_INPROC_SERVER,
@@ -2386,7 +2386,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         using BSTR name = default;
-        hr = categorizeProperties.Value->GetCategoryName(propcat, (int)PInvoke.GetThreadLocale(), &name);
+        hr = categorizeProperties.Value->GetCategoryName(propcat, (int)PInvokeCore.GetThreadLocale(), &name);
         if (hr.Succeeded && !name.IsNull)
         {
             category = new CategoryAttribute(name.ToString());
@@ -2737,7 +2737,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private AxPropertyDescriptor? GetPropertyDescriptorFromDispid(int dispid)
     {
-        Debug.Assert(dispid != PInvoke.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
+        Debug.Assert(dispid != PInvokeCore.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
 
         PropertyDescriptorCollection props = FillProperties(null);
         foreach (PropertyDescriptor prop in props)
@@ -3004,7 +3004,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 lplpUnk = unknown,
                 cPages = 1,
                 lpPages = &guid,
-                lcid = PInvoke.GetThreadLocale(),
+                lcid = PInvokeCore.GetThreadLocale(),
                 dispidInitialProperty = dispid
             };
 
@@ -3064,7 +3064,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 &unknown,
                 uuids.cElems,
                 uuids.pElems,
-                PInvoke.GetThreadLocale(),
+                PInvokeCore.GetThreadLocale(),
                 0,
                 (void*)null).AssertSuccess();
         }
@@ -3072,7 +3072,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             if (_oleSite is IPropertyNotifySink.Interface sink)
             {
-                sink.OnChanged(PInvoke.DISPID_UNKNOWN);
+                sink.OnChanged(PInvokeCore.DISPID_UNKNOWN);
             }
 
             transaction?.Commit();
@@ -3350,7 +3350,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         qaContainer.pPropertyNotifySink = ComHelpers.GetComPointer<IPropertyNotifySink>(_oleSite);
         qaContainer.pFont = GetIFontPointerFromFont(GetParentContainer()._parent.Font);
         qaContainer.dwAppearance = 0;
-        qaContainer.lcid = (int)PInvoke.GetThreadLocale();
+        qaContainer.lcid = (int)PInvokeCore.GetThreadLocale();
 
         Control? parent = ParentInternal;
 
@@ -3796,39 +3796,39 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_BOLD))
+            if ((bool)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_BOLD))
             {
                 style |= FontStyle.Bold;
             }
 
-            if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_ITALIC))
+            if ((bool)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_ITALIC))
             {
                 style |= FontStyle.Italic;
             }
 
-            if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_UNDER))
+            if ((bool)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_UNDER))
             {
                 style |= FontStyle.Underline;
             }
 
-            if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_STRIKE))
+            if ((bool)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_STRIKE))
             {
                 style |= FontStyle.Strikeout;
             }
 
-            if ((short)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_WEIGHT) >= 700)
+            if ((short)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_WEIGHT) >= 700)
             {
                 style |= FontStyle.Bold;
             }
 
-            using BSTR name = (BSTR)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_NAME);
+            using BSTR name = (BSTR)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_NAME);
 
             return new Font(
                 name.ToString(),
-                (float)(CY)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_SIZE),
+                (float)(CY)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_SIZE),
                 style,
                 GraphicsUnit.Point,
-                (byte)(short)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_CHARSET));
+                (byte)(short)dispatch.Value->GetProperty(PInvokeCore.DISPID_FONT_CHARSET));
         }
         catch (Exception)
         {

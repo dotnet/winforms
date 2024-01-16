@@ -302,7 +302,7 @@ public abstract partial class AxHost
                     return HRESULT.S_OK;
                 }
 
-                *pid = PInvoke.DISPID_UNKNOWN;
+                *pid = PInvokeCore.DISPID_UNKNOWN;
                 return HRESULT.DISP_E_UNKNOWNNAME;
             }
 
@@ -326,7 +326,7 @@ public abstract partial class AxHost
                     return HRESULT.S_OK;
                 }
 
-                *pid = PInvoke.DISPID_UNKNOWN;
+                *pid = PInvokeCore.DISPID_UNKNOWN;
                 return HRESULT.S_FALSE;
             }
 

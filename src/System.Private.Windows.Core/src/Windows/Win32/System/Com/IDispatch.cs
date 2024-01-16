@@ -93,7 +93,7 @@ internal unsafe partial struct IDispatch
     {
         Guid guid = Guid.Empty;
         EXCEPINFO pExcepInfo = default;
-        int putDispatchID = PInvoke.DISPID_PROPERTYPUT;
+        int putDispatchID = PInvokeCore.DISPID_PROPERTYPUT;
         errorText = null;
 
         DISPPARAMS dispParams = new()
@@ -110,7 +110,7 @@ internal unsafe partial struct IDispatch
         HRESULT hr = Invoke(
             dispatchId,
             &guid,
-            PInvoke.GetThreadLocale(),
+            PInvokeCore.GetThreadLocale(),
             DISPATCH_FLAGS.DISPATCH_PROPERTYPUT,
             &dispParams,
             null,
@@ -138,7 +138,7 @@ internal unsafe partial struct IDispatch
 
         fixed (char* n = name)
         {
-            HRESULT result = GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1u, PInvoke.GetThreadLocale(), &id);
+            HRESULT result = GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1u, PInvokeCore.GetThreadLocale(), &id);
             dispId = id;
             return result;
         }

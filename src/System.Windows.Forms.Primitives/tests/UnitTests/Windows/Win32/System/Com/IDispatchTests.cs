@@ -26,10 +26,10 @@ public partial class IDispatchTests
             fixed (int* pRgDispId = rgDispId)
             fixed (PWSTR* pRgszNames = rgszNames)
             {
-                picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
+                picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvokeCore.GetThreadLocale(), pRgDispId);
                 Assert.Equal(new PWSTR[] { width, other }, rgszNames);
 
-                Assert.Equal(new int[] { (int)PInvoke.DISPID_PICT_WIDTH, PInvoke.DISPID_UNKNOWN }, rgDispId);
+                Assert.Equal(new int[] { (int)PInvokeCore.DISPID_PICT_WIDTH, PInvokeCore.DISPID_UNKNOWN }, rgDispId);
             }
         }
     }
@@ -42,7 +42,7 @@ public partial class IDispatchTests
         Assert.False(picture.IsNull);
 
         using ComScope<ITypeInfo> typeInfo = new(null);
-        picture.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+        picture.Value->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
     }
 
     [StaFact]
@@ -66,9 +66,9 @@ public partial class IDispatchTests
 
         using VARIANT varResult = default;
         HRESULT hr = ((IDispatch*)picture.Value)->TryGetProperty(
-            PInvoke.DISPID_PICT_WIDTH,
+            PInvokeCore.DISPID_PICT_WIDTH,
             &varResult,
-            PInvoke.GetThreadLocale());
+            PInvokeCore.GetThreadLocale());
         Assert.Equal(HRESULT.S_OK, hr);
         Assert.Equal(VARENUM.VT_I4, varResult.vt);
         Assert.Equal(16, GdiHelper.HimetricToPixelY(varResult.data.intVal));

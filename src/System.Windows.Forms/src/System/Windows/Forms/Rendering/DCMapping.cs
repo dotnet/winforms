@@ -31,7 +31,7 @@ internal readonly struct DCMapping : IDisposable
         ArgumentNullException.ThrowIfNull(hdc);
 
         _hdc = hdc;
-        _savedState = PInvoke.SaveDC(hdc);
+        _savedState = PInvokeCore.SaveDC(hdc);
 
         // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
         Point viewportOrg = default;

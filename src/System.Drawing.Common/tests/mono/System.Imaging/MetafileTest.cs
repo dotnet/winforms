@@ -303,7 +303,7 @@ public class MetafileFulltrustTest
     [Fact]
     public void Metafile_StreamIntPtrEmfType_Null()
     {
-        Assert.Throws<NullReferenceException>(() => Metafile_StreamEmfType(null, EmfType.EmfOnly));
+        Assert.Throws<ArgumentNullException>(() => Metafile_StreamEmfType(null, EmfType.EmfOnly));
     }
 
     [Fact]

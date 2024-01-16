@@ -18,7 +18,7 @@ internal static unsafe partial class GlobalInterfaceTable
         fixed (IGlobalInterfaceTable** git = &s_globalInterfaceTable)
         fixed (Guid* g = &CLSID.StdGlobalInterfaceTable)
         {
-            PInvoke.CoCreateInstance(
+            PInvokeCore.CoCreateInstance(
                 g,
                 pUnkOuter: null,
                 CLSCTX.CLSCTX_INPROC_SERVER,

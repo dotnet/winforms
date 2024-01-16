@@ -82,7 +82,7 @@ public partial class WebBrowser
                 {
                     IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                    using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_parent._documentStreamToSetOnLoad));
+                    using var pStream = _parent._documentStreamToSetOnLoad.ToIStream();
                     psi.Load(pStream);
                     htmlDocument.Encoding = "unicode";
                 }

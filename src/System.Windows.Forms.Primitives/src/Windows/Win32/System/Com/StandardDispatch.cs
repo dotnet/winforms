@@ -12,7 +12,7 @@ namespace Windows.Win32.System.Com;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   This is roughly analagous to Win32's CreateStdDispatch which creates a simple wrapper that passes
+///   This is roughly analogous to Win32's CreateStdDispatch which creates a simple wrapper that passes
 ///   through to <see cref="ITypeInfo"/> for basic <see cref="IDispatch"/> support.
 ///  </para>
 /// </remarks>
@@ -148,7 +148,7 @@ internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispa
             return HRESULT.E_POINTER;
         }
 
-        *pid = PInvoke.DISPID_UNKNOWN;
+        *pid = PInvokeCore.DISPID_UNKNOWN;
 
         return GetNextDispID(grfdex, id, pid);
     }
@@ -205,7 +205,7 @@ internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispa
             return HRESULT.E_POINTER;
         }
 
-        if (id == PInvoke.DISPID_UNKNOWN)
+        if (id == PInvokeCore.DISPID_UNKNOWN)
         {
             return HRESULT.E_INVALIDARG;
         }

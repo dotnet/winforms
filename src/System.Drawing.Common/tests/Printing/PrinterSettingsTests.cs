@@ -624,4 +624,15 @@ public class PrinterSettingsTests
 
         Assert.Equal(expected, printerSettings.ToString());
     }
+
+    [Fact]
+    public void PrinterSettings_GetInstalledPrinters_Success()
+    {
+        var installedPrinters = PrinterSettings.InstalledPrinters;
+        installedPrinters.Should().NotBeNull();
+        foreach (string printer in installedPrinters)
+        {
+            printer.Should().NotBeNullOrEmpty();
+        }
+    }
 }

@@ -480,7 +480,7 @@ public abstract partial class AxHost
             {
                 AxPropertyDescriptor? prop = null;
 
-                if (dispid != PInvoke.DISPID_UNKNOWN)
+                if (dispid != PInvokeCore.DISPID_UNKNOWN)
                 {
                     prop = _host.GetPropertyDescriptorFromDispid(dispid);
                     if (prop is not null)

@@ -611,7 +611,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
         }
 
         VARIANT nativeValue = default;
-        hr = dispatch.Value->TryGetProperty(DISPID, &nativeValue, PInvoke.GetThreadLocale());
+        hr = dispatch.Value->TryGetProperty(DISPID, &nativeValue, PInvokeCore.GetThreadLocale());
 
         if (hr != HRESULT.S_OK && hr != HRESULT.S_FALSE)
         {
@@ -892,7 +892,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
                     FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
                     null,
                     (uint)hr,
-                    PInvoke.GetThreadLocale(),
+                    PInvokeCore.GetThreadLocale(),
                     b,
                     (uint)buffer.Length - 2,
                     null);

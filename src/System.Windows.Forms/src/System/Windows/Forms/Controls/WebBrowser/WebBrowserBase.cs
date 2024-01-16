@@ -546,7 +546,7 @@ public unsafe partial class WebBrowserBase : Control
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
-        AmbientChanged(PInvoke.DISPID_AMBIENT_FONT);
+        AmbientChanged(PInvokeCore.DISPID_AMBIENT_FONT);
     }
 
     //
@@ -556,7 +556,7 @@ public unsafe partial class WebBrowserBase : Control
     protected override void OnForeColorChanged(EventArgs e)
     {
         base.OnForeColorChanged(e);
-        AmbientChanged(PInvoke.DISPID_AMBIENT_FORECOLOR);
+        AmbientChanged(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
     }
 
     //
@@ -566,7 +566,7 @@ public unsafe partial class WebBrowserBase : Control
     protected override void OnBackColorChanged(EventArgs e)
     {
         base.OnBackColorChanged(e);
-        AmbientChanged(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+        AmbientChanged(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
     }
 
     //
@@ -856,7 +856,7 @@ public unsafe partial class WebBrowserBase : Control
             // First, create the ActiveX control
             Debug.Assert(_activeXInstance is null, "activeXInstance must be null");
 
-            HRESULT hr = PInvoke.CoCreateInstance(
+            HRESULT hr = PInvokeCore.CoCreateInstance(
                 in _clsid,
                 null,
                 CLSCTX.CLSCTX_INPROC_SERVER,
