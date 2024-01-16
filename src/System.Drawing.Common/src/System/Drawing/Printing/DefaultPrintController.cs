@@ -47,8 +47,8 @@ public unsafe class StandardPrintController : PrintController, IHandle<HDC>
             int result = PInvoke.StartDoc(this, info);
             if (result <= 0)
             {
-                int error = Marshal.GetLastPInvokeError();
-                e.Cancel = error == (int)WIN32_ERROR.ERROR_CANCELLED ? true : throw new Win32Exception(error);
+                WIN32_ERROR error = (WIN32_ERROR)Marshal.GetLastPInvokeError();
+                e.Cancel = error == WIN32_ERROR.ERROR_CANCELLED ? true : throw new Win32Exception((int)error);
             }
         }
     }
