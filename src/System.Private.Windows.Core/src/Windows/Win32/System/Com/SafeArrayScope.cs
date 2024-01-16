@@ -66,6 +66,13 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         {
             throw new ArgumentException("Use ComSafeArrayScope instead");
         }
+        else if (typeof(T) == typeof(object))
+        {
+            if (value->VarType is not VARENUM.VT_VARIANT)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
         else
         {
             // The type has not been accounted for yet in the SafeArrayScope
@@ -95,6 +102,10 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         else if (typeof(T) == typeof(nint) || typeof(T).IsAssignableTo(typeof(IComIID)))
         {
             throw new ArgumentException("Use ComSafeArrayScope instead");
+        }
+        else if (typeof(T) == typeof(object))
+        {
+            vt = VARENUM.VT_VARIANT;
         }
         else
         {
@@ -153,6 +164,13 @@ internal readonly unsafe ref struct SafeArrayScope<T>
             {
                 return (T)(object)GetElement<nint>(i);
             }
+            else if (typeof(T) == typeof(object))
+            {
+                // This may need to change if we have a case where
+                // the VARIANT should not be disposed.
+                using VARIANT result = GetElement<VARIANT>(i);
+                return (T?)result.ToObject();
+            }
 
             // Noop. This is an unknown type. We should fill this method out to to do the right
             // thing as we run into new types.
@@ -160,7 +178,12 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         }
         set
         {
-            if (value is string s)
+            if (Value->VarType == VARENUM.VT_VARIANT)
+            {
+                using VARIANT variant = VARIANT.FromObject(value);
+                PutElement(i, &variant);
+            }
+            else if (value is string s)
             {
                 using BSTR bstrText = new(s);
                 PutElement(i, bstrText);
