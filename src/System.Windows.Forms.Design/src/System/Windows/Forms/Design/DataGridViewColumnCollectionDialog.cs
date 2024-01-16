@@ -49,9 +49,9 @@ internal class DataGridViewColumnCollectionDialog : Form
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
     private readonly HashSet<DataGridViewColumn> _userAddedColumns = new();
 
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider? _serviceProvider;
 
-    internal DataGridViewColumnCollectionDialog(IServiceProvider provider)
+    internal DataGridViewColumnCollectionDialog(IServiceProvider? provider)
     {
         _serviceProvider = provider;
 
