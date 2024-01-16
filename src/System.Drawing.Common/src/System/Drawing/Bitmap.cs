@@ -280,6 +280,8 @@ public unsafe sealed class Bitmap : Image
 
     public void UnlockBits(Imaging.BitmapData bitmapdata)
     {
+        ArgumentNullException.ThrowIfNull(bitmapdata);
+
         fixed (void* data = &bitmapdata.GetPinnableReference())
         {
             PInvoke.GdipBitmapUnlockBits(NativeBitmap, (GdiPlus.BitmapData*)data).ThrowIfFailed();
