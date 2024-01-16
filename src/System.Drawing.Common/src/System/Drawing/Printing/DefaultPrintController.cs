@@ -36,6 +36,7 @@ public unsafe class StandardPrintController : PrintController, IHandle<HDC>
         {
             DOCINFOW info = new()
             {
+                cbSize = sizeof(DOCINFOW),
                 lpszDocName = documentName,
                 lpszDatatype = null,
                 fwType = 0,
@@ -48,10 +49,21 @@ public unsafe class StandardPrintController : PrintController, IHandle<HDC>
             if (result <= 0)
             {
                 WIN32_ERROR error = (WIN32_ERROR)Marshal.GetLastPInvokeError();
+                if (error == WIN32_ERROR.NO_ERROR)
+                {
+                    // StartDoc isn't documented as sets last error, but it does. Need updated SDK metadata.
+                    // Can't use CsWin32 to generate the PInvoke as it won't do it as you normally should use
+                    // Marshal.GetLastPInvokeError().
+                    error = GetLastError();
+                }
+
                 e.Cancel = error == WIN32_ERROR.ERROR_CANCELLED ? true : throw new Win32Exception((int)error);
             }
         }
     }
+
+    [DllImport(Libraries.Kernel32, ExactSpelling = true)]
+    private static extern WIN32_ERROR GetLastError();
 
     /// <summary>
     ///  Implements StartPage for printing to a physical printer.

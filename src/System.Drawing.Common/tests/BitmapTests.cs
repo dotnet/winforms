@@ -1329,7 +1329,7 @@ public class BitmapTests : FileCleanupTestBase
     {
         using (Bitmap bitmap = new(1, 1))
         {
-            AssertExtensions.Throws<ArgumentException>("bitmapData", () => bitmap.UnlockBits(null));
+            AssertExtensions.Throws<ArgumentNullException>("bitmapData", () => bitmap.UnlockBits(null));
         }
     }
 

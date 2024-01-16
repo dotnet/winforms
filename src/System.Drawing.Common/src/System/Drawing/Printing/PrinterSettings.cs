@@ -456,7 +456,7 @@ public unsafe partial class PrinterSettings : ICloneable
     internal CreateDcScope CreateDeviceContext(HGLOBAL hdevmode)
     {
         DEVMODEW* devmode = (DEVMODEW*)PInvokeCore.GlobalLock(hdevmode);
-        CreateDcScope hdc = new(DriverName, PrinterNameInternal, devmode);
+        CreateDcScope hdc = new(DriverName, PrinterNameInternal, devmode, informationOnly: false);
         PInvokeCore.GlobalUnlock(hdevmode);
         return hdc;
     }
