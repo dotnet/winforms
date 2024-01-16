@@ -533,11 +533,14 @@ Namespace Microsoft.VisualBasic.Devices
                                                   dialog, connectionTimeout, overwrite,
                                               UICancelOption.ThrowException
                                              )
-                If t.IsFaulted Then
+                If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
@@ -595,11 +598,14 @@ Namespace Microsoft.VisualBasic.Devices
                                               networkCredentials, dialog, connectionTimeout,
                                               overwrite, onUserCancel
                                              )
-                If t.IsFaulted Then
+                If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
@@ -648,11 +654,14 @@ Namespace Microsoft.VisualBasic.Devices
                                                   overwrite,
                                               UICancelOption.ThrowException
                                              )
-                If t.IsFaulted Then
+                If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
@@ -705,11 +714,14 @@ Namespace Microsoft.VisualBasic.Devices
                                                   connectionTimeout,
                                                   overwrite,
                                                   onUserCancel)
-                If t.IsFaulted Then
+                If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
@@ -757,11 +769,14 @@ Namespace Microsoft.VisualBasic.Devices
                                                   overwrite,
                                               UICancelOption.ThrowException
                                              )
-                If t.IsFaulted Then
+                If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
@@ -818,11 +833,14 @@ Namespace Microsoft.VisualBasic.Devices
                                                   overwrite,
                                                   onUserCancel
                                                  )
-                If t.IsFaulted Then
+                If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
