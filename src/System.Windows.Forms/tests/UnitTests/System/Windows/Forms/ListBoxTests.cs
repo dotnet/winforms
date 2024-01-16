@@ -1836,7 +1836,7 @@ public class ListBoxTests
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.ShouldSerializeValue(control));
+        Assert.False(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
