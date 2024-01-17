@@ -10,7 +10,7 @@ public class ArrayTests
 {
     [Theory]
     [MemberData(nameof(ArrayInfo_ParseSuccessData))]
-    public void ArrayInfo_Parse_Success(MemoryStream stream, int expectedId, int expectedLength)
+    public void ArrayInfo_Parse_Success(Stream stream, int expectedId, int expectedLength)
     {
         using BinaryReader reader = new(stream);
         ArrayInfo info = ArrayInfo.Parse(reader, out Count length);
@@ -29,7 +29,7 @@ public class ArrayTests
 
     [Theory]
     [MemberData(nameof(ArrayInfo_ParseNegativeData))]
-    public void ArrayInfo_Parse_Negative(MemoryStream stream, Type expectedException)
+    public void ArrayInfo_Parse_Negative(Stream stream, Type expectedException)
     {
         using BinaryReader reader = new(stream);
         Assert.Throws(expectedException, () => ArrayInfo.Parse(reader, out Count length));

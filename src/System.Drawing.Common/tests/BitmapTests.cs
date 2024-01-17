@@ -78,7 +78,7 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData("", "path")]
     [InlineData("\0", "path")]
     [InlineData("NoSuchPath", null)]
-    public void Ctor_InvalidFilePath_ThrowsArgumentException(string filename, string paramName)
+    public void Ctor_InvalidFilePath_ThrowsArgumentException(string filename, string? paramName)
     {
         AssertExtensions.Throws<ArgumentException>(paramName, null, () => new Bitmap(filename));
         AssertExtensions.Throws<ArgumentException>(paramName, null, () => new Bitmap(filename, false));

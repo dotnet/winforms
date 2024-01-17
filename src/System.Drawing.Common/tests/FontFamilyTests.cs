@@ -52,7 +52,7 @@ public class FontFamilyTests
     [InlineData(null)]
     [InlineData("NoSuchFont")]
     [InlineData("Serif")]
-    public void Ctor_NoSuchFontName_ThrowsArgumentException(string name)
+    public void Ctor_NoSuchFontName_ThrowsArgumentException(string? name)
     {
         AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily(name));
         AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily(name, null));

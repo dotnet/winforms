@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2009 Novell, Inc (http://www.novell.com)
@@ -77,7 +77,7 @@ public class PaperSourceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("sourceName")]
-    public void SourceName_Set_GetReturnsExpected(string value)
+    public void SourceName_Set_GetReturnsExpected(string? value)
     {
         PaperSource source = new()
         {
