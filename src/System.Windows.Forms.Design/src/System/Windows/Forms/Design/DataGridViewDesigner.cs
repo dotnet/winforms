@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -13,6 +13,8 @@ internal class DataGridViewDesigner : ControlDesigner
 {
     protected DesignerVerbCollection? designerVerbs;
 
+    public override DataGridView Control => (DataGridView)Component;
+
     // CHROME stuff
     //
     // DesignerActionLists
@@ -21,47 +23,23 @@ internal class DataGridViewDesigner : ControlDesigner
     // need this to trap meta data changes
     private CurrencyManager? _currencyManager;
 
-    // cache this type cause we will use it a lot
-    private static Type typeofIList = typeof(IList);
-    private static Type typeofDataGridViewImageColumn = typeof(DataGridViewImageColumn);
-    private static Type typeofDataGridViewTextBoxColumn = typeof(DataGridViewTextBoxColumn);
-    private static Type typeofDataGridViewCheckBoxColumn = typeof(DataGridViewCheckBoxColumn);
-
     public DataGridViewDesigner()
     {
         AutoResizeHandles = true;
     }
 
     // need AssociatedComponents for Copy / Paste
-    public override ICollection AssociatedComponents
-    {
-        get
-        {
-            DataGridView? dataGridView = Component as DataGridView;
-            if (dataGridView is not null)
-            {
-                return dataGridView.Columns;
-            }
-
-            return base.AssociatedComponents;
-        }
-    }
+    public override ICollection AssociatedComponents => Control.Columns;
 
     public DataGridViewAutoSizeColumnsMode AutoSizeColumnsMode
     {
-        get
-        {
-            DataGridView? dataGridView = Component as DataGridView;
-            Debug.Assert(dataGridView is not null, "Unexpected null dataGridView in DataGridViewDesigner:get_AutoSizeColumnsMode");
-            return dataGridView.AutoSizeColumnsMode;
-        }
+        get => Control.AutoSizeColumnsMode;
         set
         {
             // DANIELHE: this is a workaround for a bug in ComponentCache: if a component changed then its list of AssociatedComponents
             // is not marked as changed to the serialization engine will not serialize them.
-            DataGridView? dataGridView = Component as DataGridView;
-            Debug.Assert(dataGridView is not null, "Unexpected null dataGridView in DataGridViewDesigner:set_AutoSizeColumnsMode");
-            IComponentChangeService? componentChangeService = Component.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            DataGridView dataGridView = Control;
+            IComponentChangeService? componentChangeService = dataGridView.Site?.GetService<IComponentChangeService>();
             PropertyDescriptor? prop = TypeDescriptor.GetProperties(typeof(DataGridViewColumn))["Width"];
 
             for (int i = 0; i < dataGridView.Columns.Count; i++)
@@ -80,14 +58,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
     public object? DataSource
     {
-        get
-        {
-            return ((DataGridView)Component).DataSource;
-        }
+        get => Control.DataSource;
         set
         {
-            DataGridView? dataGridView = Component as DataGridView;
-            if (dataGridView is not null && dataGridView.AutoGenerateColumns && dataGridView.DataSource is null && value is not null)
+            if (Control is { AutoGenerateColumns: true, DataSource: null } dataGridView && value is not null)
             {
                 // RefreshColumnCollection() method does the job of siting/unsiting DataGridViewColumns
                 // and calls OnComponentChanged/ing at the right times.
@@ -99,7 +73,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 dataGridView.AutoGenerateColumns = false;
             }
 
-            ((DataGridView)Component).DataSource = value;
+            Control.DataSource = value;
         }
     }
 
@@ -109,16 +83,21 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             // we still need the current Component
             // so execute this code before base.Dispose(...)
-            Debug.Assert(Component is not null, "how did this get set to null?");
-            DataGridView? dataGridView = Component as DataGridView;
 
             // unhook our event handlers
-            if (dataGridView is not null)
+            if (HasComponent)
             {
+                DataGridView dataGridView = Control;
                 dataGridView.DataSourceChanged -= dataGridViewChanged;
                 dataGridView.DataMemberChanged -= dataGridViewChanged;
                 dataGridView.BindingContextChanged -= dataGridViewChanged;
                 dataGridView.ColumnRemoved -= dataGridView_ColumnRemoved;
+
+                // unhook the ComponentRemoved event handler
+                if (dataGridView.Site.TryGetService(out IComponentChangeService? ccs))
+                {
+                    ccs.ComponentRemoving -= DataGridViewDesigner_ComponentRemoving;
+                }
             }
 
             // unhook MetaDataChanged handler from the currency manager
@@ -128,16 +107,6 @@ internal class DataGridViewDesigner : ControlDesigner
             }
 
             _currencyManager = null;
-
-            // unhook the ComponentRemoved event handler
-            if (Component.Site is not null)
-            {
-                IComponentChangeService? ccs = Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                if (ccs is not null)
-                {
-                    ccs.ComponentRemoving -= DataGridViewDesigner_ComponentRemoving;
-                }
-            }
         }
 
         base.Dispose(disposing);
@@ -147,16 +116,12 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         base.Initialize(component);
 
-        if (component.Site is not null)
+        if (component.Site.TryGetService(out IComponentChangeService? componentChangeService))
         {
-            IComponentChangeService? componentChangeService = component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            if (componentChangeService is not null)
-            {
-                componentChangeService.ComponentRemoving += DataGridViewDesigner_ComponentRemoving;
-            }
+            componentChangeService.ComponentRemoving += DataGridViewDesigner_ComponentRemoving;
         }
 
-        DataGridView dataGridView = (DataGridView)component;
+        DataGridView dataGridView = Control;
 
         // DataGridViewDesigner::Initialize runs after InitializeComponent was deserialized.
         // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to TRUE if there is no DataSource, otherwise set it to FALSE
@@ -168,16 +133,16 @@ internal class DataGridViewDesigner : ControlDesigner
         dataGridView.BindingContextChanged += dataGridViewChanged;
 
         // now add data bound columns
-        dataGridViewChanged(Component, EventArgs.Empty);
+        dataGridViewChanged(dataGridView, EventArgs.Empty);
 
         // Attach to column removed for clean up
         dataGridView.ColumnRemoved += dataGridView_ColumnRemoved;
     }
 
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
-        ((DataGridView)Component).ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        Control.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
     }
 
     /// <devdoc>
@@ -223,38 +188,40 @@ internal class DataGridViewDesigner : ControlDesigner
                 BuildActionLists();
             }
 
-            return _actionLists!;
+            return _actionLists;
         }
     }
 
+    [MemberNotNull(nameof(_actionLists))]
     private void BuildActionLists()
     {
         _actionLists = new DesignerActionListCollection();
 
         // ChooseDataSource action list
-        _actionLists.Add(new DataGridViewChooseDataSourceActionList(this));
+        _actionLists.Add(new DataGridViewChooseDataSourceActionList(this)
+        {
+            // if one actionList has AutoShow == true then the chrome panel will popup when the user DnD the DataGridView onto the form
+            // It would make sense to promote AutoShow to DesignerActionListCollection.
+            // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList
+            //
+            AutoShow = true
+        });
 
         // column collection editing
         _actionLists.Add(new DataGridViewColumnEditingActionList(this));
 
         // AllowUserToAddRows / ReadOnly / AllowUserToDeleteRows / AllowUserToOrderColumns
         _actionLists.Add(new DataGridViewPropertiesActionList(this));
-
-        // if one actionList has AutoShow == true then the chrome panel will popup when the user DnD the DataGridView onto the form
-        // It would make sense to promote AutoShow to DesignerActionListCollection.
-        // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList
-        //
-        _actionLists[0]!.AutoShow = true;
     }
 
     private void dataGridViewChanged(object? sender, EventArgs e)
     {
-        DataGridView dataGridView = (DataGridView)Component;
+        DataGridView dataGridView = Control;
 
         CurrencyManager? newCM = null;
-        if (dataGridView.DataSource is not null && dataGridView.BindingContext is not null)
+        if (dataGridView.DataSource is not null)
         {
-            newCM = (CurrencyManager)dataGridView.BindingContext[dataGridView.DataSource, dataGridView.DataMember];
+            newCM = (CurrencyManager?)dataGridView.BindingContext?[dataGridView.DataSource, dataGridView.DataMember];
         }
 
         if (newCM != _currencyManager)
@@ -319,9 +286,9 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private void DataGridViewDesigner_ComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        DataGridView? dataGridView = Component as DataGridView;
+        DataGridView dataGridView = Control;
 
-        if (e.Component is not null && dataGridView is not null && e.Component == dataGridView.DataSource)
+        if (e.Component is not null && e.Component == dataGridView.DataSource)
         {
             //
             // The current data source was removed from the designer
@@ -337,24 +304,18 @@ internal class DataGridViewDesigner : ControlDesigner
             string previousDataMember = dataGridView.DataMember;
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(dataGridView);
-            PropertyDescriptor? propertyDescriptor = props is not null ? props?["DataMember"] : null;
+            PropertyDescriptor? propertyDescriptor = props?["DataMember"];
 
-            if (componentChangeService is not null)
+            if (propertyDescriptor is not null)
             {
-                if (propertyDescriptor is not null)
-                {
-                    componentChangeService.OnComponentChanging(dataGridView, propertyDescriptor);
-                }
+                componentChangeService?.OnComponentChanging(dataGridView, propertyDescriptor);
             }
 
             dataGridView.DataSource = null;
 
-            if (componentChangeService is not null)
+            if (propertyDescriptor is not null)
             {
-                if (propertyDescriptor is not null)
-                {
-                    componentChangeService.OnComponentChanged(dataGridView, propertyDescriptor, previousDataMember, "");
-                }
+                componentChangeService?.OnComponentChanged(dataGridView, propertyDescriptor, previousDataMember, string.Empty);
             }
         }
     }
@@ -394,8 +355,6 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         base.PreFilterProperties(properties);
 
-        PropertyDescriptor? prop;
-
         // Handle shadowed properties
         //
         string[] shadowProps = new string[]
@@ -408,8 +367,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            prop = properties[shadowProps[i]] as PropertyDescriptor;
-            if (prop is not null)
+            if (properties[shadowProps[i]] is PropertyDescriptor prop)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(DataGridViewDesigner), prop, empty);
             }
@@ -453,7 +411,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
             PropertyDescriptor? pd = TypeDescriptor.GetProperties(dataGridViewColumn)["UserAddedColumn"];
             object? UserAddedColumn = pd?.GetValue(dataGridViewColumn);
-            if (pd is not null && UserAddedColumn is not null && (bool)UserAddedColumn)
+            if (UserAddedColumn is not null && (bool)UserAddedColumn)
             {
                 continue;
             }
@@ -468,7 +426,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 // DataPropertyName does not map to a column anymore
                 removeColumn = true;
             }
-            else if (typeofIList.IsAssignableFrom(dataFieldProperty.PropertyType))
+            else if (typeof(IList).IsAssignableFrom(dataFieldProperty.PropertyType))
             {
                 // DataPropertyName may map to an Image column.
                 // Check for that using the Image TypeConverter
@@ -489,12 +447,12 @@ internal class DataGridViewDesigner : ControlDesigner
 
         if (similarSchema)
         {
-            ISite? site = Component?.Site;
-            IComponentChangeService? changeService = site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            PropertyDescriptor? columnsProp = Component is null ? null : TypeDescriptor.GetProperties(Component)["Columns"];
+            ISite? site = dataGridView.Site;
+            IComponentChangeService? changeService = site?.GetService<IComponentChangeService>();
+            PropertyDescriptor? columnsProp = TypeDescriptor.GetProperties(dataGridView)["Columns"];
             try
             {
-                changeService?.OnComponentChanging(Component!, columnsProp);
+                changeService?.OnComponentChanging(dataGridView, columnsProp);
             }
             catch (InvalidOperationException)
             {
@@ -513,7 +471,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
                 PropertyDescriptor? pd = TypeDescriptor.GetProperties(dataGridViewColumn)["UserAddedColumn"];
                 object? UserAddedColumn = pd?.GetValue(dataGridViewColumn);
-                if (pd is not null && UserAddedColumn is not null && (bool)UserAddedColumn)
+                if (UserAddedColumn is not null && (bool)UserAddedColumn)
                 {
                     i++;
                     continue;
@@ -529,7 +487,7 @@ internal class DataGridViewDesigner : ControlDesigner
                     // DataPropertyName does not map to a column anymore
                     removeColumn = true;
                 }
-                else if (typeofIList.IsAssignableFrom(dataFieldProperty.PropertyType))
+                else if (typeof(IList).IsAssignableFrom(dataFieldProperty.PropertyType))
                 {
                     // DataPropertyName may map to an Image column.
                     // Check for that using the Image TypeConverter
@@ -552,10 +510,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 }
             }
 
-            if (Component is not null)
-            {
-                changeService?.OnComponentChanged(Component, columnsProp, null, null);
-            }
+            changeService?.OnComponentChanged(dataGridView, columnsProp, oldValue: null, newValue: null);
         }
 
         return similarSchema;
@@ -564,10 +519,9 @@ internal class DataGridViewDesigner : ControlDesigner
     [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void RefreshColumnCollection()
     {
-        DataGridView? dataGridView = (DataGridView)Component;
+        DataGridView dataGridView = Control;
 
-        ISupportInitializeNotification? dataSource = dataGridView?.DataSource as ISupportInitializeNotification;
-        if (dataSource is not null && !dataSource.IsInitialized)
+        if (dataGridView.DataSource is ISupportInitializeNotification { IsInitialized: false })
         {
             // The DataSource is not initialized yet.
             // When the dataSource gets initialized it will send a MetaDataChanged event and at
@@ -575,10 +529,8 @@ internal class DataGridViewDesigner : ControlDesigner
             return;
         }
 
-        IComponentChangeService? changeService = null;
-        PropertyDescriptor? columnsProp = null;
-        ISite? site = Component.Site;
-        IDesignerHost? host = site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        ISite? site = dataGridView.Site;
+        IDesignerHost? host = site?.GetService<IDesignerHost>();
 
         // if after changing the data source / data member the dataGridView has columns which are still databound
         // then keep them and don't change the column collection.
@@ -591,7 +543,7 @@ internal class DataGridViewDesigner : ControlDesigner
         // then we don't want to throw these columns away when the dataManager receives another dataSet from the web service.
         // and we don't want to add another columns
 
-        if (dataGridView is not null && ProcessSimilarSchema(dataGridView))
+        if (ProcessSimilarSchema(dataGridView))
         {
             return;
         }
@@ -607,7 +559,7 @@ internal class DataGridViewDesigner : ControlDesigner
         // 7. DataGridView.Columns.Add( new DataGridViewColumns)
         // 8. OnComponentChanged DataGridView.Columns
 
-        Debug.Assert(dataGridView?.DataSource is null || _currencyManager is not null, "if we have a data source we should also have a currency manager by now");
+        Debug.Assert(dataGridView.DataSource is null || _currencyManager is not null, "if we have a data source we should also have a currency manager by now");
         PropertyDescriptorCollection? backEndProps = null;
 
         if (_currencyManager is not null)
@@ -622,14 +574,14 @@ internal class DataGridViewDesigner : ControlDesigner
             }
         }
 
-        IContainer? currentContainer = dataGridView?.Site is not null ? dataGridView.Site.Container : null;
-        changeService = Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-        columnsProp = TypeDescriptor.GetProperties(Component!)["Columns"];
+        IContainer? currentContainer = site?.Container;
+        IComponentChangeService? changeService = site?.GetService<IComponentChangeService>();
+        PropertyDescriptor? columnsProp = TypeDescriptor.GetProperties(dataGridView)["Columns"];
 
         // 1. OnComponentChanging DataGridView.Columns
-        changeService?.OnComponentChanging(Component!, columnsProp);
+        changeService?.OnComponentChanging(dataGridView, columnsProp);
 
-        DataGridViewColumn[] removeColumns = new DataGridViewColumn[dataGridView!.Columns.Count];
+        DataGridViewColumn[] removeColumns = new DataGridViewColumn[dataGridView.Columns.Count];
         int removeColumnsCount = 0;
         for (int i = 0; i < dataGridView.Columns.Count; i++)
         {
@@ -653,7 +605,7 @@ internal class DataGridViewDesigner : ControlDesigner
         }
 
         // 3. OnComponentChanged DataGridView.Columns
-        changeService?.OnComponentChanged(Component!, columnsProp, null, null);
+        changeService?.OnComponentChanged(dataGridView, columnsProp, oldValue: null, newValue: null);
 
         // 4. IContainer.Remove(dataGridView.Columns)
         if (currentContainer is not null)
@@ -664,12 +616,11 @@ internal class DataGridViewDesigner : ControlDesigner
             }
         }
 
-        DataGridViewColumn[]? columnsToBeAdded = null;
-        int columnsToBeAddedCount = 0;
+        List<DataGridViewColumn>? columnsToBeAdded = null;
         if (dataGridView.DataSource is not null)
         {
-            columnsToBeAdded = new DataGridViewColumn[backEndProps!.Count];
-            columnsToBeAddedCount = 0;
+            // backEndProps is not null here because _currencyManager cannot be null if dataGridView.DataSource is not null
+            columnsToBeAdded = new List<DataGridViewColumn>(backEndProps!.Count);
             for (int i = 0; i < backEndProps.Count; i++)
             {
                 TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(System.Drawing.Image));
@@ -682,7 +633,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 {
                     if (imageTypeConverter.CanConvertFrom(propType))
                     {
-                        columnType = typeofDataGridViewImageColumn;
+                        columnType = typeof(DataGridViewImageColumn);
                     }
                     else
                     {
@@ -691,18 +642,18 @@ internal class DataGridViewDesigner : ControlDesigner
                 }
                 else if (propType == typeof(bool) || propType == typeof(CheckState))
                 {
-                    columnType = typeofDataGridViewCheckBoxColumn;
+                    columnType = typeof(DataGridViewCheckBoxColumn);
                 }
                 else if (typeof(Image).IsAssignableFrom(propType) || imageTypeConverter.CanConvertFrom(propType))
                 {
-                    columnType = typeofDataGridViewImageColumn;
+                    columnType = typeof(DataGridViewImageColumn);
                 }
                 else
                 {
-                    columnType = typeofDataGridViewTextBoxColumn;
+                    columnType = typeof(DataGridViewTextBoxColumn);
                 }
 
-                string nameFromText = ToolStripDesigner.NameFromText(backEndProps[i].Name, columnType, Component!.Site);
+                string nameFromText = ToolStripDesigner.NameFromText(backEndProps[i].Name, columnType, site);
 
                 //
                 // host.CreateComponent adds the column to its list of components
@@ -723,44 +674,32 @@ internal class DataGridViewDesigner : ControlDesigner
 
                     host?.Container.Add(dataGridViewColumn, nameFromText);
 
-                    columnsToBeAdded[columnsToBeAddedCount] = dataGridViewColumn;
-                    columnsToBeAddedCount++;
+                    columnsToBeAdded.Add(dataGridViewColumn);
                 }
             }
         }
 
         // 6. OnComponentChanging DataGridView.Columns
-        changeService?.OnComponentChanging(Component!, columnsProp);
+        changeService?.OnComponentChanging(dataGridView, columnsProp);
 
         // 7. DataGridView.Columns.Add( new DataGridViewColumns)
-        for (int i = 0; i < columnsToBeAddedCount; i++)
+        if (columnsToBeAdded is not null)
         {
-            // wipe out the display index
-            columnsToBeAdded![i].DisplayIndex = -1;
-            dataGridView.Columns.Add(columnsToBeAdded[i]);
+            for (int i = 0; i < columnsToBeAdded.Count; i++)
+            {
+                // wipe out the display index
+                columnsToBeAdded[i].DisplayIndex = -1;
+                dataGridView.Columns.Add(columnsToBeAdded[i]);
+            }
         }
 
         // 8. OnComponentChanged DataGridView.Columns
-        changeService?.OnComponentChanged(Component!, columnsProp, null, null);
+        changeService?.OnComponentChanged(dataGridView, columnsProp, null, null);
     }
 
-    private bool ShouldSerializeAutoSizeColumnsMode()
-    {
-        DataGridView? dataGridView = Component as DataGridView;
-        if (dataGridView is not null)
-        {
-            return dataGridView.AutoSizeColumnsMode != DataGridViewAutoSizeColumnsMode.None;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    private bool ShouldSerializeAutoSizeColumnsMode() => Control.AutoSizeColumnsMode != DataGridViewAutoSizeColumnsMode.None;
 
-    private bool ShouldSerializeDataSource()
-    {
-        return ((DataGridView)Component).DataSource is not null;
-    }
+    private bool ShouldSerializeDataSource() => Control.DataSource is not null;
 
     // Ideally there would be a public method like this somewhere.
     internal static void ShowErrorDialog(IUIService? uiService, Exception ex, Control? dataGridView)
@@ -772,7 +711,7 @@ internal class DataGridViewDesigner : ControlDesigner
         else
         {
             string message = ex.Message;
-            if (message is null || message.Length == 0)
+            if (string.IsNullOrEmpty(message))
             {
                 message = ex.ToString();
             }
@@ -802,12 +741,12 @@ internal class DataGridViewDesigner : ControlDesigner
 
     public void OnEditColumns(object? sender, EventArgs e)
     {
-        IDesignerHost? host = Component.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IDesignerHost? host = Component.Site?.GetService<IDesignerHost>();
 
         // child modal dialog -launching in System Aware mode
         DataGridViewColumnCollectionDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
-            () => new DataGridViewColumnCollectionDialog(((DataGridView)Component!).Site!));
-        dialog.SetLiveDataGridView((DataGridView)Component);
+            () => new DataGridViewColumnCollectionDialog(Control.Site));
+        dialog.SetLiveDataGridView(Control);
         DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewEditColumnsTransactionString);
         DialogResult result = DialogResult.Cancel;
 
@@ -830,14 +769,14 @@ internal class DataGridViewDesigner : ControlDesigner
 
     public void OnAddColumn(object? sender, EventArgs e)
     {
-        IDesignerHost? host = Component.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IDesignerHost? host = Component.Site?.GetService<IDesignerHost>();
         DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewAddColumnTransactionString);
         DialogResult result = DialogResult.Cancel;
 
         // child modal dialog -launching in System Aware mode
         DataGridViewAddColumnDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
-            () => new DataGridViewAddColumnDialog(((DataGridView)Component).Columns, (DataGridView)Component));
-        dialog.Start(((DataGridView)Component).Columns.Count, persistChangesToDesigner: true);
+            () => new DataGridViewAddColumnDialog(Control.Columns, Control));
+        dialog.Start(Control.Columns.Count, persistChangesToDesigner: true);
 
         try
         {
@@ -858,21 +797,20 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private DialogResult ShowDialog(Form dialog)
     {
-        IUIService? service = Component.Site?.GetService(typeof(IUIService)) as IUIService;
-        if (service is not null)
+        if (Component.Site.TryGetService(out IUIService? service))
         {
             return service.ShowDialog(dialog);
         }
         else
         {
-            return dialog.ShowDialog(Component as IWin32Window);
+            return dialog.ShowDialog(Control);
         }
     }
 
     [ComplexBindingProperties("DataSource", "DataMember")]
     private class DataGridViewChooseDataSourceActionList : DesignerActionList
     {
-        private DataGridViewDesigner _owner;
+        private readonly DataGridViewDesigner _owner;
 
         public DataGridViewChooseDataSourceActionList(DataGridViewDesigner owner) : base(owner.Component)
         {
@@ -893,32 +831,25 @@ internal class DataGridViewDesigner : ControlDesigner
         [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public object? DataSource
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
-            get
-            {
-                // Use the shadow property which is defined on the designer.
-                return _owner.DataSource;
-            }
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
+            // Use the shadow property which is defined on the designer.
+            get => _owner.DataSource;
 
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 // left to do: transaction stuff
-                DataGridView dataGridView = (DataGridView)_owner.Component;
-                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                DataGridView dataGridView = _owner.Control;
+                IDesignerHost? host = dataGridView.Site?.GetService<IDesignerHost>();
                 PropertyDescriptor? dataSourceProp = TypeDescriptor.GetProperties(dataGridView)["DataSource"];
-                IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                IComponentChangeService? changeService = dataGridView.Site?.GetService<IComponentChangeService>();
                 DesignerTransaction? transaction = host?.CreateTransaction(string.Format(SR.DataGridViewChooseDataSourceTransactionString, dataGridView.Name));
                 try
                 {
-                    changeService?.OnComponentChanging(_owner.Component!, dataSourceProp);
+                    changeService?.OnComponentChanging(_owner.Component, dataSourceProp);
                     // Use the shadow property which is defined on the designer.
                     _owner.DataSource = value;
-                    changeService?.OnComponentChanged(_owner.Component!, dataSourceProp, null, null);
+                    changeService?.OnComponentChanged(_owner.Component, dataSourceProp, null, null);
                     transaction?.Commit();
                     transaction = null;
                 }
@@ -932,7 +863,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private class DataGridViewColumnEditingActionList : DesignerActionList
     {
-        private DataGridViewDesigner _owner;
+        private readonly DataGridViewDesigner _owner;
         public DataGridViewColumnEditingActionList(DataGridViewDesigner owner) : base(owner.Component)
         {
             _owner = owner;
@@ -955,17 +886,13 @@ internal class DataGridViewDesigner : ControlDesigner
             return items;
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-        ]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
         public void EditColumns()
         {
             _owner.OnEditColumns(this, EventArgs.Empty);
         }
 
-        [
-            SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-        ]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
         public void AddColumn()
         {
             _owner.OnAddColumn(this, EventArgs.Empty);
@@ -974,7 +901,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private class DataGridViewPropertiesActionList : DesignerActionList
     {
-        private DataGridViewDesigner _owner;
+        private readonly DataGridViewDesigner _owner;
 
         public DataGridViewPropertiesActionList(DataGridViewDesigner owner) : base(owner.Component)
         {
@@ -997,17 +924,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToAddRows
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
-            get
-            {
-                return ((DataGridView)_owner.Component).AllowUserToAddRows;
-            }
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
+            get => _owner.Control.AllowUserToAddRows;
 
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToAddRows)
@@ -1015,7 +935,8 @@ internal class DataGridViewDesigner : ControlDesigner
                     return;
                 }
 
-                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                DataGridView dataGridView = _owner.Control;
+                IDesignerHost? host = dataGridView.Site?.GetService<IDesignerHost>();
 
                 DesignerTransaction? transaction;
 
@@ -1030,13 +951,13 @@ internal class DataGridViewDesigner : ControlDesigner
 
                 try
                 {
-                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToAddRows"];
-                    changeService?.OnComponentChanging(_owner.Component!, prop);
+                    IComponentChangeService? changeService = dataGridView.Site?.GetService<IComponentChangeService>();
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(dataGridView)["AllowUserToAddRows"];
+                    changeService?.OnComponentChanging(dataGridView, prop);
 
-                    ((DataGridView)_owner.Component!).AllowUserToAddRows = value;
+                    dataGridView.AllowUserToAddRows = value;
 
-                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    changeService?.OnComponentChanged(dataGridView, prop, null, null);
                     transaction?.Commit();
                     transaction = null;
                 }
@@ -1049,17 +970,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToDeleteRows
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
-            get
-            {
-                return ((DataGridView)_owner.Component).AllowUserToDeleteRows;
-            }
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
+            get => _owner.Control.AllowUserToDeleteRows;
 
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToDeleteRows)
@@ -1067,7 +981,8 @@ internal class DataGridViewDesigner : ControlDesigner
                     return;
                 }
 
-                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                DataGridView dataGridView = _owner.Control;
+                IDesignerHost? host = dataGridView.Site?.GetService<IDesignerHost>();
 
                 DesignerTransaction? transaction;
 
@@ -1082,13 +997,13 @@ internal class DataGridViewDesigner : ControlDesigner
 
                 try
                 {
-                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToDeleteRows"];
-                    changeService?.OnComponentChanging(_owner.Component!, prop);
+                    IComponentChangeService? changeService = dataGridView.Site?.GetService<IComponentChangeService>();
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(dataGridView)["AllowUserToDeleteRows"];
+                    changeService?.OnComponentChanging(dataGridView, prop);
 
-                    ((DataGridView)_owner.Component!).AllowUserToDeleteRows = value;
+                    dataGridView.AllowUserToDeleteRows = value;
 
-                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    changeService?.OnComponentChanged(dataGridView, prop, null, null);
                     transaction?.Commit();
                     transaction = null;
                 }
@@ -1101,17 +1016,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToOrderColumns
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
-            get
-            {
-                return ((DataGridView)_owner.Component).AllowUserToOrderColumns;
-            }
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
+            get => _owner.Control.AllowUserToOrderColumns;
 
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToOrderColumns)
@@ -1119,7 +1027,8 @@ internal class DataGridViewDesigner : ControlDesigner
                     return;
                 }
 
-                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                DataGridView dataGridView = _owner.Control;
+                IDesignerHost? host = dataGridView.Site?.GetService<IDesignerHost>();
 
                 DesignerTransaction? transaction;
 
@@ -1134,13 +1043,13 @@ internal class DataGridViewDesigner : ControlDesigner
 
                 try
                 {
-                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToReorderColumns"];
-                    changeService?.OnComponentChanging(_owner.Component!, prop);
+                    IComponentChangeService? changeService = dataGridView.Site?.GetService<IComponentChangeService>();
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(dataGridView)["AllowUserToReorderColumns"];
+                    changeService?.OnComponentChanging(dataGridView, prop);
 
-                    ((DataGridView)_owner.Component!).AllowUserToOrderColumns = value;
+                    dataGridView.AllowUserToOrderColumns = value;
 
-                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    changeService?.OnComponentChanged(dataGridView, prop, null, null);
                     transaction?.Commit();
                     transaction = null;
                 }
@@ -1153,17 +1062,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool ReadOnly
         {
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
-            get
-            {
-                return !((DataGridView)_owner.Component).ReadOnly;
-            }
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
+            get => !_owner.Control.ReadOnly;
 
-            [
-                SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.
-            ]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == ReadOnly)
@@ -1171,7 +1073,8 @@ internal class DataGridViewDesigner : ControlDesigner
                     return;
                 }
 
-                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                DataGridView dataGridView = _owner.Control;
+                IDesignerHost? host = dataGridView.Site?.GetService<IDesignerHost>();
 
                 DesignerTransaction? transaction;
 
@@ -1186,13 +1089,13 @@ internal class DataGridViewDesigner : ControlDesigner
 
                 try
                 {
-                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["ReadOnly"];
-                    changeService?.OnComponentChanging(_owner.Component!, prop);
+                    IComponentChangeService? changeService = dataGridView.Site?.GetService<IComponentChangeService>();
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(dataGridView)["ReadOnly"];
+                    changeService?.OnComponentChanging(dataGridView, prop);
 
-                    ((DataGridView)_owner.Component!).ReadOnly = !value;
+                    dataGridView.ReadOnly = !value;
 
-                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    changeService?.OnComponentChanged(dataGridView, prop, null, null);
                     transaction?.Commit();
                     transaction = null;
                 }

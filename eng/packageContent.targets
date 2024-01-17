@@ -44,7 +44,7 @@
       <PackagePath Condition="'$(IsAnalyzerProject)' == 'true'">sdk/analyzers/dotnet$(AnalyzerTargetLanguage)</PackagePath>
     </PropertyGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(HasNoPublicIntellisense)' != 'true'">
       <!-- The intellisense provided by the Docs system -->
       <IntellisenseXmlFileSource>$([MSBuild]::NormalizePath('$(_DotnetApiDocsFilesRoot)', '$(AssemblyName).xml'))</IntellisenseXmlFileSource>
 

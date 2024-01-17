@@ -16,13 +16,8 @@
       We don't care about CLS compliance since everything here is internal and we want to match native types.
     -->
     <NoWarn>$(NoWarn);CS3016</NoWarn>
-    <!--
-      Libraries code has changed a number of APIs from `ref` to `in`. CSWin32 generates code that passes by `ref`
-      to some of these. Disabling for now until we can get https://github.com/microsoft/CsWin32/issues/1014 resolved.
-    <NoWarn>$(NoWarn);CS9195</NoWarn>
-    -->
     <Deterministic>true</Deterministic>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
     <RootNamespace />
     <HasNoPublicIntellisense>true</HasNoPublicIntellisense>
