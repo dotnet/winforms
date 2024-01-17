@@ -1815,11 +1815,12 @@ public class ListBoxTests
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
         using ListBox control = new();
+        Assert.True(control.DrawMode is DrawMode.Normal);
         Assert.False(property.CanResetValue(control));
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.CanResetValue(control));
+        Assert.False(property.CanResetValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
@@ -1835,7 +1836,7 @@ public class ListBoxTests
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.ShouldSerializeValue(control));
+        Assert.False(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
