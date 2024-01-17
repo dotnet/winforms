@@ -139,8 +139,9 @@ internal readonly unsafe ref struct SafeArrayScope<T>
     /// <remarks>
     ///  <para>
     ///   A copy will be made of anything that is put into the <see cref="SAFEARRAY"/>
-    ///   and anything the <see cref="SAFEARRAY"/> gives out. Be sure to dispose of the
-    ///   items that are given to/from the <see cref="SAFEARRAY"/> if necessary.
+    ///   and anything the <see cref="SAFEARRAY"/> gives out is a copy and has been add ref appropriately if applicable.
+    ///   Be sure to dispose of items that are given to the <see cref="SAFEARRAY"/> if necessary. All
+    ///   items given out by the <see cref="SAFEARRAY"/> should be disposed.
     ///  </para>
     /// </remarks>
     public T? this[int i]
@@ -166,8 +167,6 @@ internal readonly unsafe ref struct SafeArrayScope<T>
             }
             else if (typeof(T) == typeof(object))
             {
-                // This may need to change if we have a case where
-                // the VARIANT should not be disposed.
                 using VARIANT result = GetElement<VARIANT>(i);
                 return (T?)result.ToObject();
             }
