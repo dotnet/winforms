@@ -96,7 +96,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub DownloadWithNothingURI()
-            Assert.Throws(Of NullReferenceException)(
+            Assert.Throws(Of ArgumentNullException)(
                 Sub()
                     Dim tmpFilePath As String = CreateTempDirectory()
                     Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
@@ -238,7 +238,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         End Sub
 
-        <WinFormsFact(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact> '(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
         Public Sub SimpleFileDownloadWithUI_method()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFileName As String = Path.Combine(tmpFilePath, "testing.md")
@@ -256,7 +256,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
-        <WinFormsFact(Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
+        <WinFormsFact> ' (Skip:="Application class not available in CI, see: https://github.com/dotnet/winforms/issues/9807")>
         Public Sub SimpleFileDownloadWithUIDoNotOverwrite_method()
             Assert.Throws(Of IOException)(Sub()
                                               Dim tmpFilePath As String = CreateTempDirectory()
