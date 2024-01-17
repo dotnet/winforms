@@ -59,6 +59,7 @@
     <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj">
       <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
       <Pack>true</Pack>
+      <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
 
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
