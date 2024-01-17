@@ -413,7 +413,7 @@ public sealed unsafe partial class HtmlDocument
 
     public void Write(string text)
     {
-        using SafeArrayScope<string> scope = new(1);
+        using SafeArrayScope<object> scope = new(1);
         if (scope.IsNull)
         {
             return;
@@ -422,7 +422,7 @@ public sealed unsafe partial class HtmlDocument
         scope[0] = text;
 
         using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-        htmlDoc2.Value->write(scope.Value).ThrowOnFailure();
+        htmlDoc2.Value->write(scope);
     }
 
     /// <summary>

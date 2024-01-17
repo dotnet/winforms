@@ -1895,7 +1895,7 @@ public class HtmlDocumentTests
         yield return new object[] { "<p>Hi</p>", "<P>Hi</P>" };
     }
 
-/*    [WinFormsTheory]
+    [WinFormsTheory]
     [MemberData(nameof(Write_TestData))]
     public async Task HtmlDocument_Write_InvokeEmpty_Success(string text, string expectedInnerHtml)
     {
@@ -1927,7 +1927,7 @@ public class HtmlDocumentTests
 
         document.Write(text);
         Assert.Equal(expectedInnerHtml, document.Body?.InnerHtml);
-    }*/
+    }
 
     [WinFormsTheory]
     [BoolData]
