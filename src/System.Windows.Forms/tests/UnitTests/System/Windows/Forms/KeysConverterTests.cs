@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Globalization;
-using static System.ComponentModel.TypeConverter;
 
 namespace System.Windows.Forms.Tests;
 
@@ -89,8 +88,16 @@ public class KeysConverterTests
     [WinFormsFact]
     public void GetStandardValues()
     {
+        Keys[] expectedValues =
+        [
+            Keys.None, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.Alt, Keys.Back, Keys.Control,
+            Keys.Delete, Keys.End, Keys.Enter, Keys.F1, Keys.F10, Keys.F11, Keys.F12, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8,
+            Keys.F9, Keys.Home, Keys.Insert, Keys.Next, Keys.PageUp, Keys.Shift
+        ];
+
         KeysConverter converter = new();
-        var standardValuesCollection = (StandardValuesCollection)converter.GetStandardValues();
+        var standardValuesCollection = converter.GetStandardValues();
         Assert.Equal(34, standardValuesCollection.Count);
+        Assert.Equal(expectedValues, standardValuesCollection);
     }
 }
