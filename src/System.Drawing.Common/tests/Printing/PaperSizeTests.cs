@@ -45,7 +45,7 @@ public class PaperSizeTests
     [InlineData(null, -1, -2)]
     [InlineData("", 0, 0)]
     [InlineData("name", 100, 200)]
-    public void Ctor_String_Int_Int(string name, int width, int height)
+    public void Ctor_String_Int_Int(string? name, int width, int height)
     {
         PaperSize size = new(name, width, height);
         Assert.Equal(PaperKind.Custom, size.Kind);

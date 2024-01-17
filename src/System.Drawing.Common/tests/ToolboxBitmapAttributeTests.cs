@@ -51,7 +51,7 @@ namespace System.Drawing.Tests
         [InlineData(typeof(ClassWithNoNamespace), -1, -1)]
         [InlineData(typeof(bitmap_173x183_indexed_8bit), 173, 183)]
         [InlineData(typeof(ToolboxBitmapAttributeTests), -1, -1)]
-        public void Ctor_Type(Type type, int width, int height)
+        public void Ctor_Type(Type? type, int width, int height)
         {
             ToolboxBitmapAttribute attribute = new(type);
             using (Image image = attribute.GetImage(type))
@@ -79,7 +79,7 @@ namespace System.Drawing.Tests
         [InlineData(typeof(ToolboxBitmapAttributeTests), "empty.file", -1, -1)]
         [InlineData(typeof(ToolboxBitmapAttributeTests), "bitmap_173x183_indexed_8bit", 173, 183)]
         [InlineData(typeof(ToolboxBitmapAttributeTests), "bitmap_173x183_indexed_8bit.bmp", 173, 183)]
-        public void Ctor_Type_String(Type type, string fileName, int width, int height)
+        public void Ctor_Type_String(Type? type, string? fileName, int width, int height)
         {
             ToolboxBitmapAttribute attribute = new(type, fileName);
 
