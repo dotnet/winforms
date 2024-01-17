@@ -27229,7 +27229,7 @@ public partial class DataGridView
             OnColumnHeadersHeightChanged(EventArgs.Empty);
         }
     }
-#nullable disable
+
     protected virtual bool SetCurrentCellAddressCore(int columnIndex,
         int rowIndex,
         bool setAnchorCellAddress,
@@ -27269,7 +27269,7 @@ public partial class DataGridView
         _dataGridViewOper[OperationInCurrentCellChange] = true;
         try
         {
-            DataGridViewCell dataGridViewCellTmp = null;
+            DataGridViewCell? dataGridViewCellTmp = null;
 
             if (columnIndex > -1)
             {
@@ -27374,7 +27374,12 @@ public partial class DataGridView
                         {
                             if (!IsInnerCellOutOfBounds(columnIndex, rowIndex))
                             {
-                                OnRowEnter(ref dataGridViewCellTmp, columnIndex, rowIndex, true /*canCreateNewRow*/, false /*validationFailureOccurred*/);
+                                OnRowEnter(
+                                    ref dataGridViewCellTmp,
+                                    columnIndex,
+                                    rowIndex,
+                                    canCreateNewRow: true,
+                                    validationFailureOccurred: false);
                             }
                         }
 
@@ -27505,16 +27510,17 @@ public partial class DataGridView
                     && !_dataGridViewOper[OperationInDispose])
                 {
                     DataGridViewCell currentCell = CurrentCellInternal;
-                    if (!EndEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.CurrentCellChange,
-                                validateCurrentCell ? DataGridViewValidateCellInternal.Always : DataGridViewValidateCellInternal.Never,
-                                validateCurrentCell /*fireCellLeave*/,
-                                false /*fireCellEnter*/,
-                                validateCurrentCell /*fireRowLeave*/,
-                                false /*fireRowEnter*/,
-                                false /*fireLeave*/,
-                                EditMode != DataGridViewEditMode.EditOnEnter /*keepFocus*/,
-                                false /*resetCurrentCell*/,
-                                false /*resetAnchorCell unused here*/))
+                    if (!EndEdit(
+                        DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.CurrentCellChange,
+                        validateCurrentCell ? DataGridViewValidateCellInternal.Always : DataGridViewValidateCellInternal.Never,
+                        fireCellLeave: validateCurrentCell,
+                        fireCellEnter: false,
+                        fireRowLeave: validateCurrentCell,
+                        fireRowEnter: false,
+                        fireLeave: false,
+                        keepFocus: EditMode != DataGridViewEditMode.EditOnEnter,
+                        resetCurrentCell: false,
+                        resetAnchorCell: false))
                     {
                         return false;
                     }
@@ -27539,7 +27545,12 @@ public partial class DataGridView
                                 // Row validation was cancelled
                                 Debug.Assert(oldCurrentCellX == _ptCurrentCell.X);
                                 Debug.Assert(oldCurrentCellY == _ptCurrentCell.Y);
-                                OnRowEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY, true /*canCreateNewRow*/, true /*validationFailureOccurred*/);
+                                OnRowEnter(
+                                    ref dataGridViewCellTmp,
+                                    oldCurrentCellX,
+                                    oldCurrentCellY,
+                                    canCreateNewRow: true,
+                                    validationFailureOccurred: true);
                                 if (!IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                                 {
                                     currentCell.OnEnterInternal(oldCurrentCellY, throughMouseClick);
@@ -27649,7 +27660,7 @@ public partial class DataGridView
 
                     if (columnIndex != columnIndexTo)
                     {
-                        DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[columnIndex],
+                        DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[columnIndex],
                             DataGridViewElementStates.Visible,
                             DataGridViewElementStates.None);
                         ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
@@ -27678,7 +27689,7 @@ public partial class DataGridView
 
                     if (columnIndex != columnIndexFrom)
                     {
-                        DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[columnIndex],
+                        DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(Columns[columnIndex],
                             DataGridViewElementStates.Visible,
                             DataGridViewElementStates.None);
                         ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
@@ -27764,7 +27775,8 @@ public partial class DataGridView
 
             if (columnIndex != columnIndexTo)
             {
-                DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[columnIndex],
+                DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(
+                    Columns[columnIndex],
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.None);
                 ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
@@ -27869,7 +27881,7 @@ public partial class DataGridView
 
         if (clearSelection)
         {
-            ClearSelection(columnIndex, rowIndex, true /*selectException*/);    // we always select the new current cell when clearSelection is true
+            ClearSelection(columnIndex, rowIndex, selectExceptionElement: true);    // we always select the new current cell when clearSelection is true
         }
         else
         {
@@ -28651,7 +28663,7 @@ public partial class DataGridView
             throw new InvalidOperationException(SR.DataGridView_OperationDisabledInVirtualMode);
         }
 
-        SortInternal(null, dataGridViewColumn, direction);
+        SortInternal(comparer: null, dataGridViewColumn, direction);
     }
 
     public virtual void Sort(IComparer comparer)
@@ -28669,12 +28681,12 @@ public partial class DataGridView
             throw new InvalidOperationException(SR.DataGridView_CannotUseAComparerToSortDataGridViewWhenDataBound);
         }
 
-        SortInternal(comparer, null, ListSortDirection.Ascending);
+        SortInternal(comparer, dataGridViewColumn: null, ListSortDirection.Ascending);
     }
 
     private void SortDataBoundDataGridView_PerformCheck(DataGridViewColumn dataGridViewColumn)
     {
-        if (!(DataConnection.List is IBindingList ibl))
+        if (DataConnection?.List is not IBindingList ibl)
         {
             throw new InvalidOperationException(SR.DataGridView_CannotSortDataBoundDataGridViewBoundToNonIBindingList);
         }
@@ -28690,7 +28702,7 @@ public partial class DataGridView
         }
     }
 
-    private void SortInternal(IComparer comparer, DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
+    private void SortInternal(IComparer? comparer, DataGridViewColumn? dataGridViewColumn, ListSortDirection direction)
     {
         Debug.Assert(!(comparer is not null && DataSource is not null));
         Debug.Assert(direction == ListSortDirection.Ascending || direction == ListSortDirection.Descending);
@@ -28750,27 +28762,32 @@ public partial class DataGridView
             {
                 // Displayed rows may end up all spread out in the final layout.
                 // So we simply reset their displayed state before the sort.
-                UpdateRowsDisplayedState(false /*displayed*/);
-                Rows.Sort(comparer, direction == ListSortDirection.Ascending);
+                UpdateRowsDisplayedState(displayed: false);
+
+                // Callers pass non-null comparer when DataSource is null.
+                Rows.Sort(comparer!, direction == ListSortDirection.Ascending);
             }
             else
             {
-                SortDataBoundDataGridView_PerformCheck(dataGridViewColumn);
-                // the check passed, do the sorting
-                DataConnection.Sort(dataGridViewColumn, direction);
+                // Callers pass non-null dataGridViewColumn when DataConnection is non-null.
+                SortDataBoundDataGridView_PerformCheck(dataGridViewColumn!);
+
+                // The check passed, do the sorting.
+                DataConnection!.Sort(dataGridViewColumn!, direction);
             }
 
             if (_ptCurrentCellCache.X != -1)
             {
                 if (!IsInnerCellOutOfBounds(_ptCurrentCellCache.X, _ptCurrentCellCache.Y))
                 {
-                    SetAndSelectCurrentCellAddress(_ptCurrentCellCache.X,
-                                               _ptCurrentCellCache.Y,
-                                               true,
-                                               false,
-                                               false,
-                                               false /*clearSelection*/,
-                                               false /*forceCurrentCellSelection*/);
+                    SetAndSelectCurrentCellAddress(
+                        _ptCurrentCellCache.X,
+                        _ptCurrentCellCache.Y,
+                        setAnchorCellAddress: true,
+                        validateCurrentCell: false,
+                        throughMouseClick: false,
+                        clearSelection: false,
+                        forceCurrentCellSelection: false);
                 }
             }
 
@@ -28804,7 +28821,7 @@ public partial class DataGridView
             DisplayedBandsInfo.EnsureDirtyState();
         }
 
-        ResetUIState(false /*useRowShortcut*/, false /*computeVisibleRows*/);
+        ResetUIState(useRowShortcut: false, computeVisibleRows: false);
         OnSorted(EventArgs.Empty);
 
         // RS4 narrator does not catch this event even though event is indeed raised.
@@ -28863,7 +28880,7 @@ public partial class DataGridView
         }
     }
 
-    private void DataGridViewHScrolled(object sender, ScrollEventArgs se)
+    private void DataGridViewHScrolled(object? sender, ScrollEventArgs se)
     {
         if (!Enabled)
         {
@@ -28882,7 +28899,7 @@ public partial class DataGridView
         }
     }
 
-    private void DataGridViewVScrolled(object sender, ScrollEventArgs se)
+    private void DataGridViewVScrolled(object? sender, ScrollEventArgs se)
     {
         if (!Enabled)
         {
@@ -28958,7 +28975,7 @@ public partial class DataGridView
 
     private bool TabToNextCell()
     {
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         int firstVisibleColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
         if (firstVisibleColumnIndex == -1 || firstVisibleRowIndex == -1)
@@ -29119,7 +29136,7 @@ public partial class DataGridView
 
     private bool TabToPreviousCell()
     {
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         int firstVisibleColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
         if (firstVisibleColumnIndex == -1 || firstVisibleRowIndex == -1)
@@ -29285,7 +29302,7 @@ public partial class DataGridView
 
         return true;
     }
-#nullable enable
+
     private void UnwireEditingControlEvents()
     {
         Debug.Assert(_editingPanel is not null);

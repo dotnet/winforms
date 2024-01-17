@@ -1,0 +1,6 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)..\'))" />
+  <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" Condition="'$(_SuppressAllTargets)' != 'true'" />
+
+</Project>
