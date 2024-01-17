@@ -4136,7 +4136,7 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">DataGridView sıralama işlemi gerçekleştirmek için iki hücre değerini karşılaştırdığında gerçekleşir.</target>
+        <target state="translated">DataGridView denetimi bir sıralama işlemini tamamladığında gerçekleşir.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">

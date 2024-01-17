@@ -4136,7 +4136,7 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Występuje, gdy formant DataGridView porównuje dwie wartości komórek w celu wykonania operacji sortowania.</target>
+        <target state="translated">Występuje, gdy kontrolka DataGridView zakończy operację sortowania.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">

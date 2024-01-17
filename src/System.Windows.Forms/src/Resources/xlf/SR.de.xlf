@@ -4136,7 +4136,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Tritt auf, wenn DataGridView zwei Zellwerte vergleicht, um einen Sortiervorgang auszuführen.</target>
+        <target state="translated">Tritt auf, wenn das DataGridView-Steuerelement einen Sortiervorgang abschließt.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">

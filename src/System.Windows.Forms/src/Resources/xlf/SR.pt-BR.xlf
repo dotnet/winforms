@@ -4136,7 +4136,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Ocorre quando o DataGridView compara dois valores de células para executar uma operação de classificação.</target>
+        <target state="translated">Ocorre quando o controle DataGridView conclui uma operação de classificação.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">

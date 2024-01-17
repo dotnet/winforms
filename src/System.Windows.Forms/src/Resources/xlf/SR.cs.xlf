@@ -4136,7 +4136,7 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Vyvolá se v případě, že ovládací prvek DataGridView porovnává dvě hodnoty buňky za účelem provedení operace řazení.</target>
+        <target state="translated">Vyvolá se v případě, že kontrola DataGridView dokončí operaci řazení.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">

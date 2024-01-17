@@ -4136,7 +4136,7 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Generato quando DataGridView confronta due valori di cella per eseguire un'operazione di ordinamento.</target>
+        <target state="translated">Si verifica quando il controllo DataGridView completa un'operazione di ordinamento.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
