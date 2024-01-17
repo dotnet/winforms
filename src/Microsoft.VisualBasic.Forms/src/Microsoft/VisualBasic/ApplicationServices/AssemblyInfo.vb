@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="CurrentAssembly">The assembly for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
             If currentAssembly Is Nothing Then
-                Throw ExUtils.GetArgumentNullException("CurrentAssembly")
+                Throw ExUtils.GetArgumentNullException(NameOf(currentAssembly))
             End If
             _assembly = currentAssembly
         End Sub
@@ -244,4 +244,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _trademark As String ' Cache the assembly's trademark.
         Private _copyright As String ' Cache the assembly's copyright.
     End Class
+
 End Namespace

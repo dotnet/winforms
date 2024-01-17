@@ -61,7 +61,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="playMode">The mode in which the array should be played</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
-                    Throw ExUtils.GetArgumentNullException("data")
+                    Throw ExUtils.GetArgumentNullException(NameOf(data))
                 End If
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
@@ -78,7 +78,7 @@ Namespace Microsoft.VisualBasic
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
-                    Throw ExUtils.GetArgumentNullException("stream")
+                    Throw ExUtils.GetArgumentNullException(NameOf(stream))
                 End If
 
                 Play(New Media.SoundPlayer(stream), playMode)
@@ -91,7 +91,7 @@ Namespace Microsoft.VisualBasic
             ''' <remarks>Plays the sound asynchronously</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
-                    Throw ExUtils.GetArgumentNullException("systemSound")
+                    Throw ExUtils.GetArgumentNullException(NameOf(systemSound))
                 End If
 
                 systemSound.Play()
@@ -141,7 +141,7 @@ Namespace Microsoft.VisualBasic
             ''' <returns>A full name and path of the file</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
-                    Throw ExUtils.GetArgumentNullException("location")
+                    Throw ExUtils.GetArgumentNullException(NameOf(location))
                 End If
 
                 Return location
@@ -161,5 +161,7 @@ Namespace Microsoft.VisualBasic
             Private _sound As Media.SoundPlayer
 
         End Class 'Audio
+
     End Namespace
+
 End Namespace

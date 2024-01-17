@@ -128,7 +128,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
             Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
         End Function
@@ -164,7 +164,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
             Return Ping(address.Host, timeout)
         End Function
@@ -253,7 +253,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExUtils.GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -351,11 +351,11 @@ Namespace Microsoft.VisualBasic.Devices
                     overwrite As Boolean,
                     onUserCancel As UICancelOption)
             If connectionTimeout <= 0 Then
-                Throw ExUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Using client As New WebClientExtended
@@ -500,7 +500,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExUtils.GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             ' Getting a uri will validate the form of the host address
@@ -599,11 +599,11 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             If connectionTimeout <= 0 Then
-                Throw ExUtils.GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Using client As New WebClientExtended()
@@ -691,7 +691,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return New Uri(address)
             Catch ex As UriFormatException
                 'Throw an exception with an error message more appropriate to our API
-                Throw ExUtils.GetArgumentExceptionWithArgName("address", SR.Network_InvalidUriString, address)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
             End Try
         End Function
 
@@ -816,5 +816,7 @@ Namespace Microsoft.VisualBasic.Devices
 
         ' Flag used to indicate whether or not we should use passive mode when ftp downloading
         Private _useNonPassiveFtp As Boolean
+
     End Class
+
 End Namespace

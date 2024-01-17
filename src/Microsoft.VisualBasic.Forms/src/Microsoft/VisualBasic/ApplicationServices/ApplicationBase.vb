@@ -30,7 +30,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
             If VariableValue Is Nothing Then
-                Throw ExUtils.GetArgumentExceptionWithArgName("name", SR.EnvVarNotFound_Name, name)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
             End If
 
             Return VariableValue
@@ -116,4 +116,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _log As Logging.Log 'Lazy-initialized and cached log object.
         Private _info As AssemblyInfo ' The executing application (the EntryAssembly)
     End Class 'ApplicationBase
+
 End Namespace

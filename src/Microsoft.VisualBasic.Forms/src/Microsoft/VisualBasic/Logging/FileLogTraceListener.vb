@@ -200,7 +200,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Get
             Set(value As String)
                 If String.IsNullOrEmpty(value) Then
-                    Throw ExUtils.GetArgumentNullException("value", SR.ApplicationLogBaseNameNull)
+                    Throw ExUtils.GetArgumentNullException(NameOf(value), SR.ApplicationLogBaseNameNull)
                 End If
 
                 ' Test the file name. This will throw if the name is invalid.
@@ -275,7 +275,7 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < MIN_FILE_SIZE Then
-                    Throw ExUtils.GetArgumentExceptionWithArgName("value", SR.ApplicationLogNumberTooSmall, "MaxFileSize")
+                    Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLogNumberTooSmall, "MaxFileSize")
                 End If
                 _maxFileSize = value
                 _propertiesSet(MAXFILESIZE_INDEX) = True
@@ -298,7 +298,7 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < 0 Then
-                    Throw ExUtils.GetArgumentExceptionWithArgName("value", SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
+                    Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
                 End If
                 _reserveDiskSpace = value
                 _propertiesSet(RESERVEDISKSPACE_INDEX) = True
@@ -343,7 +343,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Get
             Set(value As Encoding)
                 If value Is Nothing Then
-                    Throw ExUtils.GetArgumentNullException("value")
+                    Throw ExUtils.GetArgumentNullException(NameOf(value))
                 End If
                 _encoding = value
                 _propertiesSet(ENCODING_INDEX) = True
@@ -1073,6 +1073,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Attribute keys used to access properties set in the config file
         Private Const KEY_APPEND As String = "append"
+
         Private Const KEY_APPEND_PASCAL As String = "Append"
 
         Private Const KEY_AUTOFLUSH As String = "autoflush"
@@ -1255,6 +1256,9 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' Indicates whether or not the object has been disposed
             Private _disposed As Boolean
+
         End Class 'ReferencedStream
+
     End Class 'FileLogTraceListener
+
 End Namespace
