@@ -200,7 +200,7 @@ public partial class ListBox : ListControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(BorderStyle.Fixed3D)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.ListBoxBorderDescr))]
     public BorderStyle BorderStyle
     {
@@ -1742,7 +1742,7 @@ public partial class ListBox : ListControl
         base.OnHandleCreated(e);
 
         // Get the current locale to set the Scrollbars
-        PInvoke.SendMessage(this, PInvoke.LB_SETLOCALE, (WPARAM)PInvoke.GetThreadLocale());
+        PInvoke.SendMessage(this, PInvoke.LB_SETLOCALE, (WPARAM)PInvokeCore.GetThreadLocale());
 
         if (_columnWidth != 0)
         {

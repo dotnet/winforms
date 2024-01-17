@@ -7,7 +7,6 @@ using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -22,7 +21,7 @@ public unsafe class Control_ActiveXImplTests
         IPersistStreamInit.Interface persistStream = control;
 
         using MemoryStream memoryStream = new();
-        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
+        using var istream = memoryStream.ToIStream();
         HRESULT hr = persistStream.Save(istream.Value, fClearDirty: BOOL.FALSE);
         Assert.True(hr.Succeeded);
         control.BackColor = Color.Honeydew;
@@ -46,7 +45,7 @@ public unsafe class Control_ActiveXImplTests
         IPersistStreamInit.Interface persistStream = control;
 
         using MemoryStream memoryStream = new();
-        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
+        using var istream = memoryStream.ToIStream();
         HRESULT hr = persistStream.Save(istream.Value, fClearDirty: BOOL.FALSE);
         Assert.True(hr.Succeeded);
         control.SerializableValue = default;
@@ -70,7 +69,7 @@ public unsafe class Control_ActiveXImplTests
         IPersistStreamInit.Interface persistStream = control;
 
         using MemoryStream memoryStream = new();
-        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
+        using var istream = memoryStream.ToIStream();
         var istreamPointer = istream.Value;
         Assert.Throws<NotSupportedException>(() => persistStream.Save(istreamPointer, fClearDirty: BOOL.FALSE));
     }
@@ -88,7 +87,7 @@ public unsafe class Control_ActiveXImplTests
         IPersistStreamInit.Interface persistStream = control;
 
         using MemoryStream memoryStream = new();
-        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
+        using var istream = memoryStream.ToIStream();
         HRESULT hr = persistStream.Save(istream.Value, fClearDirty: BOOL.FALSE);
         Assert.True(hr.Succeeded);
         control.Table = default;

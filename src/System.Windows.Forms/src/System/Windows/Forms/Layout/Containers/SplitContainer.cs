@@ -232,7 +232,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     [DefaultValue(BorderStyle.None)]
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
     public BorderStyle BorderStyle
     {
@@ -814,7 +814,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     [SRDescription(nameof(SR.ControlTabStopDescr))]
     public new bool TabStop
     {

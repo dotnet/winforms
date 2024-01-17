@@ -3,6 +3,7 @@
   "allowMarshaling": false,
   "useSafeHandles": false,
   "public": false,
+  "friendlyOverloads": { "enabled": false },
   "comInterop": {
     "preserveSigMethods": [
       "*"

@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -74,7 +73,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         _cursorData = File.ReadAllBytes(fileName);
         _freeHandle = true;
         LoadPicture(
-            new Ole32.GPStream(new MemoryStream(_cursorData)),
+            new ComManagedStream(new MemoryStream(_cursorData)),
             nameof(fileName));
     }
 
@@ -108,7 +107,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         // stream.CopyTo causes both streams to advance. So reset it for LoadPicture.
         memoryStream.Position = 0;
         LoadPicture(
-            new Ole32.GPStream(memoryStream),
+            new ComManagedStream(memoryStream),
             nameof(stream));
     }
 

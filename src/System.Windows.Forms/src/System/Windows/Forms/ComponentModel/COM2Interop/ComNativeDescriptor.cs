@@ -102,7 +102,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     internal static string GetName(IDispatch* dispatch)
     {
         int dispid = Com2TypeInfoProcessor.GetNameDispId(dispatch);
-        if (dispid != PInvoke.DISPID_UNKNOWN)
+        if (dispid != PInvokeCore.DISPID_UNKNOWN)
         {
             HRESULT hr = GetPropertyValue(dispatch, dispid, out object? value);
 
@@ -122,15 +122,15 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         fixed (char* n = propertyName)
         {
             Guid guid = Guid.Empty;
-            int dispid = PInvoke.DISPID_UNKNOWN;
+            int dispid = PInvokeCore.DISPID_UNKNOWN;
 
-            HRESULT hr = dispatch->GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
+            HRESULT hr = dispatch->GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvokeCore.GetThreadLocale(), &dispid);
             if (hr.Failed)
             {
                 return hr;
             }
 
-            return dispid == PInvoke.DISPID_UNKNOWN
+            return dispid == PInvokeCore.DISPID_UNKNOWN
                 ? HRESULT.DISP_E_MEMBERNOTFOUND
                 : GetPropertyValue(dispatch, dispid, out value);
         }
@@ -141,7 +141,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         value = null;
 
         using VARIANT result = default;
-        HRESULT hr = dispatch->TryGetProperty(dispid, &result, PInvoke.GetThreadLocale());
+        HRESULT hr = dispatch->TryGetProperty(dispid, &result, PInvokeCore.GetThreadLocale());
 
         if (hr.Succeeded)
         {

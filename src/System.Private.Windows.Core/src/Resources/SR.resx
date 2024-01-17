@@ -179,4 +179,7 @@
   <data name="GdiplusWrongState" xml:space="preserve">
     <value>Bitmap region is already locked.</value>
   </data>
+  <data name="COM2UnhandledVT" xml:space="preserve">
+    <value>Unhandled VT: {0}.</value>
+  </data>
 </root>

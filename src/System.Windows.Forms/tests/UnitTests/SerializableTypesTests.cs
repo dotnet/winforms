@@ -3,10 +3,10 @@
 
 using System.Drawing;
 using System.Text;
+using Windows.Win32.System.Com;
 using static System.Windows.Forms.ImageList;
 using static System.Windows.Forms.ListViewItem;
 using static System.Windows.Forms.TableLayoutSettings;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.Serialization;
 
@@ -60,7 +60,7 @@ public class SerializableTypesTests
 
             using var streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
-            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
+            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out ComManagedStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
             bufferStream.Read(buffer, 0, buffer.Length);

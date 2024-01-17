@@ -53,13 +53,13 @@ public unsafe class IPictureTests
         using VARIANT variant = new();
 
         IDispatch* dispatch = (IDispatch*)picture.Value;
-        dispatch->TryGetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+        dispatch->TryGetProperty(PInvokeCore.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
         Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)variant.data.iVal);
 
-        dispatch->TryGetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+        dispatch->TryGetProperty(PInvokeCore.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
         Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY((int)variant.data.uintVal));
 
-        dispatch->TryGetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+        dispatch->TryGetProperty(PInvokeCore.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
         Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX((int)variant.data.uintVal));
     }
 

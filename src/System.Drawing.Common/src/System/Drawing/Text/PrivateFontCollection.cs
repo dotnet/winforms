@@ -10,7 +10,7 @@ namespace System.Drawing.Text;
 /// <summary>
 ///  Encapsulates a collection of <see cref='Font'/> objects.
 /// </summary>
-public sealed class PrivateFontCollection : FontCollection
+public unsafe sealed class PrivateFontCollection : FontCollection
 {
     /// <summary>
     ///  Initializes a new instance of the <see cref='PrivateFontCollection'/> class.
@@ -94,6 +94,9 @@ public sealed class PrivateFontCollection : FontCollection
 
     private static void GdiAddFontFile(string filename)
     {
-        PInvoke.AddFontResourceEx(filename, FONT_RESOURCE_CHARACTERISTICS.FR_PRIVATE);
+        fixed (char* fn = filename)
+        {
+            PInvoke.AddFontResourceEx(fn, FONT_RESOURCE_CHARACTERISTICS.FR_PRIVATE);
+        }
     }
 }

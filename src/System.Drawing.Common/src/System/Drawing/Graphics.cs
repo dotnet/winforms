@@ -2691,7 +2691,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileDestPoint(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destPoint,
             callback,
             callbackData,
@@ -2707,7 +2707,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileDestPointI(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destPoint,
             callback,
             callbackData,
@@ -2723,7 +2723,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileDestRect(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destRect,
             callback,
             callbackData,
@@ -2739,7 +2739,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileDestRectI(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destRect,
             callback,
             callbackData,
@@ -2762,7 +2762,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         {
             CheckStatus(Gdip.GdipEnumerateMetafileDestPoints(
                 new HandleRef(this, (nint)NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
                 p, destPoints.Length,
                 callback,
                 callbackData,
@@ -2786,7 +2786,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         {
             CheckStatus(Gdip.GdipEnumerateMetafileDestPointsI(
                 new HandleRef(this, (nint)NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
                 p, destPoints.Length,
                 callback,
                 callbackData,
@@ -2805,7 +2805,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPoint(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destPoint,
             ref srcRect,
             unit,
@@ -2825,7 +2825,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPointI(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destPoint,
             ref srcRect,
             unit,
@@ -2845,7 +2845,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestRect(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destRect,
             ref srcRect,
             unit,
@@ -2865,7 +2865,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
     {
         CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestRectI(
             new HandleRef(this, (nint)NativeGraphics),
-            new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+            new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
             ref destRect,
             ref srcRect,
             unit,
@@ -2892,7 +2892,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         {
             CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPoints(
                 new HandleRef(this, (nint)NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
                 p, destPoints.Length,
                 ref srcRect,
                 unit,
@@ -2920,7 +2920,7 @@ public unsafe sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceCo
         {
             CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPointsI(
                 new HandleRef(this, (nint)NativeGraphics),
-                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile is null ? 0 : (nint)metafile._nativeImage),
                 p, destPoints.Length,
                 ref srcRect,
                 unit,

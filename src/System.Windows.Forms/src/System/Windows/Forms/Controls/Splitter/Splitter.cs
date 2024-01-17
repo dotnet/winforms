@@ -184,7 +184,7 @@ public partial class Splitter : Control
     /// </summary>
     [DefaultValue(BorderStyle.None)]
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
     public BorderStyle BorderStyle
     {

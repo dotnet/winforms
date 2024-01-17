@@ -66,8 +66,8 @@ public class PreviewPrintController : PrintController
         Metafile metafile = new(
             hdc,
             new Rectangle(0, 0, metafileSize.Width, metafileSize.Height),
-            MetafileFrameUnit.GdiCompatible,
-            EmfType.EmfPlusOnly);
+            Imaging.MetafileFrameUnit.GdiCompatible,
+            Imaging.EmfType.EmfPlusOnly);
 
         PreviewPageInfo info = new(metafile, size);
         _list.Add(info);

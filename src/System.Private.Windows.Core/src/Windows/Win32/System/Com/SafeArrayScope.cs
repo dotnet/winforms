@@ -110,7 +110,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
             lLbound = 0
         };
 
-        _value = (nint)PInvoke.SafeArrayCreate(vt, 1, &saBound);
+        _value = (nint)PInvokeCore.SafeArrayCreate(vt, 1, &saBound);
         if (_value == 0)
         {
             throw new InvalidOperationException("Unable to create SAFEARRAY");
@@ -186,7 +186,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         TReturn result;
         fixed (int* pIndices = indices)
         {
-            PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
+            PInvokeCore.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
         }
 
         return result;
@@ -197,7 +197,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         Span<int> indices = [index];
         fixed (int* pIndices = indices)
         {
-            PInvoke.SafeArrayPutElement((SAFEARRAY*)_value, pIndices, value).ThrowOnFailure();
+            PInvokeCore.SafeArrayPutElement((SAFEARRAY*)_value, pIndices, value).ThrowOnFailure();
         }
     }
 
@@ -218,7 +218,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
         if (safeArray is not null)
         {
-            PInvoke.SafeArrayDestroy(safeArray).ThrowOnFailure();
+            PInvokeCore.SafeArrayDestroy(safeArray).ThrowOnFailure();
         }
     }
 
