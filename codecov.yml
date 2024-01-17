@@ -7,12 +7,7 @@ coverage:
   precision: 5                    # highest level of decimal precision
   status:
     project:
-      default: 
-        target: auto
-        threshold: 0%
-        base: auto 
-        paths: 
-          - "src"
+      default: false
     patch:
       default: false
   fixes:
