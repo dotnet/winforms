@@ -58,4 +58,8 @@
     <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interop\OleAut32\" />
+  </ItemGroup>
+
 </Project>

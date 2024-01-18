@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
-using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms;
@@ -212,7 +211,7 @@ public abstract partial class AxHost
                 _memoryStream.Seek(0, SeekOrigin.Begin);
             }
 
-            return ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_memoryStream));
+            return _memoryStream.ToIStream();
         }
 
         private void InitializeFromStream(Stream dataStream, bool initializeBufferOnly = false)

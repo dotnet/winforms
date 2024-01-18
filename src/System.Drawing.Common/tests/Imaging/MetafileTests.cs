@@ -887,17 +887,17 @@ public class MetafileTests
     }
 
     [Fact]
-    public void Ctor_NullStream_ThrowsNullReferenceException()
+    public void Ctor_NullStream_ThrowsArgumentNullException()
     {
         using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         {
             IntPtr referenceHdc = g.GetHdc();
-            Assert.Throws<NullReferenceException>(() => new Metafile((Stream)null, referenceHdc, _rectangleF));
-            Assert.Throws<NullReferenceException>(() => new Metafile((Stream)null, referenceHdc, _rectangleF, MetafileFrameUnit.GdiCompatible));
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() => new Metafile((Stream)null, referenceHdc, _rectangleF));
+            Assert.Throws<ArgumentNullException>(() => new Metafile((Stream)null, referenceHdc, _rectangleF, MetafileFrameUnit.GdiCompatible));
+            Assert.Throws<ArgumentNullException>(() =>
                 new Metafile((Stream)null, referenceHdc, _rectangleF, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly));
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 new Metafile((Stream)null, referenceHdc, _rectangleF, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, "description"));
         }
     }
@@ -944,9 +944,9 @@ public class MetafileTests
     }
 
     [Fact]
-    public void Static_GetMetafileHeader_NullStream_ThrowsNullReferenceException()
+    public void Static_GetMetafileHeader_NullStream_ThrowsArgumentNullException()
     {
-        Assert.Throws<NullReferenceException>(() => Metafile.GetMetafileHeader((Stream)null));
+        Assert.Throws<ArgumentNullException>(() => Metafile.GetMetafileHeader((Stream)null));
     }
 
     [Fact]

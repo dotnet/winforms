@@ -2203,62 +2203,6 @@ internal static partial class SafeNativeMethods
         HandleRef image, int rotateFlipType);
 
         [LibraryImport(LibraryName)]
-        internal static partial int GdipGetAllPropertyItems(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, uint totalBufferSize, uint numProperties, PropertyItemInternal* allItems);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipGetPropertyCount(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, out uint numOfProperty);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipGetPropertyIdList(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, uint numOfProperty, int* list);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipGetPropertyItem(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, int propid, uint propSize, PropertyItemInternal* buffer);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipGetPropertyItemSize(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, int propid, out uint size);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipGetPropertySize(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, out uint totalBufferSize, out uint numProperties);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipRemovePropertyItem(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, int propid);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipSetPropertyItem(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, PropertyItemInternal* item);
-
-        [LibraryImport(LibraryName)]
         internal static partial int GdipGetImageType(
 #if NET7_0_OR_GREATER
         [MarshalUsing(typeof(HandleRefMarshaller))]
@@ -2325,56 +2269,6 @@ internal static partial class SafeNativeMethods
         HandleRef srcbitmap, out IntPtr dstbitmap);
 
         [LibraryImport(LibraryName)]
-        internal static partial int GdipCloneBitmapAreaI(int x, int y, int width, int height, int format,
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef srcbitmap, out IntPtr dstbitmap);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipBitmapLockBits(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef bitmap, ref Rectangle rect, ImageLockMode flags, PixelFormat format,
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(BitmapData.PinningMarshaller))]
-#endif
-        BitmapData lockedBitmapData);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipBitmapUnlockBits(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef bitmap,
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(BitmapData.PinningMarshaller))]
-#endif
-        BitmapData lockedBitmapData);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipBitmapGetPixel(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef bitmap, int x, int y, out int argb);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipBitmapSetPixel(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef bitmap, int x, int y, int argb);
-
-        [LibraryImport(LibraryName)]
-        internal static partial int GdipBitmapSetResolution(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef bitmap, float dpix, float dpiy);
-
-        [LibraryImport(LibraryName)]
         internal static partial int GdipImageGetFrameDimensionsCount(
 #if NET7_0_OR_GREATER
         [MarshalUsing(typeof(HandleRefMarshaller))]
@@ -2400,24 +2294,6 @@ internal static partial class SafeNativeMethods
 
         [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
         internal static partial int GdipCreateMetafileFromFile(string file, out IntPtr metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafile(IntPtr referenceHdc, EmfType emfType, IntPtr pframeRect, MetafileFrameUnit frameUnit, string? description, out IntPtr metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafile(IntPtr referenceHdc, EmfType emfType, ref RectangleF frameRect, MetafileFrameUnit frameUnit, string? description, out IntPtr metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileI(IntPtr referenceHdc, EmfType emfType, ref Rectangle frameRect, MetafileFrameUnit frameUnit, string? description, out IntPtr metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileFileName(string fileName, IntPtr referenceHdc, EmfType emfType, ref RectangleF frameRect, MetafileFrameUnit frameUnit, string? description, out IntPtr metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileFileName(string fileName, IntPtr referenceHdc, EmfType emfType, IntPtr pframeRect, MetafileFrameUnit frameUnit, string? description, out IntPtr metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileFileNameI(string fileName, IntPtr referenceHdc, EmfType emfType, ref Rectangle frameRect, MetafileFrameUnit frameUnit, string? description, out IntPtr metafile);
 
         [LibraryImport(LibraryName)]
         internal static partial int GdipPlayMetafileRecord(
@@ -3589,17 +3465,6 @@ internal static partial class SafeNativeMethods
         HandleRef image, out RectangleF gprectf, out GraphicsUnit unit);
 
         [LibraryImport(LibraryName)]
-        internal static partial int GdipGetImageThumbnail(
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-        HandleRef image, int thumbWidth, int thumbHeight, out IntPtr thumbImage,
-#if NET7_0_OR_GREATER
-        [MarshalUsing(typeof(Image.GetThumbnailImageAbortMarshaller))]
-#endif
-        Image.GetThumbnailImageAbort? callback, IntPtr callbackdata);
-
-        [LibraryImport(LibraryName)]
         internal static partial int GdipGetImagePalette(
 #if NET7_0_OR_GREATER
         [MarshalUsing(typeof(HandleRefMarshaller))]
@@ -3978,15 +3843,6 @@ internal static partial class SafeNativeMethods
 
         [LibraryImport(LibraryName)]
         internal static partial int GdipCreateMetafileFromStream(IntPtr stream, IntPtr* metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileStream(IntPtr stream, IntPtr referenceHdc, EmfType emfType, RectangleF* frameRect, MetafileFrameUnit frameUnit, string? description, IntPtr* metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileStream(IntPtr stream, IntPtr referenceHdc, EmfType emfType, IntPtr pframeRect, MetafileFrameUnit frameUnit, string? description, IntPtr* metafile);
-
-        [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int GdipRecordMetafileStreamI(IntPtr stream, IntPtr referenceHdc, EmfType emfType, Rectangle* frameRect, MetafileFrameUnit frameUnit, string? description, IntPtr* metafile);
 
         [LibraryImport(LibraryName)]
         internal static partial int GdipComment(

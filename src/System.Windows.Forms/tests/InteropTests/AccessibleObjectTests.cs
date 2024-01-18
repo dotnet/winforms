@@ -746,7 +746,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         // We only ever get IUnknown type info in Core. This isn't necessary to replicate, it is meant
         // to show the minbar.
         using ComScope<ITypeInfo> typeInfo = new(null);
-        dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo).ThrowOnFailure();
+        dispatch.Value->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo).ThrowOnFailure();
         HRESULT hr = typeInfo.Value->GetIDOfName("accChild", out int memberId);
         Assert.Equal(HRESULT.S_OK, hr);
         hr = typeInfo.Value->GetIDOfName("get_accChild", out memberId);

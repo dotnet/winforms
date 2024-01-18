@@ -609,7 +609,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         }
     }
 
-    private unsafe void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
+    private unsafe void CopyBitmapData(Imaging.BitmapData sourceData, Imaging.BitmapData targetData)
     {
         byte* srcPtr = (byte*)sourceData.Scan0;
         byte* destPtr = (byte*)targetData.Scan0;
@@ -628,7 +628,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         GC.KeepAlive(this); // finalizer mustn't deallocate data blobs while this method is running
     }
 
-    private static bool BitmapHasAlpha(BitmapData bmpData)
+    private static bool BitmapHasAlpha(Imaging.BitmapData bmpData)
     {
         bool hasAlpha = false;
         for (int i = 0; i < bmpData.Height; i++)
@@ -675,7 +675,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             bitmap = new Bitmap(Size.Width, Size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Debug.Assert(_bestImageOffset >= 0 && (_bestImageOffset + _bestBytesInRes) <= _iconData.Length, "Illegal offset/length for the Icon data");
 
-            BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, Size.Width, Size.Height),
+            Imaging.BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, Size.Width, Size.Height),
                 ImageLockMode.WriteOnly,
                 PixelFormat.Format32bppArgb);
             try
@@ -715,8 +715,8 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     if (bmp.bmBitsPixel == 32)
                     {
                         Bitmap? tmpBitmap = null;
-                        BitmapData? bmpData = null;
-                        BitmapData? targetData = null;
+                        Imaging.BitmapData? bmpData = null;
+                        Imaging.BitmapData? targetData = null;
                         try
                         {
                             tmpBitmap = Image.FromHbitmap(info.hbmColor);

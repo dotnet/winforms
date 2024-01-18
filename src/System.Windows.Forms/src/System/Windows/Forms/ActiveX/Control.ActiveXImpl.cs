@@ -151,9 +151,9 @@ public partial class Control
             _activeXState = default;
             _ambientProperties = new AmbientProperty[]
             {
-                new("Font", PInvoke.DISPID_AMBIENT_FONT),
-                new("BackColor", PInvoke.DISPID_AMBIENT_BACKCOLOR),
-                new("ForeColor", PInvoke.DISPID_AMBIENT_FORECOLOR)
+                new("Font", PInvokeCore.DISPID_AMBIENT_FONT),
+                new("BackColor", PInvokeCore.DISPID_AMBIENT_BACKCOLOR),
+                new("ForeColor", PInvokeCore.DISPID_AMBIENT_FORECOLOR)
             };
         }
 
@@ -167,11 +167,11 @@ public partial class Control
         {
             get
             {
-                AmbientProperty property = LookupAmbient(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+                AmbientProperty property = LookupAmbient(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
 
                 if (property.Empty)
                 {
-                    using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+                    using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
                     if (value.vt is VARENUM.VT_I4 or VARENUM.VT_INT)
                     {
                         property.Value = ColorTranslator.FromOle(value.data.intVal);
@@ -192,11 +192,11 @@ public partial class Control
         {
             get
             {
-                AmbientProperty property = LookupAmbient(PInvoke.DISPID_AMBIENT_FONT);
+                AmbientProperty property = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FONT);
 
                 if (property.Empty)
                 {
-                    using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_FONT);
+                    using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_FONT);
                     if (value.vt == VARENUM.VT_UNKNOWN)
                     {
                         using var font = ComScope<IFont>.TryQueryFrom(value.data.punkVal, out HRESULT hr);
@@ -228,11 +228,11 @@ public partial class Control
         {
             get
             {
-                AmbientProperty property = LookupAmbient(PInvoke.DISPID_AMBIENT_FORECOLOR);
+                AmbientProperty property = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
 
                 if (property.Empty)
                 {
-                    using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_FORECOLOR);
+                    using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
                     if (value.vt is VARENUM.VT_I4 or VARENUM.VT_INT)
                     {
                         property.Value = ColorTranslator.FromOle(value.data.intVal);
@@ -1239,7 +1239,7 @@ public partial class Control
         /// <inheritdoc cref="IOleControl.OnAmbientPropertyChange(int)"/>
         internal void OnAmbientPropertyChange(int dispID)
         {
-            if (dispID == PInvoke.DISPID_UNKNOWN)
+            if (dispID == PInvokeCore.DISPID_UNKNOWN)
             {
                 // Invalidate all properties. Ideally we should be checking each one, but
                 // that's pretty expensive too.
@@ -1266,8 +1266,8 @@ public partial class Control
             // Special properties that we care about
             switch (dispID)
             {
-                case PInvoke.DISPID_AMBIENT_UIDEAD:
-                    using (VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_UIDEAD))
+                case PInvokeCore.DISPID_AMBIENT_UIDEAD:
+                    using (VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_UIDEAD))
                     {
                         if (value.vt == VARENUM.VT_BOOL)
                         {
@@ -1277,10 +1277,10 @@ public partial class Control
 
                     break;
 
-                case PInvoke.DISPID_AMBIENT_DISPLAYASDEFAULT:
+                case PInvokeCore.DISPID_AMBIENT_DISPLAYASDEFAULT:
                     if (_control is IButtonControl ibuttonControl)
                     {
-                        using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_DISPLAYASDEFAULT);
+                        using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_DISPLAYASDEFAULT);
                         if (value.vt == VARENUM.VT_BOOL)
                         {
                             ibuttonControl.NotifyDefault(value.data.boolVal == VARIANT_BOOL.VARIANT_TRUE);
@@ -1344,16 +1344,16 @@ public partial class Control
             }
 
             // Hookup our ambient colors
-            AmbientProperty prop = LookupAmbient(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+            AmbientProperty prop = LookupAmbient(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
             prop.Value = ColorTranslator.FromOle((int)pQaContainer->colorBack);
 
-            prop = LookupAmbient(PInvoke.DISPID_AMBIENT_FORECOLOR);
+            prop = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
             prop.Value = ColorTranslator.FromOle((int)pQaContainer->colorFore);
 
             // And our ambient font
             if (pQaContainer->pFont is not null)
             {
-                prop = LookupAmbient(PInvoke.DISPID_AMBIENT_FONT);
+                prop = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FONT);
 
                 try
                 {
@@ -1618,7 +1618,7 @@ public partial class Control
             }
 
             // Get the ambient properties that effect us.
-            using VARIANT property = GetAmbientProperty(PInvoke.DISPID_AMBIENT_UIDEAD);
+            using VARIANT property = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_UIDEAD);
             if (property.vt == VARENUM.VT_BOOL)
             {
                 bool uiDead = property.data.boolVal == VARIANT_BOOL.VARIANT_TRUE;

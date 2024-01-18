@@ -48,14 +48,14 @@ public class ApplicationTests
                     Assert.Same(value, Application.CurrentCulture);
                     Assert.Same(value, Thread.CurrentThread.CurrentCulture);
                     Assert.Same(value, CultureInfo.CurrentCulture);
-                    Assert.Equal(expectedLcid, PInvoke.GetThreadLocale());
+                    Assert.Equal(expectedLcid, PInvokeCore.GetThreadLocale());
 
                     // Set same.
                     Application.CurrentCulture = value;
                     Assert.Same(value, Application.CurrentCulture);
                     Assert.Same(value, Thread.CurrentThread.CurrentCulture);
                     Assert.Same(value, CultureInfo.CurrentCulture);
-                    Assert.Equal(expectedLcid, PInvoke.GetThreadLocale());
+                    Assert.Equal(expectedLcid, PInvokeCore.GetThreadLocale());
                 }
                 finally
                 {

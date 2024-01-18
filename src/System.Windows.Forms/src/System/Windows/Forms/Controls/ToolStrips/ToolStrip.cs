@@ -1736,7 +1736,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     [SRDescription(nameof(SR.ControlTabStopDescr))]
     public new bool TabStop
     {

@@ -93,7 +93,7 @@ public partial class Panel : ScrollableControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(BorderStyle.None)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.PanelBorderStyleDescr))]
     public BorderStyle BorderStyle
     {

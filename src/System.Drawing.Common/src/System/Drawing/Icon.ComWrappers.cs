@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing.Internal;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -38,10 +37,8 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 using DrawingCom.IPicture picture = (DrawingCom.IPicture)DrawingCom.Instance
                     .GetOrCreateObjectForComInstance(lpPicture, CreateObjectFlags.UniqueInstance);
 
-                GPStream gpStream = new(outputStream, makeSeekable: false);
-                streamPtr = DrawingCom.Instance.GetOrCreateComInterfaceForObject(gpStream, CreateComInterfaceFlags.None);
-
-                DrawingCom.ThrowExceptionForHR(picture.SaveAsFile(streamPtr, -1, null));
+                using var iStream = outputStream.ToIStream(makeSeekable: true);
+                DrawingCom.ThrowExceptionForHR(picture.SaveAsFile(iStream, -1, null));
             }
             finally
             {

@@ -32,7 +32,7 @@ internal unsafe partial struct SAFEARRAY
             lLbound = 0
         };
 
-        return PInvoke.SafeArrayCreate(arrayType, 1, &saBound);
+        return PInvokeCore.SafeArrayCreate(arrayType, 1, &saBound);
     }
 
     public VARENUM VarType
@@ -62,7 +62,7 @@ internal unsafe partial struct SAFEARRAY
             VARENUM vt = VT_EMPTY;
             fixed (SAFEARRAY* pThis = &this)
             {
-                PInvoke.SafeArrayGetVartype(pThis, &vt).ThrowOnFailure();
+                PInvokeCore.SafeArrayGetVartype(pThis, &vt).ThrowOnFailure();
                 return vt;
             }
         }

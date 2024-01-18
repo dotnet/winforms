@@ -185,11 +185,16 @@ public class PrintDocumentTests : FileCleanupTestBase
     [ConditionalFact(nameof(CanPrintToPdf))]
     public void Print_DefaultPrintController_Success()
     {
+        if (!CanPrintToPdf())
+        {
+            return;
+        }
+
         bool endPrintCalled = false;
         PrintEventHandler endPrintHandler = new((sender, e) => endPrintCalled = true);
         using (PrintDocument document = new())
         {
-            document.PrinterSettings.PrinterName = PrintToPdfPrinterName;
+            document.PrinterSettings.PrinterName = GetPdfPrinterName();
             document.PrinterSettings.PrintFileName = GetTestFilePath();
             document.PrinterSettings.PrintToFile = true;
             document.EndPrint += endPrintHandler;
@@ -274,18 +279,28 @@ public class PrintDocumentTests : FileCleanupTestBase
     private const string PrintToPdfPrinterName = "Microsoft Print to PDF";
     private static bool CanPrintToPdf()
     {
-        if (!PlatformDetection.IsWindows || !PlatformDetection.IsDrawingSupported)
-            return false;
-
         foreach (string name in PrinterSettings.InstalledPrinters)
         {
-            if (name == PrintToPdfPrinterName)
+            if (name.StartsWith(PrintToPdfPrinterName))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private static string GetPdfPrinterName()
+    {
+        foreach (string name in PrinterSettings.InstalledPrinters)
+        {
+            if (name.StartsWith(PrintToPdfPrinterName))
+            {
+                return name;
+            }
+        }
+
+        throw new InvalidOperationException("No PDF printer installed");
     }
 
     private class TestPrintController : PrintController
