@@ -87,23 +87,27 @@ public class KeysConverterTests
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData("fr-FR")]
-    [InlineData("zh-CN")]
-    [InlineData("de-DE")]
-    [InlineData("it-IT")]
-    [InlineData("ko-KR")]
-    [InlineData("ru-RU")]
-    [InlineData("zh-TW")]
-    [InlineData("cs-CZ")]
-    [InlineData("ja-JP")]
-    public void GetStandardValues(string cultureName)
+    [InlineData(null, null)]
+    [InlineData("de-DE", null)]
+    [InlineData(null, "de-DE")]
+    [InlineData("fr-FR", "en-US")]
+    [InlineData("en-US", "fr-FR")]
+    [InlineData("zh-CN", "it-IT")]
+    [InlineData("it-IT", "zh-CN")]
+    [InlineData("ko-KR", "ru-RU")]
+    [InlineData("ru-RU", "ko-KR")]
+    [InlineData("zh-TW", "cs-CZ")]
+    [InlineData("cs-CZ", "zh-TW")]
+    [InlineData("ja-JP", "en-US")]
+    public void GetStandardValues(string cultureName, string uiCultureName)
     {
         // Record original culture
         CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+        CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
 
         // Update CurrentCulture
         Thread.CurrentThread.CurrentCulture = cultureName is not null ? CultureInfo.GetCultureInfo(cultureName) : originalCulture;
+        Thread.CurrentThread.CurrentUICulture = uiCultureName is not null ? CultureInfo.GetCultureInfo(uiCultureName) : originalUICulture;
 
         Keys[] expectedValues =
         [
@@ -128,6 +132,7 @@ public class KeysConverterTests
         {
             // Restore original Culture
             Thread.CurrentThread.CurrentCulture = originalCulture;
+            Thread.CurrentThread.CurrentUICulture = originalUICulture;
         }
     }
 }
