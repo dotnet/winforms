@@ -90,7 +90,7 @@ public unsafe class ComNativeDescriptorTests
     public void ComNativeDescriptor_GetProperties_FromActiveXMediaPlayerControl_ComInterop()
     {
         Guid guid = typeof(WindowsMediaPlayerClass).GUID;
-        HRESULT hr = PInvoke.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             in guid,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,

@@ -520,7 +520,7 @@ internal static unsafe class DragDropHelper
             throw new InvalidOperationException(SR.ThreadMustBeSTA);
         }
 
-        HRESULT hr = PInvoke.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             in CLSID.DragDropHelper,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,

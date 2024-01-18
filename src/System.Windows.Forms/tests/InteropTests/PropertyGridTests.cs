@@ -122,7 +122,7 @@ public class PropertyGridTests
     private unsafe object CreateComObjectWithRawIErrorInfoUsage()
     {
         Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
-        PInvoke.CoCreateInstance(
+        PInvokeCore.CoCreateInstance(
             in clsidRawErrorInfoUsageTest,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
@@ -133,7 +133,7 @@ public class PropertyGridTests
     private unsafe object CreateComObjectWithStandardIErrorInfoUsage()
     {
         Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
-        PInvoke.CoCreateInstance(
+        PInvokeCore.CoCreateInstance(
             in clsidStandardErrorInfoUsageTest,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
