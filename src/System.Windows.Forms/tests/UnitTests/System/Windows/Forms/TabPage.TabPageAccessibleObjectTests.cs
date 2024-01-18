@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using static Interop.UiaCore;
 using static System.Windows.Forms.TabControl;
 using static System.Windows.Forms.TabPage;
@@ -517,5 +518,42 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA)propertyId) ?? false);
         Assert.False(tabPage.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void TabPageAccessibleObject_BoundingRectangle_IsCorrect()
+    {
+        using Form form = new();
+        using TabControl tabControl = new();
+        using Button button = new Button();
+        using TabPage tabPage = new TabPage();
+
+        tabControl.Controls.Add(tabPage);
+        tabControl.Location = new Point(22, 25);
+        tabControl.Size = new Size(151, 104);
+
+        button.Location = new Point(16, 12);
+        button.Size = new Size(198, 86);
+
+        tabPage.AutoScroll = true;
+        tabPage.Controls.Add(button);
+        tabPage.Location = new Point(4, 24);
+        tabPage.Padding = new Padding(3);
+        tabPage.Size = new Size(143, 76);
+
+        form.ClientSize = new Size(520, 305);
+        form.Controls.Add(tabControl);
+
+        form.Show();
+
+        Rectangle boundingRectangle = tabPage.AccessibilityObject.BoundingRectangle;
+
+        int horizontalScrollBarHeight = SystemInformation.HorizontalScrollBarHeight;
+        int verticalScrollBarWidth = SystemInformation.VerticalScrollBarWidth;
+
+        Rectangle expected = tabPage.RectangleToScreen(tabPage.ClientRectangle);
+
+        Assert.Equal(boundingRectangle.Width, expected.Width + verticalScrollBarWidth);
+        Assert.Equal(boundingRectangle.Height, expected.Height + horizontalScrollBarHeight);
     }
 }
