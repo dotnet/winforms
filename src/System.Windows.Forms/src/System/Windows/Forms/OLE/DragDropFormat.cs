@@ -4,7 +4,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Ole;
-using static Interop;
+using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -109,7 +109,8 @@ internal class DragDropFormat : IDisposable
         }
         catch
         {
-            Ole32.ReleaseStgMedium(ref mediumDestination);
+            var comMedium = (Com.STGMEDIUM)mediumDestination;
+            PInvoke.ReleaseStgMedium(ref comMedium);
             return default;
         }
     }
@@ -119,7 +120,8 @@ internal class DragDropFormat : IDisposable
     /// </summary>
     private void ReleaseData()
     {
-        Ole32.ReleaseStgMedium(ref _medium);
+        var comMedium = (Com.STGMEDIUM)_medium;
+        PInvoke.ReleaseStgMedium(ref comMedium);
         _medium.pUnkForRelease = null;
         _medium.tymed = TYMED.TYMED_NULL;
         _medium.unionmember = IntPtr.Zero;

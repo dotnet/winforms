@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization.Formatters.Binary;
+using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
 
@@ -511,5 +512,27 @@ public class ClipboardTests
         }
 
         Assert.Fail("Formatting should have failed.");
+    }
+
+    [WinFormsFact]
+    public unsafe void ClipBoard_GetClipboard_ReturnsProxy()
+    {
+        DataObject data = new();
+        using var dataScope = ComHelpers.GetComScope<Com.IDataObject>(data);
+        PInvoke.OleSetClipboard(dataScope).Succeeded.Should().BeTrue();
+
+        using ComScope<Com.IDataObject> proxy = new(null);
+        PInvoke.OleGetClipboard(proxy).Succeeded.Should().BeTrue();
+        ((nint)proxy.Value).Should().NotBe((nint)dataScope.Value);
+
+        using var dataUnknown = dataScope.Query<Com.IUnknown>();
+        using var proxyUnknown = proxy.Query<Com.IUnknown>();
+        ((nint)proxyUnknown.Value).Should().NotBe((nint)dataUnknown.Value);
+
+        // The proxy does not know about this interface, it should give back the real pointer.
+        using var realDataPointer = proxy.Query<Com.IComCallableWrapper>();
+        using var realDataPointerUnknown = realDataPointer.Query<Com.IUnknown>();
+        ((nint)proxyUnknown.Value).Should().NotBe((nint)realDataPointerUnknown.Value);
+        ((nint)dataUnknown.Value).Should().Be((nint)realDataPointerUnknown.Value);
     }
 }

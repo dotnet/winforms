@@ -183,7 +183,7 @@ public partial class RichTextBox
                 if (CanShowImage(e))
                 {
                     UpdateDropDescription(e);
-                    DragDropHelper.DragEnter(_owner.Handle, e);
+                    DragDropHelper.DragEnter(_owner.HWND, e);
                 }
             }
             else
