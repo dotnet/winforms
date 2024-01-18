@@ -161,22 +161,18 @@ public class StringFormatTests
     [InlineData(10, new float[] { 1, 2.3f, 4, float.PositiveInfinity, float.NaN })]
     public void SetTabStops_GetTabStops_ReturnsExpected(float firstTabOffset, float[] tabStops)
     {
-        using (StringFormat format = new())
-        {
-            format.SetTabStops(firstTabOffset, tabStops);
+        using StringFormat format = new();
+        format.SetTabStops(firstTabOffset, tabStops);
 
-            Assert.Equal(tabStops, format.GetTabStops(out float actualFirstTabOffset));
-            Assert.Equal(firstTabOffset, actualFirstTabOffset);
-        }
+        Assert.Equal(tabStops, format.GetTabStops(out float actualFirstTabOffset));
+        Assert.Equal(firstTabOffset, actualFirstTabOffset);
     }
 
     [Fact]
-    public void SetTabStops_NullTabStops_ThrowsNullReferenceException()
+    public void SetTabStops_NullTabStops_ThrowsArgumentNullException()
     {
-        using (StringFormat format = new())
-        {
-            Assert.Throws<NullReferenceException>(() => format.SetTabStops(0, null));
-        }
+        using StringFormat format = new();
+        Assert.Throws<ArgumentNullException>(() => format.SetTabStops(0, null));
     }
 
     [Fact]
@@ -227,19 +223,15 @@ public class StringFormatTests
     [MemberData(nameof(SetMeasurableCharacterRanges_TestData))]
     public void SetMeasurableCharacterRanges_Valid_Success(CharacterRange[] ranges)
     {
-        using (StringFormat format = new())
-        {
-            format.SetMeasurableCharacterRanges(ranges);
-        }
+        using StringFormat format = new();
+        format.SetMeasurableCharacterRanges(ranges);
     }
 
     [Fact]
-    public void SetMeasurableCharacterRanges_NullRanges_ThrowsNullReferenceException()
+    public void SetMeasurableCharacterRanges_NullRanges_ThrowsArgumentNullException()
     {
-        using (StringFormat format = new())
-        {
-            Assert.Throws<NullReferenceException>(() => format.SetMeasurableCharacterRanges(null));
-        }
+        using StringFormat format = new();
+        Assert.Throws<ArgumentNullException>(() => format.SetMeasurableCharacterRanges(null));
     }
 
     [Fact]

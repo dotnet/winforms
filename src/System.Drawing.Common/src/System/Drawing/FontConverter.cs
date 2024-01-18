@@ -450,7 +450,7 @@ public class FontConverter : TypeConverter
 
             Array.Sort(values, Comparer.Default);
 
-            return new TypeConverter.StandardValuesCollection(values);
+            return new StandardValuesCollection(values);
         }
 
         // We allow other values other than those in the font list.

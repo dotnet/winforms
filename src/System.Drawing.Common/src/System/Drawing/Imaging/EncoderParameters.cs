@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Imaging;
 
@@ -37,7 +36,7 @@ public sealed class EncoderParameters : IDisposable
     {
         if (native is null)
         {
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
         }
 
         var nativeParameters = native->Parameters;
