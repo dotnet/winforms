@@ -108,10 +108,7 @@ public class TextBoxBaseAccessibleObjectTests
         Rectangle expected = textBoxBase.RectangleToScreen(textBoxBase.ClientRectangle);
         Rectangle actual = accessibleObject.BoundingRectangle;
 
-        Assert.InRange(actual.X, expected.X - 4, expected.X + 4);
-        Assert.InRange(actual.Y, expected.Y - 4, expected.Y + 4);
-        Assert.InRange(actual.Width, expected.Width - 4, expected.Width + 4);
-        Assert.InRange(actual.Height, expected.Height - 4, expected.Width + 4);
+        Assert.True(actual.Contains(expected));
 
         Assert.True(textBoxBase.IsHandleCreated);
     }
