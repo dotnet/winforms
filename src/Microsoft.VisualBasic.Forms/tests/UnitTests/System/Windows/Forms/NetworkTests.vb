@@ -228,8 +228,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                                                       False,
                                                                                       100000,
                                                                                       overwrite:=False)
-                                              Catch ex As Exception
-                                                  Throw
                                               Finally
                                                   CleanupTempDirectory(tmpFilePath)
                                               End Try
