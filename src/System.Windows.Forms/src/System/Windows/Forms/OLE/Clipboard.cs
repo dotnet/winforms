@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -41,9 +42,6 @@ public static class Clipboard
         ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
 
         using var dataObject = ComHelpers.GetComScope<Com.IDataObject>(data is IComDataObject ? data : new DataObject(data));
-
-        using var testUnknown = dataObject.Query<Com.IUnknown>();
-        using var testCallableWrapper = dataObject.Query<Com.IComCallableWrapper>();
 
         HRESULT hr;
         int retry = retryTimes;
@@ -85,9 +83,9 @@ public static class Clipboard
         }
 
         int retryTimes = 10;
-        ComScope<Com.IDataObject> dataObjectScope = new(null);
+        ComScope<Com.IDataObject> proxyDataObject = new(null);
         HRESULT hr;
-        while ((hr = PInvoke.OleGetClipboard(dataObjectScope)).Failed)
+        while ((hr = PInvoke.OleGetClipboard(proxyDataObject)).Failed)
         {
             if (--retryTimes < 0)
             {
@@ -97,21 +95,28 @@ public static class Clipboard
             Thread.Sleep(millisecondsTimeout: 100);
         }
 
-        IComDataObject? dataObject = null;
-
-        if (dataObjectScope.SupportsInterface<Com.IComCallableWrapper>())
+        // OleGetClipboard always returns a proxy. The proxy forwards all IDataObject method calls to the real data object,
+        // without giving out the real data object. If the real data object is not one of our CCWs, marshal will know how to
+        // retrieve the original object using the proxy. However, if the original object is one of our own, we need the real
+        // data object in order to retrieve the original object via ComWrappers. In order to retrieve the real data object,
+        // we must query for an interface that is not known to the proxy e.g. IComCallableWrapper. If we are able to query
+        // for IComCallableWrapper it means that the real data object is one of our CCWs and we've retrieved it successfully,
+        // otherwise it is not ours and we will be able to retrieve the original object with the proxy.
+        IUnknown* target = default;
+        var realDataObject = proxyDataObject.TryQuery<IComCallableWrapper>(out hr);
+        if (hr.Succeeded)
         {
-            ComHelpers.TryGetObjectForIUnknown(dataObjectScope.Query<Com.IComCallableWrapper>().AsUnknown, out dataObject);
+            target = realDataObject.AsUnknown;
+            proxyDataObject.Dispose();
         }
         else
         {
-            // COM object
-            ComHelpers.TryGetObjectForIUnknown(dataObjectScope.AsUnknown, out dataObject);
+            target = proxyDataObject.AsUnknown;
         }
 
-        if (dataObject is null)
+        if (!ComHelpers.TryGetObjectForIUnknown(target, out IComDataObject? dataObject))
         {
-            dataObjectScope.Dispose();
+            target->Release();
             return null;
         }
 
