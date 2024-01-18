@@ -73,7 +73,7 @@ internal unsafe class ClassPropertyDispatchAdapter
 
     private int GetUnusedDispId(int desiredId)
     {
-        if (desiredId != PInvoke.DISPID_UNKNOWN && !IdInUse(desiredId))
+        if (desiredId != PInvokeCore.DISPID_UNKNOWN && !IdInUse(desiredId))
         {
             return desiredId;
         }
@@ -260,7 +260,7 @@ internal unsafe class ClassPropertyDispatchAdapter
             return true;
         }
 
-        bool foundLast = dispId == PInvoke.DISPID_STARTENUM;
+        bool foundLast = dispId == PInvokeCore.DISPID_STARTENUM;
 
         foreach (int currentId in _members.Keys)
         {
@@ -273,7 +273,7 @@ internal unsafe class ClassPropertyDispatchAdapter
             foundLast = dispId == currentId;
         }
 
-        nextDispId = PInvoke.DISPID_UNKNOWN;
+        nextDispId = PInvokeCore.DISPID_UNKNOWN;
         return false;
     }
 
@@ -318,7 +318,7 @@ internal unsafe class ClassPropertyDispatchAdapter
 
     private static (string Name, int DispId, FDEX_PROP_FLAGS Flags) GetPropertyInfo(PropertyInfo info)
     {
-        int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? PInvoke.DISPID_UNKNOWN;
+        int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? PInvokeCore.DISPID_UNKNOWN;
         string name = info.Name;
         FDEX_PROP_FLAGS flags = IDispatch.GetPropertyFlags(info.CanRead, info.CanWrite);
         return (name, dispid, flags);

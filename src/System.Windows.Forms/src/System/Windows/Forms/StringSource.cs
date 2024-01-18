@@ -29,7 +29,7 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
         current = 0;
         size = strings.Length;
 
-        PInvoke.CoCreateInstance(
+        PInvokeCore.CoCreateInstance(
             in CLSID.AutoComplete,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,

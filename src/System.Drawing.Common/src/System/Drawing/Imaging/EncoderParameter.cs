@@ -14,16 +14,16 @@ public sealed unsafe class EncoderParameter : IDisposable
     private readonly EncoderParameterValueType _parameterValueType;
     private nint _parameterValue;
 
-    internal EncoderParameterNative ToNative() => new()
+    internal GdiPlus.EncoderParameter ToNative() => new()
     {
-        ParameterGuid = _parameterGuid,
-        ParameterValueType = _parameterValueType,
+        Guid = _parameterGuid,
+        Type = (uint)_parameterValueType,
         NumberOfValues = (uint)_numberOfValues,
-        ParameterValue = (void*)_parameterValue
+        Value = (void*)_parameterValue
     };
 
     /// <summary>
-    ///  Gets/Sets the Encoder for the EncoderPameter.
+    ///  Gets/Sets the Encoder for the EncoderParameter.
     /// </summary>
     public Encoder Encoder
     {

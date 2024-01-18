@@ -413,7 +413,7 @@ public sealed unsafe partial class HtmlDocument
 
     public void Write(string text)
     {
-        using SafeArrayScope<string> scope = new(1);
+        using SafeArrayScope<object> scope = new(1);
         if (scope.IsNull)
         {
             return;
@@ -422,7 +422,7 @@ public sealed unsafe partial class HtmlDocument
         scope[0] = text;
 
         using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-        htmlDoc2.Value->write(scope.Value).ThrowOnFailure();
+        htmlDoc2.Value->write(scope);
     }
 
     /// <summary>
@@ -510,11 +510,11 @@ public sealed unsafe partial class HtmlDocument
                 return null;
             }
 
-            int dispid = PInvoke.DISPID_UNKNOWN;
+            int dispid = PInvokeCore.DISPID_UNKNOWN;
             fixed (char* n = scriptName)
             {
-                hr = scriptDispatch.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
-                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+                hr = scriptDispatch.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvokeCore.GetThreadLocale(), &dispid);
+                if (!hr.Succeeded || dispid == PInvokeCore.DISPID_UNKNOWN)
                 {
                     return null;
                 }
@@ -542,7 +542,7 @@ public sealed unsafe partial class HtmlDocument
                 hr = scriptDispatch.Value->Invoke(
                     dispid,
                     IID.NULL(),
-                    PInvoke.GetThreadLocale(),
+                    PInvokeCore.GetThreadLocale(),
                     DISPATCH_FLAGS.DISPATCH_METHOD,
                     &dispParams,
                     &result,

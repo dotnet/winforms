@@ -190,7 +190,7 @@ public partial class WebBrowser
 
         internal override void OnPropertyChanged(int dispid)
         {
-            if (dispid != PInvoke.DISPID_READYSTATE)
+            if (dispid != PInvokeCore.DISPID_READYSTATE)
             {
                 base.OnPropertyChanged(dispid);
             }

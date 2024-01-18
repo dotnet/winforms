@@ -249,7 +249,7 @@ public class EncoderParameterTests
     [InlineData(new int[] { 1 }, null, new int[] { 1 }, new int[] { 1 }, typeof(NullReferenceException))]
     [InlineData(new int[] { 1 }, new int[] { 1 }, null, new int[] { 1 }, typeof(NullReferenceException))]
     [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { 1 }, null, typeof(NullReferenceException))]
-    public void Ctor_Encoder_Numerator1Array_Denominator1Array_Numerator2Array_Denominator2Array_InvalidParameters_ThrowsExpected(int[] numerator1, int[] denominator1, int[] numerator2, int[] denominator2, Type expected)
+    public void Ctor_Encoder_Numerator1Array_Denominator1Array_Numerator2Array_Denominator2Array_InvalidParameters_ThrowsExpected(int[]? numerator1, int[]? denominator1, int[]? numerator2, int[]? denominator2, Type expected)
     {
         Assert.Throws(expected, () => new EncoderParameter(s_anyEncoder, numerator1, denominator1, numerator2, denominator2));
     }
@@ -268,7 +268,7 @@ public class EncoderParameterTests
     [InlineData(new int[] { 0, 1 }, new int[] { 0 }, typeof(ArgumentException))]
     [InlineData(new int[] { 0, 1 }, null, typeof(NullReferenceException))]
     [InlineData(null, new int[] { 0, 1 }, typeof(NullReferenceException))]
-    public void Ctor_Numerator_Denominator_IvalidValues_ThrowsExpected(int[] numerator, int[] denominator, Type expected)
+    public void Ctor_Numerator_Denominator_IvalidValues_ThrowsExpected(int[]? numerator, int[]? denominator, Type expected)
     {
         Assert.Throws(expected, () => new EncoderParameter(s_anyEncoder, numerator, denominator));
     }
@@ -278,7 +278,7 @@ public class EncoderParameterTests
     [InlineData(new long[] { 0, 1 }, new long[] { 0 }, typeof(ArgumentException))]
     [InlineData(new long[] { 0, 1 }, null, typeof(NullReferenceException))]
     [InlineData(null, new long[] { 0, 1 }, typeof(NullReferenceException))]
-    public void Ctor_RangeBegin_RangeEnd_InvalidValues_ThrowsExpected(long[] rangeBegin, long[] rangeEnd, Type expected)
+    public void Ctor_RangeBegin_RangeEnd_InvalidValues_ThrowsExpected(long[]? rangeBegin, long[]? rangeEnd, Type expected)
     {
         Assert.Throws(expected, () => new EncoderParameter(s_anyEncoder, rangeBegin, rangeEnd));
     }

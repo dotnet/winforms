@@ -66,6 +66,13 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         {
             throw new ArgumentException("Use ComSafeArrayScope instead");
         }
+        else if (typeof(T) == typeof(object))
+        {
+            if (value->VarType is not VARENUM.VT_VARIANT)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
         else
         {
             // The type has not been accounted for yet in the SafeArrayScope
@@ -96,6 +103,10 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         {
             throw new ArgumentException("Use ComSafeArrayScope instead");
         }
+        else if (typeof(T) == typeof(object))
+        {
+            vt = VARENUM.VT_VARIANT;
+        }
         else
         {
             // The type has not been accounted for yet in the SafeArrayScope
@@ -110,7 +121,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
             lLbound = 0
         };
 
-        _value = (nint)PInvoke.SafeArrayCreate(vt, 1, &saBound);
+        _value = (nint)PInvokeCore.SafeArrayCreate(vt, 1, &saBound);
         if (_value == 0)
         {
             throw new InvalidOperationException("Unable to create SAFEARRAY");
@@ -128,8 +139,9 @@ internal readonly unsafe ref struct SafeArrayScope<T>
     /// <remarks>
     ///  <para>
     ///   A copy will be made of anything that is put into the <see cref="SAFEARRAY"/>
-    ///   and anything the <see cref="SAFEARRAY"/> gives out. Be sure to dispose of the
-    ///   items that are given to/from the <see cref="SAFEARRAY"/> if necessary.
+    ///   and anything the <see cref="SAFEARRAY"/> gives out is a copy and has been add ref appropriately if applicable.
+    ///   Be sure to dispose of items that are given to the <see cref="SAFEARRAY"/> if necessary. All
+    ///   items given out by the <see cref="SAFEARRAY"/> should be disposed.
     ///  </para>
     /// </remarks>
     public T? this[int i]
@@ -153,6 +165,11 @@ internal readonly unsafe ref struct SafeArrayScope<T>
             {
                 return (T)(object)GetElement<nint>(i);
             }
+            else if (typeof(T) == typeof(object))
+            {
+                using VARIANT result = GetElement<VARIANT>(i);
+                return (T?)result.ToObject();
+            }
 
             // Noop. This is an unknown type. We should fill this method out to to do the right
             // thing as we run into new types.
@@ -160,7 +177,12 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         }
         set
         {
-            if (value is string s)
+            if (Value->VarType == VARENUM.VT_VARIANT)
+            {
+                using VARIANT variant = VARIANT.FromObject(value);
+                PutElement(i, &variant);
+            }
+            else if (value is string s)
             {
                 using BSTR bstrText = new(s);
                 PutElement(i, bstrText);
@@ -186,7 +208,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         TReturn result;
         fixed (int* pIndices = indices)
         {
-            PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
+            PInvokeCore.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
         }
 
         return result;
@@ -197,7 +219,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         Span<int> indices = [index];
         fixed (int* pIndices = indices)
         {
-            PInvoke.SafeArrayPutElement((SAFEARRAY*)_value, pIndices, value).ThrowOnFailure();
+            PInvokeCore.SafeArrayPutElement((SAFEARRAY*)_value, pIndices, value).ThrowOnFailure();
         }
     }
 
@@ -218,7 +240,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
         if (safeArray is not null)
         {
-            PInvoke.SafeArrayDestroy(safeArray).ThrowOnFailure();
+            PInvokeCore.SafeArrayDestroy(safeArray).ThrowOnFailure();
         }
     }
 

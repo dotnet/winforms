@@ -22,8 +22,6 @@ flags:                            # which files to include in the reporting
       - src/Common/src/
       - src/Microsoft.VisualBasic/src/
       - src/Microsoft.VisualBasic.Forms/src/
-      - src/System.Design/src/
-      - src/System.Drawing/src/
       - src/System.Drawing.Common/src/
       - src/System.Drawing.Design/src/
       - src/System.Private.Windows.Core/src/

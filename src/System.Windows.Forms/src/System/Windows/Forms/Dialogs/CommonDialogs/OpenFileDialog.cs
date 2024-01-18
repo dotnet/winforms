@@ -165,7 +165,7 @@ public sealed partial class OpenFileDialog : FileDialog
 
     private protected override unsafe ComScope<IFileDialog> CreateVistaDialog()
     {
-        HRESULT hr = PInvoke.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             in CLSID.FileOpenDialog,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,

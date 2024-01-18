@@ -78,7 +78,7 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData("", "path")]
     [InlineData("\0", "path")]
     [InlineData("NoSuchPath", null)]
-    public void Ctor_InvalidFilePath_ThrowsArgumentException(string filename, string paramName)
+    public void Ctor_InvalidFilePath_ThrowsArgumentException(string filename, string? paramName)
     {
         AssertExtensions.Throws<ArgumentException>(paramName, null, () => new Bitmap(filename));
         AssertExtensions.Throws<ArgumentException>(paramName, null, () => new Bitmap(filename, false));
@@ -1171,12 +1171,10 @@ public class BitmapTests : FileCleanupTestBase
     }
 
     [Fact]
-    public void LockBits_NullBitmapData_ThrowsArgumentException()
+    public void LockBits_NullBitmapData_ThrowsArgumentNullException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(Rectangle.Empty, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb, null));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentNullException>("bitmapData", () => bitmap.LockBits(Rectangle.Empty, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb, null));
     }
 
     [Theory]
@@ -1193,14 +1191,12 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1, 1, 0, 1)]
     public void LockBits_InvalidRect_ThrowsArgumentException(int x, int y, int width, int height)
     {
-        using (Bitmap bitmap = new(2, 2))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(x, y, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat));
+        using Bitmap bitmap = new(2, 2);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(x, y, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat));
 
-            BitmapData bitmapData = new();
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(x, y, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat, bitmapData));
-            Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
-        }
+        BitmapData bitmapData = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(x, y, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat, bitmapData));
+        Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
     }
 
     [Theory]
@@ -1329,11 +1325,11 @@ public class BitmapTests : FileCleanupTestBase
     }
 
     [Fact]
-    public void UnlockBits_NullBitmapData_ThrowsArgumentException()
+    public void UnlockBits_NullBitmapData_ThrowsArgumentNullException()
     {
         using (Bitmap bitmap = new(1, 1))
         {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.UnlockBits(null));
+            AssertExtensions.Throws<ArgumentNullException>("bitmapdata", () => bitmap.UnlockBits(null));
         }
     }
 
@@ -1683,12 +1679,10 @@ public class BitmapTests : FileCleanupTestBase
 
         using (FileStream stream = new(path, FileMode.Open))
         {
-            using (Bitmap bitmap = new(new TestStream(stream, canSeek: false)))
-            {
-                Assert.Equal(100, bitmap.Height);
-                Assert.Equal(100, bitmap.Width);
-                Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
-            }
+            using Bitmap bitmap = new(new TestStream(stream, canSeek: false));
+            Assert.Equal(100, bitmap.Height);
+            Assert.Equal(100, bitmap.Width);
+            Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
         }
     }
 

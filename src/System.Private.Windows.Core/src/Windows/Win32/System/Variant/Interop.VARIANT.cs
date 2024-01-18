@@ -3,7 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Primitives.Resources;
+using System.Private.Windows.Core.Resources;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
@@ -60,7 +60,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
         fixed (void* t = &this)
         {
-            PInvoke.PropVariantClear((PROPVARIANT*)t);
+            PInvokeCore.PropVariantClear((PROPVARIANT*)t);
         }
 
         Anonymous.Anonymous.vt = VT_EMPTY;
@@ -205,7 +205,7 @@ internal unsafe partial struct VARIANT : IDisposable
                     break;
                 }
 
-                return (*(PInvoke.FILETIME*)data).ToDateTime();
+                return (*(FILETIME*)data).ToDateTime();
             case VT_VOID:
                 return null;
             case VT_RECORD:
@@ -272,7 +272,7 @@ internal unsafe partial struct VARIANT : IDisposable
         {
         }
 
-        HRESULT hr = PInvoke.SafeArrayLock(psa);
+        HRESULT hr = PInvokeCore.SafeArrayLock(psa);
         Debug.Assert(hr == HRESULT.S_OK);
 
         try
@@ -430,7 +430,7 @@ internal unsafe partial struct VARIANT : IDisposable
                 pin.Free();
             }
 
-            hr = PInvoke.SafeArrayUnlock(psa);
+            hr = PInvokeCore.SafeArrayUnlock(psa);
             Debug.Assert(hr == HRESULT.S_OK);
         }
 
@@ -809,7 +809,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
             case VT_FILETIME:
                 {
-                    var data = new Span<PInvoke.FILETIME>(ca.pElems, (int)ca.cElems);
+                    var data = new Span<FILETIME>(ca.pElems, (int)ca.cElems);
                     var result = new DateTime[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
@@ -1027,7 +1027,7 @@ internal unsafe partial struct VARIANT : IDisposable
                 public Guid* puuid;
 
                 [FieldOffset(0)]
-                public PInvoke.FILETIME filetime;
+                public FILETIME filetime;
 
                 [FieldOffset(0)]
                 public CA ca;

@@ -8,8 +8,11 @@ internal static partial class PInvoke
     /// <inheritdoc cref="StartDoc(HDC, DOCINFOW*)"/>
     internal static unsafe int StartDoc<T>(T hdc, in DOCINFOW lpdi) where T : IHandle<HDC>
     {
-        int result = StartDoc(hdc.Handle, in lpdi);
-        GC.KeepAlive(hdc.Wrapper);
-        return result;
+        fixed (DOCINFOW* di = &lpdi)
+        {
+            int result = StartDoc(hdc.Handle, di);
+            GC.KeepAlive(hdc.Wrapper);
+            return result;
+        }
     }
 }

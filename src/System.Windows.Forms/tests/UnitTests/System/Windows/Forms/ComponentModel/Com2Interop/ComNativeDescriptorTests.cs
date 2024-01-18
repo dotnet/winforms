@@ -109,7 +109,7 @@ public unsafe class ComNativeDescriptorTests
     {
         Guid guid = typeof(WindowsMediaPlayerClass).GUID;
         ComScope<IUnknown> unknown = new(null);
-        HRESULT hr = PInvoke.CoCreateInstance(
+        HRESULT hr = PInvokeCore.CoCreateInstance(
             &guid,
             null,
             CLSCTX.CLSCTX_INPROC_SERVER,

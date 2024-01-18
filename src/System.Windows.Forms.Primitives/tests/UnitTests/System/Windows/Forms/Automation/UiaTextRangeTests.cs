@@ -1165,7 +1165,7 @@ This is the line 3";
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("Some test text")]
-    public void UiaTextRange_private_GetFontName_ReturnsExpectedValue(string faceName)
+    public void UiaTextRange_private_GetFontName_ReturnsExpectedValue(string? faceName)
     {
         LOGFONTW logfont = new()
         {

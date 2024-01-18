@@ -80,7 +80,7 @@ public unsafe class SafeArrayScopeTests
         }
         finally
         {
-            PInvoke.SafeArrayDestroy(array);
+            PInvokeCore.SafeArrayDestroy(array);
         }
     }
 
@@ -95,7 +95,7 @@ public unsafe class SafeArrayScopeTests
         }
         finally
         {
-            PInvoke.SafeArrayDestroy(array);
+            PInvokeCore.SafeArrayDestroy(array);
         }
     }
 }

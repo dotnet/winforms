@@ -15,7 +15,7 @@ internal static partial class Com2TypeInfoProcessor
         required public string Name { get; init; }
 #pragma warning restore IDE0036
 
-        public int DispId { get; set; } = PInvoke.DISPID_UNKNOWN;
+        public int DispId { get; set; } = PInvokeCore.DISPID_UNKNOWN;
 
         public Type? ValueType { get; set; }
 

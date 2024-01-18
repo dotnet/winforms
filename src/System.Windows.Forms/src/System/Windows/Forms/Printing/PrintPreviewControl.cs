@@ -282,7 +282,7 @@ public partial class PrintPreviewControl : Control
     }
 
     [DefaultValue(false)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     public new bool TabStop
     {
         get => base.TabStop;

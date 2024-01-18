@@ -280,7 +280,7 @@ public partial class ToolStripTextBox : ToolStripControlHost
 
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(BorderStyle.Fixed3D)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.TextBoxBorderDescr))]
     public BorderStyle BorderStyle
     {

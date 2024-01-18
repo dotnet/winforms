@@ -31,7 +31,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData(" ", "default_top_level")]
     [InlineData("\t", "default_top_level")]
     [InlineData("MyProject", "default_boilerplate")]
-    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string ns, string expectedFileName)
+    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
         string expected = File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{expectedFileName}.cs");
 

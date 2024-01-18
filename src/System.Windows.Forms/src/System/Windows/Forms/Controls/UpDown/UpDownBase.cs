@@ -175,7 +175,7 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(BorderStyle.Fixed3D)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))]
     public BorderStyle BorderStyle
     {
