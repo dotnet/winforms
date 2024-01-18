@@ -1118,14 +1118,10 @@ public partial class MaskedTextBox : TextBoxBase
                 // the default one so we can get it; this would change the text displayed in the box (even for a short time)
                 // opening a sec hole.
 
-                TextBox txtBox = new TextBox
-                {
-                    UseSystemPasswordChar = true // this forces the creation of the control handle.
-                };
+                using TextBox txtBox = new();
+                txtBox.UseSystemPasswordChar = true; // this forces the creation of the control handle.
 
                 MaskedTextBox.systemPwdChar = txtBox.PasswordChar;
-
-                txtBox.Dispose();
             }
 
             return MaskedTextBox.systemPwdChar;

@@ -202,15 +202,15 @@ public partial class ComponentEditorForm : Form
 
         if (_pageSites is not null)
         {
+            using Graphics graphics = CreateGraphicsInternal();
+
             // Add the nodes corresponding to the pages
             for (int n = 0; n < _pageSites.Length; n++)
             {
                 ComponentEditorPage page = _pageSites[n].GetPageControl();
 
                 string title = page.Title;
-                Graphics graphics = CreateGraphicsInternal();
                 int titleWidth = (int)graphics.MeasureString(title, Font).Width;
-                graphics.Dispose();
                 _selectorImageList.Images.Add(page.Icon.ToBitmap());
 
                 _selector.Nodes.Add(new TreeNode(title, n, n));

@@ -1038,13 +1038,13 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             bool isActive = (LinkState & LinkState.Active) == LinkState.Active;
 
             LinkUtilities.EnsureLinkFonts(cellStyle.Font, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
+            using Font linkFont = getLinkFont;
+            using Font hoverFont = getHoverFont;
+
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(
                 DataGridView.RightToLeftInternal,
                 cellStyle.Alignment,
                 cellStyle.WrapMode);
-
-            using Font linkFont = getLinkFont;
-            using Font hoverFont = getHoverFont;
 
             // Paint the focus rectangle around the link
             if (!paint)
@@ -1129,9 +1129,6 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                     ControlPaint.DrawFocusRectangle(g, errorBounds, Color.Empty, brushColor);
                 }
             }
-
-            linkFont.Dispose();
-            hoverFont.Dispose();
         }
         else if (paint || computeContentBounds)
         {
