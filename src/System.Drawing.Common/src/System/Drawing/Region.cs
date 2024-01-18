@@ -26,7 +26,8 @@ public unsafe sealed class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     public Region(RectangleF rect)
     {
         GpRegion* region = default;
-        CheckStatus(PInvoke.GdipCreateRegionRect(rect, ref region));
+        RectF rectF = rect;
+        CheckStatus(PInvoke.GdipCreateRegionRect(&rectF, &region));
         SetNativeRegion(region);
     }
 

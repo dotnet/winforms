@@ -303,7 +303,7 @@ public partial class DocumentDesigner
                 Debug.Assert(!tlbGuid.Equals(Guid.Empty), $"No valid Guid found for: {controlKey}");
                 tlbKey.Close();
 
-                HRESULT hr = PInvoke.LoadRegTypeLib(
+                HRESULT hr = PInvokeCore.LoadRegTypeLib(
                     tlbGuid,
                     (ushort)majorVer,
                     (ushort)minorVer,

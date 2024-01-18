@@ -38,7 +38,7 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T : unmanaged, IC
             lLbound = 0
         };
 
-        _value = new(PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound));
+        _value = new(PInvokeCore.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound));
     }
 
     /// <remarks>

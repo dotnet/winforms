@@ -897,7 +897,7 @@ public unsafe partial class Control :
     ///  will always return a non-null value.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_BACKCOLOR)]
+    [DispId(PInvokeCore.DISPID_BACKCOLOR)]
     [SRDescription(nameof(SR.ControlBackColorDescr))]
     public virtual Color BackColor
     {
@@ -1991,7 +1991,7 @@ public unsafe partial class Control :
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
-    [DispId(PInvoke.DISPID_ENABLED)]
+    [DispId(PInvokeCore.DISPID_ENABLED)]
     [SRDescription(nameof(SR.ControlEnabledDescr))]
     public bool Enabled
     {
@@ -2055,7 +2055,7 @@ public unsafe partial class Control :
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Localizable(true)]
-    [DispId(PInvoke.DISPID_FONT)]
+    [DispId(PInvokeCore.DISPID_FONT)]
     [AmbientValue(null)]
     [SRDescription(nameof(SR.ControlFontDescr))]
     [AllowNull]
@@ -2263,7 +2263,7 @@ public unsafe partial class Control :
     ///  The foreground color of the control.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_FORECOLOR)]
+    [DispId(PInvokeCore.DISPID_FORECOLOR)]
     [SRDescription(nameof(SR.ControlForeColorDescr))]
     public virtual Color ForeColor
     {
@@ -2409,7 +2409,7 @@ public unsafe partial class Control :
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [DispId(PInvoke.DISPID_HWND)]
+    [DispId(PInvokeCore.DISPID_HWND)]
     [SRDescription(nameof(SR.ControlHandleDescr))]
     public IntPtr Handle
     {
@@ -3406,7 +3406,7 @@ public unsafe partial class Control :
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(true)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     [SRDescription(nameof(SR.ControlTabStopDescr))]
     public bool TabStop
     {
@@ -3465,7 +3465,7 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [Localizable(true)]
     [Bindable(true)]
-    [DispId(PInvoke.DISPID_TEXT)]
+    [DispId(PInvokeCore.DISPID_TEXT)]
     [SRDescription(nameof(SR.ControlTextDescr))]
     [AllowNull]
     public virtual string Text

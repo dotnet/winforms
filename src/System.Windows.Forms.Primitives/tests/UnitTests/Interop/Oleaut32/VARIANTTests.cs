@@ -718,7 +718,7 @@ public unsafe class VARIANTTests
     {
         using VARIANT variant = new();
         DateTime dt = new(2020, 05, 13, 13, 3, 12);
-        var ft = new PInvoke.FILETIME(dt);
+        var ft = new FILETIME(dt);
         HRESULT hr = InitPropVariantFromFileTime(&ft, &variant);
         Assert.Equal(HRESULT.S_OK, hr);
         Assert.Equal(VT_FILETIME, variant.vt);
@@ -750,7 +750,7 @@ public unsafe class VARIANTTests
     {
         using VARIANT variant = new();
         DateTime dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
-        var ft = new PInvoke.FILETIME(dt);
+        var ft = new FILETIME(dt);
         HRESULT hr = InitVariantFromFileTime(&ft, &variant);
         Assert.Equal(HRESULT.S_OK, hr);
         Assert.Equal(VT_DATE, variant.vt);
@@ -1713,12 +1713,12 @@ public unsafe class VARIANTTests
 
     public static IEnumerable<object[]> VectorFILETIME_TestData()
     {
-        yield return new object[] { Array.Empty<PInvoke.FILETIME>(), Array.Empty<DateTime>() };
+        yield return new object[] { Array.Empty<FILETIME>(), Array.Empty<DateTime>() };
 
         DateTime d1 = new(2020, 05, 13, 13, 3, 12);
         DateTime d2 = new(2020, 05, 13, 13, 3, 11);
         DateTime d3 = new(2020, 3, 13, 13, 3, 12);
-        yield return new object[] { new PInvoke.FILETIME[] { new(d1), new(d2), new(d3) }, new DateTime[] { d1, d2, d3 } };
+        yield return new object[] { new FILETIME[] { new(d1), new(d2), new(d3) }, new DateTime[] { d1, d2, d3 } };
     }
 
     [StaTheory]
@@ -1726,8 +1726,8 @@ public unsafe class VARIANTTests
     public void VARIANT_ToObject_VECTORFILETIME_ReturnsExpected(object result, DateTime[] expected)
     {
         using VARIANT variant = new();
-        PInvoke.FILETIME[] fileTimeResult = (PInvoke.FILETIME[])result;
-        fixed (PInvoke.FILETIME* pResult = fileTimeResult)
+        FILETIME[] fileTimeResult = (FILETIME[])result;
+        fixed (FILETIME* pResult = fileTimeResult)
         {
             HRESULT hr = InitPropVariantFromFileTimeVector(pResult, (uint)fileTimeResult.Length, &variant);
             Assert.Equal(HRESULT.S_OK, hr);
@@ -5399,7 +5399,7 @@ public unsafe class VARIANTTests
             };
         }
 
-        SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, (uint)rank, saBounds);
+        SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(VT_I4, (uint)rank, saBounds);
         using VARIANT variant = new()
         {
             vt = VT_ARRAY | VT_I4,
@@ -5419,11 +5419,11 @@ public unsafe class VARIANTTests
             cElements = (uint)result.Length,
             lLbound = lbound
         };
-        SAFEARRAY* psa = PInvoke.SafeArrayCreate(vt, 1, &saBound);
+        SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(vt, 1, &saBound);
         Assert.True(psa != null);
 
         VARENUM arrayVt = VT_EMPTY;
-        HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+        HRESULT hr = PInvokeCore.SafeArrayGetVartype(psa, &arrayVt);
         Assert.Equal(HRESULT.S_OK, hr);
         Assert.Equal(vt, arrayVt);
 
@@ -5434,11 +5434,11 @@ public unsafe class VARIANTTests
             // Insert pointers directly.
             if (value is nint valuePtr)
             {
-                hr = PInvoke.SafeArrayPutElement(psa, &index, (void*)valuePtr);
+                hr = PInvokeCore.SafeArrayPutElement(psa, &index, (void*)valuePtr);
             }
             else
             {
-                hr = PInvoke.SafeArrayPutElement(psa, &index, &value);
+                hr = PInvokeCore.SafeArrayPutElement(psa, &index, &value);
             }
 
             Assert.Equal(HRESULT.S_OK, hr);
@@ -5462,11 +5462,11 @@ public unsafe class VARIANTTests
             lLbound = lbound2
         };
 
-        SAFEARRAY* psa = PInvoke.SafeArrayCreate(vt, 2, saBounds);
+        SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(vt, 2, saBounds);
         Assert.True(psa != null);
 
         VARENUM arrayVt = VT_EMPTY;
-        HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+        HRESULT hr = PInvokeCore.SafeArrayGetVartype(psa, &arrayVt);
         Assert.Equal(HRESULT.S_OK, hr);
         Assert.Equal(vt, arrayVt);
 
@@ -5479,11 +5479,11 @@ public unsafe class VARIANTTests
                 // Insert pointers directly.
                 if (value is nint valuePtr)
                 {
-                    hr = PInvoke.SafeArrayPutElement(psa, indices, (void*)valuePtr);
+                    hr = PInvokeCore.SafeArrayPutElement(psa, indices, (void*)valuePtr);
                 }
                 else
                 {
-                    hr = PInvoke.SafeArrayPutElement(psa, indices, &value);
+                    hr = PInvokeCore.SafeArrayPutElement(psa, indices, &value);
                 }
 
                 Assert.Equal(HRESULT.S_OK, hr);
@@ -5748,11 +5748,11 @@ public unsafe class VARIANTTests
             cElements = (uint)result.Length,
             lLbound = lbound
         };
-        SAFEARRAY* psa = PInvoke.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
+        SAFEARRAY* psa = PInvokeCore.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
         Assert.True(psa != null);
 
         VARENUM arrayVt = VT_EMPTY;
-        HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+        HRESULT hr = PInvokeCore.SafeArrayGetVartype(psa, &arrayVt);
         Assert.Equal(HRESULT.S_OK, hr);
         Assert.Equal(VT_RECORD, arrayVt);
 
@@ -5829,10 +5829,10 @@ public unsafe class VARIANTTests
     private static extern unsafe HRESULT InitPropVariantFromCLSID(Guid* clsid, VARIANT* ppropvar);
 
     [DllImport(Libraries.Propsys, ExactSpelling = true)]
-    private static extern unsafe HRESULT InitPropVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
+    private static extern unsafe HRESULT InitPropVariantFromFileTime(FILETIME* pftIn, VARIANT* ppropvar);
 
     [DllImport(Libraries.Propsys, ExactSpelling = true)]
-    private static extern unsafe HRESULT InitVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
+    private static extern unsafe HRESULT InitVariantFromFileTime(FILETIME* pftIn, VARIANT* ppropvar);
 
     [DllImport(Libraries.Propsys, ExactSpelling = true)]
     private static extern unsafe HRESULT InitPropVariantFromBuffer(void* pv, uint cb, VARIANT* ppropvar);

@@ -666,7 +666,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(FormBorderStyle.Sizable)]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.FormBorderStyleDescr))]
     public FormBorderStyle FormBorderStyle
     {
@@ -2076,7 +2076,7 @@ public partial class Form : ContainerControl
     [DefaultValue(true)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    [DispId(PInvoke.DISPID_TABSTOP)]
+    [DispId(PInvokeCore.DISPID_TABSTOP)]
     [SRDescription(nameof(SR.ControlTabStopDescr))]
     public new bool TabStop
     {

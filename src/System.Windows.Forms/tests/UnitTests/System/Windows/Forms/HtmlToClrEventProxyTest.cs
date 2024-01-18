@@ -17,7 +17,7 @@ public unsafe class HtmlToClrEventProxyTest
 
         // Requests that the object enumerates all of the elements on IDispatchEx
         uint fdexEnumAll = 2;
-        dispatchEx.Value->GetNextDispID(fdexEnumAll, PInvoke.DISPID_UNKNOWN, out int id);
+        dispatchEx.Value->GetNextDispID(fdexEnumAll, PInvokeCore.DISPID_UNKNOWN, out int id);
         Assert.Equal(0, id);
         using BSTR onHtmlEvent = default;
         dispatchEx.Value->GetMemberName(id, &onHtmlEvent);
@@ -73,7 +73,7 @@ public unsafe class HtmlToClrEventProxyTest
 
         VARIANT result = default;
         DISPPARAMS dispParams = default;
-        uint locale = PInvoke.GetThreadLocale();
+        uint locale = PInvokeCore.GetThreadLocale();
         HRESULT hr = dispatch.Value->Invoke(0, IID.NULL(), locale, DISPATCH_FLAGS.DISPATCH_METHOD, &dispParams, &result, default, default);
         Assert.True(hr.Succeeded);
         Assert.Equal(1, count);

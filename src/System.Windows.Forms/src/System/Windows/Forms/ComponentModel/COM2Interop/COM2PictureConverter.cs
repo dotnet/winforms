@@ -21,7 +21,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
 
     public Com2PictureConverter(Com2PropertyDescriptor property)
     {
-        if (property.DISPID == PInvoke.DISPID_MOUSEICON || property.Name.Contains("Icon"))
+        if (property.DISPID == PInvokeCore.DISPID_MOUSEICON || property.Name.Contains("Icon"))
         {
             _pictureType = typeof(Icon);
         }

@@ -18,7 +18,7 @@ public unsafe class ComSafeArrayScopeTests
         }
         finally
         {
-            PInvoke.SafeArrayDestroy(array);
+            PInvokeCore.SafeArrayDestroy(array);
         }
     }
 

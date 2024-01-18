@@ -13,7 +13,7 @@ internal unsafe ref struct VARIANTVector
     {
         if (values is null)
         {
-            Variants = Array.Empty<VARIANT>();
+            Variants = [];
             return;
         }
 
@@ -36,6 +36,6 @@ internal unsafe ref struct VARIANTVector
             variant.Dispose();
         }
 
-        Variants = Array.Empty<VARIANT>();
+        Variants = [];
     }
 }

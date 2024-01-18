@@ -1609,15 +1609,15 @@ public class AxHostTests
         object disp = SubAxHost.GetIPictureDispFromPicture(original);
         using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
 
-        VARIANT variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE);
+        VARIANT variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_HANDLE);
         Assert.NotEqual(0u, variant.data.uintVal);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HPAL);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_HPAL);
         Assert.Equal(0u, variant.data.uintVal);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_TYPE);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_TYPE);
         Assert.Equal(1, variant.data.iVal);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_WIDTH);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_WIDTH);
         Assert.Equal(265u, variant.data.uintVal);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_HEIGHT);
         Assert.Equal(291u, variant.data.uintVal);
 
         var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
@@ -1634,14 +1634,14 @@ public class AxHostTests
 
         using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
 
-        VARIANT variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE);
+        VARIANT variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_HANDLE);
         Assert.NotEqual(0u, variant.data.uintVal);
-        Assert.True(iPictureDisp.Value->TryGetProperty(PInvoke.DISPID_PICT_HPAL, &variant).Failed);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_TYPE);
+        Assert.True(iPictureDisp.Value->TryGetProperty(PInvokeCore.DISPID_PICT_HPAL, &variant).Failed);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_TYPE);
         Assert.Equal(4, variant.data.iVal);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_WIDTH);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_WIDTH);
         Assert.Equal(19972u, variant.data.uintVal);
-        variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT);
+        variant = iPictureDisp.Value->GetProperty(PInvokeCore.DISPID_PICT_HEIGHT);
         Assert.Equal(28332u, variant.data.uintVal);
 
         var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));

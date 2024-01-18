@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.CompilerServices;
-using Windows.Win32.System.Com;
 using static System.Runtime.InteropServices.ComWrappers;
 
-namespace Windows.Win32.Foundation;
+namespace Windows.Win32.System.Com;
 
 internal readonly unsafe struct ComInterfaceTable
 {

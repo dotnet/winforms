@@ -267,7 +267,7 @@ internal static unsafe partial class ComHelpers
         // caching is by the type library path, so the guid needs looked up again in the registry to figure out the
         // path again.
         using ComScope<ITypeLib> typelib = new(null);
-        HRESULT hr = PInvoke.LoadRegTypeLib(typeLibrary, majorVersion, minorVersion, 0, typelib);
+        HRESULT hr = PInvokeCore.LoadRegTypeLib(typeLibrary, majorVersion, minorVersion, 0, typelib);
         hr.ThrowOnFailure();
 
         ComScope<ITypeInfo> typeInfo = new(null);

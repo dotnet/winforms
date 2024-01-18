@@ -4136,7 +4136,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
         <source>Occurs when the DataGridView control completes a sorting operation.</source>
-        <target state="needs-review-translation">Возникает, когда DataGridView сравнивает значения двух ячеек при выполнении сортировки.</target>
+        <target state="translated">Происходит при завершении операции сортировки элементом управления DataGridView.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">

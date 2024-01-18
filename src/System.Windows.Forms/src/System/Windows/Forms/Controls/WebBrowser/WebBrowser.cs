@@ -276,7 +276,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
                 else
                 {
                     MemoryStream memoryStream = new();
-                    using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(memoryStream));
+                    using var pStream = memoryStream.ToIStream();
                     psi.Save(pStream, fClearDirty: false);
                     return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                 }

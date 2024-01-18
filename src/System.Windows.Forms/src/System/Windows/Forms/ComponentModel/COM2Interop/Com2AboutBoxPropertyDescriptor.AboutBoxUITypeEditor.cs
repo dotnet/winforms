@@ -23,9 +23,9 @@ internal partial class Com2AboutBoxPropertyDescriptor
                 EXCEPINFO pExcepInfo = default;
                 DISPPARAMS dispParams = default;
                 hr = dispatch.Value->Invoke(
-                    PInvoke.DISPID_ABOUTBOX,
+                    PInvokeCore.DISPID_ABOUTBOX,
                     IID.NULL(),
-                    PInvoke.GetThreadLocale(),
+                    PInvokeCore.GetThreadLocale(),
                     DISPATCH_FLAGS.DISPATCH_METHOD,
                     &dispParams,
                     pVarResult: null,

@@ -2,10 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
+using DVASPECT = System.Runtime.InteropServices.ComTypes.DVASPECT;
+using FORMATETC = System.Runtime.InteropServices.ComTypes.FORMATETC;
 using IStream = Windows.Win32.System.Com.IStream;
+using STGMEDIUM = System.Runtime.InteropServices.ComTypes.STGMEDIUM;
+using TYMED = System.Runtime.InteropServices.ComTypes.TYMED;
 
 namespace System.Windows.Forms.Tests;
 
@@ -35,7 +38,7 @@ public class DragDropFormatTests
         yield return new object[] { formatEtc, medium };
 
         MemoryStream memoryStream = new();
-        IStream.Interface iStream = new Ole32.GPStream(memoryStream);
+        IStream.Interface iStream = new ComManagedStream(memoryStream);
         formatEtc = new()
         {
             cfFormat = (short)PInvoke.RegisterClipboardFormat("DragContext"),

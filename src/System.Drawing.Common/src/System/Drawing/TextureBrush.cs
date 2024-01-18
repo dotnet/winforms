@@ -9,7 +9,7 @@ using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
 
-public sealed class TextureBrush : Brush
+public unsafe sealed class TextureBrush : Brush
 {
     // When creating a texture brush from a metafile image, the dstRect
     // is used to specify the size that the metafile image should be
@@ -31,7 +31,7 @@ public sealed class TextureBrush : Brush
         }
 
         IntPtr brush;
-        int status = Gdip.GdipCreateTexture(new HandleRef(image, image._nativeImage),
+        int status = Gdip.GdipCreateTexture(new HandleRef(image, (nint)image._nativeImage),
                                                (int)wrapMode,
                                                out brush);
         Gdip.CheckStatus(status);
@@ -49,7 +49,7 @@ public sealed class TextureBrush : Brush
         }
 
         IntPtr brush;
-        int status = Gdip.GdipCreateTexture2(new HandleRef(image, image._nativeImage),
+        int status = Gdip.GdipCreateTexture2(new HandleRef(image, (nint)image._nativeImage),
                                                 unchecked((int)wrapMode),
                                                 dstRect.X,
                                                 dstRect.Y,
@@ -71,7 +71,7 @@ public sealed class TextureBrush : Brush
         }
 
         IntPtr brush;
-        int status = Gdip.GdipCreateTexture2I(new HandleRef(image, image._nativeImage),
+        int status = Gdip.GdipCreateTexture2I(new HandleRef(image, (nint)image._nativeImage),
                                                  unchecked((int)wrapMode),
                                                  dstRect.X,
                                                  dstRect.Y,
@@ -90,7 +90,7 @@ public sealed class TextureBrush : Brush
         ArgumentNullException.ThrowIfNull(image);
 
         IntPtr brush;
-        int status = Gdip.GdipCreateTextureIA(new HandleRef(image, image._nativeImage),
+        int status = Gdip.GdipCreateTextureIA(new HandleRef(image, (nint)image._nativeImage),
                                                  new HandleRef(imageAttr, (imageAttr is null) ?
                                                    IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                  dstRect.X,
@@ -110,7 +110,7 @@ public sealed class TextureBrush : Brush
         ArgumentNullException.ThrowIfNull(image);
 
         IntPtr brush;
-        int status = Gdip.GdipCreateTextureIAI(new HandleRef(image, image._nativeImage),
+        int status = Gdip.GdipCreateTextureIAI(new HandleRef(image, (nint)image._nativeImage),
                                                  new HandleRef(imageAttr, (imageAttr is null) ?
                                                    IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                  dstRect.X,
@@ -190,7 +190,7 @@ public sealed class TextureBrush : Brush
             int status = Gdip.GdipGetTextureImage(new HandleRef(this, NativeBrush), out image);
             Gdip.CheckStatus(status);
 
-            return Image.CreateImageObject(image);
+            return Image.CreateImageObject((GpImage*)image);
         }
     }
 

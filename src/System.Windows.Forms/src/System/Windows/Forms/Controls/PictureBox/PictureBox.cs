@@ -123,7 +123,7 @@ public partial class PictureBox : Control, ISupportInitialize
     /// </summary>
     [DefaultValue(BorderStyle.None)]
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.PictureBoxBorderStyleDescr))]
     public BorderStyle BorderStyle
     {
