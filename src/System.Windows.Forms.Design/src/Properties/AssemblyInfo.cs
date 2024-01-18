@@ -10,3 +10,4 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("System.Windows.Forms.Design.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.UI.IntegrationTests, PublicKey=00000000000000000400000000000000")]
+[assembly: InternalsVisibleTo("ScratchProjectWithInternals, PublicKey=00000000000000000400000000000000")]
