@@ -363,9 +363,9 @@ public class KeysConverter : TypeConverter, IComparer
     {
         if (_values is null)
         {
-            Keys[] list = CultureToKeyName[CultureInfo.CurrentCulture].Values.ToArray();
-            Array.Sort(list, this);
-            _values = new StandardValuesCollection(list);
+            Keys[] values = CultureToKeyName[CultureInfo.InvariantCulture].Values.ToArray();
+            Array.Sort(values, this);
+            _values = new StandardValuesCollection(values);
         }
 
         return _values;

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
 using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
@@ -83,5 +84,55 @@ public class KeysConverterTests
         KeysConverter converter = new();
         object result = converter.ConvertTo(keys, typeof(Enum[]));
         Assert.Equal(expectedResult, result);
+    }
+
+    [Theory]
+    [InlineData(null, null)]
+    [InlineData("de-DE", null)]
+    [InlineData(null, "de-DE")]
+    [InlineData("fr-FR", "en-US")]
+    [InlineData("en-US", "fr-FR")]
+    [InlineData("zh-CN", "it-IT")]
+    [InlineData("it-IT", "zh-CN")]
+    [InlineData("ko-KR", "ru-RU")]
+    [InlineData("ru-RU", "ko-KR")]
+    [InlineData("zh-TW", "cs-CZ")]
+    [InlineData("cs-CZ", "zh-TW")]
+    [InlineData("ja-JP", "en-US")]
+    public void GetStandardValues(string cultureName, string uiCultureName)
+    {
+        // Record original culture
+        CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+        CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
+
+        // Update CurrentCulture
+        Thread.CurrentThread.CurrentCulture = cultureName is not null ? CultureInfo.GetCultureInfo(cultureName) : originalCulture;
+        Thread.CurrentThread.CurrentUICulture = uiCultureName is not null ? CultureInfo.GetCultureInfo(uiCultureName) : originalUICulture;
+
+        Keys[] expectedValues =
+        [
+            Keys.None, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.Alt, Keys.Back, Keys.Control,
+            Keys.Delete, Keys.End, Keys.Enter, Keys.F1, Keys.F10, Keys.F11, Keys.F12, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8,
+            Keys.F9, Keys.Home, Keys.Insert, Keys.Next, Keys.PageUp, Keys.Shift
+        ];
+
+        try
+        {
+            var standardValuesCollection = new KeysConverter().GetStandardValues();
+            object[] actualValues = new ArrayList(standardValuesCollection).ToArray();
+
+            Assert.Equal(expectedValues.Length, standardValuesCollection.Count);
+
+            foreach (object key in expectedValues)
+            {
+                Assert.Contains(key, actualValues);
+            }
+        }
+        finally
+        {
+            // Restore original Culture
+            Thread.CurrentThread.CurrentCulture = originalCulture;
+            Thread.CurrentThread.CurrentUICulture = originalUICulture;
+        }
     }
 }
