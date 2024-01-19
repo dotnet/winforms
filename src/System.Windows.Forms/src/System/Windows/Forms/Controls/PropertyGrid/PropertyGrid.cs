@@ -167,7 +167,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         try
         {
-            _gridView = CreateGridView(null);
+            _gridView = CreateGridView(serviceProvider: null);
             _gridView.TabStop = true;
             _gridView.MouseMove += OnChildMouseMove;
             _gridView.MouseDown += OnChildMouseDown;
@@ -955,7 +955,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                         continue;
                     }
 
-                    Type oldType = GetUnwrappedObject(i).GetType();
+                    Type oldType = GetUnwrappedObject(i)!.GetType();
 
                     object newObject = value[i];
 
@@ -1569,7 +1569,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             ShowEventsButton(false);
         }
     }
-#nullable disable
+
     /// <summary> Collapses all the nodes in the PropertyGrid</summary>
     public void CollapseAllGridItems()
         => _gridView.RecursivelyExpand(_rootEntry, initialize: false, expand: false, maxExpands: -1);
@@ -1603,7 +1603,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// </summary>
     protected override AccessibleObject CreateAccessibilityInstance() => new PropertyGridAccessibleObject(this);
 
-    private PropertyGridView CreateGridView(IServiceProvider serviceProvider)
+    private PropertyGridView CreateGridView(IServiceProvider? serviceProvider)
     {
 #if DEBUG
         try
@@ -1640,11 +1640,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         return button;
     }
 
-    protected virtual PropertyTab CreatePropertyTab(Type tabType) => null;
+    protected virtual PropertyTab? CreatePropertyTab(Type tabType) => null;
 
-    private PropertyTab CreateTab(Type tabType, IDesignerHost host)
+    private PropertyTab? CreateTab(Type tabType, IDesignerHost? host)
     {
-        PropertyTab tab;
+        PropertyTab? tab;
 
         try
         {
@@ -1658,8 +1658,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         if (tab is null)
         {
-            ConstructorInfo constructor = tabType.GetConstructor(new Type[] { typeof(IServiceProvider) });
-            object parameter = null;
+            ConstructorInfo? constructor = tabType.GetConstructor(new Type[] { typeof(IServiceProvider) });
+            object? parameter = null;
             if (constructor is null)
             {
                 // Try a IDesignerHost constructor.
@@ -1684,7 +1684,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 else
                 {
                     // Just call the default constructor.
-                    tab = (PropertyTab)Activator.CreateInstance(tabType);
+                    tab = (PropertyTab)Activator.CreateInstance(tabType)!;
                 }
             }
             catch (Exception exception)
@@ -1711,7 +1711,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     private ToolStripButton CreatePushButton(
-        string toolTipText,
+        string? toolTipText,
         int imageIndex,
         EventHandler eventHandler,
         bool useRadioButtonRole = false)
@@ -1741,8 +1741,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         bool commandsPaneDisplayed = _commandsPane.Visible;
 
-        IComponent component = null;
-        DesignerVerb[] verbs = null;
+        IComponent? component = null;
+        DesignerVerb[]? verbs = null;
 
         // We favor the menu command service, since it can give us verbs.
         // If we fail that, we will go straight to the designer.
@@ -1759,7 +1759,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
             if (component?.Site is ISite site)
             {
-                if (site.TryGetService(out IMenuCommandService menuCommandService))
+                if (site.TryGetService(out IMenuCommandService? menuCommandService))
                 {
                     // Got the menu command service.  Let it deal with the set of verbs for this component.
                     verbs = new DesignerVerb[menuCommandService.Verbs.Count];
@@ -1769,10 +1769,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 {
                     // No menu command service.  Go straight to the component's designer.  We can only do this
                     // if the object count is 1, because designers do not support verbs across a multi-selection.
-                    if (_selectedObjects.Length == 1 && site.TryGetService(out IDesignerHost designerHost))
+                    if (_selectedObjects.Length == 1 && site.TryGetService(out IDesignerHost? designerHost))
                     {
-                        IDesigner designer = designerHost.GetDesigner(component);
-                        if (designer is not null)
+                        IDesigner? designer = designerHost.GetDesigner(component);
+                        if (designer?.Verbs is not null)
                         {
                             verbs = new DesignerVerb[designer.Verbs.Count];
                             designer.Verbs.CopyTo(verbs, 0);
@@ -1791,7 +1791,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             }
             else
             {
-                _commandsPane.SetVerbs(null, null);
+                _commandsPane.SetVerbs(component: null, verbs: null);
             }
 
             if (commandsPaneDisplayed != _commandsPane.Visible)
@@ -1893,7 +1893,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         DrawXorBar(this, rectangle);
     }
 
-    private SnappableControl DividerInside(int y)
+    private SnappableControl? DividerInside(int y)
     {
         int useGrid = -1;
 
@@ -1987,8 +1987,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private bool EnablePropPageButton(object obj)
+    private bool EnablePropPageButton(object? obj)
     {
+        if (_viewPropertyPagesButton is null)
+        {
+            throw new InvalidOperationException();
+        }
+
         if (obj is null)
         {
             _viewPropertyPagesButton.Enabled = false;
@@ -1997,7 +2002,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         bool enable;
 
-        if (TryGetService(out IUIService uiService))
+        if (TryGetService(out IUIService? uiService))
         {
             enable = uiService.CanShowComponentEditor(obj);
         }
@@ -2082,6 +2087,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
         else
         {
+            if (_normalButtonImages is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             ImageList.ImageCollection images = _normalButtonImages.Images;
 
             for (int i = 0; i < images.Count; i++)
@@ -2095,7 +2105,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     // This method should be called only inside a if (DpiHelper.IsScalingRequired) clause.
-    private void AddLargeImage(Bitmap originalBitmap)
+    private void AddLargeImage(Bitmap? originalBitmap)
     {
         if (originalBitmap is null)
         {
@@ -2105,7 +2115,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         try
         {
             Bitmap largeBitmap = ScaleHelper.CopyAndScaleToSize(originalBitmap, s_largeButtonSize);
-            _largeButtonImages.Images.Add(largeBitmap);
+            _largeButtonImages!.Images.Add(largeBitmap);
         }
         catch (Exception ex)
         {
@@ -2148,7 +2158,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return Array.Empty<Type>();
         }
 
-        if (!TypeDescriptorHelper.TryGetAttribute(components[0], out PropertyTabAttribute tabAttribute))
+        if (!TypeDescriptorHelper.TryGetAttribute(components[0], out PropertyTabAttribute? tabAttribute))
         {
             return Array.Empty<Type>();
         }
@@ -2185,14 +2195,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         return tabClasses;
     }
 
-    internal GridEntry GetDefaultGridEntry() => _defaultEntry ??= _currentEntries?[0];
+    internal GridEntry? GetDefaultGridEntry() => _defaultEntry ??= _currentEntries?[0];
 
     /// <summary>
     ///  Gets the element from point.
     /// </summary>
     /// <param name="point">The point where to search the element.</param>
     /// <returns>The element found in the current point.</returns>
-    internal Control GetElementFromPoint(Point point)
+    internal Control? GetElementFromPoint(Point point)
     {
         if (ToolbarAccessibleObject.Bounds.Contains(point))
         {
@@ -2217,7 +2227,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         return null;
     }
 
-    private object GetUnwrappedObject(int index)
+    private object? GetUnwrappedObject(int index)
     {
         if (_selectedObjects is null || index < 0 || index > _selectedObjects.Length)
         {
@@ -2225,10 +2235,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         object @object = _selectedObjects[index];
-        return @object is ICustomTypeDescriptor descriptor ? descriptor.GetPropertyOwner(pd: null) : @object;
+        return @object is ICustomTypeDescriptor descriptor
+            ? descriptor.GetPropertyOwner(pd: null)
+            : @object;
     }
 
-    internal GridEntryCollection GetCurrentEntries()
+    internal GridEntryCollection? GetCurrentEntries()
     {
         if (_currentEntries is null)
         {
@@ -2260,7 +2272,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         _gridView.Focus();
     }
 
-    void IComPropertyBrowser.SaveState(RegistryKey key)
+    void IComPropertyBrowser.SaveState(RegistryKey? key)
     {
         if (key is null)
         {
@@ -2274,7 +2286,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         key.SetValue(RegistryStateNames.CommandSizeRatio, _commandsPaneSizeRatio.ToString(CultureInfo.InvariantCulture));
     }
 
-    void IComPropertyBrowser.LoadState(RegistryKey key)
+    void IComPropertyBrowser.LoadState(RegistryKey? key)
     {
         if (key is null)
         {
@@ -2287,15 +2299,15 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             object value = key.GetValue(RegistryStateNames.AlphabeticalSort, "0");
 
-            PropertySort = value is not null && value.ToString().Equals("1")
+            PropertySort = value is not null && value.ToString()!.Equals("1")
                 ? PropertySort.Alphabetical
                 : PropertySort.Categorized | PropertySort.Alphabetical;
 
             value = key.GetValue(RegistryStateNames.HelpVisible, "1");
-            HelpVisible = value is not null && value.ToString().Equals("1");
+            HelpVisible = value is not null && value.ToString()!.Equals("1");
 
             value = key.GetValue(RegistryStateNames.CommandsVisible, "0");
-            CommandsVisibleIfAvailable = value is not null && value.ToString().Equals("1");
+            CommandsVisibleIfAvailable = value is not null && value.ToString()!.Equals("1");
 
             bool update = false;
 
@@ -2328,7 +2340,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
+    private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
     {
         // When the active document is changed, check all the components so see if they
         // are offering up any new tabs.
@@ -2357,7 +2369,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             && selectedEntry.PropertyDescriptor.Attributes is not null)
         {
             // Fish out the DispIdAttribute which will tell us the DispId of the property that we're changing.
-            if (selectedEntry.PropertyDescriptor.TryGetAttribute(out DispIdAttribute dispIdAttribute)
+            if (selectedEntry.PropertyDescriptor.TryGetAttribute(out DispIdAttribute? dispIdAttribute)
                 && !dispIdAttribute.IsDefaultAttribute())
             {
                 fullRefresh = dispID != dispIdAttribute.Value;
@@ -2372,10 +2384,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             }
 
             // This is so changes to names of native objects will be reflected in the combo box.
-            object obj = GetUnwrappedObject(0);
-            if (ComNativeDescriptor.IsNameDispId(obj, dispID) || dispID == PInvokeCore.DISPID_Name)
+            object? obj = GetUnwrappedObject(0);
+            if ((ComNativeDescriptor.IsNameDispId(obj, dispID) || dispID == PInvokeCore.DISPID_Name) && obj is not null)
             {
-                OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
+                OnComComponentNameChanged(new ComponentRenameEventArgs(obj, oldName: null, TypeDescriptor.GetClassName(obj)));
             }
         }
 
@@ -2385,10 +2397,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  We forward messages from several of our children to our mouse move so we can put up the splitter over their borders
     /// </summary>
-    private void OnChildMouseMove(object sender, MouseEventArgs e)
+    private void OnChildMouseMove(object? sender, MouseEventArgs e)
     {
         Point newPoint = Point.Empty;
-        if (ShouldForwardChildMouseMessage((Control)sender, e, ref newPoint))
+        if (ShouldForwardChildMouseMessage((Control?)sender, e, ref newPoint))
         {
             // Forward the message
             OnMouseMove(new MouseEventArgs(e.Button, e.Clicks, newPoint.X, newPoint.Y, e.Delta));
@@ -2400,11 +2412,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     ///  We forward messages from several of our children to our mouse move so
     ///  we can put up the splitter over their borders.
     /// </summary>
-    private void OnChildMouseDown(object sender, MouseEventArgs e)
+    private void OnChildMouseDown(object? sender, MouseEventArgs e)
     {
         Point newPoint = Point.Empty;
 
-        if (ShouldForwardChildMouseMessage((Control)sender, e, ref newPoint))
+        if (ShouldForwardChildMouseMessage((Control?)sender, e, ref newPoint))
         {
             // Forward the message
             OnMouseDown(new MouseEventArgs(e.Button, e.Clicks, newPoint.X, newPoint.Y, e.Delta));
@@ -2412,9 +2424,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private void OnComponentAdded(object sender, ComponentEventArgs e)
+    private void OnComponentAdded(object? sender, ComponentEventArgs e)
     {
-        if (!TypeDescriptorHelper.TryGetAttribute(e.Component.GetType(), out PropertyTabAttribute tabAttribute))
+        if (e.Component is null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        if (!TypeDescriptorHelper.TryGetAttribute(e.Component.GetType(), out PropertyTabAttribute? tabAttribute))
         {
             return;
         }
@@ -2429,7 +2446,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
         bool batchMode = GetFlag(Flags.BatchMode);
         if (batchMode || GetFlag(Flags.InternalChange) || _gridView.InPropertySet ||
@@ -2454,9 +2471,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private void OnComponentRemoved(object sender, ComponentEventArgs e)
+    private void OnComponentRemoved(object? sender, ComponentEventArgs e)
     {
-        if (!TypeDescriptorHelper.TryGetAttribute(e.Component.GetType(), out PropertyTabAttribute tabAttribute))
+        if (e.Component is null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        if (!TypeDescriptorHelper.TryGetAttribute(e.Component.GetType(), out PropertyTabAttribute? tabAttribute))
         {
             return;
         }
@@ -2470,28 +2492,31 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             }
         }
 
-        for (int i = 0; i < _selectedObjects.Length; i++)
+        if (_selectedObjects is not null)
         {
-            if (e.Component == _selectedObjects[i])
+            for (int i = 0; i < _selectedObjects.Length; i++)
             {
-                object[] newObjects = new object[_selectedObjects.Length - 1];
-                Array.Copy(_selectedObjects, 0, newObjects, 0, i);
-                if (i < newObjects.Length)
+                if (e.Component == _selectedObjects[i])
                 {
-                    // Fixed for .NET Framework 4.0
-                    Array.Copy(_selectedObjects, i + 1, newObjects, i, newObjects.Length - i);
-                }
+                    object[] newObjects = new object[_selectedObjects.Length - 1];
+                    Array.Copy(_selectedObjects, 0, newObjects, 0, i);
+                    if (i < newObjects.Length)
+                    {
+                        // Fixed for .NET Framework 4.0
+                        Array.Copy(_selectedObjects, i + 1, newObjects, i, newObjects.Length - i);
+                    }
 
-                if (!GetFlag(Flags.BatchMode))
-                {
-                    SelectedObjects = newObjects;
-                }
-                else
-                {
-                    // Otherwise, just dump the selection.
-                    _gridView.ClearGridEntries();
-                    _selectedObjects = newObjects;
-                    SetFlag(Flags.FullRefreshAfterBatch, true);
+                    if (!GetFlag(Flags.BatchMode))
+                    {
+                        SelectedObjects = newObjects;
+                    }
+                    else
+                    {
+                        // Otherwise, just dump the selection.
+                        _gridView.ClearGridEntries();
+                        _selectedObjects = newObjects;
+                        SetFlag(Flags.FullRefreshAfterBatch, true);
+                    }
                 }
             }
         }
@@ -2557,7 +2582,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         int sh = (int)Math.Round((Top + Height) * dy - sy);
         SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
     }
-
+#nullable disable
     private void OnLayoutInternal(bool dividerOnly)
     {
         if (!IsHandleCreated || !Visible)
