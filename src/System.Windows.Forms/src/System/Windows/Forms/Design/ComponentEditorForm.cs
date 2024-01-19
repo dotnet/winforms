@@ -200,7 +200,7 @@ public partial class ComponentEditorForm : Form
 
         int selectorWidth = MIN_SELECTOR_WIDTH;
 
-        if (_pageSites is not null)
+        if (_pageSites is not null && _pageSites.Length != 0)
         {
             using Graphics graphics = CreateGraphicsInternal();
 
