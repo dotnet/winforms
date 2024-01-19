@@ -2,7 +2,7 @@
 
 namespace System.Windows.Forms.Tests;
 
-public class AxSystemMonitorTests
+public class AxSystemMonitorTests : IDisposable
 {
     private readonly Form _form;
     private readonly AxSystemMonitor.AxSystemMonitor _control;
@@ -27,5 +27,12 @@ public class AxSystemMonitorTests
 
         Assert.True(_control.Enabled);
         Assert.Equal(0, _control.Counters.Count);
+    }
+
+    public void Dispose()
+    {
+        using NoAssertContext context = new();
+        _control.Dispose();
+        _form.Dispose();
     }
 }
