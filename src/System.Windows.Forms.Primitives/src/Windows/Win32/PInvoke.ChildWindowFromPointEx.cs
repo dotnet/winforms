@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="ChildWindowFromPointEx(HWND, Point, CWP_FLAGS)"/>
     public static HWND ChildWindowFromPointEx<T>(T hwndParent, Point pt, CWP_FLAGS uFlags)
         where T : IHandle<HWND>
     {

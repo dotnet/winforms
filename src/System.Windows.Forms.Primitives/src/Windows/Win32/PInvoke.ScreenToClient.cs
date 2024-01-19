@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="ScreenToClient(HWND, ref Point)"/>
     public static BOOL ScreenToClient<T>(T hWnd, ref Point lpPoint)
         where T : IHandle<HWND>
     {

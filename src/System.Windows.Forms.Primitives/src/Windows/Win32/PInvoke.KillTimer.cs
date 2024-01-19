@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="KillTimer(HWND, nuint)"/>
     public static BOOL KillTimer<T>(T hWnd, IntPtr uIDEvent)
         where T : IHandle<HWND>
     {

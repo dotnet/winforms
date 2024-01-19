@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="EndDialog(HWND, nint)"/>
     public static BOOL EndDialog<T>(T hDlg, IntPtr nResult)
         where T : IHandle<HWND>
     {

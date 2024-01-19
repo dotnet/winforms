@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="IsWindowVisible(HWND)"/>
     public static BOOL IsWindowVisible<T>(T hWnd) where T : IHandle<HWND>
     {
         BOOL result = IsWindowVisible(hWnd.Handle);

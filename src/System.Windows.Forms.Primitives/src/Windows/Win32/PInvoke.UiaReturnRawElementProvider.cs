@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UiaReturnRawElementProvider(HWND, WPARAM, LPARAM, IRawElementProviderSimple*)"/>
     public static unsafe LRESULT UiaReturnRawElementProvider<T>(
         T hwnd,
         WPARAM wParam,

@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SetFocus(HWND)"/>
     public static HWND SetFocus<T>(T hWnd) where T : IHandle<HWND>
     {
         HWND result = SetFocus(hWnd.Handle);

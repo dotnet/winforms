@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetSystemMenu(HWND, BOOL)"/>
     public static HMENU GetSystemMenu<T>(T hwnd, BOOL bRevert) where T : IHandle<HWND>
     {
         HMENU result = GetSystemMenu(hwnd.Handle, bRevert);

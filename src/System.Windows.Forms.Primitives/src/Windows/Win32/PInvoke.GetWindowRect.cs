@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetWindowRect(HWND, out RECT)"/>
     public static BOOL GetWindowRect<T>(T hWnd, out RECT lpRect) where T : IHandle<HWND>
     {
         BOOL result = GetWindowRect(hWnd.Handle, out lpRect);

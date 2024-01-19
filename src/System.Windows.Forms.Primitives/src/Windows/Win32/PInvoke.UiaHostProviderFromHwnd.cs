@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UiaHostProviderFromHwnd(HWND, IRawElementProviderSimple**)"/>
     public static unsafe HRESULT UiaHostProviderFromHwnd<T>(T hwnd, out IRawElementProviderSimple* ppProvider) where T : IHandle<HWND>
     {
         IRawElementProviderSimple* provider;

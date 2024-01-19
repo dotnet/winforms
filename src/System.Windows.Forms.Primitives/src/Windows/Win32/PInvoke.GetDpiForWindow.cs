@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetDpiForWindow(HWND)"/>
     public static uint GetDpiForWindow<T>(T hwnd) where T : IHandle<HWND>
     {
         if (OsVersion.IsWindows10_1607OrGreater())

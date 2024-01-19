@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UiaDisconnectProvider(IRawElementProviderSimple*)"/>
     public static unsafe void UiaDisconnectProvider(IRawElementProviderSimple.Interface? provider, bool skipOSCheck = false)
     {
         if (provider is not null && (skipOSCheck || OsVersion.IsWindows8OrGreater()))

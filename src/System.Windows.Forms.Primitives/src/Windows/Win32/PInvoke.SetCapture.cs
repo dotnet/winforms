@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SetCapture(HWND)"/>
     public static IntPtr SetCapture<T>(T hWnd) where T : IHandle<HWND>
     {
         IntPtr result = SetCapture(hWnd.Handle);

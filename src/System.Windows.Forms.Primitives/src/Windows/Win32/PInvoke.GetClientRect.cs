@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetClientRect(HWND, out RECT)"/>
     public static BOOL GetClientRect<T>(T hWnd, out RECT lpRect)
         where T : IHandle<HWND>
     {

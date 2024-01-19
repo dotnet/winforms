@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UpdateWindow(HWND)"/>
     public static BOOL UpdateWindow<T>(T hWnd) where T : IHandle<HWND>
     {
         BOOL result = UpdateWindow(hWnd.Handle);
