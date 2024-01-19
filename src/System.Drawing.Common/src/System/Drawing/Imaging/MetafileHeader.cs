@@ -2,237 +2,117 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Contains attributes of an associated <see cref='Metafile'/>.
+///  Contains attributes of an associated <see cref='Metafile'/>.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public sealed class MetafileHeader
 {
-    // determine which to use by nullity
-    internal MetafileHeaderWmf? wmf;
-    internal MetafileHeaderEmf? emf;
+    internal GdiPlus.MetafileHeader _header;
 
     internal MetafileHeader()
     {
     }
 
     /// <summary>
-    /// Gets the type of the associated <see cref='Metafile'/>.
+    ///  Gets the type of the associated <see cref='Metafile'/>.
     /// </summary>
-    public MetafileType Type
-    {
-        get
-        {
-            return IsWmf() ? wmf!.type : emf!.type;
-        }
-    }
+    public MetafileType Type => (MetafileType)_header.Type;
 
     /// <summary>
-    /// Gets the size, in bytes, of the associated <see cref='Metafile'/>.
+    ///  Gets the size, in bytes, of the associated <see cref='Metafile'/>.
     /// </summary>
-    public int MetafileSize
-    {
-        get
-        {
-            return IsWmf() ? wmf!.size : emf!.size;
-        }
-    }
+    public int MetafileSize => (int)_header.Size;
 
     /// <summary>
-    /// Gets the version number of the associated <see cref='Metafile'/>.
+    ///  Gets the version number of the associated <see cref='Metafile'/>.
     /// </summary>
-    public int Version
-    {
-        get
-        {
-            return IsWmf() ? wmf!.version : emf!.version;
-        }
-    }
+    public int Version => (int)_header.Version;
 
     /// <summary>
-    /// Gets the horizontal resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
+    ///  Gets the horizontal resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
     /// </summary>
-    public float DpiX
-    {
-        get
-        {
-            return IsWmf() ? wmf!.dpiX : emf!.dpiX;
-        }
-    }
+    public float DpiX => _header.DpiX;
 
     /// <summary>
-    /// Gets the vertical resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
+    ///  Gets the vertical resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
     /// </summary>
-    public float DpiY
-    {
-        get
-        {
-            return IsWmf() ? wmf!.dpiY : emf!.dpiY;
-        }
-    }
+    public float DpiY => _header.DpiY;
 
     /// <summary>
-    /// Gets a <see cref='Rectangle'/> that bounds the associated <see cref='Metafile'/>.
+    ///  Gets a <see cref='Rectangle'/> that bounds the associated <see cref='Metafile'/>.
     /// </summary>
-    public Rectangle Bounds
-    {
-        get
-        {
-            return IsWmf() ?
-                new Rectangle(wmf!.X, wmf.Y, wmf.Width, wmf.Height) :
-                new Rectangle(emf!.X, emf.Y, emf.Width, emf.Height);
-        }
-    }
+    public Rectangle Bounds => new(_header.X, _header.Y, _header.Width, _header.Height);
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows metafile format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows metafile format.
     /// </summary>
-    public bool IsWmf()
-    {
-        if ((wmf is null) && (emf is null))
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return (wmf is not null)
-            && ((wmf.type == MetafileType.Wmf)
-                || (wmf.type == MetafileType.WmfPlaceable));
-    }
+    public bool IsWmf() => _header.Type is GdiPlus.MetafileType.MetafileTypeWmf or GdiPlus.MetafileType.MetafileTypeWmfPlaceable;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows Placeable metafile format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows Placeable metafile format.
     /// </summary>
-    public bool IsWmfPlaceable()
-    {
-        if (wmf is null && emf is null)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return ((wmf is not null) && (wmf.type == MetafileType.WmfPlaceable));
-    }
+    public bool IsWmfPlaceable() => _header.Type is GdiPlus.MetafileType.MetafileTypeWmfPlaceable;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced metafile format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced metafile format.
     /// </summary>
-    public bool IsEmf()
-    {
-        if (wmf is null && emf is null)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return ((emf is not null) && (emf.type == MetafileType.Emf));
-    }
+    public bool IsEmf() => _header.Type is GdiPlus.MetafileType.MetafileTypeEmf;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced
-    /// metafile format or the Windows enhanced metafile plus.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced
+    ///  metafile format or the Windows enhanced metafile plus.
     /// </summary>
-    public bool IsEmfOrEmfPlus()
-    {
-        if (wmf is null && emf is null)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return ((emf is not null) && (emf.type >= MetafileType.Emf));
-    }
+    public bool IsEmfOrEmfPlus() => _header.Type is GdiPlus.MetafileType.MetafileTypeEmf
+        or GdiPlus.MetafileType.MetafileTypeEmfPlusOnly
+        or GdiPlus.MetafileType.MetafileTypeEmfPlusDual;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced
-    /// metafile plus format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced
+    ///  metafile plus format.
     /// </summary>
-    public bool IsEmfPlus()
-    {
-        if (wmf is null && emf is null)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return ((emf is not null) && (emf.type >= MetafileType.EmfPlusOnly));
-    }
+    public bool IsEmfPlus() => _header.Type is GdiPlus.MetafileType.MetafileTypeEmfPlusOnly
+        or GdiPlus.MetafileType.MetafileTypeEmfPlusDual;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is in the Dual enhanced metafile
-    /// format. This format supports both the enhanced and the enhanced plus format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Dual enhanced metafile
+    ///  format. This format supports both the enhanced and the enhanced plus format.
     /// </summary>
-    public bool IsEmfPlusDual()
-    {
-        if (wmf is null && emf is null)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return ((emf is not null) && (emf.type == MetafileType.EmfPlusDual));
-    }
+    public bool IsEmfPlusDual() => _header.Type is GdiPlus.MetafileType.MetafileTypeEmfPlusDual;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> supports only the Windows
-    /// enhanced metafile plus format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> supports only the Windows
+    ///  enhanced metafile plus format.
     /// </summary>
-    public bool IsEmfPlusOnly()
-    {
-        if (wmf is null && emf is null)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
-
-        return ((emf is not null) && (emf.type == MetafileType.EmfPlusOnly));
-    }
+    public bool IsEmfPlusOnly() => _header.Type is GdiPlus.MetafileType.MetafileTypeEmfPlusOnly;
 
     /// <summary>
-    /// Returns a value indicating whether the associated <see cref='Metafile'/> is device-dependent.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is device-dependent.
     /// </summary>
-    public bool IsDisplay()
-    {
-        return IsEmfPlus() &&
-           (((unchecked((int)emf!.emfPlusFlags)) & ((int)EmfPlusFlags.Display)) != 0);
-    }
+    public bool IsDisplay() => IsEmfPlus() && ((EmfPlusFlags)_header.EmfPlusFlags).HasFlag(EmfPlusFlags.Display);
 
     /// <summary>
-    /// Gets the WMF header file for the associated <see cref='Metafile'/>.
+    ///  Gets the WMF header file for the associated <see cref='Metafile'/>.
     /// </summary>
-    public MetaHeader WmfHeader
-    {
-        get
-        {
-            if (wmf is null)
-                throw Gdip.StatusException(Gdip.InvalidParameter);
-
-            return wmf.WmfHeader;
-        }
-    }
+    public MetaHeader WmfHeader => !IsWmf()
+        ? throw Status.InvalidParameter.GetException()
+        : new(_header.Anonymous.WmfHeader);
 
     /// <summary>
-    /// Gets the size, in bytes, of the enhanced metafile plus header file.
+    ///  Gets the size, in bytes, of the enhanced metafile plus header file.
     /// </summary>
-    public int EmfPlusHeaderSize
-    {
-        get
-        {
-            if (wmf is null && emf is null)
-                throw Gdip.StatusException(Gdip.InvalidParameter);
-
-            return IsWmf() ? wmf!.EmfPlusHeaderSize : emf!.EmfPlusHeaderSize;
-        }
-    }
+    public int EmfPlusHeaderSize => _header.EmfPlusHeaderSize;
 
     /// <summary>
-    /// Gets the logical horizontal resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
+    ///  Gets the logical horizontal resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
     /// </summary>
-    public int LogicalDpiX
-    {
-        get
-        {
-            if (wmf is null && emf is null)
-                throw Gdip.StatusException(Gdip.InvalidParameter);
-
-            return IsWmf() ? wmf!.LogicalDpiX : emf!.LogicalDpiX;
-        }
-    }
+    public int LogicalDpiX => _header.LogicalDpiX;
 
     /// <summary>
-    /// Gets the logical vertical resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
+    ///  Gets the logical vertical resolution, in dots-per-inch, of the associated <see cref='Metafile'/>.
     /// </summary>
-    public int LogicalDpiY
-    {
-        get
-        {
-            if (wmf is null && emf is null)
-                throw Gdip.StatusException(Gdip.InvalidParameter);
-
-            return IsWmf() ? wmf!.LogicalDpiY : emf!.LogicalDpiX;
-        }
-    }
+    public int LogicalDpiY => _header.LogicalDpiY;
 }

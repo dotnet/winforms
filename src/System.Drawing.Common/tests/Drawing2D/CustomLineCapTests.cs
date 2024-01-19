@@ -227,17 +227,15 @@ public class CustomLineCapTests
     [Fact]
     public void Disposed_MembersThrow()
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            customLineCap.Dispose();
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.StrokeJoin);
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseCap);
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseInset);
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.WidthScale);
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.Clone());
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.SetStrokeCaps(LineCap.Flat, LineCap.Flat));
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.GetStrokeCaps(out LineCap startCap, out LineCap endCap));
-        }
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        customLineCap.Dispose();
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.StrokeJoin);
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseCap);
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseInset);
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.WidthScale);
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.SetStrokeCaps(LineCap.Flat, LineCap.Flat));
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.GetStrokeCaps(out LineCap startCap, out LineCap endCap));
     }
 }

@@ -3,14 +3,12 @@
 
 using System.ComponentModel;
 using System.Drawing.Internal;
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Drawing2D;
 
 public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
 {
-    internal IntPtr _nativePath;
+    internal GpPath* _nativePath;
 
     private const float Flatness = (float)2.0 / (float)3.0;
 
@@ -18,58 +16,59 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public GraphicsPath(FillMode fillMode)
     {
-        Gdip.CheckStatus(Gdip.GdipCreatePath(unchecked((int)fillMode), out IntPtr nativePath));
-        _nativePath = nativePath;
+        GpPath* path;
+        PInvoke.GdipCreatePath((GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
+        _nativePath = path;
     }
 
     public GraphicsPath(PointF[] pts, byte[] types) : this(pts, types, FillMode.Alternate) { }
 
-    public unsafe GraphicsPath(PointF[] pts, byte[] types, FillMode fillMode)
+    public GraphicsPath(PointF[] pts, byte[] types, FillMode fillMode)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        ArgumentNullException.ThrowIfNull(types);
 
         if (pts.Length != types.Length)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         fixed (PointF* p = pts)
         fixed (byte* t = types)
         {
-            Gdip.CheckStatus(Gdip.GdipCreatePath2(
-                p, t, types.Length, (int)fillMode, out IntPtr nativePath));
-
-            _nativePath = nativePath;
+            GpPath* path;
+            PInvoke.GdipCreatePath2((GdiPlus.PointF*)p, t, types.Length, (GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
+            _nativePath = path;
         }
     }
 
     public GraphicsPath(Point[] pts, byte[] types) : this(pts, types, FillMode.Alternate) { }
 
-    public unsafe GraphicsPath(Point[] pts, byte[] types, FillMode fillMode)
+    public GraphicsPath(Point[] pts, byte[] types, FillMode fillMode)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         if (pts.Length != types.Length)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         fixed (byte* t = types)
         fixed (Point* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipCreatePath2I(
-                p, t, types.Length, unchecked((int)fillMode), out IntPtr nativePath));
-
-            _nativePath = nativePath;
+            GpPath* path;
+            PInvoke.GdipCreatePath2I((GdiPlus.Point*)p, t, types.Length, (GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
+            _nativePath = path;
         }
     }
 
     public object Clone()
     {
-        Gdip.CheckStatus(Gdip.GdipClonePath(new HandleRef(this, _nativePath), out IntPtr clonedPath));
-
-        return new GraphicsPath(clonedPath);
+        GpPath* path;
+        PInvoke.GdipClonePath(_nativePath, &path).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return new GraphicsPath(path);
     }
 
-    private GraphicsPath(IntPtr nativePath)
+    private GraphicsPath(GpPath* nativePath)
     {
-        if (nativePath == IntPtr.Zero)
+        if (nativePath is null)
             throw new ArgumentNullException(nameof(nativePath));
 
         _nativePath = nativePath;
@@ -77,45 +76,41 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void Dispose()
     {
-        Dispose(true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
     private void Dispose(bool disposing)
     {
-        if (_nativePath != IntPtr.Zero)
+        if (_nativePath is not null)
         {
             try
             {
 #if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
+                Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                Gdip.GdipDeletePath(new HandleRef(this, _nativePath));
+                PInvoke.GdipDeletePath(_nativePath);
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
+                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
-
                 Debug.Fail($"Exception thrown during Dispose: {ex}");
             }
             finally
             {
-                _nativePath = IntPtr.Zero;
+                _nativePath = null;
             }
         }
     }
 
-    ~GraphicsPath() => Dispose(false);
+    ~GraphicsPath() => Dispose(disposing: false);
 
     public void Reset()
     {
-        Gdip.CheckStatus(Gdip.GdipResetPath(new HandleRef(this, _nativePath)));
+        PInvoke.GdipResetPath(_nativePath).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public FillMode FillMode
@@ -123,83 +118,94 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         get
         {
             GdiPlus.FillMode fillMode;
-            Gdip.CheckStatus(PInvoke.GdipGetPathFillMode((GpPath*)_nativePath, &fillMode));
+            PInvoke.GdipGetPathFillMode(_nativePath, &fillMode).ThrowIfFailed();
             GC.KeepAlive(this);
             return (FillMode)fillMode;
         }
         set
         {
             if (value is < FillMode.Alternate or > FillMode.Winding)
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(FillMode));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FillMode));
 
-            Gdip.CheckStatus(PInvoke.GdipSetPathFillMode((GpPath*)_nativePath, (GdiPlus.FillMode)value));
+            PInvoke.GdipSetPathFillMode(_nativePath, (GdiPlus.FillMode)value).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    private unsafe PathData _GetPathData()
+    public PathData PathData
     {
-        int count = PointCount;
-
-        PathData pathData = new()
+        get
         {
-            Types = new byte[count],
-            Points = new PointF[count]
-        };
+            int count = PointCount;
 
-        if (count == 0)
-            return pathData;
-
-        fixed (byte* t = pathData.Types)
-        fixed (PointF* p = pathData.Points)
-        {
-            GpPathData data = new GpPathData
+            PathData pathData = new()
             {
-                Count = count,
-                Points = p,
-                Types = t
+                Types = new byte[count],
+                Points = new PointF[count]
             };
 
-            Gdip.CheckStatus(Gdip.GdipGetPathData(new HandleRef(this, _nativePath), &data));
+            if (count == 0)
+                return pathData;
+
+            fixed (byte* t = pathData.Types)
+            fixed (PointF* p = pathData.Points)
+            {
+                GpPathData data = new()
+                {
+                    Count = count,
+                    Points = p,
+                    Types = t
+                };
+
+                PInvoke.GdipGetPathData(_nativePath, (GdiPlus.PathData*)&data).ThrowIfFailed();
+                GC.KeepAlive(this);
+            }
+
+            return pathData;
         }
-
-        return pathData;
     }
-
-    public PathData PathData => _GetPathData();
 
     public void StartFigure()
     {
-        Gdip.CheckStatus(Gdip.GdipStartPathFigure(new HandleRef(this, _nativePath)));
+        PInvoke.GdipStartPathFigure(_nativePath);
+        GC.KeepAlive(this);
     }
 
     public void CloseFigure()
     {
-        Gdip.CheckStatus(Gdip.GdipClosePathFigure(new HandleRef(this, _nativePath)));
+        PInvoke.GdipClosePathFigure(_nativePath).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void CloseAllFigures()
     {
-        Gdip.CheckStatus(Gdip.GdipClosePathFigures(new HandleRef(this, _nativePath)));
+        PInvoke.GdipClosePathFigures(_nativePath).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void SetMarkers()
     {
-        Gdip.CheckStatus(Gdip.GdipSetPathMarker(new HandleRef(this, _nativePath)));
+        PInvoke.GdipSetPathMarker(_nativePath).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void ClearMarkers()
     {
-        Gdip.CheckStatus(Gdip.GdipClearPathMarkers(new HandleRef(this, _nativePath)));
+        PInvoke.GdipClearPathMarkers(_nativePath).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Reverse()
     {
-        Gdip.CheckStatus(Gdip.GdipReversePath(new HandleRef(this, _nativePath)));
+        PInvoke.GdipReversePath(_nativePath).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public PointF GetLastPoint()
     {
-        Gdip.CheckStatus(Gdip.GdipGetPathLastPoint(new HandleRef(this, _nativePath), out PointF point));
+        PointF point;
+        PInvoke.GdipGetPathLastPoint(_nativePath, (GdiPlus.PointF*)&point);
+        GC.KeepAlive(this);
         return point;
     }
 
@@ -207,35 +213,29 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public bool IsVisible(PointF point) => IsVisible(point, null);
 
-    public bool IsVisible(float x, float y, Graphics? graphics) => IsVisible(new PointF(x, y), graphics);
-
-    public bool IsVisible(PointF pt, Graphics? graphics)
+    public bool IsVisible(float x, float y, Graphics? graphics)
     {
-        Gdip.CheckStatus(Gdip.GdipIsVisiblePathPoint(
-            new HandleRef(this, _nativePath),
-            pt.X, pt.Y,
-            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
-            out bool isVisible));
+        BOOL isVisible;
+        PInvoke.GdipIsVisiblePathPoint(
+            _nativePath,
+            x, y,
+            graphics is null ? null : graphics.NativeGraphics,
+            &isVisible).ThrowIfFailed();
 
+        GC.KeepAlive(this);
+        GC.KeepAlive(graphics);
         return isVisible;
     }
 
-    public bool IsVisible(int x, int y) => IsVisible(new Point(x, y), null);
+    public bool IsVisible(PointF pt, Graphics? graphics) => IsVisible(pt.X, pt.Y, graphics);
 
-    public bool IsVisible(Point point) => IsVisible(point, null);
+    public bool IsVisible(int x, int y) => IsVisible((float)x, y, null);
 
-    public bool IsVisible(int x, int y, Graphics? graphics) => IsVisible(new Point(x, y), graphics);
+    public bool IsVisible(Point point) => IsVisible((PointF)point, null);
 
-    public bool IsVisible(Point pt, Graphics? graphics)
-    {
-        Gdip.CheckStatus(Gdip.GdipIsVisiblePathPointI(
-            new HandleRef(this, _nativePath),
-            pt.X, pt.Y,
-            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
-            out bool isVisible));
+    public bool IsVisible(int x, int y, Graphics? graphics) => IsVisible((float)x, y, graphics);
 
-        return isVisible;
-    }
+    public bool IsVisible(Point pt, Graphics? graphics) => IsVisible((PointF)pt, graphics);
 
     public bool IsOutlineVisible(float x, float y, Pen pen) => IsOutlineVisible(new PointF(x, y), pen, null);
 
@@ -243,51 +243,40 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public bool IsOutlineVisible(float x, float y, Pen pen, Graphics? graphics)
     {
-        return IsOutlineVisible(new PointF(x, y), pen, graphics);
-    }
-
-    public bool IsOutlineVisible(PointF pt, Pen pen, Graphics? graphics)
-    {
         ArgumentNullException.ThrowIfNull(pen);
+        BOOL isVisible;
+        PInvoke.GdipIsOutlineVisiblePathPoint(
+            _nativePath,
+            x, y,
+            pen.NativePen,
+            graphics is null ? null : graphics.NativeGraphics,
+            &isVisible).ThrowIfFailed();
 
-        Gdip.CheckStatus(Gdip.GdipIsOutlineVisiblePathPoint(
-            new HandleRef(this, _nativePath),
-            pt.X, pt.Y,
-            new HandleRef(pen, pen.NativePen),
-            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
-            out bool isVisible));
-
+        GC.KeepAlive(this);
+        GC.KeepAlive(pen);
+        GC.KeepAlive(graphics);
         return isVisible;
     }
+
+    public bool IsOutlineVisible(PointF pt, Pen pen, Graphics? graphics) => IsOutlineVisible(pt.X, pt.Y, pen, graphics);
 
     public bool IsOutlineVisible(int x, int y, Pen pen) => IsOutlineVisible(new Point(x, y), pen, null);
 
     public bool IsOutlineVisible(Point point, Pen pen) => IsOutlineVisible(point, pen, null);
 
-    public bool IsOutlineVisible(int x, int y, Pen pen, Graphics? graphics) => IsOutlineVisible(new Point(x, y), pen, graphics);
+    public bool IsOutlineVisible(int x, int y, Pen pen, Graphics? graphics) => IsOutlineVisible((float)x, y, pen, graphics);
 
-    public bool IsOutlineVisible(Point pt, Pen pen, Graphics? graphics)
-    {
-        ArgumentNullException.ThrowIfNull(pen);
-
-        Gdip.CheckStatus(Gdip.GdipIsOutlineVisiblePathPointI(
-            new HandleRef(this, _nativePath),
-            pt.X, pt.Y,
-            new HandleRef(pen, pen.NativePen),
-            new HandleRef(graphics, graphics is null ? 0 : (nint)graphics.NativeGraphics),
-            out bool isVisible));
-
-        return isVisible;
-    }
+    public bool IsOutlineVisible(Point pt, Pen pen, Graphics? graphics) => IsOutlineVisible((PointF)pt, pen, graphics);
 
     public void AddLine(PointF pt1, PointF pt2) => AddLine(pt1.X, pt1.Y, pt2.X, pt2.Y);
 
     public void AddLine(float x1, float y1, float x2, float y2)
     {
-        Gdip.CheckStatus(Gdip.GdipAddPathLine(new HandleRef(this, _nativePath), x1, y1, x2, y2));
+        PInvoke.GdipAddPathLine(_nativePath, x1, y1, x2, y2).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
-    public unsafe void AddLines(PointF[] points)
+    public void AddLines(PointF[] points)
     {
         ArgumentNullException.ThrowIfNull(points);
 
@@ -296,18 +285,16 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (PointF* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathLine2(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathLine2(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public void AddLine(Point pt1, Point pt2) => AddLine(pt1.X, pt1.Y, pt2.X, pt2.Y);
+    public void AddLine(Point pt1, Point pt2) => AddLine((float)pt1.X, pt1.Y, pt2.X, pt2.Y);
 
-    public void AddLine(int x1, int y1, int x2, int y2)
-    {
-        Gdip.CheckStatus(Gdip.GdipAddPathLineI(new HandleRef(this, _nativePath), x1, y1, x2, y2));
-    }
+    public void AddLine(int x1, int y1, int x2, int y2) => AddLine((float)x1, y1, x2, y2);
 
-    public unsafe void AddLines(Point[] points)
+    public void AddLines(Point[] points)
     {
         ArgumentNullException.ThrowIfNull(points);
 
@@ -316,73 +303,53 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (Point* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathLine2I(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathLine2I(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public void AddArc(RectangleF rect, float startAngle, float sweepAngle)
-    {
+    public void AddArc(RectangleF rect, float startAngle, float sweepAngle) =>
         AddArc(rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
     public void AddArc(float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
-        Gdip.CheckStatus(Gdip.GdipAddPathArc(
-            new HandleRef(this, _nativePath),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
+        PInvoke.GdipAddPathArc(_nativePath, x, y, width, height, startAngle, sweepAngle).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
-    public void AddArc(Rectangle rect, float startAngle, float sweepAngle)
-    {
+    public void AddArc(Rectangle rect, float startAngle, float sweepAngle) =>
         AddArc(rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
 
-    public void AddArc(int x, int y, int width, int height, float startAngle, float sweepAngle)
-    {
-        Gdip.CheckStatus(Gdip.GdipAddPathArcI(
-            new HandleRef(this, _nativePath),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-    }
+    public void AddArc(int x, int y, int width, int height, float startAngle, float sweepAngle) =>
+        AddArc((float)x, y, width, height, startAngle, sweepAngle);
 
-    public void AddBezier(PointF pt1, PointF pt2, PointF pt3, PointF pt4)
-    {
+    public void AddBezier(PointF pt1, PointF pt2, PointF pt3, PointF pt4) =>
         AddBezier(pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
-    }
 
     public void AddBezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
     {
-        Gdip.CheckStatus(Gdip.GdipAddPathBezier(
-            new HandleRef(this, _nativePath),
-            x1, y1, x2, y2, x3, y3, x4, y4));
+        PInvoke.GdipAddPathBezier(_nativePath, x1, y1, x2, y2, x3, y3, x4, y4).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
-    public unsafe void AddBeziers(PointF[] points)
+    public void AddBeziers(PointF[] points)
     {
         ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathBeziers(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathBeziers(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public void AddBezier(Point pt1, Point pt2, Point pt3, Point pt4)
-    {
-        AddBezier(pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
-    }
+    public void AddBezier(Point pt1, Point pt2, Point pt3, Point pt4) =>
+        AddBezier((float)pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
 
-    public void AddBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
-    {
-        Gdip.CheckStatus(Gdip.GdipAddPathBezierI(
-            new HandleRef(this, _nativePath),
-            x1, y1, x2, y2, x3, y3, x4, y4));
-    }
+    public void AddBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) =>
+        AddBezier((float)x1, y1, x2, y2, x3, y3, x4, y4);
 
-    public unsafe void AddBeziers(params Point[] points)
+    public void AddBeziers(params Point[] points)
     {
         ArgumentNullException.ThrowIfNull(points);
 
@@ -391,283 +358,240 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (Point* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathBeziersI(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathBeziersI(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
     /// <summary>
-    /// Add cardinal splines to the path object
+    ///  Add cardinal splines to the path object
     /// </summary>
-    public unsafe void AddCurve(PointF[] points)
+    public void AddCurve(PointF[] points) => AddCurve(points.AsSpan(), 0.5f);
+
+    public void AddCurve(PointF[] points, float tension) => AddCurve(points.AsSpan(), tension);
+
+    public void AddCurve(PointF[] points, int offset, int numberOfSegments, float tension)
+    {
+        fixed (PointF* p = points)
+        {
+            PInvoke.GdipAddPathCurve3(
+                _nativePath,
+                (GdiPlus.PointF*)p,
+                points.Length,
+                offset,
+                numberOfSegments,
+                tension).ThrowIfFailed();
+
+            GC.KeepAlive(this);
+        }
+    }
+
+    private void AddCurve(Span<PointF> points, float tension)
+    {
+        fixed (PointF* p = points)
+        {
+            PInvoke.GdipAddPathCurve2(
+                _nativePath,
+                (GdiPlus.PointF*)p,
+                points.Length,
+                tension).ThrowIfFailed();
+
+            GC.KeepAlive(this);
+        }
+    }
+
+    public void AddCurve(Point[] points) => AddCurve(points.AsSpan(), 0.5f);
+
+    public void AddCurve(Point[] points, float tension) => AddCurve(points.AsSpan(), tension);
+
+    public void AddCurve(Point[] points, int offset, int numberOfSegments, float tension)
+    {
+        fixed (Point* p = points)
+        {
+            PInvoke.GdipAddPathCurve3I(
+                _nativePath,
+                (GdiPlus.Point*)p,
+                points.Length,
+                offset,
+                numberOfSegments,
+                tension).ThrowIfFailed();
+
+            GC.KeepAlive(this);
+        }
+    }
+
+    private void AddCurve(Span<Point> points, float tension)
+    {
+        fixed (Point* p = points)
+        {
+            PInvoke.GdipAddPathCurve2I(
+                _nativePath,
+                (GdiPlus.Point*)p,
+                points.Length,
+                tension).ThrowIfFailed();
+
+            GC.KeepAlive(this);
+        }
+    }
+
+    public void AddClosedCurve(PointF[] points) => AddClosedCurve(points, 0.5f);
+
+    public void AddClosedCurve(PointF[] points, float tension)
     {
         ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathCurve(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathClosedCurve2(_nativePath, (GdiPlus.PointF*)p, points.Length, tension).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public unsafe void AddCurve(PointF[] points, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
+    public void AddClosedCurve(Point[] points) => AddClosedCurve(points, 0.5f);
 
-        if (points.Length == 0)
-            return;
-
-        fixed (PointF* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathCurve2(new HandleRef(this, _nativePath), p, points.Length, tension));
-        }
-    }
-
-    public unsafe void AddCurve(PointF[] points, int offset, int numberOfSegments, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (PointF* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathCurve3(
-                new HandleRef(this, _nativePath), p, points.Length, offset, numberOfSegments, tension));
-        }
-    }
-
-    public unsafe void AddCurve(Point[] points)
+    public void AddClosedCurve(Point[] points, float tension)
     {
         ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathCurveI(new HandleRef(this, _nativePath), p, points.Length));
-        }
-    }
-
-    public unsafe void AddCurve(Point[] points, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (Point* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathCurve2I(
-                new HandleRef(this, _nativePath), p, points.Length, tension));
-        }
-    }
-
-    public unsafe void AddCurve(Point[] points, int offset, int numberOfSegments, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (Point* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathCurve3I(
-                new HandleRef(this, _nativePath), p, points.Length, offset, numberOfSegments, tension));
-        }
-    }
-
-    public unsafe void AddClosedCurve(PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (PointF* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathClosedCurve(
-                new HandleRef(this, _nativePath), p, points.Length));
-        }
-    }
-
-    public unsafe void AddClosedCurve(PointF[] points, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (PointF* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathClosedCurve2(new HandleRef(this, _nativePath), p, points.Length, tension));
-        }
-    }
-
-    public unsafe void AddClosedCurve(Point[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (Point* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathClosedCurveI(new HandleRef(this, _nativePath), p, points.Length));
-        }
-    }
-
-    public unsafe void AddClosedCurve(Point[] points, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-
-        fixed (Point* p = points)
-        {
-            Gdip.CheckStatus(Gdip.GdipAddPathClosedCurve2I(new HandleRef(this, _nativePath), p, points.Length, tension));
+            PInvoke.GdipAddPathClosedCurve2I(_nativePath, (GdiPlus.Point*)p, points.Length, tension).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
     public void AddRectangle(RectangleF rect)
     {
-        Gdip.CheckStatus(Gdip.GdipAddPathRectangle(
-            new HandleRef(this, _nativePath),
-            rect.X, rect.Y, rect.Width, rect.Height));
+        PInvoke.GdipAddPathRectangle(
+            _nativePath,
+            rect.X, rect.Y, rect.Width, rect.Height).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
-    public unsafe void AddRectangles(RectangleF[] rects)
+    public void AddRectangles(RectangleF[] rects)
     {
         ArgumentNullException.ThrowIfNull(rects);
-
-        if (rects.Length == 0)
-            throw new ArgumentException(null, nameof(rects));
 
         fixed (RectangleF* r = rects)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathRectangles(
-                new HandleRef(this, _nativePath), r, rects.Length));
+            PInvoke.GdipAddPathRectangles(_nativePath, (RectF*)r, rects.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public void AddRectangle(Rectangle rect)
-    {
-        Gdip.CheckStatus(Gdip.GdipAddPathRectangleI(
-            new HandleRef(this, _nativePath),
-            rect.X, rect.Y, rect.Width, rect.Height));
-    }
+    public void AddRectangle(Rectangle rect) => AddRectangle((RectangleF)rect);
 
-    public unsafe void AddRectangles(Rectangle[] rects)
+    public void AddRectangles(Rectangle[] rects)
     {
         ArgumentNullException.ThrowIfNull(rects);
 
-        if (rects.Length == 0)
-            throw new ArgumentException(null, nameof(rects));
-
         fixed (Rectangle* r = rects)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathRectanglesI(
-                new HandleRef(this, _nativePath), r, rects.Length));
+            PInvoke.GdipAddPathRectanglesI(_nativePath, (Rect*)r, rects.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public void AddEllipse(RectangleF rect)
-    {
+    public void AddEllipse(RectangleF rect) =>
         AddEllipse(rect.X, rect.Y, rect.Width, rect.Height);
-    }
 
     public void AddEllipse(float x, float y, float width, float height)
     {
-        Gdip.CheckStatus(Gdip.GdipAddPathEllipse(new HandleRef(this, _nativePath), x, y, width, height));
+        PInvoke.GdipAddPathEllipse(_nativePath, x, y, width, height).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void AddEllipse(Rectangle rect) => AddEllipse(rect.X, rect.Y, rect.Width, rect.Height);
 
-    public void AddEllipse(int x, int y, int width, int height)
-    {
-        Gdip.CheckStatus(Gdip.GdipAddPathEllipseI(new HandleRef(this, _nativePath), x, y, width, height));
-    }
+    public void AddEllipse(int x, int y, int width, int height) => AddEllipse((float)x, y, width, height);
 
-    public void AddPie(Rectangle rect, float startAngle, float sweepAngle)
-    {
-        AddPie(rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
-    }
+    public void AddPie(Rectangle rect, float startAngle, float sweepAngle) =>
+        AddPie((float)rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
 
     public void AddPie(float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
-        Gdip.CheckStatus(Gdip.GdipAddPathPie(
-            new HandleRef(this, _nativePath),
+        PInvoke.GdipAddPathPie(
+            _nativePath,
             x, y, width, height,
             startAngle,
-            sweepAngle));
+            sweepAngle).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
-    public void AddPie(int x, int y, int width, int height, float startAngle, float sweepAngle)
-    {
-        Gdip.CheckStatus(Gdip.GdipAddPathPieI(
-            new HandleRef(this, _nativePath),
-            x, y, width, height,
-            startAngle,
-            sweepAngle));
-    }
+    public void AddPie(int x, int y, int width, int height, float startAngle, float sweepAngle) =>
+        AddPie((float)x, y, width, height, startAngle, sweepAngle);
 
-    public unsafe void AddPolygon(PointF[] points)
+    public void AddPolygon(PointF[] points)
     {
         ArgumentNullException.ThrowIfNull(points);
 
         fixed (PointF* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathPolygon(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathPolygon(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
     /// <summary>
-    /// Adds a polygon to the current figure.
+    ///  Adds a polygon to the current figure.
     /// </summary>
-    public unsafe void AddPolygon(Point[] points)
+    public void AddPolygon(Point[] points)
     {
         ArgumentNullException.ThrowIfNull(points);
 
         fixed (Point* p = points)
         {
-            Gdip.CheckStatus(Gdip.GdipAddPathPolygonI(new HandleRef(this, _nativePath), p, points.Length));
+            PInvoke.GdipAddPathPolygonI(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
     public void AddPath(GraphicsPath addingPath, bool connect)
     {
         ArgumentNullException.ThrowIfNull(addingPath);
-
-        Gdip.CheckStatus(Gdip.GdipAddPathPath(
-            new HandleRef(this, _nativePath), new HandleRef(addingPath, addingPath._nativePath), connect));
+        PInvoke.GdipAddPathPath(_nativePath, addingPath.Pointer(), connect).ThrowIfFailed();
+        GC.KeepAlive(addingPath);
+        GC.KeepAlive(this);
     }
 
-    public void AddString(string s, FontFamily family, int style, float emSize, PointF origin, StringFormat? format)
-    {
+    public void AddString(string s, FontFamily family, int style, float emSize, PointF origin, StringFormat? format) =>
         AddString(s, family, style, emSize, new RectangleF(origin.X, origin.Y, 0, 0), format);
-    }
 
-    public void AddString(string s, FontFamily family, int style, float emSize, Point origin, StringFormat? format)
-    {
+    public void AddString(string s, FontFamily family, int style, float emSize, Point origin, StringFormat? format) =>
         AddString(s, family, style, emSize, new Rectangle(origin.X, origin.Y, 0, 0), format);
-    }
 
     public void AddString(string s, FontFamily family, int style, float emSize, RectangleF layoutRect, StringFormat? format)
     {
+        ArgumentNullException.ThrowIfNull(s);
         ArgumentNullException.ThrowIfNull(family);
 
-        Gdip.CheckStatus(Gdip.GdipAddPathString(
-            new HandleRef(this, _nativePath),
-            s,
-            s.Length,
-            new HandleRef(family, family?.NativeFamily ?? IntPtr.Zero),
-            style,
-            emSize,
-            ref layoutRect,
-            new HandleRef(format, format?.nativeFormat ?? IntPtr.Zero)));
+        fixed (char* c = s)
+        {
+            PInvoke.GdipAddPathString(
+                _nativePath,
+                c, s.Length,
+                family.Pointer(),
+                style,
+                emSize,
+                (RectF*)&layoutRect,
+                format.Pointer());
+        }
+
+        GC.KeepAlive(family);
+        GC.KeepAlive(format);
+        GC.KeepAlive(this);
     }
 
     public void AddString(string s, FontFamily family, int style, float emSize, Rectangle layoutRect, StringFormat? format)
-    {
-        ArgumentNullException.ThrowIfNull(family);
-
-        Gdip.CheckStatus(Gdip.GdipAddPathStringI(
-            new HandleRef(this, _nativePath),
-            s,
-            s.Length,
-            new HandleRef(family, family?.NativeFamily ?? IntPtr.Zero),
-            style,
-            emSize,
-            ref layoutRect,
-            new HandleRef(format, format?.nativeFormat ?? IntPtr.Zero)));
-    }
+        => AddString(s, family, style, emSize, (RectangleF)layoutRect, format);
 
     public void Transform(Matrix matrix)
     {
         ArgumentNullException.ThrowIfNull(matrix);
-
-        if (matrix.NativeMatrix == IntPtr.Zero)
-            return;
-
-        Gdip.CheckStatus(Gdip.GdipTransformPath(
-            new HandleRef(this, _nativePath),
-            new HandleRef(matrix, matrix.NativeMatrix)));
+        PInvoke.GdipTransformPath(_nativePath, matrix.NativeMatrix).ThrowIfFailed();
+        GC.KeepAlive(matrix);
+        GC.KeepAlive(this);
     }
 
     public RectangleF GetBounds() => GetBounds(null);
@@ -676,12 +600,16 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public RectangleF GetBounds(Matrix? matrix, Pen? pen)
     {
-        Gdip.CheckStatus(Gdip.GdipGetPathWorldBounds(
-            new HandleRef(this, _nativePath),
-            out RectangleF bounds,
-            new HandleRef(matrix, matrix?.NativeMatrix ?? IntPtr.Zero),
-            new HandleRef(pen, pen?.NativePen ?? IntPtr.Zero)));
+        RectF bounds;
+        PInvoke.GdipGetPathWorldBounds(
+            _nativePath,
+            &bounds,
+            matrix.Pointer(),
+            pen.Pointer()).ThrowIfFailed();
 
+        GC.KeepAlive(this);
+        GC.KeepAlive(matrix);
+        GC.KeepAlive(pen);
         return bounds;
     }
 
@@ -691,10 +619,8 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void Flatten(Matrix? matrix, float flatness)
     {
-        Gdip.CheckStatus(Gdip.GdipFlattenPath(
-            new HandleRef(this, _nativePath),
-            new HandleRef(matrix, matrix?.NativeMatrix ?? IntPtr.Zero),
-            flatness));
+        PInvoke.GdipFlattenPath(_nativePath, matrix.Pointer(), flatness).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Widen(Pen pen) => Widen(pen, null, Flatness);
@@ -706,40 +632,40 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         ArgumentNullException.ThrowIfNull(pen);
 
         // GDI+ wrongly returns an out of memory status when there is nothing in the path, so we have to check
-        // before calling the widen method and do nothing if we dont have anything in the path.
+        // before calling the widen method and do nothing if we don't have anything in the path.
         if (PointCount == 0)
             return;
 
-        Gdip.CheckStatus(Gdip.GdipWidenPath(
-            new HandleRef(this, _nativePath),
-            new HandleRef(pen, pen.NativePen),
-            new HandleRef(matrix, matrix?.NativeMatrix ?? IntPtr.Zero),
-            flatness));
+        PInvoke.GdipWidenPath(_nativePath, pen.Pointer(), matrix.Pointer(), flatness).ThrowIfFailed();
+        GC.KeepAlive(pen);
+        GC.KeepAlive(matrix);
+        GC.KeepAlive(this);
     }
 
     public void Warp(PointF[] destPoints, RectangleF srcRect) => Warp(destPoints, srcRect, null);
 
-    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix? matrix) => Warp(destPoints, srcRect, matrix, WarpMode.Perspective);
+    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix? matrix) =>
+        Warp(destPoints, srcRect, matrix, WarpMode.Perspective);
 
-    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix? matrix, WarpMode warpMode)
-    {
+    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix? matrix, WarpMode warpMode) =>
         Warp(destPoints, srcRect, matrix, warpMode, 0.25f);
-    }
 
-    public unsafe void Warp(PointF[] destPoints, RectangleF srcRect, Matrix? matrix, WarpMode warpMode, float flatness)
+    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix? matrix, WarpMode warpMode, float flatness)
     {
         ArgumentNullException.ThrowIfNull(destPoints);
 
         fixed (PointF* p = destPoints)
         {
-            Gdip.CheckStatus(Gdip.GdipWarpPath(
-                new HandleRef(this, _nativePath),
-                new HandleRef(matrix, matrix?.NativeMatrix ?? IntPtr.Zero),
-                p,
+            PInvoke.GdipWarpPath(
+                _nativePath,
+                matrix.Pointer(),
+                (GdiPlus.PointF*)p,
                 destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-                warpMode,
-                flatness));
+                (GdiPlus.WarpMode)warpMode,
+                flatness).ThrowIfFailed();
+
+            GC.KeepAlive(this);
         }
     }
 
@@ -747,7 +673,9 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetPointCount(new HandleRef(this, _nativePath), out int count));
+            int count;
+            PInvoke.GdipGetPointCount(_nativePath, &count).ThrowIfFailed();
+            GC.KeepAlive(this);
             return count;
         }
     }
@@ -756,23 +684,39 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         get
         {
-            byte[] types = new byte[PointCount];
-            Gdip.CheckStatus(Gdip.GdipGetPathTypes(new HandleRef(this, _nativePath), types, types.Length));
-            return types;
+            int count = PointCount;
+            if (count == 0)
+            {
+                return [];
+            }
+
+            byte[] types = new byte[count];
+            fixed (byte* t = types)
+            {
+                PInvoke.GdipGetPathTypes(_nativePath, t, types.Length).ThrowIfFailed();
+                GC.KeepAlive(this);
+                return types;
+            }
         }
     }
 
-    public unsafe PointF[] PathPoints
+    public PointF[] PathPoints
     {
         get
         {
-            PointF[] points = new PointF[PointCount];
-            fixed (PointF* p = points)
+            int count = PointCount;
+            if (count == 0)
             {
-                Gdip.CheckStatus(Gdip.GdipGetPathPoints(new HandleRef(this, _nativePath), p, points.Length));
+                return [];
             }
 
-            return points;
+            PointF[] points = new PointF[count];
+            fixed (PointF* p = points)
+            {
+                PInvoke.GdipGetPathPoints(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+                GC.KeepAlive(this);
+                return points;
+            }
         }
     }
 }

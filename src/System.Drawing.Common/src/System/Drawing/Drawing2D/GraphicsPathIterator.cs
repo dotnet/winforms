@@ -1,42 +1,39 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-
 namespace System.Drawing.Drawing2D;
 
-public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
+public unsafe sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
 {
+    // handle to native path iterator object
+    internal GpPathIterator* _nativeIterator;
+
     public GraphicsPathIterator(GraphicsPath? path)
     {
-        IntPtr nativeIter = IntPtr.Zero;
-        int status = Gdip.GdipCreatePathIter(out nativeIter, new HandleRef(path, (path is null) ? IntPtr.Zero : path._nativePath));
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
-        this.nativeIter = nativeIter;
+        GpPathIterator* iterator;
+        PInvoke.GdipCreatePathIter(&iterator, path.Pointer()).ThrowIfFailed();
+        GC.KeepAlive(path);
+        _nativeIterator = iterator;
     }
 
     public void Dispose()
     {
-        Dispose(true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
     private void Dispose(bool disposing)
     {
-        if (nativeIter != IntPtr.Zero)
+        if (_nativeIterator is not null)
         {
             try
             {
 #if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
+                Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                Gdip.GdipDeletePathIter(new HandleRef(this, nativeIter));
+                PInvoke.GdipDeletePathIter(_nativeIterator);
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
+                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex)
@@ -50,7 +47,7 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
             }
             finally
             {
-                nativeIter = IntPtr.Zero;
+                _nativeIterator = null;
             }
         }
     }
@@ -59,61 +56,58 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
 
     public int NextSubpath(out int startIndex, out int endIndex, out bool isClosed)
     {
-        int status = Gdip.GdipPathIterNextSubpath(new HandleRef(this, nativeIter), out int resultCount,
-                    out int tempStart, out int tempEnd, out isClosed);
+        int resultCount;
+        BOOL tempIsClosed;
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-        else
+        fixed (int* s = &startIndex, e = &endIndex)
         {
-            startIndex = tempStart;
-            endIndex = tempEnd;
+            PInvoke.GdipPathIterNextSubpath(_nativeIterator, &resultCount, s, e, &tempIsClosed).ThrowIfFailed();
+            isClosed = tempIsClosed;
+            GC.KeepAlive(this);
+            return resultCount;
         }
-
-        return resultCount;
     }
 
     public int NextSubpath(GraphicsPath path, out bool isClosed)
     {
-        int status = Gdip.GdipPathIterNextSubpathPath(new HandleRef(this, nativeIter), out int resultCount,
-                    new HandleRef(path, (path is null) ? IntPtr.Zero : path._nativePath), out isClosed);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
+        int resultCount;
+        BOOL tempIsClosed;
+        PInvoke.GdipPathIterNextSubpathPath(_nativeIterator, &resultCount, path.Pointer(), &tempIsClosed).ThrowIfFailed();
+        isClosed = tempIsClosed;
+        GC.KeepAlive(this);
         return resultCount;
     }
 
     public int NextPathType(out byte pathType, out int startIndex, out int endIndex)
     {
-        int status = Gdip.GdipPathIterNextPathType(new HandleRef(this, nativeIter), out int resultCount,
-                    out pathType, out startIndex, out endIndex);
+        int resultCount;
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
-        return resultCount;
+        fixed (byte* pt = &pathType)
+        fixed (int* s = &startIndex, e = &endIndex)
+        {
+            PInvoke.GdipPathIterNextPathType(_nativeIterator, &resultCount, pt, s, e).ThrowIfFailed();
+            GC.KeepAlive(this);
+            return resultCount;
+        }
     }
 
     public int NextMarker(out int startIndex, out int endIndex)
     {
-        int status = Gdip.GdipPathIterNextMarker(new HandleRef(this, nativeIter), out int resultCount,
-                    out startIndex, out endIndex);
+        int resultCount;
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
-        return resultCount;
+        fixed (int* s = &startIndex, e = &endIndex)
+        {
+            PInvoke.GdipPathIterNextMarker(_nativeIterator, &resultCount, s, e).ThrowIfFailed();
+            GC.KeepAlive(this);
+            return resultCount;
+        }
     }
 
     public int NextMarker(GraphicsPath path)
     {
-        int status = Gdip.GdipPathIterNextMarkerPath(new HandleRef(this, nativeIter), out int resultCount,
-                    new HandleRef(path, (path is null) ? IntPtr.Zero : path._nativePath));
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
+        int resultCount;
+        PInvoke.GdipPathIterNextMarkerPath(_nativeIterator, &resultCount, path.Pointer()).ThrowIfFailed();
+        GC.KeepAlive(this);
         return resultCount;
     }
 
@@ -121,11 +115,9 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
     {
         get
         {
-            int status = Gdip.GdipPathIterGetCount(new HandleRef(this, nativeIter), out int resultCount);
-
-            if (status != Gdip.Ok)
-                throw Gdip.StatusException(status);
-
+            int resultCount;
+            PInvoke.GdipPathIterGetCount(_nativeIterator, &resultCount).ThrowIfFailed();
+            GC.KeepAlive(this);
             return resultCount;
         }
     }
@@ -134,37 +126,31 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
     {
         get
         {
-            int status = Gdip.GdipPathIterGetSubpathCount(new HandleRef(this, nativeIter), out int resultCount);
-
-            if (status != Gdip.Ok)
-                throw Gdip.StatusException(status);
-
+            int resultCount;
+            PInvoke.GdipPathIterGetSubpathCount(_nativeIterator, &resultCount).ThrowIfFailed();
+            GC.KeepAlive(this);
             return resultCount;
         }
     }
 
     public bool HasCurve()
     {
-        int status = Gdip.GdipPathIterHasCurve(new HandleRef(this, nativeIter), out bool hasCurve);
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
-
+        BOOL hasCurve;
+        PInvoke.GdipPathIterHasCurve(_nativeIterator, &hasCurve).ThrowIfFailed();
+        GC.KeepAlive(this);
         return hasCurve;
     }
 
     public void Rewind()
     {
-        int status = Gdip.GdipPathIterRewind(new HandleRef(this, nativeIter));
-
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        PInvoke.GdipPathIterRewind(_nativeIterator).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public unsafe int Enumerate(ref PointF[] points, ref byte[] types)
     {
         if (points.Length != types.Length)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         if (points.Length == 0)
             return 0;
@@ -172,18 +158,15 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
         fixed (PointF* p = points)
         fixed (byte* t = types)
         {
-            int status = Gdip.GdipPathIterEnumerate(
-                new HandleRef(this, nativeIter),
-                out int resultCount,
-                p,
+            int resultCount;
+            PInvoke.GdipPathIterEnumerate(
+                _nativeIterator,
+                &resultCount,
+                (GdiPlus.PointF*)p,
                 t,
-                points.Length);
+                points.Length).ThrowIfFailed();
 
-            if (status != Gdip.Ok)
-            {
-                throw Gdip.StatusException(status);
-            }
-
+            GC.KeepAlive(this);
             return resultCount;
         }
     }
@@ -191,28 +174,22 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
     public unsafe int CopyData(ref PointF[] points, ref byte[] types, int startIndex, int endIndex)
     {
         if ((points.Length != types.Length) || (endIndex - startIndex + 1 > points.Length))
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         fixed (PointF* p = points)
         fixed (byte* t = types)
         {
-            int status = Gdip.GdipPathIterCopyData(
-                new HandleRef(this, nativeIter),
-                out int resultCount,
-                p,
+            int resultCount;
+            PInvoke.GdipPathIterCopyData(
+                _nativeIterator,
+                &resultCount,
+                (GdiPlus.PointF*)p,
                 t,
                 startIndex,
-                endIndex);
+                endIndex).ThrowIfFailed();
 
-            if (status != Gdip.Ok)
-            {
-                throw Gdip.StatusException(status);
-            }
-
+            GC.KeepAlive(this);
             return resultCount;
         }
     }
-
-    // handle to native path iterator object
-    internal IntPtr nativeIter;
 }

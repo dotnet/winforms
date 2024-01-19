@@ -93,7 +93,7 @@ public class PreviewPrintController : PrintController
 
         if (UseAntiAlias)
         {
-            _graphics.TextRenderingHint = Text.TextRenderingHint.AntiAlias;
+            _graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
             _graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias;
         }
 

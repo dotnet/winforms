@@ -2,26 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
 
-public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
+public unsafe abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
 #endif
     // Handle to native GDI+ brush object to be used on demand.
-    private IntPtr _nativeBrush;
+    private GpBrush* _nativeBrush;
 
     public abstract object Clone();
 
-    protected internal void SetNativeBrush(IntPtr brush) => SetNativeBrushInternal(brush);
-    internal void SetNativeBrushInternal(IntPtr brush) => _nativeBrush = brush;
+    protected internal void SetNativeBrush(IntPtr brush) => SetNativeBrushInternal((GpBrush*)brush);
+    internal void SetNativeBrushInternal(GpBrush* brush) => _nativeBrush = brush;
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    internal IntPtr NativeBrush => _nativeBrush;
+    internal GpBrush* NativeBrush => _nativeBrush;
 
     public void Dispose()
     {
@@ -32,23 +30,23 @@ public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
     protected virtual void Dispose(bool disposing)
     {
 #if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && _nativeBrush != IntPtr.Zero, $"""
+        Debug.WriteLineIf(!disposing && _nativeBrush is not null, $"""
             **********************
             Disposed through finalization:
             {allocationSite}
             """);
 #endif
 
-        if (_nativeBrush != IntPtr.Zero)
+        if (_nativeBrush is not null)
         {
             try
             {
 #if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
+                Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                Gdip.GdipDeleteBrush(new HandleRef(this, _nativeBrush));
+                PInvoke.GdipDeleteBrush(_nativeBrush);
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
+                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
@@ -58,10 +56,10 @@ public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
             }
             finally
             {
-                _nativeBrush = IntPtr.Zero;
+                _nativeBrush = null;
             }
         }
     }
 
-    ~Brush() => Dispose(false);
+    ~Brush() => Dispose(disposing: false);
 }

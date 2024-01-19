@@ -80,7 +80,7 @@ public sealed class BitmapData
                 case PixelFormat.Format64bppArgb:
                     break;
                 default:
-                    throw new System.ComponentModel.InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(PixelFormat));
+                    throw new ComponentModel.InvalidEnumArgumentException(nameof(value), (int)value, typeof(PixelFormat));
             }
 
             _pixelFormat = value;

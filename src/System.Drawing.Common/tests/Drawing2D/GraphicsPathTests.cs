@@ -187,12 +187,10 @@ public class GraphicsPathTests
     }
 
     [Fact]
-    public void PathPoints_EmptyPath_ThrowsArgumentException()
+    public void PathPoints_EmptyPath()
     {
-        using (GraphicsPath gp = new())
-        {
-            Assert.Throws<ArgumentException>(() => gp.PathPoints);
-        }
+        using GraphicsPath gp = new();
+        gp.PathPoints.Should().BeEmpty();
     }
 
     [Fact]
@@ -209,12 +207,10 @@ public class GraphicsPathTests
     }
 
     [Fact]
-    public void PathTypes_EmptyPath_ThrowsArgumentException()
+    public void PathTypes_EmptyPath_ReturnsEmptyArray()
     {
-        using (GraphicsPath gp = new())
-        {
-            Assert.Throws<ArgumentException>(() => gp.PathTypes);
-        }
+        using GraphicsPath gp = new();
+        gp.PathTypes.Should().BeEmpty();
     }
 
     [Fact]
@@ -606,27 +602,23 @@ public class GraphicsPathTests
 
         byte[] expectedTypes = [0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
         int[] pointsCount = [4, 7, 10, 13];
-        using (GraphicsPath gp = new())
+        using GraphicsPath gp = new();
+        for (int i = 0; i < points.Length - 1; i++)
         {
-            for (int i = 0; i < points.Length - 1; i++)
-            {
-                gp.AddCurve(points, i, 1, 0.5f);
-                Assert.Equal(pointsCount[i], gp.PointCount);
-            }
-
-            gp.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
-            gp.PathTypes.Should().BeEquivalentTo(expectedTypes);
+            gp.AddCurve(points, i, 1, 0.5f);
+            Assert.Equal(pointsCount[i], gp.PointCount);
         }
+
+        gp.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        gp.PathTypes.Should().BeEquivalentTo(expectedTypes);
     }
 
     [Fact]
-    public void AddCurve_PointsNull_ThrowsArgumentNullException()
+    public void AddCurve_PointsNull_ThrowsArgumentException()
     {
-        using (GraphicsPath gp = new())
-        {
-            AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddCurve((PointF[])null));
-            AssertExtensions.Throws<ArgumentNullException>("points", () => gp.AddCurve((Point[])null));
-        }
+        using GraphicsPath gp = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve((PointF[])null));
+        AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve((Point[])null));
     }
 
     public static IEnumerable<object[]> AddCurve_InvalidFloatPointsLength_TestData()
@@ -639,11 +631,9 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidFloatPointsLength_TestData))]
     public void AddCurve_InvalidFloatPointsLength_ThrowsArgumentException(PointF[] points)
     {
-        using (GraphicsPath gp = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points));
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points, 0, 2, 0.5f));
-        }
+        using GraphicsPath gp = new();
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(() => gp.AddCurve(points));
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(() => gp.AddCurve(points, 0, 2, 0.5f));
     }
 
     public static IEnumerable<object[]> AddCurve_InvalidPointsLength_TestData()
@@ -656,11 +646,9 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidPointsLength_TestData))]
     public void AddCurve_InvalidPointsLength_ThrowsArgumentException(Point[] points)
     {
-        using (GraphicsPath gp = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points));
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(points, 0, 2, 0.5f));
-        }
+        using GraphicsPath gp = new();
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(() => gp.AddCurve(points));
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(() => gp.AddCurve(points, 0, 2, 0.5f));
     }
 
     public static IEnumerable<object[]> AddCurve_InvalidSegment_TestData()
@@ -673,27 +661,23 @@ public class GraphicsPathTests
     [MemberData(nameof(AddCurve_InvalidSegment_TestData))]
     public void AddCurve_InvalidSegment_ThrowsArgumentException(int segment)
     {
-        using (GraphicsPath gp = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(
-                new PointF[2] { new(1f, 1f), new(2f, 2f) }, 0, segment, 0.5f));
+        using GraphicsPath gp = new();
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(
+            () => gp.AddCurve(new PointF[2] { new(1f, 1f), new(2f, 2f) }, 0, segment, 0.5f));
 
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(
-                new Point[2] { new(1, 1), new(2, 2) }, 0, segment, 0.5f));
-        }
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(
+            () => gp.AddCurve(new Point[2] { new(1, 1), new(2, 2) }, 0, segment, 0.5f));
     }
 
     [Fact]
     public void AddCurve_OffsetTooLarge_ThrowsArgumentException()
     {
-        using (GraphicsPath gp = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(
-                new PointF[3] { new(1f, 1f), new(0f, 20f), new(20f, 0f) }, 1, 2, 0.5f));
+        using GraphicsPath gp = new();
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(
+            () => gp.AddCurve(new PointF[3] { new(1f, 1f), new(0f, 20f), new(20f, 0f) }, 1, 2, 0.5f));
 
-            AssertExtensions.Throws<ArgumentException>(null, () => gp.AddCurve(
-                new Point[3] { new(1, 1), new(0, 20), new(20, 0) }, 1, 2, 0.5f));
-        }
+        AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(
+            () => gp.AddCurve(new Point[3] { new(1, 1), new(0, 20), new(20, 0) }, 1, 2, 0.5f));
     }
 
     [Fact]
@@ -1198,17 +1182,17 @@ public class GraphicsPathTests
     }
 
     [Fact]
-    public void AddString_StringNull_ThrowsNullReferenceException()
+    public void AddString_StringNull_ThrowsArgumentNullException()
     {
         using (GraphicsPath gp = new())
         {
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 gp.AddString(null, FontFamily.GenericMonospace, 0, 10, new Point(10, 10), StringFormat.GenericDefault));
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 gp.AddString(null, FontFamily.GenericMonospace, 0, 10, new PointF(10f, 10f), StringFormat.GenericDefault));
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 gp.AddString(null, FontFamily.GenericMonospace, 0, 10, new Rectangle(10, 10, 10, 10), StringFormat.GenericDefault));
-            Assert.Throws<NullReferenceException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 gp.AddString(null, FontFamily.GenericMonospace, 0, 10, new RectangleF(10f, 10f, 10f, 10f), StringFormat.GenericDefault));
         }
     }

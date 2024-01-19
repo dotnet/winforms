@@ -1,16 +1,12 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-#if NET7_0_OR_GREATER
-using System.Runtime.InteropServices.Marshalling;
-#endif
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Defines a 5 x 5 matrix that contains the homogeneous coordinates for the RGBA space.
+///  Defines a 5 x 5 matrix that contains the homogeneous coordinates for the RGBA space.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public sealed class ColorMatrix
@@ -42,13 +38,11 @@ public sealed class ColorMatrix
     private float _matrix44;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='ColorMatrix'/> class.
+    ///  Initializes a new instance of the <see cref='ColorMatrix'/> class.
     /// </summary>
     public ColorMatrix()
     {
-        /*
-         * Setup identity matrix by default
-         */
+        // Setup identity matrix by default
 
         _matrix00 = 1.0f;
         // matrix01 = 0.0f;
@@ -377,7 +371,7 @@ public sealed class ColorMatrix
     }
 
     /// <summary>
-    /// Gets or sets the value of the specified element of this <see cref='ColorMatrix'/>.
+    ///  Gets or sets the value of the specified element of this <see cref='ColorMatrix'/>.
     /// </summary>
     public float this[int row, int column]
     {
@@ -385,7 +379,6 @@ public sealed class ColorMatrix
         {
             return GetMatrix()[row][column];
         }
-
         set
         {
             float[][] tempMatrix = GetMatrix();
@@ -397,15 +390,4 @@ public sealed class ColorMatrix
     }
 
     internal ref float GetPinnableReference() => ref _matrix00;
-
-#if NET7_0_OR_GREATER
-    [CustomMarshaller(typeof(ColorMatrix), MarshalMode.ManagedToUnmanagedIn, typeof(PinningMarshaller))]
-    internal static unsafe class PinningMarshaller
-    {
-        public static ref float GetPinnableReference(ColorMatrix managed) => ref (managed is null ? ref Unsafe.NullRef<float>() : ref managed.GetPinnableReference());
-
-        // All usages in our currently supported scenarios will always go through GetPinnableReference
-        public static float* ConvertToUnmanaged(ColorMatrix _) => throw new UnreachableException();
-    }
-#endif
 }

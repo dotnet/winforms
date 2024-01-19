@@ -141,7 +141,7 @@ public unsafe class StandardPrintController : PrintController, IHandle<HDC>
         {
             try
             {
-                int result = (e.Cancel) ? PInvoke.AbortDoc(this) : PInvoke.EndDoc(this);
+                int result = e.Cancel ? PInvoke.AbortDoc(this) : PInvoke.EndDoc(this);
                 if (result <= 0)
                     throw new Win32Exception();
             }
