@@ -31,6 +31,7 @@ public class AxSystemMonitorTests : IDisposable
 
     public void Dispose()
     {
+        // This line was added due to https://github.com/dotnet/winforms/issues/10692
         using NoAssertContext context = new();
         _control.Dispose();
         _form.Dispose();
