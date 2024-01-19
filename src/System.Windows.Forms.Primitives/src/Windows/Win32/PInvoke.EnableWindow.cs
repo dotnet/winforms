@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="EnableWindow(HWND, BOOL)"/>
     public static BOOL EnableWindow<T>(T hWnd, BOOL bEnable)
         where T : IHandle<HWND>
     {

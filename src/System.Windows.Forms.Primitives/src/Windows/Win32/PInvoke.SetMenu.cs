@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SetMenu(HWND, HMENU)"/>
     public static BOOL SetMenu<T>(T hWnd, HMENU hMenu)
         where T : IHandle<HWND>
     {
@@ -13,6 +14,7 @@ internal static partial class PInvoke
         return result;
     }
 
+    /// <inheritdoc cref="SetMenu(HWND, HMENU)"/>
     public static BOOL SetMenu<T1, T2>(T1 hWnd, T2 hMenu)
         where T1 : IHandle<HWND>
         where T2: IHandle<HMENU>

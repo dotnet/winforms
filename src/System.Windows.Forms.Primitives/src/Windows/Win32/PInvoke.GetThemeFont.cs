@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetThemeFont(HTHEME, HDC, int, int, int, LOGFONTW*)"/>
     public static unsafe HRESULT GetThemeFont<T>(T hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, out LOGFONT pFont)
         where T : IHandle<HTHEME>
     {

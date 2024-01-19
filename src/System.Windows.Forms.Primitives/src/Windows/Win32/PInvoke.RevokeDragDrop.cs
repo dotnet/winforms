@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="RevokeDragDrop(HWND)"/>
     public static HRESULT RevokeDragDrop<T>(T hwnd) where T : IHandle<HWND>
     {
         HRESULT result = RevokeDragDrop(hwnd.Handle);
