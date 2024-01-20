@@ -3,13 +3,12 @@
 
 using System.Drawing.Imaging;
 using System.IO;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
 
 /// <summary>
-/// ToolboxBitmapAttribute defines the images associated with a specified component.
-/// The component can offer a small and large image (large is optional).
+///  ToolboxBitmapAttribute defines the images associated with a specified component.
+///  The component can offer a small and large image (large is optional).
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class ToolboxBitmapAttribute : Attribute
@@ -121,7 +120,7 @@ public class ToolboxBitmapAttribute : Attribute
             }
         }
 
-        Image? toReturn = (large) ? _largeImage : _smallImage;
+        Image? toReturn = large ? _largeImage : _smallImage;
 
         if (Equals(Default))
         {

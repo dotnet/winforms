@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="IsChild(HWND, HWND)"/>
     public static BOOL IsChild<TParent, TChild>(TParent hWndParent, TChild hWnd)
         where TParent : IHandle<HWND>
         where TChild : IHandle<HWND>

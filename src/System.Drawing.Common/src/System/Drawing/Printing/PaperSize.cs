@@ -95,8 +95,8 @@ public partial class PaperSize
     /// </summary>
     public int RawKind
     {
-        get => unchecked((int)_kind);
-        set => _kind = unchecked((PaperKind)value);
+        get => (int)_kind;
+        set => _kind = (PaperKind)value;
     }
 
     /// <summary>

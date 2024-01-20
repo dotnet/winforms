@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="ScrollWindowEx(HWND, int, int, RECT*, RECT*, HRGN, RECT*, SCROLL_WINDOW_FLAGS)"/>
     public static unsafe int ScrollWindowEx<T>(
         T hWnd,
         int dx,

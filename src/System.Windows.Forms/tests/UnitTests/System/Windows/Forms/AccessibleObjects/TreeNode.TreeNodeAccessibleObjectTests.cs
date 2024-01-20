@@ -232,7 +232,7 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId, true)]
@@ -246,7 +246,7 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId, true)]
@@ -261,7 +261,7 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId, true)]
@@ -279,7 +279,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_Index_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new(), new(), new() });
+        control.Nodes.AddRange([new(), new(), new()]);
 
         TreeNodeAccessibleObject accessibleObject1 = control.Nodes[0].AccessibilityObject;
         TreeNodeAccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;

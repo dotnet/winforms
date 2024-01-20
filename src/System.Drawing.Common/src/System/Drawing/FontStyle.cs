@@ -7,7 +7,7 @@ namespace System.Drawing;
 /// Specifies style information applied to text.
 /// </summary>
 [Flags]
-[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+[Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public enum FontStyle
 {
     /// <summary>

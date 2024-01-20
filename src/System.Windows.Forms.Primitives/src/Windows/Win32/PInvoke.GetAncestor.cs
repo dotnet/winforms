@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetAncestor(HWND, GET_ANCESTOR_FLAGS)"/>
     public static HWND GetAncestor<T>(T hwnd, GET_ANCESTOR_FLAGS flags) where T : IHandle<HWND>
     {
         HWND result = GetAncestor(hwnd.Handle, flags);

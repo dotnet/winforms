@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetParent(HWND)"/>
     public static HWND GetParent<T>(T hwnd) where T : IHandle<HWND>
     {
         HWND result = GetParent(hwnd.Handle);

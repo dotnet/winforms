@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="IsWindow(HWND)"/>
     public static BOOL IsWindow<T>(T hWnd) where T : IHandle<HWND>
     {
         BOOL result = IsWindow(hWnd.Handle);

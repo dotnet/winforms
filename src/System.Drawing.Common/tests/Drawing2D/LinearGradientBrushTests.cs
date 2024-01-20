@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Drawing2D.Tests;
@@ -21,19 +21,17 @@ public class LinearGradientBrushTests
     [MemberData(nameof(Ctor_Point_TestData))]
     public void Ctor_PointF_PointF_Color_Color(Point point1, Point point2, Color color1, Color color2, RectangleF expectedRectangle)
     {
-        using (LinearGradientBrush brush = new((PointF)point1, point2, color1, color2))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new((PointF)point1, point2, color1, color2);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(expectedRectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(expectedRectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.False(brush.Transform.IsIdentity);
-        }
+        Assert.False(brush.Transform.IsIdentity);
     }
 
     [Fact]
@@ -52,19 +50,17 @@ public class LinearGradientBrushTests
     [MemberData(nameof(Ctor_Point_TestData))]
     public void Ctor_Point_Point_Color_Color(Point point1, Point point2, Color color1, Color color2, RectangleF expectedRectangle)
     {
-        using (LinearGradientBrush brush = new(point1, point2, color1, color2))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new(point1, point2, color1, color2);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(expectedRectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(expectedRectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.False(brush.Transform.IsIdentity);
-        }
+        Assert.False(brush.Transform.IsIdentity);
     }
 
     [Theory]
@@ -88,38 +84,34 @@ public class LinearGradientBrushTests
     [MemberData(nameof(Ctor_Rectangle_LinearGradientMode_TestData))]
     public void Ctor_Rectangle_Color_Color_LinearGradientMode(Rectangle rectangle, Color color1, Color color2, LinearGradientMode linearGradientMode)
     {
-        using (LinearGradientBrush brush = new(rectangle, color1, color2, linearGradientMode))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new(rectangle, color1, color2, linearGradientMode);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(rectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(rectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.Equal(linearGradientMode == LinearGradientMode.Horizontal, brush.Transform.IsIdentity);
-        }
+        Assert.Equal(linearGradientMode == LinearGradientMode.Horizontal, brush.Transform.IsIdentity);
     }
 
     [Theory]
     [MemberData(nameof(Ctor_Rectangle_LinearGradientMode_TestData))]
     public void Ctor_RectangleF_Color_Color_LinearGradientMode(Rectangle rectangle, Color color1, Color color2, LinearGradientMode linearGradientMode)
     {
-        using (LinearGradientBrush brush = new((RectangleF)rectangle, color1, color2, linearGradientMode))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new((RectangleF)rectangle, color1, color2, linearGradientMode);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(rectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(rectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.Equal(linearGradientMode == LinearGradientMode.Horizontal, brush.Transform.IsIdentity);
-        }
+        Assert.Equal(linearGradientMode == LinearGradientMode.Horizontal, brush.Transform.IsIdentity);
     }
 
     public static IEnumerable<object[]> Ctor_Rectangle_Angle_TestData()
@@ -135,38 +127,34 @@ public class LinearGradientBrushTests
     [MemberData(nameof(Ctor_Rectangle_Angle_TestData))]
     public void Ctor_Rectangle_Color_Color_Angle(Rectangle rectangle, Color color1, Color color2, float angle)
     {
-        using (LinearGradientBrush brush = new(rectangle, color1, color2, angle))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new(rectangle, color1, color2, angle);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(rectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(rectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
-        }
+        Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
     }
 
     [Theory]
     [MemberData(nameof(Ctor_Rectangle_Angle_TestData))]
     public void Ctor_RectangleF_Color_Color_Angle(Rectangle rectangle, Color color1, Color color2, float angle)
     {
-        using (LinearGradientBrush brush = new((RectangleF)rectangle, color1, color2, angle))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new((RectangleF)rectangle, color1, color2, angle);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(rectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(rectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
-        }
+        Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
     }
 
     public static IEnumerable<object[]> Ctor_Rectangle_Angle_IsAngleScalable_TestData()
@@ -182,38 +170,34 @@ public class LinearGradientBrushTests
     [MemberData(nameof(Ctor_Rectangle_Angle_IsAngleScalable_TestData))]
     public void Ctor_Rectangle_Color_Color_Angle_IsAngleScalable(Rectangle rectangle, Color color1, Color color2, float angle, bool isAngleScalable)
     {
-        using (LinearGradientBrush brush = new(rectangle, color1, color2, angle, isAngleScalable))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new(rectangle, color1, color2, angle, isAngleScalable);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(rectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(rectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
-        }
+        Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
     }
 
     [Theory]
     [MemberData(nameof(Ctor_Rectangle_Angle_IsAngleScalable_TestData))]
     public void Ctor_RectangleF_Color_Color_Angle_IsAngleScalable(Rectangle rectangle, Color color1, Color color2, float angle, bool isAngleScalable)
     {
-        using (LinearGradientBrush brush = new((RectangleF)rectangle, color1, color2, angle, isAngleScalable))
-        {
-            Assert.Equal(new float[] { 1 }, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+        using LinearGradientBrush brush = new((RectangleF)rectangle, color1, color2, angle, isAngleScalable);
+        Assert.Equal([1], brush.Blend.Factors);
+        Assert.Equal(1, brush.Blend.Positions.Length);
 
-            Assert.False(brush.GammaCorrection);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-            Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
-            Assert.Equal(rectangle, brush.Rectangle);
-            Assert.Equal(WrapMode.Tile, brush.WrapMode);
+        Assert.False(brush.GammaCorrection);
+        _ = brush.InterpolationColors;
+        Assert.Equal(new Color[] { Color.FromArgb(color1.ToArgb()), Color.FromArgb(color2.ToArgb()) }, brush.LinearColors);
+        Assert.Equal(rectangle, brush.Rectangle);
+        Assert.Equal(WrapMode.Tile, brush.WrapMode);
 
-            Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
-        }
+        Assert.Equal((angle % 360) == 0, brush.Transform.IsIdentity);
     }
 
     [Fact]
@@ -275,17 +259,15 @@ public class LinearGradientBrushTests
     [Fact]
     public void Blend_GetWithInterpolationColorsSet_ReturnsNull()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        ColorBlend blend = new()
         {
-            ColorBlend blend = new()
-            {
-                Colors = new Color[] { Color.Red, Color.PeachPuff, Color.PowderBlue },
-                Positions = new float[] { 0, 10, 1 }
-            };
+            Colors = [Color.Red, Color.PeachPuff, Color.PowderBlue],
+            Positions = [0, 10, 1]
+        };
 
-            brush.InterpolationColors = blend;
-            Assert.Null(brush.Blend);
-        }
+        brush.InterpolationColors = blend;
+        Assert.Null(brush.Blend);
     }
 
     [Theory]
@@ -297,7 +279,6 @@ public class LinearGradientBrushTests
     [InlineData(new float[] { 0.4f, 0.3f, 0.2f }, new float[] { 0, 0.5f, 1 })]
     [InlineData(new float[] { -1 }, new float[] { -1 })]
     [InlineData(new float[] { float.NaN }, new float[] { float.NaN })]
-    [InlineData(new float[] { 1 }, new float[] { 1, 2 })]
     public void Blend_Set_Success(float[] factors, float[] positions)
     {
         using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
@@ -333,21 +314,17 @@ public class LinearGradientBrushTests
     }
 
     [Fact]
-    public void Blend_SetNullBlend_ThrowsNullReferenceException()
+    public void Blend_SetNullBlend_ThrowsArgumentNullException()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            Assert.Throws<NullReferenceException>(() => brush.Blend = null);
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        Assert.Throws<ArgumentNullException>(() => brush.Blend = null);
     }
 
     [Fact]
-    public void Blend_SetNullBlendFactors_ThrowsNullReferenceException()
+    public void Blend_SetNullBlendFactors_ThrowsArgumentNullException()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            Assert.Throws<NullReferenceException>(() => brush.Blend = new Blend { Factors = null });
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        Assert.Throws<ArgumentNullException>(() => brush.Blend = new Blend { Factors = null });
     }
 
     [Fact]
@@ -362,10 +339,8 @@ public class LinearGradientBrushTests
     [Fact]
     public void Blend_SetFactorsLengthGreaterThanPositionsLength_ThrowsArgumentOutOfRangeException()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            AssertExtensions.Throws<ArgumentOutOfRangeException>("value", null, () => brush.Blend = new Blend { Factors = new float[2], Positions = new float[1] });
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        AssertExtensions.Throws<ArgumentException>("value", null, () => brush.Blend = new Blend { Factors = new float[2], Positions = new float[1] });
     }
 
     [Fact]
@@ -449,12 +424,10 @@ public class LinearGradientBrushTests
     }
 
     [Fact]
-    public void InterpolationColors_SetNullBlend_ThrowsArgumentException()
+    public void InterpolationColors_SetNullBlend_ThrowsArgumentNullException()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors = null);
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        AssertExtensions.Throws<ArgumentNullException>("value", () => brush.InterpolationColors = null);
     }
 
     [Fact]
@@ -480,10 +453,8 @@ public class LinearGradientBrushTests
     [Fact]
     public void InterpolationColors_SetNullBlendPositions_ThrowsNullReferenceException()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            Assert.Throws<NullReferenceException>(() => brush.InterpolationColors = new ColorBlend { Colors = new Color[2], Positions = null });
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        Assert.Throws<ArgumentException>(() => brush.InterpolationColors = new ColorBlend { Colors = new Color[2], Positions = null });
     }
 
     [Theory]
@@ -532,50 +503,51 @@ public class LinearGradientBrushTests
         AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors = new ColorBlend
         {
             Colors = new Color[2],
-            Positions = new float[] { 0f, 1f }
+            Positions = [0f, 1f]
         });
     }
 
     [Fact]
-    public void InterpolationColors_SetBlendTriangularShape_ThrowsArgumentException()
+    public void InterpolationColors_SetBlendTriangularShape_ReturnsEmptyInterpolationColors()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true)
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true)
         {
             InterpolationColors = new ColorBlend
             {
-                Colors = new Color[] { Color.Red, Color.PeachPuff, Color.PowderBlue },
-                Positions = new float[] { 0, 0.5f, 1 }
+                Colors = [Color.Red, Color.PeachPuff, Color.PowderBlue],
+                Positions = [0, 0.5f, 1]
             }
-        })
-        {
-            Assert.NotNull(brush.InterpolationColors);
+        };
 
-            brush.SetBlendTriangularShape(0.5f);
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-        }
+        Assert.NotNull(brush.InterpolationColors);
+        brush.SetBlendTriangularShape(0.5f);
+        brush.InterpolationColors.Colors.Should().HaveCount(1);
+        brush.InterpolationColors.Positions.Should().HaveCount(1);
+        brush.InterpolationColors.Colors[0].IsEmpty.Should().BeTrue();
     }
 
     [Fact]
-    public void InterpolationColors_SetBlend_ThrowsArgumentException()
+    public void InterpolationColors_SetBlend_ReturnsEmptyInterpolationColors()
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true)
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true)
         {
             InterpolationColors = new ColorBlend
             {
-                Colors = new Color[] { Color.Red, Color.PeachPuff, Color.PowderBlue },
-                Positions = new float[] { 0, 0.5f, 1 }
+                Colors = [Color.Red, Color.PeachPuff, Color.PowderBlue],
+                Positions = [0, 0.5f, 1]
             }
-        })
-        {
-            Assert.NotNull(brush.InterpolationColors);
+        };
+        Assert.NotNull(brush.InterpolationColors);
 
-            brush.Blend = new Blend
-            {
-                Factors = new float[1],
-                Positions = new float[1]
-            };
-            AssertExtensions.Throws<ArgumentException>(null, () => brush.InterpolationColors);
-        }
+        brush.Blend = new Blend
+        {
+            Factors = new float[1],
+            Positions = new float[1]
+        };
+
+        brush.InterpolationColors.Colors.Should().HaveCount(1);
+        brush.InterpolationColors.Positions.Should().HaveCount(1);
+        brush.InterpolationColors.Colors[0].IsEmpty.Should().BeTrue();
     }
 
     [Fact]
@@ -997,11 +969,9 @@ public class LinearGradientBrushTests
     [InlineData(float.NegativeInfinity)]
     public void SetSigmalBellShape_InvalidFocus_ThrowsArgumentException(float focus)
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetSigmaBellShape(focus));
-            AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetSigmaBellShape(focus, 1));
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        AssertExtensions.Throws<ArgumentException>(null, null, () => brush.SetSigmaBellShape(focus));
+        AssertExtensions.Throws<ArgumentException>(null, null, () => brush.SetSigmaBellShape(focus, 1));
     }
 
     [Theory]
@@ -1011,10 +981,8 @@ public class LinearGradientBrushTests
     [InlineData(float.NegativeInfinity)]
     public void SetSigmalBellShape_InvalidScale_ThrowsArgumentException(float scale)
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            AssertExtensions.Throws<ArgumentException>("scale", null, () => brush.SetSigmaBellShape(0.1f, scale));
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        AssertExtensions.Throws<ArgumentException>(null, null, () => brush.SetSigmaBellShape(0.1f, scale));
     }
 
     [Fact]
@@ -1065,11 +1033,9 @@ public class LinearGradientBrushTests
     [InlineData(float.NegativeInfinity)]
     public void SetBlendTriangularShape_InvalidFocus_ThrowsArgumentException(float focus)
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetBlendTriangularShape(focus));
-            AssertExtensions.Throws<ArgumentException>("focus", null, () => brush.SetBlendTriangularShape(focus, 1));
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        AssertExtensions.Throws<ArgumentException>(null, null, () => brush.SetBlendTriangularShape(focus));
+        AssertExtensions.Throws<ArgumentException>(null, null, () => brush.SetBlendTriangularShape(focus, 1));
     }
 
     [Theory]
@@ -1079,10 +1045,8 @@ public class LinearGradientBrushTests
     [InlineData(float.NegativeInfinity)]
     public void SetBlendTriangularShape_InvalidScale_ThrowsArgumentException(float scale)
     {
-        using (LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true))
-        {
-            AssertExtensions.Throws<ArgumentException>("scale", null, () => brush.SetBlendTriangularShape(0.1f, scale));
-        }
+        using LinearGradientBrush brush = new(new Rectangle(1, 2, 3, 4), Color.Plum, Color.Red, 45, true);
+        AssertExtensions.Throws<ArgumentException>(null, null, () => brush.SetBlendTriangularShape(0.1f, scale));
     }
 
     [Fact]

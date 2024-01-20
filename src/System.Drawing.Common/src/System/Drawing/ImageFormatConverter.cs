@@ -123,7 +123,7 @@ public class ImageFormatConverter : TypeConverter
 
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
-        return new TypeConverter.StandardValuesCollection(new ImageFormat[]
+        return new StandardValuesCollection(new ImageFormat[]
         {
             ImageFormat.MemoryBmp,
             ImageFormat.Bmp,

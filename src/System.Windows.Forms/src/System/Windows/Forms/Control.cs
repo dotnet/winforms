@@ -14,7 +14,7 @@ using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
+using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
 
@@ -5198,12 +5198,44 @@ public unsafe partial class Control :
     ///   value.
     ///  </para>
     /// </remarks>
-    public DragDropEffects DoDragDrop(
+    public unsafe DragDropEffects DoDragDrop(
         object data,
         DragDropEffects allowedEffects,
         Bitmap? dragImage,
         Point cursorOffset,
         bool useDefaultDragImage)
+    {
+        ComTypes.IDataObject dataObject = PrepareIncomingDragData(data);
+
+        DROPEFFECT finalEffect;
+
+        try
+        {
+            using var dropSource = ComHelpers.GetComScope<IDropSource>(
+                new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage));
+            using var dataScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+            if (PInvoke.DoDragDrop(dataScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            {
+                return DragDropEffects.None;
+            }
+        }
+        finally
+        {
+            if (DragDropHelper.IsInDragLoop(dataObject))
+            {
+                DragDropHelper.SetInDragLoop(dataObject, inDragLoop: false);
+            }
+        }
+
+        return (DragDropEffects)finalEffect;
+    }
+
+    /// <summary>
+    ///  Prepares the incoming drag data for consumption.
+    ///  The incoming <paramref name="data"/> should implement <see cref="ComTypes.IDataObject"/> to be taken as is.
+    ///  Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
+    /// </summary>
+    private static ComTypes.IDataObject PrepareIncomingDragData(object data)
     {
         ComTypes.IDataObject dataObject;
 
@@ -5227,25 +5259,7 @@ public unsafe partial class Control :
             dataObject = iwdata;
         }
 
-        DROPEFFECT finalEffect;
-
-        try
-        {
-            IDropSource.Interface dropSource = new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
-            if (Ole32.DoDragDrop(dataObject, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
-            {
-                return DragDropEffects.None;
-            }
-        }
-        finally
-        {
-            if (DragDropHelper.IsInDragLoop(dataObject))
-            {
-                DragDropHelper.SetInDragLoop(dataObject, inDragLoop: false);
-            }
-        }
-
-        return (DragDropEffects)finalEffect;
+        return dataObject;
     }
 
     public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)

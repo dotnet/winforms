@@ -7,8 +7,8 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Layout;
+using Com = Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
@@ -2211,11 +2211,9 @@ public abstract partial class ToolStripItem :
     ///  </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+    public unsafe DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
     {
-        IComDataObject? dataObject = data as IComDataObject;
-
-        if (dataObject is null)
+        if (data is not IComDataObject dataObject)
         {
             DataObject? iwdata = null;
             if (data is IDataObject idataObject)
@@ -2246,8 +2244,9 @@ public abstract partial class ToolStripItem :
 
         try
         {
-            IDropSource.Interface dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
-            if (Ole32.DoDragDrop(dataObject, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            using var dropSource = ComHelpers.GetComScope<IDropSource>(CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage));
+            using var dataObjectScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+            if (PInvoke.DoDragDrop(dataObjectScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
             {
                 return DragDropEffects.None;
             }
