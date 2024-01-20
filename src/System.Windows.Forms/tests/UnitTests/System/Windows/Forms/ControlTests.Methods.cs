@@ -4182,107 +4182,141 @@ public partial class ControlTests
     // If we use AsyncWaitHandle and not close it, then we will crash to xUnit runner:
     // The active test run was aborted. Reason: Test host process crashed : Unhandled exception. DebugAssertException: Method Debug.Fail failed with 'ThreadMethodEntry finalization hit!'
     [WinFormsFact]
-    public void Control_Invoke_SameThread_ThreadMethodEntry_Finalizeation_Success()
+    public void Control_Invoke_SameThread_ThreadMethodEntry_Finalization_Success()
     {
-        using Control control = new();
-        control.CreateControl();
-        Action method = () => { };
-        control.Invoke(method);
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-    }
-
-    [WinFormsFact]
-    public async Task Control_Invoke_OtherThread_ThreadMethodEntry_Finalizeation_Success()
-    {
-        using Control control = new();
-        control.CreateControl();
-        await Task.Run(() =>
-            {
-                Action method = () => { };
-                control.Invoke(method);
-            }).ConfigureAwait(true);
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-    }
-
-    [WinFormsFact]
-    public void Control_BeginInvoke_SameThread_ThreadMethodEntry_Finalizeation_Success()
-    {
-        using Control control = new();
-        control.CreateControl();
-        Action method = () => { };
-        control.BeginInvoke(method);
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-    }
-
-    [WinFormsFact]
-    public void Control_BeginInvoke_WH_SameThread_ThreadMethodEntry_Finalizeation_Success()
-    {
-        using Control control = new();
-        control.CreateControl();
-        Action method = () => { };
-        IAsyncResult res = control.BeginInvoke(method);
-        WaitHandle waitHandle = res.AsyncWaitHandle;
-        while (!waitHandle.WaitOne(1))
+        using (new NoAssertContext())
         {
-            Application.DoEvents();
+            using Control control = new();
+            control.CreateControl();
+            Action method = () => { };
+            control.Invoke(method);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+    }
+
+    [WinFormsFact]
+    public async Task Control_Invoke_OtherThread_ThreadMethodEntry_Finalization_Success()
+    {
+        using (new NoAssertContext())
+        {
+            using Control control = new();
+            control.CreateControl();
+            await Task.Run(() =>
+                {
+                    Action method = () => { };
+                    control.Invoke(method);
+                }).ConfigureAwait(true);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_BeginInvoke_SameThread_ThreadMethodEntry_Finalization_Success()
+    {
+        using (new NoAssertContext())
+        {
+            // We need a local function here because after inline call of "using (Control control = new()) {}" GC will not catch our ThreadMethodEntry for some reason.
+            ControlBeginInvoke();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
-        waitHandle.Close();
-        waitHandle = null;
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
+        void ControlBeginInvoke()
+        {
+            using Control control = new();
+            control.CreateControl();
+            int i = 0;
+            Action method = () => { i++; };
+            control.BeginInvoke(method);
+            while (i == 0)
+            {
+                Application.DoEvents();
+            }
+        }
     }
 
     [WinFormsFact]
-    public async Task Control_BeginInvoke_OtherThread_ThreadMethodEntry_Finalizeation_Success()
+    public void Control_BeginInvoke_WH_SameThread_ThreadMethodEntry_Finalization_Success()
     {
-        using Control control = new();
-        control.CreateControl();
-        await Task.Run(
-            () =>
+        using (new NoAssertContext())
+        {
+            // We need a local function here because after inline call of "using (Control control = new()) {}" GC will not catch our ThreadMethodEntry for some reason.
+            ControlBeginInvoke();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        void ControlBeginInvoke()
+        {
+            using Control control = new();
+            control.CreateControl();
+            Action method = () => { };
+            IAsyncResult res = control.BeginInvoke(method);
+            WaitHandle waitHandle = res.AsyncWaitHandle;
+            while (!waitHandle.WaitOne(1))
             {
-                Action method = () => { };
-                IAsyncResult res = control.BeginInvoke(method);
-                while (!res.IsCompleted)
+                Application.DoEvents();
+            }
+
+            waitHandle.Close();
+        }
+    }
+
+    [WinFormsFact]
+    public async Task Control_BeginInvoke_OtherThread_ThreadMethodEntry_Finalization_Success()
+    {
+        using (new NoAssertContext())
+        {
+            using Control control = new();
+            control.CreateControl();
+            await Task.Run(
+                () =>
                 {
-                    Thread.Sleep(1);
-                }
-            }).ConfigureAwait(true);
+                    Action method = () => { };
+                    IAsyncResult res = control.BeginInvoke(method);
+                    while (!res.IsCompleted)
+                    {
+                        Thread.Sleep(1);
+                    }
+                }).ConfigureAwait(true);
 
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
     }
 
     [WinFormsFact]
-    public async Task Control_BeginInvoke_WH_OtherThread_ThreadMethodEntry_Finalizeation_Success()
+    public async Task Control_BeginInvoke_WH_OtherThread_ThreadMethodEntry_Finalization_Success()
     {
-        using Control control = new();
-        control.CreateControl();
-        await Task.Run(() =>
-            {
-                Action method = () => { };
-                IAsyncResult res = control.BeginInvoke(method);
-                res.AsyncWaitHandle.WaitOne();
-                res.AsyncWaitHandle.Close();
-            }).ConfigureAwait(true);
+        using (new NoAssertContext())
+        {
+            using Control control = new();
+            control.CreateControl();
+            await Task.Run(() =>
+                {
+                    Action method = () => { };
+                    IAsyncResult res = control.BeginInvoke(method);
+                    res.AsyncWaitHandle.WaitOne();
+                    res.AsyncWaitHandle.Close();
+                }).ConfigureAwait(true);
 
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
     }
 #endif
 
