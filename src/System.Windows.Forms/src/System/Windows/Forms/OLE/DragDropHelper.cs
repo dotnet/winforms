@@ -6,12 +6,10 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using Shell = Windows.Win32.UI.Shell;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
+using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-using static Interop;
-using static Interop.Shell32;
-using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms;
 
@@ -19,7 +17,7 @@ namespace System.Windows.Forms;
 /// Helper class for drop targets to display the drag image while the cursor is over the target window and allows the
 /// application to specify the drag image bitmap that will be displayed during a drag-and-drop operation.
 /// </summary>
-internal static class DragDropHelper
+internal static unsafe class DragDropHelper
 {
     /// <summary>
     ///  A format used internally by the drag image manager.
@@ -32,8 +30,8 @@ internal static class DragDropHelper
     internal const string DRAGIMAGEBITS = "DragImageBits";
 
     /// <summary>
-    ///  A format that contains the value passed to <see cref="IDragSourceHelper2.SetFlags(int)"/> and controls whether to allow text specified in
-    ///  <see cref="DROPDESCRIPTION"/> to be displayed on the drag image.
+    ///  A format that contains the value passed to <see cref="IDragSourceHelper2.Interface.SetFlags(uint)"/>
+    ///  and controls whether to allow text specified in <see cref="DROPDESCRIPTION"/> to be displayed on the drag image.
     /// </summary>
     internal const string DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
 
@@ -58,7 +56,7 @@ internal static class DragDropHelper
     internal const string USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
     /// <summary>
-    /// Sets the drop object image and accompanying text back to the default.
+    ///  Sets the drop object image and accompanying text back to the default.
     /// </summary>
     public static void ClearDropDescription(IDataObject? dataObject)
     {
@@ -71,10 +69,10 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Notifies the drag-image manager that the drop target has been entered, and provides it with the information
-    /// needed to display the drag image.
+    ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the information
+    ///  needed to display the drag image.
     /// </summary>
-    public static void DragEnter(IntPtr targetWindowHandle, DragEventArgs e)
+    public static void DragEnter(HWND targetWindowHandle, DragEventArgs e)
     {
         if (e.Data is not IComDataObject dataObject)
         {
@@ -86,88 +84,66 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Notifies the drag-image manager that the drop target has been entered, and provides it with the information
-    /// needed to display the drag image.
+    ///  Notifies the drag-image manager that the drop target has been entered, and provides it with the information
+    ///  needed to display the drag image.
     /// </summary>
-    public static void DragEnter(IntPtr targetWindowHandle, IComDataObject dataObject, ref Point point, DROPEFFECT effect)
+    public static void DragEnter(HWND targetWindowHandle, IComDataObject dataObject, ref Point point, DROPEFFECT effect)
     {
-        if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
+        using ComScope<IDropTargetHelper> dropTargetHelper = new(null);
+        if (!TryGetDragDropHelper<IDropTargetHelper>(dropTargetHelper))
         {
             return;
         }
 
-        try
-        {
-            dropTargetHelper.DragEnter(targetWindowHandle, dataObject, ref point, effect);
-        }
-        finally
-        {
-            Marshal.ReleaseComObject(dropTargetHelper);
-        }
+        using var dataObjectScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        dropTargetHelper.Value->DragEnter(targetWindowHandle, dataObjectScope, in point, effect);
     }
 
     /// <summary>
-    /// Notifies the drag-image manager that the cursor has left the drop target.
+    ///  Notifies the drag-image manager that the cursor has left the drop target.
     /// </summary>
     public static void DragLeave()
     {
-        if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
+        using ComScope<IDropTargetHelper> dropTargetHelper = new(null);
+        if (!TryGetDragDropHelper<IDropTargetHelper>(dropTargetHelper))
         {
             return;
         }
 
-        try
-        {
-            dropTargetHelper.DragLeave();
-        }
-        finally
-        {
-            Marshal.ReleaseComObject(dropTargetHelper);
-        }
+        dropTargetHelper.Value->DragLeave();
     }
 
     /// <summary>
-    /// Notifies the drag-image manager that the cursor position has changed and provides it with the information needed
-    /// to display the drag image.
+    ///  Notifies the drag-image manager that the cursor position has changed
+    ///  and provides it with the information needed to display the drag image.
     /// </summary>
     public static void DragOver(DragEventArgs e)
     {
-        if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
+        using ComScope<IDropTargetHelper> dropTargetHelper = new(null);
+        if (!TryGetDragDropHelper<IDropTargetHelper>(dropTargetHelper))
         {
             return;
         }
 
-        try
-        {
-            Point point = new(e.X, e.Y);
-            dropTargetHelper.DragOver(ref point, (DROPEFFECT)(uint)e.Effect);
-        }
-        finally
-        {
-            Marshal.ReleaseComObject(dropTargetHelper);
-        }
+        Point point = new(e.X, e.Y);
+        dropTargetHelper.Value->DragOver(in point, (DROPEFFECT)(uint)e.Effect);
     }
 
     /// <summary>
-    /// Notifies the drag-image manager that the object has been dropped, and provides it with the information needed
-    /// to display the drag image.
+    ///  Notifies the drag-image manager that the object has been dropped, and provides it with the information needed
+    ///  to display the drag image.
     /// </summary>
     public static void Drop(DragEventArgs e)
     {
-        if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper) || e.Data is not IComDataObject dataObject)
+        using ComScope<IDropTargetHelper> dropTargetHelper = new(null);
+        if (!TryGetDragDropHelper<IDropTargetHelper>(dropTargetHelper) || e.Data is not IComDataObject dataObject)
         {
             return;
         }
 
-        try
-        {
-            Point point = new(e.X, e.Y);
-            dropTargetHelper.Drop(dataObject, ref point, (DROPEFFECT)(uint)e.Effect);
-        }
-        finally
-        {
-            Marshal.ReleaseComObject(dropTargetHelper);
-        }
+        Point point = new(e.X, e.Y);
+        using var dataObjectScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        dropTargetHelper.Value->Drop(dataObjectScope, in point, (DROPEFFECT)(uint)e.Effect);
     }
 
     /// <summary>
@@ -204,7 +180,8 @@ internal static class DragDropHelper
         finally
         {
             PInvokeCore.GlobalUnlock((HGLOBAL)medium.unionmember);
-            Ole32.ReleaseStgMedium(ref medium);
+            var comMedium = (STGMEDIUM)medium;
+            PInvoke.ReleaseStgMedium(ref comMedium);
         }
     }
 
@@ -212,7 +189,7 @@ internal static class DragDropHelper
     ///  Determines whether the data object is in a drag loop.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
+    ///  <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
     /// </returns>
     public static unsafe bool IsInDragLoop(IDataObject dataObject)
     {
@@ -238,15 +215,12 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Determines whether the data object is in a drag loop.
+    ///  Determines whether the data object is in a drag loop.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
+    ///  <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsInDragLoop(IComDataObject dataObject)
-    {
-        return GetBooleanFormat(dataObject, PInvoke.CFSTR_INDRAGLOOP);
-    }
+    public static bool IsInDragLoop(IComDataObject dataObject) => GetBooleanFormat(dataObject, PInvoke.CFSTR_INDRAGLOOP);
 
     /// <summary>
     ///  Determines whether the specified format is a drag loop format.
@@ -263,7 +237,7 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Releases formats used by the drag-and-drop helper.
+    ///  Releases formats used by the drag-and-drop helper.
     /// </summary>
     public static void ReleaseDragDropFormats(IComDataObject comDataObject)
     {
@@ -282,7 +256,7 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Sets boolean formats into a data object used to set and display drag images and drop descriptions.
+    ///  Sets boolean formats into a data object used to set and display drag images and drop descriptions.
     /// </summary>
     private static unsafe void SetBooleanFormat(IComDataObject dataObject, string format, bool value)
     {
@@ -324,14 +298,14 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Initializes the drag-image manager and sets the drag image bitmap into a data object.
+    ///  Initializes the drag-image manager and sets the drag image bitmap into a data object.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
-    /// always pass a bitmap without pre-multiplied alpha blending. Note that no error will result from passing a bitmap
-    /// with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
-    /// </para>
+    ///  <para>
+    ///   Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
+    ///   always pass a bitmap without pre-multiplied alpha blending. Note that no error will result from passing a bitmap
+    ///   with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
+    ///  </para>
     /// </remarks>
     public static void SetDragImage(IComDataObject dataObject, GiveFeedbackEventArgs e)
     {
@@ -340,20 +314,21 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Initializes the drag-image manager and sets the drag image bitmap into a data object.
+    ///  Initializes the drag-image manager and sets the drag image bitmap into a data object.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
-    /// always pass a bitmap without pre-multiplied alpha blending. Note that no error will result from passing a bitmap
-    /// with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
-    /// </para>
+    ///  <para>
+    ///   Because InitializeFromBitmap always performs the RGB multiplication step in calculating the alpha value, you should
+    ///   always pass a bitmap without pre-multiplied alpha blending. Note that no error will result from passing a bitmap
+    ///   with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
+    ///  </para>
     /// </remarks>
     public static void SetDragImage(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool usingDefaultDragImage)
     {
         ArgumentNullException.ThrowIfNull(dataObject);
 
-        if (!TryGetDragDropHelper(out IDragSourceHelper2? dragSourceHelper))
+        using ComScope<IDragSourceHelper2> dragSourceHelper = new(null);
+        if (!TryGetDragDropHelper<IDragSourceHelper2>(dragSourceHelper))
         {
             return;
         }
@@ -368,34 +343,30 @@ internal static class DragDropHelper
             SetInDragLoop(dataObject, inDragLoop: true);
         }
 
-        HBITMAP hbmpDragImage = (HBITMAP)IntPtr.Zero;
+        using HBITMAP hbmpDragImage = dragImage is not null ? dragImage.GetHBITMAP() : HBITMAP.Null;
 
-        try
+        // The Windows drag image manager will own this bitmap object and free the memory when its finished. Only
+        // call DeleteObject if an exception occurs while initializing.
+        SHDRAGIMAGE shDragImage = new()
         {
-            // The Windows drag image manager will own this bitmap object and free the memory when its finished. Only
-            // call DeleteObject if an exception occurs while initializing.
-            hbmpDragImage = dragImage is not null ? dragImage.GetHBITMAP() : hbmpDragImage;
-            Shell.SHDRAGIMAGE shDragImage = new()
-            {
-                hbmpDragImage = hbmpDragImage,
-                sizeDragImage = dragImage is not null ? dragImage.Size : default,
-                ptOffset = cursorOffset,
-                crColorKey = (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW)
-            };
+            hbmpDragImage = hbmpDragImage,
+            sizeDragImage = dragImage is not null ? dragImage.Size : default,
+            ptOffset = cursorOffset,
+            crColorKey = (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW)
+        };
 
-            // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
-            // object, then by default, the extra text description of the drag-and-drop operation is not displayed.
-            dragSourceHelper.SetFlags((int)DSH_FLAGS.DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowOnFailure();
-            dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowOnFailure();
-        }
-        catch
+        // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
+        // object, then by default, the extra text description of the drag-and-drop operation is not displayed.
+        if (dragSourceHelper.Value->SetFlags((uint)DSH_FLAGS.DSH_ALLOWDROPDESCRIPTIONTEXT).Failed)
         {
             PInvokeCore.DeleteObject(hbmpDragImage);
             return;
         }
-        finally
+
+        using var dataObjectScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        if (dragSourceHelper.Value->InitializeFromBitmap(shDragImage, dataObjectScope).Failed)
         {
-            Marshal.ReleaseComObject(dragSourceHelper);
+            return;
         }
 
         // To effectively display the drop description after changing the drag image bitmap, set IsShowingText to true;
@@ -405,7 +376,7 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
+    ///  Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
     /// </summary>
     public static void SetDropDescription(DragEventArgs e)
     {
@@ -420,13 +391,13 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
+    ///  Sets the drop description into a data object. Describes the image and accompanying text for a drop object.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// Some UI coloring is applied to the text in <paramref name="message"/> if used by specifying %1 in
-    /// <paramref name="messageReplacementToken"/>. The characters %% and %1 are the subset of FormatMessage markers that are processed here.
-    /// </para>
+    ///  <para>
+    ///   Some UI coloring is applied to the text in <paramref name="message"/> if used by specifying %1 in
+    ///   <paramref name="messageReplacementToken"/>. The characters %% and %1 are the subset of FormatMessage markers that are processed here.
+    ///  </para>
     /// </remarks>
     public static unsafe void SetDropDescription(
         IComDataObject dataObject,
@@ -497,12 +468,12 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Sets the InDragLoop format into a data object.
+    ///  Sets the InDragLoop format into a data object.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// Used to determine whether the data object is in a drag loop.
-    /// </para>
+    ///  <para>
+    ///   Used to determine whether the data object is in a drag loop.
+    ///  </para>
     /// </remarks>
     public static void SetInDragLoop(IComDataObject dataObject, bool inDragLoop)
     {
@@ -516,56 +487,45 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Sets the IsShowingText format into a data object.
+    ///  Sets the IsShowingText format into a data object.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// To effectively display the drop description after changing the drag image bitmap, set <paramref name="isShowingText"/>
-    /// to true; otherwise the drop description text will not be displayed.
-    /// </para>
+    ///  <para>
+    ///   To effectively display the drop description after changing the drag image bitmap, set <paramref name="isShowingText"/>
+    ///   to true; otherwise the drop description text will not be displayed.
+    ///  </para>
     /// </remarks>
     private static void SetIsShowingText(IComDataObject dataObject, bool isShowingText)
         => SetBooleanFormat(dataObject, ISSHOWINGTEXT, isShowingText);
 
     /// <summary>
-    /// Sets the UsingDefaultDragImage format into a data object.
+    ///  Sets the UsingDefaultDragImage format into a data object.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// Specify <see langword="true"/> for <paramref name="usingDefaultDragImage"/> to use a layered window drag image with a size of 96x96.
-    /// </para>
+    ///  <para>
+    ///   Specify <see langword="true"/> for <paramref name="usingDefaultDragImage"/> to use a layered window drag image with a size of 96x96.
+    ///  </para>
     /// </remarks>
     private static void SetUsingDefaultDragImage(IComDataObject dataObject, bool usingDefaultDragImage)
         => SetBooleanFormat(dataObject, USINGDEFAULTDRAGIMAGE, usingDefaultDragImage);
 
     /// <summary>
-    /// Creates an in-process server drag-image manager object and returns the specified interface pointer.
+    ///  Creates an in-process server drag-image manager object and returns the specified interface pointer.
     /// </summary>
-    private static bool TryGetDragDropHelper<TDragDropHelper>([NotNullWhen(true)] out TDragDropHelper? dragDropHelper)
+    private static bool TryGetDragDropHelper<TDragHelper>(TDragHelper** dragDropHelper)
+        where TDragHelper : unmanaged, IComIID
     {
         if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != ApartmentState.STA)
         {
             throw new InvalidOperationException(SR.ThreadMustBeSTA);
         }
 
-        try
-        {
-            HRESULT hr = Ole32.CoCreateInstance(
-                in CLSID.DragDropHelper,
-                IntPtr.Zero,
-                CLSCTX.CLSCTX_INPROC_SERVER,
-                in IID.GetRef<IUnknown>(),
-                out object obj);
+        HRESULT hr = PInvokeCore.CoCreateInstance(
+            in CLSID.DragDropHelper,
+            pUnkOuter: null,
+            CLSCTX.CLSCTX_INPROC_SERVER,
+            out *dragDropHelper);
 
-            if (hr.Succeeded)
-            {
-                dragDropHelper = (TDragDropHelper)obj;
-                return true;
-            }
-        }
-        catch { }
-
-        dragDropHelper = default;
-        return false;
+        return hr.Succeeded;
     }
 }

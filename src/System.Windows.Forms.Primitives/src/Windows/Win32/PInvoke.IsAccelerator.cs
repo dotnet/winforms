@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="IsAccelerator(HACCEL, int, MSG*, ushort*)"/>
     public static unsafe bool IsAccelerator<T>(T hAccel, int cAccelEntries, MSG* lpMsg, ushort* lpwCmd)
         where T : IHandle<HACCEL>
     {

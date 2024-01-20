@@ -16,7 +16,7 @@ namespace System.Drawing;
 [TypeConverter(typeof(IconConverter))]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
+public unsafe sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
@@ -121,20 +121,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         ArgumentNullException.ThrowIfNull(stream);
 
         _iconData = new byte[(int)stream.Length];
-#if NET7_0_OR_GREATER
         stream.ReadExactly(_iconData);
-#else
-        int totalRead = 0;
-        while (totalRead < _iconData.Length)
-        {
-            int bytesRead = stream.Read(_iconData, totalRead, _iconData.Length - totalRead);
-            if (bytesRead <= 0)
-            {
-                throw new EndOfStreamException();
-            }
-            totalRead += bytesRead;
-        }
-#endif
         Initialize(width, height);
     }
 
@@ -165,7 +152,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
     public static Icon? ExtractAssociatedIcon(string filePath) => ExtractAssociatedIcon(filePath, 0);
 
-    private static unsafe Icon? ExtractAssociatedIcon(string filePath, int index)
+    private static Icon? ExtractAssociatedIcon(string filePath, int index)
     {
         ArgumentNullException.ThrowIfNull(filePath);
         if (string.IsNullOrEmpty(filePath))
@@ -396,7 +383,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         Rectangle copy = targetRect;
 
-        using Drawing2D.Matrix transform = graphics.Transform;
+        using Matrix transform = graphics.Transform;
         PointF offset = transform.Offset;
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
@@ -412,7 +399,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     internal void DrawUnstretched(Graphics graphics, Rectangle targetRect)
     {
         Rectangle copy = targetRect;
-        using Drawing2D.Matrix transform = graphics.Transform;
+        using Matrix transform = graphics.Transform;
         PointF offset = transform.Offset;
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
@@ -434,7 +421,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     // Initializes this Image object.  This is identical to calling the image's
     // constructor with picture, but this allows non-constructor initialization,
     // which may be necessary in some instances.
-    private unsafe void Initialize(int width, int height)
+    private void Initialize(int width, int height)
     {
         if (_iconData is null || !_handle.IsNull)
         {
@@ -609,7 +596,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         }
     }
 
-    private unsafe void CopyBitmapData(Imaging.BitmapData sourceData, Imaging.BitmapData targetData)
+    private void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
     {
         byte* srcPtr = (byte*)sourceData.Scan0;
         byte* destPtr = (byte*)targetData.Scan0;
@@ -628,7 +615,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         GC.KeepAlive(this); // finalizer mustn't deallocate data blobs while this method is running
     }
 
-    private static bool BitmapHasAlpha(Imaging.BitmapData bmpData)
+    private static bool BitmapHasAlpha(BitmapData bmpData)
     {
         bool hasAlpha = false;
         for (int i = 0; i < bmpData.Height; i++)
@@ -636,14 +623,11 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             for (int j = 3; j < Math.Abs(bmpData.Stride); j += 4)
             {
                 // Stride here is fine since we know we're doing this on the whole image.
-                unsafe
+                byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + (i * bmpData.Stride) + j;
+                if (*candidate != 0)
                 {
-                    byte* candidate = unchecked(((byte*)bmpData.Scan0.ToPointer()) + (i * bmpData.Stride) + j);
-                    if (*candidate != 0)
-                    {
-                        hasAlpha = true;
-                        return hasAlpha;
-                    }
+                    hasAlpha = true;
+                    return hasAlpha;
                 }
             }
         }
@@ -665,17 +649,17 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         return BmpFrame();
     }
 
-    private unsafe Bitmap BmpFrame()
+    private Bitmap BmpFrame()
     {
         Bitmap? bitmap = null;
         if (_iconData is not null && _bestBitDepth == 32)
         {
             // GDI+ doesn't handle 32 bpp icons with alpha properly
             // we load the icon ourself from the byte table
-            bitmap = new Bitmap(Size.Width, Size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            bitmap = new Bitmap(Size.Width, Size.Height, PixelFormat.Format32bppArgb);
             Debug.Assert(_bestImageOffset >= 0 && (_bestImageOffset + _bestBytesInRes) <= _iconData.Length, "Illegal offset/length for the Icon data");
 
-            Imaging.BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, Size.Width, Size.Height),
+            BitmapData bmpdata = bitmap.LockBits(new Rectangle(0, 0, Size.Width, Size.Height),
                 ImageLockMode.WriteOnly,
                 PixelFormat.Format32bppArgb);
             try
@@ -715,8 +699,8 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     if (bmp.bmBitsPixel == 32)
                     {
                         Bitmap? tmpBitmap = null;
-                        Imaging.BitmapData? bmpData = null;
-                        Imaging.BitmapData? targetData = null;
+                        BitmapData? bmpData = null;
+                        BitmapData? targetData = null;
                         try
                         {
                             tmpBitmap = Image.FromHbitmap(info.hbmColor);
@@ -880,7 +864,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     /// <exception cref="ArgumentNullException">
     ///  <paramref name="filePath"/> is null.
     /// </exception>
-    public static unsafe Icon? ExtractIcon(string filePath, int id, int size)
+    public static Icon? ExtractIcon(string filePath, int id, int size)
         => size is <= 0 or > ushort.MaxValue
             ? throw new ArgumentOutOfRangeException(nameof(size))
             : ExtractIcon(filePath, id, size, smallIcon: false);
@@ -891,10 +875,10 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     ///  <see langword="false"/>.
     /// </param>
     /// <inheritdoc cref="ExtractIcon(string, int, int)" />
-    public static unsafe Icon? ExtractIcon(string filePath, int id, bool smallIcon = false)
+    public static Icon? ExtractIcon(string filePath, int id, bool smallIcon = false)
         => ExtractIcon(filePath, id, 0, smallIcon);
 
-    private static unsafe Icon? ExtractIcon(string filePath, int id, int size, bool smallIcon = false)
+    private static Icon? ExtractIcon(string filePath, int id, int size, bool smallIcon = false)
     {
         ArgumentNullException.ThrowIfNull(filePath);
 

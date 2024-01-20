@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="FillRect(HDC, in RECT, HBRUSH)"/>
     public static int FillRect<T>(T hDC, ref RECT lprc, HBRUSH hbr)
         where T : IHandle<HDC>
     {

@@ -240,13 +240,11 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrix_NullMatrix_ThrowsArgumentException()
     {
-        using (ImageAttributes imageAttr = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(null));
-            AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrix(null, ColorMatrixFlag.Default));
-            AssertExtensions.Throws<ArgumentException>(null, () =>
-                imageAttr.SetColorMatrix(null, ColorMatrixFlag.Default, ColorAdjustType.Default));
-        }
+        using ImageAttributes imageAttr = new();
+        AssertExtensions.Throws<ArgumentNullException>("newColorMatrix", () => imageAttr.SetColorMatrix(null));
+        AssertExtensions.Throws<ArgumentNullException>("newColorMatrix", () => imageAttr.SetColorMatrix(null, ColorMatrixFlag.Default));
+        AssertExtensions.Throws<ArgumentNullException>("newColorMatrix", () =>
+            imageAttr.SetColorMatrix(null, ColorMatrixFlag.Default, ColorAdjustType.Default));
     }
 
     public static IEnumerable<object[]> ColorAdjustType_InvalidTypes_TestData()
@@ -478,16 +476,14 @@ public class ImageAttributesTests
     [Fact]
     public void SetColorMatrices_NullMatrices_ThrowsArgumentException()
     {
-        using (ImageAttributes imageAttr = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(null, _grayMatrix));
-            AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(null, _grayMatrix, ColorMatrixFlag.Default));
-            AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, null, ColorMatrixFlag.AltGrays));
-            AssertExtensions.Throws<ArgumentException>(null, () =>
-                imageAttr.SetColorMatrices(null, _grayMatrix, ColorMatrixFlag.Default, ColorAdjustType.Default));
-            AssertExtensions.Throws<ArgumentException>(null, () =>
-                imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, null, ColorMatrixFlag.AltGrays, ColorAdjustType.Default));
-        }
+        using ImageAttributes imageAttr = new();
+        AssertExtensions.Throws<ArgumentNullException>("newColorMatrix", () => imageAttr.SetColorMatrices(null, _grayMatrix));
+        AssertExtensions.Throws<ArgumentNullException>("newColorMatrix", () => imageAttr.SetColorMatrices(null, _grayMatrix, ColorMatrixFlag.Default));
+        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, null, ColorMatrixFlag.AltGrays));
+        AssertExtensions.Throws<ArgumentNullException>("newColorMatrix", () =>
+            imageAttr.SetColorMatrices(null, _grayMatrix, ColorMatrixFlag.Default, ColorAdjustType.Default));
+        AssertExtensions.Throws<ArgumentException>(null, () =>
+            imageAttr.SetColorMatrices(_greenComponentToZeroColorMatrix, null, ColorMatrixFlag.AltGrays, ColorAdjustType.Default));
     }
 
     [Theory]
@@ -1347,19 +1343,15 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorAdjustType_InvalidTypes_TestData))]
     public void SetRemapTable_InvalidTypes_ThrowsArgumentException(ColorAdjustType type)
     {
-        using (ImageAttributes imageAttr = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetRemapTable(_yellowToRedColorMap, type));
-        }
+        using ImageAttributes imageAttr = new();
+        AssertExtensions.ThrowsAny<ArgumentNullException, ArgumentException>(() => imageAttr.SetRemapTable(_yellowToRedColorMap, type));
     }
 
     [Fact]
-    public void SetRemapTable_NullMap_ThrowsNullReferenceException()
+    public void SetRemapTable_NullMap_ThrowsArgumentNullException()
     {
-        using (ImageAttributes imageAttr = new())
-        {
-            Assert.Throws<NullReferenceException>(() => imageAttr.SetRemapTable(null, ColorAdjustType.Default));
-        }
+        using ImageAttributes imageAttr = new();
+        Assert.Throws<ArgumentNullException>(() => imageAttr.SetRemapTable(null, ColorAdjustType.Default));
     }
 
     [Fact]

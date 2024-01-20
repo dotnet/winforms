@@ -6,87 +6,57 @@ using System.Runtime.InteropServices;
 
 namespace System.Drawing;
 
-internal static partial class SafeNativeMethods
+internal static partial class Gdip
 {
-    // We make this a nested class so that we don't have to initialize GDI+ to access SafeNativeMethods (mostly gdi/user32).
-    internal static partial class Gdip
+    private static readonly nuint s_initToken = Init();
+
+    [ThreadStatic]
+    private static IDictionary<object, object>? t_threadData;
+
+    private static unsafe nuint Init()
     {
-        private static readonly nuint s_initToken = Init();
-
-        [ThreadStatic]
-        private static IDictionary<object, object>? t_threadData;
-
-        private static unsafe nuint Init()
+        if (!OperatingSystem.IsWindows())
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                NativeLibrary.SetDllImportResolver(Assembly.GetExecutingAssembly(), static (_, _, _) =>
-                    throw new PlatformNotSupportedException(SR.PlatformNotSupported_Unix));
-            }
-
-            Debug.Assert(s_initToken == 0, "GdiplusInitialization: Initialize should not be called more than once in the same domain!");
-
-            // GDI+ ref counts multiple calls to Startup in the same process, so calls from multiple
-            // domains are ok, just make sure to pair each w/GdiplusShutdown
-
-            nuint token;
-            GdiplusStartupInputEx startup = GdiplusStartupInputEx.GetDefault();
-            Status status = PInvoke.GdiplusStartup(&token, (GdiplusStartupInput*)&startup, null);
-            CheckStatus(status);
-            return token;
+            NativeLibrary.SetDllImportResolver(Assembly.GetExecutingAssembly(), static (_, _, _) =>
+                throw new PlatformNotSupportedException(SR.PlatformNotSupported_Unix));
         }
 
-        /// <summary>
-        /// Returns true if GDI+ has been started, but not shut down
-        /// </summary>
-        internal static bool Initialized => s_initToken != 0;
+        Debug.Assert(s_initToken == 0, "GdiplusInitialization: Initialize should not be called more than once in the same domain!");
 
-        /// <summary>
-        /// This property will give us back a dictionary we can use to store all of our static brushes and pens on
-        /// a per-thread basis. This way we can avoid 'object in use' crashes when different threads are
-        /// referencing the same drawing object.
-        /// </summary>
-        internal static IDictionary<object, object> ThreadData => t_threadData ??= new Dictionary<object, object>();
+        // GDI+ ref counts multiple calls to Startup in the same process, so calls from multiple
+        // domains are ok, just make sure to pair each w/GdiplusShutdown
 
-        // Used to ensure static constructor has run.
-        internal static void DummyFunction()
-        {
-        }
-
-        //----------------------------------------------------------------------------------------
-        // Status codes
-        //----------------------------------------------------------------------------------------
-        internal const int Ok = 0;
-        internal const int GenericError = 1;
-        internal const int InvalidParameter = 2;
-        internal const int OutOfMemory = 3;
-        internal const int ObjectBusy = 4;
-        internal const int InsufficientBuffer = 5;
-        internal const int NotImplemented = 6;
-        internal const int Win32Error = 7;
-        internal const int WrongState = 8;
-        internal const int Aborted = 9;
-        internal const int FileNotFound = 10;
-        internal const int ValueOverflow = 11;
-        internal const int AccessDenied = 12;
-        internal const int UnknownImageFormat = 13;
-        internal const int FontFamilyNotFound = 14;
-        internal const int FontStyleNotFound = 15;
-        internal const int NotTrueTypeFont = 16;
-        internal const int UnsupportedGdiplusVersion = 17;
-        internal const int GdiplusNotInitialized = 18;
-        internal const int PropertyNotFound = 19;
-        internal const int PropertyNotSupported = 20;
-
-        internal static void CheckStatus(int status) => CheckStatus((Status)status);
-
-        internal static Exception StatusException(int status) => StatusException((Status)status);
-
-        internal static void CheckStatus(Status status) => status.ThrowIfFailed();
-
-        internal static Exception StatusException(Status status) => status.GetException();
+        nuint token;
+        GdiplusStartupInputEx startup = GdiplusStartupInputEx.GetDefault();
+        Status status = PInvoke.GdiplusStartup(&token, (GdiplusStartupInput*)&startup, null);
+        CheckStatus(status);
+        return token;
     }
 
+    /// <summary>
+    /// Returns true if GDI+ has been started, but not shut down
+    /// </summary>
+    internal static bool Initialized => s_initToken != 0;
+
+    /// <summary>
+    /// This property will give us back a dictionary we can use to store all of our static brushes and pens on
+    /// a per-thread basis. This way we can avoid 'object in use' crashes when different threads are
+    /// referencing the same drawing object.
+    /// </summary>
+    internal static IDictionary<object, object> ThreadData => t_threadData ??= new Dictionary<object, object>();
+
+    // Used to ensure static constructor has run.
+    internal static void DummyFunction()
+    {
+    }
+
+    internal static void CheckStatus(Status status) => status.ThrowIfFailed();
+
+    internal static Exception StatusException(Status status) => status.GetException();
+}
+
+internal static partial class SafeNativeMethods
+{
     [StructLayout(LayoutKind.Sequential)]
     public struct ENHMETAHEADER
     {

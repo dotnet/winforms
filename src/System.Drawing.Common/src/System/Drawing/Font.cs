@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using System.Drawing.Interop;
 
 namespace System.Drawing;
@@ -16,10 +15,10 @@ namespace System.Drawing;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [TypeConverter(typeof(FontConverter))]
 [Serializable]
-[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+[Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
 {
-    private IntPtr _nativeFont;
+    private GpFont* _nativeFont;
     private float _fontSize;
     private FontStyle _fontStyle;
     private FontFamily _fontFamily = null!;
@@ -42,7 +41,7 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public FontStyle Style => _fontStyle;
 
     /// <summary>
-    /// Gets a value indicating whether this <see cref='System.Drawing.Font'/> is bold.
+    /// Gets a value indicating whether this <see cref='Font'/> is bold.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Bold => (Style & FontStyle.Bold) != 0;
@@ -131,9 +130,9 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public int Height => (int)Math.Ceiling(GetHeight());
 
     /// <summary>
-    /// Get native GDI+ object pointer. This property triggers the creation of the GDI+ native object if not initialized yet.
+    ///  Get native GDI+ object pointer. This property triggers the creation of the GDI+ native object if not initialized yet.
     /// </summary>
-    internal IntPtr NativeFont => _nativeFont;
+    internal GpFont* NativeFont => _nativeFont;
 
     /// <summary>
     /// Cleans up Windows resources for this <see cref='Font'/>.
@@ -166,22 +165,22 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
     /// </summary>
     public void Dispose()
     {
-        Dispose(true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
     private void Dispose(bool disposing)
     {
-        if (_nativeFont != IntPtr.Zero)
+        if (_nativeFont is not null)
         {
             try
             {
 #if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
+                Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                Gdip.GdipDeleteFont(new HandleRef(this, _nativeFont));
+                PInvoke.GdipDeleteFont(_nativeFont);
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
+                Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
@@ -189,13 +188,13 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
             }
             finally
             {
-                _nativeFont = IntPtr.Zero;
+                _nativeFont = null;
             }
         }
     }
 
     /// <summary>
-    /// Returns the height of this Font in the specified graphics context.
+    ///  Returns the height of this Font in the specified graphics context.
     /// </summary>
     public float GetHeight(Graphics graphics)
     {
@@ -205,18 +204,19 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
             throw new ArgumentException(nameof(graphics));
         }
 
-        int status = Gdip.GdipGetFontHeight(new HandleRef(this, NativeFont), new HandleRef(graphics, (nint)graphics.NativeGraphics), out float height);
-        Gdip.CheckStatus(status);
-
+        float height;
+        PInvoke.GdipGetFontHeight(NativeFont, graphics.Pointer(), &height).ThrowIfFailed();
+        GC.KeepAlive(this);
+        GC.KeepAlive(graphics);
         return height;
     }
 
     public float GetHeight(float dpi)
     {
-        float size;
-        int status = Gdip.GdipGetFontHeightGivenDPI(new HandleRef(this, NativeFont), dpi, out size);
-        Gdip.CheckStatus(status);
-        return size;
+        float height;
+        PInvoke.GdipGetFontHeightGivenDPI(NativeFont, dpi, &height).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return height;
     }
 
     /// <summary>
@@ -264,7 +264,7 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
     // This is used by SystemFonts when constructing a system Font objects.
     internal void SetSystemFontName(string systemFontName) => _systemFontName = systemFontName;
 
-    public unsafe void ToLogFont(object logFont, Graphics graphics)
+    public void ToLogFont(object logFont, Graphics graphics)
     {
         ArgumentNullException.ThrowIfNull(logFont);
 
@@ -297,15 +297,16 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
 #else
     private
 #endif
-    unsafe void ToLogFont(out LOGFONT logFont, Graphics graphics)
+    void ToLogFont(out LOGFONT logFont, Graphics graphics)
     {
         ArgumentNullException.ThrowIfNull(graphics);
 
-        logFont = default;
-        Gdip.CheckStatus(Gdip.GdipGetLogFontW(
-            new HandleRef(this, NativeFont),
-            new HandleRef(graphics, (nint)graphics.NativeGraphics),
-            ref logFont));
+        fixed (LOGFONT* lf = &logFont)
+        {
+            PInvoke.GdipGetLogFont(NativeFont, graphics.Pointer(), (LOGFONTW*)lf).ThrowIfFailed();
+            GC.KeepAlive(this);
+            GC.KeepAlive(graphics);
+        }
 
         // Prefix the string with '@' if this is a gdiVerticalFont.
         if (_gdiVerticalFont)
@@ -324,31 +325,30 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
         }
     }
 
-    ///<summary>
-    /// Creates the GDI+ native font object.
-    ///</summary>
+    /// <summary>
+    ///  Creates the GDI+ native font object.
+    /// </summary>
     private void CreateNativeFont()
     {
-        Debug.Assert(_nativeFont == IntPtr.Zero, "nativeFont already initialized, this will generate a handle leak.");
+        Debug.Assert(_nativeFont is null, "nativeFont already initialized, this will generate a handle leak.");
         Debug.Assert(_fontFamily is not null, "fontFamily not initialized.");
 
         // Note: GDI+ creates singleton font family objects (from the corresponding font file) and reference count them so
         // if creating the font object from an external FontFamily, this object's FontFamily will share the same native object.
-        int status = Gdip.GdipCreateFont(
-            new HandleRef(this, _fontFamily.NativeFamily),
-            _fontSize,
-            _fontStyle,
-            _fontUnit,
-            out _nativeFont);
+
+        GpFont* font;
+        Status status = PInvoke.GdipCreateFont(_fontFamily.Pointer(), _fontSize, (int)_fontStyle, (Unit)_fontUnit, &font);
+        GC.KeepAlive(this);
+        _nativeFont = font;
 
         // Special case this common error message to give more information
-        if (status == Gdip.FontStyleNotFound)
+        if (status == Status.FontStyleNotFound)
         {
             throw new ArgumentException(SR.Format(SR.GdiplusFontStyleNotFound, _fontFamily.Name, _fontStyle.ToString()));
         }
-        else if (status != Gdip.Ok)
+        else if (status != Status.Ok)
         {
-            throw Gdip.StatusException(status);
+            throw status.GetException();
         }
     }
 
@@ -467,19 +467,21 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
     /// <summary>
     /// Constructor to initialize fields from an existing native GDI+ object reference. Used by ToLogFont.
     /// </summary>
-    private Font(IntPtr nativeFont, byte gdiCharSet, bool gdiVerticalFont)
+    private Font(GpFont* nativeFont, byte gdiCharSet, bool gdiVerticalFont)
     {
-        Debug.Assert(_nativeFont == IntPtr.Zero, "GDI+ native font already initialized, this will generate a handle leak");
-        Debug.Assert(nativeFont != IntPtr.Zero, "nativeFont is null");
+        Debug.Assert(_nativeFont is null, "GDI+ native font already initialized, this will generate a handle leak");
+        Debug.Assert(nativeFont is not null, "nativeFont is null");
 
         _nativeFont = nativeFont;
-
-        Gdip.CheckStatus(Gdip.GdipGetFontUnit(new HandleRef(this, nativeFont), out GraphicsUnit unit));
-        Gdip.CheckStatus(Gdip.GdipGetFontSize(new HandleRef(this, nativeFont), out float size));
-        Gdip.CheckStatus(Gdip.GdipGetFontStyle(new HandleRef(this, nativeFont), out FontStyle style));
-        Gdip.CheckStatus(Gdip.GdipGetFamily(new HandleRef(this, nativeFont), out IntPtr nativeFamily));
-
-        SetFontFamily(new FontFamily(nativeFamily));
+        GraphicsUnit unit;
+        float size;
+        FontStyle style;
+        GpFontFamily* family;
+        PInvoke.GdipGetFontUnit(_nativeFont, (Unit*)&unit).ThrowIfFailed();
+        PInvoke.GdipGetFontSize(_nativeFont, &size).ThrowIfFailed();
+        PInvoke.GdipGetFontStyle(_nativeFont, (int*)&style).ThrowIfFailed();
+        PInvoke.GdipGetFamily(_nativeFont, &family).ThrowIfFailed();
+        SetFontFamily(new FontFamily(family));
         Initialize(_fontFamily, size, style, unit, gdiCharSet, gdiVerticalFont);
     }
 
@@ -506,7 +508,7 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
             throw new ArgumentException(SR.Format(SR.InvalidBoundArgument, nameof(emSize), emSize, 0, "System.Single.MaxValue"), nameof(emSize));
         }
 
-        int status;
+        Status status;
 
         _fontSize = emSize;
         _fontStyle = style;
@@ -520,13 +522,16 @@ public unsafe sealed class Font : MarshalByRefObject, ICloneable, IDisposable, I
             SetFontFamily(new FontFamily(family.NativeFamily));
         }
 
-        if (_nativeFont == IntPtr.Zero)
+        if (_nativeFont is null)
         {
             CreateNativeFont();
         }
 
         // Get actual size.
-        status = Gdip.GdipGetFontSize(new HandleRef(this, _nativeFont), out _fontSize);
+        float size;
+        status = PInvoke.GdipGetFontSize(_nativeFont, &size);
+        _fontSize = size;
+        GC.KeepAlive(this);
         Gdip.CheckStatus(status);
     }
 
@@ -568,27 +573,27 @@ internal
 #else
     internal
 #endif
-    static unsafe Font FromLogFont(in LOGFONT logFont, IntPtr hdc)
+    static Font FromLogFont(in LOGFONT logFont, IntPtr hdc)
     {
-        int status;
-        IntPtr font;
+        Status status;
+        GpFont* font;
         fixed (LOGFONT* lf = &logFont)
         {
-            status = Gdip.GdipCreateFontFromLogfontW(hdc, lf, out font);
+            status = PInvoke.GdipCreateFontFromLogfont((HDC)hdc, (LOGFONTW*)lf, &font);
         }
 
         // Special case this incredibly common error message to give more information
-        if (status == Gdip.NotTrueTypeFont)
+        if (status == Status.NotTrueTypeFont)
         {
             throw new ArgumentException(SR.GdiplusNotTrueTypeFont_NoName);
         }
-        else if (status != Gdip.Ok)
+        else if (status != Status.Ok)
         {
             throw Gdip.StatusException(status);
         }
 
         // GDI+ returns font = 0 even though the status is Ok.
-        if (font == IntPtr.Zero)
+        if (font is null)
         {
             throw new ArgumentException(SR.Format(SR.GdiplusNotTrueTypeFont, logFont.AsString()));
         }
@@ -597,12 +602,12 @@ internal
     }
 
     /// <summary>
-    /// Creates a <see cref="Font"/> from the given LOGFONT using the given device context.
+    ///  Creates a <see cref="Font"/> from the given LOGFONT using the given device context.
     /// </summary>
     /// <param name="lf">A boxed LOGFONT.</param>
     /// <param name="hdc">Handle to a device context (HDC).</param>
     /// <returns>The newly created <see cref="Font"/>.</returns>
-    public static unsafe Font FromLogFont(object lf, IntPtr hdc)
+    public static Font FromLogFont(object lf, IntPtr hdc)
     {
         ArgumentNullException.ThrowIfNull(lf);
 
@@ -635,31 +640,31 @@ internal
     /// <returns>The newly created <see cref="Font"/>.</returns>
     public static Font FromHdc(IntPtr hdc)
     {
-        IntPtr font = IntPtr.Zero;
-        int status = Gdip.GdipCreateFontFromDC(hdc, ref font);
+        GpFont* font;
+        Status status = PInvoke.GdipCreateFontFromDC((HDC)hdc, &font);
 
         // Special case this incredibly common error message to give more information
-        if (status == Gdip.NotTrueTypeFont)
+        if (status == Status.NotTrueTypeFont)
         {
             throw new ArgumentException(SR.GdiplusNotTrueTypeFont_NoName);
         }
-        else if (status != Gdip.Ok)
+        else if (status != Status.Ok)
         {
             throw Gdip.StatusException(status);
         }
 
-        return new Font(font, 0, false);
+        return new Font(font, 0, gdiVerticalFont: false);
     }
 
     /// <summary>
-    /// Creates an exact copy of this <see cref='Font'/>.
+    ///  Creates an exact copy of this <see cref='Font'/>.
     /// </summary>
     public object Clone()
     {
-        int status = Gdip.GdipCloneFont(new HandleRef(this, _nativeFont), out IntPtr clonedFont);
-        Gdip.CheckStatus(status);
-
-        return new Font(clonedFont, _gdiCharSet, _gdiVerticalFont);
+        GpFont* font;
+        PInvoke.GdipCloneFont(_nativeFont, &font).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return new Font(font, _gdiCharSet, _gdiVerticalFont);
     }
 
     private void SetFontFamily(FontFamily family)
@@ -667,7 +672,7 @@ internal
         _fontFamily = family;
 
         // GDI+ creates ref-counted singleton FontFamily objects based on the family name so all managed
-        // objects with same family name share the underlying GDI+ native pointer. The unmanged object is
+        // objects with same family name share the underlying GDI+ native pointer. The unmanaged object is
         // destroyed when its ref-count gets to zero.
         //
         // Make sure _fontFamily is not finalized so the underlying singleton object is kept alive.
@@ -679,7 +684,7 @@ internal
     {
         if (familyName?.Length > 1 && familyName[0] == '@')
         {
-            return familyName.Substring(1);
+            return familyName[1..];
         }
 
         return familyName;

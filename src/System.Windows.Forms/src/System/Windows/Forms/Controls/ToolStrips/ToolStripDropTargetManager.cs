@@ -290,7 +290,7 @@ internal class ToolStripDropTargetManager : IDropTarget
                 if (dragEnterArgs.DropImageType > DropImageType.Invalid && _owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
                 {
                     DragDropHelper.SetDropDescription(dragEnterArgs);
-                    DragDropHelper.DragEnter(toolStrip.Handle, dragEnterArgs);
+                    DragDropHelper.DragEnter(toolStrip.HWND, dragEnterArgs);
                 }
             }
         }

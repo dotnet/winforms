@@ -554,7 +554,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     protected virtual Type DefaultTabType => typeof(PropertiesTab);
-#nullable disable
+
     /// <summary>
     ///  Gets or sets a value indicating whether the <see cref="PropertyGrid"/> control paints its toolbar
     ///  with flat buttons.
@@ -584,7 +584,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ForeColorChanged
+    public new event EventHandler? ForeColorChanged
     {
         add => base.ForeColorChanged += value;
         remove => base.ForeColorChanged -= value;
@@ -819,7 +819,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler PaddingChanged
+    public new event EventHandler? PaddingChanged
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
@@ -843,18 +843,18 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
             if ((value & PropertySort.Categorized) != 0)
             {
-                newButton = _viewSortButtons[CategorySortButtonIndex];
+                newButton = _viewSortButtons![CategorySortButtonIndex];
             }
             else if ((value & PropertySort.Alphabetical) != 0)
             {
-                newButton = _viewSortButtons[AlphaSortButtonIndex];
+                newButton = _viewSortButtons![AlphaSortButtonIndex];
             }
             else
             {
-                newButton = _viewSortButtons[NoSortButtonIndex];
+                newButton = _viewSortButtons![NoSortButtonIndex];
             }
 
-            GridItem selectedGridItem = SelectedGridItem;
+            GridItem? selectedGridItem = SelectedGridItem;
 
             OnViewSortButtonClick(newButton, EventArgs.Empty);
 
@@ -890,7 +890,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [SRDescription(nameof(SR.PropertyGridSelectedObjectDesc))]
     [SRCategory(nameof(SR.CatBehavior))]
     [TypeConverter(typeof(SelectedObjectConverter))]
-    public object SelectedObject
+    public object? SelectedObject
     {
         get => _selectedObjects is null || _selectedObjects.Length == 0 ? null : _selectedObjects[0];
         set => SelectedObjects = value is null ? Array.Empty<object>() : (new object[] { value });
@@ -898,6 +898,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public object[] SelectedObjects
     {
         get => _selectedObjects is null ? Array.Empty<object>() : (object[])_selectedObjects.Clone();
@@ -960,7 +961,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                     if (newObject is ICustomTypeDescriptor descriptor)
                     {
-                        newObject = descriptor.GetPropertyOwner(pd: null);
+                        newObject = descriptor.GetPropertyOwner(pd: null)!;
                     }
 
                     Type newType = newObject.GetType();
@@ -1018,8 +1019,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 {
                     // Throw away any extra component only tabs.
 
-                    Type tabType = _selectedTab?.TabType;
-                    ToolStripButton viewTabButton = null;
+                    Type? tabType = _selectedTab?.TabType;
+                    ToolStripButton? viewTabButton = null;
                     RefreshTabs(PropertyTabScope.Component);
                     EnableTabs();
 
@@ -1047,7 +1048,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                     BrowsableAttributes.CopyTo(attributes, 0);
 
                     // Used to avoid looking up events on the same type multiple times.
-                    HashSet<Type> typesWithEvents = _selectedObjects.Length > 10 ? new() : null;
+                    HashSet<Type>? typesWithEvents = _selectedObjects.Length > 10 ? new() : null;
 
                     for (int i = 0; i < _selectedObjects.Length && showEvents; i++)
                     {
@@ -1055,7 +1056,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                         if (currentObject is ICustomTypeDescriptor descriptor)
                         {
-                            currentObject = descriptor.GetPropertyOwner(null);
+                            currentObject = descriptor.GetPropertyOwner(pd: null)!;
                         }
 
                         Type objectType = currentObject.GetType();
@@ -1094,9 +1095,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             // If you select an events tab for your designer and double click to go to code, it should
             // be the events tab when you get back to the designer. Check for that state here and
             // make sure we select and refresh that tab when we load.
-            if (_selectedObjects.Length > 0 && GetFlag(Flags.ReInitTab))
+            if (_selectedObjects!.Length > 0 && GetFlag(Flags.ReInitTab))
             {
-                object designerKey = ActiveDesigner;
+                object? designerKey = ActiveDesigner;
 
                 // Get the active designer and see if we've stashed away state for it.
                 if (TryGetSavedTabIndex(out int selectedTab))
@@ -1133,14 +1134,15 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         get
         {
             Debug.Assert(_selectedTab is not null, "Invalid tab selection!");
-            return _selectedTab?.Tab;
+            return _selectedTab?.Tab!;
         }
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public GridItem SelectedGridItem
+    [DisallowNull]
+    public GridItem? SelectedGridItem
     {
         get => _gridView.SelectedGridEntry ?? _rootEntry;
         set => _gridView.SelectedGridEntry = (GridEntry)value;
@@ -1148,7 +1150,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     protected internal override bool ShowFocusCues => true;
 
-    public override ISite Site
+    public override ISite? Site
     {
         get => base.Site;
         set
@@ -1172,6 +1174,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public override string Text
     {
         get => base.Text;
@@ -1179,7 +1182,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     [Browsable(false)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => base.TextChanged += value;
         remove => base.TextChanged -= value;
@@ -1255,7 +1258,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    protected ToolStripRenderer ToolStripRenderer
+    protected ToolStripRenderer? ToolStripRenderer
     {
         get => _toolStrip?.Renderer;
         set
@@ -1320,15 +1323,16 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         image = ScaleHelper.CopyAndScaleToSize(image, s_normalButtonSize);
-        int result = _normalButtonImages.Images.Count;
+        int result = _normalButtonImages!.Images.Count;
         _normalButtonImages.Images.Add(image);
+
         return result;
     }
 
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event KeyEventHandler KeyDown
+    public new event KeyEventHandler? KeyDown
     {
         add => base.KeyDown += value;
         remove => base.KeyDown -= value;
@@ -1337,7 +1341,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event KeyPressEventHandler KeyPress
+    public new event KeyPressEventHandler? KeyPress
     {
         add => base.KeyPress += value;
         remove => base.KeyPress -= value;
@@ -1346,7 +1350,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event KeyEventHandler KeyUp
+    public new event KeyEventHandler? KeyUp
     {
         add => base.KeyUp += value;
         remove => base.KeyUp -= value;
@@ -1355,7 +1359,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event MouseEventHandler MouseDown
+    public new event MouseEventHandler? MouseDown
     {
         add => base.MouseDown += value;
         remove => base.MouseDown -= value;
@@ -1364,7 +1368,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event MouseEventHandler MouseUp
+    public new event MouseEventHandler? MouseUp
     {
         add => base.MouseUp += value;
         remove => base.MouseUp -= value;
@@ -1373,7 +1377,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event MouseEventHandler MouseMove
+    public new event MouseEventHandler? MouseMove
     {
         add => base.MouseMove += value;
         remove => base.MouseMove -= value;
@@ -1382,7 +1386,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event EventHandler MouseEnter
+    public new event EventHandler? MouseEnter
     {
         add => base.MouseEnter += value;
         remove => base.MouseEnter -= value;
@@ -1391,7 +1395,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event EventHandler MouseLeave
+    public new event EventHandler? MouseLeave
     {
         add => base.MouseLeave += value;
         remove => base.MouseLeave -= value;
@@ -1402,13 +1406,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// </summary>
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
-    public event PropertyValueChangedEventHandler PropertyValueChanged
+    public event PropertyValueChangedEventHandler? PropertyValueChanged
     {
         add => Events.AddHandler(s_propertyValueChangedEvent, value);
         remove => Events.RemoveHandler(s_propertyValueChangedEvent, value);
     }
 
-    event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged
+    event ComponentRenameEventHandler? IComPropertyBrowser.ComComponentNameChanged
     {
         add => Events.AddHandler(s_comComponentNameChangedEvent, value);
         remove => Events.RemoveHandler(s_comComponentNameChangedEvent, value);
@@ -1419,7 +1423,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// </summary>
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
-    public event PropertyTabChangedEventHandler PropertyTabChanged
+    public event PropertyTabChangedEventHandler? PropertyTabChanged
     {
         add => Events.AddHandler(s_propertyTabChangedEvent, value);
         remove => Events.RemoveHandler(s_propertyTabChangedEvent, value);
@@ -1430,7 +1434,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// </summary>
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
-    public event EventHandler PropertySortChanged
+    public event EventHandler? PropertySortChanged
     {
         add => Events.AddHandler(s_propertySortChangedEvent, value);
         remove => Events.RemoveHandler(s_propertySortChangedEvent, value);
@@ -1441,7 +1445,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// </summary>
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
-    public event SelectedGridItemChangedEventHandler SelectedGridItemChanged
+    public event SelectedGridItemChangedEventHandler? SelectedGridItemChanged
     {
         add => Events.AddHandler(s_selectedGridItemChangedEvent, value);
         remove => Events.RemoveHandler(s_selectedGridItemChangedEvent, value);
@@ -1449,15 +1453,19 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
-    public event EventHandler SelectedObjectsChanged
+    public event EventHandler? SelectedObjectsChanged
     {
         add => Events.AddHandler(s_selectedObjectsChangedEvent, value);
         remove => Events.RemoveHandler(s_selectedObjectsChangedEvent, value);
     }
 
-    internal void AddTab(Type tabType, PropertyTabScope scope, object @object = null, bool setupToolbar = true)
+    internal void AddTab(
+        Type tabType,
+        PropertyTabScope scope,
+        object? @object = null,
+        bool setupToolbar = true)
     {
-        PropertyTab tab = null;
+        PropertyTab? tab = null;
         int tabIndex = -1;
 
         // Check to see if we've already got a tab of this type.
@@ -1476,7 +1484,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             // The tabs need service providers. The one we hold onto is not good enough,
             // so try to get the one off of the component's site.
-            IDesignerHost host = null;
+            IDesignerHost? host = null;
             if (@object is IComponent component && component.Site is ISite site)
             {
                 host = site.GetService<IDesignerHost>();
@@ -1536,11 +1544,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             try
             {
-                object[] tabComponents = tab.Components;
+                object[]? tabComponents = tab.Components;
                 int oldArraySize = tabComponents is null ? 0 : tabComponents.Length;
 
                 object[] newComponents = new object[oldArraySize + 1];
-                if (oldArraySize > 0)
+                if (tabComponents is not null)
                 {
                     Array.Copy(tabComponents, newComponents, oldArraySize);
                 }
@@ -1561,7 +1569,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             ShowEventsButton(false);
         }
     }
-
+#nullable disable
     /// <summary> Collapses all the nodes in the PropertyGrid</summary>
     public void CollapseAllGridItems()
         => _gridView.RecursivelyExpand(_rootEntry, initialize: false, expand: false, maxExpands: -1);

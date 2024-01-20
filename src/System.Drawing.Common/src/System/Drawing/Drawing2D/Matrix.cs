@@ -1,80 +1,78 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Numerics;
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Drawing2D;
 
-public sealed class Matrix : MarshalByRefObject, IDisposable
+public unsafe sealed class Matrix : MarshalByRefObject, IDisposable
 {
-    internal IntPtr NativeMatrix { get; private set; }
+    internal GdiPlus.Matrix* NativeMatrix { get; private set; }
 
     public Matrix()
     {
-        Gdip.CheckStatus(Gdip.GdipCreateMatrix(out IntPtr nativeMatrix));
-        NativeMatrix = nativeMatrix;
+        GdiPlus.Matrix* matrix;
+        PInvoke.GdipCreateMatrix(&matrix).ThrowIfFailed();
+        NativeMatrix = matrix;
     }
 
     public Matrix(float m11, float m12, float m21, float m22, float dx, float dy)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateMatrix2(m11, m12, m21, m22, dx, dy, out IntPtr nativeMatrix));
-        NativeMatrix = nativeMatrix;
+        GdiPlus.Matrix* matrix;
+        PInvoke.GdipCreateMatrix2(m11, m12, m21, m22, dx, dy, &matrix).ThrowIfFailed();
+        NativeMatrix = matrix;
     }
 
     /// <summary>
-    /// Construct a <see cref="Matrix"/> utilizing the given <paramref name="matrix"/>.
+    ///  Construct a <see cref="Matrix"/> utilizing the given <paramref name="matrix"/>.
     /// </summary>
     /// <param name="matrix">Matrix data to construct from.</param>
     public Matrix(Matrix3x2 matrix) : this(CreateNativeHandle(matrix))
     {
     }
 
-    private Matrix(IntPtr nativeMatrix)
-    {
-        NativeMatrix = nativeMatrix;
-    }
+    private Matrix(GdiPlus.Matrix* nativeMatrix) => NativeMatrix = nativeMatrix;
 
-    internal static IntPtr CreateNativeHandle(Matrix3x2 matrix)
+    internal static GdiPlus.Matrix* CreateNativeHandle(Matrix3x2 matrix)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateMatrix2(
+        GdiPlus.Matrix* nativeMatrix;
+        PInvoke.GdipCreateMatrix2(
             matrix.M11,
             matrix.M12,
             matrix.M21,
             matrix.M22,
             matrix.M31,
             matrix.M32,
-            out IntPtr nativeMatrix));
+            &nativeMatrix).ThrowIfFailed();
 
         return nativeMatrix;
     }
 
-    public unsafe Matrix(RectangleF rect, PointF[] plgpts)
+    public Matrix(RectangleF rect, PointF[] plgpts)
     {
         ArgumentNullException.ThrowIfNull(plgpts);
-
         if (plgpts.Length != 3)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         fixed (PointF* p = plgpts)
         {
-            Gdip.CheckStatus(Gdip.GdipCreateMatrix3(ref rect, p, out IntPtr nativeMatrix));
-            NativeMatrix = nativeMatrix;
+            GdiPlus.Matrix* matrix;
+            PInvoke.GdipCreateMatrix3((RectF*)&rect, (GdiPlus.PointF*)p, &matrix).ThrowIfFailed();
+            NativeMatrix = matrix;
         }
     }
 
-    public unsafe Matrix(Rectangle rect, Point[] plgpts)
+    public Matrix(Rectangle rect, Point[] plgpts)
     {
         ArgumentNullException.ThrowIfNull(plgpts);
-
         if (plgpts.Length != 3)
-            throw Gdip.StatusException(Gdip.InvalidParameter);
+            throw Status.InvalidParameter.GetException();
 
         fixed (Point* p = plgpts)
         {
-            Gdip.CheckStatus(Gdip.GdipCreateMatrix3I(ref rect, p, out IntPtr nativeMatrix));
-            NativeMatrix = nativeMatrix;
+            GdiPlus.Matrix* matrix;
+            PInvoke.GdipCreateMatrix3I((Rect*)&rect, (GdiPlus.Point*)p, &matrix).ThrowIfFailed();
+            NativeMatrix = matrix;
         }
     }
 
@@ -86,14 +84,14 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
 
     private void DisposeInternal()
     {
-        if (NativeMatrix != IntPtr.Zero)
+        if (NativeMatrix is not null)
         {
             if (Gdip.Initialized)
             {
-                Gdip.GdipDeleteMatrix(new HandleRef(this, NativeMatrix));
+                PInvoke.GdipDeleteMatrix(NativeMatrix);
             }
 
-            NativeMatrix = IntPtr.Zero;
+            NativeMatrix = null;
         }
     }
 
@@ -101,8 +99,10 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
 
     public Matrix Clone()
     {
-        Gdip.CheckStatus(Gdip.GdipCloneMatrix(new HandleRef(this, NativeMatrix), out IntPtr clonedMatrix));
-        return new Matrix(clonedMatrix);
+        GdiPlus.Matrix* matrix;
+        PInvoke.GdipCloneMatrix(NativeMatrix, &matrix).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return new Matrix(matrix);
     }
 
     public float[] Elements
@@ -118,42 +118,46 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
     /// <summary>
     ///  Gets/sets the elements for the matrix.
     /// </summary>
-    public unsafe Matrix3x2 MatrixElements
+    public Matrix3x2 MatrixElements
     {
         get
         {
             Matrix3x2 matrix = default;
-            Gdip.CheckStatus(Gdip.GdipGetMatrixElements(new HandleRef(this, NativeMatrix), (float*)&matrix));
+            PInvoke.GdipGetMatrixElements(NativeMatrix, (float*)&matrix).ThrowIfFailed();
+            GC.KeepAlive(this);
             return matrix;
         }
         set
         {
-            Gdip.CheckStatus(Gdip.GdipSetMatrixElements(
-                new HandleRef(this, NativeMatrix),
+            PInvoke.GdipSetMatrixElements(
+                NativeMatrix,
                 value.M11,
                 value.M12,
                 value.M21,
                 value.M22,
                 value.M31,
-                value.M32));
+                value.M32).ThrowIfFailed();
+
+            GC.KeepAlive(this);
         }
     }
 
-    internal unsafe void GetElements(Span<float> elements)
+    internal void GetElements(Span<float> elements)
     {
         Debug.Assert(elements.Length >= 6);
 
         fixed (float* m = elements)
         {
-            Gdip.CheckStatus(Gdip.GdipGetMatrixElements(new HandleRef(this, NativeMatrix), m));
+            PInvoke.GdipGetMatrixElements(NativeMatrix, m).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
-    public unsafe float OffsetX => Offset.X;
+    public float OffsetX => Offset.X;
 
-    public unsafe float OffsetY => Offset.Y;
+    public float OffsetY => Offset.Y;
 
-    internal unsafe PointF Offset
+    internal PointF Offset
     {
         get
         {
@@ -165,10 +169,12 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
 
     public void Reset()
     {
-        Gdip.CheckStatus(Gdip.GdipSetMatrixElements(
-            new HandleRef(this, NativeMatrix),
+        PInvoke.GdipSetMatrixElements(
+            NativeMatrix,
             1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f));
+            1.0f, 0.0f, 0.0f).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 
     public void Multiply(Matrix matrix) => Multiply(matrix, MatrixOrder.Prepend);
@@ -180,131 +186,144 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
         if (matrix.NativeMatrix == NativeMatrix)
             throw new InvalidOperationException(SR.GdiplusObjectBusy);
 
-        Gdip.CheckStatus(Gdip.GdipMultiplyMatrix(
-            new HandleRef(this, NativeMatrix),
-            new HandleRef(matrix, matrix.NativeMatrix),
-            order));
+        PInvoke.GdipMultiplyMatrix(NativeMatrix, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
+        GC.KeepAlive(matrix);
     }
 
     public void Translate(float offsetX, float offsetY) => Translate(offsetX, offsetY, MatrixOrder.Prepend);
 
     public void Translate(float offsetX, float offsetY, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipTranslateMatrix(
-            new HandleRef(this, NativeMatrix),
-            offsetX, offsetY, order));
+        PInvoke.GdipTranslateMatrix(NativeMatrix, offsetX, offsetY, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Scale(float scaleX, float scaleY) => Scale(scaleX, scaleY, MatrixOrder.Prepend);
 
     public void Scale(float scaleX, float scaleY, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipScaleMatrix(new HandleRef(this, NativeMatrix), scaleX, scaleY, order));
+        PInvoke.GdipScaleMatrix(NativeMatrix, scaleX, scaleY, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Rotate(float angle) => Rotate(angle, MatrixOrder.Prepend);
 
     public void Rotate(float angle, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipRotateMatrix(new HandleRef(this, NativeMatrix), angle, order));
+        PInvoke.GdipRotateMatrix(NativeMatrix, angle, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void RotateAt(float angle, PointF point) => RotateAt(angle, point, MatrixOrder.Prepend);
     public void RotateAt(float angle, PointF point, MatrixOrder order)
     {
-        int status;
+        Status status;
         if (order == MatrixOrder.Prepend)
         {
-            status = Gdip.GdipTranslateMatrix(new HandleRef(this, NativeMatrix), point.X, point.Y, order);
-            status |= Gdip.GdipRotateMatrix(new HandleRef(this, NativeMatrix), angle, order);
-            status |= Gdip.GdipTranslateMatrix(new HandleRef(this, NativeMatrix), -point.X, -point.Y, order);
+            status = PInvoke.GdipTranslateMatrix(NativeMatrix, point.X, point.Y, (GdiPlus.MatrixOrder)order);
+            status |= PInvoke.GdipRotateMatrix(NativeMatrix, angle, (GdiPlus.MatrixOrder)order);
+            status |= PInvoke.GdipTranslateMatrix(NativeMatrix, -point.X, -point.Y, (GdiPlus.MatrixOrder)order);
         }
         else
         {
-            status = Gdip.GdipTranslateMatrix(new HandleRef(this, NativeMatrix), -point.X, -point.Y, order);
-            status |= Gdip.GdipRotateMatrix(new HandleRef(this, NativeMatrix), angle, order);
-            status |= Gdip.GdipTranslateMatrix(new HandleRef(this, NativeMatrix), point.X, point.Y, order);
+            status = PInvoke.GdipTranslateMatrix(NativeMatrix, -point.X, -point.Y, (GdiPlus.MatrixOrder)order);
+            status |= PInvoke.GdipRotateMatrix(NativeMatrix, angle, (GdiPlus.MatrixOrder)order);
+            status |= PInvoke.GdipTranslateMatrix(NativeMatrix, point.X, point.Y, (GdiPlus.MatrixOrder)order);
         }
 
-        if (status != Gdip.Ok)
-            throw Gdip.StatusException(status);
+        status.ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Shear(float shearX, float shearY)
     {
-        Gdip.CheckStatus(Gdip.GdipShearMatrix(new HandleRef(this, NativeMatrix), shearX, shearY, MatrixOrder.Prepend));
+        PInvoke.GdipShearMatrix(NativeMatrix, shearX, shearY, GdiPlus.MatrixOrder.MatrixOrderPrepend).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Shear(float shearX, float shearY, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipShearMatrix(new HandleRef(this, NativeMatrix), shearX, shearY, order));
+        PInvoke.GdipShearMatrix(NativeMatrix, shearX, shearY, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void Invert()
     {
-        Gdip.CheckStatus(Gdip.GdipInvertMatrix(new HandleRef(this, NativeMatrix)));
+        PInvoke.GdipInvertMatrix(NativeMatrix).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
-    public unsafe void TransformPoints(PointF[] pts)
+    public void TransformPoints(PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         fixed (PointF* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipTransformMatrixPoints(
-                new HandleRef(this, NativeMatrix),
-                p,
-                pts.Length));
+            PInvoke.GdipTransformMatrixPoints(
+                NativeMatrix,
+                (GdiPlus.PointF*)p,
+                pts.Length).ThrowIfFailed();
         }
+
+        GC.KeepAlive(this);
     }
 
-    public unsafe void TransformPoints(Point[] pts)
+    public void TransformPoints(Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         fixed (Point* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipTransformMatrixPointsI(
-                new HandleRef(this, NativeMatrix),
-                p,
-                pts.Length));
+            PInvoke.GdipTransformMatrixPointsI(
+                NativeMatrix,
+                (GdiPlus.Point*)p,
+                pts.Length).ThrowIfFailed();
         }
+
+        GC.KeepAlive(this);
     }
 
-    public unsafe void TransformVectors(PointF[] pts)
+    public void TransformVectors(PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         fixed (PointF* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipVectorTransformMatrixPoints(
-                new HandleRef(this, NativeMatrix),
-                p,
-                pts.Length));
+            PInvoke.GdipVectorTransformMatrixPoints(
+                NativeMatrix,
+                (GdiPlus.PointF*)p,
+                pts.Length).ThrowIfFailed();
         }
+
+        GC.KeepAlive(this);
     }
 
     public void VectorTransformPoints(Point[] pts) => TransformVectors(pts);
 
-    public unsafe void TransformVectors(Point[] pts)
+    public void TransformVectors(Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
 
         fixed (Point* p = pts)
         {
-            Gdip.CheckStatus(Gdip.GdipVectorTransformMatrixPointsI(
-                new HandleRef(this, NativeMatrix),
-                p,
-                pts.Length));
+            PInvoke.GdipVectorTransformMatrixPointsI(
+                NativeMatrix,
+                (GdiPlus.Point*)p,
+                pts.Length).ThrowIfFailed();
         }
+
+        GC.KeepAlive(this);
     }
 
     public bool IsInvertible
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipIsMatrixInvertible(new HandleRef(this, NativeMatrix), out int isInvertible));
-            return isInvertible != 0;
+            BOOL invertible;
+            PInvoke.GdipIsMatrixInvertible(NativeMatrix, &invertible).ThrowIfFailed();
+            GC.KeepAlive(this);
+            return invertible;
         }
     }
 
@@ -312,22 +331,27 @@ public sealed class Matrix : MarshalByRefObject, IDisposable
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipIsMatrixIdentity(new HandleRef(this, NativeMatrix), out int isIdentity));
-            return isIdentity != 0;
+            BOOL identity;
+            PInvoke.GdipIsMatrixIdentity(NativeMatrix, &identity).ThrowIfFailed();
+            GC.KeepAlive(this);
+            return identity;
         }
     }
 
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (!(obj is Matrix matrix2))
+        if (obj is not Matrix matrix2)
             return false;
 
-        Gdip.CheckStatus(Gdip.GdipIsMatrixEqual(
-            new HandleRef(this, NativeMatrix),
-            new HandleRef(matrix2, matrix2.NativeMatrix),
-            out int isEqual));
+        BOOL equal;
+        PInvoke.GdipIsMatrixEqual(
+            NativeMatrix,
+            matrix2.NativeMatrix,
+            &equal).ThrowIfFailed();
 
-        return isEqual != 0;
+        GC.KeepAlive(this);
+        GC.KeepAlive(matrix2);
+        return equal;
     }
 
     public override int GetHashCode() => base.GetHashCode();

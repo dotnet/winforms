@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="MapWindowPoints(HWND, HWND, Point*, uint)"/>
     public static unsafe int MapWindowPoints<TFrom, TTo>(TFrom hWndFrom, TTo hWndTo, ref RECT lpRect)
         where TFrom : IHandle<HWND>
         where TTo : IHandle<HWND>
@@ -20,6 +21,7 @@ internal static partial class PInvoke
         }
     }
 
+    /// <inheritdoc cref="MapWindowPoints(HWND, HWND, Point*, uint)"/>
     public static unsafe int MapWindowPoints<TFrom, TTo>(TFrom hWndFrom, TTo hWndTo, ref Point lpPoint)
         where TFrom : IHandle<HWND>
         where TTo : IHandle<HWND>

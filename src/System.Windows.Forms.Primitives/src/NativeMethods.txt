@@ -293,8 +293,10 @@ IDataObject
 IDC_*
 IDispatchEx
 IDropSource
+IDragSourceHelper2
 IDropSourceNotify
 IDropTarget
+IDropTargetHelper
 IEnumFORMATETC
 IEnumOLEVERB
 IEnumString
@@ -414,6 +416,8 @@ ITextProvider
 ITextProvider2
 ITextRangeProvider
 IToggleProvider
+IUIAutomation
+IUIAutomationElement
 IValueProvider
 IVBFormat
 IVBGetControl
@@ -548,7 +552,9 @@ OleCreatePropertyFrame
 OleCreatePropertyFrameIndirect
 OleDuplicateData
 OleFlushClipboard
+OleGetClipboard
 OleInitialize
+OleSetClipboard
 OleUninitialize
 OPEN_FILENAME_FLAGS
 OPEN_FILENAME_FLAGS_EX

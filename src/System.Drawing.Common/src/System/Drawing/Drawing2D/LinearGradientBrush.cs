@@ -2,75 +2,57 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Drawing2D;
 
-public sealed class LinearGradientBrush : Brush
+public unsafe sealed class LinearGradientBrush : Brush
 {
     private bool _interpolationColorsWasSet;
 
     public LinearGradientBrush(PointF point1, PointF point2, Color color1, Color color2)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateLineBrush(
-            ref point1, ref point2,
-            color1.ToArgb(), color2.ToArgb(),
-            WrapMode.Tile,
-            out IntPtr nativeBrush));
+        GpLineGradient* nativeBrush;
+        PInvoke.GdipCreateLineBrush(
+            (GdiPlus.PointF*)&point1, (GdiPlus.PointF*)&point2,
+            (uint)color1.ToArgb(), (uint)color2.ToArgb(),
+            GdiPlus.WrapMode.WrapModeTile,
+            &nativeBrush).ThrowIfFailed();
 
-        SetNativeBrushInternal(nativeBrush);
+        SetNativeBrushInternal((GpBrush*)nativeBrush);
     }
 
     public LinearGradientBrush(Point point1, Point point2, Color color1, Color color2)
+        : this((PointF)point1, (PointF)point2, color1, color2)
     {
-        Gdip.CheckStatus(Gdip.GdipCreateLineBrushI(
-            ref point1, ref point2,
-            color1.ToArgb(), color2.ToArgb(),
-            WrapMode.Tile,
-            out IntPtr nativeBrush));
-
-        SetNativeBrushInternal(nativeBrush);
     }
 
     public LinearGradientBrush(RectangleF rect, Color color1, Color color2, LinearGradientMode linearGradientMode)
     {
-        if (linearGradientMode < LinearGradientMode.Horizontal || linearGradientMode > LinearGradientMode.BackwardDiagonal)
-            throw new InvalidEnumArgumentException(nameof(linearGradientMode), unchecked((int)linearGradientMode), typeof(LinearGradientMode));
+        if (linearGradientMode is < LinearGradientMode.Horizontal or > LinearGradientMode.BackwardDiagonal)
+            throw new InvalidEnumArgumentException(nameof(linearGradientMode), (int)linearGradientMode, typeof(LinearGradientMode));
 
         if (rect.Width == 0.0 || rect.Height == 0.0)
             throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
 
-        Gdip.CheckStatus(Gdip.GdipCreateLineBrushFromRect(
-            ref rect,
-            color1.ToArgb(),
-            color2.ToArgb(),
-            linearGradientMode,
-            WrapMode.Tile,
-            out IntPtr nativeBrush));
+        GpLineGradient* nativeBrush;
+        PInvoke.GdipCreateLineBrushFromRect(
+            (RectF*)&rect,
+            (ARGB)color1,
+            (ARGB)color2,
+            (GdiPlus.LinearGradientMode)linearGradientMode,
+            GdiPlus.WrapMode.WrapModeTile,
+            &nativeBrush).ThrowIfFailed();
 
-        SetNativeBrushInternal(nativeBrush);
+        SetNativeBrushInternal((GpBrush*)nativeBrush);
     }
 
     public LinearGradientBrush(Rectangle rect, Color color1, Color color2, LinearGradientMode linearGradientMode)
+        : this((RectangleF)rect, color1, color2, linearGradientMode)
     {
-        if (linearGradientMode < LinearGradientMode.Horizontal || linearGradientMode > LinearGradientMode.BackwardDiagonal)
-            throw new InvalidEnumArgumentException(nameof(linearGradientMode), unchecked((int)linearGradientMode), typeof(LinearGradientMode));
-        if (rect.Width == 0 || rect.Height == 0)
-            throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
-
-        Gdip.CheckStatus(Gdip.GdipCreateLineBrushFromRectI(
-            ref rect,
-            color1.ToArgb(),
-            color2.ToArgb(),
-            linearGradientMode,
-            WrapMode.Tile,
-            out IntPtr nativeBrush));
-
-        SetNativeBrushInternal(nativeBrush);
     }
 
-    public LinearGradientBrush(RectangleF rect, Color color1, Color color2, float angle) : this(rect, color1, color2, angle, false)
+    public LinearGradientBrush(RectangleF rect, Color color1, Color color2, float angle)
+        : this(rect, color1, color2, angle, isAngleScaleable: false)
     {
     }
 
@@ -79,70 +61,63 @@ public sealed class LinearGradientBrush : Brush
         if (rect.Width == 0.0 || rect.Height == 0.0)
             throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
 
-        Gdip.CheckStatus(Gdip.GdipCreateLineBrushFromRectWithAngle(
-            ref rect,
-            color1.ToArgb(),
-            color2.ToArgb(),
+        GpLineGradient* nativeBrush;
+        PInvoke.GdipCreateLineBrushFromRectWithAngle(
+            (RectF*)&rect,
+            (ARGB)color1,
+            (ARGB)color2,
             angle,
             isAngleScaleable,
-            (int)WrapMode.Tile,
-            out IntPtr nativeBrush));
+            GdiPlus.WrapMode.WrapModeTile,
+            &nativeBrush).ThrowIfFailed();
 
-        SetNativeBrushInternal(nativeBrush);
+        SetNativeBrushInternal((GpBrush*)nativeBrush);
     }
 
-    public LinearGradientBrush(Rectangle rect, Color color1, Color color2, float angle) : this(rect, color1, color2, angle, false)
+    public LinearGradientBrush(Rectangle rect, Color color1, Color color2, float angle)
+        : this(rect, color1, color2, angle, isAngleScaleable: false)
     {
     }
 
     public LinearGradientBrush(Rectangle rect, Color color1, Color color2, float angle, bool isAngleScaleable)
+        : this((RectangleF)rect, color1, color2, angle, isAngleScaleable)
     {
-        if (rect.Width == 0 || rect.Height == 0)
-            throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
-
-        Gdip.CheckStatus(Gdip.GdipCreateLineBrushFromRectWithAngleI(
-            ref rect,
-            color1.ToArgb(),
-            color2.ToArgb(),
-            angle,
-            isAngleScaleable,
-            WrapMode.Tile,
-            out IntPtr nativeBrush));
-
-        SetNativeBrushInternal(nativeBrush);
     }
 
-    internal LinearGradientBrush(IntPtr nativeBrush)
+    internal LinearGradientBrush(GpLineGradient* nativeBrush)
     {
-        Debug.Assert(nativeBrush != IntPtr.Zero, "Initializing native brush with null.");
-        SetNativeBrushInternal(nativeBrush);
+        Debug.Assert(nativeBrush is not null, "Initializing native brush with null.");
+        SetNativeBrushInternal((GpBrush*)nativeBrush);
     }
+
+    internal GpLineGradient* NativeLineGradient => (GpLineGradient*)NativeBrush;
 
     public override object Clone()
     {
-        Gdip.CheckStatus(Gdip.GdipCloneBrush(new HandleRef(this, NativeBrush), out IntPtr clonedBrush));
-        return new LinearGradientBrush(clonedBrush);
+        GpBrush* clonedBrush;
+        PInvoke.GdipCloneBrush(NativeBrush, &clonedBrush).ThrowIfFailed();
+        GC.KeepAlive(this);
+        return new LinearGradientBrush((GpLineGradient*)clonedBrush);
     }
 
     public Color[] LinearColors
     {
         get
         {
-            int[] colors = [0, 0];
-            Gdip.CheckStatus(Gdip.GdipGetLineColors(new HandleRef(this, NativeBrush), colors));
+            uint* colors = stackalloc uint[2];
+            PInvoke.GdipGetLineColors(NativeLineGradient, colors).ThrowIfFailed();
+            GC.KeepAlive(this);
 
-            return new Color[]
-            {
-                Color.FromArgb(colors[0]),
-                Color.FromArgb(colors[1])
-            };
+            return
+            [
+                Color.FromArgb((int)colors[0]),
+                Color.FromArgb((int)colors[1])
+            ];
         }
         set
         {
-            Gdip.CheckStatus(Gdip.GdipSetLineColors(
-                new HandleRef(this, NativeBrush),
-                value[0].ToArgb(),
-                value[1].ToArgb()));
+            PInvoke.GdipSetLineColors(NativeLineGradient, (uint)value[0].ToArgb(), (uint)value[1].ToArgb()).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
@@ -150,7 +125,9 @@ public sealed class LinearGradientBrush : Brush
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetLineRect(new HandleRef(this, NativeBrush), out RectangleF rect));
+            RectangleF rect;
+            PInvoke.GdipGetLineRect(NativeLineGradient, (RectF*)&rect).ThrowIfFailed();
+            GC.KeepAlive(this);
             return rect;
         }
     }
@@ -159,15 +136,15 @@ public sealed class LinearGradientBrush : Brush
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetLineGammaCorrection(
-                new HandleRef(this, NativeBrush),
-                out bool useGammaCorrection));
-
+            BOOL useGammaCorrection;
+            PInvoke.GdipGetLineGammaCorrection(NativeLineGradient, &useGammaCorrection).ThrowIfFailed();
+            GC.KeepAlive(this);
             return useGammaCorrection;
         }
         set
         {
-            Gdip.CheckStatus(Gdip.GdipSetLineGammaCorrection(new HandleRef(this, NativeBrush), value));
+            PInvoke.GdipSetLineGammaCorrection(NativeLineGradient, value).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
@@ -181,100 +158,37 @@ public sealed class LinearGradientBrush : Brush
             if (_interpolationColorsWasSet)
                 return null;
 
-            // Figure out the size of blend factor array.
-            Gdip.CheckStatus(Gdip.GdipGetLineBlendCount(new HandleRef(this, NativeBrush), out int retval));
+            int count;
+            PInvoke.GdipGetLineBlendCount(NativeLineGradient, &count).ThrowIfFailed();
+            GC.KeepAlive(this);
 
-            if (retval <= 0)
+            if (count <= 0)
+            {
                 return null;
-
-            // Allocate a temporary native memory buffer.
-            int count = retval;
-            IntPtr factors = IntPtr.Zero;
-            IntPtr positions = IntPtr.Zero;
-
-            try
-            {
-                int size = checked(4 * count);
-                factors = Marshal.AllocHGlobal(size);
-                positions = Marshal.AllocHGlobal(size);
-
-                // Retrieve horizontal blend factors.
-                Gdip.CheckStatus(Gdip.GdipGetLineBlend(new HandleRef(this, NativeBrush), factors, positions, count));
-
-                // Return the result in a managed array.
-                Blend blend = new(count);
-
-                Marshal.Copy(factors, blend.Factors, 0, count);
-                Marshal.Copy(positions, blend.Positions, 0, count);
-
-                return blend;
             }
-            finally
-            {
-                if (factors != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(factors);
-                }
 
-                if (positions != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(positions);
-                }
+            Blend blend = new(count);
+
+            fixed (float* f = blend.Factors, p = blend.Positions)
+            {
+                PInvoke.GdipGetLineBlend(NativeLineGradient, f, p, count).ThrowIfFailed();
+                GC.KeepAlive(this);
+                return blend;
             }
         }
         set
         {
-            // Do explicit parameter validation here; libgdiplus does not correctly validate the arguments
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(value.Factors);
 
-            // This is the original behavior on Desktop .NET
-            if (value is null || value.Factors is null)
-                throw new NullReferenceException();
-
-            if (value.Positions is null)
+            if (value.Positions is null || value.Positions.Length != value.Factors.Length)
                 throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
 
-            int count = value.Factors.Length;
-
-            if (count == 0 || value.Positions.Length == 0)
-                throw new ArgumentException(SR.BlendObjectMustHaveTwoElements);
-            if (count >= 2 && count != value.Positions.Length)
-                throw new ArgumentOutOfRangeException(nameof(value));
-            if (count >= 2 && value.Positions[0] != 0.0F)
-                throw new ArgumentException(SR.BlendObjectFirstElementInvalid);
-            if (count >= 2 && value.Positions[count - 1] != 1.0F)
-                throw new ArgumentException(SR.BlendObjectLastElementInvalid);
-
-            // Allocate temporary native memory buffer and copy input blend factors into it.
-            IntPtr factors = IntPtr.Zero;
-            IntPtr positions = IntPtr.Zero;
-
-            try
+            fixed (float* f = value.Factors, p = value.Positions)
             {
-                int size = checked(4 * count);
-                factors = Marshal.AllocHGlobal(size);
-                positions = Marshal.AllocHGlobal(size);
-
-                Marshal.Copy(value.Factors, 0, factors, count);
-                Marshal.Copy(value.Positions, 0, positions, count);
-
                 // Set blend factors.
-                Gdip.CheckStatus(Gdip.GdipSetLineBlend(
-                    new HandleRef(this, NativeBrush),
-                    factors,
-                    positions,
-                    count));
-            }
-            finally
-            {
-                if (factors != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(factors);
-                }
-
-                if (positions != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(positions);
-                }
+                PInvoke.GdipSetLineBlend(NativeLineGradient, f, p, value.Factors.Length).ThrowIfFailed();
+                GC.KeepAlive(this);
             }
         }
     }
@@ -283,157 +197,68 @@ public sealed class LinearGradientBrush : Brush
 
     public void SetSigmaBellShape(float focus, float scale)
     {
-        if (focus < 0 || focus > 1)
-            throw new ArgumentException(SR.GdiplusInvalidParameter, nameof(focus));
-        if (scale < 0 || scale > 1)
-            throw new ArgumentException(SR.GdiplusInvalidParameter, nameof(scale));
-
-        Gdip.CheckStatus(Gdip.GdipSetLineSigmaBlend(new HandleRef(this, NativeBrush), focus, scale));
+        PInvoke.GdipSetLineSigmaBlend(NativeLineGradient, focus, scale).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void SetBlendTriangularShape(float focus) => SetBlendTriangularShape(focus, (float)1.0);
 
     public void SetBlendTriangularShape(float focus, float scale)
     {
-        if (focus < 0 || focus > 1)
-            throw new ArgumentException(SR.GdiplusInvalidParameter, nameof(focus));
-        if (scale < 0 || scale > 1)
-            throw new ArgumentException(SR.GdiplusInvalidParameter, nameof(scale));
-
-        Gdip.CheckStatus(Gdip.GdipSetLineLinearBlend(new HandleRef(this, NativeBrush), focus, scale));
-
-        // Setting a triangular shape overrides the explicitly set interpolation colors. libgdiplus correctly clears
-        // the interpolation colors (https://github.com/mono/libgdiplus/blob/master/src/lineargradientbrush.c#L959) but
-        // returns WrongState instead of ArgumentException (https://github.com/mono/libgdiplus/blob/master/src/lineargradientbrush.c#L814)
-        // when calling GdipGetLinePresetBlend, so it is important we set this to false. This way, we are sure get_InterpolationColors
-        // will return an ArgumentException.
         _interpolationColorsWasSet = false;
+        PInvoke.GdipSetLineLinearBlend(NativeLineGradient, focus, scale).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public ColorBlend InterpolationColors
     {
         get
         {
-            if (!_interpolationColorsWasSet)
-                throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
-                                            SR.InterpolationColorsColorBlendNotSet, string.Empty));
+            int count;
+            PInvoke.GdipGetLinePresetBlendCount(NativeLineGradient, &count).ThrowIfFailed();
 
-            // Figure out the size of blend factor array.
-            Gdip.CheckStatus(Gdip.GdipGetLinePresetBlendCount(new HandleRef(this, NativeBrush), out int retval));
-
-            // Allocate temporary native memory buffer.
-            int count = retval;
-
-            IntPtr colors = IntPtr.Zero;
-            IntPtr positions = IntPtr.Zero;
-
-            try
+            if (count == 0)
             {
-                int size = checked(4 * count);
-                colors = Marshal.AllocHGlobal(size);
-                positions = Marshal.AllocHGlobal(size);
-
-                // Retrieve horizontal blend factors.
-                Gdip.CheckStatus(Gdip.GdipGetLinePresetBlend(new HandleRef(this, NativeBrush), colors, positions, count));
-
-                // Return the result in a managed array.
-                ColorBlend blend = new(count);
-
-                int[] argb = new int[count];
-                Marshal.Copy(colors, argb, 0, count);
-                Marshal.Copy(positions, blend.Positions, 0, count);
-
-                // Copy ARGB values into Color array of ColorBlend.
-                blend.Colors = new Color[argb.Length];
-
-                for (int i = 0; i < argb.Length; i++)
-                {
-                    blend.Colors[i] = Color.FromArgb(argb[i]);
-                }
-
-                return blend;
+                return new ColorBlend();
             }
-            finally
+
+            using ArgbBuffer colors = new(count, stackalloc ARGB[10]);
+            float[] positions = new float[count];
+
+            ColorBlend blend = new(count);
+
+            fixed (uint* c = colors)
+            fixed (float* p = positions)
             {
-                if (colors != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(colors);
-                }
-
-                if (positions != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(positions);
-                }
+                // Retrieve horizontal blend factors
+                PInvoke.GdipGetLinePresetBlend(NativeLineGradient, c, p, count).ThrowIfFailed();
             }
+
+            blend.Positions = positions;
+            blend.Colors = colors.ToColorArray(count);
+            GC.KeepAlive(this);
+            return blend;
         }
         set
         {
             _interpolationColorsWasSet = true;
-
-            if (value is null)
-            {
-                throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
-                                            SR.InterpolationColorsInvalidColorBlendObject, string.Empty));
-            }
-            else if (value.Colors.Length < 2)
-            {
-                throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
-                                            SR.InterpolationColorsInvalidColorBlendObject,
-                                            SR.InterpolationColorsLength));
-            }
-            else if (value.Colors.Length != value.Positions.Length)
-            {
-                throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
-                                            SR.InterpolationColorsInvalidColorBlendObject,
-                                            SR.InterpolationColorsLengthsDiffer));
-            }
-            else if (value.Positions[0] != 0.0f)
-            {
-                throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
-                                            SR.InterpolationColorsInvalidColorBlendObject,
-                                            SR.InterpolationColorsInvalidStartPosition));
-            }
-            else if (value.Positions[value.Positions.Length - 1] != 1.0f)
-            {
-                throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
-                                            SR.InterpolationColorsInvalidColorBlendObject,
-                                            SR.InterpolationColorsInvalidEndPosition));
-            }
-
-            // Allocate a temporary native memory buffer and copy input blend factors into it.
+            ArgumentNullException.ThrowIfNull(value);
             int count = value.Colors.Length;
-            IntPtr colors = IntPtr.Zero;
-            IntPtr positions = IntPtr.Zero;
 
-            try
+            if (value.Positions is null)
+                throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
+            if (value.Colors.Length != value.Positions.Length)
+                throw new ArgumentException(nameof(value));
+
+            float[] positions = value.Positions;
+            using ArgbBuffer argbValues = new(value.Colors, stackalloc ARGB[10]);
+
+            fixed (float* p = positions)
+            fixed (uint* a = argbValues)
             {
-                int size = checked(4 * count);
-                colors = Marshal.AllocHGlobal(size);
-                positions = Marshal.AllocHGlobal(size);
-
-                int[] argbs = new int[count];
-                for (int i = 0; i < count; i++)
-                {
-                    argbs[i] = value.Colors[i].ToArgb();
-                }
-
-                Marshal.Copy(argbs, 0, colors, count);
-                Marshal.Copy(value.Positions, 0, positions, count);
-
-                // Set blend factors.
-                Gdip.CheckStatus(Gdip.GdipSetLinePresetBlend(new HandleRef(this, NativeBrush), colors, positions, count));
-            }
-            finally
-            {
-                if (colors != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(colors);
-                }
-
-                if (positions != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(positions);
-                }
+                // Set blend factors
+                PInvoke.GdipSetLinePresetBlend(NativeLineGradient, a, p, count).ThrowIfFailed();
+                GC.KeepAlive(this);
             }
         }
     }
@@ -442,15 +267,18 @@ public sealed class LinearGradientBrush : Brush
     {
         get
         {
-            Gdip.CheckStatus(Gdip.GdipGetLineWrapMode(new HandleRef(this, NativeBrush), out int mode));
-            return (WrapMode)mode;
+            WrapMode mode;
+            PInvoke.GdipGetLineWrapMode(NativeLineGradient, (GdiPlus.WrapMode*)&mode).ThrowIfFailed();
+            GC.KeepAlive(this);
+            return mode;
         }
         set
         {
-            if (value < WrapMode.Tile || value > WrapMode.Clamp)
+            if (value is < WrapMode.Tile or > WrapMode.Clamp)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(WrapMode));
 
-            Gdip.CheckStatus(Gdip.GdipSetLineWrapMode(new HandleRef(this, NativeBrush), unchecked((int)value)));
+            PInvoke.GdipSetLineWrapMode(NativeLineGradient, (GdiPlus.WrapMode)value).ThrowIfFailed();
+            GC.KeepAlive(this);
         }
     }
 
@@ -459,21 +287,23 @@ public sealed class LinearGradientBrush : Brush
         get
         {
             Matrix matrix = new();
-            Gdip.CheckStatus(Gdip.GdipGetLineTransform(new HandleRef(this, NativeBrush), new HandleRef(matrix, matrix.NativeMatrix)));
+            PInvoke.GdipGetLineTransform(NativeLineGradient, matrix.NativeMatrix).ThrowIfFailed();
+            GC.KeepAlive(this);
             return matrix;
         }
         set
         {
-            if (value is null)
-                throw new ArgumentNullException(nameof(value));
-
-            Gdip.CheckStatus(Gdip.GdipSetLineTransform(new HandleRef(this, NativeBrush), new HandleRef(value, value.NativeMatrix)));
+            ArgumentNullException.ThrowIfNull(value);
+            PInvoke.GdipSetLineTransform(NativeLineGradient, value.NativeMatrix).ThrowIfFailed();
+            GC.KeepAlive(value);
+            GC.KeepAlive(this);
         }
     }
 
     public void ResetTransform()
     {
-        Gdip.CheckStatus(Gdip.GdipResetLineTransform(new HandleRef(this, NativeBrush)));
+        PInvoke.GdipResetLineTransform(NativeLineGradient).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void MultiplyTransform(Matrix matrix) => MultiplyTransform(matrix, MatrixOrder.Prepend);
@@ -482,38 +312,31 @@ public sealed class LinearGradientBrush : Brush
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
-        // Multiplying the transform by a disposed matrix is a nop in GDI+, but throws
-        // with the libgdiplus backend. Simulate a nop for compatibility with GDI+.
-        if (matrix.NativeMatrix == IntPtr.Zero)
-            return;
-
-        Gdip.CheckStatus(Gdip.GdipMultiplyLineTransform(
-            new HandleRef(this, NativeBrush),
-            new HandleRef(matrix, matrix.NativeMatrix),
-            order));
+        PInvoke.GdipMultiplyLineTransform(NativeLineGradient, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, MatrixOrder.Prepend);
 
     public void TranslateTransform(float dx, float dy, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipTranslateLineTransform(
-            new HandleRef(this, NativeBrush), dx, dy, order));
+        PInvoke.GdipTranslateLineTransform(NativeLineGradient, dx, dy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, MatrixOrder.Prepend);
 
     public void ScaleTransform(float sx, float sy, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipScaleLineTransform(
-            new HandleRef(this, NativeBrush), sx, sy, order));
+        PInvoke.GdipScaleLineTransform(NativeLineGradient, sx, sy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 
     public void RotateTransform(float angle) => RotateTransform(angle, MatrixOrder.Prepend);
 
     public void RotateTransform(float angle, MatrixOrder order)
     {
-        Gdip.CheckStatus(Gdip.GdipRotateLineTransform(
-            new HandleRef(this, NativeBrush), angle, order));
+        PInvoke.GdipRotateLineTransform(NativeLineGradient, angle, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        GC.KeepAlive(this);
     }
 }

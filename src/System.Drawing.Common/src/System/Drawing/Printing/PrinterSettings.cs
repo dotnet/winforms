@@ -285,7 +285,7 @@ public unsafe partial class PrinterSettings : ICloneable
         {
             if (!Enum.IsDefined(value))
             {
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(PrintRange));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PrintRange));
             }
 
             _printRange = value;
