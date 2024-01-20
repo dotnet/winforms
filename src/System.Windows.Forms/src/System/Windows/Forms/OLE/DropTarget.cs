@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.SystemServices;
-using Ole = Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
-using Windows.Win32.System.Com;
+using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 
@@ -15,7 +15,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
     private IDataObject? _lastDataObject;
     private DragDropEffects _lastEffect = DragDropEffects.None;
     private DragEventArgs? _lastDragEventArgs;
-    private readonly IntPtr _hwndTarget;
+    private readonly HWND _hwndTarget;
     private readonly IDropTarget _owner;
 
     public DropTarget(IDropTarget owner)
@@ -25,13 +25,13 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
         if (_owner is Control control && control.IsHandleCreated)
         {
-            _hwndTarget = control.Handle;
+            _hwndTarget = control.HWND;
         }
         else if (_owner is ToolStripDropTargetManager toolStripTargetManager
             && toolStripTargetManager?.Owner is ToolStrip toolStrip
             && toolStrip.IsHandleCreated)
         {
-            _hwndTarget = toolStrip.Handle;
+            _hwndTarget = toolStrip.HWND;
         }
     }
 
@@ -48,6 +48,25 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         DragDropHelper.ClearDropDescription(_lastDataObject);
     }
 
+    /// <summary>
+    ///  Prepares the drag data to be passed out.
+    ///  <paramref name="dataObj"/> should implement <see cref="IDataObject"/> to be passed out as is.
+    ///  Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
+    /// </summary>
+    private static IDataObject? PrepareOutgoingDropData(object dataObj)
+    {
+        if (dataObj is IDataObject dataObject)
+        {
+            return dataObject;
+        }
+        else if (dataObj is ComTypes.IDataObject nativeDataObject)
+        {
+            return new DataObject(nativeDataObject);
+        }
+
+        return null; // Unknown data object interface; we can't work with this so return null
+    }
+
     private DragEventArgs? CreateDragEventArgs(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT pdwEffect)
     {
         IDataObject? data;
@@ -58,18 +77,10 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         }
         else
         {
-            object obj = ComHelpers.GetObjectForIUnknown((Com.IUnknown*)pDataObj);
-            if (obj is IDataObject dataObject)
+            data = PrepareOutgoingDropData(ComHelpers.GetObjectForIUnknown((IUnknown*)pDataObj));
+            if (data is null)
             {
-                data = dataObject;
-            }
-            else if (obj is ComTypes.IDataObject nativeDataObject)
-            {
-                data = new DataObject(nativeDataObject);
-            }
-            else
-            {
-                return null; // Unknown data object interface; we can't work with this so return null
+                return null;
             }
         }
 

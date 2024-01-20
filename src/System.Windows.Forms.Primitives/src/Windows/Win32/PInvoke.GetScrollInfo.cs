@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetScrollInfo(HWND, SCROLLBAR_CONSTANTS, ref SCROLLINFO)"/>
     public static BOOL GetScrollInfo<T>(T hwnd, SCROLLBAR_CONSTANTS nBar, ref SCROLLINFO lpsi)
         where T : IHandle<HWND>
     {

@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="DrawMenuBar(HWND)"/>
     public static BOOL DrawMenuBar<T>(T hWnd)
         where T : IHandle<HWND>
     {

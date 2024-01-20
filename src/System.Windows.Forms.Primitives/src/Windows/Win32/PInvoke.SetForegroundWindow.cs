@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SetForegroundWindow(HWND)"/>
     public static BOOL SetForegroundWindow<T>(T hWnd) where T : IHandle<HWND>
     {
         BOOL result = SetForegroundWindow(hWnd.Handle);

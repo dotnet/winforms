@@ -183,7 +183,7 @@ public sealed class ImageFormat
     }
 
     /// <summary>
-    /// Converts this <see cref='System.Drawing.Imaging.ImageFormat'/> to a human-readable string.
+    /// Converts this <see cref='ImageFormat'/> to a human-readable string.
     /// </summary>
     public override string ToString()
     {

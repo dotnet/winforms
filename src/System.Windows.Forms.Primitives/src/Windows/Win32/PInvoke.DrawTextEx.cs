@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="DrawTextEx(HDC, PWSTR, int, RECT*, DRAW_TEXT_FORMAT, DRAWTEXTPARAMS*)"/>
     public static unsafe int DrawTextEx(
         HDC hdc,
         ReadOnlySpan<char> lpchText,

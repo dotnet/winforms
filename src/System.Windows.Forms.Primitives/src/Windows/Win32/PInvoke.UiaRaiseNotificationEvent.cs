@@ -8,6 +8,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UiaRaiseNotificationEvent(IRawElementProviderSimple*, NotificationKind, NotificationProcessing, BSTR, BSTR)"/>
     public static unsafe HRESULT UiaRaiseNotificationEvent(
         IRawElementProviderSimple.Interface provider,
         AutomationNotificationKind notificationKind,

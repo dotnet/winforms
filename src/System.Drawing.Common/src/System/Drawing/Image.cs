@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 
 #if DEBUG
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 #endif
 
 namespace System.Drawing;
@@ -21,7 +20,7 @@ namespace System.Drawing;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [ImmutableObject(true)]
 [Serializable]
-[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+[Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 [TypeConverter(typeof(ImageConverter))]
 public unsafe abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISerializable
 {
@@ -654,54 +653,32 @@ public unsafe abstract class Image : MarshalByRefObject, IDisposable, ICloneable
     ///  Gets or sets the color palette used for this <see cref='Image'/>.
     /// </summary>
     [Browsable(false)]
-    public Imaging.ColorPalette Palette
+    public ColorPalette Palette
     {
         get
         {
-            int size;
-            PInvoke.GdipGetImagePaletteSize(_nativeImage, &size).ThrowIfFailed();
-
             // "size" is total byte size:
             // sizeof(ColorPalette) + (pal->Count-1)*sizeof(ARGB)
 
-            Imaging.ColorPalette palette = new(size);
+            int size;
+            PInvoke.GdipGetImagePaletteSize(_nativeImage, &size).ThrowIfFailed();
 
-            // Memory layout is:
-            //    UINT Flags
-            //    UINT Count
-            //    ARGB Entries[size]
-
-            IntPtr memory = Marshal.AllocHGlobal(size);
-            try
+            using BufferScope<uint> buffer = new(size / sizeof(uint));
+            fixed (uint* b = buffer)
             {
-                PInvoke.GdipGetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)memory, size).ThrowIfFailed();
-                palette.ConvertFromMemory(memory);
+                PInvoke.GdipGetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)b, size).ThrowIfFailed();
+                GC.KeepAlive(this);
+                return ColorPalette.ConvertFromBuffer(buffer);
             }
-            finally
-            {
-                Marshal.FreeHGlobal(memory);
-            }
-
-            GC.KeepAlive(this);
-            return palette;
         }
         set
         {
-            IntPtr memory = value.ConvertToMemory();
-
-            try
+            using BufferScope<uint> buffer = value.ConvertToBuffer();
+            fixed (uint* b = buffer)
             {
-                PInvoke.GdipSetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)memory).ThrowIfFailed();
+                PInvoke.GdipSetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)b).ThrowIfFailed();
+                GC.KeepAlive(this);
             }
-            finally
-            {
-                if (memory != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(memory);
-                }
-            }
-
-            GC.KeepAlive(this);
         }
     }
 
@@ -929,7 +906,7 @@ public unsafe abstract class Image : MarshalByRefObject, IDisposable, ICloneable
     /// <summary>
     ///  Returns the size of the specified pixel format.
     /// </summary>
-    public static int GetPixelFormatSize(PixelFormat pixfmt) => (unchecked((int)pixfmt) >> 8) & 0xFF;
+    public static int GetPixelFormatSize(PixelFormat pixfmt) => ((int)pixfmt >> 8) & 0xFF;
 
     /// <summary>
     ///  Returns a value indicating whether the pixel format contains alpha information.

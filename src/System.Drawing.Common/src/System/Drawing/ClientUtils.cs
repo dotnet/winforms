@@ -15,7 +15,7 @@ internal static class ClientUtils
         return ex is NullReferenceException
                 or StackOverflowException
                 or OutOfMemoryException
-                or System.Threading.ThreadAbortException
+                or Threading.ThreadAbortException
                 or ExecutionEngineException
                 or IndexOutOfRangeException
                 or AccessViolationException;

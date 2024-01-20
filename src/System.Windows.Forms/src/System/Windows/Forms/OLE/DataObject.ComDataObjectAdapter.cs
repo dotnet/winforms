@@ -10,7 +10,6 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms.BinaryFormat;
-using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -259,7 +258,8 @@ public partial class DataObject
                 }
                 finally
                 {
-                    Ole32.ReleaseStgMedium(ref medium);
+                    var comMedium = (Com.STGMEDIUM)medium;
+                    PInvoke.ReleaseStgMedium(ref comMedium);
                 }
 
                 return data;
@@ -311,7 +311,8 @@ public partial class DataObject
                 }
                 finally
                 {
-                    Ole32.ReleaseStgMedium(ref medium);
+                    var comMedium = (Com.STGMEDIUM)medium;
+                    PInvoke.ReleaseStgMedium(ref comMedium);
                 }
 
                 return data;
@@ -377,7 +378,8 @@ public partial class DataObject
                         PInvokeCore.GlobalFree(hglobal);
                     }
 
-                    Ole32.ReleaseStgMedium(ref medium);
+                    var comMedium = (Com.STGMEDIUM)medium;
+                    PInvoke.ReleaseStgMedium(ref comMedium);
                 }
             }
         }

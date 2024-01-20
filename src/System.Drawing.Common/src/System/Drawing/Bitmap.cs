@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.IO;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using System.Runtime.Serialization;
 
 namespace System.Drawing;
@@ -12,7 +11,7 @@ namespace System.Drawing;
 [Editor($"System.Drawing.Design.BitmapEditor, {AssemblyRef.SystemDrawingDesign}",
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
-[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+[Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public unsafe sealed class Bitmap : Image
 {
     private static readonly Color s_defaultTransparentColor = Color.LightGray;
@@ -94,14 +93,14 @@ public unsafe sealed class Bitmap : Image
     public Bitmap(int width, int height, int stride, PixelFormat format, IntPtr scan0)
     {
         GpBitmap* bitmap;
-        PInvoke.GdipCreateBitmapFromScan0(width, height, stride, unchecked((int)format), (byte*)scan0, &bitmap).ThrowIfFailed();
+        PInvoke.GdipCreateBitmapFromScan0(width, height, stride, (int)format, (byte*)scan0, &bitmap).ThrowIfFailed();
         SetNativeImage((GpImage*)bitmap);
     }
 
     public Bitmap(int width, int height, PixelFormat format)
     {
         GpBitmap* bitmap;
-        PInvoke.GdipCreateBitmapFromScan0(width, height, 0, unchecked((int)format), null, &bitmap).ThrowIfFailed();
+        PInvoke.GdipCreateBitmapFromScan0(width, height, 0, (int)format, null, &bitmap).ThrowIfFailed();
         SetNativeImage((GpImage*)bitmap);
     }
 
@@ -188,11 +187,11 @@ public unsafe sealed class Bitmap : Image
 
         Status status = PInvoke.GdipCloneBitmapArea(
             rect.X, rect.Y, rect.Width, rect.Height,
-            unchecked((int)format),
+            (int)format,
             NativeBitmap,
             &clone);
 
-        if (status != Gdip.Ok || clone is null)
+        if (status != Status.Ok || clone is null)
         {
             throw Gdip.StatusException(status);
         }
@@ -255,10 +254,10 @@ public unsafe sealed class Bitmap : Image
         result._nativeImage = temp;
     }
 
-    public Imaging.BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format) =>
+    public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format) =>
         LockBits(rect, flags, format, new());
 
-    public Imaging.BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format, Imaging.BitmapData bitmapData)
+    public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format, BitmapData bitmapData)
     {
         ArgumentNullException.ThrowIfNull(bitmapData);
 
@@ -278,7 +277,7 @@ public unsafe sealed class Bitmap : Image
         return bitmapData;
     }
 
-    public void UnlockBits(Imaging.BitmapData bitmapdata)
+    public void UnlockBits(BitmapData bitmapdata)
     {
         ArgumentNullException.ThrowIfNull(bitmapdata);
 

@@ -15,7 +15,7 @@ public partial class Panel
         {
         }
 
-        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out ListBox? owner) ?
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out Panel? owner) ?
             owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
         internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
