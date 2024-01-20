@@ -1441,7 +1441,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     public virtual object GetService(Type serviceType)
         => serviceType == typeof(GridItem) ? this : (_parent?.GetService(serviceType));
-
+#nullable enable
     /// <summary>
     ///  Paints the label portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
     /// </summary>
@@ -1615,6 +1615,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 g.FillRectangle(brush, outline);
             }
 
+            if (g is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             if (ColorInversionNeededInHighContrast || !expanded)
             {
                 VisualStyleElement element = expanded
@@ -1715,13 +1720,18 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <param name="text">
     ///  Optional text representation of the value. If not specified, will use the <see cref="PropertyValue"/> directly.
     /// </param>
-    public virtual void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text = null)
+    public virtual void PaintValue(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        PaintValueFlags paintFlags,
+        string? text = null)
     {
         PropertyGridView ownerGrid = OwnerGridView;
         Debug.Assert(ownerGrid is not null);
 
         Color textColor = ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : ownerGrid.TextColor;
-        object value;
+        object? value;
 
         if (text is null)
         {
@@ -2002,17 +2012,17 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     private static PropertyDescriptor[] SortParenProperties(PropertyDescriptor[] props)
     {
-        PropertyDescriptor[] newProperties = null;
+        PropertyDescriptor[]? newProperties = null;
         int newPosition = 0;
 
         // First scan the list and move any parenthesized properties to the front.
         for (int i = 0; i < props.Length; i++)
         {
-            if (props[i].GetAttribute<ParenthesizePropertyNameAttribute>().NeedParenthesis)
+            if (props[i].GetAttribute<ParenthesizePropertyNameAttribute>()!.NeedParenthesis)
             {
                 newProperties ??= new PropertyDescriptor[props.Length];
                 newProperties[newPosition++] = props[i];
-                props[i] = null;
+                props[i] = null!;
             }
         }
 
@@ -2023,11 +2033,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             {
                 if (props[i] is not null)
                 {
-                    newProperties[newPosition++] = props[i];
+                    newProperties![newPosition++] = props[i];
                 }
             }
 
-            props = newProperties;
+            props = newProperties!;
         }
 
         return props;
@@ -2158,7 +2168,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Sets the value of this <see cref="GridEntry"/> from text.
     /// </summary>
-    public bool SetPropertyTextValue(string text)
+    public bool SetPropertyTextValue(string? text)
     {
         bool childrenPrior = _children is not null && _children.Count > 0;
         PropertyValue = ConvertTextToValue(text);
@@ -2179,7 +2189,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 return;
             }
 
-            for (EventEntry e = _eventList; e is not null; e = e.Next)
+            for (EventEntry? e = _eventList; e is not null; e = e.Next)
             {
                 if (e.Key == key)
                 {
@@ -2194,19 +2204,19 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual void RaiseEvent(object key, EventArgs e)
     {
-        Delegate handler = GetEventHandler(key);
+        Delegate? handler = GetEventHandler(key);
         if (handler is not null)
         {
             ((EventHandler)handler)(this, e);
         }
     }
 
-    protected virtual Delegate GetEventHandler(object key)
+    protected virtual Delegate? GetEventHandler(object key)
     {
         // Locking 'this' here is ok since this is an internal class.
         lock (this)
         {
-            for (EventEntry e = _eventList; e is not null; e = e.Next)
+            for (EventEntry? e = _eventList; e is not null; e = e.Next)
             {
                 if (e.Key == key)
                 {
@@ -2228,7 +2238,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 return;
             }
 
-            for (EventEntry entry = _eventList, previous = null; entry is not null; previous = entry, entry = entry.Next)
+            for (EventEntry? entry = _eventList, previous = null; entry is not null; previous = entry, entry = entry.Next)
             {
                 if (entry.Key == key)
                 {
