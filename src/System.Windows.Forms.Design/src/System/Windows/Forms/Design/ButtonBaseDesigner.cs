@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -28,7 +26,7 @@ internal class ButtonBaseDesigner : ControlDesigner
     {
         base.InitializeNewComponent(defaultValues);
 
-        PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["UseVisualStyleBackColor"];
+        PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["UseVisualStyleBackColor"];
         if (prop is not null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
         {
             // Dev10 Bug 685319: We should set the UseVisualStyleBackColor to trun only
@@ -53,17 +51,17 @@ internal class ButtonBaseDesigner : ControlDesigner
             FlatStyle flatStyle = FlatStyle.Standard;
             ContentAlignment alignment = ContentAlignment.MiddleCenter;
 
-            PropertyDescriptor prop;
+            PropertyDescriptor? prop;
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
             if ((prop = props["TextAlign"]) is not null)
             {
-                alignment = (ContentAlignment)prop.GetValue(Component);
+                alignment = (ContentAlignment)prop.GetValue(Component)!;
             }
 
             if ((prop = props["FlatStyle"]) is not null)
             {
-                flatStyle = (FlatStyle)prop.GetValue(Component);
+                flatStyle = (FlatStyle)prop.GetValue(Component)!;
             }
 
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
@@ -77,7 +75,7 @@ internal class ButtonBaseDesigner : ControlDesigner
                 Appearance appearance = Appearance.Normal;
                 if ((prop = props["Appearance"]) is not null)
                 {
-                    appearance = (Appearance)prop.GetValue(Component);
+                    appearance = (Appearance)prop.GetValue(Component)!;
                 }
 
                 if (appearance == Appearance.Normal)

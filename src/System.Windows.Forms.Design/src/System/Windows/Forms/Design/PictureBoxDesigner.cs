@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class PictureBoxDesigner : ControlDesigner
 {
-    private DesignerActionListCollection _actionLists;
+    private DesignerActionListCollection? _actionLists;
 
     public PictureBoxDesigner()
     {
@@ -86,10 +84,10 @@ internal class PictureBoxDesigner : ControlDesigner
             SelectionRules rules = base.SelectionRules;
             object component = Component;
 
-            PropertyDescriptor propSizeMode = TypeDescriptor.GetProperties(Component)["SizeMode"];
+            PropertyDescriptor? propSizeMode = TypeDescriptor.GetProperties(Component)["SizeMode"];
             if (propSizeMode is not null)
             {
-                PictureBoxSizeMode sizeMode = (PictureBoxSizeMode)propSizeMode.GetValue(component);
+                PictureBoxSizeMode sizeMode = (PictureBoxSizeMode)propSizeMode.GetValue(component)!;
 
                 if (sizeMode == PictureBoxSizeMode.AutoSize)
                 {
