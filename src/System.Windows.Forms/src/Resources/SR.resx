@@ -5562,6 +5562,9 @@ Stack trace where the illegal operation occurred was:
   <data name="TimerTimerDescr" xml:space="preserve">
     <value>Occurs whenever the specified interval time elapses.</value>
   </data>
+  <data name="ToolStripAllowClickThrough" xml:space="preserve">
+    <value>Allows the control to be interacted when window does not have focus.</value>
+  </data>
   <data name="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue" xml:space="preserve">
     <value>AllowItemReorder and AllowDrop cannot both be true.</value>
   </data>

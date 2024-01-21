@@ -9684,6 +9684,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ResumeUpdateMenuHandles에 대한 호출이 너무 많습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
         <target state="translated">AllowItemReorder 및 AllowDrop이 모두 true일 수 없습니다.</target>
