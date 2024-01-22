@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace System.Drawing;
 
-public unsafe abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
+public abstract unsafe class Brush : MarshalByRefObject, ICloneable, IDisposable
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();

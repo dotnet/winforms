@@ -8,7 +8,7 @@ namespace System.Drawing.Text;
 /// <summary>
 ///  Encapsulates a collection of <see cref='Font'/> objects.
 /// </summary>
-public unsafe sealed class PrivateFontCollection : FontCollection
+public sealed unsafe class PrivateFontCollection : FontCollection
 {
     /// <summary>
     ///  Initializes a new instance of the <see cref='PrivateFontCollection'/> class.
