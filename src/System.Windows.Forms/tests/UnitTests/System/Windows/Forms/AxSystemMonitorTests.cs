@@ -22,65 +22,45 @@ public class AxSystemMonitorTests : IDisposable
     public void AxSystemMonitor_WhenInitialized_ExpectsProperties()
     {
         var properties = TypeDescriptor.GetProperties(_control);
-        Assert.NotEmpty(properties);
-
         var events = TypeDescriptor.GetEvents(_control);
-        Assert.NotEmpty(events);
 
+        Assert.NotEmpty(properties);
+        Assert.NotEmpty(events);
         Assert.True(_control.Enabled);
         Assert.Equal(0, _control.Counters.Count);
 
-        // Finds out the class's assembly properties and events
-        Type type = typeof(AxSystemMonitor.AxSystemMonitor);
-        Assembly assembly = Assembly.GetAssembly(type);
-        Type classType = assembly.GetType(type.FullName);
-        TypeInfo classTypeInfo = classType.GetTypeInfo();
+        // Filters testing control properties and events so only those related to the SystemMonitor assembly remain.
+        Type assemblyType = typeof(AxSystemMonitor.AxSystemMonitor);
+        Assembly assembly = Assembly.GetAssembly(assemblyType);
+        string assemblyNameFromType = assembly.GetName().Name;
 
-        IEnumerable<PropertyInfo> assemblyClassProperties = classTypeInfo.DeclaredProperties;
-        List<string> assemblyClassPropertyNames = new();
-        assemblyClassPropertyNames = assemblyClassProperties.Select(p => p.Name).ToList();
-
-        IEnumerable<EventInfo> assemblyClassEvents = classTypeInfo.DeclaredEvents;
-        List<string> assemblyClassEventNames = new();
-        assemblyClassEventNames = assemblyClassEvents.Select(p => p.Name).ToList();
-
-        // Finds out testing control properties and events that come from the right assembly
-        string assemblyNameFromClass = assembly.GetName().Name;
         List<string> testingControlProps = new();
-        for (int i = 0; i < properties.Count; i++)
+        foreach(PropertyDescriptor prop in properties)
         {
-            var property = properties[i];
-            string assemblyNameFromProperty = property.ComponentType.Assembly.GetName().Name;
-            if (!assemblyNameFromProperty.IsNullOrEmpty() && assemblyNameFromProperty == assemblyNameFromClass)
+            string assemblyFromTestingControl = prop.ComponentType.Assembly.GetName().Name;
+            if (!assemblyFromTestingControl.IsNullOrEmpty()
+                && assemblyFromTestingControl == assemblyNameFromType)
             {
-                testingControlProps.Add(property.Name);
+                testingControlProps.Add(prop.Name);
             }
         }
 
         List<string> testingControlEvents = new();
-        for (int i = 0; i < events.Count; i++)
+        foreach(EventDescriptor singleEvent in events)
         {
-            var singleEvent = events[i];
-            string assemblyNameFromProperty = singleEvent.ComponentType.Assembly.GetName().Name;
-            if (!assemblyNameFromProperty.IsNullOrEmpty() && assemblyNameFromProperty == assemblyNameFromClass)
+            string assemblyFromTestingControl = singleEvent.ComponentType.Assembly.GetName().Name;
+            if (!assemblyFromTestingControl.IsNullOrEmpty()
+                && assemblyFromTestingControl == assemblyNameFromType)
             {
                 testingControlEvents.Add(singleEvent.Name);
             }
         }
 
-        // Tests if the properties and events from control and assembly properly match
-        foreach (string testControlProp in testingControlProps)
-        {
-            string assemblyProp = assemblyClassPropertyNames.Where(p => p == testControlProp).First();
-            Assert.Contains(testControlProp, assemblyProp);
-        }
-
-        foreach (string testControlEvent in testingControlEvents)
-        {
-            string assemblyEvent = assemblyClassEventNames.Where(p => p == testControlEvent).First();
-            Assert.Contains(testControlEvent, assemblyEvent);
-        }
-    }
+        // Compares testing control's properties and events to those of the assembly
+        TypeInfo assemblyTypeInfo = assembly.GetType(assemblyType.FullName).GetTypeInfo();
+        Assert.True(testingControlProps.All(p => assemblyTypeInfo.DeclaredProperties.Any(ap => ap.Name == p)));
+        Assert.True(testingControlEvents.All(e => assemblyTypeInfo.DeclaredEvents.Any(ae => ae.Name == e)));
+   }
 
     public void Dispose()
     {
