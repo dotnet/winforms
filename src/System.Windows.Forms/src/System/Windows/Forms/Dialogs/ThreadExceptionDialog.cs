@@ -197,8 +197,6 @@ public class ThreadExceptionDialog : Form
 
         string detailsText = detailsTextBuilder.ToString();
 
-        Graphics g = _message.CreateGraphicsInternal();
-
         Size textSize = new(_scaledMaxWidth - _scaledPaddingWidth, int.MaxValue);
 
         if (ScaleHelper.IsScalingRequirementMet && !UseCompatibleTextRenderingDefault)
@@ -208,13 +206,12 @@ public class ThreadExceptionDialog : Form
         }
         else
         {
+            using Graphics g = _message.CreateGraphicsInternal();
             // if HighDpi improvements are not enabled, or rendering mode is GDI+, use Graphics.MeasureString
             textSize = Size.Ceiling(g.MeasureString(messageText, Font, textSize.Width));
         }
 
         textSize.Height += _scaledExceptionMessageVerticalPadding;
-        g.Dispose();
-
         if (textSize.Width < _scaledMaxTextWidth)
         {
             textSize.Width = _scaledMaxTextWidth;
