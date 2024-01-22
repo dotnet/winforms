@@ -30,32 +30,55 @@ public class AxSystemMonitorTests : IDisposable
         Assert.True(_control.Enabled);
         Assert.Equal(0, _control.Counters.Count);
 
-        // Finds out desired assembly properties
-        const string ClassName = "AxSystemMonitor.AxSystemMonitor";
-        Assembly assembly = Assembly.GetAssembly(typeof(AxSystemMonitor.AxSystemMonitor));
-        Type classType = assembly.GetType(ClassName);
+        // Finds out the class's assembly properties and events
+        Type type = typeof(AxSystemMonitor.AxSystemMonitor);
+        Assembly assembly = Assembly.GetAssembly(type);
+        Type classType = assembly.GetType(type.FullName);
         TypeInfo classTypeInfo = classType.GetTypeInfo();
-        var assemblyClassProperties = classTypeInfo.DeclaredProperties;
+
+        IEnumerable<PropertyInfo> assemblyClassProperties = classTypeInfo.DeclaredProperties;
         List<string> assemblyClassPropertyNames = new();
         assemblyClassPropertyNames = assemblyClassProperties.Select(p => p.Name).ToList();
 
-        // Finds out testing control properties that come from the right assembly
+        IEnumerable<EventInfo> assemblyClassEvents = classTypeInfo.DeclaredEvents;
+        List<string> assemblyClassEventNames = new();
+        assemblyClassEventNames = assemblyClassEvents.Select(p => p.Name).ToList();
+
+        // Finds out testing control properties and events that come from the right assembly
+        string assemblyNameFromClass = assembly.GetName().Name;
         List<string> testingControlProps = new();
         for (int i = 0; i < properties.Count; i++)
         {
             var property = properties[i];
-            string assemblyNameFromControl = property.ComponentType.AssemblyQualifiedName.Split(", ")[0];
-            if (!assemblyNameFromControl.IsNullOrEmpty() && assemblyNameFromControl == assembly.GetName().Name)
+            string assemblyNameFromProperty = property.ComponentType.Assembly.GetName().Name;
+            if (!assemblyNameFromProperty.IsNullOrEmpty() && assemblyNameFromProperty == assemblyNameFromClass)
             {
                 testingControlProps.Add(property.Name);
             }
         }
 
-        // Tests if the properties from control and assembly properly match
+        List<string> testingControlEvents = new();
+        for (int i = 0; i < events.Count; i++)
+        {
+            var singleEvent = events[i];
+            string assemblyNameFromProperty = singleEvent.ComponentType.Assembly.GetName().Name;
+            if (!assemblyNameFromProperty.IsNullOrEmpty() && assemblyNameFromProperty == assemblyNameFromClass)
+            {
+                testingControlEvents.Add(singleEvent.Name);
+            }
+        }
+
+        // Tests if the properties and events from control and assembly properly match
         foreach (string testControlProp in testingControlProps)
         {
             string assemblyProp = assemblyClassPropertyNames.Where(p => p == testControlProp).First();
             Assert.Contains(testControlProp, assemblyProp);
+        }
+
+        foreach (string testControlEvent in testingControlEvents)
+        {
+            string assemblyEvent = assemblyClassEventNames.Where(p => p == testControlEvent).First();
+            Assert.Contains(testControlEvent, assemblyEvent);
         }
     }
 
