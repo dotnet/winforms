@@ -446,6 +446,11 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
+        if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+        {
+            return DialogResult.None;
+        }
+
         MESSAGEBOX_STYLE style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
 
         HandleRef<HWND> handle = default;
