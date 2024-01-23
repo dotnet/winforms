@@ -5,7 +5,7 @@ using System.Drawing.Internal;
 
 namespace System.Drawing;
 
-public unsafe sealed class SolidBrush : Brush, ISystemColorTracker
+public sealed unsafe class SolidBrush : Brush, ISystemColorTracker
 {
     // GDI+ doesn't understand system colors, so we need to cache the value here.
     private Color _color = Color.Empty;

@@ -14,7 +14,7 @@ namespace System.Drawing;
 ///   Supports IStream and IPicture COM interfaces.
 ///  </para>
 /// </remarks>
-internal unsafe sealed partial class DrawingCom : ComWrappers
+internal sealed unsafe partial class DrawingCom : ComWrappers
 {
     private static readonly Guid IID_IStream = new(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 

@@ -1947,19 +1947,12 @@ public partial class ListBox : ListControl
         {
             // Fire MeasureItem for Each Item in the ListBox...
             int cnt = Items.Count;
-            Graphics graphics = CreateGraphicsInternal();
+            using Graphics graphics = CreateGraphicsInternal();
 
-            try
+            for (int i = 0; i < cnt; i++)
             {
-                for (int i = 0; i < cnt; i++)
-                {
-                    MeasureItemEventArgs mie = new(graphics, i, ItemHeight);
-                    OnMeasureItem(mie);
-                }
-            }
-            finally
-            {
-                graphics.Dispose();
+                MeasureItemEventArgs mie = new(graphics, i, ItemHeight);
+                OnMeasureItem(mie);
             }
         }
 

@@ -10,7 +10,7 @@ namespace System.Drawing;
 /// <summary>
 ///  Defines an object used to draw lines and curves.
 /// </summary>
-public unsafe sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemColorTracker
+public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemColorTracker
 {
 #if FINALIZATION_WATCH
     private string _allocationSite = Graphics.GetAllocationStack();

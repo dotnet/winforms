@@ -12,7 +12,7 @@ namespace System.Drawing;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public unsafe sealed class Bitmap : Image
+public sealed unsafe class Bitmap : Image
 {
     private static readonly Color s_defaultTransparentColor = Color.LightGray;
 
@@ -244,8 +244,8 @@ public unsafe sealed class Bitmap : Image
                 0, 0, size.Width, size.Height,
                 GraphicsUnit.Pixel,
                 attributes,
-                null,
-                IntPtr.Zero);
+                callback: null,
+                callbackData: 0);
         }
 
         // Swap nativeImage pointers to make it look like we modified the image in place

@@ -568,7 +568,6 @@ PBS_*
 PBST_*
 PD_RESULT_*
 PeekMessage
-POINTS
 PostMessage
 PostQuitMessage
 PostQuitMessage

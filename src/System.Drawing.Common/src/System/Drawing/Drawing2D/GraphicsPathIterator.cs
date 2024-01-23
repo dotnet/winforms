@@ -3,7 +3,7 @@
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
+public sealed unsafe class GraphicsPathIterator : MarshalByRefObject, IDisposable
 {
     // handle to native path iterator object
     internal GpPathIterator* _nativeIterator;

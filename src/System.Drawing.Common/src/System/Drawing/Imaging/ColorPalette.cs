@@ -6,10 +6,11 @@ namespace System.Drawing.Imaging;
 /// <summary>
 ///  Defines an array of colors that make up a color palette.
 /// </summary>
-public unsafe sealed class ColorPalette
+public sealed unsafe class ColorPalette
 {
-    private int _flags;
-    private Color[] _entries;
+    private readonly int _flags;
+    private readonly Color[] _entries;
+
     /// <summary>
     ///  Specifies how to interpret the color information in the array of colors.
     /// </summary>

@@ -6,7 +6,7 @@ using System.Drawing.Internal;
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
+public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
 {
     internal GpPath* _nativePath;
 

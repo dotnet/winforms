@@ -4,7 +4,7 @@
 namespace System.Drawing.Imaging;
 
 // sdkinc\imaging.h
-public unsafe sealed class ImageCodecInfo
+public sealed unsafe class ImageCodecInfo
 {
     internal ImageCodecInfo()
     {

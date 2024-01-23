@@ -16,7 +16,7 @@ namespace System.Drawing.Imaging;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public unsafe sealed class Metafile : Image
+public sealed unsafe class Metafile : Image
 {
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
