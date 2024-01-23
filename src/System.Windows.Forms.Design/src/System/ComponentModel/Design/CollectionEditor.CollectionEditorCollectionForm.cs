@@ -301,6 +301,12 @@ public partial class CollectionEditor
                 {
                     AddItems(multipleInstance);
                 }
+
+                if (instance is IComponent component &&
+                    (Context?.Instance as Control)?.Site?.GetService<IDesignerHost>()?.GetDesigner(component) is IComponentInitializer initializer)
+                {
+                    initializer.InitializeNewComponent(defaultValues: null);
+                }
             }
             catch (Exception e)
             {
@@ -374,10 +380,10 @@ public partial class CollectionEditor
 
         private void HookEvents()
         {
-            _listbox.KeyDown += Listbox_keyDown;
-            _listbox.DrawItem += Listbox_drawItem;
-            _listbox.SelectedIndexChanged += Listbox_SelectedIndexChanged;
-            _listbox.HandleCreated += Listbox_HandleCreated;
+            _listbox.KeyDown += ListBox_keyDown;
+            _listbox.DrawItem += ListBox_drawItem;
+            _listbox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+            _listbox.HandleCreated += ListBox_HandleCreated;
             _upButton.Click += UpButton_Click;
             _downButton.Click += DownButton_click;
             _propertyGrid.PropertyValueChanged += PropertyGrid_propertyValueChanged;
@@ -552,9 +558,9 @@ public partial class CollectionEditor
         }
 
         /// <summary>
-        ///  This draws a row of the listbox.
+        ///  This draws a row of the listBox.
         /// </summary>
-        private void Listbox_drawItem(object? sender, DrawItemEventArgs e)
+        private void ListBox_drawItem(object? sender, DrawItemEventArgs e)
         {
             if (e.Index != -1)
             {
@@ -621,7 +627,7 @@ public partial class CollectionEditor
                         e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset });
                 }
 
-                // Check to see if we need to change the horizontal extent of the listbox
+                // Check to see if we need to change the horizontal extent of the listBox
                 int width = offset + (int)g.MeasureString(itemText, Font).Width;
                 if (width > e.Bounds.Width && _listbox.HorizontalExtent < width)
                 {
@@ -633,9 +639,9 @@ public partial class CollectionEditor
         /// <summary>
         ///  Handles keypress events for the list box.
         /// </summary>
-        private void Listbox_keyDown(object? sender, KeyEventArgs kevent)
+        private void ListBox_keyDown(object? sender, KeyEventArgs keyEvent)
         {
-            switch (kevent.KeyData)
+            switch (keyEvent.KeyData)
             {
                 case Keys.Delete:
                     PerformRemove();
@@ -649,7 +655,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Event that fires when the selected list box index changes.
         /// </summary>
-        private void Listbox_SelectedIndexChanged(object? sender, EventArgs e)
+        private void ListBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateEnabled();
         }
@@ -657,7 +663,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Event that fires when the list box's window handle is created.
         /// </summary>
-        private void Listbox_HandleCreated(object? sender, EventArgs e)
+        private void ListBox_HandleCreated(object? sender, EventArgs e)
         {
             UpdateItemWidths(null);
         }
@@ -845,7 +851,7 @@ public partial class CollectionEditor
         {
             _dirty = true;
 
-            // Refresh selected listbox item so that it picks up any name change
+            // Refresh selected listBox item so that it picks up any name change
             SuspendEnabledUpdates();
             try
             {
@@ -1063,7 +1069,7 @@ public partial class CollectionEditor
                 int selectedItemCount = _listbox.SelectedItems.Count;
                 if (selectedItemCount is 1 or -1)
                 {
-                    // handle both single select listboxes and a single item selected in a multi-select listbox
+                    // handle both single select listBoxes and a single item selected in a multi-select listBox
                     _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
                 }
                 else
