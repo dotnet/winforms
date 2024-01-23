@@ -30,7 +30,7 @@ namespace System.Drawing.Imaging;
 ///  Contains information about how image colors are manipulated during rendering.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public unsafe sealed class ImageAttributes : ICloneable, IDisposable
+public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();

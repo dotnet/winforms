@@ -6,7 +6,7 @@ namespace System.Drawing.Imaging;
 /// <summary>
 ///  Encapsulates a metadata property to be included in an image file.
 /// </summary>
-public unsafe sealed class PropertyItem
+public sealed unsafe class PropertyItem
 {
     internal PropertyItem()
     {

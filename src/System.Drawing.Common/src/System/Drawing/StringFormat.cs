@@ -10,7 +10,7 @@ namespace System.Drawing;
 ///  Encapsulates text layout information (such as alignment and linespacing), display manipulations (such as
 ///  ellipsis insertion and national digit substitution) and OpenType features.
 /// </summary>
-public unsafe sealed class StringFormat : MarshalByRefObject, ICloneable, IDisposable
+public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDisposable
 {
     internal GpStringFormat* _nativeFormat;
 

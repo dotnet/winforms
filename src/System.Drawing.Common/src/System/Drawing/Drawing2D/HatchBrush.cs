@@ -3,7 +3,7 @@
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class HatchBrush : Brush
+public sealed unsafe class HatchBrush : Brush
 {
     public HatchBrush(HatchStyle hatchstyle, Color foreColor)
         : this(hatchstyle, foreColor, Color.FromArgb(unchecked((int)0xff000000)))

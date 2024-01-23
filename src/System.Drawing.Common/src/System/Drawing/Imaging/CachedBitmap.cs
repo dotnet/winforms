@@ -25,7 +25,7 @@ namespace System.Drawing.Imaging;
 ///   <see cref="CachedBitmap"/> cannot be used to draw to a printer or metafile.
 ///  </para>
 /// </remarks>
-public unsafe sealed class CachedBitmap : IDisposable
+public sealed unsafe class CachedBitmap : IDisposable
 {
     private nint _handle;
 
