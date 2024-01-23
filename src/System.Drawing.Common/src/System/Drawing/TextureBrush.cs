@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 
 namespace System.Drawing;
 
-public unsafe sealed class TextureBrush : Brush
+public sealed unsafe class TextureBrush : Brush
 {
     // When creating a texture brush from a metafile image, the dstRect
     // is used to specify the size that the metafile image should be

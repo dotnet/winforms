@@ -22,7 +22,7 @@ namespace System.Drawing;
 [Serializable]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 [TypeConverter(typeof(ImageConverter))]
-public unsafe abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISerializable
+public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable, ISerializable
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();

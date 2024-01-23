@@ -16,7 +16,7 @@ namespace System.Drawing;
 [TypeConverter(typeof(IconConverter))]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public unsafe sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
+public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IHandle<HICON>
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
@@ -182,12 +182,7 @@ public unsafe sealed partial class Icon : MarshalByRefObject, ICloneable, IDispo
 
         ArrayPool<char>.Shared.Return(buffer);
 
-        if (!hIcon.IsNull)
-        {
-            return new Icon(hIcon, takeOwnership: true);
-        }
-
-        return null;
+        return !hIcon.IsNull ? new Icon(hIcon, takeOwnership: true) : null;
     }
 
     [Browsable(false)]
@@ -428,7 +423,11 @@ public unsafe sealed partial class Icon : MarshalByRefObject, ICloneable, IDispo
             throw new InvalidOperationException(SR.Format(SR.IllegalState, GetType().Name));
         }
 
-        if (_iconData.Length < sizeof(SafeNativeMethods.ICONDIR))
+        SpanReader<byte> reader = new(_iconData);
+        if (!reader.TryRead(out ICONDIR dir)
+            || dir.idReserved != 0
+            || dir.idType != 1
+            || dir.idCount == 0)
         {
             throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
         }
@@ -459,140 +458,125 @@ public unsafe sealed partial class Icon : MarshalByRefObject, ICloneable, IDispo
             }
         }
 
-        fixed (byte* b = _iconData)
+        byte bestWidth = 0;
+        byte bestHeight = 0;
+
+        if (!reader.TryRead(dir.idCount, out ReadOnlySpan<ICONDIRENTRY> entries))
         {
-            SafeNativeMethods.ICONDIR* dir = (SafeNativeMethods.ICONDIR*)b;
+            throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
+        }
 
-            if (dir->idReserved != 0 || dir->idType != 1 || dir->idCount == 0)
+        foreach (ICONDIRENTRY entry in entries)
+        {
+            bool fUpdateBestFit = false;
+            uint iconBitDepth;
+            if (entry.bColorCount != 0)
             {
-                throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
-            }
-
-            byte bestWidth = 0;
-            byte bestHeight = 0;
-
-            if (sizeof(SafeNativeMethods.ICONDIRENTRY) * (dir->idCount - 1) + sizeof(SafeNativeMethods.ICONDIR)
-                > _iconData.Length)
-            {
-                throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
-            }
-
-            var entries = new ReadOnlySpan<SafeNativeMethods.ICONDIRENTRY>(&dir->idEntries, dir->idCount);
-            foreach (SafeNativeMethods.ICONDIRENTRY entry in entries)
-            {
-                bool fUpdateBestFit = false;
-                uint iconBitDepth;
-                if (entry.bColorCount != 0)
+                iconBitDepth = 4;
+                if (entry.bColorCount < 0x10)
                 {
-                    iconBitDepth = 4;
-                    if (entry.bColorCount < 0x10)
-                    {
-                        iconBitDepth = 1;
-                    }
+                    iconBitDepth = 1;
                 }
-                else
-                {
-                    iconBitDepth = entry.wBitCount;
-                }
-
-                // If it looks like if nothing is specified at this point then set the bits per pixel to 8.
-                if (iconBitDepth == 0)
-                {
-                    iconBitDepth = 8;
-                }
-
-                // Windows rules for specifying an icon:
-                //
-                //  1.  The icon with the closest size match.
-                //  2.  For matching sizes, the image with the closest bit depth.
-                //  3.  If there is no color depth match, the icon with the closest color depth that does not exceed the display.
-                //  4.  If all icon color depth > display, lowest color depth is chosen.
-                //  5.  color depth of > 8bpp are all equal.
-                //  6.  Never choose an 8bpp icon on an 8bpp system.
-
-                if (_bestBytesInRes == 0)
-                {
-                    fUpdateBestFit = true;
-                }
-                else
-                {
-                    int bestDelta = Math.Abs(bestWidth - width) + Math.Abs(bestHeight - height);
-                    int thisDelta = Math.Abs(entry.bWidth - width) + Math.Abs(entry.bHeight - height);
-
-                    if ((thisDelta < bestDelta)
-                        || (thisDelta == bestDelta
-                            && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth)
-                                || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
-                    {
-                        fUpdateBestFit = true;
-                    }
-                }
-
-                if (fUpdateBestFit)
-                {
-                    bestWidth = entry.bWidth;
-                    bestHeight = entry.bHeight;
-                    _bestImageOffset = entry.dwImageOffset;
-                    _bestBytesInRes = entry.dwBytesInRes;
-                    _bestBitDepth = iconBitDepth;
-                }
-            }
-
-            if (_bestImageOffset > int.MaxValue)
-            {
-                throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
-            }
-
-            if (_bestBytesInRes > int.MaxValue)
-            {
-                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
-            }
-
-            uint endOffset;
-            try
-            {
-                endOffset = checked(_bestImageOffset + _bestBytesInRes);
-            }
-            catch (OverflowException)
-            {
-                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
-            }
-
-            if (endOffset > _iconData.Length)
-            {
-                throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
-            }
-
-            // Copy the bytes into an aligned buffer if needed.
-            if ((_bestImageOffset % IntPtr.Size) != 0)
-            {
-                // Beginning of icon's content is misaligned.
-                byte[] alignedBuffer = ArrayPool<byte>.Shared.Rent((int)_bestBytesInRes);
-                Array.Copy(_iconData, _bestImageOffset, alignedBuffer, 0, _bestBytesInRes);
-
-                fixed (byte* pbAlignedBuffer = alignedBuffer)
-                {
-                    _handle = PInvoke.CreateIconFromResourceEx(pbAlignedBuffer, _bestBytesInRes, true, 0x00030000, 0, 0, 0);
-                }
-
-                ArrayPool<byte>.Shared.Return(alignedBuffer);
             }
             else
             {
-                try
+                iconBitDepth = entry.wBitCount;
+            }
+
+            // If it looks like if nothing is specified at this point then set the bits per pixel to 8.
+            if (iconBitDepth == 0)
+            {
+                iconBitDepth = 8;
+            }
+
+            // Windows rules for specifying an icon:
+            //
+            //  1.  The icon with the closest size match.
+            //  2.  For matching sizes, the image with the closest bit depth.
+            //  3.  If there is no color depth match, the icon with the closest color depth that does not exceed the display.
+            //  4.  If all icon color depth > display, lowest color depth is chosen.
+            //  5.  color depth of > 8bpp are all equal.
+            //  6.  Never choose an 8bpp icon on an 8bpp system.
+
+            if (_bestBytesInRes == 0)
+            {
+                fUpdateBestFit = true;
+            }
+            else
+            {
+                int bestDelta = Math.Abs(bestWidth - width) + Math.Abs(bestHeight - height);
+                int thisDelta = Math.Abs(entry.bWidth - width) + Math.Abs(entry.bHeight - height);
+
+                if ((thisDelta < bestDelta)
+                    || (thisDelta == bestDelta
+                        && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth)
+                            || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
                 {
-                    _handle = PInvoke.CreateIconFromResourceEx(checked(b + _bestImageOffset), _bestBytesInRes, true, 0x00030000, 0, 0, 0);
-                }
-                catch (OverflowException)
-                {
-                    throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
+                    fUpdateBestFit = true;
                 }
             }
 
-            if (_handle.IsNull)
+            if (fUpdateBestFit)
             {
-                throw new Win32Exception();
+                bestWidth = entry.bWidth;
+                bestHeight = entry.bHeight;
+                _bestImageOffset = entry.dwImageOffset;
+                _bestBytesInRes = entry.dwBytesInRes;
+                _bestBitDepth = iconBitDepth;
             }
+        }
+
+        if (_bestImageOffset > int.MaxValue)
+        {
+            throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
+        }
+
+        if (_bestBytesInRes > int.MaxValue)
+        {
+            throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
+        }
+
+        uint endOffset;
+        try
+        {
+            endOffset = checked(_bestImageOffset + _bestBytesInRes);
+        }
+        catch (OverflowException)
+        {
+            throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_PARAMETER);
+        }
+
+        if (endOffset > _iconData.Length)
+        {
+            throw new ArgumentException(SR.Format(SR.InvalidPictureType, "picture", nameof(Icon)));
+        }
+
+        // Copy the bytes into an aligned buffer if needed.
+
+        ReadOnlySpan<byte> bestImage = reader.Span.Slice((int)_bestImageOffset, (int)_bestBytesInRes);
+
+        if ((_bestImageOffset % sizeof(nint)) != 0)
+        {
+            // Beginning of icon's content is misaligned.
+            using BufferScope<byte> alignedBuffer = new((int)_bestBytesInRes);
+            bestImage.CopyTo(alignedBuffer.AsSpan());
+
+            fixed (byte* b = alignedBuffer)
+            {
+                _handle = PInvoke.CreateIconFromResourceEx(b, (uint)bestImage.Length, fIcon: true, 0x00030000, 0, 0, 0);
+            }
+        }
+        else
+        {
+            fixed (byte* b = bestImage)
+            {
+                _handle = PInvoke.CreateIconFromResourceEx(b, (uint)bestImage.Length, fIcon: true, 0x00030000, 0, 0, 0);
+            }
+        }
+
+        if (_handle.IsNull)
+        {
+            throw new Win32Exception();
         }
     }
 

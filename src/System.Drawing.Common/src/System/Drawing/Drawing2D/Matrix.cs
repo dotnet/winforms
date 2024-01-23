@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class Matrix : MarshalByRefObject, IDisposable
+public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
 {
     internal GdiPlus.Matrix* NativeMatrix { get; private set; }
 

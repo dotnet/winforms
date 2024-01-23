@@ -72,20 +72,6 @@ public abstract partial class UpDownBase
                 return null;
             }
 
-            internal override unsafe IRawElementProviderSimple* HostRawElementProvider
-            {
-                get
-                {
-                    if (HandleInternal.IsNull)
-                    {
-                        return null;
-                    }
-
-                    PInvoke.UiaHostProviderFromHwnd(new HandleRef<HWND>(this, HandleInternal), out IRawElementProviderSimple* provider);
-                    return provider;
-                }
-            }
-
             [AllowNull]
             public override string Name
             {

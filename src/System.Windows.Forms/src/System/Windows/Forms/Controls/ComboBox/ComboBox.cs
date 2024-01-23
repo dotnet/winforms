@@ -3530,7 +3530,7 @@ public partial class ComboBox : ListControl
         else if (DrawMode == DrawMode.OwnerDrawVariable)
         {
             PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
-            Graphics graphics = CreateGraphicsInternal();
+            using Graphics graphics = CreateGraphicsInternal();
             for (int i = 0; i < Items.Count; i++)
             {
                 int original = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
@@ -3541,8 +3541,6 @@ public partial class ComboBox : ListControl
                     PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
                 }
             }
-
-            graphics.Dispose();
         }
     }
 

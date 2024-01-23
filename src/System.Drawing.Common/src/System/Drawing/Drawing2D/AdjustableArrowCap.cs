@@ -3,7 +3,7 @@
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed partial class AdjustableArrowCap : CustomLineCap
+public sealed unsafe partial class AdjustableArrowCap : CustomLineCap
 {
     internal AdjustableArrowCap(GpCustomLineCap* nativeCap) : base(nativeCap) { }
 

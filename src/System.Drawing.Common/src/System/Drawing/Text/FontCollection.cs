@@ -6,7 +6,7 @@ namespace System.Drawing.Text;
 /// <summary>
 ///  When inherited, enumerates the FontFamily objects in a collection of fonts.
 /// </summary>
-public unsafe abstract class FontCollection : IDisposable
+public abstract unsafe class FontCollection : IDisposable
 {
     internal GpFontCollection* _nativeFontCollection;
 

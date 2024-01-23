@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class PathGradientBrush : Brush
+public sealed unsafe class PathGradientBrush : Brush
 {
     public PathGradientBrush(PointF[] points) : this(points, WrapMode.Clamp) { }
 
@@ -104,7 +104,7 @@ public unsafe sealed class PathGradientBrush : Brush
             int count;
             PInvoke.GdipGetPathGradientSurroundColorCount(NativePathGradient, &count).ThrowIfFailed();
 
-            using ArgbBuffer buffer = new(count, stackalloc ARGB[10]);
+            using ArgbBuffer buffer = new(count);
             fixed (uint* b = buffer)
             {
                 PInvoke.GdipGetPathGradientSurroundColorsWithCount(NativePathGradient, b, &count).ThrowIfFailed();
@@ -116,7 +116,7 @@ public unsafe sealed class PathGradientBrush : Brush
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            using ArgbBuffer buffer = new(value, stackalloc ARGB[10]);
+            using ArgbBuffer buffer = new(value);
 
             int count = value.Length;
             fixed (uint* b = buffer)
@@ -234,7 +234,7 @@ public unsafe sealed class PathGradientBrush : Brush
                 return new ColorBlend();
             }
 
-            using ArgbBuffer colors = new(count, stackalloc ARGB[10]);
+            using ArgbBuffer colors = new(count);
             float[] positions = new float[count];
 
             ColorBlend blend = new(count);
@@ -260,7 +260,7 @@ public unsafe sealed class PathGradientBrush : Brush
                 throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
 
             float[] positions = value.Positions;
-            using ArgbBuffer argbColors = new(value.Colors, stackalloc ARGB[10]);
+            using ArgbBuffer argbColors = new(value.Colors);
 
             fixed (float* p = positions)
             fixed (uint* a = argbColors)

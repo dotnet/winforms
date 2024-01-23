@@ -509,7 +509,7 @@ public static partial class ControlPaint
             }
             else
             {
-                ImageAttributes imageAttrib = new();
+                using ImageAttributes imageAttrib = new();
                 imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                 g.DrawImage(
                     backgroundImage,
@@ -520,8 +520,6 @@ public static partial class ControlPaint
                     backgroundImage.Height,
                     GraphicsUnit.Pixel,
                     imageAttrib);
-
-                imageAttrib.Dispose();
             }
         }
     }
@@ -1617,7 +1615,7 @@ public static partial class ControlPaint
     // the supplied Graphics object.
     internal static void DrawImageReplaceColor(Graphics g, Image image, Rectangle dest, Color oldColor, Color newColor)
     {
-        ImageAttributes attrs = new();
+        using ImageAttributes attrs = new();
 
         ColorMap cm = new()
         {
@@ -1628,7 +1626,6 @@ public static partial class ControlPaint
         attrs.SetRemapTable(new ColorMap[] { cm }, ColorAdjustType.Bitmap);
 
         g.DrawImage(image, dest, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
-        attrs.Dispose();
     }
 
     /// <summary>
@@ -2136,7 +2133,7 @@ public static partial class ControlPaint
 
             int patternSize = 8;
 
-            Bitmap bitmap = new(patternSize, patternSize);
+            using Bitmap bitmap = new(patternSize, patternSize);
 
             // Bitmap does not initialize itself to be zero?
 
@@ -2160,7 +2157,6 @@ public static partial class ControlPaint
             }
 
             t_frameBrushActive = new TextureBrush(bitmap);
-            bitmap.Dispose();
         }
 
         return t_frameBrushActive;
@@ -2267,7 +2263,7 @@ public static partial class ControlPaint
 
             int patternSize = 8;
 
-            Bitmap bitmap = new(patternSize, patternSize);
+            using Bitmap bitmap = new(patternSize, patternSize);
 
             // Bitmap does not initialize itself to be zero?
 
@@ -2292,7 +2288,6 @@ public static partial class ControlPaint
             }
 
             t_frameBrushSelected = new TextureBrush(bitmap);
-            bitmap.Dispose();
         }
 
         return t_frameBrushSelected;

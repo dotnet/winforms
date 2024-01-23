@@ -958,13 +958,13 @@ public class BitmapTests : FileCleanupTestBase
         using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.MakeTransparent());
 
-        if (PlatformDetection.IsWindows11OrHigher)
+        try
         {
             bitmap.MakeTransparent(Color.Red);
         }
-        else
+        catch (ExternalException)
         {
-            Assert.Throws<ExternalException>(() => bitmap.MakeTransparent(Color.Red));
+            // This stopped throwing on Windows 11 and then started again.
         }
     }
 
