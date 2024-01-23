@@ -2736,11 +2736,8 @@ public partial class TreeView : Control
                 }
                 else if (_drawMode == TreeViewDrawMode.OwnerDrawAll)
                 {
-                    Graphics g = nmtvcd->nmcd.hdc.CreateGraphics();
-
                     DrawTreeNodeEventArgs e;
-
-                    try
+                    using (Graphics g = nmtvcd->nmcd.hdc.CreateGraphics())
                     {
                         Rectangle bounds = node.RowBounds;
 
@@ -2764,10 +2761,6 @@ public partial class TreeView : Control
 
                         e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(state));
                         OnDrawNode(e);
-                    }
-                    finally
-                    {
-                        g.Dispose();
                     }
 
                     if (!e.DrawDefault)

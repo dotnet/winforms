@@ -1550,7 +1550,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     {
         if (IsHandleCreated)
         {
-            Graphics g = CreateGraphicsInternal();
+            using Graphics g = CreateGraphicsInternal();
             if (BackgroundImage is not null)
             {
                 using TextureBrush textureBrush = new(BackgroundImage, WrapMode.Tile);
@@ -1561,8 +1561,6 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 using var solidBrush = BackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(solidBrush, _splitterRect);
             }
-
-            g.Dispose();
         }
     }
 

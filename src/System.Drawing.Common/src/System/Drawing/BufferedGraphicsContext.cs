@@ -10,7 +10,7 @@ namespace System.Drawing;
 /// <summary>
 ///  The BufferedGraphicsContext class can be used to perform standard double buffer rendering techniques.
 /// </summary>
-public unsafe sealed class BufferedGraphicsContext : IDisposable
+public sealed unsafe class BufferedGraphicsContext : IDisposable
 {
     private Size _maximumBuffer;
     private Size _bufferSize = Size.Empty;

@@ -31,6 +31,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_DrawEx(HIMAGELIST, int, HDC, int, int, int, int, COLORREF, COLORREF, IMAGE_LIST_DRAW_STYLE)"/>
         public static bool DrawEx<THIML, THDC>(
             THIML himl,
             int i,

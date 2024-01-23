@@ -27,7 +27,7 @@ public sealed class ImageFormat
     private static readonly ImageFormat s_heif = new(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
     private static readonly ImageFormat s_webp = new(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
 
-    private Guid _guid;
+    private readonly Guid _guid;
 
     /// <summary>
     /// Initializes a new instance of the <see cref='ImageFormat'/> class with the specified GUID.

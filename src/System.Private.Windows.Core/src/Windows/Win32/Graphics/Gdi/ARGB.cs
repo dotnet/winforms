@@ -44,11 +44,6 @@ internal readonly struct ARGB
     public static implicit operator Color(ARGB argb) => Color.FromArgb((int)argb.Value);
     public static implicit operator uint(ARGB argb) => argb.Value;
 
-    public static unsafe implicit operator uint*(in ARGB argb) =>
-        (uint*)Unsafe.AsPointer(ref Unsafe.AsRef(in argb.Value));
-
-    internal ref uint GetPinnableReference() => ref Unsafe.AsRef(in Value);
-
     public static Color[] ToColorArray(ReadOnlySpan<ARGB> argbColors)
     {
         Color[] colors = new Color[argbColors.Length];
@@ -63,15 +58,4 @@ internal readonly struct ARGB
     public static Color[] ToColorArray(ReadOnlySpan<uint> argbColors) => ToColorArray(MemoryMarshal.CreateReadOnlySpan(
         ref Unsafe.As<uint, ARGB>(ref MemoryMarshal.GetReference(argbColors)),
         argbColors.Length));
-
-    public static BufferScope<ARGB> FromColors(ReadOnlySpan<Color> colors, Span<ARGB> stackSpace = default)
-    {
-        BufferScope<ARGB> buffer = new(stackSpace, colors.Length);
-        for (int i = 0; i < colors.Length; i++)
-        {
-            buffer[i] = colors[i];
-        }
-
-        return buffer;
-    }
 }
