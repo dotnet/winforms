@@ -446,7 +446,7 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+        if (!s_canNotifyClients)
         {
             return DialogResult.None;
         }
@@ -490,5 +490,23 @@ public class MessageBox
             // we enable the main window.
             PInvoke.SendMessage(handle, PInvoke.WM_SETFOCUS);
         }
+    }
+
+    private static bool s_canNotifyClients => InitializeCanNotifyClients();
+
+    private static bool InitializeCanNotifyClients()
+    {
+        // While handling accessibility events, accessibility clients (JAWS, Inspect),
+        // can access AccessibleObject associated with the event. In the designer scenario, controls are not
+        // receiving messages directly and might not respond to messages while in the notification call.
+        // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
+        //
+        // The following compat switch is set in the designer server process to prevent controls from sending notification.
+        if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
+        {
+            return !isEnabled;
+        }
+
+        return true;
     }
 }
