@@ -190,13 +190,12 @@ public partial class ComboBox
             }
         }
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
+        internal override int[] RuntimeId =>
+            [
                 RuntimeIDFirstItem,
-                PARAM.ToInt(_owningComboBox.InternalHandle),
+                (int)_owningComboBox.InternalHandle,
                 _owningComboBox.GetListNativeWindowRuntimeIdPart()
-            };
+            ];
 
         public override AccessibleStates State
         {

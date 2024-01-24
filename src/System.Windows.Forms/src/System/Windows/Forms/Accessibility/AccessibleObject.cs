@@ -596,7 +596,7 @@ public unsafe partial class AccessibleObject :
         => patternId == UIA_PATTERN_ID.UIA_InvokePatternId && IsInvokePatternAvailable;
 
     /// <summary>
-    ///  Gets the runtime ID.
+    ///  Gets the runtime identifier. This value must be unique within the parent window.
     /// </summary>
     internal virtual int[] RuntimeId
     {
@@ -604,7 +604,7 @@ public unsafe partial class AccessibleObject :
         {
             if (_isSystemWrapper)
             {
-                return new int[] { RuntimeIDFirstItem, GetHashCode() };
+                return [RuntimeIDFirstItem, GetHashCode()];
             }
 
             string message = string.Format(SR.AccessibleObjectRuntimeIdNotSupported, nameof(AccessibleObject), nameof(RuntimeId));

@@ -104,18 +104,11 @@ public partial class ListViewItem
             {
                 get
                 {
-                    int[] owningItemRuntimeId = Parent.RuntimeId;
+                    int[] id = Parent.RuntimeId;
 
-                    Debug.Assert(owningItemRuntimeId.Length >= 4);
+                    Debug.Assert(id.Length >= 4);
 
-                    return new int[]
-                    {
-                        owningItemRuntimeId[0],
-                        owningItemRuntimeId[1],
-                        owningItemRuntimeId[2],
-                        owningItemRuntimeId[3],
-                        GetHashCode()
-                    };
+                    return [id[0], id[1], id[2], id[3], GetHashCode()];
                 }
             }
 
