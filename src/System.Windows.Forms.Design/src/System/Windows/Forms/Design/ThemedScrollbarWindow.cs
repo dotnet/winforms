@@ -3,7 +3,9 @@
 
 namespace System.Windows.Forms.Design;
 
+#pragma warning disable CA1815 // Override equals and operator equals on value types
 public struct ThemedScrollbarWindow
+#pragma warning restore CA1815 // Override equals and operator equals on value types
 {
     public IntPtr Handle;
     public ThemedScrollbarMode Mode;

@@ -13,7 +13,9 @@ public
 #else
 internal
 #endif
+#pragma warning disable CA1815 // Override equals and operator equals on value types
 unsafe struct LOGFONT
+#pragma warning restore CA1815 // Override equals and operator equals on value types
 {
     private const int LF_FACESIZE = 32;
 
