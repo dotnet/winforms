@@ -25,6 +25,10 @@ internal class UserControlWithObjectCollectionEditor : UserControl
         get { return new List<int>(new int[] { 1, 2, 3 }); }
         set { }
     }
+
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    public string MiscValue { get; set; }
 }
 
 internal class SomeCollectionTypeConverter : TypeConverter
