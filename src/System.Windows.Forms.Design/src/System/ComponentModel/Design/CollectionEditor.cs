@@ -92,7 +92,10 @@ public partial class CollectionEditor : UITypeEditor
     {
         ArgumentNullException.ThrowIfNull(itemType);
 
-        if (Context.TryGetService(out IDesignerHost? host) && typeof(IComponent).IsAssignableFrom(itemType))
+        Context.TryGetService(out IDesignerHost? host);
+        host ??= (Context?.Instance as Control)?.Site?.GetService<IDesignerHost>();
+
+        if (host is not null && typeof(IComponent).IsAssignableFrom(itemType))
         {
             IComponent instance = host.CreateComponent(itemType);
 
