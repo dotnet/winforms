@@ -21,7 +21,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 ///
 ///  https://github.com/microsoft/CsWin32/issues/882
 /// </devdoc>
-public partial struct DEVNAMES
+internal partial struct DEVNAMES
 {
     /// <summary>
     /// <para>Type: <b>WORD</b> The offset, in characters, from the beginning of this structure to a null-terminated string that contains the file name (without the extension) of the device driver. On input, this string is used to determine the printer to display initially in the dialog box.</para>

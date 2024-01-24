@@ -120,7 +120,6 @@ public class ImageListTests : ControlTestBase
     private static ImageListStreamer DeserializeStreamer(string base64String)
     {
         byte[] bytes = Convert.FromBase64String(base64String);
-        using MemoryStream ms = new(bytes);
-        return new ImageListStreamer(ms);
+        return new ImageListStreamer(bytes);
     }
 }
