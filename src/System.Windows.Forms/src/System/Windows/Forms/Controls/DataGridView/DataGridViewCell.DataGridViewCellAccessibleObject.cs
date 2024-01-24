@@ -619,12 +619,11 @@ public abstract partial class DataGridViewCell
             RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
 
-        internal override int[] RuntimeId
-            => _runtimeId ??= new int[]
-            {
-                RuntimeIDFirstItem, // first item is static - 0x2a
-                GetHashCode()
-            };
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+            RuntimeIDFirstItem,
+            GetHashCode()
+        ];
 
         private protected override string AutomationId
         {

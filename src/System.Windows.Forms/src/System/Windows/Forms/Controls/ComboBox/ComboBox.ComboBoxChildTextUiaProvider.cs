@@ -107,18 +107,14 @@ public partial class ComboBox
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        /// <summary>
-        ///  Gets the runtime ID.
-        /// </summary>
-        internal override int[] RuntimeId
-            => new int[]
-            {
+        internal override int[] RuntimeId =>
+            [
                 RuntimeIDFirstItem,
-                PARAM.ToInt(_owner.InternalHandle),
+                (int)_owner.InternalHandle,
                 _owner.GetHashCode(),
                 GetHashCode(),
                 GetChildId()
-            };
+            ];
 
         /// <summary>
         ///  Gets the accessible state.

@@ -147,14 +147,13 @@ public partial class ComboBox
         public override AccessibleRole Role
             => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(_owningComboBox.InternalHandle),
-                _owningComboBox.GetListNativeWindowRuntimeIdPart(),
-                _owningItem.GetHashCode()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            (int)_owningComboBox.InternalHandle,
+            _owningComboBox.GetListNativeWindowRuntimeIdPart(),
+            _owningItem.GetHashCode()
+        ];
 
         public override AccessibleStates State
         {

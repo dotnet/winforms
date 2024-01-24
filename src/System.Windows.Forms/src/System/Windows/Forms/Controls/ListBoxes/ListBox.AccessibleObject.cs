@@ -41,9 +41,6 @@ public partial class ListBox
                 && owner.SelectionMode != SelectionMode.One
                 && owner.SelectionMode != SelectionMode.None;
 
-        // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
-        // Second item can be anything, but it's good to supply HWND.
-
         public override AccessibleStates State
         {
             get

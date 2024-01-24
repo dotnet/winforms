@@ -42,6 +42,6 @@ public partial class DomainUpDown
 
         internal override bool CanGetValueInternal => false;
 
-        internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
+        internal override int[] RuntimeId => [RuntimeIDFirstItem, GetHashCode()];
     }
 }

@@ -42,17 +42,11 @@ public partial class ListBox
         {
             get
             {
-                int[] parentRuntimeId = _owningAccessibleObject.RuntimeId;
+                int[] id = _owningAccessibleObject.RuntimeId;
 
-                Debug.Assert(parentRuntimeId.Length >= 3);
+                Debug.Assert(id.Length >= 3);
 
-                return new int[]
-                {
-                    parentRuntimeId[0],
-                    parentRuntimeId[1],
-                    parentRuntimeId[2],
-                    _itemEntry.GetHashCode()
-                };
+                return [id[0], id[1], id[2], _itemEntry.GetHashCode()];
             }
         }
 

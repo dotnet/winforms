@@ -30,7 +30,7 @@ public partial class DataGridView
 
         internal override bool CanGetValueInternal => false;
 
-        internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+        internal override int[] RuntimeId => [RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode()];
 
         public override AccessibleObject? GetChild(int index) =>
             _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected)
