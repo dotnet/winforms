@@ -13,7 +13,7 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class BinaryArray : ArrayRecord, IRecord<BinaryArray>
+internal sealed class BinaryArray : ArrayRecord<object>, IRecord<BinaryArray>
 {
     public Count Rank { get; }
     public BinaryArrayType Type { get; }

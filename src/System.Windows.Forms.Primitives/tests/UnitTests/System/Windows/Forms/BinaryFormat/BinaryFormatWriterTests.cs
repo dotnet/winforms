@@ -32,10 +32,11 @@ public class BinaryFormatWriterTests
     public void BinaryFormatWriter_TryWriteObject_SupportedObjects_BinaryFormatterRead(object value)
     {
         using MemoryStream stream = new();
-        BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeTrue();
+        bool success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
+        success.Should().BeTrue();
         stream.Position = 0;
 
-        using BinaryFormatterScope formaterScope = new(enable: true);
+        using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
 #pragma warning restore SYSLIB0011 // Type or member is obsolete

@@ -13,18 +13,18 @@ public class ArrayTests
     public void ArrayInfo_Parse_Success(Stream stream, int expectedId, int expectedLength)
     {
         using BinaryReader reader = new(stream);
-        ArrayInfo info = ArrayInfo.Parse(reader, out Count length);
-        info.ObjectId.Should().Be(expectedId);
-        info.Length.Should().Be(expectedLength);
+        Id id = ArrayInfo.Parse(reader, out Count length);
+        id.Should().Be((Id)expectedId);
+        length.Should().Be(expectedLength);
         length.Should().Be(expectedLength);
     }
 
     public static TheoryData<Stream, int, int> ArrayInfo_ParseSuccessData => new()
     {
-        { new MemoryStream(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 0, 0 },
-        { new MemoryStream(new byte[] { 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 }), 1, 1 },
-        { new MemoryStream(new byte[] { 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 }), 2, 1 },
-        { new MemoryStream(new byte[] { 0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0xFF, 0x7F }), int.MaxValue, int.MaxValue }
+        { new MemoryStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]), 0, 0 },
+        { new MemoryStream([0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]), 1, 1 },
+        { new MemoryStream([0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]), 2, 1 },
+        { new MemoryStream([0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0xFF, 0x7F]), int.MaxValue, int.MaxValue }
     };
 
     [Theory]
@@ -38,10 +38,10 @@ public class ArrayTests
     public static TheoryData<Stream, Type> ArrayInfo_ParseNegativeData => new()
     {
         // Not enough data
-        { new MemoryStream(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), typeof(EndOfStreamException) },
-        { new MemoryStream(new byte[] { 0x00, 0x00, 0x00 }), typeof(EndOfStreamException) },
+        { new MemoryStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]), typeof(EndOfStreamException) },
+        { new MemoryStream([0x00, 0x00, 0x00]), typeof(EndOfStreamException) },
         // Negative numbers
-        { new MemoryStream(new byte[] { 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF }), typeof(ArgumentOutOfRangeException) }
+        { new MemoryStream([0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF]), typeof(ArgumentOutOfRangeException) }
     };
 
     [Theory]
@@ -67,8 +67,8 @@ public class ArrayTests
     {
         BinaryFormattedObject format = array.SerializeAndParse();
         format.RecordCount.Should().BeGreaterThanOrEqualTo(3);
-        ArraySinglePrimitive arrayRecord = (ArraySinglePrimitive)format[1];
-        ((IEnumerable)arrayRecord.ArrayObjects).Should().BeEquivalentTo((IEnumerable)array);
+        ArrayRecord arrayRecord = (ArrayRecord)format[1];
+        arrayRecord.Should().BeEquivalentTo((IEnumerable)array);
     }
 
     public static TheoryData<Array> PrimitiveArray_Parse_Data => new()
