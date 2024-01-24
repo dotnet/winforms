@@ -391,14 +391,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
             Try
                 My.Computer.Network.UploadFile(destinationFilename,
-                                                           UploadFileUrl,
-                                                           "anonymous",
-                                                           "anonymous",
-                                                           True,
-                                                           100000
-                                             )
-            Catch ex As Exception
-                Stop
+                                               UploadFileUrl,
+                                               "anonymous",
+                                               "anonymous",
+                                               True,
+                                               100000
+                                              )
             Finally
                 CleanupTempDirectory(tmpFilePath)
             End Try
