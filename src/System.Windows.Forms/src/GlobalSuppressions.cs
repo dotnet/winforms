@@ -16,6 +16,7 @@
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.PrintPreviewControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.FontDialog.RunDialog(System.IntPtr)~System.Boolean")]
+[assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.FontDialog.EventApply")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.FileDialog.EventFileOk")]
 
