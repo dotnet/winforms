@@ -26,6 +26,7 @@ internal class UserControlWithObjectCollectionEditor : UserControl
         set { }
     }
 
+    // https://github.com/dotnet/runtime/issues/94365
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     public string MiscValue { get; set; }
