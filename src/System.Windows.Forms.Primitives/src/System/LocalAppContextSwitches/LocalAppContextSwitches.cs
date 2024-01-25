@@ -31,6 +31,8 @@ internal static partial class LocalAppContextSwitches
 
     private static FrameworkName? s_targetFrameworkName;
 
+    internal static bool s_canNotifyClients => InitializeCanNotifyClients();
+
     /// <summary>
     ///  When there is no exception handler registered for a thread, rethrows the exception. The exception will
     ///  not be presented in a dialog or swallowed when not in interactive mode. This is always opt-in and is
@@ -161,4 +163,20 @@ internal static partial class LocalAppContextSwitches
     }
 
     internal static void SetDataGridViewUIAStartRowCountAtZero(bool value) => s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
+
+    private static bool InitializeCanNotifyClients()
+    {
+        // While handling accessibility events, accessibility clients (JAWS, Inspect),
+        // can access AccessibleObject associated with the event. In the designer scenario, controls are not
+        // receiving messages directly and might not respond to messages while in the notification call.
+        // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
+        //
+        // The following compat switch is set in the designer server process to prevent controls from sending notification.
+        if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
+        {
+            return !isEnabled;
+        }
+
+        return true;
+    }
 }
