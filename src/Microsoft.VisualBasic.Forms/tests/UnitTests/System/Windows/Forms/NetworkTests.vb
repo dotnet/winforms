@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return filename
         End Function
 
-        Private Shared Function ValidateDownLoad(tmpFilePath As String, destinationFilename As String) As Long
+        Private Shared Function ValidateDownload(tmpFilePath As String, destinationFilename As String) As Long
             Assert.True(Directory.Exists(tmpFilePath))
             Dim fileInfo As New FileInfo(destinationFilename)
             Assert.True(fileInfo.Exists)
