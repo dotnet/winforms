@@ -18,8 +18,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _lockObject As New Object
 
         ''' <summary>
-        ''' If size >= 0 then create the file with size lenght
-        ''' The file will contain the letters A-Z repeating as needed
+        ''' If size >= 0 then create the file with size length
+        ''' The file will contain the letters A-Z repeating as needed.
         ''' </summary>
         ''' <param name="tmpFilePath">Full path to working directory</param>
         ''' <param name="size">File size to be created</param>
