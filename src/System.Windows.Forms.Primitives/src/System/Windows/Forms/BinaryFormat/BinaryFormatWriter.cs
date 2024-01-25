@@ -247,7 +247,7 @@ internal static class BinaryFormatWriter
 
         StringRecordsCollection strings = new(currentId: 3);
 
-        new ArraySingleString(2, new ListConverter<string, object?>(list, strings.GetStringRecord)).Write(writer);
+        new ArraySingleString(2, new ListConverter<string, object>(list, strings.GetStringRecord)).Write(writer);
     }
 
     /// <summary>
