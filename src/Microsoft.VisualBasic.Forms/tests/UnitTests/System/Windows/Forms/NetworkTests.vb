@@ -18,8 +18,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _lockObject As New Object
 
         ''' <summary>
-        ''' If size >= 0 then create the file with size lenght
-        ''' The file will contain the letters A-Z repeating as needed
+        ''' If size >= 0 then create the file with size length
+        ''' The file will contain the letters A-Z repeating as needed.
         ''' </summary>
         ''' <param name="tmpFilePath">Full path to working directory</param>
         ''' <param name="size">File size to be created</param>
@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return filename
         End Function
 
-        Private Shared Function ValidateDownLoad(tmpFilePath As String, destinationFilename As String) As Long
+        Private Shared Function ValidateDownload(tmpFilePath As String, destinationFilename As String) As Long
             Assert.True(Directory.Exists(tmpFilePath))
             Dim fileInfo As New FileInfo(destinationFilename)
             Assert.True(fileInfo.Exists)
@@ -61,8 +61,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
         ''' <summary>
-        ''' This gets a master test folder using a predefined Guid
-        ''' So all temp directories and files end up in 1 place
+        ''' This gets a master test folder using a predefined Guid,
+        ''' so all temp directories and files end up in one place.
         ''' </summary>
         ''' <returns></returns>
         Private Function GetTempTestFolder() As String
@@ -95,7 +95,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                         )
                     Finally
                         Assert.True(Directory.Exists(tmpFilePath))
-                        Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 1)
+                        Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 1)
                         CleanupTempDirectory(tmpFilePath)
                     End Try
                 End Sub
@@ -118,7 +118,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                 )
             Finally
                 Assert.True(Directory.Exists(tmpFilePath))
-                Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 18135)
+                Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
                 CleanupTempDirectory(tmpFilePath)
             End Try
 
@@ -192,7 +192,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                 "",
                                                 Nothing
                                             )
-            Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 18135)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -226,7 +226,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                                 100000,
                                                 False
                                             )
-            Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 18135)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -255,7 +255,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                              100000,
                                              True
                                             )
-            Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 104857600)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 104857600)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -265,7 +265,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
             My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl),
                                              destinationFilename)
-            Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 18135)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -277,7 +277,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                              destinationFilename,
                                              "TDB",
                                              "TBD")
-            Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 18135)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -287,7 +287,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
             My.Computer.Network.DownloadFile(DownloadFileUrl,
                                              destinationFilename)
-            Assert.Equal(ValidateDownLoad(tmpFilePath, destinationFilename), 18135)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
