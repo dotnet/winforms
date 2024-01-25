@@ -247,9 +247,7 @@ internal static class BinaryFormatWriter
 
         StringRecordsCollection strings = new(currentId: 3);
 
-        new ArraySingleString(
-            new ArrayInfo(2, list.Count),
-            new ListConverter<string>(list, strings.GetStringRecord)).Write(writer);
+        new ArraySingleString(2, new ListConverter<string, object>(list, strings.GetStringRecord)).Write(writer);
     }
 
     /// <summary>
@@ -280,10 +278,7 @@ internal static class BinaryFormatWriter
             // _version doesn't matter
             0).Write(writer);
 
-        new ArraySinglePrimitive(
-            new ArrayInfo(2, list.Count),
-            primitiveType,
-            new ListConverter<T>(list, (T value) => value!)).Write(writer);
+        new ArraySinglePrimitive<T>(2, list).Write(writer);
     }
 
     /// <summary>
@@ -376,7 +371,7 @@ internal static class BinaryFormatWriter
                 0).Write(writer);
 
             new ArraySingleObject(
-                new ArrayInfo(2, list.Count),
+                2,
                 ListConverter.GetPrimitiveConverter(list, new StringRecordsCollection(currentId: 3))).Write(writer);
 
             return true;
@@ -403,16 +398,46 @@ internal static class BinaryFormatWriter
             if (primitiveType == PrimitiveType.String)
             {
                 StringRecordsCollection strings = new(currentId: 2);
-                new ArraySingleString(
-                    new ArrayInfo(1, array.Length),
-                    ListConverter.GetPrimitiveConverter(array, strings)).Write(writer);
+                new ArraySingleString(1, ListConverter.GetPrimitiveConverter(array, strings)).Write(writer);
                 return true;
             }
 
-            new ArraySinglePrimitive(
-                new ArrayInfo(1, array.Length),
-                primitiveType,
-                new ListConverter<object?>(array, o => o!)).Write(writer);
+            IRecord record = primitiveType switch
+            {
+                PrimitiveType.Boolean => new ArraySinglePrimitive<bool>(
+                    1, new ListConverter<object, bool>(array, o => (bool)o!)),
+                PrimitiveType.Char => new ArraySinglePrimitive<char>(
+                    1, new ListConverter<object, char>(array, o => (char)o!)),
+                PrimitiveType.Byte => new ArraySinglePrimitive<byte>(
+                    1, new ListConverter<object, byte>(array, o => (byte)o!)),
+                PrimitiveType.SByte => new ArraySinglePrimitive<sbyte>(
+                    1, new ListConverter<object, sbyte>(array, o => (sbyte)o!)),
+                PrimitiveType.Int16 => new ArraySinglePrimitive<short>(
+                    1, new ListConverter<object, short>(array, o => (short)o!)),
+                PrimitiveType.Int32 => new ArraySinglePrimitive<int>(
+                    1, new ListConverter<object, int>(array, o => (int)o!)),
+                PrimitiveType.Int64 => new ArraySinglePrimitive<long>(
+                    1, new ListConverter<object, long>(array, o => (long)o!)),
+                PrimitiveType.UInt16 => new ArraySinglePrimitive<ushort>(
+                    1, new ListConverter<object, ushort>(array, o => (ushort)o!)),
+                PrimitiveType.UInt32 => new ArraySinglePrimitive<uint>(
+                    1, new ListConverter<object, uint>(array, o => (uint)o!)),
+                PrimitiveType.UInt64 => new ArraySinglePrimitive<ulong>(
+                    1, new ListConverter<object, ulong>(array, o => (ulong)o!)),
+                PrimitiveType.Single => new ArraySinglePrimitive<float>(
+                    1, new ListConverter<object, float>(array, o => (float)o!)),
+                PrimitiveType.Double => new ArraySinglePrimitive<double>(
+                    1, new ListConverter<object, double>(array, o => (double)o!)),
+                PrimitiveType.Decimal => new ArraySinglePrimitive<decimal>(
+                    1, new ListConverter<object, decimal>(array, o => (decimal)o!)),
+                PrimitiveType.TimeSpan => new ArraySinglePrimitive<TimeSpan>(
+                    1, new ListConverter<object, TimeSpan>(array, o => (TimeSpan)o!)),
+                PrimitiveType.DateTime => new ArraySinglePrimitive<DateTime>(
+                    1, new ListConverter<object, DateTime>(array, o => (DateTime)o!)),
+                _ => throw new InvalidOperationException()
+            };
+
+            record.Write(writer);
 
             return true;
         }
@@ -481,12 +506,8 @@ internal static class BinaryFormatWriter
         // 1, 2 and 3 are used for the class id and array ids.
         StringRecordsCollection strings = new(currentId: 4);
 
-        new ArraySingleObject(
-            new ArrayInfo(2, keys.Length),
-            ListConverter.GetPrimitiveConverter(keys, strings)).Write(writer);
-        new ArraySingleObject(
-            new ArrayInfo(3, values.Length),
-            ListConverter.GetPrimitiveConverter(values, strings)).Write(writer);
+        new ArraySingleObject(2, ListConverter.GetPrimitiveConverter(keys, strings)).Write(writer);
+        new ArraySingleObject(3, ListConverter.GetPrimitiveConverter(values, strings)).Write(writer);
     }
 
     /// <summary>
@@ -605,7 +626,7 @@ internal static class BinaryFormatWriter
         catch (Exception ex) when (!ex.IsCriticalException())
         {
             Debug.WriteLine($"Failed to binary format: {ex.Message}");
-            Debug.Assert(ex is ArgumentException, "We should only be getting ArgumentExceptions on write.");
+            Debug.Assert(ex is ArgumentException or SerializationException, "Unexpected write exception.");
             success = false;
         }
 

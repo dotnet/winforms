@@ -145,7 +145,7 @@ public class ListTests
         classInfo["_size"].Should().Be(0);
         classInfo["_version"].Should().Be(0);
 
-        ArraySinglePrimitive array = (ArraySinglePrimitive)format[2];
+        ArraySinglePrimitive<int> array = (ArraySinglePrimitive<int>)format[2];
         array.Length.Should().Be(0);
     }
 
