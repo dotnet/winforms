@@ -4711,7 +4711,7 @@ public class TreeViewTests
     [MemberData(nameof(TreeViewNodeSorter_TestData))]
     public void TreeViewNodeSorter_Set_GetReturnsExpected(IComparer value)
     {
-        using TreeView treeView = new()
+        using TreeView treeView = new ()
         {
             TreeViewNodeSorter = value
         };
