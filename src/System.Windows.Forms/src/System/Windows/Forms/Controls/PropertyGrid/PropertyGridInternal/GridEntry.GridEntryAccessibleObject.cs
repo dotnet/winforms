@@ -195,18 +195,22 @@ internal abstract partial class GridEntry
             }
         }
 
-        internal override int[] RuntimeId => _runtimeId ??= new[]
-        {
-            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a.
-            // Second item can be anything, but it's good to supply HWND. Third and others are optional, but in case of
-            // GridItem we need it, to make it unique. Grid items are not controls, they don't have hwnd - we use hwnd
-            // of PropertyGridView.
+        /// <remarks>
+        ///  <para>
+        ///    For <see cref="GridEntry" /> the item hash code to make the ID unique. Grid items are not controls,
+        ///    they don't have windows - we use <see cref="HWND" /> of <see cref="PropertyGridView" />.
+        ///  </para>
+        /// </remarks>
+        /// <inheritdoc cref="AccessibleObject.RuntimeId" />
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+
             RuntimeIDFirstItem,
             this.TryGetOwnerAs(out GridEntry? owner)
                 ? (int)(owner?.OwnerGridView?.InternalHandle ?? HWND.Null)
                 : (int)HWND.Null,
             GetHashCode()
-        };
+        ];
 
         private PropertyGridView? PropertyGridView
         {

@@ -9,7 +9,7 @@ namespace Windows.Win32.UI.WindowsAndMessaging;
 // https://devblogs.microsoft.com/oldnewthing/20120720-00/?p=7083
 
 [StructLayout(LayoutKind.Sequential)]
-public struct ICONDIRENTRY
+internal struct ICONDIRENTRY
 {
     // Width and height are 1 - 255 or 0 for 256
     public byte bWidth;

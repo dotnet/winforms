@@ -13,7 +13,7 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class MemberPrimitiveTyped : Record, IRecord<MemberPrimitiveTyped>
+internal sealed class MemberPrimitiveTyped : Record, IRecord<MemberPrimitiveTyped>, IPrimitiveTypeRecord
 {
     public PrimitiveType PrimitiveType { get; }
     public object Value { get; }

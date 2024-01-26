@@ -200,14 +200,20 @@ public partial class Control
 
         internal override bool CanGetDefaultActionInternal => IsInternal && Owner?.AccessibleDefaultActionDescription is null;
 
-        // This is used only if control supports IAccessibleEx. We need to provide a unique ID. Others are implementing this in the same manner.
-        // First item is static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
-        internal override int[] RuntimeId => new int[]
-        {
+        /// <remarks>
+        ///  <para>
+        ///    This is used only if control supports <see cref="IAccessibleEx" />.  We need to provide a unique ID.
+        ///    Others are implementing this in the same manner.  First item is static - <see cref="AccessibleObject.RuntimeIDFirstItem"/>).
+        ///    Second item can be anything unique, Win32 uses <see cref="HWND"/>, we copied that.
+        ///  </para>
+        /// </remarks>
+        /// <inheritdoc cref="AccessibleObject.RuntimeId" />
+        internal override int[] RuntimeId =>
+        [
             RuntimeIDFirstItem,
-            PARAM.ToInt(HandleInternal),
+            (int)HandleInternal,
             GetHashCode()
-        };
+        ];
 
         public override string? Description => Owner?.AccessibleDescription ?? base.Description;
 

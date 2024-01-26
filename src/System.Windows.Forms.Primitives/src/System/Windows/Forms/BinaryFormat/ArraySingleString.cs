@@ -13,12 +13,12 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ArraySingleString : ArrayRecord, IRecord<ArraySingleString>
+internal sealed class ArraySingleString : ArrayRecord<object>, IRecord<ArraySingleString>
 {
     public static RecordType RecordType => RecordType.ArraySingleString;
 
-    public ArraySingleString(ArrayInfo arrayInfo, IReadOnlyList<object> arrayObjects)
-        : base(arrayInfo, arrayObjects)
+    public ArraySingleString(Id objectId, IReadOnlyList<object> arrayObjects)
+        : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     { }
 
     static ArraySingleString IBinaryFormatParseable<ArraySingleString>.Parse(

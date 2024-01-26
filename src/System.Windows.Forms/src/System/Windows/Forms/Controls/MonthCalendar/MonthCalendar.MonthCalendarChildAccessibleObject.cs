@@ -49,16 +49,18 @@ public partial class MonthCalendar
                 _ => base.FragmentNavigate(direction)
             };
 
-        // This value wasn't saved to _initRuntimeId as in the rest calendar accessible objects
-        // because GetChildId requires _monthCalendarAccessibleObject existing
-        // but it will be null because an inherited constructor is not called yet.
-        internal override int[] RuntimeId
-            => !_monthCalendarAccessibleObject.TryGetOwnerAs(out Control? owner) ? base.RuntimeId : new int[]
-            {
-                RuntimeIDFirstItem,
-                (int)(nint)owner.InternalHandle,
-                GetChildId()
-            };
+        /// <remarks>
+        ///  <para>
+        ///    This value wasn't saved to a field as in the rest calendar accessible objects
+        ///    because GetChildId requires <see cref="_monthCalendarAccessibleObject" /> existing
+        ///    but it will be <see langword="null"/> because an inherited constructor is not called yet.
+        ///  </para>
+        /// </remarks>
+        /// <inheritdoc cref="AccessibleObject.RuntimeId" />
+        internal override int[] RuntimeId =>
+            !_monthCalendarAccessibleObject.TryGetOwnerAs(out Control? owner)
+                ? base.RuntimeId
+                : [RuntimeIDFirstItem, (int)owner.InternalHandle, GetChildId()];
 
         public override AccessibleStates State => AccessibleStates.None;
     }

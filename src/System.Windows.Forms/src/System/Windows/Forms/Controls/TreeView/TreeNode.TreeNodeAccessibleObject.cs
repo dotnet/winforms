@@ -146,13 +146,12 @@ public partial class TreeNode
                 ? AccessibleRole.CheckButton
                 : AccessibleRole.OutlineItem;
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(_owningTreeView.InternalHandle),
-                _owningTreeNode.GetHashCode()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            (int)_owningTreeView.InternalHandle,
+            _owningTreeNode.GetHashCode()
+        ];
 
         public override AccessibleStates State
         {
