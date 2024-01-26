@@ -111,17 +111,18 @@ public partial class ListViewGroup
         {
             get
             {
-                int[] owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
+                int[] id = _owningListViewAccessibilityObject.RuntimeId;
 
-                Debug.Assert(owningListViewRuntimeId.Length >= 2);
+                Debug.Assert(id.Length >= 2);
 
-                return new int[]
-                {
-                    owningListViewRuntimeId[0],
-                    owningListViewRuntimeId[1],
-                    4, // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                return
+                [
+                    id[0],
+                    id[1],
+                    // Win32 control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                    4,
                     GetHashCode()
-                };
+                ];
             }
         }
 

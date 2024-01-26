@@ -113,15 +113,12 @@ public partial class ErrorProvider
 
             public override AccessibleRole Role => AccessibleRole.Grouping;
 
-            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
-            // Second item can be anything, but it's good to supply HWND.
-            internal override int[] RuntimeId
-                => new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(_owner.Handle),
-                    _owner.GetHashCode()
-                };
+            internal override int[] RuntimeId =>
+            [
+                RuntimeIDFirstItem,
+                (int)_owner.Handle,
+                _owner.GetHashCode()
+            ];
 
             public override AccessibleStates State => AccessibleStates.ReadOnly;
         }

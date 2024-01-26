@@ -100,10 +100,7 @@ public partial class ComboBox
                 _ => base.IsPatternSupported(patternId)
             };
 
-        /// <summary>
-        ///  Gets the runtime ID.
-        /// </summary>
-        internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
+        internal override int[] RuntimeId => [RuntimeIDFirstItem, GetHashCode()];
 
         internal override unsafe ITextRangeProvider* DocumentRangeInternal
             => _textProvider.DocumentRange;

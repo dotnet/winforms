@@ -42,13 +42,11 @@ internal partial class PropertyGridView
 
         private protected override bool IsInternal => true;
 
-        /// <inheritdoc />
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(_owningGridViewListBox.InternalHandle),
-                _owningItem.GetHashCode()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            (int)_owningGridViewListBox.InternalHandle,
+            _owningItem.GetHashCode()
+        ];
     }
 }

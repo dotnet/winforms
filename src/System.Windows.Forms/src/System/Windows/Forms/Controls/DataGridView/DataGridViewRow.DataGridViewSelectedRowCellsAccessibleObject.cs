@@ -34,8 +34,7 @@ public partial class DataGridViewRow
 
         internal override bool CanGetValueInternal => false;
 
-        internal override int[] RuntimeId
-            => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+        internal override int[] RuntimeId => _runtimeId ??= [RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode()];
 
         public override AccessibleObject? GetChild(int index)
         {

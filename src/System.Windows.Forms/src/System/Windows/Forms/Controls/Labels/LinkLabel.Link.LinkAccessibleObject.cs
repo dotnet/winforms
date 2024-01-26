@@ -130,13 +130,12 @@ public partial class LinkLabel
 
             public override AccessibleRole Role => AccessibleRole.Link;
 
-            internal override int[] RuntimeId
-                => new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(_owningLinkLabel.InternalHandle),
-                    _owningLink.GetHashCode()
-                };
+            internal override int[] RuntimeId =>
+            [
+                RuntimeIDFirstItem,
+                (int)_owningLinkLabel.InternalHandle,
+                _owningLink.GetHashCode()
+            ];
 
             public override AccessibleStates State
             {

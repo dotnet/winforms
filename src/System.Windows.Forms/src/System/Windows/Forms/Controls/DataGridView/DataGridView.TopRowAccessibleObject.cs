@@ -84,13 +84,12 @@ public partial class DataGridView
             }
         }
 
-        internal override int[] RuntimeId
-            => runtimeId ??= new int[]
-            {
-                RuntimeIDFirstItem, // first item is static - 0x2a
-                Parent.GetHashCode(),
-                GetHashCode()
-            };
+        internal override int[] RuntimeId => runtimeId ??=
+        [
+            RuntimeIDFirstItem,
+            Parent.GetHashCode(),
+            GetHashCode()
+        ];
 
         public override string Value => Name;
 

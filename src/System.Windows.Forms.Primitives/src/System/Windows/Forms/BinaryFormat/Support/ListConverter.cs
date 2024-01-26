@@ -7,7 +7,7 @@ namespace System.Windows.Forms.BinaryFormat;
 
 internal static class ListConverter
 {
-    public static ListConverter<object?> GetPrimitiveConverter(
+    public static ListConverter<object?, object> GetPrimitiveConverter(
         IList values,
         StringRecordsCollection strings) => new(
             values,

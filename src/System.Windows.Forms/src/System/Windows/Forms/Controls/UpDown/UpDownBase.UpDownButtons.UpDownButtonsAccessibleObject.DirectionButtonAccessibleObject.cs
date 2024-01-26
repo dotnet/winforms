@@ -103,17 +103,14 @@ public abstract partial class UpDownBase
 
                 public override AccessibleRole Role => AccessibleRole.PushButton;
 
-                /// <summary>
-                ///  Gets the runtime ID.
-                /// </summary>
                 internal override int[] RuntimeId
-                    => new int[]
+                {
+                    get
                     {
-                        _parent.RuntimeId[0],
-                        _parent.RuntimeId[1],
-                        _parent.RuntimeId[2],
-                        _up ? 1 : 0
-                    };
+                        int[] id = _parent.RuntimeId;
+                        return [id[0], id[1], id[2], _up ? 1 : 0];
+                    }
+                }
             }
         }
     }

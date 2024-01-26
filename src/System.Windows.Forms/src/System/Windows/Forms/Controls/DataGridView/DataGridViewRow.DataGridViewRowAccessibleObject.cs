@@ -138,13 +138,12 @@ public partial class DataGridViewRow
 
         private static int RowStartIndex => LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1;
 
-        internal override int[] RuntimeId
-            => _runtimeId ??= new int[]
-            {
-                RuntimeIDFirstItem, // first item is static - 0x2a
-                Parent?.GetHashCode() ?? 0,
-                GetHashCode()
-            };
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+            RuntimeIDFirstItem,
+            Parent?.GetHashCode() ?? 0,
+            GetHashCode()
+        ];
 
         private AccessibleObject SelectedCellsAccessibilityObject
         {
