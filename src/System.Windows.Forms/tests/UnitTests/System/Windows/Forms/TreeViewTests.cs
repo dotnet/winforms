@@ -4725,7 +4725,7 @@ public class TreeViewTests
     [WinFormsFact]
     public void TreeViewNodeSorter_Set_SortedFalseIfNull()
     {
-        using var treeView = new ()
+        using TreeView treeView = new ()
         {
             TreeViewNodeSorter = StringComparer.CurrentCulture
         };
