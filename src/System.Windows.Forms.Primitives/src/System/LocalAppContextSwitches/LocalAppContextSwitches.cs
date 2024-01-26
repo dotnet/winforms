@@ -118,11 +118,11 @@ internal static partial class LocalAppContextSwitches
                 {
                     return true;
                 }
+            }
 
-                if (switchName == WindowsFormsAccessibleObjectNoClientNotificationsSwitchName)
-                {
-                    return true;
-                }
+            if (switchName == WindowsFormsAccessibleObjectNoClientNotificationsSwitchName)
+            {
+                return true;
             }
 
             return false;
