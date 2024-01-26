@@ -202,10 +202,18 @@ internal abstract class Record : IRecord
         where T : unmanaged
     {
         // Special casing byte[] for performance.
-        if (typeof(T) == typeof(byte) && values is byte[] byteArray)
+        if (typeof(T) == typeof(byte))
         {
-            writer.Write(byteArray);
-            return;
+            if (values is byte[] byteArray)
+            {
+                writer.Write(byteArray);
+                return;
+            }
+            else if (values is ArraySegment<byte> arraySegment)
+            {
+                writer.Write(arraySegment);
+                return;
+            }
         }
 
         for (int i = 0; i < values.Count; i++)
