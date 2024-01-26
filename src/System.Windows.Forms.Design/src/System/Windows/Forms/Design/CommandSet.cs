@@ -808,7 +808,7 @@ internal partial class CommandSet : IDisposable
 
                     // If we CTRL+Arrow and we're using SnapLines - snap to the next location
                     // Don't snap if we are moving a component in the ComponentTray
-                    if (invertSnap && useSnapLines && primaryControl is not null)
+                    if (invertSnap && useSnapLines && primaryControl is not null && comp.Site is not null)
                     {
                         List<IComponent> selComps = SelectionService.GetSelectedComponents().Cast<IComponent>().ToList();
 
