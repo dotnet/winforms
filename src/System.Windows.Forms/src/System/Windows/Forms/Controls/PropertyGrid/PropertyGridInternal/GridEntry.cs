@@ -2027,17 +2027,17 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
 
         // Second pass, copy any that didn't have the parenthesis.
-        if (newPosition > 0)
+        if (newProperties is not null)
         {
             for (int i = 0; i < props.Length; i++)
             {
                 if (props[i] is not null)
                 {
-                    newProperties![newPosition++] = props[i];
+                    newProperties[newPosition++] = props[i];
                 }
             }
 
-            props = newProperties!;
+            props = newProperties;
         }
 
         return props;
