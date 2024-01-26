@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.ComponentModel;
 using System.Drawing;
 
@@ -9,6 +11,52 @@ namespace System.Windows.Forms.BinaryFormat.Tests;
 public class WinFormsBinaryFormattedObjectTests
 {
     private static readonly Attribute[] s_visible = [DesignerSerializationVisibilityAttribute.Visible];
+
+    [Fact]
+    public void BinaryFormattedObject_ImageListStreamer_FromBinaryFormatter()
+    {
+        using ImageList sourceList = new();
+        using Bitmap image = new(10, 10);
+        sourceList.Images.Add(image);
+        using ImageListStreamer stream = sourceList.ImageStream!;
+
+        BinaryFormattedObject binary = stream.SerializeAndParse();
+        binary.RecordCount.Should().Be(5);
+        binary[1].Should().BeOfType<BinaryLibrary>().Which
+            .LibraryName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
+        binary[2].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be(typeof(ImageListStreamer).FullName);
+        binary[3].Should().BeOfType<ArraySinglePrimitive<byte>>();
+
+        binary.TryGetImageListStreamer(out object? result).Should().BeTrue();
+        using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
+        using ImageList newList = new();
+        newList.ImageStream = deserialized;
+        newList.Images.Count.Should().Be(1);
+        Bitmap newImage = (Bitmap)newList.Images[0];
+        newImage.Size.Should().Be(sourceList.Images[0].Size);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_ImageListStreamer_RoundTrip()
+    {
+        using ImageList sourceList = new();
+        using Bitmap image = new(10, 10);
+        sourceList.Images.Add(image);
+        using ImageListStreamer stream = sourceList.ImageStream!;
+
+        using MemoryStream memoryStream = new();
+        WinFormsBinaryFormatWriter.WriteImageListStreamer(memoryStream, stream);
+        memoryStream.Position = 0;
+        BinaryFormattedObject binary = new(memoryStream, leaveOpen: true);
+
+        binary.TryGetImageListStreamer(out object? result).Should().BeTrue();
+        using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
+        using ImageList newList = new();
+        newList.ImageStream = deserialized;
+        newList.Images.Count.Should().Be(1);
+        Bitmap newImage = (Bitmap)newList.Images[0];
+        newImage.Size.Should().Be(sourceList.Images[0].Size);
+    }
 
     [Theory]
     [MemberData(nameof(BinaryFormattedObjects_TestData))]

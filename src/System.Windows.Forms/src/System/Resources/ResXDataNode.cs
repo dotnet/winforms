@@ -303,7 +303,7 @@ public sealed class ResXDataNode : ISerializable
                 bool success = false;
                 try
                 {
-                    success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
+                    success = WinFormsBinaryFormatWriter.TryWriteObject(stream, value);
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
@@ -433,7 +433,7 @@ public sealed class ResXDataNode : ISerializable
         try
         {
             BinaryFormattedObject format = new(stream, leaveOpen: true);
-            if (format.TryGetFrameworkObject(out object? value))
+            if (format.TryGetObject(out object? value))
             {
                 return value;
             }
