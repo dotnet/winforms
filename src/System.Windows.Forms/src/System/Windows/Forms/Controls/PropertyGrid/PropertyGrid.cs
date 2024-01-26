@@ -955,6 +955,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                         continue;
                     }
 
+                    // We have already done the same checks as inside GetUnwrappedObject that return null.
                     Type oldType = GetUnwrappedObject(i)!.GetType();
 
                     object newObject = value[i];
