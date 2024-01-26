@@ -1658,12 +1658,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         if (tab is null)
         {
-            ConstructorInfo? constructor = tabType.GetConstructor(new Type[] { typeof(IServiceProvider) });
+            ConstructorInfo? constructor = tabType.GetConstructor([typeof(IServiceProvider)]);
             object? parameter = null;
             if (constructor is null)
             {
                 // Try a IDesignerHost constructor.
-                constructor = tabType.GetConstructor(new Type[] { typeof(IDesignerHost) });
+                constructor = tabType.GetConstructor([typeof(IDesignerHost)]);
 
                 if (constructor is not null)
                 {
