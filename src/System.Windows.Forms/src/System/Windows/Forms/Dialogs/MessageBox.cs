@@ -447,7 +447,7 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        if (!LocalAppContextSwitches.s_canNotifyClients)
+        if (!LocalAppContextSwitches.CanNotifyClients)
         {
             return DialogResult.None;
         }

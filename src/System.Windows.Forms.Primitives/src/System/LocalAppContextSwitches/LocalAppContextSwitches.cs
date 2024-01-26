@@ -21,6 +21,7 @@ internal static partial class LocalAppContextSwitches
     internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
+    private const string WindowsFormsAccessibleObjectNoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -28,10 +29,9 @@ internal static partial class LocalAppContextSwitches
     private static int s_trackBarModernRendering;
     private static int s_doNotCatchUnhandledExceptions;
     private static int s_dataGridViewUIAStartRowCountAtZero;
+    private static int s_canNotifyClients;
 
     private static FrameworkName? s_targetFrameworkName;
-
-    internal static bool s_canNotifyClients => InitializeCanNotifyClients();
 
     /// <summary>
     ///  When there is no exception handler registered for a thread, rethrows the exception. The exception will
@@ -80,6 +80,11 @@ internal static partial class LocalAppContextSwitches
             isSwitchEnabled = GetSwitchDefaultValue(switchName);
         }
 
+        if (hasSwitch && (switchName == WindowsFormsAccessibleObjectNoClientNotificationsSwitchName))
+        {
+            return !isSwitchEnabled;
+        }
+
         AppContext.TryGetSwitch("TestSwitch.LocalAppContext.DisableCaching", out bool disableCaching);
         if (!disableCaching)
         {
@@ -110,6 +115,11 @@ internal static partial class LocalAppContextSwitches
                 }
 
                 if (switchName == ServicePointManagerCheckCrlSwitchName)
+                {
+                    return true;
+                }
+
+                if (switchName == WindowsFormsAccessibleObjectNoClientNotificationsSwitchName)
                 {
                     return true;
                 }
@@ -162,21 +172,11 @@ internal static partial class LocalAppContextSwitches
         get => GetCachedSwitchValue(DataGridViewUIAStartRowCountAtZeroSwitchName, ref s_dataGridViewUIAStartRowCountAtZero);
     }
 
-    internal static void SetDataGridViewUIAStartRowCountAtZero(bool value) => s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
-
-    private static bool InitializeCanNotifyClients()
+    public static bool CanNotifyClients
     {
-        // While handling accessibility events, accessibility clients (JAWS, Inspect),
-        // can access AccessibleObject associated with the event. In the designer scenario, controls are not
-        // receiving messages directly and might not respond to messages while in the notification call.
-        // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
-        //
-        // The following compat switch is set in the designer server process to prevent controls from sending notification.
-        if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
-        {
-            return !isEnabled;
-        }
-
-        return true;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(WindowsFormsAccessibleObjectNoClientNotificationsSwitchName, ref s_canNotifyClients);
     }
+
+    internal static void SetDataGridViewUIAStartRowCountAtZero(bool value) => s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
 }

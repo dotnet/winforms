@@ -143,7 +143,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     public virtual Rectangle Bounds => SystemIAccessible.TryGetLocation(CHILDID_SELF);
 
-    internal static bool CanNotifyClients => LocalAppContextSwitches.s_canNotifyClients;
+    internal static bool CanNotifyClients => LocalAppContextSwitches.CanNotifyClients;
 
     /// <summary>
     ///  Gets a description of the default action for an object.
