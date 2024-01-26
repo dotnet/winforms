@@ -2018,7 +2018,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         // First scan the list and move any parenthesized properties to the front.
         for (int i = 0; i < props.Length; i++)
         {
-            if (props[i].GetAttribute<ParenthesizePropertyNameAttribute>()!.NeedParenthesis)
+            if (props[i].GetAttribute<ParenthesizePropertyNameAttribute>()?.NeedParenthesis ?? false)
             {
                 newProperties ??= new PropertyDescriptor[props.Length];
                 newProperties[newPosition++] = props[i];
