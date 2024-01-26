@@ -13,30 +13,28 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ArraySinglePrimitive : ArrayRecord, IRecord<ArraySinglePrimitive>
+internal sealed class ArraySinglePrimitive<T> : ArrayRecord<T>, IRecord<ArraySinglePrimitive<T>>, IPrimitiveTypeRecord
+    where T : unmanaged
 {
     public PrimitiveType PrimitiveType { get; }
 
     public static RecordType RecordType => RecordType.ArraySinglePrimitive;
 
-    public ArraySinglePrimitive(ArrayInfo arrayInfo, PrimitiveType primitiveType, IReadOnlyList<object> arrayObjects)
-        : base(arrayInfo, arrayObjects)
+    public ArraySinglePrimitive(Id objectId, IReadOnlyList<T> arrayObjects)
+        : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     {
-        PrimitiveType = primitiveType;
+        PrimitiveType = TypeInfo.GetPrimitiveType(typeof(T));
     }
 
-    static ArraySinglePrimitive IBinaryFormatParseable<ArraySinglePrimitive>.Parse(
+    static ArraySinglePrimitive<T> IBinaryFormatParseable<ArraySinglePrimitive<T>>.Parse(
         BinaryReader reader,
         RecordMap recordMap)
     {
-        ArrayInfo arrayInfo = ArrayInfo.Parse(reader, out Count length);
+        Id id = ArrayInfo.Parse(reader, out Count length);
         PrimitiveType primitiveType = (PrimitiveType)reader.ReadByte();
+        Debug.Assert(typeof(T) == primitiveType.GetPrimitiveTypeType());
 
-        ArraySinglePrimitive record = new(
-            arrayInfo,
-            primitiveType,
-            ReadPrimitiveTypes(reader, primitiveType, length));
-
+        ArraySinglePrimitive<T> record = new(id, ReadPrimitiveTypes<T>(reader, length));
         recordMap[record.ObjectId] = record;
         return record;
     }
@@ -46,6 +44,6 @@ internal sealed class ArraySinglePrimitive : ArrayRecord, IRecord<ArraySinglePri
         writer.Write((byte)RecordType);
         ArrayInfo.Write(writer);
         writer.Write((byte)PrimitiveType);
-        WritePrimitiveTypes(writer, PrimitiveType, ArrayObjects);
+        WritePrimitiveTypes(writer, ArrayObjects);
     }
 }

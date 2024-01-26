@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32.System.Com;
 
-public sealed unsafe class ComManagedStream : IStream.Interface, IManagedWrapper<IStream, ISequentialStream>
+internal sealed unsafe class ComManagedStream : IStream.Interface, IManagedWrapper<IStream, ISequentialStream>
 {
     private readonly Stream _dataStream;
 

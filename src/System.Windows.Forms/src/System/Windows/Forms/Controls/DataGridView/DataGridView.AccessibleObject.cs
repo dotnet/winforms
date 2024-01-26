@@ -11,7 +11,7 @@ public partial class DataGridView
 {
     protected class DataGridViewAccessibleObject : ControlAccessibleObject
     {
-        private int[]? runtimeId; // Used by UIAutomation
+        private int[]? _runtimeId;
         private bool? _isModal;
 
         private DataGridViewTopRowAccessibleObject? _topRowAccessibilityObject;
@@ -217,21 +217,11 @@ public partial class DataGridView
             }
         }
 
-        /* Microsoft: why is this method defined and not used?
-        // this method is called when the accessible object needs to be reset
-        // Example: when the user changes the display index on a column or when the user modifies the column collection
-        internal void Reset()
-        {
-            this.NotifyClients(AccessibleEvents.Reorder);
-        }
-        */
-
-        internal override int[] RuntimeId
-            => runtimeId ??= new int[]
-            {
-                RuntimeIDFirstItem, // first item is static - 0x2a
-                GetHashCode()
-            };
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+            RuntimeIDFirstItem,
+            GetHashCode()
+        ];
 
         internal override bool IsIAccessibleExSupported() => true;
 

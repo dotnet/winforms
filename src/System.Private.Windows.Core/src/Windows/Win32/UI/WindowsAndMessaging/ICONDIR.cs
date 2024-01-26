@@ -7,7 +7,7 @@ namespace Windows.Win32.UI.WindowsAndMessaging;
 
 // Needs to be packed to 2 to get ICONDIRENTRY to follow immediately after idCount.
 [StructLayout(LayoutKind.Sequential, Pack = 2)]
-public struct ICONDIR
+internal struct ICONDIR
 {
     // Must be 0
     public ushort idReserved;

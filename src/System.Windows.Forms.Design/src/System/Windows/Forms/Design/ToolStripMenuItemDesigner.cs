@@ -2655,22 +2655,22 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 if (ownerItem is not null && host is not null)
                 {
                     string transDesc;
-                    IList components = data.DragComponents;
+                    List<ToolStripItem> dragComponents = data.DragComponents;
                     int primaryIndex = -1;
                     bool copy = (e.Effect == DragDropEffects.Copy);
-                    if (components.Count == 1)
+                    if (dragComponents.Count == 1)
                     {
-                        string name = TypeDescriptor.GetComponentName(components[0]);
+                        string name = TypeDescriptor.GetComponentName(dragComponents[0]);
                         if (name is null || name.Length == 0)
                         {
-                            name = components[0].GetType().Name;
+                            name = dragComponents[0].GetType().Name;
                         }
 
                         transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                     }
                     else
                     {
-                        transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                        transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, dragComponents.Count);
                     }
 
                     // create a transaction so this happens as an atomic unit.
@@ -2680,13 +2680,15 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         var changeService = primaryItem.Site.GetService<IComponentChangeService>();
                         changeService?.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
 
+                        IReadOnlyList<IComponent> components;
+
                         // If we are copying, then we want to make a copy of the components we are dragging
                         if (copy)
                         {
                             // Remember the primary selection if we had one
                             if (primaryItem is not null)
                             {
-                                primaryIndex = components.IndexOf(primaryItem);
+                                primaryIndex = dragComponents.IndexOf(primaryItem);
                             }
 
                             ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)primaryItem.Site.GetService(typeof(ToolStripKeyboardHandlingService));
@@ -2695,7 +2697,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                                 keyboardHandlingService.CopyInProgress = true;
                             }
 
-                            components = DesignerUtils.CopyDragObjects(components, primaryItem.Site);
+                            components = DesignerUtils.CopyDragObjects(dragComponents, primaryItem.Site);
 
                             if (keyboardHandlingService is not null)
                             {
@@ -2706,6 +2708,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                             {
                                 primaryItem = components[primaryIndex] as ToolStripItem;
                             }
+                        }
+                        else
+                        {
+                            components = dragComponents;
                         }
 
                         if (e.Effect == DragDropEffects.Move || copy)
