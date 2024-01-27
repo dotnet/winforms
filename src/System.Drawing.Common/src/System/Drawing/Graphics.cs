@@ -4,6 +4,9 @@
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+#if NET9_0_OR_GREATER
+using System.Drawing.Imaging.Effects;
+#endif
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -3322,6 +3325,29 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             x, y));
 
         GC.KeepAlive(cachedBitmap);
+    }
+#endif
+
+#if NET9_0_OR_GREATER
+    [RequiresPreviewFeatures]
+    public void DrawImage(
+        Image image,
+        Effect effect,
+        RectangleF srcRect = default,
+        Matrix? transform = default,
+        GraphicsUnit srcUnit = GraphicsUnit.Pixel,
+        ImageAttributes? imageAttr = default)
+    {
+        PInvoke.GdipDrawImageFX(
+            NativeGraphics,
+            image.Pointer(),
+            srcRect.IsEmpty ? null : (RectF*)&srcRect,
+            transform.Pointer(),
+            effect.Pointer(),
+            imageAttr.Pointer(),
+            (Unit)srcUnit).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 #endif
 
