@@ -41,7 +41,7 @@ public unsafe abstract class Effect : IDisposable
 
     ~Effect() => Dispose(disposing: false);
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (_nativeEffect is not null)
         {

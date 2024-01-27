@@ -24,7 +24,7 @@ public sealed class BlackSaturationEffect : ColorCurveEffect
     ///  so that they spread out over the interval [0, 255]. Color channel values less than 15 are set to 0.
     /// </param>
     public BlackSaturationEffect(CurveChannel channel, int adjustValue)
-        : base(GdiPlus.CurveAdjustments.AdjustBlackSaturation, channel, adjustValue)
+        : base(CurveAdjustments.AdjustBlackSaturation, channel, adjustValue)
     {
     }
 }

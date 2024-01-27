@@ -15,7 +15,7 @@ public abstract class ColorCurveEffect : Effect
 {
     private readonly ColorCurveParams _parameters;
 
-    private protected ColorCurveEffect(GdiPlus.CurveAdjustments adjustment, CurveChannel channel, int adjustValue)
+    private protected ColorCurveEffect(CurveAdjustments adjustment, CurveChannel channel, int adjustValue)
         : base(PInvoke.ColorCurveEffectGuid)
     {
         _parameters = new()

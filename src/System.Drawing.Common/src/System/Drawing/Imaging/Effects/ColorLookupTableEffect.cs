@@ -26,6 +26,15 @@ public sealed unsafe class ColorLookupTableEffect : Effect
     /// <param name="alphaLookupTable">The lookup table for the alpha channel.</param>
     /// <exception cref="ArgumentOutOfRangeException">A lookup table parameter was longer than 256 bytes.</exception>
     public ColorLookupTableEffect(
+        byte[] redLookupTable,
+        byte[] greenLookupTable,
+        byte[] blueLookupTable,
+        byte[] alphaLookupTable) : this(redLookupTable.AsSpan(), greenLookupTable, blueLookupTable, alphaLookupTable)
+    {
+    }
+
+    /// <inheritdoc cref="ColorLookupTableEffect(byte[], byte[], byte[], byte[])"/>
+    public ColorLookupTableEffect(
         ReadOnlySpan<byte> redLookupTable,
         ReadOnlySpan<byte> greenLookupTable,
         ReadOnlySpan<byte> blueLookupTable,
