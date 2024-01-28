@@ -1,3 +1,4 @@
+#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
 
@@ -9,6 +10,21 @@ interface IBasicTest : IDispatch
 {
     [propget] HRESULT Int_Property([out, retval] int *ret);
     [propput] HRESULT Int_Property([in] int val);
+};
+
+[
+    object,
+    uuid(424ddab6-a4b1-422f-93b9-7e254b28dbf0),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IAxTestControl : IDispatch
+{
+    [propput, bindable, requestedit, id(DISPID_TEXT)]
+    HRESULT Text([in] BSTR strText);
+    [propget, bindable, requestedit, id(DISPID_TEXT)]
+    HRESULT Text([out, retval] BSTR* pstrText);
 };
 
 [
@@ -35,4 +51,25 @@ library NativeTests
         [default] interface IBasicTest;
         interface ISupportErrorInfo;
     }
+
+    [
+        uuid(726D447D-8F66-4330-9531-F591011DC7B7)
+    ]
+    dispinterface _IAxTestControlEvents
+    {
+        properties:
+        methods:
+            [id(1)] void OnTextChanged([in] BSTR text);
+            [id(2)] void OnButtonClick([in] LONG count);
+            [id(DISPID_CLICK)] void OnClick();
+    };
+
+    [
+        uuid(4EABA135-7C8A-4DB8-B732-2A6AE511D7EB)
+    ]
+    coclass AxTestControl
+    {
+        [default] interface IAxTestControl;
+        [default, source] dispinterface _IAxTestControlEvents;
+    };
 }
