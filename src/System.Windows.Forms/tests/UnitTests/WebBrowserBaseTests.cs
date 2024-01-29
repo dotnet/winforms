@@ -848,6 +848,14 @@ public class WebBrowserBaseTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void WebBrowserBase_UseWaitCursor_ThrowsNotSupportedException()
+    {
+        using SubWebBrowserBase control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
+        Assert.False(control.UseWaitCursor);
+        Assert.Throws<NotSupportedException>(() => control.UseWaitCursor = true);
+    }
+
     private class CustomProcessControl : Control
     {
         public Func<Message, Keys, bool> ProcessCmdKeyAction { get; set; }
