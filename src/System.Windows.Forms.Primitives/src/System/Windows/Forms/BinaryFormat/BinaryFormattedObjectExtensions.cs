@@ -30,9 +30,9 @@ internal static class BinaryFormattedObjectExtensions
             _ => false,
         };
 
-    private delegate bool TryGetDelegate(BinaryFormattedObject format, [NotNullWhen(true)] out object? value);
+    internal delegate bool TryGetDelegate(BinaryFormattedObject format, [NotNullWhen(true)] out object? value);
 
-    private static bool TryGet(TryGetDelegate get, BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    internal static bool TryGet(TryGetDelegate get, BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
         try
         {

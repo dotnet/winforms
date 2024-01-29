@@ -1125,7 +1125,7 @@ public partial class Control
                     try
                     {
                         BinaryFormattedObject format = new(stream, leaveOpen: true);
-                        success = format.TryGetFrameworkObject(out deserialized);
+                        success = format.TryGetObject(out deserialized);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
@@ -1492,7 +1492,7 @@ public partial class Control
 
                     try
                     {
-                        success = BinaryFormatWriter.TryWriteFrameworkObject(stream, sourceValue);
+                        success = WinFormsBinaryFormatWriter.TryWriteObject(stream, sourceValue);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
