@@ -74,9 +74,14 @@ Namespace Microsoft.VisualBasic.Devices
                                    New HttpClientHandler,
                                    New HttpClientHandler With {.Credentials = networkCredentials}
                                   )
-            Return DownloadFileAsync(addressUri, destinationFileName,
-                                     clientHandler, dialog, connectionTimeout,
-                                     overwrite, onUserCancel)
+            Return DownloadFileAsync(addressUri,
+                                     destinationFileName,
+                                     clientHandler,
+                                     dialog,
+                                     connectionTimeout,
+                                     overwrite,
+                                     onUserCancel
+                                    )
         End Function
 
         ''' <summary>
@@ -97,9 +102,15 @@ Namespace Microsoft.VisualBasic.Devices
                                              connectionTimeout As Integer,
                                              overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(address, destinationFileName, userName, password,
-                                    dialog, connectionTimeout, overwrite,
-                                    UICancelOption.ThrowException).ConfigureAwait(False)
+            Await DownloadFileAsync(address,
+                                    destinationFileName,
+                                    userName,
+                                    password,
+                                    dialog,
+                                    connectionTimeout,
+                                    overwrite,
+                                    UICancelOption.ThrowException
+                                   ).ConfigureAwait(False)
         End Function
 
         ''' <summary>
@@ -168,7 +179,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     dialog,
                                     connectionTimeout,
                                     overwrite,
-                                    UICancelOption.ThrowException).ConfigureAwait(False)
+                                    UICancelOption.ThrowException
+                                   ).ConfigureAwait(False)
         End Function
 
         ''' <summary>
@@ -200,7 +212,8 @@ Namespace Microsoft.VisualBasic.Devices
                                     dialog,
                                     connectionTimeout,
                                     overwrite,
-                                    onUserCancel).ConfigureAwait(False)
+                                    onUserCancel
+                                   ).ConfigureAwait(False)
         End Function
 
 #If False Then ' Here in case DownloadFileAsync becomes public
@@ -221,9 +234,14 @@ Namespace Microsoft.VisualBasic.Devices
                                             connectionTimeout As Integer,
                                             overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials,
-                                    dialog, connectionTimeout, overwrite,
-                                    UICancelOption.ThrowException).ConfigureAwait(False)
+            Await DownloadFileAsync(addressUri,
+                                    destinationFileName,
+                                    networkCredentials,
+                                    dialog,
+                                    connectionTimeout,
+                                    overwrite,
+                                    UICancelOption.ThrowException
+                                   ).ConfigureAwait(False)
         End Function
 #End If
 
@@ -254,9 +272,9 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             Dim client = If(clientHandler IsNot Nothing,
-                        New HttpClient(clientHandler),
-                        New HttpClient()
-                       )
+                            New HttpClient(clientHandler),
+                            New HttpClient()
+                           )
 
             ' Set credentials if we have any
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
@@ -292,7 +310,8 @@ Namespace Microsoft.VisualBasic.Devices
             'Download the file
             Try
                 Await copier.DownloadFileAsync(addressUri,
-                                               fullFilename).ConfigureAwait(False)
+                                               fullFilename
+                                              ).ConfigureAwait(False)
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
                     Throw

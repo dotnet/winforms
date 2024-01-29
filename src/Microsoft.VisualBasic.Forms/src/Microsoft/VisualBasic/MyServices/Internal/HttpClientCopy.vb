@@ -16,6 +16,26 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' </summary>
     Friend NotInheritable Class HttpClientCopy
 
+        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
+        Private WithEvents m_ProgressDialog As ProgressDialog
+
+        ' The WebClient performs the downloading or uploading operations for us
+        Private ReadOnly _httpClient As HttpClient
+
+        Private _cancelTokenSourceGet As CancellationTokenSource
+
+        Private _cancelTokenSourceRead As CancellationTokenSource
+
+        Private _cancelTokenSourceReadStream As CancellationTokenSource
+
+        Private _cancelTokenSourceWrite As CancellationTokenSource
+
+        ' The percentage of the operation completed
+        Private _percentage As Integer
+
+        ' Used for invoking ProgressDialog.Increment
+        Private Delegate Sub DoIncrement(Increment As Integer)
+
         ''' <summary>
         ''' Creates an instance of a HttpClientCopy, used to download or upload a file
         ''' </summary>
@@ -31,6 +51,60 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 AddHandler m_ProgressDialog.UserHitCancel, AddressOf m_ProgressDialog_UserHitCancel
             End If
 
+        End Sub
+
+        ''' <summary>
+        '''  Posts a message to close the progress dialog
+        ''' </summary>
+        Private Sub CloseProgressDialog()
+            ' Don't invoke unless dialog is up and running
+            If m_ProgressDialog IsNot Nothing Then
+                m_ProgressDialog.IndicateClosing()
+
+                If m_ProgressDialog.IsHandleCreated Then
+                    m_ProgressDialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
+                Else
+                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
+                    ' the progress dialog was created.
+                    m_ProgressDialog.Close()
+                End If
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Notifies the progress dialog to increment the progress bar
+        ''' </summary>
+        ''' <param name="progressPercentage">The percentage of bytes read</param>
+        Private Sub InvokeIncrement(progressPercentage As Integer)
+            ' Don't invoke unless dialog is up and running
+            If m_ProgressDialog IsNot Nothing Then
+                If m_ProgressDialog.IsHandleCreated Then
+
+                    ' For performance, don't invoke if increment is 0
+                    Dim increment As Integer = progressPercentage - _percentage
+                    _percentage = progressPercentage
+                    If increment > 0 Then
+                        m_ProgressDialog.BeginInvoke(New DoIncrement(AddressOf m_ProgressDialog.Increment), increment)
+                    End If
+
+                End If
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' If the user clicks cancel on the Progress dialog, we need to cancel
+        ''' the current async file transfer operation
+        ''' </summary>
+        ''' <remarks>
+        ''' Note that we don't want to close the progress dialog here.  Wait until
+        ''' the actual file transfer cancel event comes through and do it there.
+        ''' </remarks>
+        Private Sub m_ProgressDialog_UserHitCancel()
+            'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
+            _cancelTokenSourceGet.Cancel()
+            _cancelTokenSourceRead.Cancel()
+            _cancelTokenSourceReadStream.Cancel()
+            _cancelTokenSourceWrite.Cancel()
         End Sub
 
         ''' <summary>
@@ -99,16 +173,16 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="sourceFileName">The name and path of the source file</param>
         ''' <param name="address">The address to which the file is uploaded</param>
         Public Sub UploadFile(sourceFileName As String, address As Uri)
-            Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
+            Debug.Assert(_httpClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
             Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
             If m_ProgressDialog IsNot Nothing Then
-                m_WebClient.UploadFileAsync(address, sourceFileName)
+                _httpClient.UploadFileAsync(address, sourceFileName)
                 m_ProgressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
             Else
-                m_WebClient.UploadFile(address, sourceFileName)
+                _httpClient.UploadFile(address, sourceFileName)
             End If
 
             'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
@@ -118,79 +192,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 End If
             End If
         End Sub
-
 #End If
-
-        ''' <summary>
-        '''  Notifies the progress dialog to increment the progress bar
-        ''' </summary>
-        ''' <param name="progressPercentage">The percentage of bytes read</param>
-        Private Sub InvokeIncrement(progressPercentage As Integer)
-            ' Don't invoke unless dialog is up and running
-            If m_ProgressDialog IsNot Nothing Then
-                If m_ProgressDialog.IsHandleCreated Then
-
-                    ' For performance, don't invoke if increment is 0
-                    Dim increment As Integer = progressPercentage - _percentage
-                    _percentage = progressPercentage
-                    If increment > 0 Then
-                        m_ProgressDialog.BeginInvoke(New DoIncrement(AddressOf m_ProgressDialog.Increment), increment)
-                    End If
-
-                End If
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Posts a message to close the progress dialog
-        ''' </summary>
-        Private Sub CloseProgressDialog()
-            ' Don't invoke unless dialog is up and running
-            If m_ProgressDialog IsNot Nothing Then
-                m_ProgressDialog.IndicateClosing()
-
-                If m_ProgressDialog.IsHandleCreated Then
-                    m_ProgressDialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    m_ProgressDialog.Close()
-                End If
-            End If
-        End Sub
-
-        ''' <summary>
-        ''' If the user clicks cancel on the Progress dialog, we need to cancel
-        ''' the current async file transfer operation
-        ''' </summary>
-        ''' <remarks>
-        ''' Note that we don't want to close the progress dialog here.  Wait until
-        ''' the actual file transfer cancel event comes through and do it there.
-        ''' </remarks>
-        Private Sub m_ProgressDialog_UserHitCancel()
-            'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
-            _cancelTokenSourceGet.Cancel()
-            _cancelTokenSourceRead.Cancel()
-            _cancelTokenSourceReadStream.Cancel()
-            _cancelTokenSourceWrite.Cancel()
-        End Sub
-
-        Private _cancelTokenSourceGet As CancellationTokenSource
-        Private _cancelTokenSourceRead As CancellationTokenSource
-        Private _cancelTokenSourceReadStream As CancellationTokenSource
-        Private _cancelTokenSourceWrite As CancellationTokenSource
-
-        ' The WebClient performs the downloading or uploading operations for us
-        Private ReadOnly _httpClient As HttpClient
-
-        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
-        Private WithEvents m_ProgressDialog As ProgressDialog
-
-        ' Used for invoking ProgressDialog.Increment
-        Private Delegate Sub DoIncrement(Increment As Integer)
-
-        ' The percentage of the operation completed
-        Private _percentage As Integer
 
     End Class
 
