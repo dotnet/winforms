@@ -5,8 +5,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using Com = Windows.Win32.System.Com;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms.Tests;
 
@@ -534,5 +536,72 @@ public class ClipboardTests
         using var realDataPointerUnknown = realDataPointer.Query<Com.IUnknown>();
         ((nint)proxyUnknown.Value).Should().NotBe((nint)realDataPointerUnknown.Value);
         ((nint)dataUnknown.Value).Should().Be((nint)realDataPointerUnknown.Value);
+    }
+
+    [WinFormsFact]
+    public void ClipBoard_Set_DoesNotWrapTwice()
+    {
+        string realDataObject = string.Empty;
+        Clipboard.SetDataObject(realDataObject);
+        IDataObject clipboardDataObject = Clipboard.GetDataObject();
+        clipboardDataObject.Should().BeOfType(typeof(DataObject));
+        ((DataObject)clipboardDataObject).IsWrappedForClipboard.Should().BeTrue();
+
+        Clipboard.SetDataObject(clipboardDataObject);
+        IDataObject clipboardDataObject2 = Clipboard.GetDataObject();
+        clipboardDataObject2.Should().BeSameAs(clipboardDataObject);
+    }
+
+    [WinFormsFact]
+    public void ClipBoard_GetSet_RoundTrip_ReturnsExpected()
+    {
+        CustomDataObject realDataObject = new();
+        Clipboard.SetDataObject(realDataObject);
+        IDataObject clipboardDataObject = Clipboard.GetDataObject();
+        clipboardDataObject.Should().BeSameAs(realDataObject);
+        clipboardDataObject.GetDataPresent("Foo").Should().BeTrue();
+        clipboardDataObject.GetData("Foo").Should().Be("Bar");
+    }
+
+    private class CustomDataObject : IDataObject, ComTypes.IDataObject
+    {
+        [DllImport("shell32.dll")]
+        public static extern int SHCreateStdEnumFmtEtc(uint cfmt, ComTypes.FORMATETC[] afmt, out ComTypes.IEnumFORMATETC ppenumFormatEtc);
+
+        int ComTypes.IDataObject.DAdvise(ref ComTypes.FORMATETC pFormatetc, ComTypes.ADVF advf, ComTypes.IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+        void ComTypes.IDataObject.DUnadvise(int connection) => throw new NotImplementedException();
+        int ComTypes.IDataObject.EnumDAdvise(out ComTypes.IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
+        ComTypes.IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(ComTypes.DATADIR direction)
+        {
+            if (direction == ComTypes.DATADIR.DATADIR_GET)
+            {
+                // Create enumerator and return it
+                ComTypes.IEnumFORMATETC enumerator;
+                if (SHCreateStdEnumFmtEtc(0, [], out enumerator) == 0)
+                {
+                    return enumerator;
+                }
+            }
+
+            throw new NotImplementedException();
+        }
+
+        int ComTypes.IDataObject.GetCanonicalFormatEtc(ref ComTypes.FORMATETC formatIn, out ComTypes.FORMATETC formatOut) => throw new NotImplementedException();
+        object IDataObject.GetData(string format, bool autoConvert) => format == "Foo" ? "Bar" : null;
+        object IDataObject.GetData(string format) => format == "Foo" ? "Bar" : null;
+        object IDataObject.GetData(Type format) => null;
+        void ComTypes.IDataObject.GetData(ref ComTypes.FORMATETC format, out ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
+        void ComTypes.IDataObject.GetDataHere(ref ComTypes.FORMATETC format, ref ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
+        bool IDataObject.GetDataPresent(string format, bool autoConvert) => format == "Foo";
+        bool IDataObject.GetDataPresent(string format) => format == "Foo";
+        bool IDataObject.GetDataPresent(Type format) => false;
+        string[] IDataObject.GetFormats(bool autoConvert) => ["Foo"];
+        string[] IDataObject.GetFormats() => ["Foo"];
+        int ComTypes.IDataObject.QueryGetData(ref ComTypes.FORMATETC format) => throw new NotImplementedException();
+        void IDataObject.SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+        void IDataObject.SetData(string format, object data) => throw new NotImplementedException();
+        void IDataObject.SetData(Type format, object data) => throw new NotImplementedException();
+        void IDataObject.SetData(object data) => throw new NotImplementedException();
+        void ComTypes.IDataObject.SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
     }
 }
