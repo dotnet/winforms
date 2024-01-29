@@ -652,7 +652,7 @@ public unsafe partial class DataObject :
 
         try
         {
-            success = BinaryFormatWriter.TryWriteFrameworkObject(stream, data);
+            success = WinFormsBinaryFormatWriter.TryWriteObject(stream, data);
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {

@@ -13,33 +13,25 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal static class BinaryFormatWriter
 {
-    private static string[]? s_hashtableMemberNames;
-    private static string[] HashtableMemberNames => s_hashtableMemberNames ??= new[]
-    {
+    private static readonly string[] s_hashtableMemberNames =
+    [
         "LoadFactor", "Version", "Comparer", "HashCodeProvider", "HashSize", "Keys", "Values"
-    };
+    ];
 
-    private static string[]? s_notSupportedExceptionMemberNames;
-    private static string[] NotSupportedExceptionMemberNames => s_notSupportedExceptionMemberNames ??= new[]
-    {
+    private static readonly string[] s_notSupportedExceptionMemberNames =
+    [
         "ClassName", "Message", "Data", "InnerException", "HelpURL", "StackTraceString", "RemoteStackTraceString",
         "RemoteStackIndex", "ExceptionMethod", "HResult", "Source", "WatsonBuckets"
-    };
+    ];
 
-    private static string[]? s_listMemberNames;
-    private static string[] ListMemberNames => s_listMemberNames ??= new[] { "_items", "_size", "_version" };
-
-    private static string[]? s_decimalMemberNames;
-    private static string[] DecimalMemberNames => s_decimalMemberNames ??= new[] { "flags", "hi", "lo", "mid" };
-
-    private static readonly string[] s_dateTimeMemberNames = new[] { "ticks", "dateData" };
-    private static readonly string[] s_primitiveMemberName = new[] { "m_value" };
-
-    private static string[]? s_pointMemberNames;
-    private static string[] PointMemberNames => s_pointMemberNames ??= new[] { "x", "y" };
-
-    private static string[]? s_rectangleMemberNames;
-    private static string[] RectangleMemberNames => s_rectangleMemberNames ??= new[] { "x", "y", "width", "height" };
+    private static readonly string[] s_listMemberNames = ["_items", "_size", "_version"];
+    private static readonly string[] s_decimalMemberNames = ["flags", "hi", "lo", "mid"];
+    private static readonly string[] s_dateTimeMemberNames = ["ticks", "dateData"];
+    private static readonly string[] s_primitiveMemberName = ["m_value"];
+    private static readonly string[] s_pointMemberNames = ["x", "y"];
+    private static readonly string[] s_rectangleMemberNames = ["x", "y", "width", "height"];
+    private static readonly string[] s_valueName = ["value"];
+    private static readonly string[] s_ticksName = ["_ticks"];
 
     /// <summary>
     ///  Writes a <see langword="string"/> in binary format.
@@ -61,7 +53,7 @@ internal static class BinaryFormatWriter
         using BinaryFormatWriterScope writer = new(stream);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(decimal).FullName!, DecimalMemberNames),
+            new ClassInfo(1, typeof(decimal).FullName!, s_decimalMemberNames),
             new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Int32),
                 (BinaryType.Primitive, PrimitiveType.Int32),
@@ -99,7 +91,7 @@ internal static class BinaryFormatWriter
     {
         using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(TimeSpan).FullName!, new string[] { "_ticks" }),
+            new ClassInfo(1, typeof(TimeSpan).FullName!, s_ticksName),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
             value.Ticks).Write(writer);
     }
@@ -111,7 +103,7 @@ internal static class BinaryFormatWriter
     {
         using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(nint).FullName!, new string[] { "value" }),
+            new ClassInfo(1, typeof(nint).FullName!, s_valueName),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
             (long)value).Write(writer);
     }
@@ -123,7 +115,7 @@ internal static class BinaryFormatWriter
     {
         using BinaryFormatWriterScope writer = new(stream);
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(nuint).FullName!, new string[] { "value" }),
+            new ClassInfo(1, typeof(nuint).FullName!, s_valueName),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.UInt64)),
             (ulong)value).Write(writer);
     }
@@ -136,7 +128,7 @@ internal static class BinaryFormatWriter
         using BinaryFormatWriterScope writer = new(stream);
         new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
         new ClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(PointF).FullName!, PointMemberNames),
+            new ClassInfo(1, typeof(PointF).FullName!, s_pointMemberNames),
             libraryId: 2,
             new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Single),
@@ -153,7 +145,7 @@ internal static class BinaryFormatWriter
         using BinaryFormatWriterScope writer = new(stream);
         new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
         new ClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(RectangleF).FullName!, RectangleMemberNames),
+            new ClassInfo(1, typeof(RectangleF).FullName!, s_rectangleMemberNames),
             libraryId: 2,
             new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Single),
@@ -235,7 +227,7 @@ internal static class BinaryFormatWriter
             new ClassInfo(
                 1,
                 $"System.Collections.Generic.List`1[[{TypeInfo.StringType}, {TypeInfo.MscorlibAssemblyName}]]",
-                ListMemberNames),
+                s_listMemberNames),
             new MemberTypeInfo(
                 (BinaryType.StringArray, null),
                 (BinaryType.Primitive, PrimitiveType.Int32),
@@ -268,7 +260,7 @@ internal static class BinaryFormatWriter
             new ClassInfo(
                 1,
                 $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {TypeInfo.MscorlibAssemblyName}]]",
-                ListMemberNames),
+                s_listMemberNames),
             new MemberTypeInfo(
                 (BinaryType.PrimitiveArray, primitiveType),
                 (BinaryType.Primitive, PrimitiveType.Int32),
@@ -360,7 +352,7 @@ internal static class BinaryFormatWriter
         {
             using BinaryFormatWriterScope writer = new(stream);
             new SystemClassWithMembersAndTypes(
-                new ClassInfo(1, typeof(ArrayList).FullName!, ListMemberNames),
+                new ClassInfo(1, typeof(ArrayList).FullName!, s_listMemberNames),
                 new MemberTypeInfo(
                     (BinaryType.ObjectArray, null),
                     (BinaryType.Primitive, PrimitiveType.Int32),
@@ -484,7 +476,7 @@ internal static class BinaryFormatWriter
         using BinaryFormatWriterScope writer = new(stream);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, TypeInfo.HashtableType, HashtableMemberNames),
+            new ClassInfo(1, TypeInfo.HashtableType, s_hashtableMemberNames),
             new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Single),
                 (BinaryType.Primitive, PrimitiveType.Int32),
@@ -519,7 +511,7 @@ internal static class BinaryFormatWriter
 
         // We only serialize the message to avoid binary serialization risks.
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, TypeInfo.NotSupportedExceptionType, NotSupportedExceptionMemberNames),
+            new ClassInfo(1, TypeInfo.NotSupportedExceptionType, s_notSupportedExceptionMemberNames),
             new MemberTypeInfo(
                 (BinaryType.String, null),
                 (BinaryType.String, null),
