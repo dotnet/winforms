@@ -160,7 +160,7 @@ internal partial class CommandsPane : PropertyGrid.SnappableControl
 
     public void FocusLabel() => Label.Focus();
 
-    public virtual void SetVerbs(object component, DesignerVerb[] verbs)
+    public virtual void SetVerbs(object? component, DesignerVerb[]? verbs)
     {
         if (_verbs is not null)
         {

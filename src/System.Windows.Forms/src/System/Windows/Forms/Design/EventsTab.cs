@@ -25,7 +25,7 @@ public class EventsTab : PropertyTab
 
     public override string HelpKeyword => "Events";
 
-    public override bool CanExtend(object extendee) => extendee is null || !Marshal.IsComObject(extendee);
+    public override bool CanExtend(object? extendee) => extendee is null || !Marshal.IsComObject(extendee);
 
     private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
         => _currentHost = e.NewDesigner;

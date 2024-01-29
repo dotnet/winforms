@@ -163,7 +163,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     ///  Checks if the given dispid matches the dispid that the Object would like to specify
     ///  as its identification property (Name, ID, etc).
     /// </summary>
-    internal static bool IsNameDispId(object @object, int dispid)
+    internal static bool IsNameDispId(object? @object, int dispid)
     {
         using var dispatch = ComHelpers.TryGetComScope<IDispatch>(@object, out HRESULT hr);
         return hr.Failed ? false : dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
