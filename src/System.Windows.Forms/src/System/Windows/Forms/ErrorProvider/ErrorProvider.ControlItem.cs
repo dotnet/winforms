@@ -13,8 +13,6 @@ public partial class ErrorProvider
     /// </summary>
     internal partial class ControlItem
     {
-        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
-
         private string _error;
         private readonly Control _control;
         private ErrorWindow? _window;
@@ -22,6 +20,7 @@ public partial class ErrorProvider
         private int _iconPadding;
         private ErrorIconAlignment _iconAlignment;
         private const int _startingBlinkPhase = 10; // We want to blink 5 times
+        private AccessibleObject? _accessibleObject;
 
         /// <summary>
         ///  Construct the item with its associated control, provider, and a unique ID. The ID is
@@ -40,27 +39,12 @@ public partial class ErrorProvider
             _control.SizeChanged += new EventHandler(OnBoundsChanged);
             _control.VisibleChanged += new EventHandler(OnParentVisibleChanged);
             _control.ParentChanged += new EventHandler(OnParentVisibleChanged);
-            Properties = new PropertyStore();
         }
 
         /// <summary>
         ///  The Accessibility Object for this ErrorProvider
         /// </summary>
-        internal AccessibleObject AccessibilityObject
-        {
-            get
-            {
-                AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
-
-                if (accessibleObject is null)
-                {
-                    accessibleObject = CreateAccessibilityInstance();
-                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
-                }
-
-                return accessibleObject;
-            }
-        }
+        internal AccessibleObject AccessibilityObject => _accessibleObject ??= CreateAccessibilityInstance();
 
         /// <summary>
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
@@ -323,13 +307,6 @@ public partial class ErrorProvider
             RemoveFromWindow();
             AddToWindow();
         }
-
-        /// <summary>
-        ///  Retrieves our internal property storage object. If you have a property
-        ///  whose value is not always set, you should store it in here to save
-        ///  space.
-        /// </summary>
-        private PropertyStore Properties { get; }
 
         /// <summary>
         ///  This is called when the control's handle is created.
