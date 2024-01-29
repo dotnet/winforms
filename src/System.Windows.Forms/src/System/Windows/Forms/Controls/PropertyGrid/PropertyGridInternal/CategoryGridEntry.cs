@@ -106,7 +106,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
         }
     }
 
-    public override string GetPropertyTextValue(object o) => string.Empty;
+    public override string GetPropertyTextValue(object? o) => string.Empty;
 
     public override Type PropertyType => typeof(void);
 
