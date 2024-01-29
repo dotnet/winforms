@@ -16,19 +16,6 @@ Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
 
-    ''' <summary>
-    '''  Used to pass network connectivity status.
-    ''' </summary>
-    Public Class NetworkAvailableEventArgs
-        Inherits EventArgs
-
-        Public Sub New(networkAvailable As Boolean)
-            IsNetworkAvailable = networkAvailable
-        End Sub
-
-        Public ReadOnly Property IsNetworkAvailable() As Boolean
-    End Class
-
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub NetworkAvailableEventHandler(sender As Object, e As NetworkAvailableEventArgs)
 
@@ -36,6 +23,74 @@ Namespace Microsoft.VisualBasic.Devices
     '''  An object that allows easy access to some simple network properties and functionality.
     ''' </summary>
     Public Class Network
+
+        'Size of Ping.exe buffer
+        Private Const BUFFER_SIZE As Integer = 32
+
+        ' Password used in overloads where there is no password parameter
+        Private Const DEFAULT_PASSWORD As String = ""
+
+        ' Default timeout for Ping
+        Private Const DEFAULT_PING_TIMEOUT As Integer = 1000
+
+        ' Default timeout value
+        Private Const DEFAULT_TIMEOUT As Integer = 100000
+
+        ' UserName used in overloads where there is no userName parameter
+        Private Const DEFAULT_USERNAME As String = ""
+
+        ' Object for syncing
+        Private ReadOnly _syncObject As New Object()
+
+        ' Indicates last known connection state
+        Private _connected As Boolean
+
+        'Used for marshalling the network address changed event to the foreground thread
+        Private _networkAvailabilityChangedCallback As SendOrPostCallback
+
+        'Holds the listeners to our NetworkAvailability changed event
+        Private _networkAvailabilityEventHandlers As List(Of NetworkAvailableEventHandler)
+
+        'Holds the buffer for pinging. We lazy initialize on first use
+        Private _pingBuffer() As Byte
+
+        Private _synchronizationContext As SynchronizationContext
+
+        ''' <summary>
+        '''  Creates class and hooks up events
+        ''' </summary>
+        Public Sub New()
+        End Sub
+
+        ''' <summary>
+        '''  A buffer for pinging. This imitates the buffer used by Ping.Exe
+        ''' </summary>
+        ''' <value>A buffer</value>
+        Private ReadOnly Property PingBuffer() As Byte()
+            Get
+                If _pingBuffer Is Nothing Then
+                    ReDim _pingBuffer(BUFFER_SIZE - 1)
+                    For i As Integer = 0 To BUFFER_SIZE - 1
+                        'This is the same logic Ping.exe uses to fill it's buffer
+                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + i Mod 23, Globalization.CultureInfo.InvariantCulture)
+                    Next
+                End If
+
+                Return _pingBuffer
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Indicates whether or not the local machine is connected to an IP network.
+        ''' </summary>
+        ''' <value>True if connected, otherwise False</value>
+        Public ReadOnly Property IsAvailable() As Boolean
+            Get
+
+                Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
+
+            End Get
+        End Property
 
         ''' <summary>
         '''  Event fired when connected to the network
@@ -95,78 +150,22 @@ Namespace Microsoft.VisualBasic.Devices
         End Event
 
         ''' <summary>
-        '''  Creates class and hooks up events
+        '''  Posts a message to close the progress dialog
         ''' </summary>
-        Public Sub New()
+        Private Shared Sub CloseProgressDialog(dialog As ProgressDialog)
+            ' Don't invoke unless dialog is up and running
+            If dialog IsNot Nothing Then
+                dialog.IndicateClosing()
+
+                If dialog.IsHandleCreated Then
+                    dialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf dialog.CloseDialog))
+                Else
+                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
+                    ' the progress dialog was created.
+                    dialog.Close()
+                End If
+            End If
         End Sub
-
-        ''' <summary>
-        '''  Indicates whether or not the local machine is connected to an IP network.
-        ''' </summary>
-        ''' <value>True if connected, otherwise False</value>
-        Public ReadOnly Property IsAvailable() As Boolean
-            Get
-
-                Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
-
-            End Get
-        End Property
-
-        ''' <summary>
-        ''' Sends and receives a packet to and from the passed in address.
-        ''' </summary>
-        ''' <param name="hostNameOrAddress"></param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
-        Public Function Ping(hostNameOrAddress As String) As Boolean
-            Return Ping(hostNameOrAddress, DEFAULT_PING_TIMEOUT)
-        End Function
-
-        ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
-        ''' </summary>
-        ''' <param name="address">A Uri representing the host</param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
-        Public Function Ping(address As Uri) As Boolean
-            ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
-            ' However, it is good practice to verify address before calling address.Host.
-            If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
-            End If
-            Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
-        End Function
-
-        ''' <summary>
-        '''  Sends and receives a packet to and from the passed in address.
-        ''' </summary>
-        ''' <param name="hostNameOrAddress">The name of the host as a Url or IP Address</param>
-        ''' <param name="timeout">Time to wait before aborting ping</param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
-        Public Function Ping(hostNameOrAddress As String, timeout As Integer) As Boolean
-
-            ' Make sure a network is available
-            If Not IsAvailable Then
-                Throw ExUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
-            End If
-
-            Dim PingMaker As New NetInfoAlias.Ping
-            Dim Reply As NetInfoAlias.PingReply = PingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
-            Return Reply.Status = NetInfoAlias.IPStatus.Success
-        End Function
-
-        ''' <summary>
-        ''' Sends and receives a packet to and from the passed in Uri.
-        ''' </summary>
-        ''' <param name="address">A Uri representing the host</param>
-        ''' <param name="timeout">Time to wait before aborting ping</param>
-        ''' <returns>True if ping was successful, otherwise False</returns>
-        Public Function Ping(address As Uri, timeout As Integer) As Boolean
-            ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
-            ' However, it is good practice to verify address before calling address.Host.
-            If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
-            End If
-            Return Ping(address.Host, timeout)
-        End Function
 
         ''' <summary>
         ''' Sends and receives a packet to and from the passed in Uri.
@@ -418,6 +417,59 @@ Namespace Microsoft.VisualBasic.Devices
             End Try
 
         End Function
+
+        ''' <summary>
+        ''' Gets network credentials from a userName and password
+        ''' </summary>
+        ''' <param name="userName">The name of the user</param>
+        ''' <param name="password">The password of the user</param>
+        ''' <returns>A NetworkCredentials</returns>
+        Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
+
+            Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
+                      Nothing,
+                      DirectCast(New NetworkCredential(userName, password), ICredentials)
+                     )
+        End Function
+
+        ''' <summary>
+        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
+        ''' </summary>
+        ''' <param name="address">The remote file address</param>
+        ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
+        Private Shared Function GetUri(address As String) As Uri
+            Try
+                Return New Uri(address)
+            Catch ex As UriFormatException
+                'Throw an exception with an error message more appropriate to our API
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
+            End Try
+        End Function
+
+        'Listens to the AddressChanged event which will come on the same thread that this class was created on (AsyncEventManager is responsible for getting the event here)
+        Private Sub NetworkAvailabilityChangedHandler(state As Object)
+            Dim Connected As Boolean = IsAvailable
+            ' Fire an event only if the connected state has changed
+            If _connected <> Connected Then
+                _connected = Connected
+                RaiseEvent NetworkAvailabilityChanged(Me, New NetworkAvailableEventArgs(Connected))
+            End If
+        End Sub
+
+        'Listens to the AddressChanged event from the OS which comes in on an arbitrary thread
+        Private Sub OS_NetworkAvailabilityChangedListener(sender As Object, e As EventArgs)
+            SyncLock _syncObject 'Ensure we don't handle events until after we've finished setting up the event marshalling infrastructure
+                'Don't call AsyncOperationManager.OperationSynchronizationContext.Post.  The reason we want to go through m_SynchronizationContext is that
+                'the OperationSynchronizationContext is thread static.  Since we are getting called on some random thread, the context that was
+                'in place when the Network object was created won't be available (it is on the original thread).  To hang on to the original
+                'context associated with the thread that the network object is created on, I use m_SynchronizationContext.
+                _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
+            End SyncLock
+        End Sub
+
+        Friend Sub DisconnectListener()
+            RemoveHandler NetInfoAlias.NetworkChange.NetworkAddressChanged, New NetInfoAlias.NetworkAddressChangedEventHandler(AddressOf OS_NetworkAvailabilityChangedListener)
+        End Sub
 
         ''' <summary>
         ''' Downloads a file from the network to the specified path
@@ -871,6 +923,62 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
+        ''' Sends and receives a packet to and from the passed in address.
+        ''' </summary>
+        ''' <param name="hostNameOrAddress"></param>
+        ''' <returns>True if ping was successful, otherwise False</returns>
+        Public Function Ping(hostNameOrAddress As String) As Boolean
+            Return Ping(hostNameOrAddress, DEFAULT_PING_TIMEOUT)
+        End Function
+
+        ''' <summary>
+        ''' Sends and receives a packet to and from the passed in Uri.
+        ''' </summary>
+        ''' <param name="address">A Uri representing the host</param>
+        ''' <returns>True if ping was successful, otherwise False</returns>
+        Public Function Ping(address As Uri) As Boolean
+            ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
+            ' However, it is good practice to verify address before calling address.Host.
+            If address Is Nothing Then
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
+            End If
+            Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
+        End Function
+
+        ''' <summary>
+        '''  Sends and receives a packet to and from the passed in address.
+        ''' </summary>
+        ''' <param name="hostNameOrAddress">The name of the host as a Url or IP Address</param>
+        ''' <param name="timeout">Time to wait before aborting ping</param>
+        ''' <returns>True if ping was successful, otherwise False</returns>
+        Public Function Ping(hostNameOrAddress As String, timeout As Integer) As Boolean
+
+            ' Make sure a network is available
+            If Not IsAvailable Then
+                Throw ExUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
+            End If
+
+            Dim PingMaker As New NetInfoAlias.Ping
+            Dim Reply As NetInfoAlias.PingReply = PingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
+            Return Reply.Status = NetInfoAlias.IPStatus.Success
+        End Function
+
+        ''' <summary>
+        ''' Sends and receives a packet to and from the passed in Uri.
+        ''' </summary>
+        ''' <param name="address">A Uri representing the host</param>
+        ''' <param name="timeout">Time to wait before aborting ping</param>
+        ''' <returns>True if ping was successful, otherwise False</returns>
+        Public Function Ping(address As Uri, timeout As Integer) As Boolean
+            ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
+            ' However, it is good practice to verify address before calling address.Host.
+            If address Is Nothing Then
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
+            End If
+            Return Ping(address.Host, timeout)
+        End Function
+
+        ''' <summary>
         ''' Uploads a file from the local machine to the specified host
         ''' </summary>
         ''' <param name="sourceFileName">The file to be uploaded</param>
@@ -1087,193 +1195,6 @@ Namespace Microsoft.VisualBasic.Devices
             End Using
 
         End Sub
-
-        Friend Sub DisconnectListener()
-            RemoveHandler NetInfoAlias.NetworkChange.NetworkAddressChanged, New NetInfoAlias.NetworkAddressChangedEventHandler(AddressOf OS_NetworkAvailabilityChangedListener)
-        End Sub
-
-        'Listens to the AddressChanged event from the OS which comes in on an arbitrary thread
-        Private Sub OS_NetworkAvailabilityChangedListener(sender As Object, e As EventArgs)
-            SyncLock _syncObject 'Ensure we don't handle events until after we've finished setting up the event marshalling infrastructure
-                'Don't call AsyncOperationManager.OperationSynchronizationContext.Post.  The reason we want to go through m_SynchronizationContext is that
-                'the OperationSynchronizationContext is thread static.  Since we are getting called on some random thread, the context that was
-                'in place when the Network object was created won't be available (it is on the original thread).  To hang on to the original
-                'context associated with the thread that the network object is created on, I use m_SynchronizationContext.
-                _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
-            End SyncLock
-        End Sub
-
-        'Listens to the AddressChanged event which will come on the same thread that this class was created on (AsyncEventManager is responsible for getting the event here)
-        Private Sub NetworkAvailabilityChangedHandler(state As Object)
-            Dim Connected As Boolean = IsAvailable
-            ' Fire an event only if the connected state has changed
-            If _connected <> Connected Then
-                _connected = Connected
-                RaiseEvent NetworkAvailabilityChanged(Me, New NetworkAvailableEventArgs(Connected))
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  A buffer for pinging. This imitates the buffer used by Ping.Exe
-        ''' </summary>
-        ''' <value>A buffer</value>
-        Private ReadOnly Property PingBuffer() As Byte()
-            Get
-                If _pingBuffer Is Nothing Then
-                    ReDim _pingBuffer(BUFFER_SIZE - 1)
-                    For i As Integer = 0 To BUFFER_SIZE - 1
-                        'This is the same logic Ping.exe uses to fill it's buffer
-                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + i Mod 23, Globalization.CultureInfo.InvariantCulture)
-                    Next
-                End If
-
-                Return _pingBuffer
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Posts a message to close the progress dialog
-        ''' </summary>
-        Private Shared Sub CloseProgressDialog(dialog As ProgressDialog)
-            ' Don't invoke unless dialog is up and running
-            If dialog IsNot Nothing Then
-                dialog.IndicateClosing()
-
-                If dialog.IsHandleCreated Then
-                    dialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf dialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    dialog.Close()
-                End If
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)
-        ''' </summary>
-        ''' <param name="address">The remote file address</param>
-        ''' <returns>A Uri if successful, otherwise it throws an exception</returns>
-        Private Shared Function GetUri(address As String) As Uri
-            Try
-                Return New Uri(address)
-            Catch ex As UriFormatException
-                'Throw an exception with an error message more appropriate to our API
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Gets network credentials from a userName and password
-        ''' </summary>
-        ''' <param name="userName">The name of the user</param>
-        ''' <param name="password">The password of the user</param>
-        ''' <returns>A NetworkCredentials</returns>
-        Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
-
-            Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
-                      Nothing,
-                      DirectCast(New NetworkCredential(userName, password), ICredentials)
-                     )
-        End Function
-
-        'Holds the buffer for pinging. We lazy initialize on first use
-        Private _pingBuffer() As Byte
-
-        'Size of Ping.exe buffer
-        Private Const BUFFER_SIZE As Integer = 32
-
-        ' Default timeout value
-        Private Const DEFAULT_TIMEOUT As Integer = 100000
-
-        ' Default timeout for Ping
-        Private Const DEFAULT_PING_TIMEOUT As Integer = 1000
-
-        ' UserName used in overloads where there is no userName parameter
-        Private Const DEFAULT_USERNAME As String = ""
-
-        ' Password used in overloads where there is no password parameter
-        Private Const DEFAULT_PASSWORD As String = ""
-
-        ' Indicates last known connection state
-        Private _connected As Boolean
-
-        ' Object for syncing
-        Private ReadOnly _syncObject As New Object()
-
-        Private _networkAvailabilityEventHandlers As List(Of NetworkAvailableEventHandler) 'Holds the listeners to our NetworkAvailability changed event
-
-        Private _synchronizationContext As SynchronizationContext
-        Private _networkAvailabilityChangedCallback As SendOrPostCallback 'Used for marshalling the network address changed event to the foreground thread
-    End Class
-
-    ''' <summary>
-    ''' Temporary class used to provide WebClient with a timeout property.
-    ''' </summary>
-    ''' <remarks>This class will be deleted when Timeout is added to WebClient</remarks>
-    Friend NotInheritable Class WebClientExtended
-        Inherits WebClient
-
-        ''' <summary>
-        ''' Sets or indicates the timeout used by WebRequest used by WebClient
-        ''' </summary>
-        Public WriteOnly Property Timeout() As Integer
-            Set(value As Integer)
-                Debug.Assert(value > 0, "illegal value for timeout")
-                _timeout = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Enables switching the server to non passive mode.
-        ''' </summary>
-        ''' <remarks>We need this in order for the progress UI on a download to work</remarks>
-        Public WriteOnly Property UseNonPassiveFtp() As Boolean
-            Set(value As Boolean)
-                _useNonPassiveFtp = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Makes sure that the timeout value for WebRequests (used for all Download and Upload methods) is set
-        ''' to the Timeout value
-        ''' </summary>
-        ''' <param name="address"></param>
-        Protected Overrides Function GetWebRequest(address As Uri) As WebRequest
-            Dim request As WebRequest = MyBase.GetWebRequest(address)
-
-            Debug.Assert(request IsNot Nothing, "Unable to get WebRequest from base class")
-            If request IsNot Nothing Then
-                request.Timeout = _timeout
-                If _useNonPassiveFtp Then
-                    Dim ftpRequest As FtpWebRequest = TryCast(request, FtpWebRequest)
-                    If ftpRequest IsNot Nothing Then
-                        ftpRequest.UsePassive = False
-                    End If
-                End If
-
-                Dim httpRequest As HttpWebRequest = TryCast(request, HttpWebRequest)
-                If httpRequest IsNot Nothing Then
-                    httpRequest.AllowAutoRedirect = False
-                End If
-
-            End If
-
-            Return request
-        End Function
-
-#Disable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
-
-        Friend Sub New()
-        End Sub
-
-#Enable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
-
-        ' The Timeout value to be used by WebClient's WebRequest for Downloading or Uploading a file
-        Private _timeout As Integer = 100000
-
-        ' Flag used to indicate whether or not we should use passive mode when ftp downloading
-        Private _useNonPassiveFtp As Boolean
 
     End Class
 
