@@ -353,13 +353,17 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        Public Sub DownloadFile(address As String, destinationFileName As String)
+        Public Sub DownloadFile(address As String,
+                                destinationFileName As String)
             Try
-                DownloadFileAsync(address, destinationFileName, DEFAULT_USERNAME,
-                              DEFAULT_PASSWORD, Nothing,
-                              DEFAULT_TIMEOUT,
-                              False
-                             ).Wait()
+                DownloadFileAsync(address,
+                                  destinationFileName,
+                                  DEFAULT_USERNAME,
+                                  DEFAULT_PASSWORD,
+                                  Nothing,
+                                  DEFAULT_TIMEOUT,
+                                  False
+                                 ).Wait()
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -373,11 +377,17 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        Public Sub DownloadFile(address As Uri, destinationFileName As String)
+        Public Sub DownloadFile(address As Uri,
+                                destinationFileName As String)
             Try
-                DownloadFileAsync(address, destinationFileName, DEFAULT_USERNAME,
-                            DEFAULT_PASSWORD, Nothing,
-                            DEFAULT_TIMEOUT, False).Wait()
+                DownloadFileAsync(address,
+                                  destinationFileName,
+                                  DEFAULT_USERNAME,
+                                  DEFAULT_PASSWORD,
+                                  Nothing,
+                                  DEFAULT_TIMEOUT,
+                                  False
+                                 ).Wait()
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -393,11 +403,18 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
-        Public Sub DownloadFile(address As String, destinationFileName As String, userName As String, password As String)
+        Public Sub DownloadFile(address As String,
+                                destinationFileName As String,
+                                userName As String,
+                                password As String)
             Try
-                DownloadFileAsync(address, destinationFileName, userName, password,
-                            Nothing, DEFAULT_TIMEOUT,
-                            False).Wait()
+                DownloadFileAsync(address,
+                                  destinationFileName,
+                                  userName, password,
+                                  Nothing,
+                                  DEFAULT_TIMEOUT,
+                                  False
+                                 ).Wait()
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -413,11 +430,19 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
-        Public Sub DownloadFile(address As Uri, destinationFileName As String, userName As String, password As String)
+        Public Sub DownloadFile(address As Uri,
+                                destinationFileName As String,
+                                userName As String,
+                                password As String)
             Try
-                DownloadFileAsync(address, destinationFileName, userName, password,
-                             Nothing, DEFAULT_TIMEOUT,
-                             False).Wait()
+                DownloadFileAsync(address,
+                                  destinationFileName,
+                                  userName,
+                                  password,
+                                  Nothing,
+                                  DEFAULT_TIMEOUT,
+                                  False
+                                 ).Wait()
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -438,12 +463,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         Public Sub DownloadFile(address As String,
-                               destinationFileName As String,
-                               userName As String,
-                               password As String,
-                               showUI As Boolean,
-                               connectionTimeout As Integer,
-                               overwrite As Boolean)
+                                destinationFileName As String,
+                                userName As String,
+                                password As String,
+                                showUI As Boolean,
+                                connectionTimeout As Integer,
+                                overwrite As Boolean)
             Dim dialog As ProgressDialog = Nothing
             Try
                 If showUI AndAlso Environment.UserInteractive Then
@@ -460,8 +485,8 @@ Namespace Microsoft.VisualBasic.Devices
                                                   userName,
                                                   password,
                                                   dialog, connectionTimeout, overwrite,
-                                              UICancelOption.ThrowException
-                                             )
+                                                  UICancelOption.ThrowException
+                                                 )
                 If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
@@ -530,10 +555,14 @@ Namespace Microsoft.VisualBasic.Devices
             }
                 End If
 
-                Dim t As Task = DownloadFileAsync(addressUri, destinationFileName,
-                                              networkCredentials, dialog, connectionTimeout,
-                                              overwrite, onUserCancel
-                                             )
+                Dim t As Task = DownloadFileAsync(addressUri,
+                                                  destinationFileName,
+                                                  networkCredentials,
+                                                  dialog,
+                                                  connectionTimeout,
+                                                  overwrite,
+                                                  onUserCancel
+                                                 )
                 If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
@@ -591,8 +620,8 @@ Namespace Microsoft.VisualBasic.Devices
                                                   dialog,
                                                   connectionTimeout,
                                                   overwrite,
-                                              UICancelOption.ThrowException
-                                             )
+                                                  UICancelOption.ThrowException
+                                                 )
                 If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
@@ -656,7 +685,8 @@ Namespace Microsoft.VisualBasic.Devices
                                                   dialog,
                                                   connectionTimeout,
                                                   overwrite,
-                                                  onUserCancel)
+                                                  onUserCancel
+                                                 )
                 If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
@@ -714,8 +744,8 @@ Namespace Microsoft.VisualBasic.Devices
                                                   dialog,
                                                   connectionTimeout,
                                                   overwrite,
-                                              UICancelOption.ThrowException
-                                             )
+                                                  UICancelOption.ThrowException
+                                                 )
                 If t.IsFaulted Then ' This will be true if any parameters are bad
                     Throw t.Exception
                 Else
