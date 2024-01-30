@@ -134,18 +134,15 @@ public unsafe partial class DataObject :
 
     /// <summary>
     ///  Returns the inner data that the <see cref="DataObject"/> was created with if the original data implemented
-    ///  <see cref="IDataObject"/>. Otherwise, returns null.
+    ///  <see cref="IDataObject"/>. Otherwise, returns this.
     ///  This method should only be used if the <see cref="DataObject"/> was created for clipboard purposes.
     /// </summary>
-    internal IDataObject? UnwrapInnerIDataObject()
+    internal IDataObject TryUnwrapInnerIDataObject()
     {
-        if (!IsWrappedForClipboard)
-        {
-            throw new InvalidOperationException("This method should only be used for clipboard purposes.");
-        }
+        Debug.Assert(IsWrappedForClipboard, "This method should only be used for clipboard purposes.");
 
         return _innerData is DataStore or ComDataObjectAdapter
-            ? null
+            ? this
             : _innerData;
     }
 

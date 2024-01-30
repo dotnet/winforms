@@ -129,9 +129,7 @@ public static class Clipboard
             // There is a DataObject on the clipboard that we placed there. If the real data object
             // implements IDataObject, we want to unwrap it and return it. Otherwise return
             // the DataObject as is.
-            return wrappedData.UnwrapInnerIDataObject() is { } innerData
-                ? innerData
-                : wrappedData;
+            return wrappedData.TryUnwrapInnerIDataObject();
         }
 
         // We did not place the data on the clipboard. Fall back to old behavior.
