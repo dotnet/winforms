@@ -16,7 +16,7 @@ public sealed unsafe class BrightnessContrastEffect : Effect
     private readonly BrightnessContrastParams _brightnessContrastParams;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="BrightnessContrastEffect"/> class.
+    ///  Creates a new <see cref="BrightnessContrastEffect"/> with the given parameters.
     /// </summary>
     /// <param name="brightnessLevel">
     ///  Integer in the range -255 through 255 that specifies the brightness level. If the value is 0, the brightness
@@ -28,6 +28,10 @@ public sealed unsafe class BrightnessContrastEffect : Effect
     ///  remains the same. As the value moves from 0 to 100, the contrast of the image increases. As the value moves
     ///  from 0 to -100, the contrast of the image decreases.
     /// </param>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="brightnessLevel"/> is less than -255 or greater than 255 or <paramref name="contrastLevel"/>
+    ///  is less than -100 or greater than 100.
+    /// </exception>
     public BrightnessContrastEffect(int brightnessLevel, int contrastLevel) : base(PInvoke.BrightnessContrastEffectGuid)
     {
         _brightnessContrastParams = new() { brightnessLevel = brightnessLevel, contrastLevel = contrastLevel };

@@ -14,16 +14,23 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class ContrastEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="Contrast"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="ContrastEffect"/> with the given <paramref name="contrast"/> adjustment value.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
+    /// <param name="contrast">
     ///  A value in the range of -100 through 100.  A value of 0 specifies no change in contrast. Positive values
     ///  specify increased contrast and negative values specify decreased contrast.
     /// </param>
-    public ContrastEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustContrast, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="contrast"/> is less than -100 or greater than 100.</exception>
+    public ContrastEffect(CurveChannel channel, int contrast)
+        : base(CurveAdjustments.AdjustContrast, channel, contrast)
     {
     }
+
+    /// <summary>
+    ///  A value in the range of -100 through 100.  A value of 0 specifies no change in contrast. Positive values
+    ///  specify increased contrast and negative values specify decreased contrast.
+    /// </summary>
+    public int Contrast => AdjustValue;
 }
 #endif

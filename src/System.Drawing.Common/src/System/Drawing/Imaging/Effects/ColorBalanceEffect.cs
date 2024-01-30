@@ -36,6 +36,10 @@ public sealed class ColorBalanceEffect : Effect
     ///  amount of yellow decreases. As the value moves from 0 to -100, the amount of blue in the image decreases and
     ///  the amount of yellow increases.
     /// </param>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="cyanRed"/>, <paramref name="magentaGreen"/>, or <paramref name="yellowBlue"/> is less than
+    ///  -100 or greater than 100.
+    /// </exception>
     public ColorBalanceEffect(int cyanRed, int magentaGreen, int yellowBlue) : base(PInvoke.ColorBalanceEffectGuid)
     {
         _colorBalanceParams = new() { cyanRed = cyanRed, magentaGreen = magentaGreen, yellowBlue = yellowBlue };

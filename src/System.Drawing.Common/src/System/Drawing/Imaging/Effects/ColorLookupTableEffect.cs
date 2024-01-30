@@ -18,13 +18,13 @@ public sealed unsafe class ColorLookupTableEffect : Effect
     private readonly ColorLUTParams _parameters;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="ColorLookupTableEffect"/> class.
+    ///  Creates a new <see cref="ColorLookupTableEffect"/> with the given parameters.
     /// </summary>
     /// <param name="redLookupTable">The lookup table for the red channel.</param>
     /// <param name="greenLookupTable">The lookup table for the green channel.</param>
     /// <param name="blueLookupTable">The lookup table for the blue channel.</param>
     /// <param name="alphaLookupTable">The lookup table for the alpha channel.</param>
-    /// <exception cref="ArgumentOutOfRangeException">A lookup table parameter was longer than 256 bytes.</exception>
+    /// <exception cref="ArgumentException">A lookup table parameter is longer than 256 bytes.</exception>
     public ColorLookupTableEffect(
         byte[] redLookupTable,
         byte[] greenLookupTable,
@@ -40,6 +40,8 @@ public sealed unsafe class ColorLookupTableEffect : Effect
         ReadOnlySpan<byte> blueLookupTable,
         ReadOnlySpan<byte> alphaLookupTable) : base(PInvoke.ColorLUTEffectGuid)
     {
+        // ColorLUTParams will validate that the length fits.
+
         Unsafe.SkipInit(out _parameters);
         _parameters.lutR = redLookupTable;
         _parameters.lutG = greenLookupTable;

@@ -14,16 +14,23 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class ExposureEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="ExposureEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="ExposureEffect"/> with the given <paramref name="exposure"/> adjustment.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
-    ///  A value in the range of -255 through 255. A value of 0 specifies no change in exposure. Positive values
+    /// <param name="exposure">
+    ///  A value in the range of -256 through 256. A value of 0 specifies no change in exposure. Positive values
     ///  specify increased exposure and negative values specify decreased exposure.
     /// </param>
-    public ExposureEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustExposure, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="exposure"/> is less than -256 or greater than 256.</exception>
+    public ExposureEffect(CurveChannel channel, int exposure)
+        : base(CurveAdjustments.AdjustExposure, channel, exposure)
     {
     }
+
+    /// <summary>
+    ///  A value in the range of -256 through 256. A value of 0 specifies no change in exposure. Positive values
+    ///  specify increased exposure and negative values specify decreased exposure.
+    /// </summary>
+    public int Exposure => AdjustValue;
 }
 #endif

@@ -39,6 +39,10 @@ public sealed class LevelsEffect : Effect
     ///  full intensity. For example, setting shadow to 10 specifies that all color channel values less than 10 percent
     ///  of full intensity are decreased.
     /// </param>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="highlight"/> or <paramref name="shadow"/> is less than 0 or greater than 100 or
+    ///  <paramref name="midtone"/> is less than -100 or greater than 100.
+    /// </exception>
     public LevelsEffect(int highlight, int midtone, int shadow)
         : base(PInvoke.LevelsEffectGuid)
     {

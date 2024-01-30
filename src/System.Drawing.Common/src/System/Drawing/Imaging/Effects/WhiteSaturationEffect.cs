@@ -15,17 +15,25 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class WhiteSaturationEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="WhiteSaturationEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="WhiteSaturationEffect"/> with the given parameters.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
+    /// <param name="whiteSaturation">
     ///  A value of t specifies that the interval [0, t] is mapped linearly to the interval [0, 255]. For example, if
-    ///  <paramref name="adjustValue"/> is equal to 240, then color channel values in the interval [0, 240] are adjusted
+    ///  <paramref name="whiteSaturation"/> is equal to 240, then color channel values in the interval [0, 240] are adjusted
     ///  so that they spread out over the interval [0, 255]. Color channel values greater than 240 are set to 255.
     /// </param>
-    public WhiteSaturationEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustWhiteSaturation, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="whiteSaturation"/> was less than 1 or greater than 255.</exception>
+    public WhiteSaturationEffect(CurveChannel channel, int whiteSaturation)
+        : base(CurveAdjustments.AdjustWhiteSaturation, channel, whiteSaturation)
     {
     }
+
+    /// <summary>
+    ///  A value of t specifies that the interval [0, t] is mapped linearly to the interval [0, 255]. For example, if
+    ///  <see cref="WhiteSaturation"/> is equal to 240, then color channel values in the interval [0, 240] are adjusted
+    ///  so that they spread out over the interval [0, 255]. Color channel values greater than 240 are set to 255.
+    /// </summary>
+    public int WhiteSaturation => AdjustValue;
 }
 #endif

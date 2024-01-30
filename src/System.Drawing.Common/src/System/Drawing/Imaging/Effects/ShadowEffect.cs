@@ -16,16 +16,23 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class ShadowEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="ShadowEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="ShadowEffect"/> with the given <paramref name="shadow"/>.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
+    /// <param name="shadow">
     ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
     ///  dark areas are made lighter, and negative values specify that the dark areas are made darker.
     /// </param>
-    public ShadowEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustShadow, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="shadow"/> is less than -100 or greater than 100.</exception>
+    public ShadowEffect(CurveChannel channel, int shadow)
+        : base(CurveAdjustments.AdjustShadow, channel, shadow)
     {
     }
+
+    /// <summary>
+    ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
+    ///  dark areas are made lighter, and negative values specify that the dark areas are made darker.
+    /// </summary>
+    public int Shadow => AdjustValue;
 }
 #endif

@@ -36,6 +36,6 @@ public abstract class ColorCurveEffect : Effect
     /// <summary>
     ///  The adjustment value.
     /// </summary>
-    public int AdjustValue => _parameters.adjustValue;
+    private protected int AdjustValue => _parameters.adjustValue;
 }
 #endif

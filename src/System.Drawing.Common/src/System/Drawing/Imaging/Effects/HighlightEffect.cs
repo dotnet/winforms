@@ -16,16 +16,22 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class HighlightEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="HighlightEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="HighlightEffect"/> with the given <paramref name="highlight"/> adjustment.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
+    /// <param name="highlight">
     ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
     ///  light areas are made lighter, and negative values specify that the light areas are made darker.
     /// </param>
-    public HighlightEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustHighlight, channel, adjustValue)
+    public HighlightEffect(CurveChannel channel, int highlight)
+        : base(CurveAdjustments.AdjustHighlight, channel, highlight)
     {
     }
+
+    /// <summary>
+    ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
+    ///  light areas are made lighter, and negative values specify that the light areas are made darker.
+    /// </summary>
+    public int Highlight => AdjustValue;
 }
 #endif

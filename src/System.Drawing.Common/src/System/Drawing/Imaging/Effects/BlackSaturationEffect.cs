@@ -15,17 +15,25 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class BlackSaturationEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="BlackSaturationEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="BlackSaturationEffect"/> with the given parameters.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
+    /// <param name="blackSaturation">
     ///  A value of t specifies that the interval [t, 255] is mapped linearly to the interval [0, 255]. For example, if
-    ///  <paramref name="adjustValue"/> is equal to 15, then color channel values in the interval [15, 255] are adjusted
+    ///  <paramref name="blackSaturation"/> is equal to 15, then color channel values in the interval [15, 255] are adjusted
     ///  so that they spread out over the interval [0, 255]. Color channel values less than 15 are set to 0.
     /// </param>
-    public BlackSaturationEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustBlackSaturation, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="blackSaturation"/> is less than 0 or greater than 254.</exception>
+    public BlackSaturationEffect(CurveChannel channel, int blackSaturation)
+        : base(CurveAdjustments.AdjustBlackSaturation, channel, blackSaturation)
     {
     }
+
+    /// <summary>
+    ///  A value of t specifies that the interval [t, 255] is mapped linearly to the interval [0, 255]. For example, if
+    ///  <see cref="BlackSaturation"/> is equal to 15, then color channel values in the interval [15, 255] are adjusted
+    ///  so that they spread out over the interval [0, 255]. Color channel values less than 15 are set to 0.
+    /// </summary>
+    public int BlackSaturation => AdjustValue;
 }
 #endif

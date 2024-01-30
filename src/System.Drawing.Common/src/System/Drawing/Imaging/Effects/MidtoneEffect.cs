@@ -16,16 +16,23 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class MidtoneEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="MidtoneEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="MidtoneEffect"/> with the given <paramref name="midtone"/> adjustment.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
+    /// <param name="midtone">
     ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
     ///  mid-tones are made lighter, and negative values specify that the mid-tones are made darker.
     /// </param>
-    public MidtoneEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustMidtone, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="midtone"/> is less than -100 or greater than 100.</exception>
+    public MidtoneEffect(CurveChannel channel, int midtone)
+        : base(CurveAdjustments.AdjustMidtone, channel, midtone)
     {
     }
+
+    /// <summary>
+    ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
+    ///  mid-tones are made lighter, and negative values specify that the mid-tones are made darker.
+    /// </summary>
+    public int Midtone => AdjustValue;
 }
 #endif

@@ -22,7 +22,7 @@ public sealed unsafe class ColorMatrixEffect : Effect
     private readonly ColorMatrix _matrix;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="ColorMatrixEffect"/> class.
+    ///  Creates a new <see cref="ColorMatrixEffect"/> with the given <paramref name="matrix"/>.
     /// </summary>
     /// <param name="matrix">Color transform matrix.</param>
     public ColorMatrixEffect(ColorMatrix matrix) : base(PInvoke.ColorMatrixEffectGuid)

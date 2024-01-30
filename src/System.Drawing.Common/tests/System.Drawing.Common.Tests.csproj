@@ -7,6 +7,7 @@
          TODO: Clean the code up and remove the NoWarns. -->
     <NoWarn>$(NoWarn);CA1825;CA5351;CA1850</NoWarn>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +40,7 @@
     <Compile Include="IconTests.cs" />
     <Compile Include="ImageTests.cs" />
     <Compile Include="Imaging\CachedBitmapTests.cs" />
+    <Compile Include="Imaging\Effects\EffectsTests.cs" />
     <Compile Include="Imaging\ImageAttributesTests.cs" />
     <Compile Include="Imaging\MetafileTests.cs" />
     <Compile Include="Imaging\PropertyItemTests.cs" />

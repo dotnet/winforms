@@ -14,16 +14,23 @@ namespace System.Drawing.Imaging.Effects;
 public sealed class DensityEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="DensityEffect"/> with the given <paramref name="adjustValue"/>.
+    ///  Creates a new <see cref="DensityEffect"/> with the given <paramref name="density"/>.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
-    /// <param name="adjustValue">
-    ///  A value in the range of -255 through 255. A value of 0 specifies no change in density. Positive values specify
+    /// <param name="density">
+    ///  A value in the range of -256 through 256. A value of 0 specifies no change in density. Positive values specify
     ///  increased density (lighter picture) and negative values specify decreased density (darker picture).
     /// </param>
-    public DensityEffect(CurveChannel channel, int adjustValue)
-        : base(CurveAdjustments.AdjustDensity, channel, adjustValue)
+    /// <exception cref="ArgumentException"><paramref name="density"/> is less than -256 or greater than 256.</exception>
+    public DensityEffect(CurveChannel channel, int density)
+        : base(CurveAdjustments.AdjustDensity, channel, density)
     {
     }
+
+    /// <summary>
+    ///  A value in the range of -256 through 256. A value of 0 specifies no change in density. Positive values specify
+    ///  increased density (lighter picture) and negative values specify decreased density (darker picture).
+    /// </summary>
+    public int Density => AdjustValue;
 }
 #endif
