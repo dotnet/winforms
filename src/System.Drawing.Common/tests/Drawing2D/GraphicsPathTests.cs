@@ -2636,4 +2636,69 @@ public class GraphicsPathTests
             Assert.Equal(expectedTypes[i], reversedTypes[i]);
         }
     }
+
+#if NET9_0_OR_GREATER
+    [Fact]
+    public void GraphicsPath_AddRoundedRectangle_Integer()
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(new Rectangle(10, 10, 20, 20), new(5, 5));
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(
+            new PointF[]
+            {
+                new(27.499994f, 10),
+                new(28.880707f, 9.999997f),
+                new(29.999996f, 11.119284f),
+                new(29.999998f, 12.499999f),
+                new(29.999998f, 12.499999f),
+                new(29.999998f, 12.5f),
+                new(29.999998f, 12.5f),
+                new(29.999998f, 27.499998f),
+                new(29.999998f, 28.88071f),
+                new(28.88071f, 29.999998f),
+                new(27.5f, 29.999998f),
+                new(12.500001f, 29.999998f),
+                new(11.119289f, 30),
+                new(10.000001f, 28.880713f),
+                new(10f, 27.5f),
+                new(9.999999f, 12.500001f),
+                new(9.999998f, 11.119289f),
+                new(11.119286f, 10.000001f),
+                new(12.499997f, 9.999999f),
+            },
+            0.000001f);
+    }
+
+    [Fact]
+    public void GraphicsPath_AddRoundedRectangle_Float()
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(new RectangleF(10, 10, 20, 20), new(5, 5));
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(
+            new PointF[]
+            {
+                new(27.499994f, 10),
+                new(28.880707f, 9.999997f),
+                new(29.999996f, 11.119284f),
+                new(29.999998f, 12.499999f),
+                new(29.999998f, 12.499999f),
+                new(29.999998f, 12.5f),
+                new(29.999998f, 12.5f),
+                new(29.999998f, 27.499998f),
+                new(29.999998f, 28.88071f),
+                new(28.88071f, 29.999998f),
+                new(27.5f, 29.999998f),
+                new(12.500001f, 29.999998f),
+                new(11.119289f, 30),
+                new(10.000001f, 28.880713f),
+                new(10f, 27.5f),
+                new(9.999999f, 12.500001f),
+                new(9.999998f, 11.119289f),
+                new(11.119286f, 10.000001f),
+                new(12.499997f, 9.999999f),
+            },
+            0.000001f);
+    }
+
+#endif
 }

@@ -3274,4 +3274,70 @@ public partial class GraphicsTests
         }
     }
 #endif
+
+    internal unsafe static void VerifyBitmapEmpty(Bitmap bitmap)
+    {
+        BitmapData data = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+        try
+        {
+            ReadOnlySpan<byte> bytes = new((byte*)data.Scan0, data.Stride * data.Height);
+            bytes.IndexOfAnyExcept((byte)0).Should().Be(-1);
+        }
+        finally
+        {
+            bitmap.UnlockBits(data);
+        }
+    }
+
+    internal unsafe static void VerifyBitmapNotEmpty(Bitmap bitmap)
+    {
+        BitmapData data = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+        try
+        {
+            ReadOnlySpan<byte> bytes = new((byte*)data.Scan0, data.Stride * data.Height);
+            bytes.IndexOfAnyExcept((byte)0).Should().NotBe(-1);
+        }
+        finally
+        {
+            bitmap.UnlockBits(data);
+        }
+    }
+
+#if NET9_0_OR_GREATER
+    [Fact]
+    public void Graphics_DrawRoundedRectangle_Integer()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.DrawRoundedRectangle(Pens.Red, new(0, 0, 10, 10), new(2, 2));
+        VerifyBitmapNotEmpty(bitmap);
+    }
+
+    [Fact]
+    public void Graphics_DrawRoundedRectangle_Float()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.DrawRoundedRectangle(Pens.Red, new RectangleF(0, 0, 10, 10), new(2, 2));
+        VerifyBitmapNotEmpty(bitmap);
+    }
+
+    [Fact]
+    public void Graphics_FillRoundedRectangle_Integer()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.FillRoundedRectangle(Brushes.Green, new(0, 0, 10, 10), new(2, 2));
+        VerifyBitmapNotEmpty(bitmap);
+    }
+
+    [Fact]
+    public void Graphics_FillRoundedRectangle_Float()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.FillRoundedRectangle(Brushes.Green, new RectangleF(0, 0, 10, 10), new(2, 2));
+        VerifyBitmapNotEmpty(bitmap);
+    }
+#endif
 }
