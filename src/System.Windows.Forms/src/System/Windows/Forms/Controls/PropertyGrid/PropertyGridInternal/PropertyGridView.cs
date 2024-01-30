@@ -115,7 +115,7 @@ internal sealed partial class PropertyGridView :
 
     private GridPositionData? _positionData;
 
-    public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
+    public PropertyGridView(IServiceProvider? serviceProvider, PropertyGrid propertyGrid)
         : base()
     {
         _paintWidth = ScaleHelper.ScaleToInitialSystemDpi(LogicalPaintWidth);
@@ -4002,7 +4002,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal void RecursivelyExpand(GridEntry gridEntry, bool initialize, bool expand, int maxExpands)
+    internal void RecursivelyExpand(GridEntry? gridEntry, bool initialize, bool expand, int maxExpands)
     {
         if (gridEntry is null || (expand && --maxExpands < 0))
         {
