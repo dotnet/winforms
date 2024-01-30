@@ -3,6 +3,10 @@
 
 using System.ComponentModel;
 using System.Drawing.Imaging;
+#if NET9_0_OR_GREATER
+using System.Drawing.Imaging.Effects;
+using System.Runtime.Versioning;
+#endif
 using System.IO;
 using System.Runtime.Serialization;
 
@@ -356,4 +360,27 @@ public sealed unsafe class Bitmap : Image
         GC.KeepAlive(this);
         return new Bitmap(clone);
     }
+
+#if NET9_0_OR_GREATER
+    /// <summary>
+    ///  Alters the bitmap by applying the given <paramref name="effect"/>.
+    /// </summary>
+    /// <param name="effect">The effect to apply.</param>
+    /// <param name="area">The area to apply to, or <see cref="Rectangle.Empty"/> for the entire image.</param>
+    [RequiresPreviewFeatures]
+    public void ApplyEffect(Effect effect, Rectangle area = default)
+    {
+        RECT rect = area;
+        PInvoke.GdipBitmapApplyEffect(
+            this.Pointer(),
+            effect.Pointer(),
+            area.IsEmpty ? null : &rect,
+            useAuxData: false,
+            auxData: null,
+            auxDataSize: null).ThrowIfFailed();
+
+        GC.KeepAlive(this);
+        GC.KeepAlive(effect);
+    }
+#endif
 }
