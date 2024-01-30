@@ -143,8 +143,6 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     public virtual Rectangle Bounds => SystemIAccessible.TryGetLocation(CHILDID_SELF);
 
-    internal static bool CanNotifyClients => LocalAppContextSwitches.CanNotifyClients;
-
     /// <summary>
     ///  Gets a description of the default action for an object.
     /// </summary>
@@ -3218,7 +3216,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationKind notificationKind,
         AutomationNotificationProcessing notificationProcessing,
         string? notificationText)
-        => CanNotifyClients
+        => !LocalAppContextSwitches.NoClientNotifications
             && PInvoke.UiaRaiseNotificationEvent(
                 this,
                 notificationKind,
@@ -3237,7 +3235,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationEvent(provider, eventId);
@@ -3249,7 +3247,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationPropertyChangedEvent(provider, propertyId, oldValue, newValue);
@@ -3269,7 +3267,7 @@ public unsafe partial class AccessibleObject :
 
     internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             int length = runtimeId.Length;
