@@ -128,6 +128,25 @@ public unsafe partial class DataObject :
     internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
 
     /// <summary>
+    ///  Flags that the original data was wrapped for clipboard purposes.
+    /// </summary>
+    internal bool IsWrappedForClipboard { get; init; }
+
+    /// <summary>
+    ///  Returns the inner data that the <see cref="DataObject"/> was created with if the original data implemented
+    ///  <see cref="IDataObject"/>. Otherwise, returns this.
+    ///  This method should only be used if the <see cref="DataObject"/> was created for clipboard purposes.
+    /// </summary>
+    internal IDataObject TryUnwrapInnerIDataObject()
+    {
+        Debug.Assert(IsWrappedForClipboard, "This method should only be used for clipboard purposes.");
+
+        return _innerData is DataStore or ComDataObjectAdapter
+            ? this
+            : _innerData;
+    }
+
+    /// <summary>
     ///  Retrieves the data associated with the specified data format, using an automated conversion parameter to
     ///  determine whether to convert the data to the format.
     /// </summary>
