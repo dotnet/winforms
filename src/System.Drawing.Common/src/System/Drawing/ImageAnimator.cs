@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Imaging;
@@ -38,60 +38,61 @@ public sealed partial class ImageAnimator
     internal const int AnimationDelayMS = 40;
 
     /// <summary>
-    ///     A list of images to be animated.
+    ///  A list of images to be animated.
     /// </summary>
     private static List<ImageInfo>? s_imageInfoList;
 
     /// <summary>
-    ///     A variable to flag when an image or images need to be updated due to the selection of a new frame
-    ///     in an image.  We don't need to synchronize access to this variable, in the case it is true we don't
-    ///     do anything, otherwise the worse case is where a thread attempts to update the image's frame after
-    ///     another one did which is harmless.
+    ///  A variable to flag when an image or images need to be updated due to the selection of a new frame
+    ///  in an image.  We don't need to synchronize access to this variable, in the case it is true we don't
+    ///  do anything, otherwise the worse case is where a thread attempts to update the image's frame after
+    ///  another one did which is harmless.
     /// </summary>
     private static bool s_anyFrameDirty;
 
     /// <summary>
-    ///     The thread used for animating the images.
+    ///  The thread used for animating the images.
     /// </summary>
     private static Thread? s_animationThread;
 
     /// <summary>
-    ///     Lock that allows either concurrent read-access to the images list for multiple threads, or write-
-    ///     access to it for a single thread.  Observe that synchronization access to image objects are done
-    ///     with critical sections (lock).
+    ///  Lock that allows either concurrent read-access to the images list for multiple threads, or write-
+    ///  access to it for a single thread.  Observe that synchronization access to image objects are done
+    ///  with critical sections (lock).
     /// </summary>
     private static readonly ReaderWriterLock s_rwImgListLock = new();
 
     /// <summary>
-    ///     Flag to avoid a deadlock when waiting on a write-lock and an attempt to acquire a read-lock is
-    ///     made in the same thread. If RWLock is currently owned by another thread, the current thread is going to wait on an
-    ///     event using CoWaitForMultipleHandles while pumps message.
-    ///     The comment above refers to the COM STA message pump, not to be confused with the UI message pump.
-    ///     However, the effect is the same, the COM message pump will pump messages and dispatch them to the
-    ///     window while waiting on the writer lock; this has the potential of creating a re-entrancy situation
-    ///     that if during the message processing a wait on a reader lock is originated the thread will be block
-    ///     on itself.
-    ///     While processing STA message, the thread may call back into managed code. We do this because
-    ///     we can not block finalizer thread.  Finalizer thread may need to release STA objects on this thread. If
-    ///     the current thread does not pump message, finalizer thread is blocked, and AD  unload is blocked while
-    ///     waiting for finalizer thread. RWLock is a fair lock. If a thread waits for a writer lock, then it needs
-    ///     a reader lock while pumping message, the thread is blocked forever.
-    ///     This TLS variable is used to flag the above situation and avoid the deadlock, it is ThreadStatic so each
-    ///     thread calling into ImageAnimator is guarded against this problem.
+    ///  Flag to avoid a deadlock when waiting on a write-lock and an attempt to acquire a read-lock is
+    ///  made in the same thread. If RWLock is currently owned by another thread, the current thread is going to wait on an
+    ///  event using CoWaitForMultipleHandles while pumps message.
+    ///
+    ///  The comment above refers to the COM STA message pump, not to be confused with the UI message pump.
+    ///  However, the effect is the same, the COM message pump will pump messages and dispatch them to the
+    ///  window while waiting on the writer lock; this has the potential of creating a re-entrancy situation
+    ///  that if during the message processing a wait on a reader lock is originated the thread will be block
+    ///  on itself.
+    ///
+    ///  While processing STA message, the thread may call back into managed code. We do this because
+    ///  we can not block finalizer thread.  Finalizer thread may need to release STA objects on this thread. If
+    ///  the current thread does not pump message, finalizer thread is blocked, and AD  unload is blocked while
+    ///  waiting for finalizer thread. RWLock is a fair lock. If a thread waits for a writer lock, then it needs
+    ///  a reader lock while pumping message, the thread is blocked forever.
+    ///  This TLS variable is used to flag the above situation and avoid the deadlock, it is ThreadStatic so each
+    ///  thread calling into ImageAnimator is guarded against this problem.
     /// </summary>
-
     [ThreadStatic]
     private static int t_threadWriterLockWaitCount;
 
     /// <summary>
-    ///     Prevent instantiation of this class.
+    ///  Prevent instantiation of this class.
     /// </summary>
     private ImageAnimator()
     {
     }
 
     /// <summary>
-    ///     Advances the frame in the specified image. The new frame is drawn the next time the image is rendered.
+    ///  Advances the frame in the specified image. The new frame is drawn the next time the image is rendered.
     /// </summary>
     public static void UpdateFrames(Image? image)
     {
@@ -152,7 +153,7 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///     Advances the frame in all images currently being animated. The new frame is drawn the next time the image is rendered.
+    ///  Advances the frame in all images currently being animated. The new frame is drawn the next time the image is rendered.
     /// </summary>
     public static void UpdateFrames()
     {
@@ -189,8 +190,8 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///     Adds an image to the image manager.  If the image does not support animation this method does nothing.
-    ///     This method creates the image list and spawns the animation thread the first time it is called.
+    ///  Adds an image to the image manager.  If the image does not support animation this method does nothing.
+    ///  This method creates the image list and spawns the animation thread the first time it is called.
     /// </summary>
     public static void Animate(Image image, EventHandler onFrameChangedHandler)
     {
@@ -240,26 +241,28 @@ public sealed partial class ImageAnimator
 
         try
         {
-            if (imageInfo.Animated)
+            if (!imageInfo.Animated)
             {
-                // Construct the image array
-                //
-                s_imageInfoList ??= new List<ImageInfo>();
+                return;
+            }
 
-                // Add the new image
-                //
-                imageInfo.FrameChangedHandler = onFrameChangedHandler;
-                s_imageInfoList.Add(imageInfo);
+            // Construct the image array
+            s_imageInfoList ??= [];
 
-                // Construct a new timer thread if we haven't already
-                //
-                if (s_animationThread is null)
+            // Add the new image
+            imageInfo.FrameChangedHandler = onFrameChangedHandler;
+            s_imageInfoList.Add(imageInfo);
+
+            // Construct a new timer thread if we haven't already
+            if (s_animationThread is null)
+            {
+                s_animationThread = new Thread(new ThreadStart(AnimateImages))
                 {
-                    s_animationThread = new Thread(new ThreadStart(AnimateImages));
-                    s_animationThread.Name = nameof(ImageAnimator);
-                    s_animationThread.IsBackground = true;
-                    s_animationThread.Start();
-                }
+                    Name = nameof(ImageAnimator),
+                    IsBackground = true
+                };
+
+                s_animationThread.Start();
             }
         }
         finally
@@ -276,7 +279,7 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///    Whether or not the image has multiple time-based frames.
+    ///  Whether or not the image has multiple time-based frames.
     /// </summary>
     public static bool CanAnimate([NotNullWhen(true)] Image? image)
     {
@@ -304,7 +307,7 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///     Removes an image from the image manager so it is no longer animated.
+    ///  Removes an image from the image manager so it is no longer animated.
     /// </summary>
     public static void StopAnimate(Image image, EventHandler onFrameChangedHandler)
     {
@@ -347,7 +350,8 @@ public sealed partial class ImageAnimator
 
                 if (image == imageInfo.Image)
                 {
-                    if ((onFrameChangedHandler == imageInfo.FrameChangedHandler) || (onFrameChangedHandler is not null && onFrameChangedHandler.Equals(imageInfo.FrameChangedHandler)))
+                    if (onFrameChangedHandler == imageInfo.FrameChangedHandler
+                        || (onFrameChangedHandler is not null && onFrameChangedHandler.Equals(imageInfo.FrameChangedHandler)))
                     {
                         s_imageInfoList.Remove(imageInfo);
                     }
@@ -370,11 +374,13 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///     Worker thread procedure which implements the main animation loop.
-    ///     NOTE: This is the ONLY code the worker thread executes, keeping it in one method helps better understand
-    ///     any synchronization issues.
-    ///     WARNING: Also, this is the only place where ImageInfo objects (not the contained image object) are modified,
-    ///     so no access synchronization is required to modify them.
+    ///  Worker thread procedure which implements the main animation loop.
+    ///
+    ///  NOTE: This is the ONLY code the worker thread executes, keeping it in one method helps better understand
+    ///  any synchronization issues.
+    ///
+    ///  WARNING: Also, this is the only place where ImageInfo objects (not the contained image object) are modified,
+    ///  so no access synchronization is required to modify them.
     /// </summary>
     private static void AnimateImages()
     {
