@@ -1256,6 +1256,11 @@ public partial class TreeView : Control
                 {
                     Sort();
                 }
+                else
+                {
+                    Sorted = false;
+                    RefreshNodes();
+                }
             }
         }
     }

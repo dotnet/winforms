@@ -1,8 +1,19 @@
 AbortDoc
 AddFontResourceEx
 BITMAP
+BlurEffectGuid
+BlurParams
+BrightnessContrastEffectGuid
+BrightnessContrastParams
 CHECKJPEGFORMAT
 CHECKPNGFORMAT
+ColorBalanceEffectGuid
+ColorBalanceParams
+ColorCurveEffectGuid
+ColorCurveParams
+ColorLUTEffectGuid
+ColorLUTParams
+ColorMatrixEffectGuid
 CreateIconFromResourceEx
 DeviceCapabilities
 DMBIN_*
@@ -40,6 +51,7 @@ GdipAddPathRectanglesI
 GdipAddPathString
 GdipBeginContainer
 GdipBeginContainer2
+GdipBitmapApplyEffect
 GdipBitmapGetPixel
 GdipBitmapLockBits
 GdipBitmapSetPixel
@@ -77,6 +89,7 @@ GdipCreateBitmapFromStream
 GdipCreateBitmapFromStreamICM
 GdipCreateCachedBitmap
 GdipCreateCustomLineCap
+GdipCreateEffect
 GdipCreateFont
 GdipCreateFontFamilyFromName
 GdipCreateFontFromDC
@@ -122,6 +135,7 @@ GdipDeleteBrush
 GdipDeleteCachedBitmap
 GdipDeleteCustomLineCap
 GdipDeleteCustomLineCap
+GdipDeleteEffect
 GdipDeleteFont
 GdipDeleteFontFamily
 GdipDeleteMatrix
@@ -151,6 +165,7 @@ GdipDrawCurve3I
 GdipDrawCurveI
 GdipDrawEllipse
 GdipDrawImage
+GdipDrawImageFX
 GdipDrawImagePointRect
 GdipDrawImagePoints
 GdipDrawImagePointsI
@@ -439,6 +454,7 @@ GdipSetCustomLineCapBaseInset
 GdipSetCustomLineCapStrokeCaps
 GdipSetCustomLineCapStrokeJoin
 GdipSetCustomLineCapWidthScale
+GdipSetEffectParameters
 GdipSetEmpty
 GdipSetImageAttributesColorKeys
 GdipSetImageAttributesColorMatrix
@@ -533,8 +549,12 @@ GdipVectorTransformMatrixPointsI
 GdipWarpPath
 GdipWidenPath
 GetDIBits
+HueSaturationLightnessEffectGuid
+HueSaturationLightnessParams
 LANG_ARABIC
 LANG_JAPANESE
+LevelsEffectGuid
+LevelsParams
 PALETTEENTRY
 PRINTER_ENUM_CONNECTIONS
 PRINTER_ENUM_LOCAL
@@ -542,8 +562,12 @@ PRINTER_INFO_4W
 QUERYESCSUPPORT
 ResetDC
 ROP_CODE
+SharpenEffectGuid
+SharpenParams
 SHDefExtractIcon
 SHGSI_FLAGS
 SHSTOCKICONID
 StartDoc
 StartPage
+TintEffectGuid
+TintParams

@@ -81,7 +81,7 @@ public abstract class PropertyTab : IExtenderProvider
     ///  Gets a value indicating whether this <see cref="PropertyTab"/> can display properties for the
     ///  specified <paramref name="extendee"/>.
     /// </summary>
-    public virtual bool CanExtend(object extendee) => true;
+    public virtual bool CanExtend(object? extendee) => true;
 
     public virtual void Dispose()
     {
