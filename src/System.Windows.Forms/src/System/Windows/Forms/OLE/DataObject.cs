@@ -130,7 +130,7 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Flags that the original data was wrapped for clipboard purposes.
     /// </summary>
-    internal bool IsWrappedForClipboard { get; set; }
+    internal bool IsWrappedForClipboard { get; init; }
 
     /// <summary>
     ///  Returns the inner data that the <see cref="DataObject"/> was created with if the original data implemented
