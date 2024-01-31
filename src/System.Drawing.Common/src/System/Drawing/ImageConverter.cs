@@ -73,7 +73,7 @@ public partial class ImageConverter : TypeConverter
                 // If we don't find an Encoder (for things like Icon), we
                 // just switch back to PNG.
                 ImageCodecInfo codec = FindEncoder(dest) ?? FindEncoder(ImageFormat.Png)!;
-                image.Save(ms, codec, null);
+                image.Save(ms, codec);
                 return ms.ToArray();
             }
         }

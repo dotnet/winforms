@@ -16,7 +16,7 @@ namespace System.Drawing;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed unsafe class Bitmap : Image
+public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
 {
     private static readonly Color s_defaultTransparentColor = Color.LightGray;
 
@@ -44,7 +44,7 @@ public sealed unsafe class Bitmap : Image
 
         ValidateImage((GpImage*)bitmap);
         SetNativeImage((GpImage*)bitmap);
-        EnsureSave(this, filename, null);
+        GetAnimatedGifRawData(this, filename, dataStream: null);
     }
 
     public Bitmap(Stream stream) : this(stream, false)
@@ -64,7 +64,7 @@ public sealed unsafe class Bitmap : Image
 
         ValidateImage((GpImage*)bitmap);
         SetNativeImage((GpImage*)bitmap);
-        EnsureSave(this, null, stream);
+        GetAnimatedGifRawData(this, filename: null, stream);
     }
 
     public Bitmap(Type type, string resource) : this(GetResourceStream(type, resource))
@@ -128,7 +128,7 @@ public sealed unsafe class Bitmap : Image
     {
     }
 
-    internal GpBitmap* NativeBitmap => (GpBitmap*)_nativeImage;
+    GpBitmap* IPointer<GpBitmap>.Pointer => (GpBitmap*)((Image)this).Pointer();
 
     public static Bitmap FromHicon(IntPtr hicon)
     {
@@ -157,7 +157,7 @@ public sealed unsafe class Bitmap : Image
     {
         HBITMAP hbitmap;
         Status status = PInvoke.GdipCreateHBITMAPFromBitmap(
-            NativeBitmap,
+            this.Pointer(),
             &hbitmap,
             (uint)ColorTranslator.ToWin32(background));
 
@@ -175,7 +175,7 @@ public sealed unsafe class Bitmap : Image
     public IntPtr GetHicon()
     {
         HICON hicon;
-        PInvoke.GdipCreateHICONFromBitmap(NativeBitmap, &hicon).ThrowIfFailed();
+        PInvoke.GdipCreateHICONFromBitmap(this.Pointer(), &hicon).ThrowIfFailed();
         GC.KeepAlive(this);
         return hicon;
     }
@@ -192,7 +192,7 @@ public sealed unsafe class Bitmap : Image
         Status status = PInvoke.GdipCloneBitmapArea(
             rect.X, rect.Y, rect.Width, rect.Height,
             (int)format,
-            NativeBitmap,
+            this.Pointer(),
             &clone);
 
         if (status != Status.Ok || clone is null)
@@ -253,9 +253,9 @@ public sealed unsafe class Bitmap : Image
         }
 
         // Swap nativeImage pointers to make it look like we modified the image in place
-        GpImage* temp = _nativeImage;
-        _nativeImage = result._nativeImage;
-        result._nativeImage = temp;
+        GpBitmap* temp = this.Pointer();
+        SetNativeImage((GpImage*)result.Pointer());
+        result.SetNativeImage((GpImage*)temp);
     }
 
     public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format) =>
@@ -268,7 +268,7 @@ public sealed unsafe class Bitmap : Image
         fixed (void* data = &bitmapData.GetPinnableReference())
         {
             PInvoke.GdipBitmapLockBits(
-                NativeBitmap,
+                this.Pointer(),
                 rect.IsEmpty ? null : (Rect*)&rect,
                 (uint)flags,
                 (int)format,
@@ -285,7 +285,7 @@ public sealed unsafe class Bitmap : Image
 
         fixed (void* data = &bitmapdata.GetPinnableReference())
         {
-            PInvoke.GdipBitmapUnlockBits(NativeBitmap, (GdiPlus.BitmapData*)data).ThrowIfFailed();
+            PInvoke.GdipBitmapUnlockBits(this.Pointer(), (GdiPlus.BitmapData*)data).ThrowIfFailed();
         }
 
         GC.KeepAlive(this);
@@ -304,7 +304,7 @@ public sealed unsafe class Bitmap : Image
         }
 
         uint color;
-        PInvoke.GdipBitmapGetPixel(NativeBitmap, x, y, &color).ThrowIfFailed();
+        PInvoke.GdipBitmapGetPixel(this.Pointer(), x, y, &color).ThrowIfFailed();
         GC.KeepAlive(this);
         return Color.FromArgb((int)color);
     }
@@ -326,13 +326,13 @@ public sealed unsafe class Bitmap : Image
             throw new ArgumentOutOfRangeException(nameof(y), SR.ValidRangeY);
         }
 
-        PInvoke.GdipBitmapSetPixel(NativeBitmap, x, y, (uint)color.ToArgb()).ThrowIfFailed();
+        PInvoke.GdipBitmapSetPixel(this.Pointer(), x, y, (uint)color.ToArgb()).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     public void SetResolution(float xDpi, float yDpi)
     {
-        PInvoke.GdipBitmapSetResolution(NativeBitmap, xDpi, yDpi).ThrowIfFailed();
+        PInvoke.GdipBitmapSetResolution(this.Pointer(), xDpi, yDpi).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -347,7 +347,7 @@ public sealed unsafe class Bitmap : Image
         Status status = PInvoke.GdipCloneBitmapAreaI(
             rect.X, rect.Y, rect.Width, rect.Height,
             (int)format,
-            NativeBitmap,
+            this.Pointer(),
             &clone);
 
         if (status != Status.Ok || clone is null)
