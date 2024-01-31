@@ -1313,7 +1313,12 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             {
                 // Otherwise, create the proper GridEntries.
                 bool createInstanceSupported = TypeConverter.GetCreateInstanceSupported(this);
-                entries = new GridEntry[properties!.Count];
+                if (properties is null)
+                {
+                    return entries;
+                }
+
+                entries = new GridEntry[properties.Count];
                 int index = 0;
 
                 // Loop through all the props we got and create property descriptors.
