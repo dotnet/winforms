@@ -21,7 +21,7 @@ internal static partial class LocalAppContextSwitches
     internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
-    private const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
+    internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -173,5 +173,16 @@ internal static partial class LocalAppContextSwitches
         get => GetCachedSwitchValue(NoClientNotificationsSwitchName, ref s_noClientNotifications);
     }
 
-    internal static void SetDataGridViewUIAStartRowCountAtZero(bool value) => s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
+    internal static void SetLocalAppContextSwitchValue(string switchName, bool value)
+    {
+        if (switchName == NoClientNotificationsSwitchName)
+        {
+            s_noClientNotifications = value ? 1 : 0;
+        }
+
+        if (switchName == DataGridViewUIAStartRowCountAtZeroSwitchName)
+        {
+            s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
+        }
+    }
 }
