@@ -22,7 +22,7 @@ namespace System.Drawing;
 [Serializable]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 [TypeConverter(typeof(ImageConverter))]
-public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable, ISerializable
+public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, ICloneable, ISerializable
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
@@ -38,12 +38,15 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
     // However, as this delegate is not used in both GDI 1.0 and 1.1, we choose not
     // to modify it, in order to preserve compatibility.
     public delegate bool GetThumbnailImageAbort();
-    internal GpImage* _nativeImage;
+
+    GpImage* IPointer<GpImage>.Pointer => _nativeImage;
+    private GpImage* _nativeImage;
 
     private object? _userData;
 
-    // used to work around lack of animated gif encoder... rarely set...
-    private byte[]? _rawData;
+    // Used to work around lack of animated gif encoder.
+    private byte[]? _animatedGifRawData;
+    ReadOnlySpan<byte> IRawData.Data => _animatedGifRawData;
 
     [Localizable(false)]
     [DefaultValue(null)]
@@ -118,7 +121,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         ValidateImage(image);
 
         Image img = CreateImageObject(image);
-        EnsureSave(img, filename, null);
+        GetAnimatedGifRawData(img, filename, dataStream: null);
         return img;
     }
 
@@ -141,7 +144,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         }
 
         Image img = CreateImageObject(image);
-        EnsureSave(img, null, stream);
+        GetAnimatedGifRawData(img, filename: null, stream);
         return img;
     }
 
@@ -153,7 +156,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         _nativeImage = image;
         GdiPlus.ImageType type = default;
         PInvoke.GdipGetImageType(_nativeImage, &type).ThrowIfFailed();
-        EnsureSave(this, null, stream);
+        GetAnimatedGifRawData(this, filename: null, stream);
         return image;
     }
 
@@ -274,7 +277,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
 
         if (encoderParams is not null)
         {
-            _rawData = null;
+            _animatedGifRawData = null;
             nativeParameters = encoderParams.ConvertToNative();
         }
 
@@ -283,10 +286,10 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
             Guid guid = encoder.Clsid;
             bool saved = false;
 
-            if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
+            if (_animatedGifRawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
             {
                 using var fs = File.OpenWrite(filename);
-                fs.Write(_rawData, 0, _rawData.Length);
+                fs.Write(_animatedGifRawData, 0, _animatedGifRawData.Length);
                 saved = true;
             }
 
@@ -320,7 +323,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         // If we don't find an Encoder (for things like Icon), we just switch back to PNG...
         ImageCodecInfo codec = dest.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
 
-        Save(stream, codec, encoderParams: null);
+        Save(stream, codec);
     }
 
     /// <summary>
@@ -331,7 +334,28 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         ArgumentNullException.ThrowIfNull(format);
 
         ImageCodecInfo codec = format.FindEncoder()!;
-        Save(stream, codec, null);
+        Save(stream, codec);
+    }
+
+    internal void Save(Stream stream, ImageCodecInfo encoder) =>
+        Save(stream, encoder, encoderParameters: null);
+
+    internal void Save(Stream stream, ImageCodecInfo encoder, GdiPlus.EncoderParameters* encoderParameters) =>
+        Save(this, stream, encoder.Clsid, encoder.FormatID, encoderParameters);
+
+    internal static void Save(IImage image, Stream stream, Guid encoder, Guid format, GdiPlus.EncoderParameters* encoderParameters)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(encoder);
+
+        if (format == ImageFormat.Gif.Guid && image.Data is { } rawData && rawData.Length > 0)
+        {
+            stream.Write(rawData);
+            return;
+        }
+
+        using var iStream = stream.ToIStream();
+        PInvoke.GdipSaveImageToStream(image.Pointer, iStream, &encoder, encoderParameters).ThrowIfFailed();
     }
 
     /// <summary>
@@ -346,26 +370,13 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
 
         if (encoderParams is not null)
         {
-            _rawData = null;
+            _animatedGifRawData = null;
             nativeParameters = encoderParams.ConvertToNative();
         }
 
         try
         {
-            Guid guid = encoder.Clsid;
-            bool saved = false;
-
-            if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
-            {
-                stream.Write(_rawData, 0, _rawData.Length);
-                saved = true;
-            }
-
-            if (!saved)
-            {
-                using var iStream = stream.ToIStream();
-                PInvoke.GdipSaveImageToStream(_nativeImage, iStream, &guid, nativeParameters).ThrowIfFailed();
-            }
+            Save(stream, encoder, nativeParameters);
         }
         finally
         {
@@ -390,7 +401,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
             nativeParameters = encoderParams.ConvertToNative();
         }
 
-        _rawData = null;
+        _animatedGifRawData = null;
 
         try
         {
@@ -422,7 +433,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
             nativeParameters = encoderParams.ConvertToNative();
         }
 
-        _rawData = null;
+        _animatedGifRawData = null;
 
         try
         {
@@ -694,7 +705,7 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         // GDI+ had to ignore the callback as System.Drawing didn't define it correctly so it was eventually removed
         // completely in Windows 7. As such, we don't need to pass it to GDI+.
         PInvoke.GdipGetImageThumbnail(
-            _nativeImage,
+            this.Pointer(),
             (uint)thumbWidth,
             (uint)thumbHeight,
             &thumbImage,
@@ -925,85 +936,91 @@ public abstract unsafe class Image : MarshalByRefObject, IDisposable, ICloneable
         };
     }
 
-    internal static unsafe void EnsureSave(Image image, string? filename, Stream? dataStream)
+    /// <summary>
+    ///  If the image is an animated GIF, loads the raw data for the image into the _rawData field so we
+    ///  can work around the lack of an animated GIF encoder.
+    /// </summary>
+    internal static unsafe void GetAnimatedGifRawData(Image image, string? filename, Stream? dataStream)
     {
-        if (image.RawFormat.Equals(ImageFormat.Gif))
+        if (!image.RawFormat.Equals(ImageFormat.Gif))
         {
-            bool animatedGif = false;
+            return;
+        }
 
-            uint dimensions;
-            PInvoke.GdipImageGetFrameDimensionsCount(image._nativeImage, &dimensions).ThrowIfFailed();
-            if (dimensions <= 0)
+        bool animatedGif = false;
+
+        uint dimensions;
+        PInvoke.GdipImageGetFrameDimensionsCount(image._nativeImage, &dimensions).ThrowIfFailed();
+        if (dimensions <= 0)
+        {
+            return;
+        }
+
+        using BufferScope<Guid> guids = new(stackalloc Guid[16], (int)dimensions);
+
+        fixed (Guid* g = guids)
+        {
+            PInvoke.GdipImageGetFrameDimensionsList(image._nativeImage, g, dimensions).ThrowIfFailed();
+        }
+
+        Guid timeGuid = FrameDimension.Time.Guid;
+        for (int i = 0; i < dimensions; i++)
+        {
+            if (timeGuid == guids[i])
             {
-                return;
+                animatedGif = image.GetFrameCount(FrameDimension.Time) > 1;
+                break;
             }
+        }
 
-            using BufferScope<Guid> guids = new(stackalloc Guid[16], (int)dimensions);
+        if (!animatedGif)
+        {
+            return;
+        }
 
-            fixed (Guid* g = guids)
+        try
+        {
+            Stream? created = null;
+            long lastPos = 0;
+            if (dataStream is not null)
             {
-                PInvoke.GdipImageGetFrameDimensionsList(image._nativeImage, g, dimensions).ThrowIfFailed();
-            }
-
-            Guid timeGuid = FrameDimension.Time.Guid;
-            for (int i = 0; i < dimensions; i++)
-            {
-                if (timeGuid == guids[i])
-                {
-                    animatedGif = image.GetFrameCount(FrameDimension.Time) > 1;
-                    break;
-                }
-            }
-
-            if (!animatedGif)
-            {
-                return;
+                lastPos = dataStream.Position;
+                dataStream.Position = 0;
             }
 
             try
             {
-                Stream? created = null;
-                long lastPos = 0;
-                if (dataStream is not null)
+                if (dataStream is null)
                 {
-                    lastPos = dataStream.Position;
-                    dataStream.Position = 0;
+                    created = dataStream = File.OpenRead(filename ?? throw new InvalidOperationException());
                 }
 
-                try
-                {
-                    if (dataStream is null)
-                    {
-                        created = dataStream = File.OpenRead(filename!);
-                    }
-
-                    image._rawData = new byte[(int)dataStream.Length];
-                    dataStream.Read(image._rawData, 0, (int)dataStream.Length);
-                }
-                finally
-                {
-                    if (created is not null)
-                    {
-                        created.Close();
-                    }
-                    else
-                    {
-                        dataStream!.Position = lastPos;
-                    }
-                }
+                image._animatedGifRawData = new byte[(int)dataStream.Length];
+                dataStream.Read(image._animatedGifRawData, 0, (int)dataStream.Length);
             }
-            catch (Exception e) when (e
-                // possible exceptions for reading the filename
-                is UnauthorizedAccessException
-                or DirectoryNotFoundException
-                or IOException
-                // possible exceptions for setting/getting the position inside dataStream
-                or NotSupportedException
-                or ObjectDisposedException
-                // possible exception when reading stuff into dataStream
-                or ArgumentException)
+            finally
             {
+                if (created is not null)
+                {
+                    created.Close();
+                }
+                else
+                {
+                    dataStream!.Position = lastPos;
+                }
             }
+        }
+        catch (Exception e) when (e
+            // possible exceptions for reading the filename
+            is UnauthorizedAccessException
+            or DirectoryNotFoundException
+            or IOException
+            // possible exceptions for setting/getting the position inside dataStream
+            or NotSupportedException
+            or ObjectDisposedException
+            // possible exception when reading stuff into dataStream
+            or ArgumentException)
+        {
         }
     }
 }

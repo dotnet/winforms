@@ -86,6 +86,7 @@ GlobalReAlloc
 GlobalSize
 GlobalUnlock
 GpGraphics
+GpImage
 GpRegion
 HBITMAP
 HBMMENU_*
