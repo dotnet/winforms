@@ -1,13 +1,11 @@
 <Project>
 
   <PropertyGroup>
-    <EnablePackageValidation Condition="'$(EnablePackageValidation)' == '' and
-                                        '$(DotNetBuildFromSource)' != 'true'">true</EnablePackageValidation>
+    <EnablePackageValidation Condition="'$(EnablePackageValidation)' == ''">true</EnablePackageValidation>
     <!-- Don't perform baseline validation if we don't have a stable prebuilt version.
          Don't attempt to restore prebuilts during source-build. -->
     <DisablePackageBaselineValidation Condition="'$(IsShipping)' == 'false' or
-                                                 '$(SuppressFinalPackageVersion)' == 'true' or
-                                                 '$(DotNetBuildFromSource)' == 'true'">true</DisablePackageBaselineValidation>
+                                                 '$(SuppressFinalPackageVersion)' == 'true'">true</DisablePackageBaselineValidation>
     <!-- Optional rules -->
     <ApiCompatEnableRuleCannotChangeParameterName>true</ApiCompatEnableRuleCannotChangeParameterName>
     <ApiCompatEnableRuleAttributesMustMatch>true</ApiCompatEnableRuleAttributesMustMatch>

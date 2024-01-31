@@ -265,13 +265,11 @@ public sealed unsafe class Bitmap : Image
     {
         ArgumentNullException.ThrowIfNull(bitmapData);
 
-        Rect nativeRect = rect;
-
         fixed (void* data = &bitmapData.GetPinnableReference())
         {
             PInvoke.GdipBitmapLockBits(
                 NativeBitmap,
-                &nativeRect,
+                rect.IsEmpty ? null : (Rect*)&rect,
                 (uint)flags,
                 (int)format,
                 (GdiPlus.BitmapData*)data).ThrowIfFailed();

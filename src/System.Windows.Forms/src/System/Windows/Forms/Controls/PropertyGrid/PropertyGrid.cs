@@ -2583,7 +2583,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         int sh = (int)Math.Round((Top + Height) * dy - sy);
         SetBounds(sx, sy, sw, sh, BoundsSpecified.All);
     }
-#nullable disable
+
     private void OnLayoutInternal(bool dividerOnly)
     {
         if (!IsHandleCreated || !Visible)
@@ -2764,7 +2764,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 #pragma warning disable CA1725 // Parameter name shipped as 'me'
     protected override void OnMouseDown(MouseEventArgs me)
     {
-        SnappableControl target = DividerInside(me.Y);
+        SnappableControl? target = DividerInside(me.Y);
         if (target is not null && me.Button == MouseButtons.Left)
         {
             // Capture the mouse.
@@ -2793,7 +2793,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        int yNew = DividerLimitMove(_targetMove, me.Y);
+        // _targetMove is initialized in OnMouseDown.
+        int yNew = DividerLimitMove(_targetMove!, me.Y);
 
         if (yNew != _dividerMoveY)
         {
@@ -2815,8 +2816,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         Cursor = null;
 
         DividerDraw(_dividerMoveY);
-        _dividerMoveY = DividerLimitMove(_targetMove, me.Y);
-        Rectangle rectDoc = _targetMove.Bounds;
+
+        // _targetMove is initialized in OnMouseDown.
+        _dividerMoveY = DividerLimitMove(_targetMove!, me.Y);
+        Rectangle rectDoc = _targetMove!.Bounds;
         if (_dividerMoveY != rectDoc.Y)
         {
             // We subtract half the height so the mouse is still over the divider.
@@ -2862,7 +2865,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         base.OnResize(e);
     }
 
-    private void OnButtonClick(object sender, EventArgs e)
+    private void OnButtonClick(object? sender, EventArgs e)
     {
         // We don't want to steal focus from the property pages.
         if (sender != _viewPropertyPagesButton)
@@ -2873,10 +2876,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     protected void OnComComponentNameChanged(ComponentRenameEventArgs e)
     {
-        ((ComponentRenameEventHandler)Events[s_comComponentNameChangedEvent])?.Invoke(this, e);
+        ((ComponentRenameEventHandler?)Events[s_comComponentNameChangedEvent])?.Invoke(this, e);
     }
 
-    protected void OnNotifyPropertyValueUIItemsChanged(object sender, EventArgs e)
+    protected void OnNotifyPropertyValueUIItemsChanged(object? sender, EventArgs e)
     {
         _gridView.LabelPaintMargin = 0;
         _gridView.Invalidate(invalidateChildren: true);
@@ -2921,20 +2924,20 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     protected virtual void OnPropertySortChanged(EventArgs e)
     {
-        ((EventHandler)Events[s_propertySortChangedEvent])?.Invoke(this, e);
+        ((EventHandler?)Events[s_propertySortChangedEvent])?.Invoke(this, e);
     }
 
     protected virtual void OnPropertyTabChanged(PropertyTabChangedEventArgs e)
     {
-        ((PropertyTabChangedEventHandler)Events[s_propertyTabChangedEvent])?.Invoke(this, e);
+        ((PropertyTabChangedEventHandler?)Events[s_propertyTabChangedEvent])?.Invoke(this, e);
     }
 
     protected virtual void OnPropertyValueChanged(PropertyValueChangedEventArgs e)
     {
-        ((PropertyValueChangedEventHandler)Events[s_propertyValueChangedEvent])?.Invoke(this, e);
+        ((PropertyValueChangedEventHandler?)Events[s_propertyValueChangedEvent])?.Invoke(this, e);
     }
 
-    internal void OnPropertyValueSet(GridItem changedItem, object oldValue)
+    internal void OnPropertyValueSet(GridItem changedItem, object? oldValue)
     {
         OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
 
@@ -2945,8 +2948,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         // Announce the property value change like standalone combobox control do: "[something] selected".
         bool dropDown = false;
-        Type propertyType = changedItem.PropertyDescriptor.PropertyType;
-        var editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
+        Type propertyType = changedItem.PropertyDescriptor!.PropertyType;
+        var editor = (UITypeEditor?)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
         if (editor is not null)
         {
             dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
@@ -2968,22 +2971,22 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    internal void OnSelectedGridItemChanged(GridEntry oldEntry, GridEntry newEntry)
+    internal void OnSelectedGridItemChanged(GridEntry? oldEntry, GridEntry? newEntry)
     {
         OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(oldEntry, newEntry));
     }
 
     protected virtual void OnSelectedGridItemChanged(SelectedGridItemChangedEventArgs e)
     {
-        ((SelectedGridItemChangedEventHandler)Events[s_selectedGridItemChangedEvent])?.Invoke(this, e);
+        ((SelectedGridItemChangedEventHandler?)Events[s_selectedGridItemChangedEvent])?.Invoke(this, e);
     }
 
     protected virtual void OnSelectedObjectsChanged(EventArgs e)
     {
-        ((EventHandler)Events[s_selectedObjectsChangedEvent])?.Invoke(this, e);
+        ((EventHandler?)Events[s_selectedObjectsChangedEvent])?.Invoke(this, e);
     }
 
-    private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
+    private void OnTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
     {
         if (!e.LastTransaction)
         {
@@ -3013,7 +3016,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         SetFlag(Flags.BatchModeChange, false);
     }
 
-    private void OnTransactionOpened(object sender, EventArgs e) => SetFlag(Flags.BatchMode, true);
+    private void OnTransactionOpened(object? sender, EventArgs e) => SetFlag(Flags.BatchMode, true);
 
     private void OnTypeDescriptorRefreshed(RefreshEventArgs e)
     {
@@ -3036,7 +3039,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         for (int i = 0; i < _selectedObjects.Length; i++)
         {
-            Type typeChanged = e.TypeChanged;
+            Type? typeChanged = e.TypeChanged;
             if (_selectedObjects[i] == e.ComponentChanged || typeChanged?.IsAssignableFrom(_selectedObjects[i].GetType()) == true)
             {
                 // Clear our property hashes.
@@ -3052,7 +3055,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         using (FreezePaintScope _ = new(this))
         {
             // Is this tab selected? If so, do nothing.
-            if (sender == _viewSortButtons[_selectedViewSort])
+            if (sender == _viewSortButtons![_selectedViewSort])
             {
                 _viewSortButtons[_selectedViewSort].Checked = true;
                 return;
@@ -3096,11 +3099,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         OnButtonClick(sender, e);
     }
 
-    private void OnViewTabButtonClick(object sender, EventArgs e)
+    private void OnViewTabButtonClick(object? sender, EventArgs e)
     {
         using (FreezePaintScope _ = new(this))
         {
-            SelectViewTabButton((ToolStripButton)sender, true);
+            SelectViewTabButton((ToolStripButton?)sender, true);
             OnLayoutInternal(dividerOnly: false);
             SaveSelectedTabIndex();
         }
@@ -3110,7 +3113,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void OnViewPropertyPagesButtonClick(object sender, EventArgs e)
     {
-        if (_viewPropertyPagesButton.Enabled &&
+        if (_viewPropertyPagesButton!.Enabled &&
             _selectedObjects is not null &&
             _selectedObjects.Length > 0)
         {
@@ -3131,7 +3134,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 {
                     try
                     {
-                        var editor = (ComponentEditor)TypeDescriptor.GetEditor(obj, typeof(ComponentEditor));
+                        var editor = (ComponentEditor?)TypeDescriptor.GetEditor(obj, typeof(ComponentEditor));
                         if (editor is not null)
                         {
                             success = editor is WindowsFormsComponentEditor formsEditor
@@ -3147,9 +3150,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 if (success)
                 {
                     if (baseObject is IComponent component
+                        && _connectionPointCookies is not null
                         && _connectionPointCookies[0] is null
                         && component.Site is ISite site
-                        && site.TryGetService(out IComponentChangeService changeService))
+                        && site.TryGetService(out IComponentChangeService? changeService))
                     {
                         try
                         {
@@ -3444,7 +3448,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             foreach (IComponent component in components)
             {
-                if (TypeDescriptorHelper.TryGetAttribute(components.GetType(), out PropertyTabAttribute tabAttribute))
+                if (TypeDescriptorHelper.TryGetAttribute(components.GetType(), out PropertyTabAttribute? tabAttribute))
                 {
                     for (int i = 0; i < tabAttribute.TabClasses.Length; i++)
                     {
@@ -3459,7 +3463,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         SetupToolbar();
     }
-
+#nullable disable
     internal void ReleaseTab(Type tabType, object component)
     {
         PropertyTab tab = null;
