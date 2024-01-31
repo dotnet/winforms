@@ -42,7 +42,7 @@ public class SystemBrushesTests
         yield return Brush(() => SystemBrushes.WindowText, SystemColors.WindowText);
     }
 
-    public static object[] Brush(Func<Brush> getBrush, Color expectedColor) => new object[] { getBrush, expectedColor };
+    public static object[] Brush(Func<Brush> getBrush, Color expectedColor) => [getBrush, expectedColor];
 
     [Theory]
     [MemberData(nameof(SystemBrushes_TestData))]

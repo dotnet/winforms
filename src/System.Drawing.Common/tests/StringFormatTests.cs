@@ -13,16 +13,14 @@ public class StringFormatTests
     [Fact]
     public void Ctor_Default()
     {
-        using (StringFormat format = new())
-        {
-            Assert.Equal(StringAlignment.Near, format.Alignment);
-            Assert.Equal(0, format.DigitSubstitutionLanguage);
-            Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
-            Assert.Equal((StringFormatFlags)0, format.FormatFlags);
-            Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
-            Assert.Equal(StringAlignment.Near, format.LineAlignment);
-            Assert.Equal(StringTrimming.Character, format.Trimming);
-        }
+        using StringFormat format = new();
+        Assert.Equal(StringAlignment.Near, format.Alignment);
+        Assert.Equal(0, format.DigitSubstitutionLanguage);
+        Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
+        Assert.Equal((StringFormatFlags)0, format.FormatFlags);
+        Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
+        Assert.Equal(StringAlignment.Near, format.LineAlignment);
+        Assert.Equal(StringTrimming.Character, format.Trimming);
     }
 
     [Theory]
@@ -30,16 +28,14 @@ public class StringFormatTests
     [InlineData((StringFormatFlags)(-1))]
     public void Ctor_Options(StringFormatFlags options)
     {
-        using (StringFormat format = new(options))
-        {
-            Assert.Equal(StringAlignment.Near, format.Alignment);
-            Assert.Equal(0, format.DigitSubstitutionLanguage);
-            Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
-            Assert.Equal(options, format.FormatFlags);
-            Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
-            Assert.Equal(StringAlignment.Near, format.LineAlignment);
-            Assert.Equal(StringTrimming.Character, format.Trimming);
-        }
+        using StringFormat format = new(options);
+        Assert.Equal(StringAlignment.Near, format.Alignment);
+        Assert.Equal(0, format.DigitSubstitutionLanguage);
+        Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
+        Assert.Equal(options, format.FormatFlags);
+        Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
+        Assert.Equal(StringAlignment.Near, format.LineAlignment);
+        Assert.Equal(StringTrimming.Character, format.Trimming);
     }
 
     [Theory]
@@ -48,36 +44,32 @@ public class StringFormatTests
     [InlineData((StringFormatFlags)(-1), -1)]
     public void Ctor_Options_Language(StringFormatFlags options, int language)
     {
-        using (StringFormat format = new(options, language))
-        {
-            Assert.Equal(StringAlignment.Near, format.Alignment);
-            Assert.Equal(0, format.DigitSubstitutionLanguage);
-            Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
-            Assert.Equal(options, format.FormatFlags);
-            Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
-            Assert.Equal(StringAlignment.Near, format.LineAlignment);
-            Assert.Equal(StringTrimming.Character, format.Trimming);
-        }
+        using StringFormat format = new(options, language);
+        Assert.Equal(StringAlignment.Near, format.Alignment);
+        Assert.Equal(0, format.DigitSubstitutionLanguage);
+        Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
+        Assert.Equal(options, format.FormatFlags);
+        Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
+        Assert.Equal(StringAlignment.Near, format.LineAlignment);
+        Assert.Equal(StringTrimming.Character, format.Trimming);
     }
 
     [Fact]
     public void Ctor_Format()
     {
-        using (StringFormat original = new(StringFormatFlags.NoClip, EnglishLanguageCode))
-        using (StringFormat format = new(original))
-        {
-            Assert.Equal(StringAlignment.Near, format.Alignment);
-            Assert.Equal(0, format.DigitSubstitutionLanguage);
-            Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
-            Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
-            Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
-            Assert.Equal(StringAlignment.Near, format.LineAlignment);
-            Assert.Equal(StringTrimming.Character, format.Trimming);
+        using StringFormat original = new(StringFormatFlags.NoClip, EnglishLanguageCode);
+        using StringFormat format = new(original);
+        Assert.Equal(StringAlignment.Near, format.Alignment);
+        Assert.Equal(0, format.DigitSubstitutionLanguage);
+        Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
+        Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
+        Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
+        Assert.Equal(StringAlignment.Near, format.LineAlignment);
+        Assert.Equal(StringTrimming.Character, format.Trimming);
 
-            // The new format is a clone.
-            original.FormatFlags = StringFormatFlags.NoFontFallback;
-            Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
-        }
+        // The new format is a clone.
+        original.FormatFlags = StringFormatFlags.NoFontFallback;
+        Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
     }
 
     [Fact]
@@ -106,21 +98,19 @@ public class StringFormatTests
     [Fact]
     public void Clone_Valid_Success()
     {
-        using (StringFormat original = new(StringFormatFlags.NoClip, EnglishLanguageCode))
-        using (StringFormat format = Assert.IsType<StringFormat>(original.Clone()))
-        {
-            Assert.Equal(StringAlignment.Near, format.Alignment);
-            Assert.Equal(0, format.DigitSubstitutionLanguage);
-            Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
-            Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
-            Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
-            Assert.Equal(StringAlignment.Near, format.LineAlignment);
-            Assert.Equal(StringTrimming.Character, format.Trimming);
+        using StringFormat original = new(StringFormatFlags.NoClip, EnglishLanguageCode);
+        using StringFormat format = Assert.IsType<StringFormat>(original.Clone());
+        Assert.Equal(StringAlignment.Near, format.Alignment);
+        Assert.Equal(0, format.DigitSubstitutionLanguage);
+        Assert.Equal(StringDigitSubstitute.User, format.DigitSubstitutionMethod);
+        Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
+        Assert.Equal(HotkeyPrefix.None, format.HotkeyPrefix);
+        Assert.Equal(StringAlignment.Near, format.LineAlignment);
+        Assert.Equal(StringTrimming.Character, format.Trimming);
 
-            // The new format is a clone.
-            original.FormatFlags = StringFormatFlags.NoFontFallback;
-            Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
-        }
+        // The new format is a clone.
+        original.FormatFlags = StringFormatFlags.NoFontFallback;
+        Assert.Equal(StringFormatFlags.NoClip, format.FormatFlags);
     }
 
     [Fact]
@@ -139,12 +129,10 @@ public class StringFormatTests
     [InlineData(-1, StringDigitSubstitute.User - 1, 65535)]
     public void SetDigitSubstitution_Invoke_SetsProperties(int language, StringDigitSubstitute substitute, int expectedLanguage)
     {
-        using (StringFormat format = new())
-        {
-            format.SetDigitSubstitution(language, substitute);
-            Assert.Equal(expectedLanguage, format.DigitSubstitutionLanguage);
-            Assert.Equal(substitute, format.DigitSubstitutionMethod);
-        }
+        using StringFormat format = new();
+        format.SetDigitSubstitution(language, substitute);
+        Assert.Equal(expectedLanguage, format.DigitSubstitutionLanguage);
+        Assert.Equal(substitute, format.DigitSubstitutionMethod);
     }
 
     [Fact]
@@ -178,19 +166,15 @@ public class StringFormatTests
     [Fact]
     public void SetTabStops_NegativeFirstTabOffset_ThrowsArgumentException()
     {
-        using (StringFormat format = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => format.SetTabStops(-1, new float[0]));
-        }
+        using StringFormat format = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => format.SetTabStops(-1, []));
     }
 
     [Fact]
     public void SetTabStops_NegativeInfinityInTabStops_ThrowsNotImplementedException()
     {
-        using (StringFormat format = new())
-        {
-            Assert.Throws<NotImplementedException>(() => format.SetTabStops(0, new float[] { float.NegativeInfinity }));
-        }
+        using StringFormat format = new();
+        Assert.Throws<NotImplementedException>(() => format.SetTabStops(0, [float.NegativeInfinity]));
     }
 
     [Fact]
@@ -199,7 +183,7 @@ public class StringFormatTests
         StringFormat format = new();
         format.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => format.SetTabStops(0, new float[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => format.SetTabStops(0, []));
     }
 
     [Fact]
@@ -237,10 +221,8 @@ public class StringFormatTests
     [Fact]
     public void SetMeasurableCharacterRanges_RangesTooLarge_ThrowsOverflowException()
     {
-        using (StringFormat format = new())
-        {
-            Assert.Throws<OverflowException>(() => format.SetMeasurableCharacterRanges(new CharacterRange[33]));
-        }
+        using StringFormat format = new();
+        Assert.Throws<OverflowException>(() => format.SetMeasurableCharacterRanges(new CharacterRange[33]));
     }
 
     [Fact]
@@ -249,7 +231,7 @@ public class StringFormatTests
         StringFormat format = new();
         format.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => format.SetMeasurableCharacterRanges(new CharacterRange[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => format.SetMeasurableCharacterRanges([]));
     }
 
     [Theory]
@@ -258,10 +240,8 @@ public class StringFormatTests
     [InlineData(StringAlignment.Near)]
     public void Alignment_SetValid_GetReturnsExpected(StringAlignment alignment)
     {
-        using (StringFormat format = new() { Alignment = alignment })
-        {
-            Assert.Equal(alignment, format.Alignment);
-        }
+        using StringFormat format = new() { Alignment = alignment };
+        Assert.Equal(alignment, format.Alignment);
     }
 
     [Theory]
@@ -269,10 +249,8 @@ public class StringFormatTests
     [InlineData(StringAlignment.Far + 1)]
     public void Alignment_SetInvalid_ThrowsInvalidEnumArgumentException(StringAlignment alignment)
     {
-        using (StringFormat format = new())
-        {
-            Assert.ThrowsAny<ArgumentException>(() => format.Alignment = alignment);
-        }
+        using StringFormat format = new();
+        Assert.ThrowsAny<ArgumentException>(() => format.Alignment = alignment);
     }
 
     [Fact]
@@ -309,10 +287,8 @@ public class StringFormatTests
     [InlineData((StringFormatFlags)int.MaxValue)]
     public void FormatFlags_Set_GetReturnsExpected(StringFormatFlags formatFlags)
     {
-        using (StringFormat format = new() { FormatFlags = formatFlags })
-        {
-            Assert.Equal(formatFlags, format.FormatFlags);
-        }
+        using StringFormat format = new() { FormatFlags = formatFlags };
+        Assert.Equal(formatFlags, format.FormatFlags);
     }
 
     [Fact]
@@ -331,10 +307,8 @@ public class StringFormatTests
     [InlineData(StringAlignment.Near)]
     public void LineAlignment_SetValid_GetReturnsExpected(StringAlignment alignment)
     {
-        using (StringFormat format = new() { LineAlignment = alignment })
-        {
-            Assert.Equal(alignment, format.LineAlignment);
-        }
+        using StringFormat format = new() { LineAlignment = alignment };
+        Assert.Equal(alignment, format.LineAlignment);
     }
 
     [Theory]
@@ -342,10 +316,8 @@ public class StringFormatTests
     [InlineData(StringAlignment.Far + 1)]
     public void LineAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(StringAlignment alignment)
     {
-        using (StringFormat format = new())
-        {
-            Assert.ThrowsAny<ArgumentException>(() => format.LineAlignment = alignment);
-        }
+        using StringFormat format = new();
+        Assert.ThrowsAny<ArgumentException>(() => format.LineAlignment = alignment);
     }
 
     [Fact]
@@ -364,10 +336,8 @@ public class StringFormatTests
     [InlineData(HotkeyPrefix.Show)]
     public void HotKeyPrefix_SetValid_GetReturnsExpected(HotkeyPrefix prefix)
     {
-        using (StringFormat format = new() { HotkeyPrefix = prefix })
-        {
-            Assert.Equal(prefix, format.HotkeyPrefix);
-        }
+        using StringFormat format = new() { HotkeyPrefix = prefix };
+        Assert.Equal(prefix, format.HotkeyPrefix);
     }
 
     [Theory]
@@ -375,10 +345,8 @@ public class StringFormatTests
     [InlineData(HotkeyPrefix.Hide + 1)]
     public void HotKeyPrefix_SetInvalid_ThrowsInvalidEnumArgumentException(HotkeyPrefix prefix)
     {
-        using (StringFormat format = new())
-        {
-            Assert.ThrowsAny<ArgumentException>(() => format.HotkeyPrefix = prefix);
-        }
+        using StringFormat format = new();
+        Assert.ThrowsAny<ArgumentException>(() => format.HotkeyPrefix = prefix);
     }
 
     [Fact]
@@ -395,10 +363,8 @@ public class StringFormatTests
     [InlineData(StringTrimming.Word)]
     public void Trimming_SetValid_GetReturnsExpected(StringTrimming trimming)
     {
-        using (StringFormat format = new() { Trimming = trimming })
-        {
-            Assert.Equal(trimming, format.Trimming);
-        }
+        using StringFormat format = new() { Trimming = trimming };
+        Assert.Equal(trimming, format.Trimming);
     }
 
     [Theory]
@@ -406,10 +372,8 @@ public class StringFormatTests
     [InlineData(StringTrimming.EllipsisPath + 1)]
     public void Trimming_SetInvalid_ThrowsInvalidEnumArgumentException(StringTrimming trimming)
     {
-        using (StringFormat format = new())
-        {
-            Assert.ThrowsAny<ArgumentException>(() => format.Trimming = trimming);
-        }
+        using StringFormat format = new();
+        Assert.ThrowsAny<ArgumentException>(() => format.Trimming = trimming);
     }
 
     [Fact]
@@ -455,10 +419,8 @@ public class StringFormatTests
     [Fact]
     public void ToString_Flags_ReturnsExpected()
     {
-        using (StringFormat format = new(StringFormatFlags.DirectionVertical))
-        {
-            Assert.Equal("[StringFormat, FormatFlags=DirectionVertical]", format.ToString());
-        }
+        using StringFormat format = new(StringFormatFlags.DirectionVertical);
+        Assert.Equal("[StringFormat, FormatFlags=DirectionVertical]", format.ToString());
     }
 
     [Fact]

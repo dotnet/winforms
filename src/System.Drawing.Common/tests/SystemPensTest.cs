@@ -44,7 +44,7 @@ public class SystemPensTests
         yield return Pen(() => SystemPens.WindowText, SystemColors.WindowText);
     }
 
-    public static object[] Pen(Func<Pen> getPen, Color expectedColor) => new object[] { getPen, expectedColor };
+    public static object[] Pen(Func<Pen> getPen, Color expectedColor) => [getPen, expectedColor];
 
     [Theory]
     [MemberData(nameof(SystemPens_TestData))]

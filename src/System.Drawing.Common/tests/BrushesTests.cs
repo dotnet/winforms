@@ -150,7 +150,7 @@ public class BrushesTests
         yield return Brush(() => Brushes.YellowGreen, Color.YellowGreen);
     }
 
-    public static object[] Brush(Func<Brush> getBrush, Color expectedColor) => new object[] { getBrush, expectedColor };
+    public static object[] Brush(Func<Brush> getBrush, Color expectedColor) => [getBrush, expectedColor];
 
     [Theory]
     [MemberData(nameof(Brushes_TestData))]

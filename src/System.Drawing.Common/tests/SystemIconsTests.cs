@@ -19,7 +19,7 @@ public class SystemIconsTests
         yield return Icon(() => SystemIcons.WinLogo);
     }
 
-    public static object[] Icon(Func<Icon> getIcon) => new object[] { getIcon };
+    public static object[] Icon(Func<Icon> getIcon) => [getIcon];
 
     [Theory]
     [MemberData(nameof(SystemIcons_TestData))]

@@ -9,28 +9,26 @@ public class SystemFontsTests
 {
     public static IEnumerable<object[]> SystemFonts_TestData()
     {
-        yield return new object[] { (Func<Font>)(() => SystemFonts.CaptionFont) };
-        yield return new object[] { (Func<Font>)(() => SystemFonts.IconTitleFont) };
-        yield return new object[] { (Func<Font>)(() => SystemFonts.MenuFont) };
-        yield return new object[] { (Func<Font>)(() => SystemFonts.MessageBoxFont) };
-        yield return new object[] { (Func<Font>)(() => SystemFonts.SmallCaptionFont) };
-        yield return new object[] { (Func<Font>)(() => SystemFonts.StatusFont) };
+        yield return new object[] { () => SystemFonts.CaptionFont };
+        yield return new object[] { () => SystemFonts.IconTitleFont };
+        yield return new object[] { () => SystemFonts.MenuFont };
+        yield return new object[] { () => SystemFonts.MessageBoxFont };
+        yield return new object[] { () => SystemFonts.SmallCaptionFont };
+        yield return new object[] { () => SystemFonts.StatusFont };
     }
 
     [Theory]
     [MemberData(nameof(SystemFonts_TestData))]
     public void SystemFont_Get_ReturnsExpected(Func<Font> getFont)
     {
-        using (Font font = getFont())
-        using (Font otherFont = getFont())
-        {
-            Assert.NotNull(font);
-            Assert.NotNull(otherFont);
-            Assert.NotSame(font, otherFont);
+        using Font font = getFont();
+        using Font otherFont = getFont();
+        Assert.NotNull(font);
+        Assert.NotNull(otherFont);
+        Assert.NotSame(font, otherFont);
 
-            // Assert.Equal on a font will use the native handle to assert equality, which is not always guaranteed.
-            Assert.Equal(font.Name, otherFont.Name);
-        }
+        // Assert.Equal on a font will use the native handle to assert equality, which is not always guaranteed.
+        Assert.Equal(font.Name, otherFont.Name);
     }
 
     public static IEnumerable<object[]> SystemFonts_WindowsNames_TestData()
@@ -106,21 +104,19 @@ public class SystemFontsTests
     [MemberData(nameof(SystemFonts_WindowsNames_TestData))]
     public void SystemFont_Get_ReturnsExpected_WindowsNames(Func<Font> getFont, string systemFontName, string windowsFontName)
     {
-        using (Font font = getFont())
-        using (Font otherFont = getFont())
-        using (Font fontFromName = SystemFonts.GetFontByName(systemFontName))
+        using Font font = getFont();
+        using Font otherFont = getFont();
+        using Font fontFromName = SystemFonts.GetFontByName(systemFontName);
+        Assert.NotSame(font, otherFont);
+        Assert.Equal(font, otherFont);
+        Assert.Equal(font, fontFromName);
+
+        Assert.Equal(systemFontName, font.SystemFontName);
+
+        // Windows 8 updated some system fonts.
+        if (!PlatformDetection.IsWindows7)
         {
-            Assert.NotSame(font, otherFont);
-            Assert.Equal(font, otherFont);
-            Assert.Equal(font, fontFromName);
-
-            Assert.Equal(systemFontName, font.SystemFontName);
-
-            // Windows 8 updated some system fonts.
-            if (!PlatformDetection.IsWindows7)
-            {
-                Assert.Equal(windowsFontName, font.Name);
-            }
+            Assert.Equal(windowsFontName, font.Name);
         }
     }
 
@@ -161,12 +157,12 @@ public class SystemFontsTests
         {
             return new []
             {
-            new object[] {(Func<Font>)(() => SystemFonts.CaptionFont), nameof(CaptionFont), CaptionFont},
-            new object[] {(Func<Font>)(() => SystemFonts.IconTitleFont), nameof(IconTitleFont), IconTitleFont},
-            new object[] {(Func<Font>)(() => SystemFonts.MenuFont), nameof(MenuFont), MenuFont},
-            new object[] {(Func<Font>)(() => SystemFonts.MessageBoxFont), nameof(MessageBoxFont), MessageBoxFont},
-            new object[] {(Func<Font>)(() => SystemFonts.SmallCaptionFont), nameof(SmallCaptionFont), SmallCaptionFont},
-            new object[] {(Func<Font>)(() => SystemFonts.StatusFont), nameof(StatusFont), StatusFont}
+            new object[] { () => SystemFonts.CaptionFont, nameof(CaptionFont), CaptionFont},
+            [(() => SystemFonts.IconTitleFont), nameof(IconTitleFont), IconTitleFont],
+            [(() => SystemFonts.MenuFont), nameof(MenuFont), MenuFont],
+            [(() => SystemFonts.MessageBoxFont), nameof(MessageBoxFont), MessageBoxFont],
+            [(() => SystemFonts.SmallCaptionFont), nameof(SmallCaptionFont), SmallCaptionFont],
+            [(() => SystemFonts.StatusFont), nameof(StatusFont), StatusFont]
             };
         }
     }

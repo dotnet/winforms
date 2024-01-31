@@ -24,12 +24,10 @@ public class AdjustableArrowCapTests
     [MemberData(nameof(Ctor_Float_Float_TestData))]
     public void Ctor_Float_Float(float width, float height)
     {
-        using (AdjustableArrowCap arrowCap = new(width, height))
-        {
-            Assert.Equal(width, arrowCap.Width);
-            Assert.Equal(height, arrowCap.Height);
-            Assert.True(arrowCap.Filled);
-        }
+        using AdjustableArrowCap arrowCap = new(width, height);
+        Assert.Equal(width, arrowCap.Width);
+        Assert.Equal(height, arrowCap.Height);
+        Assert.True(arrowCap.Filled);
     }
 
     public static IEnumerable<object[]> Ctor_Float_Float_Bool_TestData()
@@ -45,12 +43,10 @@ public class AdjustableArrowCapTests
     [MemberData(nameof(Ctor_Float_Float_Bool_TestData))]
     public void Ctor_Float_Float_Bool(float width, float height, bool filled)
     {
-        using (AdjustableArrowCap arrowCap = new(width, height, filled))
-        {
-            Assert.Equal(width, arrowCap.Width);
-            Assert.Equal(height, arrowCap.Height);
-            Assert.Equal(filled, arrowCap.Filled);
-        }
+        using AdjustableArrowCap arrowCap = new(width, height, filled);
+        Assert.Equal(width, arrowCap.Width);
+        Assert.Equal(height, arrowCap.Height);
+        Assert.Equal(filled, arrowCap.Filled);
     }
 
     public static IEnumerable<object[]> Properties_TestData()
@@ -69,33 +65,27 @@ public class AdjustableArrowCapTests
     [MemberData(nameof(Properties_TestData))]
     public void Width_Set_GetReturnsExpected(float width)
     {
-        using (AdjustableArrowCap arrowCap = new(1, 1))
-        {
-            arrowCap.Width = width;
-            Assert.Equal(width, arrowCap.Width);
-        }
+        using AdjustableArrowCap arrowCap = new(1, 1);
+        arrowCap.Width = width;
+        Assert.Equal(width, arrowCap.Width);
     }
 
     [Theory]
     [MemberData(nameof(Properties_TestData))]
     public void Height_Set_GetReturnsExpected(float height)
     {
-        using (AdjustableArrowCap arrowCap = new(1, 1))
-        {
-            arrowCap.Height = height;
-            Assert.Equal(height, arrowCap.Height);
-        }
+        using AdjustableArrowCap arrowCap = new(1, 1);
+        arrowCap.Height = height;
+        Assert.Equal(height, arrowCap.Height);
     }
 
     [Theory]
     [MemberData(nameof(Properties_TestData))]
     public void MiddleInset_Set_GetReturnsExpected(float middleInset)
     {
-        using (AdjustableArrowCap arrowCap = new(1, 1))
-        {
-            arrowCap.MiddleInset = middleInset;
-            Assert.Equal(middleInset, arrowCap.MiddleInset);
-        }
+        using AdjustableArrowCap arrowCap = new(1, 1);
+        arrowCap.MiddleInset = middleInset;
+        Assert.Equal(middleInset, arrowCap.MiddleInset);
     }
 
     [Theory]
@@ -103,33 +93,27 @@ public class AdjustableArrowCapTests
     [InlineData(false)]
     public void Filled_Set_GetReturnsExpected(bool filled)
     {
-        using (AdjustableArrowCap arrowCap = new(1, 1))
-        {
-            arrowCap.Filled = filled;
-            Assert.Equal(filled, arrowCap.Filled);
-        }
+        using AdjustableArrowCap arrowCap = new(1, 1);
+        arrowCap.Filled = filled;
+        Assert.Equal(filled, arrowCap.Filled);
     }
 
     [Fact]
     public void Clone_Success()
     {
-        using (AdjustableArrowCap arrowCap = new(1, 1))
-        using (AdjustableArrowCap clone = Assert.IsType<AdjustableArrowCap>(arrowCap.Clone()))
-        {
-            Assert.NotSame(clone, arrowCap);
-            Assert.Equal(clone.Width, arrowCap.Width);
-            Assert.Equal(clone.Height, arrowCap.Height);
-            Assert.Equal(clone.MiddleInset, arrowCap.MiddleInset);
-            Assert.Equal(clone.Filled, arrowCap.Filled);
-        }
+        using AdjustableArrowCap arrowCap = new(1, 1);
+        using AdjustableArrowCap clone = Assert.IsType<AdjustableArrowCap>(arrowCap.Clone());
+        Assert.NotSame(clone, arrowCap);
+        Assert.Equal(clone.Width, arrowCap.Width);
+        Assert.Equal(clone.Height, arrowCap.Height);
+        Assert.Equal(clone.MiddleInset, arrowCap.MiddleInset);
+        Assert.Equal(clone.Filled, arrowCap.Filled);
     }
 
     [Fact]
     public void BaseCap_ReturnsTriangle()
     {
-        using (AdjustableArrowCap arrowCap = new(1, 1))
-        {
-            Assert.Equal(LineCap.Triangle, arrowCap.BaseCap);
-        }
+        using AdjustableArrowCap arrowCap = new(1, 1);
+        Assert.Equal(LineCap.Triangle, arrowCap.BaseCap);
     }
 }

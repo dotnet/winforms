@@ -25,8 +25,8 @@ public class ImageAnimatorManualTests
         // folder for each configuration, and then under an `ImageAnimatorManualTests` folder
         // with a timestamped folder under that. Each animation image gets its own folder too.
 
-        string[] images = new string[]
-        {
+        string[] images =
+        [
             "animated-timer-1fps-repeat-2.gif",
             "animated-timer-1fps-repeat-infinite.gif",
             "animated-timer-10fps-repeat-2.gif",
@@ -34,7 +34,7 @@ public class ImageAnimatorManualTests
             "animated-timer-100fps-repeat-2.gif",
             "animated-timer-100fps-repeat-infinite.gif",
             "animated-timer-0-delay-all-frames.gif",
-        };
+        ];
 
         Dictionary<string, EventHandler> handlers = new();
         Dictionary<string, int> frameIndexes = new();

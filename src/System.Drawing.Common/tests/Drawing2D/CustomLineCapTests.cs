@@ -58,35 +58,29 @@ public class CustomLineCapTests
     [InlineData(LineCap.Custom + 1)]
     public void Ctor_InvalidLineCap_ReturnsFlat(LineCap baseCap)
     {
-        using (GraphicsPath fillPath = new())
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(fillPath, strokePath, baseCap, 0f))
-        {
-            Assert.Equal(LineCap.Flat, customLineCap.BaseCap);
-        }
+        using GraphicsPath fillPath = new();
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(fillPath, strokePath, baseCap, 0f);
+        Assert.Equal(LineCap.Flat, customLineCap.BaseCap);
     }
 
     [Fact]
     public void Ctor_FillPath_Incomplete_ThrowsArgumentException()
     {
-        using (GraphicsPath fillPath = new())
-        {
-            fillPath.AddLine(new Point(0, -10), new Point(0, 10));
-            AssertExtensions.Throws<ArgumentException>(null, () => new CustomLineCap(fillPath, null));
-        }
+        using GraphicsPath fillPath = new();
+        fillPath.AddLine(new Point(0, -10), new Point(0, 10));
+        AssertExtensions.Throws<ArgumentException>(null, () => new CustomLineCap(fillPath, null));
     }
 
     [Fact]
     public void Ctor_FillPath_DoesNotCrossYAxis_ThrowsNotImplementedException()
     {
         // Closed fillPath, but does not cross the Y-axis.
-        using (GraphicsPath fillPath = new())
-        {
-            fillPath.AddLine(new Point(-5, 5), new Point(5, 5));
-            fillPath.AddLine(new Point(5, 5), new Point(5, 1));
-            fillPath.AddLine(new Point(5, 1), new Point(-5, 5));
-            Assert.Throws<NotImplementedException>(() => new CustomLineCap(fillPath, null));
-        }
+        using GraphicsPath fillPath = new();
+        fillPath.AddLine(new Point(-5, 5), new Point(5, 5));
+        fillPath.AddLine(new Point(5, 5), new Point(5, 1));
+        fillPath.AddLine(new Point(5, 1), new Point(-5, 5));
+        Assert.Throws<NotImplementedException>(() => new CustomLineCap(fillPath, null));
     }
 
     [Theory]
@@ -95,15 +89,13 @@ public class CustomLineCapTests
     [InlineData(LineCap.Triangle, LineCap.Triangle)]
     public void SetThenGetStrokeCaps_Success(LineCap startCap, LineCap endCap)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            customLineCap.SetStrokeCaps(startCap, endCap);
-            customLineCap.GetStrokeCaps(out LineCap retrievedStartCap, out LineCap retrievedEndCap);
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        customLineCap.SetStrokeCaps(startCap, endCap);
+        customLineCap.GetStrokeCaps(out LineCap retrievedStartCap, out LineCap retrievedEndCap);
 
-            Assert.Equal(startCap, retrievedStartCap);
-            Assert.Equal(endCap, retrievedEndCap);
-        }
+        Assert.Equal(startCap, retrievedStartCap);
+        Assert.Equal(endCap, retrievedEndCap);
     }
 
     [Theory]
@@ -115,16 +107,14 @@ public class CustomLineCapTests
     [InlineData(LineCap.Custom + 1, LineCap.Flat)] // Above valid enum range
     public void SetStrokeCaps_InvalidLineCap_ThrowsArgumentException(LineCap startCap, LineCap endCap)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.SetStrokeCaps(startCap, endCap));
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.SetStrokeCaps(startCap, endCap));
 
-            // start and end cap should be unchanged.
-            customLineCap.GetStrokeCaps(out LineCap retrievedStartCap, out LineCap retrievedEndCap);
-            Assert.Equal(LineCap.Flat, retrievedStartCap);
-            Assert.Equal(LineCap.Flat, retrievedEndCap);
-        }
+        // start and end cap should be unchanged.
+        customLineCap.GetStrokeCaps(out LineCap retrievedStartCap, out LineCap retrievedEndCap);
+        Assert.Equal(LineCap.Flat, retrievedStartCap);
+        Assert.Equal(LineCap.Flat, retrievedEndCap);
     }
 
     [Theory]
@@ -137,12 +127,10 @@ public class CustomLineCapTests
     [InlineData(LineJoin.MiterClipped + 1)]
     public void StrokeJoin_SetThenGet_Success(LineJoin lineJoin)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            customLineCap.StrokeJoin = lineJoin;
-            Assert.Equal(lineJoin, customLineCap.StrokeJoin);
-        }
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        customLineCap.StrokeJoin = lineJoin;
+        Assert.Equal(lineJoin, customLineCap.StrokeJoin);
     }
 
     [Theory]
@@ -152,12 +140,10 @@ public class CustomLineCapTests
     [InlineData(LineCap.Triangle)]
     public void BaseCap_SetThenGet_Success(LineCap baseCap)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            customLineCap.BaseCap = baseCap;
-            Assert.Equal(baseCap, customLineCap.BaseCap);
-        }
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        customLineCap.BaseCap = baseCap;
+        Assert.Equal(baseCap, customLineCap.BaseCap);
     }
 
     [Theory]
@@ -170,12 +156,10 @@ public class CustomLineCapTests
     [InlineData(LineCap.Custom + 1)]
     public void BaseCap_Set_InvalidLineCap_ThrowsArgumentException(LineCap baseCap)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseCap = baseCap);
-            Assert.Equal(LineCap.Flat, customLineCap.BaseCap);
-        }
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseCap = baseCap);
+        Assert.Equal(LineCap.Flat, customLineCap.BaseCap);
     }
 
     [Theory]
@@ -193,12 +177,10 @@ public class CustomLineCapTests
     [InlineData(float.NaN)]
     public void BaseInset_SetThenGet_Success(float value)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            customLineCap.BaseInset = value;
-            Assert.Equal(value, customLineCap.BaseInset);
-        }
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        customLineCap.BaseInset = value;
+        Assert.Equal(value, customLineCap.BaseInset);
     }
 
     [Theory]
@@ -216,12 +198,10 @@ public class CustomLineCapTests
     [InlineData(float.NaN)]
     public void WidthScale_SetThenGet_Success(float value)
     {
-        using (GraphicsPath strokePath = new())
-        using (CustomLineCap customLineCap = new(null, strokePath))
-        {
-            customLineCap.WidthScale = value;
-            Assert.Equal(value, customLineCap.WidthScale);
-        }
+        using GraphicsPath strokePath = new();
+        using CustomLineCap customLineCap = new(null, strokePath);
+        customLineCap.WidthScale = value;
+        Assert.Equal(value, customLineCap.WidthScale);
     }
 
     [Fact]

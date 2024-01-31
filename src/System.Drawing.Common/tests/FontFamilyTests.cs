@@ -15,10 +15,8 @@ public class FontFamilyTests
     [InlineData(GenericFontFamilies.Serif, "Times New Roman")]
     public void Ctor_GenericFamily(GenericFontFamilies genericFamily, string expectedName)
     {
-        using (FontFamily fontFamily = new(genericFamily))
-        {
-            Assert.Equal(expectedName, fontFamily.Name);
-        }
+        using FontFamily fontFamily = new(genericFamily);
+        Assert.Equal(expectedName, fontFamily.Name);
     }
 
     [Theory]
@@ -28,24 +26,18 @@ public class FontFamilyTests
     [InlineData("times new roman", "Times New Roman")]
     public void Ctor_Name(string name, string expectedName)
     {
-        using (FontFamily fontFamily = new(name))
-        {
-            Assert.Equal(expectedName, fontFamily.Name);
-        }
+        using FontFamily fontFamily = new(name);
+        Assert.Equal(expectedName, fontFamily.Name);
     }
 
     [Fact]
     public void Ctor_Name_FontCollection()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+        using PrivateFontCollection fontCollection = new();
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            using (FontFamily fontFamily = new("Code New Roman", fontCollection))
-            {
-                Assert.Equal("Code New Roman", fontFamily.Name);
-            }
-        }
+        using FontFamily fontFamily = new("Code New Roman", fontCollection);
+        Assert.Equal("Code New Roman", fontFamily.Name);
     }
 
     [Theory]
@@ -61,10 +53,8 @@ public class FontFamilyTests
     [Fact]
     public void Ctor_NoSuchFontNameInCollection_ThrowsArgumentException()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily("Times New Roman", fontCollection));
-        }
+        using PrivateFontCollection fontCollection = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily("Times New Roman", fontCollection));
     }
 
     public static IEnumerable<object[]> Equals_TestData()
@@ -100,28 +90,24 @@ public class FontFamilyTests
     public void Families_Get_ReturnsExpected()
     {
 #pragma warning disable 0618 // FontFamily.GetFamilies is deprecated.
-        using (Bitmap image = new(10, 10))
-        using (var graphics = Graphics.FromImage(image))
+        using Bitmap image = new(10, 10);
+        using var graphics = Graphics.FromImage(image);
+        FontFamily[] families = FontFamily.Families;
+        FontFamily[] familiesWithGraphics = FontFamily.GetFamilies(graphics);
+
+        // FontFamily.Equals uses the native handle to determine equality. However, GDI+ does not always
+        // cache handles, so we cannot just Assert.Equal(families, familiesWithGraphics);
+        Assert.Equal(families.Length, familiesWithGraphics.Length);
+
+        for (int i = 0; i < families.Length; i++)
         {
-            FontFamily[] families = FontFamily.Families;
-            FontFamily[] familiesWithGraphics = FontFamily.GetFamilies(graphics);
+            Assert.Equal(families[i].Name, familiesWithGraphics[i].Name);
+        }
 
-            // FontFamily.Equals uses the native handle to determine equality. However, GDI+ does not always
-            // cache handles, so we cannot just Assert.Equal(families, familiesWithGraphics);
-            Assert.Equal(families.Length, familiesWithGraphics.Length);
-
-            for (int i = 0; i < families.Length; i++)
-            {
-                Assert.Equal(families[i].Name, familiesWithGraphics[i].Name);
-            }
-
-            foreach (FontFamily fontFamily in families)
-            {
-                using (FontFamily copy = new(fontFamily.Name))
-                {
-                    Assert.Equal(fontFamily.Name, copy.Name);
-                }
-            }
+        foreach (FontFamily fontFamily in families)
+        {
+            using FontFamily copy = new(fontFamily.Name);
+            Assert.Equal(fontFamily.Name, copy.Name);
         }
 #pragma warning restore 0618
     }
@@ -129,40 +115,28 @@ public class FontFamilyTests
     [Fact]
     public void GenericMonospace_Get_ReturnsExpected()
     {
-        using (FontFamily fontFamily1 = FontFamily.GenericMonospace)
-        {
-            using (FontFamily fontFamily2 = FontFamily.GenericMonospace)
-            {
-                Assert.NotSame(fontFamily1, fontFamily2);
-                Assert.Equal("Courier New", fontFamily2.Name);
-            }
-        }
+        using FontFamily fontFamily1 = FontFamily.GenericMonospace;
+        using FontFamily fontFamily2 = FontFamily.GenericMonospace;
+        Assert.NotSame(fontFamily1, fontFamily2);
+        Assert.Equal("Courier New", fontFamily2.Name);
     }
 
     [Fact]
     public void GenericSansSerif_Get_ReturnsExpected()
     {
-        using (FontFamily fontFamily1 = FontFamily.GenericSansSerif)
-        {
-            using (FontFamily fontFamily2 = FontFamily.GenericSansSerif)
-            {
-                Assert.NotSame(fontFamily1, fontFamily2);
-                Assert.Equal("Microsoft Sans Serif", fontFamily2.Name);
-            }
-        }
+        using FontFamily fontFamily1 = FontFamily.GenericSansSerif;
+        using FontFamily fontFamily2 = FontFamily.GenericSansSerif;
+        Assert.NotSame(fontFamily1, fontFamily2);
+        Assert.Equal("Microsoft Sans Serif", fontFamily2.Name);
     }
 
     [Fact]
     public void GenericSerif_Get_ReturnsExpected()
     {
-        using (FontFamily fontFamily1 = FontFamily.GenericSerif)
-        {
-            using (FontFamily fontFamily2 = FontFamily.GenericSerif)
-            {
-                Assert.NotSame(fontFamily1, fontFamily2);
-                Assert.Equal("Times New Roman", fontFamily2.Name);
-            }
-        }
+        using FontFamily fontFamily1 = FontFamily.GenericSerif;
+        using FontFamily fontFamily2 = FontFamily.GenericSerif;
+        Assert.NotSame(fontFamily1, fontFamily2);
+        Assert.Equal("Times New Roman", fontFamily2.Name);
     }
 
     [Fact]
@@ -176,10 +150,8 @@ public class FontFamilyTests
     [Fact]
     public void GetHashCode_Invoke_ReturnsNameHashCode()
     {
-        using (FontFamily fontFamily = FontFamily.GenericSansSerif)
-        {
-            Assert.Equal(fontFamily.GetName(0).GetHashCode(), fontFamily.GetHashCode());
-        }
+        using FontFamily fontFamily = FontFamily.GenericSansSerif;
+        Assert.Equal(fontFamily.GetName(0).GetHashCode(), fontFamily.GetHashCode());
     }
 
     public static IEnumerable<object[]> FontStyle_TestData()
@@ -197,19 +169,15 @@ public class FontFamilyTests
     [MemberData(nameof(FontStyle_TestData))]
     public void FontFamilyProperties_CustomFont_ReturnsExpected(FontStyle style)
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+        using PrivateFontCollection fontCollection = new();
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            using (FontFamily fontFamily = new("Code New Roman", fontCollection))
-            {
-                Assert.True(fontFamily.IsStyleAvailable(style));
-                Assert.Equal(1884, fontFamily.GetCellAscent(style));
-                Assert.Equal(514, fontFamily.GetCellDescent(style));
-                Assert.Equal(2048, fontFamily.GetEmHeight(style));
-                Assert.Equal(2398, fontFamily.GetLineSpacing(style));
-            }
-        }
+        using FontFamily fontFamily = new("Code New Roman", fontCollection);
+        Assert.True(fontFamily.IsStyleAvailable(style));
+        Assert.Equal(1884, fontFamily.GetCellAscent(style));
+        Assert.Equal(514, fontFamily.GetCellDescent(style));
+        Assert.Equal(2048, fontFamily.GetEmHeight(style));
+        Assert.Equal(2398, fontFamily.GetLineSpacing(style));
     }
 
     [Fact]
@@ -240,15 +208,11 @@ public class FontFamilyTests
     [InlineData(FrenchLCID, "Bonjour")]
     public void GetName_LanguageCode_ReturnsExpected(int languageCode, string expectedName)
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
+        using PrivateFontCollection fontCollection = new();
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
 
-            using (FontFamily fontFamily = new("Code New Roman", fontCollection))
-            {
-                Assert.Equal(expectedName, fontFamily.GetName(languageCode));
-            }
-        }
+        using FontFamily fontFamily = new("Code New Roman", fontCollection);
+        Assert.Equal(expectedName, fontFamily.GetName(languageCode));
     }
 
     [Fact]
