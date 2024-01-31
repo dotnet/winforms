@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <EnablePackageValidation Condition="'$(EnablePackageValidation)' == ''">true</EnablePackageValidation>
-    <!-- Don't perform baseline validation if we don't have a stable prebuilt version.
-         Don't attempt to restore prebuilts during source-build. -->
+    <!-- Don't perform baseline validation if we don't have a stable prebuilt version. -->
     <DisablePackageBaselineValidation Condition="'$(IsShipping)' == 'false' or
                                                  '$(SuppressFinalPackageVersion)' == 'true'">true</DisablePackageBaselineValidation>
     <!-- Optional rules -->
