@@ -106,6 +106,7 @@ HWND_*
 IDI_*
 IEnumUnknown
 IGlobalInterfaceTable
+ImageFormat*
 INPLACE_E_NOTOOLSPACE
 IntersectClipRect
 IStream

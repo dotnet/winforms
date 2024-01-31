@@ -14,18 +14,18 @@ public sealed class ImageFormat
 {
     // Format IDs
     // private static ImageFormat undefined = new ImageFormat(new Guid("{b96b3ca9-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_memoryBMP = new(new Guid("{b96b3caa-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_bmp = new(new Guid("{b96b3cab-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_emf = new(new Guid("{b96b3cac-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_wmf = new(new Guid("{b96b3cad-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_jpeg = new(new Guid("{b96b3cae-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_png = new(new Guid("{b96b3caf-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_gif = new(new Guid("{b96b3cb0-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_tiff = new(new Guid("{b96b3cb1-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_exif = new(new Guid("{b96b3cb2-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_icon = new(new Guid("{b96b3cb5-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_heif = new(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_webp = new(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_memoryBMP = new(PInvokeCore.ImageFormatMemoryBMP);
+    private static readonly ImageFormat s_bmp = new(PInvokeCore.ImageFormatBMP);
+    private static readonly ImageFormat s_emf = new(PInvokeCore.ImageFormatEMF);
+    private static readonly ImageFormat s_wmf = new(PInvokeCore.ImageFormatWMF);
+    private static readonly ImageFormat s_jpeg = new(PInvokeCore.ImageFormatJPEG);
+    private static readonly ImageFormat s_png = new(PInvokeCore.ImageFormatPNG);
+    private static readonly ImageFormat s_gif = new(PInvokeCore.ImageFormatGIF);
+    private static readonly ImageFormat s_tiff = new(PInvokeCore.ImageFormatTIFF);
+    private static readonly ImageFormat s_exif = new(PInvokeCore.ImageFormatEXIF);
+    private static readonly ImageFormat s_icon = new(PInvokeCore.ImageFormatIcon);
+    private static readonly ImageFormat s_heif = new(PInvokeCore.ImageFormatHEIF);
+    private static readonly ImageFormat s_webp = new(PInvokeCore.ImageFormatWEBP);
 
     private readonly Guid _guid;
 
@@ -93,16 +93,16 @@ public sealed class ImageFormat
     ///  Specifies the High Efficiency Image Format (HEIF).
     /// </summary>
     /// <remarks>
-    ///  This format is supported since Windows 10 1809.
+    ///  <para>This format is supported since Windows 10 1809.</para>
     /// </remarks>
     [SupportedOSPlatform("windows10.0.17763.0")]
     public static ImageFormat Heif => s_heif;
 
     /// <summary>
-    /// Specifies the WebP image format.
+    ///  Specifies the WebP image format.
     /// </summary>
     /// <remarks>
-    ///  This format is supported since Windows 10 1809.
+    ///  <para>This format is supported since Windows 10 1809.</para>
     /// </remarks>
     [SupportedOSPlatform("windows10.0.17763.0")]
     public static ImageFormat Webp => s_webp;
@@ -111,52 +111,35 @@ public sealed class ImageFormat
     ///  Returns a value indicating whether the specified object is an <see cref='ImageFormat'/> equivalent to this
     ///  <see cref='ImageFormat'/>.
     /// </summary>
-    public override bool Equals([NotNullWhen(true)] object? o)
-    {
-        ImageFormat? format = o as ImageFormat;
-        if (format is null)
-            return false;
-        return _guid == format._guid;
-    }
+    public override bool Equals([NotNullWhen(true)] object? o) => o is ImageFormat format && _guid == format._guid;
 
     /// <summary>
     ///  Returns a hash code.
     /// </summary>
-    public override int GetHashCode()
-    {
-        return _guid.GetHashCode();
-    }
+    public override int GetHashCode() => _guid.GetHashCode();
 
-    // Find any random encoder which supports this format
-    internal ImageCodecInfo? FindEncoder()
-    {
-        ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-        foreach (ImageCodecInfo codec in codecs)
-        {
-            if (codec.FormatID.Equals(_guid))
-                return codec;
-        }
-
-        return null;
-    }
+    /// <summary>
+    ///  The encoder that supports this format, if any.
+    /// </summary>
+    internal Guid Encoder => ImageCodecInfo.GetEncoderClsid(_guid);
 
     /// <summary>
     ///  Converts this <see cref='ImageFormat'/> to a human-readable string.
     /// </summary>
     public override string ToString()
     {
-        if (Guid == s_memoryBMP.Guid) return "MemoryBMP";
-        if (Guid == s_bmp.Guid) return "Bmp";
-        if (Guid == s_emf.Guid) return "Emf";
-        if (Guid == s_wmf.Guid) return "Wmf";
-        if (Guid == s_gif.Guid) return "Gif";
-        if (Guid == s_jpeg.Guid) return "Jpeg";
-        if (Guid == s_png.Guid) return "Png";
-        if (Guid == s_tiff.Guid) return "Tiff";
-        if (Guid == s_exif.Guid) return "Exif";
-        if (Guid == s_icon.Guid) return "Icon";
-        if (Guid == s_heif.Guid) return "Heif";
-        if (Guid == s_webp.Guid) return "Webp";
+        if (Guid == PInvokeCore.ImageFormatMemoryBMP) return "MemoryBMP";
+        if (Guid == PInvokeCore.ImageFormatBMP) return "Bmp";
+        if (Guid == PInvokeCore.ImageFormatEMF) return "Emf";
+        if (Guid == PInvokeCore.ImageFormatWMF) return "Wmf";
+        if (Guid == PInvokeCore.ImageFormatGIF) return "Gif";
+        if (Guid == PInvokeCore.ImageFormatJPEG) return "Jpeg";
+        if (Guid == PInvokeCore.ImageFormatPNG) return "Png";
+        if (Guid == PInvokeCore.ImageFormatTIFF) return "Tiff";
+        if (Guid == PInvokeCore.ImageFormatEXIF) return "Exif";
+        if (Guid == PInvokeCore.ImageFormatIcon) return "Icon";
+        if (Guid == PInvokeCore.ImageFormatHEIF) return "Heif";
+        if (Guid == PInvokeCore.ImageFormatWEBP) return "Webp";
         return $"[ImageFormat: {_guid}]";
     }
 }
