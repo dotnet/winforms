@@ -1231,8 +1231,13 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
         GridEntry[]? entries = null;
 
-        var attributes = new Attribute[BrowsableAttributes!.Count];
-        BrowsableAttributes.CopyTo(attributes, 0);
+        AttributeCollection? browsableAttributes = BrowsableAttributes;
+        Attribute[]? attributes = null;
+        if (browsableAttributes is not null)
+        {
+            attributes = new Attribute[browsableAttributes.Count];
+            browsableAttributes.CopyTo(attributes, 0);
+        }
 
         PropertyTab? ownerTab = OwnerTab;
         Debug.Assert(ownerTab is not null, "No current tab!");
