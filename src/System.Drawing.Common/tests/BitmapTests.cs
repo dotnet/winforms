@@ -42,13 +42,11 @@ public class BitmapTests : FileCleanupTestBase
     [MemberData(nameof(Ctor_FilePath_TestData))]
     public void Ctor_FilePath(string filename, int width, int height, PixelFormat pixelFormat, ImageFormat rawFormat)
     {
-        using (Bitmap bitmap = new(Helpers.GetTestBitmapPath(filename)))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(pixelFormat, bitmap.PixelFormat);
-            Assert.Equal(rawFormat, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath(filename));
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(pixelFormat, bitmap.PixelFormat);
+        Assert.Equal(rawFormat, bitmap.RawFormat);
     }
 
     [Theory]
@@ -57,13 +55,11 @@ public class BitmapTests : FileCleanupTestBase
     {
         foreach (bool useIcm in new bool[] { true, false })
         {
-            using (Bitmap bitmap = new(Helpers.GetTestBitmapPath(filename), useIcm))
-            {
-                Assert.Equal(width, bitmap.Width);
-                Assert.Equal(height, bitmap.Height);
-                Assert.Equal(pixelFormat, bitmap.PixelFormat);
-                Assert.Equal(rawFormat, bitmap.RawFormat);
-            }
+            using Bitmap bitmap = new(Helpers.GetTestBitmapPath(filename), useIcm);
+            Assert.Equal(width, bitmap.Width);
+            Assert.Equal(height, bitmap.Height);
+            Assert.Equal(pixelFormat, bitmap.PixelFormat);
+            Assert.Equal(rawFormat, bitmap.RawFormat);
         }
     }
 
@@ -88,13 +84,11 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void Ctor_Type_ResourceName()
     {
-        using (Bitmap bitmap = new(typeof(BitmapTests), "bitmap_173x183_indexed_8bit.bmp"))
-        {
-            Assert.Equal(173, bitmap.Width);
-            Assert.Equal(183, bitmap.Height);
-            Assert.Equal(PixelFormat.Format8bppIndexed, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.Bmp, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(typeof(BitmapTests), "bitmap_173x183_indexed_8bit.bmp");
+        Assert.Equal(173, bitmap.Width);
+        Assert.Equal(183, bitmap.Height);
+        Assert.Equal(PixelFormat.Format8bppIndexed, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.Bmp, bitmap.RawFormat);
     }
 
     [Fact]
@@ -123,14 +117,12 @@ public class BitmapTests : FileCleanupTestBase
     [MemberData(nameof(Ctor_FilePath_TestData))]
     public void Ctor_Stream(string filename, int width, int height, PixelFormat pixelFormat, ImageFormat rawFormat)
     {
-        using (Stream stream = File.OpenRead(Helpers.GetTestBitmapPath(filename)))
-        using (Bitmap bitmap = new(stream))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(pixelFormat, bitmap.PixelFormat);
-            Assert.Equal(rawFormat, bitmap.RawFormat);
-        }
+        using Stream stream = File.OpenRead(Helpers.GetTestBitmapPath(filename));
+        using Bitmap bitmap = new(stream);
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(pixelFormat, bitmap.PixelFormat);
+        Assert.Equal(rawFormat, bitmap.RawFormat);
     }
 
     [Theory]
@@ -139,14 +131,12 @@ public class BitmapTests : FileCleanupTestBase
     {
         foreach (bool useIcm in new bool[] { true, false })
         {
-            using (Stream stream = File.OpenRead(Helpers.GetTestBitmapPath(filename)))
-            using (Bitmap bitmap = new(stream, useIcm))
-            {
-                Assert.Equal(width, bitmap.Width);
-                Assert.Equal(height, bitmap.Height);
-                Assert.Equal(pixelFormat, bitmap.PixelFormat);
-                Assert.Equal(rawFormat, bitmap.RawFormat);
-            }
+            using Stream stream = File.OpenRead(Helpers.GetTestBitmapPath(filename));
+            using Bitmap bitmap = new(stream, useIcm);
+            Assert.Equal(width, bitmap.Width);
+            Assert.Equal(height, bitmap.Height);
+            Assert.Equal(pixelFormat, bitmap.PixelFormat);
+            Assert.Equal(rawFormat, bitmap.RawFormat);
         }
     }
 
@@ -160,12 +150,10 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void Ctor_InvalidBytesInStream_ThrowsArgumentException()
     {
-        using (MemoryStream stream = new(new byte[0]))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(stream));
-            AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(stream, false));
-            AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(stream, true));
-        }
+        using MemoryStream stream = new([]);
+        AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(stream));
+        AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(stream, false));
+        AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(stream, true));
     }
 
     [Theory]
@@ -173,13 +161,11 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(5, 15)]
     public void Ctor_Width_Height(int width, int height)
     {
-        using (Bitmap bitmap = new(width, height))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(width, height);
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     [Theory]
@@ -199,13 +185,11 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1, 1, PixelFormat.Format64bppPArgb)]
     public void Ctor_Width_Height_PixelFormat(int width, int height, PixelFormat pixelFormat)
     {
-        using (Bitmap bitmap = new(width, height, pixelFormat))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(pixelFormat, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(width, height, pixelFormat);
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(pixelFormat, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     public static IEnumerable<object[]> Ctor_Width_Height_Stride_PixelFormat_Scan0_TestData()
@@ -220,13 +204,11 @@ public class BitmapTests : FileCleanupTestBase
     [MemberData(nameof(Ctor_Width_Height_Stride_PixelFormat_Scan0_TestData))]
     public void Ctor_Width_Height_Stride_PixelFormat_Scan0(int width, int height, int stride, PixelFormat pixelFormat, IntPtr scan0)
     {
-        using (Bitmap bitmap = new(width, height, stride, pixelFormat, scan0))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(pixelFormat, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(width, height, stride, pixelFormat, scan0);
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(pixelFormat, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     [Theory]
@@ -279,7 +261,7 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void Ctor_InvalidScan0_ThrowsArgumentException()
     {
-        AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(1, 1, 0, PixelFormat.Format16bppArgb1555, (IntPtr)10));
+        AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(1, 1, 0, PixelFormat.Format16bppArgb1555, 10));
     }
 
     public static IEnumerable<object[]> Image_TestData()
@@ -301,14 +283,12 @@ public class BitmapTests : FileCleanupTestBase
     [MemberData(nameof(Image_TestData))]
     public void Ctor_Width_Height_Graphics(Bitmap image, int width, int height)
     {
-        using (Graphics graphics = Graphics.FromImage(image))
-        using (Bitmap bitmap = new(width, height, graphics))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(PixelFormat.Format32bppPArgb, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Graphics graphics = Graphics.FromImage(image);
+        using Bitmap bitmap = new(width, height, graphics);
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(PixelFormat.Format32bppPArgb, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     [Fact]
@@ -320,14 +300,12 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void Ctor_Image()
     {
-        using (Bitmap image = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
-        using (Bitmap bitmap = new(image))
-        {
-            Assert.Equal(16, bitmap.Width);
-            Assert.Equal(16, bitmap.Height);
-            Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Bitmap image = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico"));
+        using Bitmap bitmap = new(image);
+        Assert.Equal(16, bitmap.Width);
+        Assert.Equal(16, bitmap.Height);
+        Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     [Fact]
@@ -340,26 +318,22 @@ public class BitmapTests : FileCleanupTestBase
     [MemberData(nameof(Image_TestData))]
     public void Ctor_Image_Width_Height(Image image, int width, int height)
     {
-        using (Bitmap bitmap = new(image, width, height))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(image, width, height);
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     [Theory]
     [MemberData(nameof(Image_TestData))]
     public void Ctor_Size(Image image, int width, int height)
     {
-        using (Bitmap bitmap = new(image, new Size(width, height)))
-        {
-            Assert.Equal(width, bitmap.Width);
-            Assert.Equal(height, bitmap.Height);
-            Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
-            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-        }
+        using Bitmap bitmap = new(image, new Size(width, height));
+        Assert.Equal(width, bitmap.Width);
+        Assert.Equal(height, bitmap.Height);
+        Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
+        Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
     }
 
     [Fact]
@@ -394,28 +368,26 @@ public class BitmapTests : FileCleanupTestBase
     {
         try
         {
-            using (Bitmap clone = bitmap.Clone(rectangle, targetFormat))
+            using Bitmap clone = bitmap.Clone(rectangle, targetFormat);
+            Assert.NotSame(bitmap, clone);
+
+            Assert.Equal(rectangle.Width, clone.Width);
+            Assert.Equal(rectangle.Height, clone.Height);
+            Assert.Equal(targetFormat, clone.PixelFormat);
+            Assert.Equal(bitmap.RawFormat, clone.RawFormat);
+
+            for (int x = 0; x < rectangle.Width; x++)
             {
-                Assert.NotSame(bitmap, clone);
-
-                Assert.Equal(rectangle.Width, clone.Width);
-                Assert.Equal(rectangle.Height, clone.Height);
-                Assert.Equal(targetFormat, clone.PixelFormat);
-                Assert.Equal(bitmap.RawFormat, clone.RawFormat);
-
-                for (int x = 0; x < rectangle.Width; x++)
+                for (int y = 0; y < rectangle.Height; y++)
                 {
-                    for (int y = 0; y < rectangle.Height; y++)
+                    Color expectedColor = bitmap.GetPixel(rectangle.X + x, rectangle.Y + y);
+                    if (Image.IsAlphaPixelFormat(targetFormat))
                     {
-                        Color expectedColor = bitmap.GetPixel(rectangle.X + x, rectangle.Y + y);
-                        if (Image.IsAlphaPixelFormat(targetFormat))
-                        {
-                            Assert.Equal(expectedColor, clone.GetPixel(x, y));
-                        }
-                        else
-                        {
-                            Assert.Equal(Color.FromArgb(255, expectedColor.R, expectedColor.G, expectedColor.B), clone.GetPixel(x, y));
-                        }
+                        Assert.Equal(expectedColor, clone.GetPixel(x, y));
+                    }
+                    else
+                    {
+                        Assert.Equal(Color.FromArgb(255, expectedColor.R, expectedColor.G, expectedColor.B), clone.GetPixel(x, y));
                     }
                 }
             }
@@ -432,14 +404,12 @@ public class BitmapTests : FileCleanupTestBase
     {
         try
         {
-            using (Bitmap clone = bitmap.Clone((RectangleF)rectangle, format))
-            {
-                Assert.NotSame(bitmap, clone);
+            using Bitmap clone = bitmap.Clone((RectangleF)rectangle, format);
+            Assert.NotSame(bitmap, clone);
 
-                Assert.Equal(rectangle.Width, clone.Width);
-                Assert.Equal(rectangle.Height, clone.Height);
-                Assert.Equal(format, clone.PixelFormat);
-            }
+            Assert.Equal(rectangle.Width, clone.Width);
+            Assert.Equal(rectangle.Height, clone.Height);
+            Assert.Equal(format, clone.PixelFormat);
         }
         finally
         {
@@ -452,11 +422,9 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1, 0)]
     public void Clone_ZeroWidthOrHeightRect_ThrowsArgumentException(int width, int height)
     {
-        using (Bitmap bitmap = new(3, 3))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Clone(new Rectangle(0, 0, width, height), bitmap.PixelFormat));
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Clone(new RectangleF(0, 0, width, height), bitmap.PixelFormat));
-        }
+        using Bitmap bitmap = new(3, 3);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Clone(new Rectangle(0, 0, width, height), bitmap.PixelFormat));
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Clone(new RectangleF(0, 0, width, height), bitmap.PixelFormat));
     }
 
     [Theory]
@@ -468,11 +436,9 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1, 4, 1, 1)]
     public void Clone_InvalidRect_ThrowsOutOfMemoryException(int x, int y, int width, int height)
     {
-        using (Bitmap bitmap = new(3, 3))
-        {
-            Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(x, y, width, height), bitmap.PixelFormat));
-            Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(x, y, width, height), bitmap.PixelFormat));
-        }
+        using Bitmap bitmap = new(3, 3);
+        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(x, y, width, height), bitmap.PixelFormat));
+        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(x, y, width, height), bitmap.PixelFormat));
     }
 
     [Theory]
@@ -486,33 +452,27 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(PixelFormat.Canonical)]
     public void Clone_InvalidPixelFormat_ThrowsOutOfMemoryException(PixelFormat format)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), format));
-            Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), format));
-        }
+        using Bitmap bitmap = new(1, 1);
+        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), format));
+        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), format));
     }
 
     [Fact]
     public void Clone_GrayscaleFormat_ThrowsOutOfMemoryException()
     {
-        using (Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale))
-        {
-            Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), PixelFormat.Format32bppArgb));
-            Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
-        }
+        using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
+        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), PixelFormat.Format32bppArgb));
+        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
     }
 
     [Fact]
     public void Clone_ValidBitmap_Success()
     {
-        using (Bitmap bitmap = new(1, 1))
-        using (Bitmap clone = Assert.IsType<Bitmap>(bitmap.Clone()))
-        {
-            Assert.NotSame(bitmap, clone);
-            Assert.Equal(1, clone.Width);
-            Assert.Equal(1, clone.Height);
-        }
+        using Bitmap bitmap = new(1, 1);
+        using Bitmap clone = Assert.IsType<Bitmap>(bitmap.Clone());
+        Assert.NotSame(bitmap, clone);
+        Assert.Equal(1, clone.Width);
+        Assert.Equal(1, clone.Height);
     }
 
     [Fact]
@@ -529,13 +489,11 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void GetFrameCount_NewBitmap_ReturnsZero()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            Assert.Equal(1, bitmap.GetFrameCount(FrameDimension.Page));
-            Assert.Equal(1, bitmap.GetFrameCount(FrameDimension.Resolution));
-            Assert.Equal(1, bitmap.GetFrameCount(FrameDimension.Time));
-            Assert.Equal(1, bitmap.GetFrameCount(new FrameDimension(Guid.Empty)));
-        }
+        using Bitmap bitmap = new(1, 1);
+        Assert.Equal(1, bitmap.GetFrameCount(FrameDimension.Page));
+        Assert.Equal(1, bitmap.GetFrameCount(FrameDimension.Resolution));
+        Assert.Equal(1, bitmap.GetFrameCount(FrameDimension.Time));
+        Assert.Equal(1, bitmap.GetFrameCount(new FrameDimension(Guid.Empty)));
     }
 
     [Fact]
@@ -553,13 +511,11 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1)]
     public void SelectActiveFrame_InvalidFrameIndex_ThrowsArgumentException(int index)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            Assert.Equal(0, bitmap.SelectActiveFrame(FrameDimension.Page, index));
-            Assert.Equal(0, bitmap.SelectActiveFrame(FrameDimension.Resolution, index));
-            Assert.Equal(0, bitmap.SelectActiveFrame(FrameDimension.Time, index));
-            Assert.Equal(0, bitmap.SelectActiveFrame(new FrameDimension(Guid.Empty), index));
-        }
+        using Bitmap bitmap = new(1, 1);
+        Assert.Equal(0, bitmap.SelectActiveFrame(FrameDimension.Page, index));
+        Assert.Equal(0, bitmap.SelectActiveFrame(FrameDimension.Resolution, index));
+        Assert.Equal(0, bitmap.SelectActiveFrame(FrameDimension.Time, index));
+        Assert.Equal(0, bitmap.SelectActiveFrame(new FrameDimension(Guid.Empty), index));
     }
 
     [Fact]
@@ -599,10 +555,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1)]
     public void GetPixel_InvalidX_ThrowsArgumentOutOfRangeException(int x)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentOutOfRangeException>("x", () => bitmap.GetPixel(x, 0));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentOutOfRangeException>("x", () => bitmap.GetPixel(x, 0));
     }
 
     [Theory]
@@ -610,19 +564,15 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1)]
     public void GetPixel_InvalidY_ThrowsArgumentOutOfRangeException(int y)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentOutOfRangeException>("y", () => bitmap.GetPixel(0, y));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentOutOfRangeException>("y", () => bitmap.GetPixel(0, y));
     }
 
     [Fact]
     public void GetPixel_GrayScalePixelFormat_ThrowsArgumentException()
     {
-        using (Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPixel(0, 0));
-        }
+        using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPixel(0, 0));
     }
 
     [Fact]
@@ -650,13 +600,11 @@ public class BitmapTests : FileCleanupTestBase
         {
             Assert.NotEqual(IntPtr.Zero, handle);
 
-            using (Bitmap result = Image.FromHbitmap(handle))
-            {
-                Assert.Equal(width, result.Width);
-                Assert.Equal(height, result.Height);
-                Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
-                Assert.Equal(ImageFormat.MemoryBmp, result.RawFormat);
-            }
+            using Bitmap result = Image.FromHbitmap(handle);
+            Assert.Equal(width, result.Width);
+            Assert.Equal(height, result.Height);
+            Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
+            Assert.Equal(ImageFormat.MemoryBmp, result.RawFormat);
         }
         finally
         {
@@ -688,10 +636,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1, short.MaxValue)]
     public void GetHbitmap_Grayscale_ThrowsArgumentException(int width, int height)
     {
-        using (Bitmap bitmap = new(width, height, PixelFormat.Format16bppGrayScale))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetHbitmap());
-        }
+        using Bitmap bitmap = new(width, height, PixelFormat.Format16bppGrayScale);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetHbitmap());
     }
 
     [Fact]
@@ -707,7 +653,7 @@ public class BitmapTests : FileCleanupTestBase
     public void FromHbitmap_InvalidHandle_ThrowsExternalException()
     {
         Assert.Throws<ExternalException>(() => Image.FromHbitmap(IntPtr.Zero));
-        Assert.Throws<ExternalException>(() => Image.FromHbitmap((IntPtr)10));
+        Assert.Throws<ExternalException>(() => Image.FromHbitmap(10));
     }
 
     public static IEnumerable<object[]> FromHicon_Icon_TestData()
@@ -726,10 +672,8 @@ public class BitmapTests : FileCleanupTestBase
         try
         {
             GetHicon_FromHicon_ReturnsExpected(icon.Handle, width, height);
-            using (var bitmap = Bitmap.FromHicon(icon.Handle))
-            {
-                handle = bitmap.GetHicon();
-            }
+            using var bitmap = Bitmap.FromHicon(icon.Handle);
+            handle = bitmap.GetHicon();
         }
         finally
         {
@@ -765,10 +709,8 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void GetHicon_Grayscale_ThrowsArgumentException()
     {
-        using (Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetHicon());
-        }
+        using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetHicon());
     }
 
     [Fact]
@@ -816,65 +758,61 @@ public class BitmapTests : FileCleanupTestBase
     public void FromHicon_InvalidHandle_ThrowsArgumentException()
     {
         AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon(IntPtr.Zero));
-        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon((IntPtr)10));
+        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon(10));
     }
 
     [Fact]
     public void FromHicon_1bppIcon_ThrowsArgumentException()
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico")))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon(icon.Handle));
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico"));
+        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon(icon.Handle));
     }
 
     [Fact]
     public void FromResource_InvalidHandle_ThrowsArgumentException()
     {
         AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource(IntPtr.Zero, "Name"));
-        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource((IntPtr)10, "Name"));
+        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource(10, "Name"));
     }
 
     [Fact]
     public void FromResource_InvalidBitmapName_ThrowsArgumentException()
     {
         AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource(IntPtr.Zero, "Name"));
-        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource((IntPtr)10, "Name"));
+        AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource(10, "Name"));
     }
 
     [Fact]
     public void MakeTransparent_NoColorWithMatches_SetsMatchingPixelsToTransparent()
     {
-        using (Bitmap bitmap = new(10, 10))
+        using Bitmap bitmap = new(10, 10);
+        for (int x = 0; x < bitmap.Width; x++)
         {
-            for (int x = 0; x < bitmap.Width; x++)
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
+                if (y % 2 == 0)
                 {
-                    if (y % 2 == 0)
-                    {
-                        bitmap.SetPixel(x, y, Color.LightGray);
-                    }
-                    else
-                    {
-                        bitmap.SetPixel(x, y, Color.Red);
-                    }
+                    bitmap.SetPixel(x, y, Color.LightGray);
+                }
+                else
+                {
+                    bitmap.SetPixel(x, y, Color.Red);
                 }
             }
+        }
 
-            bitmap.MakeTransparent();
-            for (int x = 0; x < bitmap.Width; x++)
+        bitmap.MakeTransparent();
+        for (int x = 0; x < bitmap.Width; x++)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
+                if (y % 2 == 0)
                 {
-                    if (y % 2 == 0)
-                    {
-                        Assert.Equal(Color.FromArgb(255, 211, 211, 211), bitmap.GetPixel(x, y));
-                    }
-                    else
-                    {
-                        Assert.Equal(Color.FromArgb(0, 0, 0, 0), bitmap.GetPixel(x, y));
-                    }
+                    Assert.Equal(Color.FromArgb(255, 211, 211, 211), bitmap.GetPixel(x, y));
+                }
+                else
+                {
+                    Assert.Equal(Color.FromArgb(0, 0, 0, 0), bitmap.GetPixel(x, y));
                 }
             }
         }
@@ -883,36 +821,34 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void MakeTransparent_CustomColorExists_SetsMatchingPixelsToTransparent()
     {
-        using (Bitmap bitmap = new(10, 10))
+        using Bitmap bitmap = new(10, 10);
+        for (int x = 0; x < bitmap.Width; x++)
         {
-            for (int x = 0; x < bitmap.Width; x++)
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
+                if (y % 2 == 0)
                 {
-                    if (y % 2 == 0)
-                    {
-                        bitmap.SetPixel(x, y, Color.Blue);
-                    }
-                    else
-                    {
-                        bitmap.SetPixel(x, y, Color.Red);
-                    }
+                    bitmap.SetPixel(x, y, Color.Blue);
+                }
+                else
+                {
+                    bitmap.SetPixel(x, y, Color.Red);
                 }
             }
+        }
 
-            bitmap.MakeTransparent(Color.Blue);
-            for (int x = 0; x < bitmap.Width; x++)
+        bitmap.MakeTransparent(Color.Blue);
+        for (int x = 0; x < bitmap.Width; x++)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
+                if (y % 2 == 0)
                 {
-                    if (y % 2 == 0)
-                    {
-                        Assert.Equal(Color.FromArgb(0, 0, 0, 0), bitmap.GetPixel(x, y));
-                    }
-                    else
-                    {
-                        Assert.Equal(Color.FromArgb(255, 255, 0, 0), bitmap.GetPixel(x, y));
-                    }
+                    Assert.Equal(Color.FromArgb(0, 0, 0, 0), bitmap.GetPixel(x, y));
+                }
+                else
+                {
+                    Assert.Equal(Color.FromArgb(255, 255, 0, 0), bitmap.GetPixel(x, y));
                 }
             }
         }
@@ -921,23 +857,21 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void MakeTransparent_CustomColorDoesntExist_DoesNothing()
     {
-        using (Bitmap bitmap = new(10, 10))
+        using Bitmap bitmap = new(10, 10);
+        for (int x = 0; x < bitmap.Width; x++)
         {
-            for (int x = 0; x < bitmap.Width; x++)
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
-                {
-                    bitmap.SetPixel(x, y, Color.Blue);
-                }
+                bitmap.SetPixel(x, y, Color.Blue);
             }
+        }
 
-            bitmap.MakeTransparent(Color.Red);
-            for (int x = 0; x < bitmap.Width; x++)
+        bitmap.MakeTransparent(Color.Red);
+        for (int x = 0; x < bitmap.Width; x++)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
-                {
-                    Assert.Equal(Color.FromArgb(255, 0, 0, 255), bitmap.GetPixel(x, y));
-                }
+                Assert.Equal(Color.FromArgb(255, 0, 0, 255), bitmap.GetPixel(x, y));
             }
         }
     }
@@ -971,10 +905,8 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void MakeTransparent_Icon_ThrowsInvalidOperationException()
     {
-        using (Bitmap bitmap = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
-        {
-            Assert.Throws<InvalidOperationException>(() => bitmap.MakeTransparent(Color.Red));
-        }
+        using Bitmap bitmap = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico"));
+        Assert.Throws<InvalidOperationException>(() => bitmap.MakeTransparent(Color.Red));
     }
 
     public static IEnumerable<object[]> SetPixel_TestData()
@@ -997,10 +929,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(PixelFormat.Format8bppIndexed)]
     public void SetPixel_IndexedPixelFormat_ThrowsInvalidOperationException(PixelFormat format)
     {
-        using (Bitmap bitmap = new(1, 1, format))
-        {
-            Assert.Throws<InvalidOperationException>(() => bitmap.SetPixel(0, 0, Color.Red));
-        }
+        using Bitmap bitmap = new(1, 1, format);
+        Assert.Throws<InvalidOperationException>(() => bitmap.SetPixel(0, 0, Color.Red));
     }
 
     [Theory]
@@ -1008,10 +938,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1)]
     public void SetPixel_InvalidX_ThrowsArgumentOutOfRangeException(int x)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentOutOfRangeException>("x", () => bitmap.SetPixel(x, 0, Color.Red));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentOutOfRangeException>("x", () => bitmap.SetPixel(x, 0, Color.Red));
     }
 
     [Theory]
@@ -1019,19 +947,15 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1)]
     public void SetPixel_InvalidY_ThrowsArgumentOutOfRangeException(int y)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentOutOfRangeException>("y", () => bitmap.SetPixel(0, y, Color.Red));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentOutOfRangeException>("y", () => bitmap.SetPixel(0, y, Color.Red));
     }
 
     [Fact]
     public void SetPixel_GrayScalePixelFormat_ThrowsArgumentException()
     {
-        using (Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetPixel(0, 0, Color.Red));
-        }
+        using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetPixel(0, 0, Color.Red));
     }
 
     [Fact]
@@ -1049,10 +973,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(float.MaxValue, float.MaxValue)]
     public void SetResolution_ValidDpi_Success(float xDpi, float yDpi)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            bitmap.SetResolution(xDpi, yDpi);
-        }
+        using Bitmap bitmap = new(1, 1);
+        bitmap.SetResolution(xDpi, yDpi);
     }
 
     [Theory]
@@ -1062,10 +984,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(float.NegativeInfinity)]
     public void SetResolution_InvalidXDpi_ThrowsArgumentException(float xDpi)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetResolution(xDpi, 1));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetResolution(xDpi, 1));
     }
 
     [Theory]
@@ -1075,10 +995,8 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(float.NegativeInfinity)]
     public void SetResolution_InvalidYDpi_ThrowsArgumentException(float yDpi)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetResolution(1, yDpi));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetResolution(1, yDpi));
     }
 
     [Fact]
@@ -1210,33 +1128,29 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(PixelFormat.Canonical)]
     public void LockBits_InvalidPixelFormat_ThrowsArgumentException(PixelFormat format)
     {
-        using (Bitmap bitmap = new(1, 1))
+        using Bitmap bitmap = new(1, 1);
+        foreach (ImageLockMode lockMode in Enum.GetValues(typeof(ImageLockMode)))
         {
-            foreach (ImageLockMode lockMode in Enum.GetValues(typeof(ImageLockMode)))
-            {
-                AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, format));
+            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, format));
 
-                BitmapData bitmapData = new();
-                AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, format, bitmapData));
-                Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
-            }
+            BitmapData bitmapData = new();
+            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, format, bitmapData));
+            Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
         }
     }
 
     [Fact]
     public void LockBits_ReadOnlyGrayscale_ThrowsArgumentException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, PixelFormat.Format16bppGrayScale));
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, PixelFormat.Format16bppGrayScale, new BitmapData()));
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, PixelFormat.Format16bppGrayScale));
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, PixelFormat.Format16bppGrayScale, new BitmapData()));
 
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadWrite, PixelFormat.Format16bppGrayScale));
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadWrite, PixelFormat.Format16bppGrayScale, new BitmapData()));
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadWrite, PixelFormat.Format16bppGrayScale));
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadWrite, PixelFormat.Format16bppGrayScale, new BitmapData()));
 
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.WriteOnly, PixelFormat.Format16bppGrayScale);
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.UnlockBits(data));
-        }
+        BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.WriteOnly, PixelFormat.Format16bppGrayScale);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.UnlockBits(data));
     }
 
     [Theory]
@@ -1245,14 +1159,12 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(ImageLockMode.UserInputBuffer)]
     public void LockBits_InvalidLockMode_ThrowsArgumentException(ImageLockMode lockMode)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, bitmap.PixelFormat));
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, bitmap.PixelFormat));
 
-            BitmapData bitmapData = new();
-            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, bitmap.PixelFormat, bitmapData));
-            Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
-        }
+        BitmapData bitmapData = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => bitmap.LockBits(new Rectangle(0, 0, 1, 1), lockMode, bitmap.PixelFormat, bitmapData));
+        Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
     }
 
     [Fact]
@@ -1270,16 +1182,14 @@ public class BitmapTests : FileCleanupTestBase
     [Fact]
     public void LockBits_AlreadyLocked_ThrowsInvalidOperationException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+        using Bitmap bitmap = new(1, 1);
+        bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
-            Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat));
-            Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat, new BitmapData()));
+        Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat));
+        Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat, new BitmapData()));
 
-            Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(1, 1, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat));
-            Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(1, 1, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat, new BitmapData()));
-        }
+        Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(1, 1, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat));
+        Assert.Throws<InvalidOperationException>(() => bitmap.LockBits(new Rectangle(1, 1, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat, new BitmapData()));
     }
 
     [Theory]
@@ -1288,26 +1198,22 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(1, 2)]
     public void UnlockBits_InvalidHeightWidth_Nop(int offset, int invalidParameter)
     {
-        using (Bitmap bitmap = new(2, 2))
-        {
-            BitmapData data = bitmap.LockBits(new Rectangle(offset, offset, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-            data.Height = invalidParameter;
-            data.Width = invalidParameter;
+        using Bitmap bitmap = new(2, 2);
+        BitmapData data = bitmap.LockBits(new Rectangle(offset, offset, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+        data.Height = invalidParameter;
+        data.Width = invalidParameter;
 
-            bitmap.UnlockBits(data);
-        }
+        bitmap.UnlockBits(data);
     }
 
     [Fact]
     public void UnlockBits_Scan0Zero_Nop()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-            data.Scan0 = IntPtr.Zero;
+        using Bitmap bitmap = new(1, 1);
+        BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+        data.Scan0 = IntPtr.Zero;
 
-            bitmap.UnlockBits(data);
-        }
+        bitmap.UnlockBits(data);
     }
 
     [Theory]
@@ -1315,43 +1221,35 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(PixelFormat.Gdi)]
     public void UnlockBits_InvalidPixelFormat_Nop(PixelFormat format)
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-            data.PixelFormat = format;
+        using Bitmap bitmap = new(1, 1);
+        BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+        data.PixelFormat = format;
 
-            bitmap.UnlockBits(data);
-        }
+        bitmap.UnlockBits(data);
     }
 
     [Fact]
     public void UnlockBits_NullBitmapData_ThrowsArgumentNullException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            AssertExtensions.Throws<ArgumentNullException>("bitmapdata", () => bitmap.UnlockBits(null));
-        }
+        using Bitmap bitmap = new(1, 1);
+        AssertExtensions.Throws<ArgumentNullException>("bitmapdata", () => bitmap.UnlockBits(null));
     }
 
     [Fact]
     public void UnlockBits_NotLocked_ThrowsExternalException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            Assert.Throws<ExternalException>(() => bitmap.UnlockBits(new BitmapData()));
-        }
+        using Bitmap bitmap = new(1, 1);
+        Assert.Throws<ExternalException>(() => bitmap.UnlockBits(new BitmapData()));
     }
 
     [Fact]
     public void UnlockBits_AlreadyUnlocked_ThrowsExternalException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-            bitmap.UnlockBits(data);
+        using Bitmap bitmap = new(1, 1);
+        BitmapData data = bitmap.LockBits(new Rectangle(0, 0, 1, 1), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+        bitmap.UnlockBits(data);
 
-            Assert.Throws<ExternalException>(() => bitmap.UnlockBits(new BitmapData()));
-        }
+        Assert.Throws<ExternalException>(() => bitmap.UnlockBits(new BitmapData()));
     }
 
     [Fact]
@@ -1386,146 +1284,144 @@ public class BitmapTests : FileCleanupTestBase
     {
         bool alpha = Image.IsAlphaPixelFormat(format);
         int size = Image.GetPixelFormatSize(format) / 8 * 2;
-        using (Bitmap bitmap = new(2, 1, format))
+        using Bitmap bitmap = new(2, 1, format);
+        Color a = Color.FromArgb(128, 64, 32, 16);
+        Color b = Color.FromArgb(192, 96, 48, 24);
+        bitmap.SetPixel(0, 0, a);
+        bitmap.SetPixel(1, 0, b);
+        Color c = bitmap.GetPixel(0, 0);
+        Color d = bitmap.GetPixel(1, 0);
+        if (size == 4)
         {
-            Color a = Color.FromArgb(128, 64, 32, 16);
-            Color b = Color.FromArgb(192, 96, 48, 24);
-            bitmap.SetPixel(0, 0, a);
-            bitmap.SetPixel(1, 0, b);
-            Color c = bitmap.GetPixel(0, 0);
-            Color d = bitmap.GetPixel(1, 0);
-            if (size == 4)
+            Assert.Equal(255, c.A);
+            Assert.Equal(66, c.R);
+            if (format == PixelFormat.Format16bppRgb565)
             {
-                Assert.Equal(255, c.A);
-                Assert.Equal(66, c.R);
-                if (format == PixelFormat.Format16bppRgb565)
-                {
-                    Assert.Equal(32, c.G);
-                }
-                else
-                {
-                    Assert.Equal(33, c.G);
-                }
-
-                Assert.Equal(16, c.B);
-
-                Assert.Equal(255, d.A);
-                Assert.Equal(99, d.R);
-                if (format == PixelFormat.Format16bppRgb565)
-                {
-                    Assert.Equal(48, d.G);
-                }
-                else
-                {
-                    Assert.Equal(49, d.G);
-                }
-
-                Assert.Equal(24, d.B);
+                Assert.Equal(32, c.G);
             }
-            else if (alpha)
+            else
             {
-                if (format == PixelFormat.Format32bppPArgb)
-                {
-                    Assert.Equal(a.A, c.A);
-                    Assert.Equal(a.R - 1, c.R);
-                    Assert.Equal(a.G - 1, c.G);
-                    Assert.Equal(a.B - 1, c.B);
+                Assert.Equal(33, c.G);
+            }
 
-                    Assert.Equal(b.A, d.A);
-                    Assert.Equal(b.R - 1, d.R);
-                    Assert.Equal(b.G - 1, d.G);
-                    Assert.Equal(b.B - 1, d.B);
-                }
-                else
+            Assert.Equal(16, c.B);
+
+            Assert.Equal(255, d.A);
+            Assert.Equal(99, d.R);
+            if (format == PixelFormat.Format16bppRgb565)
+            {
+                Assert.Equal(48, d.G);
+            }
+            else
+            {
+                Assert.Equal(49, d.G);
+            }
+
+            Assert.Equal(24, d.B);
+        }
+        else if (alpha)
+        {
+            if (format == PixelFormat.Format32bppPArgb)
+            {
+                Assert.Equal(a.A, c.A);
+                Assert.Equal(a.R - 1, c.R);
+                Assert.Equal(a.G - 1, c.G);
+                Assert.Equal(a.B - 1, c.B);
+
+                Assert.Equal(b.A, d.A);
+                Assert.Equal(b.R - 1, d.R);
+                Assert.Equal(b.G - 1, d.G);
+                Assert.Equal(b.B - 1, d.B);
+            }
+            else
+            {
+                Assert.Equal(a, c);
+                Assert.Equal(b, d);
+            }
+        }
+        else
+        {
+            Assert.Equal(Color.FromArgb(255, 64, 32, 16), c);
+            Assert.Equal(Color.FromArgb(255, 96, 48, 24), d);
+        }
+
+        BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, 2, 1), ImageLockMode.ReadOnly, format);
+        try
+        {
+            byte[] data = new byte[size];
+            Marshal.Copy(bitmapData.Scan0, data, 0, size);
+            if (format == PixelFormat.Format32bppPArgb)
+            {
+                Assert.Equal(Math.Ceiling((float)c.B * c.A / 255), data[0]);
+                Assert.Equal(Math.Ceiling((float)c.G * c.A / 255), data[1]);
+                Assert.Equal(Math.Ceiling((float)c.R * c.A / 255), data[2]);
+                Assert.Equal(c.A, data[3]);
+                Assert.Equal(Math.Ceiling((float)d.B * d.A / 255), data[4]);
+                Assert.Equal(Math.Ceiling((float)d.G * d.A / 255), data[5]);
+                Assert.Equal(Math.Ceiling((float)d.R * d.A / 255), data[6]);
+                Assert.Equal(d.A, data[7]);
+            }
+            else if (size == 4)
+            {
+                switch (format)
                 {
-                    Assert.Equal(a, c);
-                    Assert.Equal(b, d);
+                    case PixelFormat.Format16bppRgb565:
+                        Assert.Equal(2, data[0]);
+                        Assert.Equal(65, data[1]);
+                        Assert.Equal(131, data[2]);
+                        Assert.Equal(97, data[3]);
+                        break;
+                    case PixelFormat.Format16bppArgb1555:
+                        Assert.Equal(130, data[0]);
+                        Assert.Equal(160, data[1]);
+                        Assert.Equal(195, data[2]);
+                        Assert.Equal(176, data[3]);
+                        break;
+                    case PixelFormat.Format16bppRgb555:
+                        Assert.Equal(130, data[0]);
+                        Assert.Equal(32, data[1]);
+                        Assert.Equal(195, data[2]);
+                        Assert.Equal(48, data[3]);
+                        break;
                 }
             }
             else
             {
-                Assert.Equal(Color.FromArgb(255, 64, 32, 16), c);
-                Assert.Equal(Color.FromArgb(255, 96, 48, 24), d);
-            }
+                int n = 0;
+                Assert.Equal(c.B, data[n++]);
+                Assert.Equal(c.G, data[n++]);
+                Assert.Equal(c.R, data[n++]);
+                if (size % 4 == 0)
+                {
+                    if (format == PixelFormat.Format32bppRgb)
+                    {
+                        Assert.Equal(128, data[n++]);
+                    }
+                    else
+                    {
+                        Assert.Equal(c.A, data[n++]);
+                    }
+                }
 
-            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, 2, 1), ImageLockMode.ReadOnly, format);
-            try
-            {
-                byte[] data = new byte[size];
-                Marshal.Copy(bitmapData.Scan0, data, 0, size);
-                if (format == PixelFormat.Format32bppPArgb)
+                Assert.Equal(d.B, data[n++]);
+                Assert.Equal(d.G, data[n++]);
+                Assert.Equal(d.R, data[n++]);
+                if (size % 4 == 0)
                 {
-                    Assert.Equal(Math.Ceiling((float)c.B * c.A / 255), data[0]);
-                    Assert.Equal(Math.Ceiling((float)c.G * c.A / 255), data[1]);
-                    Assert.Equal(Math.Ceiling((float)c.R * c.A / 255), data[2]);
-                    Assert.Equal(c.A, data[3]);
-                    Assert.Equal(Math.Ceiling((float)d.B * d.A / 255), data[4]);
-                    Assert.Equal(Math.Ceiling((float)d.G * d.A / 255), data[5]);
-                    Assert.Equal(Math.Ceiling((float)d.R * d.A / 255), data[6]);
-                    Assert.Equal(d.A, data[7]);
-                }
-                else if (size == 4)
-                {
-                    switch (format)
+                    if (format == PixelFormat.Format32bppRgb)
                     {
-                        case PixelFormat.Format16bppRgb565:
-                            Assert.Equal(2, data[0]);
-                            Assert.Equal(65, data[1]);
-                            Assert.Equal(131, data[2]);
-                            Assert.Equal(97, data[3]);
-                            break;
-                        case PixelFormat.Format16bppArgb1555:
-                            Assert.Equal(130, data[0]);
-                            Assert.Equal(160, data[1]);
-                            Assert.Equal(195, data[2]);
-                            Assert.Equal(176, data[3]);
-                            break;
-                        case PixelFormat.Format16bppRgb555:
-                            Assert.Equal(130, data[0]);
-                            Assert.Equal(32, data[1]);
-                            Assert.Equal(195, data[2]);
-                            Assert.Equal(48, data[3]);
-                            break;
+                        Assert.Equal(192, data[n++]);
                     }
-                }
-                else
-                {
-                    int n = 0;
-                    Assert.Equal(c.B, data[n++]);
-                    Assert.Equal(c.G, data[n++]);
-                    Assert.Equal(c.R, data[n++]);
-                    if (size % 4 == 0)
+                    else
                     {
-                        if (format == PixelFormat.Format32bppRgb)
-                        {
-                            Assert.Equal(128, data[n++]);
-                        }
-                        else
-                        {
-                            Assert.Equal(c.A, data[n++]);
-                        }
-                    }
-
-                    Assert.Equal(d.B, data[n++]);
-                    Assert.Equal(d.G, data[n++]);
-                    Assert.Equal(d.R, data[n++]);
-                    if (size % 4 == 0)
-                    {
-                        if (format == PixelFormat.Format32bppRgb)
-                        {
-                            Assert.Equal(192, data[n++]);
-                        }
-                        else
-                        {
-                            Assert.Equal(d.A, data[n++]);
-                        }
+                        Assert.Equal(d.A, data[n++]);
                     }
                 }
             }
-            finally
-            {
-                bitmap.UnlockBits(bitmapData);
-            }
+        }
+        finally
+        {
+            bitmap.UnlockBits(bitmapData);
         }
     }
 
@@ -1540,19 +1436,15 @@ public class BitmapTests : FileCleanupTestBase
     [MemberData(nameof(Palette_TestData))]
     public void Palette_Get_ReturnsExpected(PixelFormat pixelFormat, int[] expectedEntries)
     {
-        using (Bitmap bitmap = new(1, 1, pixelFormat))
-        {
-            Assert.Equal(expectedEntries, bitmap.Palette.Entries.Select(c => c.ToArgb()));
-        }
+        using Bitmap bitmap = new(1, 1, pixelFormat);
+        Assert.Equal(expectedEntries, bitmap.Palette.Entries.Select(c => c.ToArgb()));
     }
 
     [Fact]
     public void Palette_SetNull_ThrowsNullReferenceException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            Assert.Throws<NullReferenceException>(() => bitmap.Palette = null);
-        }
+        using Bitmap bitmap = new(1, 1);
+        Assert.Throws<NullReferenceException>(() => bitmap.Palette = null);
     }
 
     [Fact]
@@ -1692,22 +1584,20 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(false, true)]
     public void SaveToRestrictiveStream(bool canRead, bool canSeek)
     {
-        using (Stream backingStream = new MemoryStream())
-        using (Stream restrictiveStream = new TestStream(backingStream, canRead, canSeek))
+        using Stream backingStream = new MemoryStream();
+        using Stream restrictiveStream = new TestStream(backingStream, canRead, canSeek);
+        using (Bitmap bitmap = new(100, 100))
         {
-            using (Bitmap bitmap = new(100, 100))
-            {
-                bitmap.Save(restrictiveStream, ImageFormat.Png);
-            }
+            bitmap.Save(restrictiveStream, ImageFormat.Png);
+        }
 
-            backingStream.Position = 0;
+        backingStream.Position = 0;
 
-            using (Bitmap bitmap = new(backingStream))
-            {
-                Assert.Equal(100, bitmap.Height);
-                Assert.Equal(100, bitmap.Width);
-                Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
-            }
+        using (Bitmap bitmap = new(backingStream))
+        {
+            Assert.Equal(100, bitmap.Height);
+            Assert.Equal(100, bitmap.Width);
+            Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
         }
     }
 

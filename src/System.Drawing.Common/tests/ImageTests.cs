@@ -492,11 +492,9 @@ public class ImageTests
     [MemberData(nameof(InvalidBytes_TestData))]
     public void FromFile_InvalidBytes_ThrowsOutOfMemoryException(byte[] bytes)
     {
-        using (var file = TempFile.Create(bytes))
-        {
-            Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path));
-            Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path, useEmbeddedColorManagement: true));
-        }
+        using var file = TempFile.Create(bytes);
+        Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path));
+        Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path, useEmbeddedColorManagement: true));
     }
 
     [Fact]
@@ -546,18 +544,16 @@ public class ImageTests
     [MemberData(nameof(InvalidBytes_TestData))]
     public void FromStream_InvalidBytes_ThrowsArgumentException(byte[] bytes)
     {
-        using (MemoryStream stream = new())
-        {
-            stream.Write(bytes, 0, bytes.Length);
-            stream.Position = 0;
+        using MemoryStream stream = new();
+        stream.Write(bytes, 0, bytes.Length);
+        stream.Position = 0;
 
-            AssertExtensions.Throws<ArgumentException>(null, () => Image.FromStream(stream));
-            Assert.Equal(0, stream.Position);
+        AssertExtensions.Throws<ArgumentException>(null, () => Image.FromStream(stream));
+        Assert.Equal(0, stream.Position);
 
-            AssertExtensions.Throws<ArgumentException>(null, () => Image.FromStream(stream, useEmbeddedColorManagement: true));
-            AssertExtensions.Throws<ArgumentException>(null, () => Image.FromStream(stream, useEmbeddedColorManagement: true, validateImageData: true));
-            Assert.Equal(0, stream.Position);
-        }
+        AssertExtensions.Throws<ArgumentException>(null, () => Image.FromStream(stream, useEmbeddedColorManagement: true));
+        AssertExtensions.Throws<ArgumentException>(null, () => Image.FromStream(stream, useEmbeddedColorManagement: true, validateImageData: true));
+        Assert.Equal(0, stream.Position);
     }
 
     [Fact]
@@ -618,7 +614,7 @@ public class ImageTests
                 Encoder.Compression.Guid,
                 Encoder.ColorDepth.Guid,
                 Encoder.SaveFlag.Guid,
-                new(unchecked((int)0xa219bbc9), unchecked((short)0x0a9d), unchecked((short)0x4005), new byte[] { 0xa3, 0xee, 0x3a, 0x42, 0x1b, 0x8b, 0xb0, 0x6c }) /* Encoder.SaveAsCmyk.Guid */
+                new(unchecked((int)0xa219bbc9), unchecked(0x0a9d), unchecked(0x4005), [0xa3, 0xee, 0x3a, 0x42, 0x1b, 0x8b, 0xb0, 0x6c]) /* Encoder.SaveAsCmyk.Guid */
             }
         };
 
@@ -652,23 +648,19 @@ public class ImageTests
         ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
         ImageCodecInfo codec = codecs.Single(c => c.FormatID == format.Guid);
 
-        using (Bitmap bitmap = new(1, 1))
-        {
-            EncoderParameters paramList = bitmap.GetEncoderParameterList(codec.Clsid);
+        using Bitmap bitmap = new(1, 1);
+        EncoderParameters paramList = bitmap.GetEncoderParameterList(codec.Clsid);
 
-            Assert.Equal(
-                expectedParameters,
-                paramList.Param.Select(p => p.Encoder.Guid));
-        }
+        Assert.Equal(
+            expectedParameters,
+            paramList.Param.Select(p => p.Encoder.Guid));
     }
 
     [Fact]
     public void Save_InvalidDirectory_ThrowsDirectoryNotFoundException()
     {
-        using (Bitmap bitmap = new(1, 1))
-        {
-            string badTarget = System.IO.Path.Combine("NoSuchDirectory", "NoSuchFile");
-            AssertExtensions.Throws<DirectoryNotFoundException>(() => bitmap.Save(badTarget), $"The directory NoSuchDirectory of the filename {badTarget} does not exist.");
-        }
+        using Bitmap bitmap = new(1, 1);
+        string badTarget = System.IO.Path.Combine("NoSuchDirectory", "NoSuchFile");
+        AssertExtensions.Throws<DirectoryNotFoundException>(() => bitmap.Save(badTarget), $"The directory NoSuchDirectory of the filename {badTarget} does not exist.");
     }
 }

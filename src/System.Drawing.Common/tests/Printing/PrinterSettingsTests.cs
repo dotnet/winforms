@@ -190,7 +190,7 @@ public class PrinterSettingsTests
     public void LandscapeAngle_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        int[] validValues = new[] { -90, 0, 90, 270 };
+        int[] validValues = [-90, 0, 90, 270];
         Assert.True(validValues.Contains(printerSettings.LandscapeAngle), $"PrinterSettings.LandscapeAngle ({printerSettings.LandscapeAngle}) must be 0, 90, or 270 degrees.");
     }
 
@@ -406,11 +406,9 @@ public class PrinterSettingsTests
     [Fact]
     public void IsDirectPrintingSupported_ImageNotSupported_ReturnsExpected()
     {
-        using (Bitmap bitmap = new(10, 10))
-        {
-            PrinterSettings printerSettings = new();
-            Assert.False(printerSettings.IsDirectPrintingSupported(bitmap));
-        }
+        using Bitmap bitmap = new(10, 10);
+        PrinterSettings printerSettings = new();
+        Assert.False(printerSettings.IsDirectPrintingSupported(bitmap));
     }
 
     [ConditionalFact(typeof(PrinterSettingsTests), nameof(CanTestSetHdevmode_IntPtr_Success))]
@@ -456,26 +454,22 @@ public class PrinterSettingsTests
     public void CreateMeasurementGraphics_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        using (Graphics graphic = printerSettings.CreateMeasurementGraphics())
-        {
-            Assert.NotNull(graphic);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.X, graphic.VisibleClipBounds.X, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.Y, graphic.VisibleClipBounds.Y, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
-        }
+        using Graphics graphic = printerSettings.CreateMeasurementGraphics();
+        Assert.NotNull(graphic);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.X, graphic.VisibleClipBounds.X, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.Y, graphic.VisibleClipBounds.Y, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
     public void CreateMeasurementGraphics_Bool_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        using (Graphics graphic = printerSettings.CreateMeasurementGraphics(true))
-        {
-            Assert.NotNull(graphic);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
-        }
+        using Graphics graphic = printerSettings.CreateMeasurementGraphics(true);
+        Assert.NotNull(graphic);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
@@ -483,14 +477,12 @@ public class PrinterSettingsTests
     {
         PrinterSettings printerSettings = new();
         PageSettings pageSettings = new();
-        using (Graphics graphic = printerSettings.CreateMeasurementGraphics(pageSettings))
-        {
-            Assert.NotNull(graphic);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.X, graphic.VisibleClipBounds.X, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.Y, graphic.VisibleClipBounds.Y, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
-        }
+        using Graphics graphic = printerSettings.CreateMeasurementGraphics(pageSettings);
+        Assert.NotNull(graphic);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.X, graphic.VisibleClipBounds.X, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.Bounds.Y, graphic.VisibleClipBounds.Y, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
@@ -498,12 +490,10 @@ public class PrinterSettingsTests
     {
         PrinterSettings printerSettings = new();
         PageSettings pageSettings = new();
-        using (Graphics graphic = printerSettings.CreateMeasurementGraphics(pageSettings, true))
-        {
-            Assert.NotNull(graphic);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
-            Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
-        }
+        using Graphics graphic = printerSettings.CreateMeasurementGraphics(pageSettings, true);
+        Assert.NotNull(graphic);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Height, graphic.VisibleClipBounds.Height, 0);
+        Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
     [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
@@ -581,13 +571,13 @@ public class PrinterSettingsTests
     }
 
     private static readonly string[] s_TestPrinterNames =
-    {
+    [
         // Our method of testing some apis requires a printer that supports multi-copy printing, collating, color and duplex settings. Not all printers
         // support these so rather than trust the machine running the test to have configured such a printer as the default, use the name of
         // a known compliant printer that ships with Windows 10.
         "Microsoft Print to PDF",
         "Microsoft XPS Document Writer", // Backup for older Windows
-    };
+    ];
 
     [Fact]
     public void GetHdevmode_Zero_ThrowsArgumentException()

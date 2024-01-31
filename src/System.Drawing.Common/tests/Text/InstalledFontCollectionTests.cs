@@ -9,10 +9,8 @@ public class InstalledFontCollectionTests
     [Fact]
     public void Ctor_Default()
     {
-        using (InstalledFontCollection fontCollection = new())
-        {
-            Assert.NotEmpty(fontCollection.Families);
-        }
+        using InstalledFontCollection fontCollection = new();
+        Assert.NotEmpty(fontCollection.Families);
     }
 
     [Fact]

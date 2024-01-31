@@ -39,14 +39,12 @@ public partial class MatrixTests
     [Fact]
     public void Ctor_Default()
     {
-        using (Matrix matrix = new())
-        {
-            Assert.Equal(new float[] { 1, 0, 0, 1, 0, 0 }, matrix.Elements);
-            Assert.True(matrix.IsIdentity);
-            Assert.True(matrix.IsInvertible);
-            Assert.Equal(0, matrix.OffsetX);
-            Assert.Equal(0, matrix.OffsetY);
-        }
+        using Matrix matrix = new();
+        Assert.Equal([1, 0, 0, 1, 0, 0], matrix.Elements);
+        Assert.True(matrix.IsIdentity);
+        Assert.True(matrix.IsInvertible);
+        Assert.Equal(0, matrix.OffsetX);
+        Assert.Equal(0, matrix.OffsetY);
     }
 
     [Theory]
@@ -67,14 +65,12 @@ public partial class MatrixTests
     [MemberData(nameof(MatrixElements_TestData))]
     public void Ctor_Elements(float m11, float m12, float m21, float m22, float dx, float dy, bool isIdentity, bool isInvertible)
     {
-        using (Matrix matrix = new(m11, m12, m21, m22, dx, dy))
-        {
-            Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);
-            Assert.Equal(isIdentity, matrix.IsIdentity);
-            Assert.Equal(isInvertible, matrix.IsInvertible);
-            Assert.Equal(dx, matrix.OffsetX);
-            Assert.Equal(dy, matrix.OffsetY);
-        }
+        using Matrix matrix = new(m11, m12, m21, m22, dx, dy);
+        Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);
+        Assert.Equal(isIdentity, matrix.IsIdentity);
+        Assert.Equal(isInvertible, matrix.IsInvertible);
+        Assert.Equal(dx, matrix.OffsetX);
+        Assert.Equal(dy, matrix.OffsetY);
     }
 
     public static TheoryData<float, float, float, float, float, float, bool, bool> MatrixElements_TestData
@@ -108,28 +104,24 @@ public partial class MatrixTests
     [MemberData(nameof(Ctor_Rectangle_Points_TestData))]
     public void Ctor_Rectangle_Points(Rectangle rect, Point[] plgpnts, float[] expectedElements, bool isIdentity, bool isInvertible)
     {
-        using (Matrix matrix = new(rect, plgpnts))
-        {
-            Assert.Equal(expectedElements, matrix.Elements);
-            Assert.Equal(isIdentity, matrix.IsIdentity);
-            Assert.Equal(isInvertible, matrix.IsInvertible);
-            Assert.Equal(expectedElements[4], matrix.OffsetX);
-            Assert.Equal(expectedElements[5], matrix.OffsetY);
-        }
+        using Matrix matrix = new(rect, plgpnts);
+        Assert.Equal(expectedElements, matrix.Elements);
+        Assert.Equal(isIdentity, matrix.IsIdentity);
+        Assert.Equal(isInvertible, matrix.IsInvertible);
+        Assert.Equal(expectedElements[4], matrix.OffsetX);
+        Assert.Equal(expectedElements[5], matrix.OffsetY);
     }
 
     [Theory]
     [MemberData(nameof(Ctor_Rectangle_Points_TestData))]
     public void Ctor_RectangleF_Points(Rectangle rect, Point[] plgpnts, float[] expectedElements, bool isIdentity, bool isInvertible)
     {
-        using (Matrix matrix = new(rect, plgpnts.Select(p => (PointF)p).ToArray()))
-        {
-            Assert.Equal(expectedElements, matrix.Elements);
-            Assert.Equal(isIdentity, matrix.IsIdentity);
-            Assert.Equal(isInvertible, matrix.IsInvertible);
-            Assert.Equal(expectedElements[4], matrix.OffsetX);
-            Assert.Equal(expectedElements[5], matrix.OffsetY);
-        }
+        using Matrix matrix = new(rect, plgpnts.Select(p => (PointF)p).ToArray());
+        Assert.Equal(expectedElements, matrix.Elements);
+        Assert.Equal(isIdentity, matrix.IsIdentity);
+        Assert.Equal(isInvertible, matrix.IsInvertible);
+        Assert.Equal(expectedElements[4], matrix.OffsetX);
+        Assert.Equal(expectedElements[5], matrix.OffsetY);
     }
 
     [Fact]
@@ -166,12 +158,10 @@ public partial class MatrixTests
     [Fact]
     public void Clone_Matrix_ReturnsExpected()
     {
-        using (Matrix matrix = new(1, 2, 3, 4, 5, 6))
-        using (Matrix clone = Assert.IsType<Matrix>(matrix.Clone()))
-        {
-            Assert.NotSame(matrix, clone);
-            Assert.Equal(new float[] { 1, 2, 3, 4, 5, 6 }, clone.Elements);
-        }
+        using Matrix matrix = new(1, 2, 3, 4, 5, 6);
+        using Matrix clone = Assert.IsType<Matrix>(matrix.Clone());
+        Assert.NotSame(matrix, clone);
+        Assert.Equal([1, 2, 3, 4, 5, 6], clone.Elements);
     }
 
     [Fact]
@@ -262,20 +252,18 @@ public partial class MatrixTests
     [InlineData(float.NegativeInfinity)]
     public void Invert_FloatBounds_ThrowsArgumentException(float f)
     {
-        using (Matrix matrix1 = new(f, 2, 3, 4, 5, 6))
-        using (Matrix matrix2 = new(1, f, 3, 4, 5, 6))
-        using (Matrix matrix3 = new(1, 2, f, 4, 5, 6))
-        using (Matrix matrix4 = new(1, 2, 3, f, 5, 6))
-        using (Matrix matrix5 = new(1, 2, 3, 4, f, 6))
-        using (Matrix matrix6 = new(1, 2, 3, 4, 5, f))
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix1.Invert());
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix2.Invert());
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix3.Invert());
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix4.Invert());
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix5.Invert());
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix6.Invert());
-        }
+        using Matrix matrix1 = new(f, 2, 3, 4, 5, 6);
+        using Matrix matrix2 = new(1, f, 3, 4, 5, 6);
+        using Matrix matrix3 = new(1, 2, f, 4, 5, 6);
+        using Matrix matrix4 = new(1, 2, 3, f, 5, 6);
+        using Matrix matrix5 = new(1, 2, 3, 4, f, 6);
+        using Matrix matrix6 = new(1, 2, 3, 4, 5, f);
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix1.Invert());
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix2.Invert());
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix3.Invert());
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix4.Invert());
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix5.Invert());
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix6.Invert());
     }
 
     [Fact]
@@ -332,11 +320,9 @@ public partial class MatrixTests
         {
             if (order == MatrixOrder.Prepend)
             {
-                using (Matrix clone1 = matrix.Clone())
-                {
-                    clone1.Multiply(multiple);
-                    Assert.Equal(expected, clone1.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
-                }
+                using Matrix clone1 = matrix.Clone();
+                clone1.Multiply(multiple);
+                Assert.Equal(expected, clone1.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
             }
 
             matrix.Multiply(multiple, order);
@@ -347,11 +333,9 @@ public partial class MatrixTests
     [Fact]
     public void Multiply_NullMatrix_ThrowsArgumentNullException()
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentNullException>("matrix", () => matrix.Multiply(null));
-            AssertExtensions.Throws<ArgumentNullException>("matrix", () => matrix.Multiply(null, MatrixOrder.Prepend));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentNullException>("matrix", () => matrix.Multiply(null));
+        AssertExtensions.Throws<ArgumentNullException>("matrix", () => matrix.Multiply(null, MatrixOrder.Prepend));
     }
 
     [Theory]
@@ -359,11 +343,9 @@ public partial class MatrixTests
     [InlineData(MatrixOrder.Append + 1)]
     public void Multiply_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (Matrix matrix = new())
-        using (Matrix other = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Multiply(other, order));
-        }
+        using Matrix matrix = new();
+        using Matrix other = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Multiply(other, order));
     }
 
     [Fact]
@@ -371,11 +353,9 @@ public partial class MatrixTests
     {
         Matrix disposedMatrix = CreateDisposedMatrix();
 
-        using (Matrix other = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => disposedMatrix.Multiply(other));
-            AssertExtensions.Throws<ArgumentException>(null, () => disposedMatrix.Multiply(other, MatrixOrder.Prepend));
-        }
+        using Matrix other = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedMatrix.Multiply(other));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedMatrix.Multiply(other, MatrixOrder.Prepend));
     }
 
     [Fact]
@@ -383,34 +363,28 @@ public partial class MatrixTests
     {
         Matrix disposedMatrix = CreateDisposedMatrix();
 
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Multiply(disposedMatrix));
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Multiply(disposedMatrix, MatrixOrder.Prepend));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Multiply(disposedMatrix));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Multiply(disposedMatrix, MatrixOrder.Prepend));
     }
 
     [Fact]
     public void Multiply_SameMatrix_ThrowsInvalidOperationException()
     {
-        using (Matrix matrix = new())
-        {
-            Assert.Throws<InvalidOperationException>(() => matrix.Multiply(matrix));
-            Assert.Throws<InvalidOperationException>(() => matrix.Multiply(matrix, MatrixOrder.Prepend));
-        }
+        using Matrix matrix = new();
+        Assert.Throws<InvalidOperationException>(() => matrix.Multiply(matrix));
+        Assert.Throws<InvalidOperationException>(() => matrix.Multiply(matrix, MatrixOrder.Prepend));
     }
 
     [Fact]
     public void Reset_Matrix_ReturnsExpected()
     {
-        using (Matrix matrix = new(1, 2, 3, 4, 5, 6))
-        {
-            matrix.Reset();
-            Assert.Equal(new float[] { 1, 0, 0, 1, 0, 0 }, matrix.Elements);
+        using Matrix matrix = new(1, 2, 3, 4, 5, 6);
+        matrix.Reset();
+        Assert.Equal([1, 0, 0, 1, 0, 0], matrix.Elements);
 
-            matrix.Reset();
-            Assert.Equal(new float[] { 1, 0, 0, 1, 0, 0 }, matrix.Elements);
-        }
+        matrix.Reset();
+        Assert.Equal([1, 0, 0, 1, 0, 0], matrix.Elements);
     }
 
     [Fact]
@@ -470,38 +444,30 @@ public partial class MatrixTests
             {
                 if (point == Point.Empty)
                 {
-                    using (Matrix clone1 = matrix.Clone())
-                    {
-                        clone1.Rotate(angle);
-                        AssertEqualFloatArray(expectedElements, clone1.Elements);
-                        Assert.Equal(isIdentity, clone1.IsIdentity);
-                    }
+                    using Matrix clone1 = matrix.Clone();
+                    clone1.Rotate(angle);
+                    AssertEqualFloatArray(expectedElements, clone1.Elements);
+                    Assert.Equal(isIdentity, clone1.IsIdentity);
                 }
 
-                using (Matrix clone2 = matrix.Clone())
-                {
-                    clone2.RotateAt(angle, point);
-                    AssertEqualFloatArray(expectedElementsRotateAt ?? expectedElements, clone2.Elements);
-                    Assert.False(clone2.IsIdentity);
-                }
+                using Matrix clone2 = matrix.Clone();
+                clone2.RotateAt(angle, point);
+                AssertEqualFloatArray(expectedElementsRotateAt ?? expectedElements, clone2.Elements);
+                Assert.False(clone2.IsIdentity);
             }
 
             if (point == Point.Empty)
             {
-                using (Matrix clone3 = matrix.Clone())
-                {
-                    clone3.Rotate(angle, order);
-                    AssertEqualFloatArray(expectedElements, clone3.Elements);
-                    Assert.Equal(isIdentity, clone3.IsIdentity);
-                }
+                using Matrix clone3 = matrix.Clone();
+                clone3.Rotate(angle, order);
+                AssertEqualFloatArray(expectedElements, clone3.Elements);
+                Assert.Equal(isIdentity, clone3.IsIdentity);
             }
 
-            using (Matrix clone4 = matrix.Clone())
-            {
-                clone4.RotateAt(angle, point, order);
-                AssertEqualFloatArray(expectedElementsRotateAt ?? expectedElements, clone4.Elements);
-                Assert.False(clone4.IsIdentity);
-            }
+            using Matrix clone4 = matrix.Clone();
+            clone4.RotateAt(angle, point, order);
+            AssertEqualFloatArray(expectedElementsRotateAt ?? expectedElements, clone4.Elements);
+            Assert.False(clone4.IsIdentity);
         }
     }
 
@@ -516,10 +482,8 @@ public partial class MatrixTests
     [InlineData(MatrixOrder.Append + 1)]
     public void Rotate_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Rotate(1, order));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Rotate(1, order));
     }
 
     [Fact]
@@ -536,10 +500,8 @@ public partial class MatrixTests
     [InlineData(MatrixOrder.Append + 1)]
     public void RotateAt_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.RotateAt(1, PointF.Empty, order));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.RotateAt(1, PointF.Empty, order));
     }
 
     public static IEnumerable<object[]> Scale_TestData()
@@ -580,11 +542,9 @@ public partial class MatrixTests
         {
             if (order == MatrixOrder.Prepend)
             {
-                using (Matrix clone = matrix.Clone())
-                {
-                    clone.Scale(scaleX, scaleY);
-                    Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
-                }
+                using Matrix clone = matrix.Clone();
+                clone.Scale(scaleX, scaleY);
+                Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
             }
 
             matrix.Scale(scaleX, scaleY, order);
@@ -597,10 +557,8 @@ public partial class MatrixTests
     [InlineData(MatrixOrder.Append + 1)]
     public void Scale_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Shear(1, 2, order));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Shear(1, 2, order));
     }
 
     [Fact]
@@ -650,11 +608,9 @@ public partial class MatrixTests
         {
             if (order == MatrixOrder.Prepend)
             {
-                using (Matrix clone = matrix.Clone())
-                {
-                    clone.Shear(shearX, shearY);
-                    Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
-                }
+                using Matrix clone = matrix.Clone();
+                clone.Shear(shearX, shearY);
+                Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
             }
 
             matrix.Shear(shearX, shearY, order);
@@ -667,10 +623,8 @@ public partial class MatrixTests
     [InlineData(MatrixOrder.Append + 1)]
     public void Shear_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Shear(1, 2, order));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Shear(1, 2, order));
     }
 
     [Fact]
@@ -711,11 +665,9 @@ public partial class MatrixTests
         {
             if (order == MatrixOrder.Prepend)
             {
-                using (Matrix clone = matrix.Clone())
-                {
-                    clone.Translate(offsetX, offsetY);
-                    Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
-                }
+                using Matrix clone = matrix.Clone();
+                clone.Translate(offsetX, offsetY);
+                Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
             }
 
             matrix.Translate(offsetX, offsetY, order);
@@ -728,10 +680,8 @@ public partial class MatrixTests
     [InlineData(MatrixOrder.Append + 1)]
     public void Translate_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.Translate(1, 2, order));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.Translate(1, 2, order));
     }
 
     [Fact]
@@ -776,21 +726,17 @@ public partial class MatrixTests
     [Fact]
     public void TransformPoints_NullPoints_ThrowsArgumentNullException()
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformPoints((Point[])null));
-            AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformPoints((PointF[])null));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformPoints((Point[])null));
+        AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformPoints((PointF[])null));
     }
 
     [Fact]
     public void TransformPoints_EmptyPoints_ThrowsArgumentException()
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(new Point[0]));
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(new PointF[0]));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(new Point[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(new PointF[0]));
     }
 
     [Fact]
@@ -846,23 +792,19 @@ public partial class MatrixTests
     [Fact]
     public void TransformVectors_NullPoints_ThrowsArgumentNullException()
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.VectorTransformPoints(null));
-            AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformVectors((Point[])null));
-            AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformVectors((PointF[])null));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.VectorTransformPoints(null));
+        AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformVectors((Point[])null));
+        AssertExtensions.Throws<ArgumentNullException>("pts", () => matrix.TransformVectors((PointF[])null));
     }
 
     [Fact]
     public void TransformVectors_EmptyPoints_ThrowsArgumentException()
     {
-        using (Matrix matrix = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.VectorTransformPoints(new Point[0]));
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(new Point[0]));
-            AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(new PointF[0]));
-        }
+        using Matrix matrix = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.VectorTransformPoints([]));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(new Point[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(new PointF[0]));
     }
 
     [Fact]

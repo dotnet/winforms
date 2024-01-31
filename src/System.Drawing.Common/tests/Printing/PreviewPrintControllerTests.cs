@@ -15,20 +15,18 @@ public class PreviewPrintControllerTests
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPage_InvokeWithPrint_ReturnsNull()
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            controller.OnStartPrint(document, new PrintEventArgs());
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        controller.OnStartPrint(document, new PrintEventArgs());
 
-            PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, new PageSettings());
-            Assert.NotNull(controller.OnStartPage(document, printEventArgs));
+        PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, new PageSettings());
+        Assert.NotNull(controller.OnStartPage(document, printEventArgs));
 
-            // Call OnEndPage.
-            controller.OnEndPage(document, printEventArgs);
+        // Call OnEndPage.
+        controller.OnEndPage(document, printEventArgs);
 
-            // Call EndPrint.
-            controller.OnEndPrint(document, new PrintEventArgs());
-        }
+        // Call EndPrint.
+        controller.OnEndPrint(document, new PrintEventArgs());
     }
 
     [Fact]
@@ -42,46 +40,38 @@ public class PreviewPrintControllerTests
     [Fact]
     public void OnStartPage_InvokeNullEventArgs_ThrowsNullReferenceException()
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, null));
-        }
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, null));
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPage_InvokeNullEventArgsPageSettings_ReturnsNull()
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            controller.OnStartPrint(document, new PrintEventArgs());
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        controller.OnStartPrint(document, new PrintEventArgs());
 
-            PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, null);
-            Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, printEventArgs));
-        }
+        PrintPageEventArgs printEventArgs = new(null, Rectangle.Empty, Rectangle.Empty, null);
+        Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, printEventArgs));
     }
 
     [Fact]
     public void OnStartPage_PrintNotStarted_ThrowsNullReferenceException()
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            PrintPageEventArgs e = new(null, Rectangle.Empty, Rectangle.Empty, null);
-            Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, e));
-        }
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        PrintPageEventArgs e = new(null, Rectangle.Empty, Rectangle.Empty, null);
+        Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, e));
     }
 
     [Fact]
     public void OnEndPage_InvokeWithoutStarting_Nop()
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            controller.OnEndPage(document, new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null));
-            controller.OnEndPage(null, null);
-        }
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        controller.OnEndPage(document, new PrintPageEventArgs(null, Rectangle.Empty, Rectangle.Empty, null));
+        controller.OnEndPage(null, null);
     }
 
     public static IEnumerable<object[]> PrintEventArgs_TestData()
@@ -94,28 +84,24 @@ public class PreviewPrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnStartPrint_InvokeWithDocument_Success(PrintEventArgs e)
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            controller.OnStartPrint(document, e);
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        controller.OnStartPrint(document, e);
 
-            // Call OnEndPrint
-            controller.OnEndPrint(document, e);
-        }
+        // Call OnEndPrint
+        controller.OnEndPrint(document, e);
     }
 
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void OnStartPrint_InvokeMultipleTimes_Success()
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            controller.OnStartPrint(document, new PrintEventArgs());
-            controller.OnStartPrint(document, new PrintEventArgs());
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        controller.OnStartPrint(document, new PrintEventArgs());
+        controller.OnStartPrint(document, new PrintEventArgs());
 
-            // Call OnEndPrint
-            controller.OnEndPrint(document, new PrintEventArgs());
-        }
+        // Call OnEndPrint
+        controller.OnEndPrint(document, new PrintEventArgs());
     }
 
     [Fact]
@@ -129,11 +115,9 @@ public class PreviewPrintControllerTests
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnEndPrint_InvokeWithoutStarting_Nop(PrintEventArgs e)
     {
-        using (PrintDocument document = new())
-        {
-            PreviewPrintController controller = new();
-            controller.OnEndPrint(document, e);
-            controller.OnEndPrint(null, e);
-        }
+        using PrintDocument document = new();
+        PreviewPrintController controller = new();
+        controller.OnEndPrint(document, e);
+        controller.OnEndPrint(null, e);
     }
 }

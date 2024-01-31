@@ -37,12 +37,10 @@ public class IconTests
     [InlineData("pngwithheight_icon.ico")]
     public void Ctor_FilePath(string name)
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath(name)))
-        {
-            Assert.Equal(32, icon.Width);
-            Assert.Equal(32, icon.Height);
-            Assert.Equal(new Size(32, 32), icon.Size);
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath(name));
+        Assert.Equal(32, icon.Width);
+        Assert.Equal(32, icon.Height);
+        Assert.Equal(new Size(32, 32), icon.Size);
     }
 
     public static IEnumerable<object[]> Size_TestData()
@@ -69,24 +67,20 @@ public class IconTests
     [MemberData(nameof(Size_TestData))]
     public void Ctor_FilePath_Width_Height(string fileName, Size size, Size expectedSize)
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath(fileName), size.Width, size.Height))
-        {
-            Assert.Equal(expectedSize.Width, icon.Width);
-            Assert.Equal(expectedSize.Height, icon.Height);
-            Assert.Equal(expectedSize, icon.Size);
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath(fileName), size.Width, size.Height);
+        Assert.Equal(expectedSize.Width, icon.Width);
+        Assert.Equal(expectedSize.Height, icon.Height);
+        Assert.Equal(expectedSize, icon.Size);
     }
 
     [Theory]
     [MemberData(nameof(Size_TestData))]
     public void Ctor_FilePath_Size(string fileName, Size size, Size expectedSize)
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath(fileName), size))
-        {
-            Assert.Equal(expectedSize.Width, icon.Width);
-            Assert.Equal(expectedSize.Height, icon.Height);
-            Assert.Equal(expectedSize, icon.Size);
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath(fileName), size);
+        Assert.Equal(expectedSize.Width, icon.Width);
+        Assert.Equal(expectedSize.Height, icon.Height);
+        Assert.Equal(expectedSize, icon.Size);
     }
 
     [Fact]
@@ -100,13 +94,11 @@ public class IconTests
     [Fact]
     public void Ctor_Stream()
     {
-        using (var stream = File.OpenRead(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        {
-            Icon icon = new(stream);
-            Assert.Equal(32, icon.Width);
-            Assert.Equal(32, icon.Height);
-            Assert.Equal(new Size(32, 32), icon.Size);
-        }
+        using var stream = File.OpenRead(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        Icon icon = new(stream);
+        Assert.Equal(32, icon.Width);
+        Assert.Equal(32, icon.Height);
+        Assert.Equal(new Size(32, 32), icon.Size);
     }
 
     [Fact]
@@ -129,26 +121,22 @@ public class IconTests
     [MemberData(nameof(Size_TestData))]
     public void Ctor_Stream_Width_Height(string fileName, Size size, Size expectedSize)
     {
-        using (var stream = File.OpenRead(Helpers.GetTestBitmapPath(fileName)))
-        using (Icon icon = new(stream, size.Width, size.Height))
-        {
-            Assert.Equal(expectedSize.Width, icon.Width);
-            Assert.Equal(expectedSize.Height, icon.Height);
-            Assert.Equal(expectedSize, icon.Size);
-        }
+        using var stream = File.OpenRead(Helpers.GetTestBitmapPath(fileName));
+        using Icon icon = new(stream, size.Width, size.Height);
+        Assert.Equal(expectedSize.Width, icon.Width);
+        Assert.Equal(expectedSize.Height, icon.Height);
+        Assert.Equal(expectedSize, icon.Size);
     }
 
     [Theory]
     [MemberData(nameof(Size_TestData))]
     public void Ctor_Stream_Size(string fileName, Size size, Size expectedSize)
     {
-        using (var stream = File.OpenRead(Helpers.GetTestBitmapPath(fileName)))
-        using (Icon icon = new(stream, size))
-        {
-            Assert.Equal(expectedSize.Width, icon.Width);
-            Assert.Equal(expectedSize.Height, icon.Height);
-            Assert.Equal(expectedSize, icon.Size);
-        }
+        using var stream = File.OpenRead(Helpers.GetTestBitmapPath(fileName));
+        using Icon icon = new(stream, size);
+        Assert.Equal(expectedSize.Width, icon.Width);
+        Assert.Equal(expectedSize.Height, icon.Height);
+        Assert.Equal(expectedSize, icon.Size);
     }
 
     [Fact]
@@ -220,41 +208,35 @@ public class IconTests
     [MemberData(nameof(Ctor_InvalidBytesInStream_TestData))]
     public void Ctor_InvalidBytesInStream_ThrowsException(byte[] bytes, Type exceptionType)
     {
-        using (MemoryStream stream = new())
-        {
-            stream.Write(bytes, 0, bytes.Length);
+        using MemoryStream stream = new();
+        stream.Write(bytes, 0, bytes.Length);
 
-            stream.Position = 0;
-            Assert.Throws(exceptionType, () => new Icon(stream));
-        }
+        stream.Position = 0;
+        Assert.Throws(exceptionType, () => new Icon(stream));
     }
 
     [Theory]
     [MemberData(nameof(Size_TestData))]
     public void Ctor_Icon_Width_Height(string fileName, Size size, Size expectedSize)
     {
-        using (Icon sourceIcon = new(Helpers.GetTestBitmapPath(fileName)))
-        using (Icon icon = new(sourceIcon, size.Width, size.Height))
-        {
-            Assert.Equal(expectedSize.Width, icon.Width);
-            Assert.Equal(expectedSize.Height, icon.Height);
-            Assert.Equal(expectedSize, icon.Size);
-            Assert.NotEqual(sourceIcon.Handle, icon.Handle);
-        }
+        using Icon sourceIcon = new(Helpers.GetTestBitmapPath(fileName));
+        using Icon icon = new(sourceIcon, size.Width, size.Height);
+        Assert.Equal(expectedSize.Width, icon.Width);
+        Assert.Equal(expectedSize.Height, icon.Height);
+        Assert.Equal(expectedSize, icon.Size);
+        Assert.NotEqual(sourceIcon.Handle, icon.Handle);
     }
 
     [Theory]
     [MemberData(nameof(Size_TestData))]
     public void Ctor_Icon_Size(string fileName, Size size, Size expectedSize)
     {
-        using (Icon sourceIcon = new(Helpers.GetTestBitmapPath(fileName)))
-        using (Icon icon = new(sourceIcon, size))
-        {
-            Assert.Equal(expectedSize.Width, icon.Width);
-            Assert.Equal(expectedSize.Height, icon.Height);
-            Assert.Equal(expectedSize, icon.Size);
-            Assert.NotEqual(sourceIcon.Handle, icon.Handle);
-        }
+        using Icon sourceIcon = new(Helpers.GetTestBitmapPath(fileName));
+        using Icon icon = new(sourceIcon, size);
+        Assert.Equal(expectedSize.Width, icon.Width);
+        Assert.Equal(expectedSize.Height, icon.Height);
+        Assert.Equal(expectedSize, icon.Size);
+        Assert.NotEqual(sourceIcon.Handle, icon.Handle);
     }
 
     [Fact]
@@ -267,11 +249,9 @@ public class IconTests
     [Fact]
     public void Ctor_Type_Resource()
     {
-        using (Icon icon = new(typeof(IconTests), "48x48_multiple_entries_4bit.ico"))
-        {
-            Assert.Equal(32, icon.Height);
-            Assert.Equal(32, icon.Width);
-        }
+        using Icon icon = new(typeof(IconTests), "48x48_multiple_entries_4bit.ico");
+        Assert.Equal(32, icon.Height);
+        Assert.Equal(32, icon.Width);
     }
 
     [Fact]
@@ -298,29 +278,25 @@ public class IconTests
     [Fact]
     public void Clone_ConstructedIcon_Success()
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        using (Icon clone = Assert.IsType<Icon>(icon.Clone()))
-        {
-            Assert.NotSame(icon, clone);
-            Assert.NotEqual(icon.Handle, clone.Handle);
-            Assert.Equal(32, clone.Width);
-            Assert.Equal(32, clone.Height);
-            Assert.Equal(new Size(32, 32), clone.Size);
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        using Icon clone = Assert.IsType<Icon>(icon.Clone());
+        Assert.NotSame(icon, clone);
+        Assert.NotEqual(icon.Handle, clone.Handle);
+        Assert.Equal(32, clone.Width);
+        Assert.Equal(32, clone.Height);
+        Assert.Equal(new Size(32, 32), clone.Size);
     }
 
     [Fact]
     public void Clone_IconFromHandle_Success()
     {
-        using (var icon = Icon.FromHandle(SystemIcons.Hand.Handle))
-        using (Icon clone = Assert.IsType<Icon>(icon.Clone()))
-        {
-            Assert.NotSame(icon, clone);
-            Assert.NotEqual(icon.Handle, clone.Handle);
-            Assert.Equal(SystemIcons.Hand.Width, clone.Width);
-            Assert.Equal(SystemIcons.Hand.Height, clone.Height);
-            Assert.Equal(SystemIcons.Hand.Size, clone.Size);
-        }
+        using var icon = Icon.FromHandle(SystemIcons.Hand.Handle);
+        using Icon clone = Assert.IsType<Icon>(icon.Clone());
+        Assert.NotSame(icon, clone);
+        Assert.NotEqual(icon.Handle, clone.Handle);
+        Assert.Equal(SystemIcons.Hand.Width, clone.Width);
+        Assert.Equal(SystemIcons.Hand.Height, clone.Height);
+        Assert.Equal(SystemIcons.Hand.Size, clone.Size);
     }
 
     [Fact]
@@ -343,15 +319,13 @@ public class IconTests
     [Fact]
     public void Dispose_DoesNotOwnHandle_DoesNotDestroyHandle()
     {
-        using (Icon source = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        using (var icon = Icon.FromHandle(source.Handle))
-        {
-            IntPtr handle = icon.Handle;
-            Assert.NotEqual(IntPtr.Zero, handle);
+        using Icon source = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        using var icon = Icon.FromHandle(source.Handle);
+        IntPtr handle = icon.Handle;
+        Assert.NotEqual(IntPtr.Zero, handle);
 
-            icon.Dispose();
-            Assert.Equal(handle, icon.Handle);
-        }
+        icon.Dispose();
+        Assert.Equal(handle, icon.Handle);
     }
 
     [Theory]
@@ -360,19 +334,15 @@ public class IconTests
     [InlineData(48)]
     public void XpIcon_ToBitmap_Success(int size)
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_32bit.ico"), size, size))
-        {
-            Assert.Equal(size, icon.Width);
-            Assert.Equal(size, icon.Height);
-            Assert.Equal(new Size(size, size), icon.Size);
+        using Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_32bit.ico"), size, size);
+        Assert.Equal(size, icon.Width);
+        Assert.Equal(size, icon.Height);
+        Assert.Equal(new Size(size, size), icon.Size);
 
-            using (Bitmap bitmap = icon.ToBitmap())
-            {
-                Assert.Equal(size, bitmap.Width);
-                Assert.Equal(size, bitmap.Height);
-                Assert.Equal(new Size(size, size), bitmap.Size);
-            }
-        }
+        using Bitmap bitmap = icon.ToBitmap();
+        Assert.Equal(size, bitmap.Width);
+        Assert.Equal(size, bitmap.Height);
+        Assert.Equal(new Size(size, size), bitmap.Size);
     }
 
     [Fact]
@@ -406,11 +376,9 @@ public class IconTests
 
     private void ExtractAssociatedIcon_FilePath_Success_Helper(string filePath)
     {
-        using (Icon icon = Icon.ExtractAssociatedIcon(filePath))
-        {
-            Assert.Equal(32, icon.Width);
-            Assert.Equal(32, icon.Height);
-        }
+        using Icon icon = Icon.ExtractAssociatedIcon(filePath);
+        Assert.Equal(32, icon.Width);
+        Assert.Equal(32, icon.Height);
     }
 
     [Fact]
@@ -461,12 +429,10 @@ public class IconTests
     public void Save_OutputStream_ProducesIdenticalBytes()
     {
         string filePath = Helpers.GetTestBitmapPath("256x256_seven_entries_multiple_bits.ico");
-        using (Icon icon = new(filePath))
-        using (MemoryStream outputStream = new())
-        {
-            icon.Save(outputStream);
-            Assert.Equal(File.ReadAllBytes(filePath), outputStream.ToArray());
-        }
+        using Icon icon = new(filePath);
+        using MemoryStream outputStream = new();
+        icon.Save(outputStream);
+        Assert.Equal(File.ReadAllBytes(filePath), outputStream.ToArray());
     }
 
     [Fact]
@@ -475,65 +441,55 @@ public class IconTests
         string filePath = Helpers.GetTestBitmapPath("256x256_seven_entries_multiple_bits.ico");
         Icon icon = new(filePath);
         icon.Dispose();
-        using (MemoryStream outputStream = new())
-        {
-            icon.Save(outputStream);
-            Assert.Equal(File.ReadAllBytes(filePath), outputStream.ToArray());
-        }
+        using MemoryStream outputStream = new();
+        icon.Save(outputStream);
+        Assert.Equal(File.ReadAllBytes(filePath), outputStream.ToArray());
     }
 
     [Fact]
     public void Save_NullOutputStreamIconData_ThrowsNullReferenceException()
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        {
-            Assert.Throws<NullReferenceException>(() => icon.Save(null));
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        Assert.Throws<NullReferenceException>(() => icon.Save(null));
     }
 
     [Fact]
     public void Save_NullOutputStreamNoIconData_ThrowsArgumentNullException()
     {
-        using (Icon source = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        {
-            var icon = Icon.FromHandle(source.Handle);
-            icon.Dispose();
+        using Icon source = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        var icon = Icon.FromHandle(source.Handle);
+        icon.Dispose();
 
-            AssertExtensions.Throws<ArgumentNullException>("outputStream", "dataStream", () => icon.Save(null));
-        }
+        AssertExtensions.Throws<ArgumentNullException>("outputStream", "dataStream", () => icon.Save(null));
     }
 
     [Fact]
     public void Save_ClosedOutputStreamIconData_ThrowsException()
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        {
-            MemoryStream stream = new();
-            stream.Close();
+        using Icon icon = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        MemoryStream stream = new();
+        stream.Close();
 
-            Assert.Throws<ObjectDisposedException>(() => icon.Save(stream));
-        }
+        Assert.Throws<ObjectDisposedException>(() => icon.Save(stream));
     }
 
     [Fact]
     public void Save_ClosedOutputStreamNoIconData()
     {
-        using (Icon source = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
-        using (var icon = Icon.FromHandle(source.Handle))
-        {
-            MemoryStream stream = new();
-            stream.Close();
+        using Icon source = new(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
+        using var icon = Icon.FromHandle(source.Handle);
+        MemoryStream stream = new();
+        stream.Close();
 
-            if (PlatformDetection.IsNetFramework)
-            {
-                // The ObjectDisposedException is ignored in previous .NET versions,
-                // so the following does nothing.
-                icon.Save(stream);
-            }
-            else
-            {
-                Assert.Throws<ObjectDisposedException>(() => icon.Save(stream));
-            }
+        if (PlatformDetection.IsNetFramework)
+        {
+            // The ObjectDisposedException is ignored in previous .NET versions,
+            // so the following does nothing.
+            icon.Save(stream);
+        }
+        else
+        {
+            Assert.Throws<ObjectDisposedException>(() => icon.Save(stream));
         }
     }
 
@@ -564,17 +520,15 @@ public class IconTests
     {
         try
         {
-            using (Bitmap bitmap = icon.ToBitmap())
-            {
-                Assert.NotSame(icon.ToBitmap(), bitmap);
-                Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
-                Assert.Empty(bitmap.Palette.Entries);
-                Assert.Equal(icon.Width, bitmap.Width);
-                Assert.Equal(icon.Height, bitmap.Height);
+            using Bitmap bitmap = icon.ToBitmap();
+            Assert.NotSame(icon.ToBitmap(), bitmap);
+            Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
+            Assert.Empty(bitmap.Palette.Entries);
+            Assert.Equal(icon.Width, bitmap.Width);
+            Assert.Equal(icon.Height, bitmap.Height);
 
-                Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
-                Assert.Equal(2, bitmap.Flags);
-            }
+            Assert.Equal(ImageFormat.MemoryBmp, bitmap.RawFormat);
+            Assert.Equal(2, bitmap.Flags);
         }
         finally
         {
@@ -587,11 +541,9 @@ public class IconTests
     {
         // Handle refers to an icon without any colour. This is not in ToBitmap_TestData as there is
         // a chance that the original icon will be finalized as it is not kept alive in the iterator.
-        using (Icon originalIcon = new(Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico")))
-        using (Icon icon = Icon.FromHandle(originalIcon.Handle))
-        {
-            ToBitmap_BitmapIcon_ReturnsExpected(icon);
-        }
+        using Icon originalIcon = new(Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico"));
+        using Icon icon = Icon.FromHandle(originalIcon.Handle);
+        ToBitmap_BitmapIcon_ReturnsExpected(icon);
     }
 
     private const string DontSupportPngFramesInIcons = "Switch.System.Drawing.DontSupportPngFramesInIcons";
@@ -601,22 +553,20 @@ public class IconTests
     {
         void VerifyPng()
         {
-            using (Icon icon = GetPngIcon())
-            using (Bitmap bitmap = icon.ToBitmap())
+            using Icon icon = GetPngIcon();
+            using Bitmap bitmap = icon.ToBitmap();
+            using (Bitmap secondBitmap = icon.ToBitmap())
             {
-                using (Bitmap secondBitmap = icon.ToBitmap())
-                {
-                    Assert.NotSame(icon.ToBitmap(), bitmap);
-                }
-
-                Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
-                Assert.Empty(bitmap.Palette.Entries);
-                Assert.Equal(icon.Width, bitmap.Width);
-                Assert.Equal(icon.Height, bitmap.Height);
-
-                Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
-                Assert.Equal(77842, bitmap.Flags);
+                Assert.NotSame(icon.ToBitmap(), bitmap);
             }
+
+            Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
+            Assert.Empty(bitmap.Palette.Entries);
+            Assert.Equal(icon.Width, bitmap.Width);
+            Assert.Equal(icon.Height, bitmap.Height);
+
+            Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
+            Assert.Equal(77842, bitmap.Flags);
         }
 
         if (RemoteExecutor.IsSupported && (!AppContext.TryGetSwitch(DontSupportPngFramesInIcons, out bool isEnabled) || isEnabled))
@@ -638,10 +588,8 @@ public class IconTests
     {
         void VerifyPngNotSupported()
         {
-            using (Icon icon = GetPngIcon())
-            {
-                AssertExtensions.Throws<ArgumentOutOfRangeException>(null, () => icon.ToBitmap());
-            }
+            using Icon icon = GetPngIcon();
+            AssertExtensions.Throws<ArgumentOutOfRangeException>(null, () => icon.ToBitmap());
         }
 
         if (RemoteExecutor.IsSupported && (!AppContext.TryGetSwitch(DontSupportPngFramesInIcons, out bool isEnabled) || !isEnabled))
@@ -661,60 +609,52 @@ public class IconTests
 
     private static Icon GetPngIcon()
     {
-        using (MemoryStream stream = new())
+        using MemoryStream stream = new();
+        // Create a PNG inside an ICO.
+        using (Bitmap bitmap = new(10, 10))
         {
-            // Create a PNG inside an ICO.
-            using (Bitmap bitmap = new(10, 10))
-            {
-                stream.Write(new byte[] { 0, 0, 1, 0, 1, 0, (byte)bitmap.Width, (byte)bitmap.Height, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 22, 0, 0, 0 }, 0, 22);
+            stream.Write([0, 0, 1, 0, 1, 0, (byte)bitmap.Width, (byte)bitmap.Height, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 22, 0, 0, 0], 0, 22);
 
-                // Writing actual data
-                bitmap.Save(stream, ImageFormat.Png);
-            }
-
-            // Getting data length (file length minus header)
-            long length = stream.Length - 22;
-            stream.Seek(14, SeekOrigin.Begin);
-            stream.WriteByte((byte)length);
-            stream.WriteByte((byte)(length >> 8));
-
-            // Read the PNG inside an ICO.
-            stream.Position = 0;
-            return new Icon(stream);
+            // Writing actual data
+            bitmap.Save(stream, ImageFormat.Png);
         }
+
+        // Getting data length (file length minus header)
+        long length = stream.Length - 22;
+        stream.Seek(14, SeekOrigin.Begin);
+        stream.WriteByte((byte)length);
+        stream.WriteByte((byte)(length >> 8));
+
+        // Read the PNG inside an ICO.
+        stream.Position = 0;
+        return new Icon(stream);
     }
 
     [Fact]
     public void FromHandle_IconHandleOneTime_Success()
     {
-        using (Icon icon1 = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
+        using Icon icon1 = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico"));
+        using Icon icon2 = Icon.FromHandle(icon1.Handle);
+        Assert.Equal(icon1.Handle, icon2.Handle);
+        Assert.Equal(icon1.Size, icon2.Size);
+        SaveAndCompare(icon2, false);
+    }
+
+    [Fact]
+    public void FromHandle_IconHandleMultipleTime_Success()
+    {
+        using Icon icon1 = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico"));
         using (Icon icon2 = Icon.FromHandle(icon1.Handle))
         {
             Assert.Equal(icon1.Handle, icon2.Handle);
             Assert.Equal(icon1.Size, icon2.Size);
             SaveAndCompare(icon2, false);
         }
-    }
 
-    [Fact]
-    public void FromHandle_IconHandleMultipleTime_Success()
-    {
-        using (Icon icon1 = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
-        {
-            using (Icon icon2 = Icon.FromHandle(icon1.Handle))
-            {
-                Assert.Equal(icon1.Handle, icon2.Handle);
-                Assert.Equal(icon1.Size, icon2.Size);
-                SaveAndCompare(icon2, false);
-            }
-
-            using (Icon icon3 = Icon.FromHandle(icon1.Handle))
-            {
-                Assert.Equal(icon1.Handle, icon3.Handle);
-                Assert.Equal(icon1.Size, icon3.Size);
-                SaveAndCompare(icon3, false);
-            }
-        }
+        using Icon icon3 = Icon.FromHandle(icon1.Handle);
+        Assert.Equal(icon1.Handle, icon3.Handle);
+        Assert.Equal(icon1.Size, icon3.Size);
+        SaveAndCompare(icon3, false);
     }
 
     [Fact]
@@ -726,12 +666,10 @@ public class IconTests
             handle = icon1.ToBitmap().GetHicon();
         }
 
-        using (Icon icon2 = Icon.FromHandle(handle))
-        {
-            Assert.Equal(handle, icon2.Handle);
-            Assert.Equal(new Size(16, 16), icon2.Size);
-            SaveAndCompare(icon2, false);
-        }
+        using Icon icon2 = Icon.FromHandle(handle);
+        Assert.Equal(handle, icon2.Handle);
+        Assert.Equal(new Size(16, 16), icon2.Size);
+        SaveAndCompare(icon2, false);
     }
 
     [Fact]
@@ -750,12 +688,10 @@ public class IconTests
             SaveAndCompare(icon2, false);
         }
 
-        using (Icon icon3 = Icon.FromHandle(handle))
-        {
-            Assert.Equal(handle, icon3.Handle);
-            Assert.Equal(new Size(16, 16), icon3.Size);
-            SaveAndCompare(icon3, false);
-        }
+        using Icon icon3 = Icon.FromHandle(handle);
+        Assert.Equal(handle, icon3.Handle);
+        Assert.Equal(new Size(16, 16), icon3.Size);
+        SaveAndCompare(icon3, false);
     }
 
     [Fact]
@@ -777,39 +713,33 @@ public class IconTests
 
     private static void SaveAndCompare(Icon icon, bool alpha)
     {
-        using (MemoryStream outputStream = new())
+        using MemoryStream outputStream = new();
+        icon.Save(outputStream);
+        outputStream.Position = 0;
+
+        using Icon loaded = new(outputStream);
+        Assert.Equal(icon.Height, loaded.Height);
+        Assert.Equal(icon.Width, loaded.Width);
+
+        using Bitmap expected = icon.ToBitmap();
+        using Bitmap actual = loaded.ToBitmap();
+        Assert.Equal(expected.Height, actual.Height);
+        Assert.Equal(expected.Width, actual.Width);
+
+        for (int y = 0; y < expected.Height; y++)
         {
-            icon.Save(outputStream);
-            outputStream.Position = 0;
-
-            using (Icon loaded = new(outputStream))
+            for (int x = 0; x < expected.Width; x++)
             {
-                Assert.Equal(icon.Height, loaded.Height);
-                Assert.Equal(icon.Width, loaded.Width);
-
-                using (Bitmap expected = icon.ToBitmap())
-                using (Bitmap actual = loaded.ToBitmap())
+                Color e = expected.GetPixel(x, y);
+                Color a = actual.GetPixel(x, y);
+                if (alpha)
                 {
-                    Assert.Equal(expected.Height, actual.Height);
-                    Assert.Equal(expected.Width, actual.Width);
-
-                    for (int y = 0; y < expected.Height; y++)
-                    {
-                        for (int x = 0; x < expected.Width; x++)
-                        {
-                            Color e = expected.GetPixel(x, y);
-                            Color a = actual.GetPixel(x, y);
-                            if (alpha)
-                            {
-                                Assert.Equal(e.A, a.A);
-                            }
-
-                            Assert.Equal(e.R, a.R);
-                            Assert.Equal(e.G, a.G);
-                            Assert.Equal(e.B, a.B);
-                        }
-                    }
+                    Assert.Equal(e.A, a.A);
                 }
+
+                Assert.Equal(e.R, a.R);
+                Assert.Equal(e.G, a.G);
+                Assert.Equal(e.B, a.B);
             }
         }
     }
@@ -817,41 +747,35 @@ public class IconTests
     [Fact]
     public void CorrectColorDepthExtracted()
     {
-        using (var stream = File.OpenRead(Helpers.GetTestBitmapPath("pngwithheight_icon.ico")))
+        using var stream = File.OpenRead(Helpers.GetTestBitmapPath("pngwithheight_icon.ico"));
+        using Icon icon = new(stream, new Size(32, 32));
+        // The first 32x32 icon isn't 32 bit. Checking a few pixels that are in the 32 bit entry.
+        using Bitmap bitmap = icon.ToBitmap();
+        Assert.Equal(new Size(32, 32), bitmap.Size);
+
+        int expectedBitDepth;
+        string fieldName = PlatformDetection.IsNetFramework ? "bitDepth" : "s_bitDepth";
+        FieldInfo fi = typeof(Icon).GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic);
+        expectedBitDepth = (int)fi.GetValue(null);
+
+        // If the first icon entry was picked, the color would be black: 0xFF000000?
+
+        switch (expectedBitDepth)
         {
-            using (Icon icon = new(stream, new Size(32, 32)))
-            {
-                // The first 32x32 icon isn't 32 bit. Checking a few pixels that are in the 32 bit entry.
-                using (Bitmap bitmap = icon.ToBitmap())
-                {
-                    Assert.Equal(new Size(32, 32), bitmap.Size);
-
-                    int expectedBitDepth;
-                    string fieldName = PlatformDetection.IsNetFramework ? "bitDepth" : "s_bitDepth";
-                    FieldInfo fi = typeof(Icon).GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic);
-                    expectedBitDepth = (int)fi.GetValue(null);
-
-                    // If the first icon entry was picked, the color would be black: 0xFF000000?
-
-                    switch (expectedBitDepth)
-                    {
-                        case 32:
-                            Assert.Equal(0x879EE532u, (uint)bitmap.GetPixel(0, 0).ToArgb());
-                            Assert.Equal(0x661CD8B7u, (uint)bitmap.GetPixel(0, 31).ToArgb());
-                            break;
-                        case 16:
-                        case 8:
-                            // There is no 16 bit 32x32 icon in this file, 8 will be picked
-                            // as the closest match.
-                            Assert.Equal(0x00000000u, (uint)bitmap.GetPixel(0, 0).ToArgb());
-                            Assert.Equal(0xFF000000u, (uint)bitmap.GetPixel(0, 31).ToArgb());
-                            break;
-                        default:
-                            Assert.Fail($"Unexpected bitmap depth: {expectedBitDepth}");
-                            break;
-                    }
-                }
-            }
+            case 32:
+                Assert.Equal(0x879EE532u, (uint)bitmap.GetPixel(0, 0).ToArgb());
+                Assert.Equal(0x661CD8B7u, (uint)bitmap.GetPixel(0, 31).ToArgb());
+                break;
+            case 16:
+            case 8:
+                // There is no 16 bit 32x32 icon in this file, 8 will be picked
+                // as the closest match.
+                Assert.Equal(0x00000000u, (uint)bitmap.GetPixel(0, 0).ToArgb());
+                Assert.Equal(0xFF000000u, (uint)bitmap.GetPixel(0, 31).ToArgb());
+                break;
+            default:
+                Assert.Fail($"Unexpected bitmap depth: {expectedBitDepth}");
+                break;
         }
     }
 

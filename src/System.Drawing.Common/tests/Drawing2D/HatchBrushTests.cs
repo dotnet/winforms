@@ -15,15 +15,13 @@ public class HatchBrushTests
     [MemberData(nameof(Ctor_HatchStyle_ForeColor_TestData))]
     public void Ctor_HatchStyle_ForeColor(HatchStyle hatchStyle, Color foreColor)
     {
-        using (HatchBrush brush = new(hatchStyle, foreColor))
-        {
-            Assert.Equal(hatchStyle, brush.HatchStyle);
+        using HatchBrush brush = new(hatchStyle, foreColor);
+        Assert.Equal(hatchStyle, brush.HatchStyle);
 
-            Assert.NotEqual(foreColor, brush.ForegroundColor);
-            Assert.Equal(foreColor.ToArgb(), brush.ForegroundColor.ToArgb());
+        Assert.NotEqual(foreColor, brush.ForegroundColor);
+        Assert.Equal(foreColor.ToArgb(), brush.ForegroundColor.ToArgb());
 
-            Assert.Equal(Color.FromArgb(255, 0, 0, 0), brush.BackgroundColor);
-        }
+        Assert.Equal(Color.FromArgb(255, 0, 0, 0), brush.BackgroundColor);
     }
 
     public static IEnumerable<object[]> Ctor_HatchStyle_ForeColor_BackColor_TestData()
@@ -36,16 +34,14 @@ public class HatchBrushTests
     [MemberData(nameof(Ctor_HatchStyle_ForeColor_BackColor_TestData))]
     public void Ctor_HatchStyle_ForeColor_BackColor(HatchStyle hatchStyle, Color foreColor, Color backColor)
     {
-        using (HatchBrush brush = new(hatchStyle, foreColor, backColor))
-        {
-            Assert.Equal(hatchStyle, brush.HatchStyle);
+        using HatchBrush brush = new(hatchStyle, foreColor, backColor);
+        Assert.Equal(hatchStyle, brush.HatchStyle);
 
-            Assert.NotEqual(foreColor, brush.ForegroundColor);
-            Assert.Equal(foreColor.ToArgb(), brush.ForegroundColor.ToArgb());
+        Assert.NotEqual(foreColor, brush.ForegroundColor);
+        Assert.Equal(foreColor.ToArgb(), brush.ForegroundColor.ToArgb());
 
-            Assert.NotEqual(backColor, brush.BackgroundColor);
-            Assert.Equal(backColor.ToArgb(), brush.BackgroundColor.ToArgb());
-        }
+        Assert.NotEqual(backColor, brush.BackgroundColor);
+        Assert.Equal(backColor.ToArgb(), brush.BackgroundColor.ToArgb());
     }
 
     [Theory]
@@ -60,15 +56,13 @@ public class HatchBrushTests
     [Fact]
     public void Clone_Brush_ReturnsClone()
     {
-        using (HatchBrush brush = new(HatchStyle.DarkDownwardDiagonal, Color.Magenta, Color.Peru))
-        {
-            HatchBrush clone = Assert.IsType<HatchBrush>(brush.Clone());
+        using HatchBrush brush = new(HatchStyle.DarkDownwardDiagonal, Color.Magenta, Color.Peru);
+        HatchBrush clone = Assert.IsType<HatchBrush>(brush.Clone());
 
-            Assert.NotSame(clone, brush);
-            Assert.Equal(brush.HatchStyle, clone.HatchStyle);
-            Assert.Equal(brush.ForegroundColor, clone.ForegroundColor);
-            Assert.Equal(brush.BackgroundColor, clone.BackgroundColor);
-        }
+        Assert.NotSame(clone, brush);
+        Assert.Equal(brush.HatchStyle, clone.HatchStyle);
+        Assert.Equal(brush.ForegroundColor, clone.ForegroundColor);
+        Assert.Equal(brush.BackgroundColor, clone.BackgroundColor);
     }
 
     [Fact]

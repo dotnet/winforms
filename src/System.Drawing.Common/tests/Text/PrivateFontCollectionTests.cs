@@ -10,10 +10,8 @@ public class PrivateFontCollectionTests
     [Fact]
     public void Ctor_Default()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            Assert.Empty(fontCollection.Families);
-        }
+        using PrivateFontCollection fontCollection = new();
+        Assert.Empty(fontCollection.Families);
     }
 
     [Fact]
@@ -25,14 +23,12 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (PrivateFontCollection fontCollection = new())
-        {
-            fontCollection.AddFontFile(Helpers.GetTestBitmapPath("empty.file"));
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+        using PrivateFontCollection fontCollection = new();
+        fontCollection.AddFontFile(Helpers.GetTestBitmapPath("empty.file"));
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            FontFamily fontFamily = Assert.Single(fontCollection.Families);
-            Assert.Equal("Code New Roman", fontFamily.Name);
-        }
+        FontFamily fontFamily = Assert.Single(fontCollection.Families);
+        Assert.Equal("Code New Roman", fontFamily.Name);
     }
 
     [Fact]
@@ -44,14 +40,12 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (PrivateFontCollection fontCollection = new())
-        {
-            string relativePath = Path.Combine("fonts", "CodeNewRoman.ttf");
-            fontCollection.AddFontFile(relativePath);
+        using PrivateFontCollection fontCollection = new();
+        string relativePath = Path.Combine("fonts", "CodeNewRoman.ttf");
+        fontCollection.AddFontFile(relativePath);
 
-            FontFamily fontFamily = Assert.Single(fontCollection.Families);
-            Assert.Equal("Code New Roman", fontFamily.Name);
-        }
+        FontFamily fontFamily = Assert.Single(fontCollection.Families);
+        Assert.Equal("Code New Roman", fontFamily.Name);
     }
 
     [Fact]
@@ -63,14 +57,12 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (PrivateFontCollection fontCollection = new())
-        {
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
+        using PrivateFontCollection fontCollection = new();
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
 
-            FontFamily fontFamily = Assert.Single(fontCollection.Families);
-            Assert.Equal("Code New Roman", fontFamily.Name);
-        }
+        FontFamily fontFamily = Assert.Single(fontCollection.Families);
+        Assert.Equal("Code New Roman", fontFamily.Name);
     }
 
     [Fact]
@@ -82,45 +74,37 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (PrivateFontCollection fontCollection = new())
-        {
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
-            fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+        using PrivateFontCollection fontCollection = new();
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.ttf"));
+        fontCollection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            // Verify that the first file is used by checking that it contains metadata
-            // associated with CodeNewRoman.ttf.
-            const int FrenchLCID = 1036;
-            FontFamily fontFamily = Assert.Single(fontCollection.Families);
-            Assert.Equal("Code New Roman", fontFamily.Name);
-            Assert.Equal("Bonjour", fontFamily.GetName(FrenchLCID));
-        }
+        // Verify that the first file is used by checking that it contains metadata
+        // associated with CodeNewRoman.ttf.
+        const int FrenchLCID = 1036;
+        FontFamily fontFamily = Assert.Single(fontCollection.Families);
+        Assert.Equal("Code New Roman", fontFamily.Name);
+        Assert.Equal("Bonjour", fontFamily.GetName(FrenchLCID));
     }
 
     [Fact]
     public void AddFontFile_NullFileName_ThrowsArgumentNullException()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            AssertExtensions.Throws<ArgumentNullException>("filename", "path", () => fontCollection.AddFontFile(null));
-        }
+        using PrivateFontCollection fontCollection = new();
+        AssertExtensions.Throws<ArgumentNullException>("filename", "path", () => fontCollection.AddFontFile(null));
     }
 
     [Fact]
     public void AddFontFile_InvalidPath_ThrowsArgumentException()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            AssertExtensions.Throws<ArgumentException>("path", null, () => fontCollection.AddFontFile(string.Empty));
-        }
+        using PrivateFontCollection fontCollection = new();
+        AssertExtensions.Throws<ArgumentException>("path", null, () => fontCollection.AddFontFile(string.Empty));
     }
 
     [Fact]
     public void AddFontFile_NoSuchFilePath_ThrowsFileNotFoundException()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            Assert.Throws<FileNotFoundException>(() => fontCollection.AddFontFile("fileName"));
-        }
+        using PrivateFontCollection fontCollection = new();
+        Assert.Throws<FileNotFoundException>(() => fontCollection.AddFontFile("fileName"));
     }
 
     [Fact]
@@ -134,10 +118,8 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddFontFile_Directory_ThrowsFileNotFoundException()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            AssertExtensions.Throws<FileNotFoundException, ExternalException>(() => fontCollection.AddFontFile(AppContext.BaseDirectory));
-        }
+        using PrivateFontCollection fontCollection = new();
+        AssertExtensions.Throws<FileNotFoundException, ExternalException>(() => fontCollection.AddFontFile(AppContext.BaseDirectory));
     }
 
     [Fact]
@@ -152,33 +134,29 @@ public class PrivateFontCollectionTests
     [Fact]
     public void AddMemoryFont_ValidMemory_Success()
     {
-        using (PrivateFontCollection fontCollection = new())
+        using PrivateFontCollection fontCollection = new();
+        byte[] data = File.ReadAllBytes(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+
+        IntPtr fontBuffer = Marshal.AllocCoTaskMem(data.Length);
+        try
         {
-            byte[] data = File.ReadAllBytes(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+            Marshal.Copy(data, 0, fontBuffer, data.Length);
+            fontCollection.AddMemoryFont(fontBuffer, data.Length);
 
-            IntPtr fontBuffer = Marshal.AllocCoTaskMem(data.Length);
-            try
-            {
-                Marshal.Copy(data, 0, fontBuffer, data.Length);
-                fontCollection.AddMemoryFont(fontBuffer, data.Length);
-
-                FontFamily font = Assert.Single(fontCollection.Families);
-                Assert.Equal("Code New Roman", font.Name);
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(fontBuffer);
-            }
+            FontFamily font = Assert.Single(fontCollection.Families);
+            Assert.Equal("Code New Roman", font.Name);
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(fontBuffer);
         }
     }
 
     [Fact]
     public void AddMemoryFont_ZeroMemory_ThrowsArgumentException()
     {
-        using (PrivateFontCollection fontCollection = new())
-        {
-            AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont(IntPtr.Zero, 100));
-        }
+        using PrivateFontCollection fontCollection = new();
+        AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont(IntPtr.Zero, 100));
     }
 
     [Theory]
@@ -192,20 +170,18 @@ public class PrivateFontCollectionTests
             return;
         }
 
-        using (PrivateFontCollection fontCollection = new())
-        {
-            byte[] data = File.ReadAllBytes(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+        using PrivateFontCollection fontCollection = new();
+        byte[] data = File.ReadAllBytes(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-            IntPtr fontBuffer = Marshal.AllocCoTaskMem(data.Length);
-            try
-            {
-                Marshal.Copy(data, 0, fontBuffer, data.Length);
-                AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont(fontBuffer, length));
-            }
-            finally
-            {
-                Marshal.FreeCoTaskMem(fontBuffer);
-            }
+        IntPtr fontBuffer = Marshal.AllocCoTaskMem(data.Length);
+        try
+        {
+            Marshal.Copy(data, 0, fontBuffer, data.Length);
+            AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont(fontBuffer, length));
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(fontBuffer);
         }
     }
 
@@ -215,7 +191,7 @@ public class PrivateFontCollectionTests
         PrivateFontCollection fontCollection = new();
         fontCollection.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont((IntPtr)10, 100));
+        AssertExtensions.Throws<ArgumentException>(null, () => fontCollection.AddMemoryFont(10, 100));
     }
 
     [Fact]

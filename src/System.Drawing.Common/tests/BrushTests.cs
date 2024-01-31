@@ -8,14 +8,12 @@ public class BrushTests
     [Fact]
     public void SetNativeBrush_Brush_Success()
     {
-        using (SubBrush brush = new())
-        {
-            brush.PublicSetNativeBrush(10);
-            brush.PublicSetNativeBrush(IntPtr.Zero);
+        using SubBrush brush = new();
+        brush.PublicSetNativeBrush(10);
+        brush.PublicSetNativeBrush(IntPtr.Zero);
 
-            brush.PublicSetNativeBrush(10);
-            brush.PublicSetNativeBrush(IntPtr.Zero);
-        }
+        brush.PublicSetNativeBrush(10);
+        brush.PublicSetNativeBrush(IntPtr.Zero);
     }
 
     [Fact]

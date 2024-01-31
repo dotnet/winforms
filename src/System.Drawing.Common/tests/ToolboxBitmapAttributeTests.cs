@@ -33,16 +33,14 @@ namespace System.Drawing.Tests
         {
             ToolboxBitmapAttribute attribute = new(fileName);
 
-            using (Image image = attribute.GetImage(null))
+            using Image image = attribute.GetImage(null);
+            if (size == Size.Empty)
             {
-                if (size == Size.Empty)
-                {
-                    AssertDefaultSize(image);
-                }
-                else
-                {
-                    Assert.Equal(size, image.Size);
-                }
+                AssertDefaultSize(image);
+            }
+            else
+            {
+                Assert.Equal(size, image.Size);
             }
         }
 
@@ -54,16 +52,14 @@ namespace System.Drawing.Tests
         public void Ctor_Type(Type? type, int width, int height)
         {
             ToolboxBitmapAttribute attribute = new(type);
-            using (Image image = attribute.GetImage(type))
+            using Image image = attribute.GetImage(type);
+            if (width == -1 && height == -1)
             {
-                if (width == -1 && height == -1)
-                {
-                    AssertDefaultSize(image);
-                }
-                else
-                {
-                    Assert.Equal(new Size(width, height), image.Size);
-                }
+                AssertDefaultSize(image);
+            }
+            else
+            {
+                Assert.Equal(new Size(width, height), image.Size);
             }
         }
 
@@ -83,16 +79,14 @@ namespace System.Drawing.Tests
         {
             ToolboxBitmapAttribute attribute = new(type, fileName);
 
-            using (Image image = attribute.GetImage(type, fileName, false))
+            using Image image = attribute.GetImage(type, fileName, false);
+            if (width == -1 && height == -1)
             {
-                if (width == -1 && height == -1)
-                {
-                    AssertDefaultSize(image);
-                }
-                else
-                {
-                    Assert.Equal(new Size(width, height), image.Size);
-                }
+                AssertDefaultSize(image);
+            }
+            else
+            {
+                Assert.Equal(new Size(width, height), image.Size);
             }
         }
 
@@ -126,15 +120,11 @@ namespace System.Drawing.Tests
         {
             ToolboxBitmapAttribute attribute = new((string)null);
 
-            using (Image smallImage = attribute.GetImage(new bitmap_173x183_indexed_8bit(), large: false))
-            {
-                Assert.Equal(new Size(173, 183), smallImage.Size);
+            using Image smallImage = attribute.GetImage(new bitmap_173x183_indexed_8bit(), large: false);
+            Assert.Equal(new Size(173, 183), smallImage.Size);
 
-                using (Image largeImage = attribute.GetImage(new bitmap_173x183_indexed_8bit(), large: true))
-                {
-                    Assert.Equal(new Size(32, 32), largeImage.Size);
-                }
-            }
+            using Image largeImage = attribute.GetImage(new bitmap_173x183_indexed_8bit(), large: true);
+            Assert.Equal(new Size(32, 32), largeImage.Size);
         }
 
         [Fact]
@@ -158,16 +148,14 @@ namespace System.Drawing.Tests
         public void GetImage_NoExtension(Type type, int width, int height)
         {
             ToolboxBitmapAttribute attribute = new(type);
-            using (Image image = attribute.GetImage(type))
+            using Image image = attribute.GetImage(type);
+            if (width == -1 && height == -1)
             {
-                if (width == -1 && height == -1)
-                {
-                    AssertDefaultSize(image);
-                }
-                else
-                {
-                    Assert.Equal(new Size(width, height), image.Size);
-                }
+                AssertDefaultSize(image);
+            }
+            else
+            {
+                Assert.Equal(new Size(width, height), image.Size);
             }
         }
 
