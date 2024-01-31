@@ -3669,10 +3669,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void SaveSelectedTabIndex()
     {
-        if (_designerHost is not null && _selectedTab is not null)
+        if (_designerHost is not null)
         {
             _designerSelections ??= new();
-            _designerSelections[_designerHost.GetHashCode()] = _tabs.IndexOf(_selectedTab);
+
+            // If _selectedTab is null, we will set the _designerSelections item to -1.
+            _designerSelections[_designerHost.GetHashCode()] = _tabs.IndexOf(_selectedTab!);
         }
     }
 
