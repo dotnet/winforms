@@ -3050,7 +3050,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private void OnViewSortButtonClick(object sender, EventArgs e)
+    private void OnViewSortButtonClick(object? sender, EventArgs e)
     {
         using (FreezePaintScope _ = new(this))
         {
@@ -3103,7 +3103,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         using (FreezePaintScope _ = new(this))
         {
-            SelectViewTabButton((ToolStripButton?)sender, true);
+            if (sender is not null)
+            {
+                SelectViewTabButton((ToolStripButton)sender, true);
+            }
+
             OnLayoutInternal(dividerOnly: false);
             SaveSelectedTabIndex();
         }
@@ -3111,7 +3115,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         OnButtonClick(sender, e);
     }
 
-    private void OnViewPropertyPagesButtonClick(object sender, EventArgs e)
+    private void OnViewPropertyPagesButtonClick(object? sender, EventArgs e)
     {
         if (_viewPropertyPagesButton!.Enabled &&
             _selectedObjects is not null &&
@@ -3463,10 +3467,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         SetupToolbar();
     }
-#nullable disable
+
     internal void ReleaseTab(Type tabType, object component)
     {
-        PropertyTab tab = null;
+        PropertyTab? tab = null;
         int tabIndex = -1;
         for (int i = 0; i < _tabs.Count; i++)
         {
@@ -3483,7 +3487,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        object[] components = tab.Components;
+        object[]? components = tab.Components;
         bool killTab;
 
         try
@@ -3496,14 +3500,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
             if (index >= 0)
             {
-                object[] newComponents = new object[components.Length - 1];
+                object[] newComponents = new object[components!.Length - 1];
                 Array.Copy(components, 0, newComponents, 0, index);
                 Array.Copy(components, index + 1, newComponents, index, components.Length - index - 1);
                 components = newComponents;
                 tab.Components = components;
             }
 
-            killTab = components.Length == 0;
+            killTab = components is not null && components.Length == 0;
         }
         catch (Exception e)
         {
@@ -3536,7 +3540,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        ToolStripButton selectedButton = _selectedTab?.Button;
+        ToolStripButton? selectedButton = _selectedTab?.Button;
 
         if (_tabs.RemoveAll(i => i.Scope >= classification) > 0)
         {
@@ -3584,7 +3588,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             _designerSelections.Remove(ActiveDesigner.GetHashCode());
         }
 
-        ToolStripButton selectedButton = _selectedTab.Button;
+        ToolStripButton? selectedButton = _selectedTab?.Button;
 
         _tabs.RemoveAt(tabIndex);
         _tabsDirty = true;
@@ -3645,6 +3649,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         Debug.Assert(oldObject is not null && newObject is not null && oldObject.GetType() == newObject.GetType());
 
+        if (_selectedObjects is null)
+        {
+            return;
+        }
+
         for (int i = 0; i < _selectedObjects.Length; ++i)
         {
             if (_selectedObjects[i] == oldObject)
@@ -3660,13 +3669,15 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void SaveSelectedTabIndex()
     {
-        if (_designerHost is not null)
+        if (_designerHost is not null && _selectedTab is not null)
         {
             _designerSelections ??= new();
             _designerSelections[_designerHost.GetHashCode()] = _tabs.IndexOf(_selectedTab);
         }
     }
 
+    [MemberNotNullWhen(true, nameof(_designerSelections))]
+    [MemberNotNullWhen(true, nameof(ActiveDesigner))]
     private bool TryGetSavedTabIndex(out int selectedTabIndex)
     {
         selectedTabIndex = -1;
@@ -3688,7 +3699,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private void SetHotCommandColors()
         => _commandsPane.SetColors(SystemColors.Control, SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
 
-    internal void SetStatusBox(string title, string description) => _helpPane.SetDescription(title, description);
+    internal void SetStatusBox(string? title, string? description) => _helpPane.SetDescription(title, description);
 
     private void SelectViewTabButton(ToolStripButton button, bool updateSelection)
     {
@@ -3705,8 +3716,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private bool SelectViewTabButtonDefault(ToolStripButton button)
+    private bool SelectViewTabButtonDefault(ToolStripButton? button)
     {
+        if (button is null)
+        {
+            return false;
+        }
+
         // Is this tab button checked? If so, do nothing.
         if (button == _selectedTab?.Button)
         {
@@ -3714,7 +3730,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return true;
         }
 
-        PropertyTab oldTab = null;
+        PropertyTab? oldTab = null;
 
         // Unselect what's selected.
         if (_selectedTab is not null)
@@ -3754,6 +3770,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void SetSelectState(int state)
     {
+        if (_viewSortButtons is null)
+        {
+            return;
+        }
+
         if (state >= (_tabs.Count * _viewSortButtons.Length))
         {
             state = 0;
@@ -3913,7 +3934,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             {
                 try
                 {
-                    info.Button.ImageIndex = AddImage(info.Tab.Bitmap);
+                    info.Button.ImageIndex = AddImage(info.Tab.Bitmap!);
                     buttonList.Add(info.Button);
                 }
                 catch (Exception ex)
@@ -3988,7 +4009,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         UpdatePropertiesViewTabVisibility();
     }
-
+#nullable disable
     /// <summary>
     ///  This 16x16 Bitmap is applied to the button which orders properties alphabetically.
     /// </summary>
