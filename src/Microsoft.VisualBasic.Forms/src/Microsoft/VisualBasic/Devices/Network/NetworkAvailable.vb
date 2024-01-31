@@ -4,9 +4,13 @@
 Imports System.ComponentModel
 Imports System.Security
 Imports System.Threading
+
 Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
+
+    <EditorBrowsable(EditorBrowsableState.Advanced)>
+    Public Delegate Sub NetworkAvailableEventHandler(sender As Object, e As NetworkAvailableEventArgs)
 
     Partial Public Class Network
 
@@ -16,10 +20,10 @@ Namespace Microsoft.VisualBasic.Devices
         ' Indicates last known connection state
         Private _connected As Boolean
 
-        'Holds the listeners to our NetworkAvailability changed event
+        'Used for marshalling the network address changed event to the foreground thread
         Private _networkAvailabilityChangedCallback As SendOrPostCallback
 
-        'Used for marshalling the network address changed event to the foreground thread
+        'Holds the listeners to our NetworkAvailability changed event
         Private _networkAvailabilityEventHandlers As List(Of NetworkAvailableEventHandler)
 
         Private _synchronizationContext As SynchronizationContext

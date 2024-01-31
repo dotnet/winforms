@@ -1,7 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.ComponentModel
 Imports System.Net
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
@@ -10,9 +9,6 @@ Imports Microsoft.VisualBasic.MyServices.Internal
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
-
-    <EditorBrowsable(EditorBrowsableState.Advanced)>
-    Public Delegate Sub NetworkAvailableEventHandler(sender As Object, e As NetworkAvailableEventArgs)
 
     ''' <summary>
     '''  An object that allows easy access to some simple network properties and functionality.

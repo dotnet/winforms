@@ -6,7 +6,7 @@ Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
 
-    Public Class Network
+    Partial Public Class Network
 
         'Size of Ping.exe buffer
         Private Const BUFFER_SIZE As Integer = 32
@@ -65,6 +65,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="timeout">Time to wait before aborting ping</param>
         ''' <returns>True if ping was successful, otherwise False</returns>
         Public Function Ping(hostNameOrAddress As String, timeout As Integer) As Boolean
+
             ' Make sure a network is available
             If Not IsAvailable Then
                 Throw ExUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
