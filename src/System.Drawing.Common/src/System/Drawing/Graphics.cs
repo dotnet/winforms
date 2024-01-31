@@ -745,6 +745,24 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     public void DrawRectangle(Pen pen, Rectangle rect) => DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
 
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="DrawRoundedRectangle(Pen, RectangleF, SizeF)"/>
+    public void DrawRoundedRectangle(Pen pen, Rectangle rect, Size corner) =>
+        DrawRoundedRectangle(pen, (RectangleF)rect, corner);
+
+    /// <summary>
+    ///  Draws the outline of the specified rounded rectangle.
+    /// </summary>
+    /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
+    public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF corner)
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(rect, corner);
+        DrawPath(pen, path);
+    }
+#endif
+
     /// <summary>
     ///  Draws the outline of the specified rectangle.
     /// </summary>
@@ -1093,6 +1111,25 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Fills the entire drawing surface with the specified color.
     /// </summary>
     public void Clear(Color color) => CheckStatus(PInvoke.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    public void FillRoundedRectangle(Brush brush, Rectangle rect, Size corner) =>
+        FillRoundedRectangle(brush, (RectangleF)rect, corner);
+
+    /// <summary>
+    ///  Fills the interior of a rounded rectangle with a <see cref='Brush'/>.
+    /// </summary>
+    /// <param name="brush">The <see cref="Brush"/> to fill the rounded rectangle with.</param>
+    /// <param name="rect">The bounds of the rounded rectangle.</param>
+    /// <param name="corner">The size of the ellipse used to round the corners of the rectangle.</param>
+    public void FillRoundedRectangle(Brush brush, RectangleF rect, SizeF corner)
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(rect, corner);
+        FillPath(brush, path);
+    }
+#endif
 
     /// <summary>
     ///  Fills the interior of a rectangle with a <see cref='Brush'/>.

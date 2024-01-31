@@ -41,7 +41,11 @@ public static class Clipboard
         ArgumentOutOfRangeException.ThrowIfNegative(retryTimes);
         ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
 
-        using var dataObject = ComHelpers.GetComScope<Com.IDataObject>(data is IComDataObject ? data : new DataObject(data));
+        // Always wrap the data in our DataObject since we know how to retrieve our DataObject from the proxy OleGetClipboard returns.
+        DataObject wrappedData = data is DataObject { IsWrappedForClipboard: true } alreadyWrapped
+            ? alreadyWrapped
+            : new DataObject(data) { IsWrappedForClipboard = true };
+        using var dataObject = ComHelpers.GetComScope<Com.IDataObject>(wrappedData);
 
         HRESULT hr;
         int retry = retryTimes;
@@ -120,6 +124,15 @@ public static class Clipboard
             return null;
         }
 
+        if (dataObject is DataObject { IsWrappedForClipboard: true } wrappedData)
+        {
+            // There is a DataObject on the clipboard that we placed there. If the real data object
+            // implements IDataObject, we want to unwrap it and return it. Otherwise return
+            // the DataObject as is.
+            return wrappedData.TryUnwrapInnerIDataObject();
+        }
+
+        // We did not place the data on the clipboard. Fall back to old behavior.
         return dataObject is IDataObject ido && !Marshal.IsComObject(dataObject)
                 ? ido
                 : new DataObject(dataObject);
