@@ -61,19 +61,8 @@ public partial class ImageConverter : TypeConverter
             else if (value is Image image)
             {
                 using MemoryStream ms = new();
+                image.Save(ms);
 
-                Guid format = image.RawFormat.Guid;
-                Guid encoder = ImageCodecInfo.GetEncoderClsid(format);
-
-                // Jpeg loses data, so we don't want to use it to serialize. We'll use PNG instead.
-                // If we don't find an Encoder (for things like Icon), we just switch back to PNG.
-                if (format == PInvokeCore.ImageFormatJPEG || encoder == Guid.Empty)
-                {
-                    format = PInvokeCore.ImageFormatPNG;
-                    encoder = ImageCodecInfo.GetEncoderClsid(format);
-                }
-
-                Image.Save(image, ms, encoder, format, null);
                 return ms.ToArray();
             }
         }
