@@ -67,7 +67,7 @@ internal interface IArrangedElement : IComponent
     /// </summary>
     BitVector32 LayoutState { get; set; }
 
-    Rectangle SpecifiedBounds { get; set; }
+    Rectangle? SpecifiedBounds { get; set; }
 
     Size PreferredSize { get; set; }
 

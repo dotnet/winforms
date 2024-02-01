@@ -65,12 +65,7 @@ internal partial class CommonProperties
     ///  property and not calling base.  If CommonProperties.GetAutoSize(element) is false,
     ///  a layout engine will treat it as AutoSize = false and not size the element to its
     ///  preferred size.
-    internal static bool GetAutoSize(IArrangedElement element)
-    {
-        BitVector32 state = element.LayoutState;
-        int value = state[s_autoSizeSection];
-        return value != 0;
-    }
+    internal static bool GetAutoSize(IArrangedElement element) => element.LayoutState[s_autoSizeSection] != 0;
 
     ///  GetMargin
     ///  Returns the Margin (exterior space) for an item
@@ -101,8 +96,7 @@ internal partial class CommonProperties
     ///  Returns the last size manually set into the element.  See UpdateSpecifiedBounds.
     internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
     {
-        Rectangle rectangle = element.SpecifiedBounds;
-        if (rectangle != LayoutUtils.s_maxRectangle)
+        if (element.SpecifiedBounds is Rectangle rectangle && rectangle != LayoutUtils.s_maxRectangle)
         {
             return rectangle;
         }

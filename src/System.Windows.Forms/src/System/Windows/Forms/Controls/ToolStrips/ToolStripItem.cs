@@ -61,7 +61,7 @@ public abstract partial class ToolStripItem :
 
     // IArrangedElement fields
     private BitVector32 _layoutState;
-    private Rectangle _specifiedBounds;
+    private Rectangle? _specifiedBounds;
     private Size _preferredSize;
     private Size _layoutBounds;
     private Padding? _padding;
@@ -1038,7 +1038,7 @@ public abstract partial class ToolStripItem :
     }
 
     BitVector32 IArrangedElement.LayoutState { get => _layoutState; set => _layoutState = value; }
-    Rectangle IArrangedElement.SpecifiedBounds { get => _specifiedBounds; set => _specifiedBounds = value; }
+    Rectangle? IArrangedElement.SpecifiedBounds { get => _specifiedBounds; set => _specifiedBounds = value; }
     Size IArrangedElement.PreferredSize { get => _preferredSize; set => _preferredSize = value; }
     Size IArrangedElement.LayoutBounds { get => _layoutBounds; set => _layoutBounds = value; }
     Padding? IArrangedElement.Padding { get => _padding; set => _padding = value; }
