@@ -1,13 +1,39 @@
-override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
-static System.Windows.Forms.MessageBox.ShowAsync(string! text, string! caption = "", System.Windows.Forms.MessageBoxButtons buttons = System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon icon = System.Windows.Forms.MessageBoxIcon.None) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 override System.Windows.Forms.Popup.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.Popup.WndProc(ref System.Windows.Forms.Message m) -> void
+override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
+static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
+static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
+static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
+static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
+static System.Windows.Forms.Application.SystemColors.get -> System.Windows.Forms.ThemedSystemColors!
 static System.Windows.Forms.MessageBox.ShowAsync(string? text, string? caption = "", System.Windows.Forms.MessageBoxButtons buttons = System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon icon = System.Windows.Forms.MessageBoxIcon.None, System.Windows.Forms.MessageBoxDefaultButton defaultButton = System.Windows.Forms.MessageBoxDefaultButton.Button1, System.Windows.Forms.MessageBoxOptions options = System.Windows.Forms.MessageBoxOptions.DefaultDesktopOnly, System.Windows.Forms.IWin32Window? owner = null, string? helpFilePath = null, System.Windows.Forms.HelpNavigator navigator = (System.Windows.Forms.HelpNavigator)0, object? param = null) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 static System.Windows.Forms.Popup.GetPopupLocation(System.Windows.Forms.Control! referringControl, System.Drawing.Size popupSize) -> System.Drawing.Point
-System.Windows.Forms.Control.InvokeAsync(System.Delegate! method, params object![]! args) -> System.Threading.Tasks.Task<object?>!
-System.Windows.Forms.Control.InvokeAsync(System.Func<object![]!, System.Threading.Tasks.Task<object!>!>! asyncAction, params object![]! args) -> System.Threading.Tasks.Task<object!>!
+System.Windows.Forms.AsyncGraphicsFactory
+System.Windows.Forms.AsyncGraphicsFactory.GetGraphicsAsync() -> System.Threading.Tasks.Task<System.Drawing.Graphics!>!
+System.Windows.Forms.Control.AsyncInvoke<T>(System.Func<System.Threading.Tasks.Task<T>!>! asyncFunc) -> T?
+System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
+System.Windows.Forms.Control.DarkMode.set -> void
+System.Windows.Forms.Control.InvokeAsync(System.Func<System.Threading.Tasks.Task!>! function, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+System.Windows.Forms.Control.InvokeAsync<T, U>(System.Func<T, System.Threading.Tasks.Task<U>!>! asyncFunc, T arg, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<U>!
+System.Windows.Forms.Control.InvokeAsync<T>(System.Func<System.Threading.Tasks.Task<T>!>! asyncFunc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<T>!
+System.Windows.Forms.Control.InvokeSyncAsync<T>(System.Func<T>! syncFunction, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<T>!
+System.Windows.Forms.DarkMode
+System.Windows.Forms.DarkMode.Disabled = 3 -> System.Windows.Forms.DarkMode
+System.Windows.Forms.DarkMode.Enabled = 2 -> System.Windows.Forms.DarkMode
+System.Windows.Forms.DarkMode.Inherits = 1 -> System.Windows.Forms.DarkMode
+System.Windows.Forms.DarkMode.NotSupported = 0 -> System.Windows.Forms.DarkMode
+System.Windows.Forms.Form.SetWindowBorderColor(System.Drawing.Color color) -> void
+System.Windows.Forms.Form.SetWindowCaptionColor(System.Drawing.Color color) -> void
+System.Windows.Forms.Form.SetWindowCaptionTextColor(System.Drawing.Color color) -> void
+System.Windows.Forms.Form.SetWindowCornerPreference(System.Windows.Forms.Form.WindowCornerPreference cornerPreference) -> void
 System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.Default = 0 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.DoNotRound = 1 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.PaintEventArgs.GraphicsFactory.get -> System.Windows.Forms.AsyncGraphicsFactory!
 System.Windows.Forms.Popup
 System.Windows.Forms.Popup.CanResize.get -> bool
 System.Windows.Forms.Popup.CanResize.set -> void
@@ -22,45 +48,40 @@ System.Windows.Forms.Popup.PopupContent.get -> System.Windows.Forms.Control?
 System.Windows.Forms.Popup.PopupContent.set -> void
 System.Windows.Forms.Popup.PopupOpened -> System.EventHandler?
 System.Windows.Forms.Popup.PopupOpening -> System.EventHandler?
+System.Windows.Forms.PopupCloseRequestEventArgs
+System.Windows.Forms.PopupCloseRequestEventArgs.ClosingRequestOrigin.get -> System.Windows.Forms.PopupCloseRequestOrigin
+System.Windows.Forms.PopupCloseRequestEventArgs.ClosingRequestOrigin.set -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.KeyData.get -> System.Windows.Forms.Keys
+System.Windows.Forms.PopupCloseRequestEventArgs.KeyData.set -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupCloseRequestEventArgs(System.Windows.Forms.PopupCloseRequestReason closeReason) -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupCloseRequestEventArgs(System.Windows.Forms.PopupCloseRequestReason closingRequestReason, System.Windows.Forms.Keys keyData) -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupClosingRequestReason.get -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupClosingRequestReason.set -> void
 System.Windows.Forms.PopupCloseRequestEventHandler
 System.Windows.Forms.PopupCloseRequestOrigin
 System.Windows.Forms.PopupCloseRequestOrigin.ExternalByUser = 0 -> System.Windows.Forms.PopupCloseRequestOrigin
 System.Windows.Forms.PopupCloseRequestOrigin.InternalByComponent = 1 -> System.Windows.Forms.PopupCloseRequestOrigin
+System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.AppLostFocus = 1 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.CloseMethodInvoked = 2 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.ContentClicked = 3 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.Keyboard = 4 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.PopupLostFocus = 0 -> System.Windows.Forms.PopupCloseRequestReason
 System.Windows.Forms.PopupOpeningEventArgs
 System.Windows.Forms.PopupOpeningEventArgs.PopupOpeningEventArgs(bool cancel, System.Drawing.Size preferredNewSize) -> void
 System.Windows.Forms.PopupOpeningEventArgs.PreferredNewSize.get -> System.Drawing.Size
 System.Windows.Forms.PopupOpeningEventArgs.PreferredNewSize.set -> void
 System.Windows.Forms.PopupOpeningEventArgs.PreventResizing.get -> bool
 System.Windows.Forms.PopupOpeningEventArgs.PreventResizing.set -> void
-virtual System.Windows.Forms.Popup.OnPopupClosed(System.EventArgs! e) -> void
-virtual System.Windows.Forms.Popup.OnPopupClosing(System.Windows.Forms.PopupCloseRequestEventArgs! e) -> void
-virtual System.Windows.Forms.Popup.OnPopupOpening(System.Windows.Forms.PopupOpeningEventArgs! e) -> void
-static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
-static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
-static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
-static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
-static System.Windows.Forms.Application.SystemColors.get -> System.Windows.Forms.ThemedSystemColors!
-System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
-System.Windows.Forms.Control.DarkMode.set -> void
-System.Windows.Forms.DarkMode
-System.Windows.Forms.DarkMode.Disabled = 3 -> System.Windows.Forms.DarkMode
-System.Windows.Forms.DarkMode.Enabled = 2 -> System.Windows.Forms.DarkMode
-System.Windows.Forms.DarkMode.Inherits = 1 -> System.Windows.Forms.DarkMode
-System.Windows.Forms.DarkMode.NotSupported = 0 -> System.Windows.Forms.DarkMode
-System.Windows.Forms.Form.SetWindowBorderColor(System.Drawing.Color color) -> void
-System.Windows.Forms.Form.SetWindowCaptionColor(System.Drawing.Color color) -> void
-System.Windows.Forms.Form.SetWindowCaptionTextColor(System.Drawing.Color color) -> void
-System.Windows.Forms.Form.SetWindowCornerPreference(System.Windows.Forms.Form.WindowCornerPreference cornerPreference) -> void
-System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.Default = 0 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.DoNotRound = 1 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.ThemedSystemColors
 System.Windows.Forms.ThemedSystemColors.ThemedSystemColors() -> void
+System.Windows.Forms.ToolStrip.GetGraphicsForItemAsync(System.Windows.Forms.ToolStripItem! toolStripItem) -> System.Threading.Tasks.Task<System.Drawing.Graphics!>!
 virtual System.Windows.Forms.Control.DarkModeSupported.get -> bool
 virtual System.Windows.Forms.Control.IsDarkModeEnabled.get -> bool
 virtual System.Windows.Forms.Control.SetDarkModeCore(System.Windows.Forms.DarkMode darkModeSetting) -> bool
+virtual System.Windows.Forms.Popup.OnPopupClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Popup.OnPopupClosing(System.Windows.Forms.PopupCloseRequestEventArgs! e) -> void
+virtual System.Windows.Forms.Popup.OnPopupOpening(System.Windows.Forms.PopupOpeningEventArgs! e) -> void
 virtual System.Windows.Forms.ThemedSystemColors.ActiveBorder.get -> System.Drawing.Color
 virtual System.Windows.Forms.ThemedSystemColors.ActiveCaption.get -> System.Drawing.Color
 virtual System.Windows.Forms.ThemedSystemColors.ActiveCaptionText.get -> System.Drawing.Color

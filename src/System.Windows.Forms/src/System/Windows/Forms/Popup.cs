@@ -28,7 +28,6 @@ public partial class Popup : Panel, IMessageFilter
 
     private Control? _popupContentControl;
     private bool _canResize;
-    private Size _originalHostingControlSize;
     private Control? _lastKnownAssociatingControl;
 
     public Popup()
@@ -36,7 +35,7 @@ public partial class Popup : Panel, IMessageFilter
         base.AutoSize = false;
         AutoSize = true;
         BackColor = Color.White;
-        BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        BorderStyle = BorderStyle.FixedSingle;
         SetStyle(ControlStyles.ResizeRedraw, true);
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
     }
@@ -65,7 +64,6 @@ public partial class Popup : Panel, IMessageFilter
         }
 
         Show(associatingControl);
-
         OnPopupOpened(EventArgs.Empty);
     }
 
@@ -114,8 +112,7 @@ public partial class Popup : Panel, IMessageFilter
             return;
         }
 
-        PInvoke.ShowWindow((HWND)Handle, (SHOW_WINDOW_CMD)0);
-
+        PInvoke.ShowWindow((HWND)Handle, 0);
         _isVisible = false;
     }
 
@@ -259,7 +256,7 @@ public partial class Popup : Panel, IMessageFilter
     {
         get
         {
-            Rectangle rect = this.ClientRectangle;
+            Rectangle rect = ClientRectangle;
             rect.X = rect.Width - 10;
             rect.Width = 10;
             return rect;
@@ -272,7 +269,7 @@ public partial class Popup : Panel, IMessageFilter
         {
             if (m.Msg == PInvoke.WM_GETMINMAXINFO)
             {
-                var nullableMinMaxInfo = Marshal.PtrToStructure(m.LParamInternal, typeof(MINMAXINFO));
+                object? nullableMinMaxInfo = Marshal.PtrToStructure(m.LParamInternal, typeof(MINMAXINFO));
 
                 if (nullableMinMaxInfo is not null)
                 {
@@ -313,24 +310,6 @@ public partial class Popup : Panel, IMessageFilter
         base.WndProc(ref m);
     }
 
-    private void DoLayout()
-    {
-        if (AutoSize)
-        {
-            if (_popupContentControl is not null)
-            {
-                Size tmpSize = Size.Add(_originalHostingControlSize, new Size(1, 1));
-
-                if (CanResize)
-                {
-                    tmpSize = Size.Add(tmpSize, new Size(0, 22));
-                }
-
-                Size = tmpSize;
-            }
-        }
-    }
-
     public bool CanResize
     {
         get => _canResize;
@@ -359,8 +338,6 @@ public partial class Popup : Panel, IMessageFilter
             {
                 return;
             }
-
-            _originalHostingControlSize = _popupContentControl.Size;
 
             if (typeof(Form).IsAssignableFrom(_popupContentControl.GetType()))
             {
@@ -414,7 +391,7 @@ public partial class Popup : Panel, IMessageFilter
 
         if (referringControl.Parent is null)
         {
-            throw new ArgumentNullException("Control must be assigned to a Form when calculating the screen coordinates for its popup position");
+            throw new InvalidOperationException("Control must be assigned to a Form when calculating the screen coordinates for its popup position");
         }
 
         screenCoordinates = referringControl.Parent.PointToScreen(referringControl.Location);

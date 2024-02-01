@@ -32,7 +32,7 @@ public class PopupCloseRequestEventArgs : CancelEventArgs
     ///  Gets or sets the reason why the popup is closing.
     /// </summary>
     /// <value>
-    ///  The reason why the popup is closing represented by a <see cref="Forms.PopupCloseRequestReason"/> value.
+    ///  The reason why the popup is closing represented by a <see cref="PopupCloseRequestReason"/> value.
     /// </value>
     public PopupCloseRequestReason PopupClosingRequestReason { get; set; }
 
