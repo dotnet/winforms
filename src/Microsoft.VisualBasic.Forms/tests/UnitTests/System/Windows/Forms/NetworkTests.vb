@@ -85,14 +85,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Dim tmpFilePath As String = CreateTempDirectory()
                     Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
                     Try
-                        My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                         destinationFilename,
-                                                         "",
-                                                         "",
-                                                         False,
-                                                         100000,
-                                                         overwrite:=False
-                                                        )
+                        My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                            destinationFilename,
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            connectionTimeout:=100000,
+                            overwrite:=False)
                     Finally
                         Assert.True(Directory.Exists(tmpFilePath))
                         Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 1)
@@ -108,14 +107,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
             Try
-                My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                 destinationFilename,
-                                                 "",
-                                                 "",
-                                                 False,
-                                                 100000,
-                                                 True
-                                                )
+                My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                    destinationFilename,
+                    userName:="",
+                    password:="",
+                    showUI:=False,
+                    connectionTimeout:=100000,
+                    overwrite:=True)
             Finally
                 Assert.True(Directory.Exists(tmpFilePath))
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
@@ -130,14 +128,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
             Assert.Throws(Of ArgumentException)(
                 Sub()
-                    My.Computer.Network.DownloadFile(DownloadLargeFileUrl,
-                                                     destinationFilename,
-                                                     "",
-                                                     "",
-                                                     True,
-                                                     -1,
-                                                     False
-                                                    )
+                    My.Computer.Network.DownloadFile(address:=DownloadLargeFileUrl,
+                        destinationFilename,
+                        userName:="",
+                        password:="",
+                        showUI:=True,
+                        connectionTimeout:=-1,
+                        overwrite:=False)
                 End Sub)
             Assert.False(File.Exists(destinationFilename))
             CleanupTempDirectory(tmpFilePath)
@@ -146,21 +143,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadWithExpectedTimeOut()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
             Try
 
                 Assert.Throws(Of WebException)(
                     Sub()
-                        My.Computer.Network.DownloadFile(DownloadLargeFileUrl,
-                                                         destinationFilename,
-                                                         "",
-                                                         "",
-                                                         False,
-                                                         1,
-                                                         True
-                                                        )
-                    End Sub
-                                               )
+                        My.Computer.Network.DownloadFile(address:=DownloadLargeFileUrl,
+                            destinationFilename,
+                            userName:="",
+                            password:="",
+                            showUI:=False,
+                            connectionTimeout:=1,
+                            overwrite:=True)
+                    End Sub)
             Finally
                 Assert.True(Directory.Exists(tmpFilePath))
                 Assert.False(File.Exists(destinationFilename))
@@ -172,44 +167,41 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithNothingDestinationFile()
             Assert.Throws(Of ArgumentNullException)(
                 Sub()
-                    My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                     Nothing,
-                                                     "",
-                                                     "",
-                                                     True,
-                                                     100000,
-                                                     False
-                                                    )
+                    My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                        destinationFileName:=Nothing,
+                        userName:="",
+                        password:="",
+                        showUI:=True,
+                        connectionTimeout:=100000,
+                        overwrite:=False)
                 End Sub)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadWithNothingPassword()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                destinationFilename,
-                                                "",
-                                                Nothing
-                                            )
-            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
+            My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                destinationFilename,
+                userName:="",
+                password:=Nothing)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadWithNothingUri()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
             Assert.Throws(Of ArgumentNullException)(
                 Sub()
-                    My.Computer.Network.DownloadFile(CType(Nothing, Uri),
-                                                     destinationFilename,
-                                                     "",
-                                                     "",
-                                                     True,
-                                                     100000,
-                                                     False
-                                                    )
+                    My.Computer.Network.DownloadFile(address:=CType(Nothing, Uri),
+                        destinationFilename,
+                        userName:="",
+                        password:="",
+                        showUI:=True,
+                        connectionTimeout:=100000,
+                        overwrite:=False)
                 End Sub)
             CleanupTempDirectory(tmpFilePath)
         End Sub
@@ -217,28 +209,26 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadWithNothingUsername()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                                destinationFilename,
-                                                Nothing,
-                                                "",
-                                                True,
-                                                100000,
-                                                False
-                                            )
-            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
+            My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                destinationFilename,
+                userName:=Nothing,
+                password:="",
+                showUI:=True,
+                connectionTimeout:=100000,
+                overwrite:=False)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadWithNothingWebAddress()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
             Assert.Throws(Of ArgumentNullException)(
                 Sub()
-                    My.Computer.Network.DownloadFile(CStr(Nothing),
-                                                     destinationFilename
-)
+                    My.Computer.Network.DownloadFile(address:=CStr(Nothing),
+                        destinationFileName:=destinationFilename)
                 End Sub)
             CleanupTempDirectory(tmpFilePath)
         End Sub
@@ -246,16 +236,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadWithUI()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, 0)
-            My.Computer.Network.DownloadFile(DownloadLargeFileUrl,
-                                             destinationFilename,
-                                             "",
-                                             "",
-                                             True,
-                                             100000,
-                                             True
-                                            )
-            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 104857600)
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=0)
+            My.Computer.Network.DownloadFile(address:=DownloadLargeFileUrl,
+                destinationFilename,
+                userName:="",
+                password:="",
+                showUI:=True,
+                connectionTimeout:=100000,
+                overwrite:=True)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=104857600)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -263,9 +252,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUriFilename()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl),
-                                             destinationFilename)
-            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
+            My.Computer.Network.DownloadFile(address:=New Uri(DownloadFileUrl),
+                destinationFileName:=destinationFilename)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -273,11 +262,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUriFilenameAndUserCredentials()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            My.Computer.Network.DownloadFile(New Uri(DownloadFileUrl),
-                                             destinationFilename,
-                                             "TDB",
-                                             "TBD")
-            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
+            My.Computer.Network.DownloadFile(address:=New Uri(DownloadFileUrl),
+                destinationFilename,
+                userName:="TDB",
+                password:="TBD")
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
@@ -285,33 +274,33 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUrlDestinationFilename()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            My.Computer.Network.DownloadFile(DownloadFileUrl,
-                                             destinationFilename)
-            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
+            My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                destinationFilename)
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
         <WinFormsFact>
         Public Sub UploadFilenameUrl()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
-            My.Computer.Network.UploadFile(sourceFilename, UploadFileUrl)
+            Dim sourceFilename As String = CreateTempFile(tmpFilePath, size:=1)
+            My.Computer.Network.UploadFile(sourceFilename,
+                address:=UploadFileUrl)
             CleanupTempDirectory(tmpFilePath)
         End Sub
 
         <WinFormsFact>
         Public Sub UploadWhereTimeoutNegative()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, &H100_0000)
+            Dim sourceFilename As String = CreateTempFile(tmpFilePath, size:=&H100_0000)
             Assert.Throws(Of ArgumentException)(
                 Sub()
                     My.Computer.Network.UploadFile(sourceFilename,
-                                                   UploadFileUrl,
-                                                   "anonymous",
-                                                   "anonymous",
-                                                   True,
-                                                   -1
-                                                  )
+                        address:=UploadFileUrl,
+                        userName:="anonymous",
+                        password:="anonymous",
+                        showUI:=True,
+                        connectionTimeout:=-1)
                 End Sub)
             CleanupTempDirectory(tmpFilePath)
         End Sub
@@ -325,12 +314,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Assert.Throws(Of WebException)(
                     Sub()
                         My.Computer.Network.UploadFile(sourceFilename,
-                                                       UploadFileUrl,
-                                                       "anonymous",
-                                                       "anonymous",
-                                                       True,
-                                                       1
-                                                      )
+                            address:=UploadFileUrl,
+                            userName:="anonymous",
+                            password:="anonymous",
+                            showUI:=True,
+                            connectionTimeout:=1)
                     End Sub)
             Finally
                 CleanupTempDirectory(tmpFilePath)
@@ -340,13 +328,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UploadWithNothingPassword()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim filename As String = CreateTempFile(tmpFilePath, 1)
+            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
             Try
-                My.Computer.Network.UploadFile(filename,
-                                               UploadFileUrl,
-                                               "anonymous",
-                                               Nothing
-                                              )
+                My.Computer.Network.UploadFile(sourceFilename,
+                    address:=UploadFileUrl,
+                    userName:="anonymous",
+                    password:=Nothing)
             Finally
                 CleanupTempDirectory(tmpFilePath)
             End Try
@@ -359,11 +346,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 Assert.Throws(Of ArgumentNullException)(
                     Sub()
-                        My.Computer.Network.UploadFile(Nothing,
-                                                       UploadFileUrl,
-                                                       "anonymous",
-                                                       "anonymous"
-                                                      )
+                        My.Computer.Network.UploadFile(sourceFileName:=Nothing,
+                            address:=UploadFileUrl,
+                            userName:="anonymous",
+                            password:="anonymous")
                     End Sub)
             Finally
                 CleanupTempDirectory(tmpFilePath)
@@ -373,14 +359,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UploadWithNothingUri()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
+            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
             Assert.Throws(Of ArgumentNullException)(
                 Sub()
-                    My.Computer.Network.DownloadFile(CType(Nothing, Uri),
-                                                     destinationFilename,
-                                                     "anonymous",
-                                                     "anonymous"
-                                                    )
+                    My.Computer.Network.UploadFile(sourceFilename,
+                        address:=CType(Nothing, Uri),
+                        userName:="anonymous",
+                        password:="anonymous")
                 End Sub)
             CleanupTempDirectory(tmpFilePath)
         End Sub
@@ -388,15 +373,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UploadWithUI()
             Dim tmpFilePath As String = CreateTempDirectory()
-            Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
+            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
             Try
-                My.Computer.Network.UploadFile(destinationFilename,
-                                               UploadFileUrl,
-                                               "anonymous",
-                                               "anonymous",
-                                               True,
-                                               100000
-                                              )
+                My.Computer.Network.UploadFile(sourceFilename,
+                    address:=UploadFileUrl,
+                    userName:="anonymous",
+                    password:="anonymous",
+                    showUI:=True,
+                    connectionTimeout:=100000)
             Finally
                 CleanupTempDirectory(tmpFilePath)
             End Try
