@@ -18,7 +18,8 @@ internal static class WinFormsBinaryFormatWriter
     {
         using MemoryStream memoryStream = new();
         bitmap.Save(memoryStream);
-        byte[] data = memoryStream.GetBuffer();
+
+        Debug.Assert(memoryStream.TryGetBuffer(out ArraySegment<byte> data));
 
         using BinaryFormatWriterScope writer = new(stream);
         new BinaryLibrary(2, AssemblyRef.SystemDrawing).Write(writer);

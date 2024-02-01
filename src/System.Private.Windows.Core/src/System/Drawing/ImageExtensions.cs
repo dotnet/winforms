@@ -30,7 +30,6 @@ internal static unsafe class ImageExtensions
     {
         Guid format = default;
         PInvokeCore.GdipGetImageRawFormat(image.Pointer, &format).ThrowIfFailed();
-        GC.KeepAlive(image);
 
         Guid encoder = ImageCodecInfoHelper.GetEncoderClsid(format);
 
