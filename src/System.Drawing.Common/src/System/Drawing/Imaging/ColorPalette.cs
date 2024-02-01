@@ -15,6 +15,9 @@ public sealed unsafe class ColorPalette
     private readonly int _flags;
     private readonly Color[] _entries;
 
+    // XmlSerializer requires a public constructor with no parameters.
+    private ColorPalette() => _entries = new Color[1];
+
     /// <summary>
     ///  Specifies how to interpret the color information in the array of colors.
     /// </summary>
