@@ -36,7 +36,6 @@ using Microsoft.DotNet.XUnitExtensions;
 
 namespace MonoTests.System.Drawing;
 
-[ConditionalClass(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported))]
 public class GraphicsTest : IDisposable
 {
     private RectangleF[] rects;
