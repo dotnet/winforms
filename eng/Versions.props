@@ -20,6 +20,7 @@
     <SystemDirectoryServicesPackageVersion>9.0.0-preview.2.24081.10</SystemDirectoryServicesPackageVersion>
     <SystemReflectionMetadataLoadContextPackageVersion>9.0.0-preview.2.24081.10</SystemReflectionMetadataLoadContextPackageVersion>
     <SystemSecurityCryptographyXmlPackageVersion>9.0.0-preview.2.24081.10</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOHashingPackageVersion>9.0.0-preview.2.24081.10</SystemIOHashingPackageVersion>
     <SystemIOPackagingPackageVersion>9.0.0-preview.2.24081.10</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
     <MicrosoftNETCoreILDAsmPackageVersion>9.0.0-preview.2.24081.10</MicrosoftNETCoreILDAsmPackageVersion>

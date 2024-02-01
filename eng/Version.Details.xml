@@ -116,6 +116,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>9f6debd3d9a4e8ccfd53845c6d268daab1ab7a2f</Sha>
     </Dependency>
+    <Dependency Name="System.IO.Hashing" Version="9.0.0-preview.2.24081.10">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>9f6debd3d9a4e8ccfd53845c6d268daab1ab7a2f</Sha>
+    </Dependency>
     <Dependency Name="System.IO.Packaging" Version="9.0.0-preview.2.24081.10">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>9f6debd3d9a4e8ccfd53845c6d268daab1ab7a2f</Sha>
