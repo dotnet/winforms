@@ -248,7 +248,7 @@ internal partial class TableLayout
                             continue;
                         }
 
-                        LayoutInfo layoutInfo = GetLayoutInfo(element);
+                        LayoutInfo layoutInfo = element.LayoutInfo;
                         if (layoutInfo.IsAbsolutelyPositioned)
                         {
                             _countFixedChildren++;

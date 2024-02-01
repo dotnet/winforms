@@ -12,9 +12,6 @@ internal partial class FlowLayout : LayoutEngine
 {
     internal static readonly FlowLayout Instance = new();
 
-    private static readonly int s_wrapContentsProperty = PropertyStore.CreateKey();
-    private static readonly int s_flowDirectionProperty = PropertyStore.CreateKey();
-
     private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
     {
 #if DEBUG
@@ -304,27 +301,11 @@ internal partial class FlowLayout : LayoutEngine
         return rowSize;
     }
 
-    public static bool GetWrapContents(IArrangedElement container) =>
-        container.Properties.GetInteger(s_wrapContentsProperty) == 0;
+    public static bool GetWrapContents(IArrangedElement container) => CommonProperties.GetWrapContents(container);
 
-    public static void SetWrapContents(IArrangedElement container, bool value)
-    {
-        container.Properties.SetInteger(s_wrapContentsProperty, value ? 0 : 1);
-        LayoutTransaction.DoLayout(container, container, PropertyNames.WrapContents);
-        Debug.Assert(GetWrapContents(container) == value, "GetWrapContents should return the same value as we set");
-    }
-
-    public static FlowDirection GetFlowDirection(IArrangedElement container) =>
-        (FlowDirection)container.Properties.GetInteger(s_flowDirectionProperty);
-
-    public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
-    {
-        SourceGenerated.EnumValidator.Validate(value);
-
-        container.Properties.SetInteger(s_flowDirectionProperty, (int)value);
-        LayoutTransaction.DoLayout(container, container, PropertyNames.FlowDirection);
-        Debug.Assert(GetFlowDirection(container) == value, "GetFlowDirection should return the same value as we set");
-    }
+    public static void SetWrapContents(IArrangedElement container, bool value) => CommonProperties.SetWrapContents(container, value);
+public static FlowDirection GetFlowDirection(IArrangedElement container) => CommonProperties.GetFlowDirection(container);
+    public static void SetFlowDirection(IArrangedElement container, FlowDirection value) => CommonProperties.SetFlowDirection(container, value);
 
     [Conditional("DEBUG_VERIFY_ALIGNMENT")]
     private static void Debug_VerifyAlignment(IArrangedElement container, FlowDirection flowDirection)

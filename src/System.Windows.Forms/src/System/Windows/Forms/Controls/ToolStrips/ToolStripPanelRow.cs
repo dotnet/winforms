@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+
 #if DEBUG
 using System.Globalization;
 #endif
@@ -40,6 +41,21 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     private static int s_rowCreationCount;
     private readonly int _thisRowID;
 #endif
+
+    // IArrangedElement fields
+    private BitVector32 _layoutState;
+    private Rectangle _specifiedBounds;
+    private Size _preferredSize;
+    private Size _layoutBounds;
+    private Dictionary<string, string?>? _lastKnownState;
+    private Padding? _padding;
+    private Padding? _margin;
+    private Size? _minimumSize;
+    private Size? _maximumSize;
+    private DefaultLayout.AnchorInfo? _anchorInfo;
+    private readonly Dictionary<IArrangedElement, Rectangle> _cachedBounds = [];
+    private TableLayout.LayoutInfo? _layoutInfo;
+    private TableLayout.ContainerInfo? _containerInfo;
 
     public ToolStripPanelRow(ToolStripPanel parent)
         : this(parent, true)
@@ -684,14 +700,6 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         }
     }
 
-    PropertyStore IArrangedElement.Properties
-    {
-        get
-        {
-            return Properties;
-        }
-    }
-
     Size IArrangedElement.GetPreferredSize(Size constrainingSize)
     {
         Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
@@ -724,7 +732,23 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         }
     }
 
-#region MouseStuff
+    BitVector32 IArrangedElement.LayoutState { get => _layoutState; set => _layoutState = value; }
+    Rectangle IArrangedElement.SpecifiedBounds { get => _specifiedBounds; set => _specifiedBounds = value; }
+    Size IArrangedElement.PreferredSize { get => _preferredSize; set => _preferredSize = value; }
+    Size IArrangedElement.LayoutBounds { get => _layoutBounds; set => _layoutBounds = value; }
+    Padding? IArrangedElement.Padding { get => _padding; set => _padding = value; }
+    Padding? IArrangedElement.Margin { get => _margin; set => _margin = value; }
+    Size? IArrangedElement.MinimumSize { get => _minimumSize; set => _minimumSize = value; }
+    Size? IArrangedElement.MaximumSize { get => _maximumSize; set => _maximumSize = value; }
+    DefaultLayout.AnchorInfo? IArrangedElement.AnchorInfo { get => _anchorInfo; set => _anchorInfo = value; }
+    Dictionary<IArrangedElement, Rectangle> IArrangedElement.CachedBounds => _cachedBounds;
+    TableLayout.LayoutInfo IArrangedElement.LayoutInfo { get => _layoutInfo ??= new(this); set => _layoutInfo = value; }
+    TableLayout.ContainerInfo IArrangedElement.ContainerInfo { get => _containerInfo ??= new(this); }
+#if DEBUG
+    Dictionary<string, string?>? IArrangedElement.LastKnownState { get => _lastKnownState; set => _lastKnownState = value; }
+#endif
+
+    #region MouseStuff
 
 #if DEBUG
     internal static readonly TraceSwitch ToolStripPanelMouseDebug = new("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");

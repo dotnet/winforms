@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
+
 #if DEBUG
 using System.ComponentModel;
 using System.Text;
@@ -17,21 +18,6 @@ namespace System.Windows.Forms.Layout;
 // accessors for such properties.
 internal partial class CommonProperties
 {
-    private static readonly int _layoutStateProperty = PropertyStore.CreateKey();
-    private static readonly int _specifiedBoundsProperty = PropertyStore.CreateKey();
-    private static readonly int _preferredSizeCacheProperty = PropertyStore.CreateKey();
-    private static readonly int _paddingProperty = PropertyStore.CreateKey();
-
-    private static readonly int _marginProperty = PropertyStore.CreateKey();
-    private static readonly int _minimumSizeProperty = PropertyStore.CreateKey();
-    private static readonly int _maximumSizeProperty = PropertyStore.CreateKey();
-    private static readonly int _layoutBoundsProperty = PropertyStore.CreateKey();
-
-#if DEBUG
-    private static readonly int _lastKnownStateProperty = PropertyStore.CreateKey();
-
-#endif
-
     internal const ContentAlignment DefaultAlignment = ContentAlignment.TopLeft;
     internal const AnchorStyles DefaultAnchor = AnchorStyles.Top | AnchorStyles.Left;
     internal const bool DefaultAutoSize = false;
@@ -46,15 +32,17 @@ internal partial class CommonProperties
     // that the control is purely absolutely positioned and DefaultLayout does not need to do
     // anything.
     //
-    private static readonly BitVector32.Section _dockAndAnchorNeedsLayoutSection = BitVector32.CreateSection(0x7F);
-    private static readonly BitVector32.Section _dockAndAnchorSection = BitVector32.CreateSection(0x0F);
-    private static readonly BitVector32.Section _dockModeSection = BitVector32.CreateSection(0x01, _dockAndAnchorSection);
-    private static readonly BitVector32.Section _autoSizeSection = BitVector32.CreateSection(0x01, _dockModeSection);
-    private static readonly BitVector32.Section _BoxStretchInternalSection = BitVector32.CreateSection(0x03, _autoSizeSection);
-    private static readonly BitVector32.Section _anchorNeverShrinksSection = BitVector32.CreateSection(0x01, _BoxStretchInternalSection);
-    private static readonly BitVector32.Section _flowBreakSection = BitVector32.CreateSection(0x01, _anchorNeverShrinksSection);
-    private static readonly BitVector32.Section _selfAutoSizingSection = BitVector32.CreateSection(0x01, _flowBreakSection);
-    private static readonly BitVector32.Section _autoSizeModeSection = BitVector32.CreateSection(0x01, _selfAutoSizingSection);
+    private static readonly BitVector32.Section s_dockAndAnchorNeedsLayoutSection = BitVector32.CreateSection(0x7F);
+    private static readonly BitVector32.Section s_dockAndAnchorSection = BitVector32.CreateSection(0x0F);
+    private static readonly BitVector32.Section s_dockModeSection = BitVector32.CreateSection(0x01, s_dockAndAnchorSection);
+    private static readonly BitVector32.Section s_autoSizeSection = BitVector32.CreateSection(0x01, s_dockModeSection);
+    private static readonly BitVector32.Section s_boxStretchInternalSection = BitVector32.CreateSection(0x03, s_autoSizeSection);
+    private static readonly BitVector32.Section s_anchorNeverShrinksSection = BitVector32.CreateSection(0x01, s_boxStretchInternalSection);
+    private static readonly BitVector32.Section s_flowBreakSection = BitVector32.CreateSection(0x01, s_anchorNeverShrinksSection);
+    private static readonly BitVector32.Section s_selfAutoSizingSection = BitVector32.CreateSection(0x01, s_flowBreakSection);
+    private static readonly BitVector32.Section s_autoSizeModeSection = BitVector32.CreateSection(0x01, s_selfAutoSizingSection);
+    private static readonly BitVector32.Section s_wrapContentsSection = BitVector32.CreateSection(0x01, s_autoSizeModeSection);
+    private static readonly BitVector32.Section s_flowDirectionSection = BitVector32.CreateSection(0x03, s_wrapContentsSection);
 
     #region AppliesToAllLayouts
 
@@ -63,9 +51,9 @@ internal partial class CommonProperties
     ///
     internal static void ClearMaximumSize(IArrangedElement element)
     {
-        if (element.Properties.ContainsObject(_maximumSizeProperty))
+        if (element.MaximumSize is not null)
         {
-            element.Properties.RemoveObject(_maximumSizeProperty);
+            element.MaximumSize = null;
         }
     }
 
@@ -79,8 +67,8 @@ internal partial class CommonProperties
     ///  preferred size.
     internal static bool GetAutoSize(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        int value = state[_autoSizeSection];
+        BitVector32 state = element.LayoutState;
+        int value = state[s_autoSizeSection];
         return value != 0;
     }
 
@@ -90,42 +78,15 @@ internal partial class CommonProperties
     ///  We can not use our pattern of passing the default value into Margin because the
     ///  LayoutEngines read this property and do not know each element's DefaultMargin.
     ///  Instead the Element sets the Margin in its ctor.
-    internal static Padding GetMargin(IArrangedElement element)
-    {
-        Padding padding = element.Properties.GetPadding(_marginProperty, out bool found);
-        if (found)
-        {
-            return padding;
-        }
-
-        return DefaultMargin;
-    }
+    internal static Padding GetMargin(IArrangedElement element) => element.Margin ?? DefaultMargin;
 
     ///  GetMaximumSize
     ///  Returns the maximum size for an element
-    internal static Size GetMaximumSize(IArrangedElement element, Size defaultMaximumSize)
-    {
-        Size size = element.Properties.GetSize(_maximumSizeProperty, out bool found);
-        if (found)
-        {
-            return size;
-        }
-
-        return defaultMaximumSize;
-    }
+    internal static Size GetMaximumSize(IArrangedElement element, Size defaultMaximumSize) => element.MaximumSize ?? defaultMaximumSize;
 
     ///  GetMinimumSize
     ///  Returns the minimum size for an element
-    internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize)
-    {
-        Size size = element.Properties.GetSize(_minimumSizeProperty, out bool found);
-        if (found)
-        {
-            return size;
-        }
-
-        return defaultMinimumSize;
-    }
+    internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize) => element.MinimumSize ?? defaultMinimumSize;
 
     ///  GetPadding
     ///  Returns the padding for an element
@@ -134,23 +95,14 @@ internal partial class CommonProperties
     ///
     ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorporated into
     ///  layout by modifying what the control reports for preferred size.
-    internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
-    {
-        Padding padding = element.Properties.GetPadding(_paddingProperty, out bool found);
-        if (found)
-        {
-            return padding;
-        }
-
-        return defaultPadding;
-    }
+    internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding) => element.Padding ?? defaultPadding;
 
     ///  GetSpecifiedBounds
     ///  Returns the last size manually set into the element.  See UpdateSpecifiedBounds.
     internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
     {
-        Rectangle rectangle = element.Properties.GetRectangle(_specifiedBoundsProperty, out bool found);
-        if (found && rectangle != LayoutUtils.s_maxRectangle)
+        Rectangle rectangle = element.SpecifiedBounds;
+        if (rectangle != LayoutUtils.s_maxRectangle)
         {
             return rectangle;
         }
@@ -162,10 +114,9 @@ internal partial class CommonProperties
     ///  clears out the padding from the property store
     internal static void ResetPadding(IArrangedElement element)
     {
-        object? value = element.Properties.GetObject(_paddingProperty);
-        if (value is not null)
+        if (element.Padding is not null)
         {
-            element.Properties.RemoveObject(_paddingProperty);
+            element.Padding = null;
         }
     }
 
@@ -175,9 +126,9 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != GetAutoSize(element), "PERF: Caller should guard against setting AutoSize to original value.");
 
-        BitVector32 state = GetLayoutState(element);
-        state[_autoSizeSection] = value ? 1 : 0;
-        SetLayoutState(element, state);
+        BitVector32 state = element.LayoutState;
+        state[s_autoSizeSection] = value ? 1 : 0;
+        element.LayoutState = state;
         if (value == false)
         {
             // If autoSize is being turned off, restore the control to its specified bounds.
@@ -193,7 +144,7 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != GetMargin(element), "PERF: Caller should guard against setting Margin to original value.");
 
-        element.Properties.SetPadding(_marginProperty, value);
+        element.Margin = value;
 
         Debug.Assert(GetMargin(element) == value, "Error detected setting Margin.");
 
@@ -207,7 +158,7 @@ internal partial class CommonProperties
         Debug.Assert(value != GetMaximumSize(element, new Size(-7109, -7107)),
             "PERF: Caller should guard against setting MaximumSize to original value.");
 
-        element.Properties.SetSize(_maximumSizeProperty, value);
+        element.MaximumSize = value;
 
         // Element bounds may need to truncated to new maximum
         //
@@ -229,7 +180,7 @@ internal partial class CommonProperties
         Debug.Assert(value != GetMinimumSize(element, new Size(-7109, -7107)),
             "PERF: Caller should guard against setting MinimumSize to original value.");
 
-        element.Properties.SetSize(_minimumSizeProperty, value);
+        element.MinimumSize = value;
 
         using (new LayoutTransaction(element.Container as Control, element, PropertyNames.MinimumSize))
         {
@@ -253,7 +204,7 @@ internal partial class CommonProperties
             "PERF: Caller should guard against setting Padding to original value.");
 
         value = LayoutUtils.ClampNegativePaddingToZero(value);
-        element.Properties.SetPadding(_paddingProperty, value);
+        element.Padding = value;
 
         Debug.Assert(GetPadding(element, new Padding(-7105)) == value, "Error detected setting Padding.");
     }
@@ -307,16 +258,15 @@ internal partial class CommonProperties
                 originalBounds.Height = height;
             }
 
-            element.Properties.SetRectangle(_specifiedBoundsProperty, originalBounds);
+            element.SpecifiedBounds = originalBounds;
         }
         else
         {
             // SetBoundsCore is going to call this a lot with the same bounds.  Avoid the set object
             // (which indirectly may causes an allocation) if we can.
-            if (element.Properties.ContainsObject(_specifiedBoundsProperty))
+            if (element.SpecifiedBounds != LayoutUtils.s_maxRectangle)
             {
-                // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
-                element.Properties.SetRectangle(_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
+                element.SpecifiedBounds = LayoutUtils.s_maxRectangle;
             }
         }
     }
@@ -325,7 +275,7 @@ internal partial class CommonProperties
     internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height)
     {
         Rectangle bounds = new(x, y, width, height);
-        element.Properties.SetRectangle(_specifiedBoundsProperty, bounds);
+        element.SpecifiedBounds = bounds;
     }
 
     ///  xClearPreferredSizeCache
@@ -335,7 +285,7 @@ internal partial class CommonProperties
     ///
     internal static void xClearPreferredSizeCache(IArrangedElement element)
     {
-        element.Properties.SetSize(_preferredSizeCacheProperty, LayoutUtils.s_invalidSize);
+        element.PreferredSize = LayoutUtils.s_invalidSize;
 #if DEBUG
         Debug_ClearProperties(element);
 #endif
@@ -367,8 +317,8 @@ internal partial class CommonProperties
     ///  for a constraining value of LayoutUtils.MaxValue (or Size.Empty too).
     internal static Size xGetPreferredSizeCache(IArrangedElement element)
     {
-        Size size = element.Properties.GetSize(_preferredSizeCacheProperty, out bool found);
-        if (found && (size != LayoutUtils.s_invalidSize))
+        Size size = element.PreferredSize;
+        if (size != LayoutUtils.s_invalidSize)
         {
             return size;
         }
@@ -384,7 +334,7 @@ internal partial class CommonProperties
 #if DEBUG
         Debug_SnapProperties(element);
 #endif
-        element.Properties.SetSize(_preferredSizeCacheProperty, value);
+        element.PreferredSize = value;
         Debug.Assert(xGetPreferredSizeCache(element) == value, "Error detected in xGetPreferredSizeCache.");
     }
 
@@ -399,8 +349,8 @@ internal partial class CommonProperties
     ///  to design panels or have Buttons maintain their default size of 100,23
     internal static AutoSizeMode GetAutoSizeMode(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        return state[_autoSizeModeSection] == 0 ? AutoSizeMode.GrowOnly : AutoSizeMode.GrowAndShrink;
+        BitVector32 state = element.LayoutState;
+        return state[s_autoSizeModeSection] == 0 ? AutoSizeMode.GrowOnly : AutoSizeMode.GrowAndShrink;
     }
 
     ///  GetNeedsDockAndAnchorLayout
@@ -409,8 +359,8 @@ internal partial class CommonProperties
     ///  (Returns false if the element is purely absolutely positioned)
     internal static bool GetNeedsDockAndAnchorLayout(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        bool result = state[_dockAndAnchorNeedsLayoutSection] != 0;
+        BitVector32 state = element.LayoutState;
+        bool result = state[s_dockAndAnchorNeedsLayoutSection] != 0;
 
         Debug.Assert(
             (xGetAnchor(element) == DefaultAnchor
@@ -426,8 +376,8 @@ internal partial class CommonProperties
     ///  Returns true if DefaultLayout needs to do anchoring for this element.
     internal static bool GetNeedsAnchorLayout(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        bool result = (state[_dockAndAnchorNeedsLayoutSection] != 0) && (state[_dockModeSection] == (int)DockAnchorMode.Anchor);
+        BitVector32 state = element.LayoutState;
+        bool result = (state[s_dockAndAnchorNeedsLayoutSection] != 0) && (state[s_dockModeSection] == (int)DockAnchorMode.Anchor);
 
         Debug.Assert(
             (xGetAnchor(element) != DefaultAnchor
@@ -442,8 +392,8 @@ internal partial class CommonProperties
     ///  Returns true if DefaultLayout needs to do docking for this element.
     internal static bool GetNeedsDockLayout(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        bool result = state[_dockModeSection] == (int)DockAnchorMode.Dock && element.ParticipatesInLayout;
+        BitVector32 state = element.LayoutState;
+        bool result = state[s_dockModeSection] == (int)DockAnchorMode.Dock && element.ParticipatesInLayout;
 
         Debug.Assert(((xGetDock(element) != DockStyle.None) && element.ParticipatesInLayout) == result,
             "Error detected in GetNeedsDockLayout().");
@@ -460,8 +410,8 @@ internal partial class CommonProperties
     /// </summary>
     internal static bool GetSelfAutoSizeInDefaultLayout(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        int value = state[_selfAutoSizingSection];
+        BitVector32 state = element.LayoutState;
+        int value = state[s_selfAutoSizingSection];
         return (value == 1);
     }
 
@@ -472,9 +422,9 @@ internal partial class CommonProperties
     ///  to design panels or have Buttons maintain their default size of 100,23
     internal static void SetAutoSizeMode(IArrangedElement element, AutoSizeMode mode)
     {
-        BitVector32 state = GetLayoutState(element);
-        state[_autoSizeModeSection] = mode == AutoSizeMode.GrowAndShrink ? 1 : 0;
-        SetLayoutState(element, state);
+        BitVector32 state = element.LayoutState;
+        state[s_autoSizeModeSection] = mode == AutoSizeMode.GrowAndShrink ? 1 : 0;
+        element.LayoutState = state;
     }
 
     ///  ShouldSelfSize
@@ -507,9 +457,9 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != GetSelfAutoSizeInDefaultLayout(element), "PERF: Caller should guard against setting AutoSize to original value.");
 
-        BitVector32 state = GetLayoutState(element);
-        state[_selfAutoSizingSection] = value ? 1 : 0;
-        SetLayoutState(element, state);
+        BitVector32 state = element.LayoutState;
+        state[s_selfAutoSizingSection] = value ? 1 : 0;
+        element.LayoutState = state;
 
         Debug.Assert(GetSelfAutoSizeInDefaultLayout(element) == value, "Error detected setting AutoSize.");
     }
@@ -519,9 +469,9 @@ internal partial class CommonProperties
     ///  NOTE that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static AnchorStyles xGetAnchor(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        AnchorStyles value = (AnchorStyles)state[_dockAndAnchorSection];
-        DockAnchorMode mode = (DockAnchorMode)state[_dockModeSection];
+        BitVector32 state = element.LayoutState;
+        AnchorStyles value = (AnchorStyles)state[s_dockAndAnchorSection];
+        DockAnchorMode mode = (DockAnchorMode)state[s_dockModeSection];
 
         // If we are docked, or if it the value is 0, we return DefaultAnchor
         value = mode == DockAnchorMode.Anchor ? xTranslateAnchorValue(value) : DefaultAnchor;
@@ -535,14 +485,14 @@ internal partial class CommonProperties
     ///  Returns true if the element is both AutoSized and Anchored.
     internal static bool xGetAutoSizedAndAnchored(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
+        BitVector32 state = element.LayoutState;
 
-        if (state[_selfAutoSizingSection] != 0)
+        if (state[s_selfAutoSizingSection] != 0)
         {
             return false;
         }
 
-        bool result = (state[_autoSizeSection] != 0) && (state[_dockModeSection] == (int)DockAnchorMode.Anchor);
+        bool result = (state[s_autoSizeSection] != 0) && (state[s_dockModeSection] == (int)DockAnchorMode.Anchor);
         Debug.Assert(result == (GetAutoSize(element) && xGetDock(element) == DockStyle.None),
             "Error detected in xGetAutoSizeAndAnchored.");
 
@@ -554,9 +504,9 @@ internal partial class CommonProperties
     ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static DockStyle xGetDock(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        DockStyle value = (DockStyle)state[_dockAndAnchorSection];
-        DockAnchorMode mode = (DockAnchorMode)state[_dockModeSection];
+        BitVector32 state = element.LayoutState;
+        DockStyle value = (DockStyle)state[s_dockAndAnchorSection];
+        DockAnchorMode mode = (DockAnchorMode)state[s_dockModeSection];
 
         // If we are anchored we return DefaultDock
         value = mode == DockAnchorMode.Dock ? value : DefaultDock;
@@ -575,15 +525,15 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != xGetAnchor(element), "PERF: Caller should guard against setting Anchor to original value.");
 
-        BitVector32 state = GetLayoutState(element);
+        BitVector32 state = element.LayoutState;
 
         // We translate DefaultAnchor to zero - see the _dockAndAnchorNeedsLayoutSection section above.
-        state[_dockAndAnchorSection] = (int)xTranslateAnchorValue(value);
-        state[_dockModeSection] = (int)DockAnchorMode.Anchor;
+        state[s_dockAndAnchorSection] = (int)xTranslateAnchorValue(value);
+        state[s_dockModeSection] = (int)DockAnchorMode.Anchor;
 
-        SetLayoutState(element, state);
+        element.LayoutState = state;
 
-        Debug.Assert(GetLayoutState(element)[_dockModeSection] == (int)DockAnchorMode.Anchor,
+        Debug.Assert(element.LayoutState[s_dockModeSection] == (int)DockAnchorMode.Anchor,
             "xSetAnchor did not set mode to Anchor.");
     }
 
@@ -595,15 +545,15 @@ internal partial class CommonProperties
         Debug.Assert(value != xGetDock(element), "PERF: Caller should guard against setting Dock to original value.");
         SourceGenerated.EnumValidator.Validate(value);
 
-        BitVector32 state = GetLayoutState(element);
+        BitVector32 state = element.LayoutState;
 
-        state[_dockAndAnchorSection] = (int)value;     // See xTranslateAnchorValue for why this works with Dock.None.
-        state[_dockModeSection] = (int)(value == DockStyle.None ? DockAnchorMode.Anchor : DockAnchorMode.Dock);
+        state[s_dockAndAnchorSection] = (int)value;     // See xTranslateAnchorValue for why this works with Dock.None.
+        state[s_dockModeSection] = (int)(value == DockStyle.None ? DockAnchorMode.Anchor : DockAnchorMode.Dock);
 
-        SetLayoutState(element, state);
+        element.LayoutState = state;
 
         Debug.Assert(xGetDock(element) == value, "Error detected setting Dock.");
-        Debug.Assert((GetLayoutState(element)[_dockModeSection] == (int)DockAnchorMode.Dock)
+        Debug.Assert((element.LayoutState[s_dockModeSection] == (int)DockAnchorMode.Dock)
             == (value != DockStyle.None), "xSetDock set DockMode incorrectly.");
     }
 
@@ -634,8 +584,8 @@ internal partial class CommonProperties
 
     internal static bool GetFlowBreak(IArrangedElement element)
     {
-        BitVector32 state = GetLayoutState(element);
-        int value = state[_flowBreakSection];
+        BitVector32 state = element.LayoutState;
+        int value = state[s_flowBreakSection];
         return value == 1;
     }
 
@@ -646,14 +596,44 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != GetFlowBreak(element), "PERF: Caller should guard against setting FlowBreak to original value.");
 
-        BitVector32 state = GetLayoutState(element);
-        state[_flowBreakSection] = value ? 1 : 0;
-        SetLayoutState(element, state);
+        BitVector32 state = element.LayoutState;
+        state[s_flowBreakSection] = value ? 1 : 0;
+        element.LayoutState = state;
 
         LayoutTransaction.DoLayout(element.Container, element, PropertyNames.FlowBreak);
 
         Debug.Assert(GetFlowBreak(element) == value, "Error detected setting SetFlowBreak.");
     }
+
+    internal static bool GetWrapContents(IArrangedElement container)
+    {
+        BitVector32 state = container.LayoutState;
+        int value = state[s_wrapContentsSection];
+        return value == 0;
+    }
+
+    public static void SetWrapContents(IArrangedElement container, bool value)
+    {
+        BitVector32 state = container.LayoutState;
+        state[s_wrapContentsSection] = value ? 0 : 1;
+        container.LayoutState = state;
+        LayoutTransaction.DoLayout(container, container, PropertyNames.WrapContents);
+        Debug.Assert(GetWrapContents(container) == value, "GetWrapContents should return the same value as we set");
+    }
+
+    public static FlowDirection GetFlowDirection(IArrangedElement container)
+        => (FlowDirection)container.LayoutState[s_flowDirectionSection];
+
+    public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
+    {
+        SourceGenerated.EnumValidator.Validate(value);
+        BitVector32 state = container.LayoutState;
+        state[s_flowDirectionSection] = (int)value;
+        container.LayoutState = state;
+        LayoutTransaction.DoLayout(container, container, PropertyNames.FlowDirection);
+        Debug.Assert(GetFlowDirection(container) == value, "GetFlowDirection should return the same value as we set");
+    }
+
     #endregion
     #region AutoScrollSpecific
 
@@ -662,16 +642,7 @@ internal partial class CommonProperties
     ///
     ///  Used if the layoutengine always want to return the same layout bounds regardless
     ///  of how it lays out. Example is TLP in RTL and LTR.
-    internal static Size GetLayoutBounds(IArrangedElement element)
-    {
-        Size size = element.Properties.GetSize(_layoutBoundsProperty, out bool found);
-        if (found)
-        {
-            return size;
-        }
-
-        return Size.Empty;
-    }
+    internal static Size GetLayoutBounds(IArrangedElement element) => element.LayoutBounds;
 
     ///  SetLayoutBounds -
     ///  This is the size used to determine whether or not we need scrollbars.
@@ -684,34 +655,12 @@ internal partial class CommonProperties
     ///  layout engine. If the bounds has been set, ScrollableControl will use
     ///  those bounds to check if scrollbars should be added, rather than doing
     ///  its own magic to figure it out.
-    internal static void SetLayoutBounds(IArrangedElement element, Size value)
-    {
-        element.Properties.SetSize(_layoutBoundsProperty, value);
-    }
+    internal static void SetLayoutBounds(IArrangedElement element, Size value) => element.LayoutBounds = value;
 
     ///  HasLayoutBounds -
     ///  Returns whether we have layout bounds stored for this element.
-    internal static bool HasLayoutBounds(IArrangedElement element)
-    {
-        element.Properties.GetSize(_layoutBoundsProperty, out bool found);
-        return found;
-    }
+    internal static bool HasLayoutBounds(IArrangedElement element) => element.LayoutBounds != Size.Empty;
 
-    #endregion
-    #region InternalCommonPropertiesHelpers
-
-    ///  GetLayoutState - returns the layout state bit vector from the property store.
-    ///  CAREFUL: this is a copy of the state.  You need to SetLayoutState() to save your changes.
-    ///
-    internal static BitVector32 GetLayoutState(IArrangedElement element)
-    {
-        return new BitVector32(element.Properties.GetInteger(_layoutStateProperty));
-    }
-
-    internal static void SetLayoutState(IArrangedElement element, BitVector32 state)
-    {
-        element.Properties.SetInteger(_layoutStateProperty, state.Data);
-    }
     #endregion
 
     #region DebugHelpers
@@ -724,7 +673,7 @@ internal partial class CommonProperties
         string diff = string.Empty;
         if (PreferredSize.TraceVerbose)
         {
-            if (element.Properties.GetObject(_lastKnownStateProperty) is Dictionary<string, string?> propertyHash)
+            if (element.LastKnownState is Dictionary<string, string?> propertyHash)
             {
                 StringBuilder sb = new();
 
@@ -750,13 +699,13 @@ internal partial class CommonProperties
     internal static void Debug_SnapProperties(IArrangedElement element)
     {
         // DEBUG - store off the old state so we can figure out what has changed in a GPS assert
-        element.Properties.SetObject(_lastKnownStateProperty, Debug_GetCurrentPropertyState(element));
+        element.LastKnownState = Debug_GetCurrentPropertyState(element);
     }
 
     internal static void Debug_ClearProperties(IArrangedElement element)
     {
         // DEBUG - clear off the old state so we can figure out what has changed in a GPS assert
-        element.Properties.SetObject(_lastKnownStateProperty, null);
+        element.LastKnownState = null;
     }
 
     public static Dictionary<string, string?> Debug_GetCurrentPropertyState(object obj)

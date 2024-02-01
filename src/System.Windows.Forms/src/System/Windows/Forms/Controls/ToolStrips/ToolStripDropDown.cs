@@ -1455,7 +1455,7 @@ public partial class ToolStripDropDown : ToolStrip
                 bool closeOnHorizontalKey = false;
                 if (LayoutStyle == ToolStripLayoutStyle.Flow)
                 {
-                    closeOnHorizontalKey = FlowLayout.GetFlowDirection(this) == FlowDirection.TopDown && !FlowLayout.GetWrapContents(this);
+                    closeOnHorizontalKey = CommonProperties.GetFlowDirection(this) == FlowDirection.TopDown && !FlowLayout.GetWrapContents(this);
                 }
 
                 if (closeOnHorizontalKey)

@@ -74,11 +74,6 @@ public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
         get { return GetState(States.Visible); }
     }
 
-    PropertyStore IArrangedElement.Properties
-    {
-        get { return Properties; }
-    }
-
     void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
     {
         SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
@@ -107,26 +102,26 @@ public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     {
         if (ParentToolStrip is not null && ParentToolStrip.IsInDesignMode)
         {
-            if (FlowLayout.GetFlowDirection(this) != FlowDirection.TopDown)
+            if (CommonProperties.GetFlowDirection(this) != FlowDirection.TopDown)
             {
-                FlowLayout.SetFlowDirection(this, FlowDirection.TopDown);
+                CommonProperties.SetFlowDirection(this, FlowDirection.TopDown);
             }
 
-            if (FlowLayout.GetWrapContents(this))
+            if (CommonProperties.GetWrapContents(this))
             {
-                FlowLayout.SetWrapContents(this, false);
+                CommonProperties.SetWrapContents(this, false);
             }
         }
         else
         {
-            if (FlowLayout.GetFlowDirection(this) != FlowDirection.LeftToRight)
+            if (CommonProperties.GetFlowDirection(this) != FlowDirection.LeftToRight)
             {
-                FlowLayout.SetFlowDirection(this, FlowDirection.LeftToRight);
+                CommonProperties.SetFlowDirection(this, FlowDirection.LeftToRight);
             }
 
-            if (!FlowLayout.GetWrapContents(this))
+            if (!CommonProperties.GetWrapContents(this))
             {
-                FlowLayout.SetWrapContents(this, true);
+                CommonProperties.SetWrapContents(this, true);
             }
         }
 

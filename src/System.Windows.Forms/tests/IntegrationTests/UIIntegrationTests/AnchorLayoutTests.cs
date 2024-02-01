@@ -65,14 +65,14 @@ public class AnchorLayoutTests : ControlTestBase
 
         try
         {
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             // Unparent button and resume layout.
             form.Controls.Remove(button);
             form.ResumeLayout(performLayout: false);
 
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
         }
         finally
@@ -91,11 +91,11 @@ public class AnchorLayoutTests : ControlTestBase
 
         try
         {
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             form.Controls.Add(button);
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
         }
         finally
@@ -114,15 +114,15 @@ public class AnchorLayoutTests : ControlTestBase
 
         try
         {
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             form.Controls.Add(button);
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             form.ResumeLayout(performLayout: false);
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.NotNull(anchorInfo);
         }
         finally
@@ -143,7 +143,7 @@ public class AnchorLayoutTests : ControlTestBase
         {
             form.Controls.Add(button);
 
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.NotNull(anchorInfo);
         }
         finally
@@ -166,7 +166,7 @@ public class AnchorLayoutTests : ControlTestBase
             container.SuspendLayout();
             container.Controls.Add(button);
 
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             form.Controls.Add(container);
@@ -174,7 +174,7 @@ public class AnchorLayoutTests : ControlTestBase
 
             container.ResumeLayout(false);
             form.ResumeLayout(false);
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.NotNull(anchorInfo);
         }
         finally
@@ -197,7 +197,7 @@ public class AnchorLayoutTests : ControlTestBase
             container.SuspendLayout();
             container.Controls.Add(button);
 
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             form.Controls.Add(container);
@@ -206,7 +206,7 @@ public class AnchorLayoutTests : ControlTestBase
             container.ResumeLayout(false);
             form.ResumeLayout(false);
 
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.NotNull(anchorInfo);
 
             container.Controls.Remove(button);
@@ -233,12 +233,12 @@ public class AnchorLayoutTests : ControlTestBase
         {
             form.Controls.Add(button);
 
-            DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.Null(anchorInfo);
 
             form.ResumeLayout(false);
 
-            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            anchorInfo = ((IArrangedElement)button).AnchorInfo;
             Assert.NotNull(anchorInfo);
 
             var bounds = button.Bounds;
@@ -307,7 +307,7 @@ public class AnchorLayoutTests : ControlTestBase
             Anchor = buttonAnchors
         };
 
-        DefaultLayout.AnchorInfo? anchorInfo = DefaultLayout.GetAnchorInfo(button);
+        DefaultLayout.AnchorInfo? anchorInfo = ((IArrangedElement)button).AnchorInfo;
         Assert.Null(anchorInfo);
 
         return (form, button);

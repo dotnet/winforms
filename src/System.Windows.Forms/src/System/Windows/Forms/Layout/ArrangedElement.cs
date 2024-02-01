@@ -12,16 +12,32 @@ internal abstract class ArrangedElement : Component, IArrangedElement
 {
     private Rectangle _bounds = Rectangle.Empty;
     private IArrangedElement? _parent;
-    private BitVector32 _state;
-    private readonly PropertyStore _propertyStore = new();  // Contains all properties that are not always set.
+    private bool _stateVisible;
 
-    private static readonly int s_stateVisible = BitVector32.CreateMask();
+    // IArrangedElement fields
+    private BitVector32 _layoutState;
+    private Rectangle _specifiedBounds;
+    private Size _preferredSize;
+    private Size _layoutBounds;
+    private Dictionary<string, string?>? _lastKnownState;
+    private Padding? _padding;
+    private Padding? _margin;
+    private Size? _minimumSize;
+    private Size? _maximumSize;
+    private DefaultLayout.AnchorInfo? _anchorInfo;
+    private readonly Dictionary<IArrangedElement, Rectangle> _cachedBounds = [];
+    private TableLayout.LayoutInfo? _layoutInfo;
+    private TableLayout.ContainerInfo? _containerInfo;
+
+    private readonly PropertyStore _propertyStore = new();  // Contains all properties that are not always set.
 
     internal ArrangedElement()
     {
         Padding = DefaultPadding;
         Margin = DefaultMargin;
-        _state[s_stateVisible] = true;
+        _stateVisible = true;
+        _minimumSize = CommonProperties.DefaultMinimumSize;
+        _maximumSize = CommonProperties.DefaultMaximumSize;
     }
 
     public Rectangle Bounds
@@ -110,14 +126,6 @@ internal abstract class ArrangedElement : Component, IArrangedElement
         }
     }
 
-    PropertyStore IArrangedElement.Properties
-    {
-        get
-        {
-            return Properties;
-        }
-    }
-
     private PropertyStore Properties
     {
         get
@@ -130,13 +138,13 @@ internal abstract class ArrangedElement : Component, IArrangedElement
     {
         get
         {
-            return _state[s_stateVisible];
+            return _stateVisible;
         }
         set
         {
-            if (_state[s_stateVisible] != value)
+            if (_stateVisible != value)
             {
-                _state[s_stateVisible] = value;
+                _stateVisible = value;
                 if (Parent is not null)
                 {
                     LayoutTransaction.DoLayout(Parent, this, PropertyNames.Visible);
@@ -188,4 +196,20 @@ internal abstract class ArrangedElement : Component, IArrangedElement
             OnBoundsChanged(oldBounds, bounds);
         }
     }
+
+    BitVector32 IArrangedElement.LayoutState { get => _layoutState; set => _layoutState = value; }
+    Rectangle IArrangedElement.SpecifiedBounds { get => _specifiedBounds; set => _specifiedBounds = value; }
+    Size IArrangedElement.PreferredSize { get => _preferredSize; set => _preferredSize = value; }
+    Size IArrangedElement.LayoutBounds { get => _layoutBounds; set => _layoutBounds = value; }
+    Padding? IArrangedElement.Padding { get => _padding; set => _padding = value; }
+    Padding? IArrangedElement.Margin { get => _margin; set => _margin = value; }
+    Size? IArrangedElement.MinimumSize { get => _minimumSize; set => _minimumSize = value; }
+    Size? IArrangedElement.MaximumSize { get => _maximumSize; set => _maximumSize = value; }
+    DefaultLayout.AnchorInfo? IArrangedElement.AnchorInfo { get => _anchorInfo; set => _anchorInfo = value; }
+    Dictionary<IArrangedElement, Rectangle> IArrangedElement.CachedBounds => _cachedBounds;
+    TableLayout.LayoutInfo IArrangedElement.LayoutInfo { get => _layoutInfo ??= new(this); set => _layoutInfo = value; }
+    TableLayout.ContainerInfo IArrangedElement.ContainerInfo { get => _containerInfo ??= new(this); }
+#if DEBUG
+    Dictionary<string, string?>? IArrangedElement.LastKnownState { get => _lastKnownState; set => _lastKnownState = value; }
+#endif
 }

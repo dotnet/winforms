@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
@@ -299,6 +300,23 @@ public unsafe partial class Control :
     private int _clientHeight;
     private States _state;
     private ExtendedStates _extendedState;
+
+    // IArrangedElement fields
+    private BitVector32 _layoutState;
+    private Rectangle _specifiedBounds;
+    private Size _preferredSize;
+    private Padding? _padding;
+    private Padding? _margin;
+    private Size? _minimumSize;
+    private Size? _maximumSize;
+    private Size _layoutBounds;
+    private DefaultLayout.AnchorInfo? _anchorInfo;
+    private readonly Dictionary<IArrangedElement, Rectangle> _cachedBounds = [];
+    private TableLayout.LayoutInfo? _layoutInfo;
+    private TableLayout.ContainerInfo? _containerInfo;
+#if DEBUG
+    private Dictionary<string, string?>? _lastKnownState;
+#endif
 
     /// <summary>
     /// User supplied control style
@@ -13343,11 +13361,6 @@ public unsafe partial class Control :
         PerformLayout(new LayoutEventArgs(affectedElement, affectedProperty));
     }
 
-    PropertyStore IArrangedElement.Properties
-    {
-        get { return Properties; }
-    }
-
     // CAREFUL: This really calls SetBoundsCore, not SetBounds.
     void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
     {
@@ -13418,6 +13431,22 @@ public unsafe partial class Control :
             }
         }
     }
+
+    BitVector32 IArrangedElement.LayoutState { get => _layoutState; set => _layoutState = value; }
+    Rectangle IArrangedElement.SpecifiedBounds { get => _specifiedBounds; set => _specifiedBounds = value; }
+    Size IArrangedElement.PreferredSize { get => _preferredSize; set => _preferredSize = value; }
+    Size IArrangedElement.LayoutBounds { get => _layoutBounds; set => _layoutBounds = value; }
+    Padding? IArrangedElement.Padding { get => _padding; set => _padding = value; }
+    Padding? IArrangedElement.Margin { get => _margin; set => _margin = value; }
+    Size? IArrangedElement.MinimumSize { get => _minimumSize; set => _minimumSize = value; }
+    Size? IArrangedElement.MaximumSize { get => _maximumSize; set => _maximumSize = value; }
+    DefaultLayout.AnchorInfo? IArrangedElement.AnchorInfo { get => _anchorInfo; set => _anchorInfo = value; }
+    Dictionary<IArrangedElement, Rectangle> IArrangedElement.CachedBounds => _cachedBounds;
+    TableLayout.LayoutInfo IArrangedElement.LayoutInfo { get => _layoutInfo ??= new(this); set => _layoutInfo = value; }
+    TableLayout.ContainerInfo IArrangedElement.ContainerInfo { get => _containerInfo ??= new(this); }
+#if DEBUG
+    Dictionary<string, string?>? IArrangedElement.LastKnownState { get => _lastKnownState; set => _lastKnownState = value; }
+#endif
 
     /// <summary>
     ///  Indicates whether or not the control supports UIA Providers via
