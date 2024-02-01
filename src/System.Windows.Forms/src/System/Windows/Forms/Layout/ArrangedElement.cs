@@ -19,7 +19,6 @@ internal abstract class ArrangedElement : Component, IArrangedElement
     private Rectangle _specifiedBounds;
     private Size _preferredSize;
     private Size _layoutBounds;
-    private Dictionary<string, string?>? _lastKnownState;
     private Padding? _padding;
     private Padding? _margin;
     private Size? _minimumSize;
@@ -28,6 +27,9 @@ internal abstract class ArrangedElement : Component, IArrangedElement
     private readonly Dictionary<IArrangedElement, Rectangle> _cachedBounds = [];
     private TableLayout.LayoutInfo? _layoutInfo;
     private TableLayout.ContainerInfo? _containerInfo;
+#if DEBUG
+    private Dictionary<string, string?>? _lastKnownState;
+#endif
 
     private readonly PropertyStore _propertyStore = new();  // Contains all properties that are not always set.
 

@@ -64,7 +64,6 @@ public abstract partial class ToolStripItem :
     private Rectangle _specifiedBounds;
     private Size _preferredSize;
     private Size _layoutBounds;
-    private Dictionary<string, string?>? _lastKnownState;
     private Padding? _padding;
     private Padding? _margin;
     private Size? _minimumSize;
@@ -73,6 +72,9 @@ public abstract partial class ToolStripItem :
     private readonly Dictionary<IArrangedElement, Rectangle> _cachedBounds = [];
     private TableLayout.LayoutInfo? _layoutInfo;
     private TableLayout.ContainerInfo? _containerInfo;
+#if DEBUG
+    private Dictionary<string, string?>? _lastKnownState;
+#endif
 
     private static readonly ArrangedElementCollection s_emptyChildCollection = new();
 

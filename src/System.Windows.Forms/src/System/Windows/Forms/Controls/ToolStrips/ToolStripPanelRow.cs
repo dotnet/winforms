@@ -47,7 +47,6 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     private Rectangle _specifiedBounds;
     private Size _preferredSize;
     private Size _layoutBounds;
-    private Dictionary<string, string?>? _lastKnownState;
     private Padding? _padding;
     private Padding? _margin;
     private Size? _minimumSize;
@@ -56,6 +55,9 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     private readonly Dictionary<IArrangedElement, Rectangle> _cachedBounds = [];
     private TableLayout.LayoutInfo? _layoutInfo;
     private TableLayout.ContainerInfo? _containerInfo;
+#if DEBUG
+    private Dictionary<string, string?>? _lastKnownState;
+#endif
 
     public ToolStripPanelRow(ToolStripPanel parent)
         : this(parent, true)
