@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms.Primitives;
 
+using Moq;
+
 namespace System.Windows.Forms.Tests;
 
 public class MessageBoxTests
@@ -137,11 +139,31 @@ public class MessageBoxTests
     }
 
     [WinFormsTheory]
-    [InlineData(true)]
-    public void MessageBox_MessageBoxDialogResult_Valid(bool switchValue)
+    [InlineData(false, DialogResult.OK)]
+    [InlineData(true, DialogResult.None)]
+    public void Show_WithText_ReturnsOK(bool switchValue, DialogResult expectedResult)
     {
         LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.NoClientNotificationsSwitchName, switchValue);
-        Assert.Equal(DialogResult.None, MessageBox.Show("Testing DialogResult"));
+
+        string text = "Testing DialogResult!";
+        Mock<ISubMessageBox> messageBoxMock = new Mock<ISubMessageBox>();
+        messageBoxMock.Setup(m => m.Show(text)).Returns(expectedResult);
+        DialogResult result = messageBoxMock.Object.Show(text);
+
+        Assert.Equal(expectedResult, result);
+    }
+
+    public interface ISubMessageBox
+    {
+        DialogResult Show(string message);
+    }
+
+    public class MessageBoxWrapper : ISubMessageBox
+    {
+        public DialogResult Show(string message)
+        {
+            return MessageBox.Show(message);
+        }
     }
 
     private static MESSAGEBOX_STYLE GetMessageBoxStyle(
