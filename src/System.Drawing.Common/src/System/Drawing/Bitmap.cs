@@ -380,5 +380,71 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
         GC.KeepAlive(this);
         GC.KeepAlive(effect);
     }
+
+    /// <summary>
+    ///  Converts the bitmap to the specified <paramref name="format"/> using the given <paramref name="ditherType"/>.
+    ///  The original pixel data is replaced with the new format.
+    /// </summary>
+    /// <param name="format">The new pixel format.</param>
+    /// <param name="ditherType">
+    ///  The dithering algorithm. Pass <see cref="DitherType.None"/> when the conversion does not reduce the bit depth
+    ///  of the pixel data.
+    /// </param>
+    /// <param name="paletteType">
+    ///  The palette type to use when the pixel format is indexed.
+    /// </param>
+    /// <param name="palette">
+    ///  Pointer to a <see cref="ColorPalette"/> that specifies the palette whose indexes are stored in the pixel data
+    ///  of the converted bitmap. This palette (called the actual palette) does not have to have the type specified by
+    ///  the <paramref name="paletteType"/> parameter. The <paramref name="paletteType"/> parameter specifies a standard
+    ///  palette that can be used by any of the ordered or spiral dithering algorithms. If the actual palette has a type
+    ///  other than that specified by the <paramref name="paletteType"/> parameter, then
+    ///  <see cref="ConvertFormat(PixelFormat, DitherType, PaletteType, ColorPalette?, float)"/> performs a nearest-color
+    ///  conversion from the standard palette to the actual palette.
+    /// </param>
+    /// <param name="alphaThresholdPercent">
+    ///  Real number in the range 0 through 100 that specifies which pixels in the source bitmap will map to the
+    ///  transparent color in the converted bitmap. A value of 0 specifies that none of the source pixels map to the
+    ///  transparent color. A value of 100 specifies that any pixel that is not fully opaque will map to the transparent
+    ///  color. A value of t specifies that any source pixel less than t percent of fully opaque will map to the
+    ///  transparent color. Note that for the alpha threshold to be effective, the palette must have a transparent
+    ///  color. If the palette does not have a transparent color, pixels with alpha values below the threshold will
+    ///  map to color that most closely matches (0, 0, 0, 0), usually black.
+    /// </param>
+    [RequiresPreviewFeatures]
+    public void ConvertFormat(
+        PixelFormat format,
+        DitherType ditherType,
+        PaletteType paletteType,
+        ColorPalette? palette = null,
+        float alphaThresholdPercent = 0.0f)
+    {
+        if (palette is null)
+        {
+            PInvoke.GdipBitmapConvertFormat(
+                this.Pointer(),
+                (int)format,
+                (GdiPlus.DitherType)ditherType,
+                (GdiPlus.PaletteType)paletteType,
+                null,
+                alphaThresholdPercent).ThrowIfFailed();
+        }
+        else
+        {
+            using var buffer = palette.ConvertToBuffer();
+            fixed (void* b = buffer)
+            {
+                PInvoke.GdipBitmapConvertFormat(
+                    this.Pointer(),
+                    (int)format,
+                    (GdiPlus.DitherType)ditherType,
+                    (GdiPlus.PaletteType)paletteType,
+                    (GdiPlus.ColorPalette*)b,
+                    alphaThresholdPercent).ThrowIfFailed();
+            }
+        }
+
+        GC.KeepAlive(this);
+    }
 #endif
 }
