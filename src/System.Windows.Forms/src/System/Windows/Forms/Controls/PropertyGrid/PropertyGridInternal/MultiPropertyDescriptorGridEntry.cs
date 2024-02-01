@@ -165,7 +165,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         return copy;
     }
 
-    public override string GetPropertyTextValue(object value)
+    public override string GetPropertyTextValue(object? value)
     {
         try
         {
