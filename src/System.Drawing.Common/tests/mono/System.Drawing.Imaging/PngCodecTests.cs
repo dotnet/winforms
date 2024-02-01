@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // PNG Codec class testing unit
@@ -33,7 +33,6 @@ using System.Drawing.Imaging;
 
 namespace MonoTests.System.Drawing.Imaging;
 
-[ConditionalClass(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported))]
 public class PngCodecTest
 {
     /* Checks bitmap features on a known 1bbp bitmap */
