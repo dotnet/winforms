@@ -416,8 +416,8 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
         PixelFormat format,
         DitherType ditherType,
         PaletteType paletteType,
-        ColorPalette? palette,
-        float alphaThresholdPercent)
+        ColorPalette? palette = null,
+        float alphaThresholdPercent = 0.0f)
     {
         if (palette is null)
         {
