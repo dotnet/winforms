@@ -8,9 +8,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 
-#if DEBUG
-#endif
-
 namespace System.Drawing;
 
 /// <summary>
@@ -259,18 +256,29 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     {
         ArgumentNullException.ThrowIfNull(format);
 
-        ImageCodecInfo codec = format.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
+        Guid encoder = format.Encoder;
+        if (encoder == Guid.Empty)
+        {
+            encoder = ImageCodecInfo.GetEncoderClsid(PInvokeCore.ImageFormatPNG);
+        }
 
-        Save(filename, codec, null);
+        Save(filename, encoder, null);
     }
 
     /// <summary>
     ///  Saves this <see cref='Image'/> to the specified file in the specified format and with the specified encoder parameters.
     /// </summary>
     public void Save(string filename, ImageCodecInfo encoder, Imaging.EncoderParameters? encoderParams)
+        => Save(filename, encoder.Clsid, encoderParams);
+
+    private void Save(string filename, Guid encoder, Imaging.EncoderParameters? encoderParams)
     {
         ArgumentNullException.ThrowIfNull(filename);
-        ArgumentNullException.ThrowIfNull(encoder);
+        if (encoder == Guid.Empty)
+        {
+            throw new ArgumentNullException(nameof(encoder));
+        }
+
         ThrowIfDirectoryDoesntExist(filename);
 
         GdiPlus.EncoderParameters* nativeParameters = null;
@@ -283,22 +291,17 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         try
         {
-            Guid guid = encoder.Clsid;
-            bool saved = false;
-
-            if (_animatedGifRawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
+            if (_animatedGifRawData is not null && RawFormat.Encoder == encoder)
             {
+                // Special case for animated gifs. We don't have an encoder for them, so we just write the raw data.
                 using var fs = File.OpenWrite(filename);
                 fs.Write(_animatedGifRawData, 0, _animatedGifRawData.Length);
-                saved = true;
+                return;
             }
 
-            if (!saved)
+            fixed (char* fn = filename)
             {
-                fixed (char* fn = filename)
-                {
-                    PInvoke.GdipSaveImageToFile(_nativeImage, fn, &guid, nativeParameters).ThrowIfFailed();
-                }
+                PInvoke.GdipSaveImageToFile(_nativeImage, fn, &encoder, nativeParameters).ThrowIfFailed();
             }
         }
         finally
@@ -315,15 +318,18 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
     private void Save(MemoryStream stream)
     {
-        // Jpeg loses data, so we don't want to use it to serialize...
-        ImageFormat dest = RawFormat;
-        if (dest.Guid == ImageFormat.Jpeg.Guid)
-            dest = ImageFormat.Png;
+        Guid format = RawFormat.Guid;
+        Guid encoder = ImageCodecInfo.GetEncoderClsid(format);
 
-        // If we don't find an Encoder (for things like Icon), we just switch back to PNG...
-        ImageCodecInfo codec = dest.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
+        // Jpeg loses data, so we don't want to use it to serialize. We'll use PNG instead.
+        // If we don't find an Encoder (for things like Icon), we just switch back to PNG.
+        if (format == PInvokeCore.ImageFormatJPEG || encoder == Guid.Empty)
+        {
+            format = PInvokeCore.ImageFormatPNG;
+            encoder = ImageCodecInfo.GetEncoderClsid(format);
+        }
 
-        Save(stream, codec);
+        Save(this, stream, encoder, format, null);
     }
 
     /// <summary>
@@ -332,23 +338,18 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     public void Save(Stream stream, ImageFormat format)
     {
         ArgumentNullException.ThrowIfNull(format);
-
-        ImageCodecInfo codec = format.FindEncoder()!;
-        Save(stream, codec);
+        Save(this, stream, format.Encoder, format.Guid, null);
     }
-
-    internal void Save(Stream stream, ImageCodecInfo encoder) =>
-        Save(stream, encoder, encoderParameters: null);
-
-    internal void Save(Stream stream, ImageCodecInfo encoder, GdiPlus.EncoderParameters* encoderParameters) =>
-        Save(this, stream, encoder.Clsid, encoder.FormatID, encoderParameters);
 
     internal static void Save(IImage image, Stream stream, Guid encoder, Guid format, GdiPlus.EncoderParameters* encoderParameters)
     {
         ArgumentNullException.ThrowIfNull(stream);
-        ArgumentNullException.ThrowIfNull(encoder);
+        if (encoder == Guid.Empty)
+        {
+            throw new ArgumentNullException(nameof(encoder));
+        }
 
-        if (format == ImageFormat.Gif.Guid && image.Data is { } rawData && rawData.Length > 0)
+        if (format == PInvokeCore.ImageFormatGIF && image.Data is { } rawData && rawData.Length > 0)
         {
             stream.Write(rawData);
             return;
@@ -376,7 +377,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         try
         {
-            Save(stream, encoder, nativeParameters);
+            Save(this, stream, encoder.Clsid, encoder.FormatID, nativeParameters);
         }
         finally
         {
