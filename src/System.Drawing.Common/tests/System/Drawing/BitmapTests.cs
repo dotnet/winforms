@@ -1425,12 +1425,12 @@ public class BitmapTests : FileCleanupTestBase
         }
     }
 
-    public static IEnumerable<object[]> Palette_TestData()
+    public static TheoryData<PixelFormat, int[]> Palette_TestData => new()
     {
-        yield return new object[] { PixelFormat.Format1bppIndexed, new int[] { -16777216, -1 } };
-        yield return new object[] { PixelFormat.Format4bppIndexed, new int[] { -16777216, -8388608, -16744448, -8355840, -16777088, -8388480, -16744320, -8355712, -4144960, -65536, -16711936, -256, -16776961, -65281, -16711681, -1, } };
-        yield return new object[] { PixelFormat.Format8bppIndexed, new int[] { -16777216, -8388608, -16744448, -8355840, -16777088, -8388480, -16744320, -8355712, -4144960, -65536, -16711936, -256, -16776961, -65281, -16711681, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -16777216, -16777165, -16777114, -16777063, -16777012, -16776961, -16764160, -16764109, -16764058, -16764007, -16763956, -16763905, -16751104, -16751053, -16751002, -16750951, -16750900, -16750849, -16738048, -16737997, -16737946, -16737895, -16737844, -16737793, -16724992, -16724941, -16724890, -16724839, -16724788, -16724737, -16711936, -16711885, -16711834, -16711783, -16711732, -16711681, -13434880, -13434829, -13434778, -13434727, -13434676, -13434625, -13421824, -13421773, -13421722, -13421671, -13421620, -13421569, -13408768, -13408717, -13408666, -13408615, -13408564, -13408513, -13395712, -13395661, -13395610, -13395559, -13395508, -13395457, -13382656, -13382605, -13382554, -13382503, -13382452, -13382401, -13369600, -13369549, -13369498, -13369447, -13369396, -13369345, -10092544, -10092493, -10092442, -10092391, -10092340, -10092289, -10079488, -10079437, -10079386, -10079335, -10079284, -10079233, -10066432, -10066381, -10066330, -10066279, -10066228, -10066177, -10053376, -10053325, -10053274, -10053223, -10053172, -10053121, -10040320, -10040269, -10040218, -10040167, -10040116, -10040065, -10027264, -10027213, -10027162, -10027111, -10027060, -10027009, -6750208, -6750157, -6750106, -6750055, -6750004, -6749953, -6737152, -6737101, -6737050, -6736999, -6736948, -6736897, -6724096, -6724045, -6723994, -6723943, -6723892, -6723841, -6711040, -6710989, -6710938, -6710887, -6710836, -6710785, -6697984, -6697933, -6697882, -6697831, -6697780, -6697729, -6684928, -6684877, -6684826, -6684775, -6684724, -6684673, -3407872, -3407821, -3407770, -3407719, -3407668, -3407617, -3394816, -3394765, -3394714, -3394663, -3394612, -3394561, -3381760, -3381709, -3381658, -3381607, -3381556, -3381505, -3368704, -3368653, -3368602, -3368551, -3368500, -3368449, -3355648, -3355597, -3355546, -3355495, -3355444, -3355393, -3342592, -3342541, -3342490, -3342439, -3342388, -3342337, -65536, -65485, -65434, -65383, -65332, -65281, -52480, -52429, -52378, -52327, -52276, -52225, -39424, -39373, -39322, -39271, -39220, -39169, -26368, -26317, -26266, -26215, -26164, -26113, -13312, -13261, -13210, -13159, -13108, -13057, -256, -205, -154, -103, -52, -1 } };
-    }
+        { PixelFormat.Format1bppIndexed, new int[] { -16777216, -1 } },
+        { PixelFormat.Format4bppIndexed, new int[] { -16777216, -8388608, -16744448, -8355840, -16777088, -8388480, -16744320, -8355712, -4144960, -65536, -16711936, -256, -16776961, -65281, -16711681, -1, } },
+        { PixelFormat.Format8bppIndexed, new int[] { -16777216, -8388608, -16744448, -8355840, -16777088, -8388480, -16744320, -8355712, -4144960, -65536, -16711936, -256, -16776961, -65281, -16711681, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -16777216, -16777165, -16777114, -16777063, -16777012, -16776961, -16764160, -16764109, -16764058, -16764007, -16763956, -16763905, -16751104, -16751053, -16751002, -16750951, -16750900, -16750849, -16738048, -16737997, -16737946, -16737895, -16737844, -16737793, -16724992, -16724941, -16724890, -16724839, -16724788, -16724737, -16711936, -16711885, -16711834, -16711783, -16711732, -16711681, -13434880, -13434829, -13434778, -13434727, -13434676, -13434625, -13421824, -13421773, -13421722, -13421671, -13421620, -13421569, -13408768, -13408717, -13408666, -13408615, -13408564, -13408513, -13395712, -13395661, -13395610, -13395559, -13395508, -13395457, -13382656, -13382605, -13382554, -13382503, -13382452, -13382401, -13369600, -13369549, -13369498, -13369447, -13369396, -13369345, -10092544, -10092493, -10092442, -10092391, -10092340, -10092289, -10079488, -10079437, -10079386, -10079335, -10079284, -10079233, -10066432, -10066381, -10066330, -10066279, -10066228, -10066177, -10053376, -10053325, -10053274, -10053223, -10053172, -10053121, -10040320, -10040269, -10040218, -10040167, -10040116, -10040065, -10027264, -10027213, -10027162, -10027111, -10027060, -10027009, -6750208, -6750157, -6750106, -6750055, -6750004, -6749953, -6737152, -6737101, -6737050, -6736999, -6736948, -6736897, -6724096, -6724045, -6723994, -6723943, -6723892, -6723841, -6711040, -6710989, -6710938, -6710887, -6710836, -6710785, -6697984, -6697933, -6697882, -6697831, -6697780, -6697729, -6684928, -6684877, -6684826, -6684775, -6684724, -6684673, -3407872, -3407821, -3407770, -3407719, -3407668, -3407617, -3394816, -3394765, -3394714, -3394663, -3394612, -3394561, -3381760, -3381709, -3381658, -3381607, -3381556, -3381505, -3368704, -3368653, -3368602, -3368551, -3368500, -3368449, -3355648, -3355597, -3355546, -3355495, -3355444, -3355393, -3342592, -3342541, -3342490, -3342439, -3342388, -3342337, -65536, -65485, -65434, -65383, -65332, -65281, -52480, -52429, -52378, -52327, -52276, -52225, -39424, -39373, -39322, -39271, -39220, -39169, -26368, -26317, -26266, -26215, -26164, -26113, -13312, -13261, -13210, -13159, -13108, -13057, -256, -205, -154, -103, -52, -1 } }
+    };
 
     [Theory]
     [MemberData(nameof(Palette_TestData))]
@@ -1600,6 +1600,93 @@ public class BitmapTests : FileCleanupTestBase
             Assert.Equal(ImageFormat.Png, bitmap.RawFormat);
         }
     }
+
+#if NET9_0_OR_GREATER
+    public static TheoryData<PixelFormat, DitherType, PaletteType> Convert_Valid = new()
+    {
+        // PaletteType is ignored for non-indexed formats
+        { PixelFormat.Format16bppArgb1555, DitherType.None, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format16bppRgb555, DitherType.Spiral8x8, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format16bppRgb565, DitherType.Ordered8x8, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format24bppRgb, DitherType.Ordered4x4, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format32bppArgb, DitherType.DualSpiral4x4, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format32bppPArgb, DitherType.ErrorDiffusion, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format32bppRgb, DitherType.Solid, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format16bppArgb1555, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format16bppRgb555, DitherType.DualSpiral8x8, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format16bppRgb565, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format24bppRgb, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format32bppArgb, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format32bppPArgb, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format32bppRgb, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format16bppRgb565, DitherType.None, (PaletteType)(-1) },
+    };
+
+    public static TheoryData<PixelFormat, DitherType, PaletteType> Convert_InvalidArgument = new()
+    {
+        // Indexed formats MUST always have a specified ColorPalette
+        { PixelFormat.Format1bppIndexed, (DitherType)(-1), PaletteType.FixedHalftone256 },
+        { PixelFormat.Format1bppIndexed, DitherType.None, (PaletteType)(-1) },
+        { PixelFormat.Format1bppIndexed, (DitherType)(-1), (PaletteType)(-1) },
+        { PixelFormat.Format1bppIndexed, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format1bppIndexed, DitherType.ErrorDiffusion, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format4bppIndexed, DitherType.Solid, PaletteType.FixedHalftone64 },
+        { PixelFormat.Format4bppIndexed, DitherType.None, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format4bppIndexed, DitherType.ErrorDiffusion, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format8bppIndexed, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format8bppIndexed, DitherType.Solid, PaletteType.FixedHalftone27 },
+        // Format16bppGrayScale is not supported for conversion
+        { PixelFormat.Format16bppGrayScale, DitherType.None, PaletteType.FixedHalftone256 },
+        { PixelFormat.Format16bppGrayScale, DitherType.ErrorDiffusion, PaletteType.FixedHalftone8 },
+        { PixelFormat.Format16bppGrayScale, DitherType.None, PaletteType.FixedBW },
+        { PixelFormat.Format16bppGrayScale, DitherType.Solid, PaletteType.FixedBW },
+        { PixelFormat.Format16bppRgb565, (DitherType)(-1), PaletteType.FixedHalftone256 },
+        { PixelFormat.Format16bppRgb565, (DitherType)(-1), (PaletteType)(-1) },
+    };
+
+    [Theory]
+    [MemberData(nameof(Convert_Valid))]
+    public void Bitmap_Convert_BasicPixelFormat(PixelFormat format, DitherType dither, PaletteType palette)
+    {
+        using Bitmap bitmap = new(1, 1);
+        bitmap.ConvertFormat(format, dither, palette);
+        bitmap.PixelFormat.Should().Be(format);
+    }
+
+    [Theory]
+    [MemberData(nameof(Convert_InvalidArgument))]
+    public void Bitmap_Convert_ArgumentException(PixelFormat format, DitherType dither, PaletteType palette)
+    {
+        using Bitmap bitmap = new(1, 1);
+        bitmap.Invoking(b => b.ConvertFormat(format, dither, palette)).Should().Throw<ArgumentException>();
+    }
+
+    public static TheoryData<PixelFormat> AllValidPixelFormats = new()
+    {
+        PixelFormat.Format16bppArgb1555,
+        PixelFormat.Format16bppRgb555,
+        PixelFormat.Format16bppRgb565,
+        PixelFormat.Format24bppRgb,
+        PixelFormat.Format32bppArgb,
+        PixelFormat.Format32bppPArgb,
+        PixelFormat.Format32bppRgb,
+        PixelFormat.Format48bppRgb,
+        PixelFormat.Format64bppArgb,
+        PixelFormat.Format64bppPArgb,
+        PixelFormat.Format8bppIndexed,
+        PixelFormat.Format1bppIndexed,
+        PixelFormat.Format4bppIndexed
+    };
+
+    [Theory]
+    [MemberData(nameof(AllValidPixelFormats))]
+    public void Bitmap_Convert_SingleArgument(PixelFormat format)
+    {
+        using Bitmap bitmap = new(1, 1);
+        bitmap.ConvertFormat(format);
+        bitmap.PixelFormat.Should().Be(format);
+    }
+#endif
 
     private class TestStream : Stream
     {
