@@ -25,10 +25,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.Prefixes.Add(s)
             Next
             listener.Start()
-
             Task.Run(
                 Sub()
-
                     Try
                         ' Start the listener to begin listening for requests.
                         Debug.WriteLine("Listening...")
