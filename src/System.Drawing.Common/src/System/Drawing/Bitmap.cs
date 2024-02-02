@@ -499,8 +499,13 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
             return;
         }
 
-        int paletteSize = 1 << targetSize;
+        int paletteSize = targetSize switch { 1 => 2, 4 => 16, _ => 256 };
         bool hasAlpha = format.HasFlag(PixelFormat.Alpha);
+        if (hasAlpha)
+        {
+            paletteSize++;
+        }
+
         ColorPalette palette = ColorPalette.CreateOptimalPalette(paletteSize, hasAlpha, this);
         ConvertFormat(format, DitherType.ErrorDiffusion, PaletteType.Custom, palette, .25f);
     }
