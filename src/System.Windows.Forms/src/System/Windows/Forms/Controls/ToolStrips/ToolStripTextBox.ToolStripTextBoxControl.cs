@@ -37,7 +37,7 @@ public partial class ToolStripTextBox
                 int offsetY = -rect.top;
 
                 // fetch the client rect, then apply the offset.
-                PInvoke.GetClientRect(this, out var clientRect);
+                PInvokeCore.GetClientRect(this, out var clientRect);
 
                 clientRect.left += offsetX;
                 clientRect.right += offsetX;

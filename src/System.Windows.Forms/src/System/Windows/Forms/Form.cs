@@ -2907,7 +2907,7 @@ public partial class Form : ContainerControl
             }
         }
 
-        PInvoke.GetClientRect(this, out RECT currentClient);
+        PInvokeCore.GetClientRect(this, out RECT currentClient);
         Rectangle bounds = Bounds;
 
         // If the width is incorrect, compute the correct size with
@@ -2934,7 +2934,7 @@ public partial class Form : ContainerControl
             bounds.Width = correct.Width;
             bounds.Height = correct.Height;
             Bounds = bounds;
-            PInvoke.GetClientRect(this, out currentClient);
+            PInvokeCore.GetClientRect(this, out currentClient);
         }
 
         // If it still isn't correct, then we assume that the problem is
