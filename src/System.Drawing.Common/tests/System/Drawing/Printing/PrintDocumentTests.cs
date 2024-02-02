@@ -35,7 +35,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         }
     };
 
-    [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [Fact]
     public void Ctor_Default_Success()
     {
         using PrintDocument document = new();
@@ -44,7 +44,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         AssertDefaultPageSettings(document.DefaultPageSettings);
     }
 
-    [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [Fact]
     public void DefaultPageSettings_SetValue_ReturnsExpected()
     {
         using PrintDocument document = new();
@@ -56,7 +56,6 @@ public class PrintDocumentTests : FileCleanupTestBase
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/8812")]
     public void DefaultPageSettings_Null_ReturnsExpected()
     {
         using PrintDocument document = new();
@@ -104,7 +103,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.Same(printController, document.PrintController);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void PrinterSettings_SetValue_ReturnsExpected()
     {
         using PrintDocument document = new();
@@ -125,7 +124,7 @@ public class PrintDocumentTests : FileCleanupTestBase
             document.DefaultPageSettings.PaperSize.Kind);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void BeginPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -143,7 +142,6 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/8815")]
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void EndPrint_SetValue_ReturnsExpected()
     {
@@ -187,7 +185,6 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.True(endPrintCalled);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/8815")]
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void PrintPage_SetValue_ReturnsExpected()
     {
@@ -206,7 +203,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)] 
     public void QueryPageSettings_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -253,9 +250,9 @@ public class PrintDocumentTests : FileCleanupTestBase
     private const string PrintToPdfPrinterName = "Microsoft Print to PDF";
     private static bool CanPrintToPdf()
     {
-        foreach (string name in PrinterSettings.InstalledPrinters)
+        foreach (string name in Helpers.InstalledPrinters)
         {
-            if (name.StartsWith(PrintToPdfPrinterName))
+            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
             {
                 return true;
             }
@@ -266,9 +263,9 @@ public class PrintDocumentTests : FileCleanupTestBase
 
     private static string GetPdfPrinterName()
     {
-        foreach (string name in PrinterSettings.InstalledPrinters)
+        foreach (string name in Helpers.InstalledPrinters)
         {
-            if (name.StartsWith(PrintToPdfPrinterName))
+            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
             {
                 return name;
             }
