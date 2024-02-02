@@ -123,12 +123,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
             Try
                 My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
-                    destinationFilename,
-                    userName:="",
-                    password:="",
-                    showUI:=False,
-                    connectionTimeout:=100000,
-                    overwrite:=True)
+                        destinationFilename,
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        connectionTimeout:=100000,
+                        overwrite:=True)
                 Assert.True(Directory.Exists(tmpFilePath))
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 18135)
             Finally
@@ -250,12 +250,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
             Try
                 My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
-                    destinationFilename,
-                    userName:=Nothing,
-                    password:="",
-                    showUI:=True,
-                    connectionTimeout:=100000,
-                    overwrite:=False)
+                        destinationFilename,
+                        userName:=Nothing,
+                        password:="",
+                        showUI:=True,
+                        connectionTimeout:=100000,
+                        overwrite:=False)
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             Finally
                 CleanUp(listener, tmpFilePath)

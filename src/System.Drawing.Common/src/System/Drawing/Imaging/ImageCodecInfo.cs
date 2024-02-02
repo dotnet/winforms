@@ -61,13 +61,13 @@ public sealed unsafe class ImageCodecInfo
         uint numEncoders;
         uint size;
 
-        PInvoke.GdipGetImageEncodersSize(&numEncoders, &size).ThrowIfFailed();
+        PInvokeCore.GdipGetImageEncodersSize(&numEncoders, &size).ThrowIfFailed();
 
         using BufferScope<byte> buffer = new((int)size);
 
         fixed (byte* b = buffer)
         {
-            PInvoke.GdipGetImageEncoders(numEncoders, size, (GdiPlus.ImageCodecInfo*)b).ThrowIfFailed();
+            PInvokeCore.GdipGetImageEncoders(numEncoders, size, (GdiPlus.ImageCodecInfo*)b).ThrowIfFailed();
             imageCodecs = FromNative(new((GdiPlus.ImageCodecInfo*)b, (int)numEncoders));
         }
 

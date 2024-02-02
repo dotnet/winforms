@@ -1130,15 +1130,15 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Returns the index of a child <see cref="GridEntry"/>.
     /// </summary>
     internal int GetChildIndex(GridEntry entry) => Children.IndexOf(entry);
-
+#nullable enable
     /// <summary>
     ///  Gets the components that own the current value. This is usually the value of the root entry, which is the
     ///  object being browsed. Walks up the <see cref="GridEntry"/> tree looking for an owner that is an
     ///  <see cref="IComponent"/>.
     /// </summary>
-    public virtual IComponent[] GetComponents()
+    public virtual IComponent[]? GetComponents()
     {
-        IComponent component = Component;
+        IComponent? component = Component;
         if (component is not null)
         {
             return new IComponent[] { component };
@@ -1218,7 +1218,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Returns the child <see cref="GridEntry"/> items for this <see cref="GridEntry"/>.
     /// </summary>
-    private GridEntry[] GetChildEntries()
+    private GridEntry[]? GetChildEntries()
     {
         object value = PropertyValue;
         Type objectType = PropertyType;
@@ -1229,12 +1229,17 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             return null;
         }
 
-        GridEntry[] entries = null;
+        GridEntry[]? entries = null;
 
-        var attributes = new Attribute[BrowsableAttributes.Count];
-        BrowsableAttributes.CopyTo(attributes, 0);
+        AttributeCollection? browsableAttributes = BrowsableAttributes;
+        Attribute[]? attributes = null;
+        if (browsableAttributes is not null)
+        {
+            attributes = new Attribute[browsableAttributes.Count];
+            browsableAttributes.CopyTo(attributes, 0);
+        }
 
-        PropertyTab ownerTab = OwnerTab;
+        PropertyTab? ownerTab = OwnerTab;
         Debug.Assert(ownerTab is not null, "No current tab!");
 
         try
@@ -1243,7 +1248,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
             if (!forceReadOnly)
             {
-                forceReadOnly = TypeDescriptorHelper.TryGetAttribute(value, out ReadOnlyAttribute readOnlyAttribute)
+                forceReadOnly = TypeDescriptorHelper.TryGetAttribute(value, out ReadOnlyAttribute? readOnlyAttribute)
                     && !readOnlyAttribute.IsDefaultAttribute();
             }
 
@@ -1254,8 +1259,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             }
 
             // Ask the owning tab for properties if we have one.
-            PropertyDescriptorCollection properties = null;
-            PropertyDescriptor defaultProperty = null;
+            PropertyDescriptorCollection? properties = null;
+            PropertyDescriptor? defaultProperty = null;
             if (ownerTab is not null)
             {
                 properties = ownerTab.GetProperties(this, value, attributes);
@@ -1308,6 +1313,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             {
                 // Otherwise, create the proper GridEntries.
                 bool createInstanceSupported = TypeConverter.GetCreateInstanceSupported(this);
+                if (properties is null)
+                {
+                    return entries;
+                }
+
                 entries = new GridEntry[properties.Count];
                 int index = 0;
 
@@ -1320,7 +1330,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                     bool hide = false;
                     try
                     {
-                        object owner = value;
+                        object? owner = value;
                         if (value is ICustomTypeDescriptor descriptor)
                         {
                             owner = descriptor.GetPropertyOwner(property);
@@ -1392,9 +1402,9 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Returns the text value of this property.
     /// </summary>
-    public virtual string GetPropertyTextValue(object value)
+    public virtual string GetPropertyTextValue(object? value)
     {
-        string textValue = null;
+        string? textValue = null;
 
         TypeConverter converter = TypeConverter;
         try
@@ -1416,7 +1426,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// </summary>
     public virtual object[] GetPropertyValueList()
     {
-        ICollection values = TypeConverter.GetStandardValues(this);
+        ICollection? values = TypeConverter.GetStandardValues(this);
         if (values is not null)
         {
             object[] valueArray = new object[values.Count];
@@ -1439,9 +1449,9 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Retrieves the requested service.  This may return null if the requested service is not available.
     /// </summary>
-    public virtual object GetService(Type serviceType)
+    public virtual object? GetService(Type serviceType)
         => serviceType == typeof(GridItem) ? this : (_parent?.GetService(serviceType));
-#nullable enable
+
     /// <summary>
     ///  Paints the label portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
     /// </summary>

@@ -6,12 +6,14 @@
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
     <LangVersion>latest</LangVersion>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <UseApplicationFramework>True</UseApplicationFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <UseApplicationFramework>True</UseApplicationFramework>
     <OutputType>Library</OutputType>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
