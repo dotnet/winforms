@@ -185,4 +185,10 @@ internal static partial class LocalAppContextSwitches
             s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
         }
     }
+
+    internal static bool GetCachedSwitchValue(string switchName)
+    {
+        int cachedSwitchValue = 0;
+        return GetCachedSwitchValue(switchName, ref cachedSwitchValue);
+    }
 }

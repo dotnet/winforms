@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Reflection;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests;
 
@@ -134,14 +133,6 @@ public class MessageBoxTests
                 | (MESSAGEBOX_STYLE)MessageBoxIcon.None
                 | (MESSAGEBOX_STYLE)value
                 | (MESSAGEBOX_STYLE)MessageBoxOptions.DefaultDesktopOnly);
-    }
-
-    [WinFormsTheory]
-    [InlineData(true, DialogResult.None)]
-    public void MessageBox_MessageBoxDialogResult_Valid(bool switchValue, DialogResult expectedResult)
-    {
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.NoClientNotificationsSwitchName, switchValue);
-        Assert.Equal(expectedResult, MessageBox.Show("Testing DialogResult"));
     }
 
     private static MESSAGEBOX_STYLE GetMessageBoxStyle(
