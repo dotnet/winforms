@@ -24,7 +24,7 @@ public static class GdiPlusHandlesTests
             using Bitmap bmp = new(100, 100);
             using Icon ico = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico"));
 
-            using var hdc = new GetDcScope(PInvokeCore.GetForegroundWindow());
+            using GetDcScope hdc = new(PInvokeCore.GetForegroundWindow());
             using Graphics graphicsFromHdc = Graphics.FromHdc(hdc);
 
             using Process currentProcess = Process.GetCurrentProcess();
