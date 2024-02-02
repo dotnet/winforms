@@ -254,8 +254,6 @@ GdipGetImageBounds
 GdipGetImageDecoders
 GdipGetImageDecodersSize
 GdipGetImageDimension
-GdipGetImageEncoders
-GdipGetImageEncodersSize
 GdipGetImageFlags
 GdipGetImageGraphicsContext
 GdipGetImageHeight
@@ -435,7 +433,6 @@ GdipSaveAdd
 GdipSaveAddImage
 GdipSaveGraphics
 GdipSaveImageToFile
-GdipSaveImageToStream
 GdipScaleLineTransform
 GdipScaleMatrix
 GdipScalePathGradientTransform

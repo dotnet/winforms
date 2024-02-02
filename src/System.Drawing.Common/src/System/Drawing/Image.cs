@@ -78,7 +78,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
         using MemoryStream stream = new();
-        Save(stream);
+        this.Save(stream);
         si.AddValue("Data", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
     }
 
@@ -259,7 +259,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         Guid encoder = format.Encoder;
         if (encoder == Guid.Empty)
         {
-            encoder = ImageCodecInfo.GetEncoderClsid(PInvokeCore.ImageFormatPNG);
+            encoder = ImageCodecInfoHelper.GetEncoderClsid(PInvokeCore.ImageFormatPNG);
         }
 
         Save(filename, encoder, null);
@@ -316,47 +316,13 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         }
     }
 
-    private void Save(MemoryStream stream)
-    {
-        Guid format = RawFormat.Guid;
-        Guid encoder = ImageCodecInfo.GetEncoderClsid(format);
-
-        // Jpeg loses data, so we don't want to use it to serialize. We'll use PNG instead.
-        // If we don't find an Encoder (for things like Icon), we just switch back to PNG.
-        if (format == PInvokeCore.ImageFormatJPEG || encoder == Guid.Empty)
-        {
-            format = PInvokeCore.ImageFormatPNG;
-            encoder = ImageCodecInfo.GetEncoderClsid(format);
-        }
-
-        Save(this, stream, encoder, format, null);
-    }
-
     /// <summary>
     ///  Saves this <see cref='Image'/> to the specified stream in the specified format.
     /// </summary>
     public void Save(Stream stream, ImageFormat format)
     {
         ArgumentNullException.ThrowIfNull(format);
-        Save(this, stream, format.Encoder, format.Guid, null);
-    }
-
-    internal static void Save(IImage image, Stream stream, Guid encoder, Guid format, GdiPlus.EncoderParameters* encoderParameters)
-    {
-        ArgumentNullException.ThrowIfNull(stream);
-        if (encoder == Guid.Empty)
-        {
-            throw new ArgumentNullException(nameof(encoder));
-        }
-
-        if (format == PInvokeCore.ImageFormatGIF && image.Data is { } rawData && rawData.Length > 0)
-        {
-            stream.Write(rawData);
-            return;
-        }
-
-        using var iStream = stream.ToIStream();
-        PInvoke.GdipSaveImageToStream(image.Pointer, iStream, &encoder, encoderParameters).ThrowIfFailed();
+        this.Save(stream, format.Encoder, format.Guid, encoderParameters: null);
     }
 
     /// <summary>
@@ -377,7 +343,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         try
         {
-            Save(this, stream, encoder.Clsid, encoder.FormatID, nativeParameters);
+            this.Save(stream, encoder.Clsid, encoder.FormatID, nativeParameters);
         }
         finally
         {

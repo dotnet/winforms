@@ -121,7 +121,7 @@ public sealed class ImageFormat
     /// <summary>
     ///  The encoder that supports this format, if any.
     /// </summary>
-    internal Guid Encoder => ImageCodecInfo.GetEncoderClsid(_guid);
+    internal Guid Encoder => ImageCodecInfoHelper.GetEncoderClsid(_guid);
 
     /// <summary>
     ///  Converts this <see cref='ImageFormat'/> to a human-readable string.
