@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Adjusts the light, midtone, or dark areas of an image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class LevelsEffect : Effect
+public class LevelsEffect : Effect
 {
     private readonly LevelsParams _levelsParams;
 

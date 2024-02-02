@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Increases or decreases the contrast of an image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class ContrastEffect : ColorCurveEffect
+public class ContrastEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="ContrastEffect"/> with the given <paramref name="contrast"/> adjustment value.

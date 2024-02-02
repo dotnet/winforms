@@ -13,7 +13,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  in a series of lookup tables.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed unsafe class ColorLookupTableEffect : Effect
+public unsafe class ColorLookupTableEffect : Effect
 {
     private readonly ColorLUTParams _parameters;
 
