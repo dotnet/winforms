@@ -16,6 +16,7 @@ ColorLUTParams
 ColorMatrixEffectGuid
 CreateIconFromResourceEx
 DeviceCapabilities
+DitherType
 DMBIN_*
 DMPAPER_*
 DMRES_*
@@ -52,6 +53,7 @@ GdipAddPathString
 GdipBeginContainer
 GdipBeginContainer2
 GdipBitmapApplyEffect
+GdipBitmapConvertFormat
 GdipBitmapGetPixel
 GdipBitmapLockBits
 GdipBitmapSetPixel
@@ -252,8 +254,6 @@ GdipGetImageBounds
 GdipGetImageDecoders
 GdipGetImageDecodersSize
 GdipGetImageDimension
-GdipGetImageEncoders
-GdipGetImageEncodersSize
 GdipGetImageFlags
 GdipGetImageGraphicsContext
 GdipGetImageHeight
@@ -362,6 +362,7 @@ GdipImageGetFrameDimensionsCount
 GdipImageGetFrameDimensionsList
 GdipImageRotateFlip
 GdipImageSelectActiveFrame
+GdipInitializePalette
 GdipInvertMatrix
 GdipIsClipEmpty
 GdipIsEmptyRegion
@@ -432,7 +433,6 @@ GdipSaveAdd
 GdipSaveAddImage
 GdipSaveGraphics
 GdipSaveImageToFile
-GdipSaveImageToStream
 GdipScaleLineTransform
 GdipScaleMatrix
 GdipScalePathGradientTransform
@@ -556,6 +556,9 @@ LANG_JAPANESE
 LevelsEffectGuid
 LevelsParams
 PALETTEENTRY
+PaletteFlags
+PaletteType
+PixelFormat*
 PRINTER_ENUM_CONNECTIONS
 PRINTER_ENUM_LOCAL
 PRINTER_INFO_4W

@@ -56,13 +56,18 @@ E_NOTIMPL
 E_OUTOFMEMORY
 E_POINTER
 E_UNEXPECTED
+EncoderParameters
 fdex*
 FDEX_PROP_FLAGS
 FILETIME
 GdipCreateFromHWND
 GdipDeleteGraphics
+GdipGetImageEncoders
+GdipGetImageEncodersSize
+GdipGetImageRawFormat
 GdipGetRegionHRgn
 GdipIsInfiniteRegion
+GdipSaveImageToStream
 GetClipRgn
 GetDC
 GetDCEx
@@ -86,6 +91,7 @@ GlobalReAlloc
 GlobalSize
 GlobalUnlock
 GpGraphics
+GpImage
 GpRegion
 HBITMAP
 HBMMENU_*
@@ -105,6 +111,7 @@ HWND_*
 IDI_*
 IEnumUnknown
 IGlobalInterfaceTable
+ImageFormat*
 INPLACE_E_NOTOOLSPACE
 IntersectClipRect
 IStream

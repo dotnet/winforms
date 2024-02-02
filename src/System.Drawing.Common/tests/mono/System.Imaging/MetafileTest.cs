@@ -43,10 +43,8 @@ public class MetafileTest
     public void Metafile_String()
     {
         string filename = Helpers.GetTestBitmapPath(WmfPlaceable);
-        using (Metafile mf = new(filename))
-        using (Metafile clone = (Metafile)mf.Clone())
-        {
-        }
+        using Metafile mf = new(filename);
+        using Metafile clone = (Metafile)mf.Clone();
     }
 
     private static void Check_MetaHeader_WmfPlaceable(MetaHeader mh)
@@ -93,52 +91,46 @@ public class MetafileTest
     [Fact]
     public void GetMetafileHeader_FromFile_WmfPlaceable()
     {
-        using (Metafile mf = new(Helpers.GetTestBitmapPath(WmfPlaceable)))
-        {
-            MetafileHeader header1 = mf.GetMetafileHeader();
-            Check_MetafileHeader_WmfPlaceable(header1);
+        using Metafile mf = new(Helpers.GetTestBitmapPath(WmfPlaceable));
+        MetafileHeader header1 = mf.GetMetafileHeader();
+        Check_MetafileHeader_WmfPlaceable(header1);
 
-            MetaHeader mh1 = header1.WmfHeader;
-            Check_MetaHeader_WmfPlaceable(mh1);
+        MetaHeader mh1 = header1.WmfHeader;
+        Check_MetaHeader_WmfPlaceable(mh1);
 
-            MetaHeader mh2 = mf.GetMetafileHeader().WmfHeader;
-            Assert.NotSame(mh1, mh2);
-        }
+        MetaHeader mh2 = mf.GetMetafileHeader().WmfHeader;
+        Assert.NotSame(mh1, mh2);
     }
 
     [Fact]
     public void GetMetafileHeader_FromFileStream_WmfPlaceable()
     {
-        using (FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(WmfPlaceable)))
-        using (Metafile mf = new(fs))
-        {
-            MetafileHeader header1 = mf.GetMetafileHeader();
-            Check_MetafileHeader_WmfPlaceable(header1);
+        using FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(WmfPlaceable));
+        using Metafile mf = new(fs);
+        MetafileHeader header1 = mf.GetMetafileHeader();
+        Check_MetafileHeader_WmfPlaceable(header1);
 
-            MetaHeader mh1 = header1.WmfHeader;
-            Check_MetaHeader_WmfPlaceable(mh1);
+        MetaHeader mh1 = header1.WmfHeader;
+        Check_MetaHeader_WmfPlaceable(mh1);
 
-            MetaHeader mh2 = mf.GetMetafileHeader().WmfHeader;
-            Assert.NotSame(mh1, mh2);
-        }
+        MetaHeader mh2 = mf.GetMetafileHeader().WmfHeader;
+        Assert.NotSame(mh1, mh2);
     }
 
     [Fact]
     public void GetMetafileHeader_FromMemoryStream_WmfPlaceable()
     {
         string filename = Helpers.GetTestBitmapPath(WmfPlaceable);
-        using (MemoryStream ms = new(File.ReadAllBytes(filename)))
-        using (Metafile mf = new(ms))
-        {
-            MetafileHeader header1 = mf.GetMetafileHeader();
-            Check_MetafileHeader_WmfPlaceable(header1);
+        using MemoryStream ms = new(File.ReadAllBytes(filename));
+        using Metafile mf = new(ms);
+        MetafileHeader header1 = mf.GetMetafileHeader();
+        Check_MetafileHeader_WmfPlaceable(header1);
 
-            MetaHeader mh1 = header1.WmfHeader;
-            Check_MetaHeader_WmfPlaceable(mh1);
+        MetaHeader mh1 = header1.WmfHeader;
+        Check_MetaHeader_WmfPlaceable(mh1);
 
-            MetaHeader mh2 = mf.GetMetafileHeader().WmfHeader;
-            Assert.NotSame(mh1, mh2);
-        }
+        MetaHeader mh2 = mf.GetMetafileHeader().WmfHeader;
+        Assert.NotSame(mh1, mh2);
     }
 
     private static void Check_MetafileHeader_Emf(MetafileHeader header)
@@ -166,34 +158,28 @@ public class MetafileTest
     [Fact]
     public void GetMetafileHeader_FromFile_Emf()
     {
-        using (Metafile mf = new(Helpers.GetTestBitmapPath(Emf)))
-        {
-            MetafileHeader header1 = mf.GetMetafileHeader();
-            Check_MetafileHeader_Emf(header1);
-        }
+        using Metafile mf = new(Helpers.GetTestBitmapPath(Emf));
+        MetafileHeader header1 = mf.GetMetafileHeader();
+        Check_MetafileHeader_Emf(header1);
     }
 
     [Fact]
     public void GetMetafileHeader_FromFileStream_Emf()
     {
-        using (FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(Emf)))
-        using (Metafile mf = new(fs))
-        {
-            MetafileHeader header1 = mf.GetMetafileHeader();
-            Check_MetafileHeader_Emf(header1);
-        }
+        using FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(Emf));
+        using Metafile mf = new(fs);
+        MetafileHeader header1 = mf.GetMetafileHeader();
+        Check_MetafileHeader_Emf(header1);
     }
 
     [Fact]
     public void GetMetafileHeader_FromMemoryStream_Emf()
     {
         string filename = Helpers.GetTestBitmapPath(Emf);
-        using (MemoryStream ms = new(File.ReadAllBytes(filename)))
-        using (Metafile mf = new(ms))
-        {
-            MetafileHeader header1 = mf.GetMetafileHeader();
-            Check_MetafileHeader_Emf(header1);
-        }
+        using MemoryStream ms = new(File.ReadAllBytes(filename));
+        using Metafile mf = new(ms);
+        MetafileHeader header1 = mf.GetMetafileHeader();
+        Check_MetafileHeader_Emf(header1);
     }
 }
 
@@ -226,77 +212,67 @@ public class MetafileFulltrustTest
 
     private void Metafile_IntPtrEmfType(EmfType type)
     {
-        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
+        using Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        IntPtr hdc = g.GetHdc();
+        try
         {
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                IntPtr hdc = g.GetHdc();
-                try
-                {
-                    Metafile mf = new(hdc, type);
-                    CheckEmptyHeader(mf, type);
-                }
-                finally
-                {
-                    g.ReleaseHdc(hdc);
-                }
-            }
+            Metafile mf = new(hdc, type);
+            CheckEmptyHeader(mf, type);
+        }
+        finally
+        {
+            g.ReleaseHdc(hdc);
         }
     }
 
     [Fact]
     public void Metafile_IntPtrRectangle_Empty()
     {
-        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
-        using (Graphics g = Graphics.FromImage(bmp))
+        using Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        IntPtr hdc = g.GetHdc();
+        try
         {
-            IntPtr hdc = g.GetHdc();
-            try
-            {
-                Metafile mf = new(hdc, new Rectangle());
-                CheckEmptyHeader(mf, EmfType.EmfPlusDual);
-            }
-            finally
-            {
-                g.ReleaseHdc(hdc);
-            }
+            Metafile mf = new(hdc, new Rectangle());
+            CheckEmptyHeader(mf, EmfType.EmfPlusDual);
+        }
+        finally
+        {
+            g.ReleaseHdc(hdc);
         }
     }
 
     [Fact]
     public void Metafile_IntPtrRectangleF_Empty()
     {
-        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
-        using (Graphics g = Graphics.FromImage(bmp))
+        using Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        IntPtr hdc = g.GetHdc();
+        try
         {
-            IntPtr hdc = g.GetHdc();
-            try
-            {
-                Metafile mf = new(hdc, new RectangleF());
-                CheckEmptyHeader(mf, EmfType.EmfPlusDual);
-            }
-            finally
-            {
-                g.ReleaseHdc(hdc);
-            }
+            Metafile mf = new(hdc, new RectangleF());
+            CheckEmptyHeader(mf, EmfType.EmfPlusDual);
+        }
+        finally
+        {
+            g.ReleaseHdc(hdc);
         }
     }
 
     private void Metafile_StreamEmfType(Stream stream, EmfType type)
     {
-        using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
-        using (Graphics g = Graphics.FromImage(bmp))
+        using Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        IntPtr hdc = g.GetHdc();
+        try
         {
-            IntPtr hdc = g.GetHdc();
-            try
-            {
-                Metafile mf = new(stream, hdc, type);
-                CheckEmptyHeader(mf, type);
-            }
-            finally
-            {
-                g.ReleaseHdc(hdc);
-            }
+            Metafile mf = new(stream, hdc, type);
+            CheckEmptyHeader(mf, type);
+        }
+        finally
+        {
+            g.ReleaseHdc(hdc);
         }
     }
 
@@ -309,19 +285,15 @@ public class MetafileFulltrustTest
     [Fact]
     public void Metafile_StreamIntPtrEmfType_EmfOnly()
     {
-        using (MemoryStream ms = new())
-        {
-            Metafile_StreamEmfType(ms, EmfType.EmfOnly);
-        }
+        using MemoryStream ms = new();
+        Metafile_StreamEmfType(ms, EmfType.EmfOnly);
     }
 
     [Fact]
     public void Metafile_StreamIntPtrEmfType_Invalid()
     {
-        using (MemoryStream ms = new())
-        {
-            Assert.Throws<ArgumentException>(() => Metafile_StreamEmfType(ms, (EmfType)int.MinValue));
-        }
+        using MemoryStream ms = new();
+        Assert.Throws<ArgumentException>(() => Metafile_StreamEmfType(ms, (EmfType)int.MinValue));
     }
 
     private void CreateFilename(EmfType type, bool single)
@@ -329,41 +301,37 @@ public class MetafileFulltrustTest
         string name = $"{type}-{(single ? "Single" : "Multiple")}.emf";
         string filename = Path.Combine(Path.GetTempPath(), name);
         Metafile mf;
-        using (Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb))
+        using Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb);
+        using (Graphics g = Graphics.FromImage(bmp))
         {
-            using (Graphics g = Graphics.FromImage(bmp))
+            IntPtr hdc = g.GetHdc();
+            try
             {
-                IntPtr hdc = g.GetHdc();
-                try
-                {
-                    mf = new Metafile(filename, hdc, type);
-                    Assert.Equal(0, new FileInfo(filename).Length);
-                }
-                finally
-                {
-                    g.ReleaseHdc(hdc);
-                }
+                mf = new Metafile(filename, hdc, type);
+                Assert.Equal(0, new FileInfo(filename).Length);
             }
-
-            long size = 0;
-            using (Graphics g = Graphics.FromImage(mf))
+            finally
             {
-                g.FillRectangle(Brushes.BlueViolet, 10, 10, 80, 80);
-                size = new FileInfo(filename).Length;
-                Assert.Equal(0, size);
+                g.ReleaseHdc(hdc);
             }
-
-            if (!single)
-            {
-                using (Graphics g = Graphics.FromImage(mf))
-                {
-                    g.DrawRectangle(Pens.Azure, 10, 10, 80, 80);
-                }
-            }
-
-            mf.Dispose();
-            Assert.Equal(size, new FileInfo(filename).Length);
         }
+
+        long size = 0;
+        using (Graphics g = Graphics.FromImage(mf))
+        {
+            g.FillRectangle(Brushes.BlueViolet, 10, 10, 80, 80);
+            size = new FileInfo(filename).Length;
+            Assert.Equal(0, size);
+        }
+
+        if (!single)
+        {
+            using Graphics g = Graphics.FromImage(mf);
+            g.DrawRectangle(Pens.Azure, 10, 10, 80, 80);
+        }
+
+        mf.Dispose();
+        Assert.Equal(size, new FileInfo(filename).Length);
     }
 
     [Fact]
@@ -389,9 +357,7 @@ public class MetafileFulltrustTest
         using (Graphics g = Graphics.FromImage(mf))
         {
             string text = "this\nis a test";
-            CharacterRange[] ranges = new CharacterRange[2];
-            ranges[0] = new CharacterRange(0, 5);
-            ranges[1] = new CharacterRange(5, 9);
+            CharacterRange[] ranges = [new CharacterRange(0, 5), new CharacterRange(5, 9)];
 
             SizeF size = g.MeasureString(text, test_font);
             Assert.False(size.IsEmpty);
@@ -414,53 +380,51 @@ public class MetafileFulltrustTest
     public void WorldTransforms()
     {
         Metafile mf;
-        using (Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb))
+        using Bitmap bmp = new(100, 100, PixelFormat.Format32bppArgb);
+        using (Graphics g = Graphics.FromImage(bmp))
         {
-            using (Graphics g = Graphics.FromImage(bmp))
+            IntPtr hdc = g.GetHdc();
+            try
             {
-                IntPtr hdc = g.GetHdc();
-                try
-                {
-                    mf = new Metafile(hdc, EmfType.EmfPlusOnly);
-                }
-                finally
-                {
-                    g.ReleaseHdc(hdc);
-                }
+                mf = new Metafile(hdc, EmfType.EmfPlusOnly);
             }
-
-            using (Graphics g = Graphics.FromImage(mf))
+            finally
             {
-                Assert.True(g.Transform.IsIdentity);
-                g.ScaleTransform(2f, 0.5f);
-                Assert.False(g.Transform.IsIdentity);
-                g.RotateTransform(90);
-                g.TranslateTransform(-2, 2);
-                Matrix m = g.Transform;
-                g.MultiplyTransform(m);
-                // check
-                float[] elements = g.Transform.Elements;
-                Assert.Equal(-1.0, elements[0], 5);
-                Assert.Equal(0.0, elements[1], 5);
-                Assert.Equal(0.0, elements[2], 5);
-                Assert.Equal(-1.0, elements[3], 5);
-                Assert.Equal(-2.0, elements[4], 5);
-                Assert.Equal(-3.0, elements[5], 5);
-
-                g.Transform = m;
-                elements = g.Transform.Elements;
-                Assert.Equal(0.0, elements[0], 5);
-                Assert.Equal(0.5, elements[1], 5);
-                Assert.Equal(-2.0, elements[2], 5);
-                Assert.Equal(0.0, elements[3], 5);
-                Assert.Equal(-4.0, elements[4], 5);
-                Assert.Equal(-1.0, elements[5], 5);
-
-                g.ResetTransform();
-                Assert.True(g.Transform.IsIdentity);
+                g.ReleaseHdc(hdc);
             }
-
-            mf.Dispose();
         }
+
+        using (Graphics g = Graphics.FromImage(mf))
+        {
+            Assert.True(g.Transform.IsIdentity);
+            g.ScaleTransform(2f, 0.5f);
+            Assert.False(g.Transform.IsIdentity);
+            g.RotateTransform(90);
+            g.TranslateTransform(-2, 2);
+            Matrix m = g.Transform;
+            g.MultiplyTransform(m);
+            // check
+            float[] elements = g.Transform.Elements;
+            Assert.Equal(-1.0, elements[0], 5);
+            Assert.Equal(0.0, elements[1], 5);
+            Assert.Equal(0.0, elements[2], 5);
+            Assert.Equal(-1.0, elements[3], 5);
+            Assert.Equal(-2.0, elements[4], 5);
+            Assert.Equal(-3.0, elements[5], 5);
+
+            g.Transform = m;
+            elements = g.Transform.Elements;
+            Assert.Equal(0.0, elements[0], 5);
+            Assert.Equal(0.5, elements[1], 5);
+            Assert.Equal(-2.0, elements[2], 5);
+            Assert.Equal(0.0, elements[3], 5);
+            Assert.Equal(-4.0, elements[4], 5);
+            Assert.Equal(-1.0, elements[5], 5);
+
+            g.ResetTransform();
+            Assert.True(g.Transform.IsIdentity);
+        }
+
+        mf.Dispose();
     }
 }
