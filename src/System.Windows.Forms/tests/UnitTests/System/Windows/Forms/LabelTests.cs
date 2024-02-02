@@ -303,16 +303,16 @@ public class LabelTests
     {
         foreach (bool autoSize in new bool[] { true, false })
         {
-            foreach (BorderStyle value in Enum.GetValues(typeof(BorderStyle)))
+            foreach (BorderStyle style in Enum.GetValues(typeof(BorderStyle)))
             {
-                yield return new object[] { autoSize, value };
+                yield return new object[] { autoSize, style };
             }
         }
     }
 
     [WinFormsTheory]
     [MemberData(nameof(BorderStyles_Set_TestData))]
-    public void Label_BorderStyle_Set_GetReturnsExpected(bool autoSize, BorderStyle value)
+    public void Label_BorderStyle_Set_GetReturnsExpected(bool autoSize, BorderStyle style)
     {
         using Label control = new()
         {
@@ -321,21 +321,21 @@ public class LabelTests
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
-        control.BorderStyle = value;
-        Assert.Equal(value, control.BorderStyle);
+        control.BorderStyle = style;
+        Assert.Equal(style, control.BorderStyle);
         Assert.Equal(0, layoutCallCount);
         Assert.Equal(autoSize, control.AutoSize);
         Assert.False(control.IsHandleCreated);
 
         // Set same.
-        control.BorderStyle = value;
-        Assert.Equal(value, control.BorderStyle);
+        control.BorderStyle = style;
+        Assert.Equal(style, control.BorderStyle);
         Assert.Equal(0, layoutCallCount);
         Assert.Equal(autoSize, control.AutoSize);
         Assert.False(control.IsHandleCreated);
 
         // Set different.
-        if (value != BorderStyle.None)
+        if (style != BorderStyle.None)
         {
             control.BorderStyle = BorderStyle.None;
             Assert.Equal(BorderStyle.None, control.BorderStyle);
@@ -350,24 +350,24 @@ public class LabelTests
     [InlineData(FlatStyle.Popup)]
     [InlineData(FlatStyle.Standard)]
     [InlineData(FlatStyle.Flat)]
-    public void Label_FlatStyle_Set_GetReturnsExpected(FlatStyle value)
+    public void Label_FlatStyle_Set_GetReturnsExpected(FlatStyle style)
     {
-        using var label = new Label();
-        label.FlatStyle = value;
+        using Label label = new Label();
+        label.FlatStyle = style;
         label.CreateControl();
 
         Assert.True(label.IsHandleCreated);
-        Assert.Equal(value, label.FlatStyle);
+        Assert.Equal(style, label.FlatStyle);
 
         // Set same.
-        label.FlatStyle = value;
+        label.FlatStyle = style;
         label.CreateControl();
 
         Assert.True(label.IsHandleCreated);
-        Assert.Equal(value, label.FlatStyle);
+        Assert.Equal(style, label.FlatStyle);
 
         // Set different.
-        if (value != FlatStyle.Flat)
+        if (style != FlatStyle.Flat)
         {
             label.FlatStyle = FlatStyle.Flat;
             label.CreateControl();
@@ -386,19 +386,19 @@ public class LabelTests
     [InlineData(ContentAlignment.BottomLeft)]
     [InlineData(ContentAlignment.BottomCenter)]
     [InlineData(ContentAlignment.BottomRight)]
-    public void Label_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
+    public void Label_TextAlign_Set_GetReturnsExpected(ContentAlignment alignment)
     {
-        using var label = new Label();
-        label.TextAlign = value;
+        using Label label = new Label();
+        label.TextAlign = alignment;
 
-        Assert.Equal(value, label.TextAlign);
+        Assert.Equal(alignment, label.TextAlign);
         Assert.True(label.OwnerDraw);
     }
 
     [WinFormsFact]
     public void Label_TextAlign_SetSameValue_DoesNotInvalidate()
     {
-        using var label = new Label();
+        using Label label = new Label();
         label.TextAlign = ContentAlignment.TopLeft;
 
         label.CreateControl();
@@ -411,7 +411,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_TextAlign_SetDifferentValue_Invalidate()
     {
-        using var label = new Label();
+        using Label label = new Label();
         label.TextAlign = ContentAlignment.TopLeft;
 
         label.CreateControl();
