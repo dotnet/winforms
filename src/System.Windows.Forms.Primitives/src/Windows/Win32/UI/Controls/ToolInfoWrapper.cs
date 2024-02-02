@@ -11,7 +11,7 @@ internal unsafe struct ToolInfoWrapper<T>
     private readonly T _handle;
 
     // The size of the TTTOOLINFOW struct in version 4.7. We use this version to maintain compatibility.
-    private const uint TTTOOLINFO_V2_Size = 44;
+    private static uint TTTOOLINFO_V2_Size => IntPtr.Size == 4 ? 44u : 64u;
 
     public ToolInfoWrapper(T handle, TOOLTIP_FLAGS flags = default, string? text = null)
         : this(handle, handle.Handle, flags | TOOLTIP_FLAGS.TTF_IDISHWND, text)
