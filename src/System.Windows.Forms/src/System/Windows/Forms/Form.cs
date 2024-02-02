@@ -278,7 +278,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Gets the currently active form for this application.
     /// </summary>
-    public static Form? ActiveForm => FromHandle(PInvoke.GetForegroundWindow()) as Form;
+    public static Form? ActiveForm => FromHandle(PInvokeCore.GetForegroundWindow()) as Form;
 
     /// <summary>
     ///

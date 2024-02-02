@@ -2,23 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Printing;
-using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 using Xunit.Sdk;
 
 namespace System.Drawing;
 
-public static class Helpers
+public unsafe static class Helpers
 {
-    public const string AnyInstalledPrinters = $"{nameof(Helpers)}.{nameof(IsAnyInstalledPrinters)}";
-    public const string WindowsRS3OrEarlier = $"{nameof(Helpers)}.{nameof(IsWindowsRS3OrEarlier)}";
+    // This MUST come before s_anyInstalledPrinters. Caching for performance in tests.
+    public static IReadOnlyList<string> InstalledPrinters { get; } = PrinterSettings.InstalledPrinters;
 
-    public static bool IsWindowsRS3OrEarlier => !PlatformDetection.IsWindows10Version1803OrGreater;
+    private static bool s_anyInstalledPrinters = InstalledPrinters.Count > 0;
 
-    public static bool IsAnyInstalledPrinters()
-    {
-        return PrinterSettings.InstalledPrinters.Count > 0;
-    }
+    public const string AnyInstalledPrinters = $"{nameof(Helpers)}.{nameof(AreAnyPrintersInstalled)}";
+
+    public static bool AreAnyPrintersInstalled() => s_anyInstalledPrinters;
 
     public static string GetTestBitmapPath(string fileName) => GetTestPath("bitmaps", fileName);
     public static string GetTestFontPath(string fileName) => GetTestPath("fonts", fileName);
@@ -83,84 +84,31 @@ public static class Helpers
 
     public static Color EmptyColor => Color.FromArgb(0, 0, 0, 0);
 
-    private static Rectangle GetRectangle(RECT rect)
+    internal static Rectangle GetWindowDCRect(HDC hdc) => GetHWndRect(PInvokeCore.WindowFromDC(hdc));
+
+    internal static Rectangle GetHWndRect(HWND hwnd)
     {
-        return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
-    }
-
-    private const int MONITOR_DEFAULTTOPRIMARY = 1;
-
-    [DllImport("libgdiplus", ExactSpelling = true)]
-    internal static extern string GetLibgdiplusVersion();
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern IntPtr MonitorFromWindow(IntPtr hWnd, int dwFlags);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO monitorInfo);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    internal static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
-    internal static extern int GetGuiResources(IntPtr hProcess, uint flags);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    internal static extern IntPtr GetDC(IntPtr hWnd);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    internal static extern IntPtr GetWindowDC(IntPtr hWnd);
-
-    public static Rectangle GetWindowDCRect(IntPtr hdc) => GetHWndRect(WindowFromDC(hdc));
-
-    public static Rectangle GetHWndRect(IntPtr hWnd)
-    {
-        if (hWnd == IntPtr.Zero)
+        if (hwnd.IsNull)
         {
-            return GetMonitorRectForWindow(hWnd);
+            return GetMonitorRectForWindow(hwnd);
         }
 
-        RECT rect = new();
-        GetClientRect(hWnd, ref rect);
-
-        return GetRectangle(rect);
+        PInvokeCore.GetClientRect(hwnd, out RECT rect);
+        return rect;
     }
 
-    private static Rectangle GetMonitorRectForWindow(IntPtr hWnd)
+    private static Rectangle GetMonitorRectForWindow(HWND hwnd)
     {
-        IntPtr hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTOPRIMARY);
-        Assert.NotEqual(IntPtr.Zero, hMonitor);
+        HMONITOR hmonitor = PInvokeCore.MonitorFromWindow(hwnd, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTOPRIMARY);
+        hmonitor.Value.Should().NotBe(0);
 
-        MONITORINFO info = new();
-        info.cbSize = Marshal.SizeOf(info);
-        int result = GetMonitorInfo(hMonitor, ref info);
-        Assert.NotEqual(0, result);
+        MONITORINFO info = new()
+        {
+            cbSize = (uint)sizeof(MONITORINFO)
+        };
 
-        return GetRectangle(info.rcMonitor);
-    }
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetClientRect(IntPtr hWnd, ref RECT lpRect);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern IntPtr WindowFromDC(IntPtr hdc);
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MONITORINFO
-    {
-        public int cbSize;
-        public RECT rcMonitor;
-        public RECT rcWork;
-        public int dwFlags;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct RECT
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
+        PInvokeCore.GetMonitorInfo(hmonitor, ref info).Should().Be(BOOL.TRUE);
+        return info.rcMonitor;
     }
 
     public static void VerifyBitmapNotBlank(Bitmap bmp)

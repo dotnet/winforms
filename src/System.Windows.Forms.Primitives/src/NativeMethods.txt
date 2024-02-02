@@ -160,7 +160,6 @@ GetCaretBlinkTime
 GetCaretPos
 GetClassInfo
 GetClassName
-GetClientRect
 GetClipboardFormatName
 GetClipBox
 GetClipCursor
@@ -183,8 +182,6 @@ GetDpiForWindow
 GetErrorInfo
 GetExitCodeThread
 GetFocus
-GetForegroundWindow
-GetGuiResources
 GetHGlobalFromILockBytes
 GetKeyboardLayout
 GetKeyboardLayoutList
@@ -200,7 +197,6 @@ GetMessagePos
 GetMessageTime
 GetModuleFileName
 GetModuleHandle
-GetMonitorInfo
 GetNearestColor
 GetParent
 GetPhysicalCursorPos
@@ -494,11 +490,6 @@ MESSAGEBOX_RESULT
 MINIMIZEDMETRICS
 MINMAXINFO
 MODIFY_WORLD_TRANSFORM_MODE
-MonitorFromPoint
-MonitorFromRect
-MonitorFromWindow
-MONITORINFOEXW
-MONITORINFOF_*
 MONTH_CALDENDAR_MESSAGES_VIEW
 MONTHCAL_CLASS
 MOUSEHOOKSTRUCT
@@ -769,7 +760,6 @@ WC_TREEVIEW
 WHEEL_DELTA
 WideCharToMultiByte
 WINDOW_LONG_PTR_INDEX
-WindowFromDC
 WindowFromPoint
 WINDOWPOS
 WINEVENT_INCONTEXT

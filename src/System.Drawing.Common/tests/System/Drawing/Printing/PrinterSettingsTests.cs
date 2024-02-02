@@ -158,7 +158,7 @@ public class PrinterSettingsTests
     [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void Static_InstalledPrinters_ReturnsExpected()
     {
-        Assert.NotNull(PrinterSettings.InstalledPrinters);
+        Assert.NotNull(Helpers.InstalledPrinters);
     }
 
     [Fact]
@@ -168,7 +168,7 @@ public class PrinterSettingsTests
         Assert.True(printerSettings.IsDefaultPrinter);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void IsPlotter_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -442,7 +442,7 @@ public class PrinterSettingsTests
         AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.ToPage = toPage);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void Clone_Success()
     {
         PrinterSettings printerSettings = new();
@@ -450,7 +450,7 @@ public class PrinterSettingsTests
         Assert.False(ReferenceEquals(clone, printerSettings));
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void CreateMeasurementGraphics_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -462,7 +462,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void CreateMeasurementGraphics_Bool_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -472,7 +472,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void CreateMeasurementGraphics_PageSettings_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -485,7 +485,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void CreateMeasurementGraphics_PageSettingsBool_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -496,7 +496,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [Fact]
     public void CreateMeasurementGraphics_Null_ThrowsNullReferenceException()
     {
         PrinterSettings printerSettings = new();
@@ -618,7 +618,7 @@ public class PrinterSettingsTests
     [Fact]
     public void PrinterSettings_GetInstalledPrinters_Success()
     {
-        var installedPrinters = PrinterSettings.InstalledPrinters;
+        var installedPrinters = Helpers.InstalledPrinters;
         installedPrinters.Should().NotBeNull();
         foreach (string printer in installedPrinters)
         {

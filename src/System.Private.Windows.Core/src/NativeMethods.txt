@@ -67,13 +67,17 @@ GdipGetImageEncodersSize
 GdipGetImageRawFormat
 GdipGetRegionHRgn
 GdipIsInfiniteRegion
+GetClientRect
 GdipSaveImageToStream
 GetClipRgn
 GetDC
 GetDCEx
 GetDesktopWindow
 GetDeviceCaps
+GetForegroundWindow
+GetGuiResources
 GetIconInfo
+GetMonitorInfo
 GetObject
 GetObjectType
 GetPaletteEntries
@@ -122,6 +126,11 @@ LoadIcon
 LoadRegTypeLib
 LPARAM
 MAX_PATH
+MonitorFromPoint
+MonitorFromRect
+MonitorFromWindow
+MONITORINFOEXW
+MONITORINFOF_*
 NONCLIENTMETRICSW
 OBJ_TYPE
 OffsetViewportOrgEx
@@ -133,8 +142,8 @@ POINTS
 PRINTDLGEX_FLAGS
 PropVariantClear
 PWSTR
-RECT
 Rect
+RECT
 RectF
 REGDB_E_CLASSNOTREG
 ReleaseDC
@@ -168,4 +177,5 @@ SystemParametersInfoForDpi
 TYPE_E_BADMODULEKIND
 VIEW_E_DRAW
 WIN32_ERROR
+WindowFromDC
 WPARAM
