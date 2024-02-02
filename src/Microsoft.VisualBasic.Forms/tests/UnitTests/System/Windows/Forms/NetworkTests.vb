@@ -3,6 +3,7 @@
 
 Imports System.IO
 Imports System.Net
+Imports System.Runtime.CompilerServices
 Imports System.Threading
 
 Imports Xunit
@@ -15,7 +16,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const DownloadLargeFileUrl As String = "http://127.0.0.1:8080/HttpListener/T104857600"
 
         ' The following URL MUST be replaced with a local URL
-        Private Const UploadFileUrl As String = "ftp://speedtest.tele2.net/upload/testing.md"
+        Private Const UploadFileUrl As String = "ftp://speedtest.tele2.net/upload/testing.txt"
 
         Private Shared ReadOnly s_prefixes As String() = {"http://127.0.0.1:8080/HttpListener/"}
         Private ReadOnly _baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
@@ -29,7 +30,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="size">File size to be created</param>
         ''' <returns></returns>
         Private Shared Function CreateTempFile(tmpFilePath As String, Optional size As Integer = -1) As String
-            Dim filename As String = Path.Combine(tmpFilePath, "testing.md")
+            Dim filename As String = Path.Combine(tmpFilePath, "testing.txt")
             If size >= 0 Then
                 Using destinationStream As FileStream = File.Create(filename)
                     For i As Long = 0 To size - 1
@@ -52,44 +53,21 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Sub CleanUp(listener As HttpListener, Optional tmpFilePath As String = Nothing)
             listener.Stop()
             listener.Close()
+            _mutex.ReleaseMutex()
             If tmpFilePath IsNot Nothing Then
                 Directory.Delete(tmpFilePath, True)
             End If
-            _mutex.ReleaseMutex()
         End Sub
 
         Private Sub CleanupTempDirectory(path As String)
-            _mutex.WaitOne()
             Directory.Delete(path, True)
-            _mutex.ReleaseMutex()
         End Sub
 
-        Private Function CreateTempDirectory() As String
-            _mutex.WaitOne()
+        Private Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing) As String
 
-            If Not Directory.Exists(_baseTempPath) Then
-                Directory.CreateDirectory(_baseTempPath)
-            End If
-            Return GetTempTestFolder()
-            _mutex.ReleaseMutex()
-        End Function
-
-        ''' <summary>
-        ''' This gets a master test folder using a predefined Guid,
-        ''' so all temp directories and files end up in one place.
-        ''' </summary>
-        ''' <returns></returns>
-        Private Function GetTempTestFolder() As String
-            Dim i As Integer = 0
-            Dim folder As String = Path.Combine(_baseTempPath, $"Test{i}")
-            _mutex.WaitOne()
-
-            Do While Directory.Exists(folder) OrElse File.Exists(folder)
-                folder = Path.Combine(_baseTempPath, $"Test{i}")
-                i += 1
-            Loop
+            Directory.CreateDirectory(_baseTempPath)
+            Dim folder As String = Path.Combine(_baseTempPath, $"{memberName}Test")
             Directory.CreateDirectory(folder)
-            _mutex.ReleaseMutex()
             Return folder
         End Function
 
