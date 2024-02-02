@@ -4157,7 +4157,7 @@ internal sealed partial class PropertyGridView :
         if (!HasEntries)
         {
             CommonEditorHide(_selectedRow != -1);
-            OwnerGrid.SetStatusBox(null, null);
+            OwnerGrid.SetStatusBox(title: null, description: null);
             SetScrollOffset(0);
             _selectedRow = -1;
             Invalidate();

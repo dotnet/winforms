@@ -229,7 +229,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         {
             if (!_propertyValueUIServiceChecked && _propertyValueUIService is null)
             {
-                _propertyValueUIService = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
+                _propertyValueUIService = (IPropertyValueUIService?)GetService(typeof(IPropertyValueUIService));
                 _propertyValueUIServiceChecked = true;
             }
 

@@ -9,13 +9,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class WebListener
 
         Friend Shared Function ProcessRequests(prefixes() As String) As HttpListener
+
             If Not HttpListener.IsSupported Then
                 Console.WriteLine("Windows XP SP2, Server 2003, or higher is required to use the HttpListener class.")
             End If
+
             ' URI prefixes are required,
             If prefixes Is Nothing OrElse prefixes.Length = 0 Then
                 Throw New ArgumentException("prefixes")
             End If
+
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
             For Each s As String In prefixes
@@ -27,6 +30,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Try
                         ' Start the listener to begin listening for requests.
                         Debug.WriteLine("Listening...")
+
                         Dim response As HttpListenerResponse = Nothing
                         Try
                             ' Note: GetContext blocks while waiting for a request.
