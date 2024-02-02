@@ -1350,7 +1350,7 @@ internal sealed partial class PropertyGridView :
 
     public int GridEntryHeight => RowHeight;
 
-    internal int GetPropertyLocation(string propertyName, bool getXY, bool rowValue)
+    internal int GetPropertyLocation(string? propertyName, bool getXY, bool rowValue)
     {
         if (_allGridEntries is null || _allGridEntries.Count <= 0)
         {
