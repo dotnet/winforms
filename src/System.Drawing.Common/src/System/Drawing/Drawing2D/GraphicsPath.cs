@@ -6,7 +6,7 @@ using System.Drawing.Internal;
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
+public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
 {
     internal GpPath* _nativePath;
 
@@ -491,6 +491,47 @@ public unsafe sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
             GC.KeepAlive(this);
         }
     }
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="AddRoundedRectangle(RectangleF, SizeF)"/>
+    public void AddRoundedRectangle(Rectangle rect, Size corner) =>
+        AddRoundedRectangle((RectangleF)rect, corner);
+
+    /// <summary>
+    ///  Adds a rounded rectangle to this path.
+    /// </summary>
+    /// <param name="rect">The bounds of the rectangle to add.</param>
+    /// <param name="corner">The size of the ellipse used to round the corners of the rectangle.</param>
+    public void AddRoundedRectangle(RectangleF rect, SizeF corner)
+    {
+        StartFigure();
+        AddArc(
+            rect.Right - corner.Width,
+            rect.Top,
+            corner.Width,
+            corner.Height,
+            -90.0f, 90.0f);
+        AddArc(
+            rect.Right - corner.Width,
+            rect.Bottom - corner.Height,
+            corner.Width,
+            corner.Height,
+            0.0f, 90.0f);
+        AddArc(
+            rect.Left,
+            rect.Bottom - corner.Height,
+            corner.Width,
+            corner.Height,
+            90.0f, 90.0f);
+        AddArc(
+            rect.Left,
+            rect.Top,
+            corner.Width,
+            corner.Height,
+            180.0f, 90.0f);
+        CloseFigure();
+    }
+#endif
 
     public void AddEllipse(RectangleF rect) =>
         AddEllipse(rect.X, rect.Y, rect.Width, rect.Height);

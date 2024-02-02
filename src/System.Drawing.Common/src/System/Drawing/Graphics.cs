@@ -4,6 +4,9 @@
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+#if NET9_0_OR_GREATER
+using System.Drawing.Imaging.Effects;
+#endif
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -139,7 +142,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             throw new ArgumentException(SR.GdiplusCannotCreateGraphicsFromIndexedPixelFormat, nameof(image));
 
         GpGraphics* nativeGraphics;
-        Gdip.CheckStatus(PInvoke.GdipGetImageGraphicsContext(image._nativeImage, &nativeGraphics));
+        Gdip.CheckStatus(PInvoke.GdipGetImageGraphicsContext(image.Pointer(), &nativeGraphics));
         GC.KeepAlive(image);
 
         return new Graphics(nativeGraphics) { _backingImage = image };
@@ -742,6 +745,24 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     public void DrawRectangle(Pen pen, Rectangle rect) => DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
 
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="DrawRoundedRectangle(Pen, RectangleF, SizeF)"/>
+    public void DrawRoundedRectangle(Pen pen, Rectangle rect, Size corner) =>
+        DrawRoundedRectangle(pen, (RectangleF)rect, corner);
+
+    /// <summary>
+    ///  Draws the outline of the specified rounded rectangle.
+    /// </summary>
+    /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
+    public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF corner)
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(rect, corner);
+        DrawPath(pen, path);
+    }
+#endif
+
     /// <summary>
     ///  Draws the outline of the specified rectangle.
     /// </summary>
@@ -1090,6 +1111,25 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Fills the entire drawing surface with the specified color.
     /// </summary>
     public void Clear(Color color) => CheckStatus(PInvoke.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    public void FillRoundedRectangle(Brush brush, Rectangle rect, Size corner) =>
+        FillRoundedRectangle(brush, (RectangleF)rect, corner);
+
+    /// <summary>
+    ///  Fills the interior of a rounded rectangle with a <see cref='Brush'/>.
+    /// </summary>
+    /// <param name="brush">The <see cref="Brush"/> to fill the rounded rectangle with.</param>
+    /// <param name="rect">The bounds of the rounded rectangle.</param>
+    /// <param name="corner">The size of the ellipse used to round the corners of the rectangle.</param>
+    public void FillRoundedRectangle(Brush brush, RectangleF rect, SizeF corner)
+    {
+        using GraphicsPath path = new();
+        path.AddRoundedRectangle(rect, corner);
+        FillPath(brush, path);
+    }
+#endif
 
     /// <summary>
     ///  Fills the interior of a rectangle with a <see cref='Brush'/>.
@@ -1773,7 +1813,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawImage(Image image, float x, float y)
     {
         ArgumentNullException.ThrowIfNull(image);
-        Status status = PInvoke.GdipDrawImage(NativeGraphics, image._nativeImage, x, y);
+        Status status = PInvoke.GdipDrawImage(NativeGraphics, image.Pointer(), x, y);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
@@ -1783,7 +1823,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawImage(Image image, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(image);
-        Status status = PInvoke.GdipDrawImageRect(NativeGraphics, image._nativeImage, x, y, width, height);
+        Status status = PInvoke.GdipDrawImageRect(NativeGraphics, image.Pointer(), x, y, width, height);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
@@ -1838,7 +1878,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePoints(NativeGraphics, image._nativeImage, (GdiPlus.PointF*)p, count);
+            Status status = PInvoke.GdipDrawImagePoints(NativeGraphics, image.Pointer(), (GdiPlus.PointF*)p, count);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
@@ -1855,7 +1895,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePointsI(NativeGraphics, image._nativeImage, (GdiPlus.Point*)p, count);
+            Status status = PInvoke.GdipDrawImagePointsI(NativeGraphics, image.Pointer(), (GdiPlus.Point*)p, count);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
@@ -1867,7 +1907,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         Status status = PInvoke.GdipDrawImagePointRect(
             NativeGraphics,
-            image._nativeImage,
+            image.Pointer(),
             x, y,
             srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
             (Unit)srcUnit);
@@ -1885,7 +1925,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         Status status = PInvoke.GdipDrawImageRectRect(
             NativeGraphics,
-            image._nativeImage,
+            image.Pointer(),
             destRect.X, destRect.Y, destRect.Width, destRect.Height,
             srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
             (Unit)srcUnit,
@@ -1913,7 +1953,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         {
             Status status = PInvoke.GdipDrawImagePointsRect(
                 NativeGraphics,
-                image._nativeImage,
+                image.Pointer(),
                 (GdiPlus.PointF*)p, destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (Unit)srcUnit,
@@ -1958,7 +1998,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         {
             Status status = PInvoke.GdipDrawImagePointsRect(
                 NativeGraphics,
-                image._nativeImage,
+                image.Pointer(),
                 (GdiPlus.PointF*)p, destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (Unit)srcUnit,
@@ -2011,7 +2051,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         {
             Status status = PInvoke.GdipDrawImagePointsRectI(
                 NativeGraphics,
-                image._nativeImage,
+                image.Pointer(),
                 (GdiPlus.Point*)p, destPoints.Length,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (Unit)srcUnit,
@@ -2073,7 +2113,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         Status status = PInvoke.GdipDrawImageRectRect(
             NativeGraphics,
-            image._nativeImage,
+            image.Pointer(),
             destRect.X, destRect.Y, destRect.Width, destRect.Height,
             srcX, srcY, srcWidth, srcHeight,
             (Unit)srcUnit,
@@ -3322,6 +3362,29 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             x, y));
 
         GC.KeepAlive(cachedBitmap);
+    }
+#endif
+
+#if NET9_0_OR_GREATER
+    [RequiresPreviewFeatures]
+    public void DrawImage(
+        Image image,
+        Effect effect,
+        RectangleF srcRect = default,
+        Matrix? transform = default,
+        GraphicsUnit srcUnit = GraphicsUnit.Pixel,
+        ImageAttributes? imageAttr = default)
+    {
+        PInvoke.GdipDrawImageFX(
+            NativeGraphics,
+            image.Pointer(),
+            srcRect.IsEmpty ? null : (RectF*)&srcRect,
+            transform.Pointer(),
+            effect.Pointer(),
+            imageAttr.Pointer(),
+            (Unit)srcUnit).ThrowIfFailed();
+
+        GC.KeepAlive(this);
     }
 #endif
 

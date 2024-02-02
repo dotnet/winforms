@@ -136,7 +136,7 @@ public partial class DataGridViewCheckBoxCell
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override int[] RuntimeId => runtimeId ??= new int[] { RuntimeIDFirstItem, GetHashCode() };
+        internal override int[] RuntimeId => runtimeId ??= [RuntimeIDFirstItem, GetHashCode()];
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch

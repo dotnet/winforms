@@ -24,7 +24,7 @@ public partial class MonthCalendar
         private readonly MonthCalendarAccessibleObject _monthCalendarAccessibleObject;
         private readonly int _calendarIndex;
         private readonly int _rowIndex;
-        private readonly int[] _initRuntimeId;
+        private readonly int[] _runtimeId;
         private LinkedList<CalendarCellAccessibleObject>? _cellsAccessibleObjects;
         private CalendarWeekNumberCellAccessibleObject? _weekNumberCellAccessibleObject;
 
@@ -36,18 +36,13 @@ public partial class MonthCalendar
             _monthCalendarAccessibleObject = monthCalendarAccessibleObject;
             _calendarIndex = calendarIndex;
             _rowIndex = rowIndex;
+
             // RuntimeId doesn't change if the calendar date range is not changed,
             // otherwise the calendar accessibility tree will be rebuilt.
             // So save this value one time to avoid recreating new structures
             // and making extra calculations every time.
-            _initRuntimeId = new int[]
-            {
-                _calendarBodyAccessibleObject.RuntimeId[0],
-                _calendarBodyAccessibleObject.RuntimeId[1],
-                _calendarBodyAccessibleObject.RuntimeId[2],
-                _calendarBodyAccessibleObject.RuntimeId[3],
-                GetChildId()
-            };
+            int[] id = _calendarBodyAccessibleObject.RuntimeId;
+            _runtimeId = [id[0], id[1], id[2], id[3], GetChildId()];
         }
 
         public override Rectangle Bounds
@@ -199,7 +194,7 @@ public partial class MonthCalendar
 
         internal override int Row => _rowIndex;
 
-        internal override int[] RuntimeId => _initRuntimeId;
+        internal override int[] RuntimeId => _runtimeId;
 
         internal override void SetFocus()
         {

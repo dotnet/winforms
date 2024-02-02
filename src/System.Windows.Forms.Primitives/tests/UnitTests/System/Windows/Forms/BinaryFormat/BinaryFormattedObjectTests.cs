@@ -169,7 +169,7 @@ public class BinaryFormattedObjectTests
             new MemberReference(3)
         });
 
-        ArrayRecord array = (ArrayRecord)format[(MemberReference)systemClass.MemberValues[5]];
+        ArrayRecord<object> array = (ArrayRecord<object>)format[(MemberReference)systemClass.MemberValues[5]];
 
         array.ArrayInfo.ObjectId.Should().Be(2);
         array.ArrayInfo.Length.Should().Be(3);
@@ -177,7 +177,7 @@ public class BinaryFormattedObjectTests
         value.ObjectId.Should().Be(4);
         value.Value.Should().BeOneOf("Yowza", "Youza", "Meeza");
 
-        array = (ArrayRecord)format[(MemberReference)systemClass["Values"]];
+        array = (ArrayRecord<object>)format[(MemberReference)systemClass["Values"]];
         array.ArrayInfo.ObjectId.Should().Be(3);
         array.ArrayInfo.Length.Should().Be(3);
         array.ArrayObjects[0].Should().BeOfType<ObjectNull>();
@@ -296,7 +296,7 @@ public class BinaryFormattedObjectTests
     {
         BinaryFormattedObject format = new int[] { 10, 9, 8, 7 }.SerializeAndParse();
 
-        ArraySinglePrimitive array = (ArraySinglePrimitive)format[1];
+        ArraySinglePrimitive<int> array = (ArraySinglePrimitive<int>)format[1];
         array.ArrayInfo.Length.Should().Be(4);
         array.PrimitiveType.Should().Be(PrimitiveType.Int32);
         array.ArrayObjects.Should().BeEquivalentTo(new object[] { 10, 9, 8, 7 });

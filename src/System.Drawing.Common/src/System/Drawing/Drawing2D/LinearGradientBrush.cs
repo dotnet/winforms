@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace System.Drawing.Drawing2D;
 
-public unsafe sealed class LinearGradientBrush : Brush
+public sealed unsafe class LinearGradientBrush : Brush
 {
     private bool _interpolationColorsWasSet;
 
@@ -222,7 +222,7 @@ public unsafe sealed class LinearGradientBrush : Brush
                 return new ColorBlend();
             }
 
-            using ArgbBuffer colors = new(count, stackalloc ARGB[10]);
+            using ArgbBuffer colors = new(count);
             float[] positions = new float[count];
 
             ColorBlend blend = new(count);
@@ -251,7 +251,7 @@ public unsafe sealed class LinearGradientBrush : Brush
                 throw new ArgumentException(nameof(value));
 
             float[] positions = value.Positions;
-            using ArgbBuffer argbValues = new(value.Colors, stackalloc ARGB[10]);
+            using ArgbBuffer argbValues = new(value.Colors);
 
             fixed (float* p = positions)
             fixed (uint* a = argbValues)

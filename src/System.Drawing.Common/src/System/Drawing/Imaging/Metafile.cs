@@ -16,7 +16,7 @@ namespace System.Drawing.Imaging;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public unsafe sealed class Metafile : Image
+public sealed unsafe class Metafile : Image
 {
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
@@ -537,7 +537,7 @@ public unsafe sealed class Metafile : Image
         fixed (byte* d = data)
         {
             PInvoke.GdipPlayMetafileRecord(
-                (GpMetafile*)_nativeImage,
+                this.Pointer(),
                 (GdiPlus.EmfPlusRecordType)recordType,
                 (uint)flags,
                 (uint)dataSize,
@@ -619,7 +619,7 @@ public unsafe sealed class Metafile : Image
 
         fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            PInvoke.GdipGetMetafileHeaderFromMetafile((GpMetafile*)_nativeImage, mf).ThrowIfFailed();
+            PInvoke.GdipGetMetafileHeaderFromMetafile(this.Pointer(), mf).ThrowIfFailed();
             GC.KeepAlive(this);
             return header;
         }
@@ -631,7 +631,7 @@ public unsafe sealed class Metafile : Image
     public IntPtr GetHenhmetafile()
     {
         HENHMETAFILE hemf;
-        PInvoke.GdipGetHemfFromMetafile((GpMetafile*)_nativeImage, &hemf).ThrowIfFailed();
+        PInvoke.GdipGetHemfFromMetafile(this.Pointer(), &hemf).ThrowIfFailed();
         GC.KeepAlive(this);
         return hemf;
     }

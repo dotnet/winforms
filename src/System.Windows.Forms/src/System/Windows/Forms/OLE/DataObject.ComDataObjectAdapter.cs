@@ -126,7 +126,7 @@ public partial class DataObject
                     long startPosition = stream.Position;
                     try
                     {
-                        if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetFrameworkObject(out object? value))
+                        if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetObject(out object? value))
                         {
                             return value;
                         }

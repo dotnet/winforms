@@ -85,15 +85,20 @@ public abstract partial class ToolStripItem
 
         internal override bool CanGetKeyboardShortcutInternal => false;
 
-        // We need to provide a unique ID. Others are implementing this in the same manner. First item should be UiaAppendRuntimeId
-        // since this is not a top-level element of the fragment. Second item can be anything, but here it is a hash.
-        // For toolstrip hash is unique even with child controls. Hwnd  is not.
-        internal override int[] RuntimeId
-            => _runtimeId ??= new int[]
-            {
-                (int)PInvoke.UiaAppendRuntimeId,
-                _ownerItem.GetHashCode()
-            };
+        /// <remarks>
+        ///  <para>
+        ///    First item should be <see cref="PInvoke.UiaAppendRuntimeId" /> since this is not a top-level
+        ///    element of the fragment. Second item can be anything, but here it is the owner hash code.
+        ///    For <see cref="ToolStrip" /> hash code is unique even with child controls.
+        ///    <see cref="ToolStrip.Handle" /> is not.
+        ///  </para>
+        /// </remarks>
+        /// <inheritdoc cref="AccessibleObject.RuntimeId" />
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+            (int)PInvoke.UiaAppendRuntimeId,
+            _ownerItem.GetHashCode()
+        ];
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch

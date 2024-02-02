@@ -5,7 +5,7 @@ namespace System.Drawing.Text;
 /// <summary>
 ///  Represents the fonts installed on the system.
 /// </summary>
-public unsafe sealed class InstalledFontCollection : FontCollection
+public sealed unsafe class InstalledFontCollection : FontCollection
 {
     /// <summary>
     ///  Initializes a new instance of the <see cref='InstalledFontCollection'/> class.

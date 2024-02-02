@@ -567,7 +567,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 // Proceed with the drag and drop, passing in the list item.
                 try
                 {
-                    ArrayList dragItems = new();
+                    List<ToolStripItem> dragItems = new();
                     ICollection selComps = selSvc.GetSelectedComponents();
                     // create our list of controls-to-drag
                     foreach (IComponent comp in selComps)
@@ -636,24 +636,24 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             // Do DragDrop only if currentDropItem has changed.
             if (currentDropItem != selectedItem && designerHost is not null)
             {
-                IList components = data.DragComponents;
+                List<ToolStripItem> dragComponents = data.DragComponents;
                 ToolStrip parentToolStrip = currentDropItem.GetCurrentParent();
                 int primaryIndex = -1;
                 string transDesc;
                 bool copy = (e.Effect == DragDropEffects.Copy);
-                if (components.Count == 1)
+                if (dragComponents.Count == 1)
                 {
-                    string name = TypeDescriptor.GetComponentName(components[0]);
+                    string name = TypeDescriptor.GetComponentName(dragComponents[0]);
                     if (name is null || name.Length == 0)
                     {
-                        name = components[0].GetType().Name;
+                        name = dragComponents[0].GetType().Name;
                     }
 
                     transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                 }
                 else
                 {
-                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, dragComponents.Count);
                 }
 
                 DesignerTransaction designerTransaction = designerHost.CreateTransaction(transDesc);
@@ -672,13 +672,15 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         }
                     }
 
+                    IReadOnlyList<IComponent> components;
+
                     // If we are copying, then we want to make a copy of the components we are dragging
                     if (copy)
                     {
                         // Remember the primary selection if we had one
                         if (selectedItem is not null)
                         {
-                            primaryIndex = components.IndexOf(selectedItem);
+                            primaryIndex = dragComponents.IndexOf(selectedItem);
                         }
 
                         ToolStripKeyboardHandlingService keyboardHandlingService = GetKeyBoardHandlingService(selectedItem);
@@ -687,7 +689,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                             keyboardHandlingService.CopyInProgress = true;
                         }
 
-                        components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site);
+                        components = DesignerUtils.CopyDragObjects(dragComponents, currentDropItem.Site);
                         if (keyboardHandlingService is not null)
                         {
                             keyboardHandlingService.CopyInProgress = false;
@@ -697,6 +699,10 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         {
                             selectedItem = components[primaryIndex] as ToolStripItem;
                         }
+                    }
+                    else
+                    {
+                        components = dragComponents;
                     }
 
                     if (e.Effect == DragDropEffects.Move || copy)

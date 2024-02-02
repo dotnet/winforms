@@ -2,6 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Imaging;
+#if NET9_0_OR_GREATER
+using System.Drawing.Imaging.Effects;
+using System.Runtime.Versioning;
+#endif
 
 namespace System.Drawing;
 
@@ -16,6 +20,11 @@ internal static unsafe class PointerExtensions
     public static GpImageAttributes* Pointer(this ImageAttributes? imageAttr) => imageAttr is null ? null : imageAttr._nativeImageAttributes;
     public static GpGraphics* Pointer(this Graphics? graphics) => graphics is null ? null : graphics.NativeGraphics;
     public static GpFont* Pointer(this Font? font) => font is null ? null : font.NativeFont;
-    public static GpBitmap* Pointer(this Bitmap? bitmap) => bitmap is null ? null : bitmap.NativeBitmap;
-    public static GpMetafile* Pointer(this Metafile? metafile) => metafile is null ? null : (GpMetafile*)metafile._nativeImage;
+    public static GpBitmap* Pointer(this Bitmap? bitmap) => bitmap is null ? null : ((IPointer<GpBitmap>)bitmap).Pointer;
+    public static GpMetafile* Pointer(this Metafile? metafile) => metafile is null ? null : (GpMetafile*)((Image)metafile).Pointer();
+    public static GpImage* Pointer(this Image? image) => image is null ? null : ((IPointer<GpImage>)image).Pointer;
+#if NET9_0_OR_GREATER
+    [RequiresPreviewFeatures]
+    public static CGpEffect* Pointer(this Effect? effect) => effect is null ? null : effect.NativeEffect;
+#endif
 }

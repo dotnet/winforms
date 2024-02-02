@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 
 namespace System.Drawing;
 
-public unsafe sealed class Region : MarshalByRefObject, IDisposable, IPointer<GpRegion>
+public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<GpRegion>
 {
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();

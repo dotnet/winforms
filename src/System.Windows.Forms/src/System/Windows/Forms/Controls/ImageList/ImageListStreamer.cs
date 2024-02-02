@@ -1,7 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.IO.Compression;
 using System.Runtime.Serialization;
+using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
@@ -16,116 +18,30 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
     private readonly ImageList? _imageList;
     private ImageList.NativeImageList? _nativeImageList;
 
-    internal ImageListStreamer(ImageList il) => _imageList = il;
+    internal ImageListStreamer(ImageList imageList) => _imageList = imageList;
 
+    // Used by binary serialization
     private ImageListStreamer(SerializationInfo info, StreamingContext context)
     {
-        if (info.GetEnumerator() is not { } enumerator)
+        if (info.GetValue<byte[]>("Data") is { } data)
         {
-            return;
-        }
-
-        while (enumerator.MoveNext())
-        {
-            if (!string.Equals(enumerator.Name, "Data", StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            try
-            {
-                if (enumerator.Value is byte[] data)
-                {
-                    Deserialize(data);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Fail($"ImageList serialization failure: {e}");
-                throw;
-            }
+            Deserialize(data);
         }
     }
 
-    internal ImageListStreamer(Stream stream)
-    {
-        if (stream is MemoryStream memoryStream
-            && memoryStream.TryGetBuffer(out ArraySegment<byte> buffer)
-            && buffer.Offset == 0
-            && buffer.Array is { } array)
-        {
-            Deserialize(array);
-        }
-        else
-        {
-            stream.Position = 0;
-            using MemoryStream copyStream = new(checked((int)stream.Length));
-            stream.CopyTo(copyStream);
-            Deserialize(copyStream.GetBuffer());
-        }
-    }
+    internal ImageListStreamer(byte[] data) => Deserialize(data);
 
     /// <summary>
     ///  Compresses the given input, returning a new array that represents the compressed data.
     /// </summary>
-    private static byte[] Compress(ReadOnlySpan<byte>input)
+    private static byte[] Compress(ReadOnlySpan<byte> input)
     {
-        int finalLength = 0;
-        int idx = 0;
-        int compressedIdx = 0;
-
-        while (idx < input.Length)
-        {
-            byte current = input[idx++];
-            byte runLength = 1;
-
-            while (idx < input.Length && input[idx] == current && runLength < 0xFF)
-            {
-                runLength++;
-                idx++;
-            }
-
-            finalLength += 2;
-        }
-
-        byte[] output = new byte[finalLength + HeaderMagic.Length];
-
-        HeaderMagic.CopyTo(output);
-        int idxOffset = HeaderMagic.Length;
-        idx = 0;
-
-        while (idx < input.Length)
-        {
-            byte current = input[idx++];
-            byte runLength = 1;
-
-            while (idx < input.Length && input[idx] == current && runLength < 0xFF)
-            {
-                runLength++;
-                idx++;
-            }
-
-            output[idxOffset + compressedIdx++] = runLength;
-            output[idxOffset + compressedIdx++] = current;
-        }
-
-        Debug.Assert(idxOffset + compressedIdx == output.Length, "RLE Compression failure in ImageListStreamer -- didn't fill array");
-
-        // Validate that our compression routine works
-#if DEBUG
-        byte[] debugCompare = Decompress(output);
-        Debug.Assert(debugCompare.Length == input.Length, "RLE Compression in ImageListStreamer is broken.");
-        int debugMaxCompare = input.Length;
-        for (int debugIdx = 0; debugIdx < debugMaxCompare; debugIdx++)
-        {
-            if (debugCompare[debugIdx] != input[debugIdx])
-            {
-                Debug.Fail($"RLE Compression failure in ImageListStreamer at byte offset {debugIdx}");
-                break;
-            }
-        }
-#endif
-
+        int length = RunLengthEncoder.GetEncodedLength(input) + HeaderMagic.Length;
+        byte[] output = new byte[length];
+        SpanWriter<byte> writer = new(output);
+        writer.TryWrite(HeaderMagic);
+        RunLengthEncoder.TryEncode(input, writer.Span[writer.Position..], out int written);
+        Debug.Assert(written == length - HeaderMagic.Length, "RLE compression failure");
         return output;
     }
 
@@ -134,49 +50,24 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
     /// </summary>
     private static byte[] Decompress(byte[] input)
     {
-        int finalLength = 0;
-        int idx = 0;
-        int outputIdx = 0;
-
-        // Check for our header. If we don't have one, we're not actually compressed, so just return the original.
-        if (!input.AsSpan().StartsWith(HeaderMagic))
+        SpanReader<byte> reader = new(input);
+        if (!reader.TryAdvancePast(HeaderMagic))
         {
+            // Not compressed, return the original
             return input;
         }
 
-        // Ok, we passed the magic header test.
-
-        for (idx = HeaderMagic.Length; idx < input.Length; idx += 2)
-        {
-            finalLength += input[idx];
-        }
-
-        byte[] output = new byte[finalLength];
-
-        idx = HeaderMagic.Length;
-
-        while (idx < input.Length)
-        {
-            byte runLength = input[idx++];
-            byte current = input[idx++];
-
-            int startIdx = outputIdx;
-            int endIdx = outputIdx + runLength;
-
-            while (startIdx < endIdx)
-            {
-                output[startIdx++] = current;
-            }
-
-            outputIdx += runLength;
-        }
-
+        ReadOnlySpan<byte> remaining = reader.Span[reader.Position..];
+        int length = RunLengthEncoder.GetDecodedLength(remaining);
+        byte[] output = new byte[length];
+        RunLengthEncoder.TryDecode(remaining, output, out int written);
+        Debug.Assert(written == length, "RLE decompression failure");
         return output;
     }
 
     private void Deserialize(byte[] data)
     {
-        // We enclose this imagelist handle create in a theming scope.
+        // We enclose this ImageList handle create in a theming scope.
         using ThemingScope scope = new(Application.UseVisualStyles);
         using MemoryStream memoryStream = new(Decompress(data));
 
@@ -192,9 +83,10 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
         }
     }
 
-#pragma warning disable CA1725 // Parameter names should match base declaration (previously shipped public API)
-    public void GetObjectData(SerializationInfo si, StreamingContext context)
-#pragma warning restore CA1725
+    public void GetObjectData(SerializationInfo si, StreamingContext context) =>
+        si.AddValue("Data", Serialize());
+
+    internal byte[] Serialize()
     {
         using MemoryStream stream = new();
         if (!WriteImageList(stream))
@@ -202,7 +94,8 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
             throw new InvalidOperationException(SR.ImageListStreamerSaveFailed);
         }
 
-        si.AddValue("Data", Compress(stream.GetBuffer().AsSpan(0, (int)stream.Length)));
+        ReadOnlySpan<byte> buffer = stream.GetBuffer().AsSpan()[..(int)stream.Length];
+        return Compress(buffer);
     }
 
     internal void GetObjectData(Stream stream)
@@ -217,14 +110,14 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
 
     private bool WriteImageList(Stream stream)
     {
-        HIMAGELIST handle = HIMAGELIST.Null;
+        HandleRef<HIMAGELIST> handle = default;
         if (_imageList is not null)
         {
-            handle = (HIMAGELIST)_imageList.Handle;
+            handle = new(_imageList, (HIMAGELIST)_imageList.Handle);
         }
         else if (_nativeImageList is not null)
         {
-            handle = _nativeImageList.HIMAGELIST;
+            handle = new(_nativeImageList, _nativeImageList.HIMAGELIST);
         }
 
         if (handle.IsNull)
@@ -232,40 +125,24 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
             return false;
         }
 
-        // What we need to do here is use WriteEx if comctl 6 or above, and Write otherwise. However, till we can fix
-        // There isn't a reliable way to tell which version of comctl fusion is binding to.
-        // So for now, we try to bind to WriteEx, and if that entry point isn't found, we use Write.
-
         try
         {
             return PInvoke.ImageList.WriteEx(
-                new HandleRef<HIMAGELIST>(this, handle),
+                handle,
                 IMAGE_LIST_WRITE_STREAM_FLAGS.ILP_DOWNLEVEL,
-                new ComManagedStream(stream)).Succeeded;
+                stream).Succeeded;
         }
         catch (EntryPointNotFoundException)
         {
-            // WriteEx wasn't found - that's fine - we will use Write.
+            // Not running on ComCtl32 v6, fall back to the old API.
         }
 
-        return PInvoke.ImageList.Write(new HandleRef<HIMAGELIST>(this, handle), new ComManagedStream(stream));
+        return PInvoke.ImageList.Write(handle, stream);
     }
 
-    /// <summary>
-    ///  Disposes the native image list handle.
-    /// </summary>
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _nativeImageList?.Dispose();
-            _nativeImageList = null;
-        }
+        _nativeImageList?.Dispose();
+        _nativeImageList = null;
     }
 }

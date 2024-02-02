@@ -83,8 +83,8 @@ public class FontConverterTest
     public void GetFontPropsSorted()
     {
         // The order provided since .NET Framework
-        string[] expectedPropNames = new[]
-        {
+        string[] expectedPropNames =
+        [
             nameof(Font.Name),
             nameof(Font.Size),
             nameof(Font.Unit),
@@ -94,7 +94,7 @@ public class FontConverterTest
             nameof(Font.Italic),
             nameof(Font.Strikeout),
             nameof(Font.Underline),
-        };
+        ];
 
         FontConverter converter = new();
         Font font = new($"Courier New", 8.25f, FontStyle.Regular, GraphicsUnit.Point);
@@ -189,10 +189,8 @@ public class FontConverterTest
     {
         get
         {
-            using (InstalledFontCollection installedFonts = new())
-            {
-                return installedFonts.Families.Select(t => t.Name).Contains(string.Empty);
-            }
+            using InstalledFontCollection installedFonts = new();
+            return installedFonts.Families.Select(t => t.Name).Contains(string.Empty);
         }
     }
 

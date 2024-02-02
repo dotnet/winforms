@@ -27,4 +27,9 @@ global using PenAlignment = System.Drawing.Drawing2D.PenAlignment;
 global using PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode;
 global using TextRenderingHint = System.Drawing.Text.TextRenderingHint;
 
+#if NET9_0_OR_GREATER
+global using DitherType = System.Drawing.Imaging.DitherType;
+global using PaletteType = System.Drawing.Imaging.PaletteType;
+#endif
+
 global using GdiPlus = Windows.Win32.Graphics.GdiPlus;

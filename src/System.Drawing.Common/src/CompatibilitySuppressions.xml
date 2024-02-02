@@ -85,6 +85,20 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0014</DiagnosticId>
+    <Target>T:System.Drawing.Imaging.ColorMatrix:[T:System.Runtime.CompilerServices.NullableAttribute]</Target>
+    <Left>lib/net8.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net8.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
+    <Target>T:System.Drawing.Imaging.ColorMatrix:[T:System.Runtime.CompilerServices.NullableContextAttribute]</Target>
+    <Left>lib/net8.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net8.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
     <Target>T:System.Drawing.Imaging.EncoderParameters:[T:System.Runtime.CompilerServices.NullableAttribute]</Target>
     <Left>lib/net8.0/System.Drawing.Common.dll</Left>
     <Right>lib/net8.0/System.Drawing.Common.dll</Right>

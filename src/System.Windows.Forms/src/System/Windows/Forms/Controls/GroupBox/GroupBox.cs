@@ -657,7 +657,7 @@ public partial class GroupBox : Control
             return;
         }
 
-        PInvoke.GetClientRect(this, out RECT rect);
+        PInvokeCore.GetClientRect(this, out RECT rect);
         Color backColor = BackColor;
 
         if (backColor.HasTransparency())

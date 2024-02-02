@@ -198,14 +198,14 @@ public partial class ListViewItem
         {
             get
             {
-                int[] owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
+                int[] id = _owningListView.AccessibilityObject.RuntimeId;
 
-                Debug.Assert(owningListViewRuntimeId.Length >= 2);
+                Debug.Assert(id.Length >= 2);
 
-                return new int[]
-                {
-                    owningListViewRuntimeId[0],
-                    owningListViewRuntimeId[1],
+                return
+                [
+                    id[0],
+                    id[1],
                     // Win32-control specific RuntimeID constant.
                     4,
                     // RuntimeId uses hash code instead of item's index. When items are removed,
@@ -215,7 +215,7 @@ public partial class ListViewItem
                     // Similar applies for items within a group, where adding the group's index
                     // was preventing from correct disconnection of items on removal.
                     _owningItem.GetHashCode()
-                };
+                ];
             }
         }
 

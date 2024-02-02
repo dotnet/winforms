@@ -186,7 +186,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         _borderSize = LogicalToDeviceUnits(LogicalBorderSize);
     }
 
-    public virtual void SetDescription(string title, string description)
+    public virtual void SetDescription(string? title, string? description)
     {
         if (_descriptionLabel.Text != title)
         {

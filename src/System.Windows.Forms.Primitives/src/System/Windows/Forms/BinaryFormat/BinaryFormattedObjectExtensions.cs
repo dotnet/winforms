@@ -30,9 +30,9 @@ internal static class BinaryFormattedObjectExtensions
             _ => false,
         };
 
-    private delegate bool TryGetDelegate(BinaryFormattedObject format, [NotNullWhen(true)] out object? value);
+    internal delegate bool TryGetDelegate(BinaryFormattedObject format, [NotNullWhen(true)] out object? value);
 
-    private static bool TryGet(TryGetDelegate get, BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    internal static bool TryGet(TryGetDelegate get, BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
         try
         {
@@ -178,7 +178,7 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
-    ///  Trys to get this object as a <see cref="List{T}"/> of <see cref="PrimitiveType"/>.
+    ///  Tries to get this object as a <see cref="List{T}"/> of <see cref="PrimitiveType"/>.
     /// </summary>
     public static bool TryGetPrimitiveList(this BinaryFormattedObject format, [NotNullWhen(true)] out object? list)
     {
@@ -237,37 +237,32 @@ internal static class BinaryFormattedObjectExtensions
                     return false;
             }
 
-            if (array is not ArraySinglePrimitive primitiveArray || primitiveArray.PrimitiveType != primitiveType)
+            if (array is not IPrimitiveTypeRecord primitiveArray || primitiveArray.PrimitiveType != primitiveType)
             {
                 return false;
             }
 
-            IList primitiveList = primitiveType switch
+            // BinaryFormatter serializes the entire backing array, so we need to trim it down to the size of the list.
+            list = primitiveType switch
             {
-                PrimitiveType.Boolean => new List<bool>(size),
-                PrimitiveType.Byte => new List<byte>(size),
-                PrimitiveType.Char => new List<char>(size),
-                PrimitiveType.Decimal => new List<decimal>(size),
-                PrimitiveType.Double => new List<double>(size),
-                PrimitiveType.Int16 => new List<short>(size),
-                PrimitiveType.Int32 => new List<int>(size),
-                PrimitiveType.Int64 => new List<long>(size),
-                PrimitiveType.SByte => new List<sbyte>(size),
-                PrimitiveType.Single => new List<float>(size),
-                PrimitiveType.TimeSpan => new List<TimeSpan>(size),
-                PrimitiveType.DateTime => new List<DateTime>(size),
-                PrimitiveType.UInt16 => new List<ushort>(size),
-                PrimitiveType.UInt32 => new List<uint>(size),
-                PrimitiveType.UInt64 => new List<ulong>(size),
+                PrimitiveType.Boolean => ((ArrayRecord<bool>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Byte => ((ArrayRecord<byte>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Char => ((ArrayRecord<char>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Decimal => ((ArrayRecord<decimal>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Double => ((ArrayRecord<double>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Int16 => ((ArrayRecord<short>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Int32 => ((ArrayRecord<int>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Int64 => ((ArrayRecord<long>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.SByte => ((ArrayRecord<sbyte>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.Single => ((ArrayRecord<float>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.TimeSpan => ((ArrayRecord<TimeSpan>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.DateTime => ((ArrayRecord<DateTime>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.UInt16 => ((ArrayRecord<ushort>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.UInt32 => ((ArrayRecord<uint>)array).ArrayObjects.CreateTrimmedList(size),
+                PrimitiveType.UInt64 => ((ArrayRecord<ulong>)array).ArrayObjects.CreateTrimmedList(size),
                 _ => throw new InvalidOperationException()
             };
 
-            foreach (object item in array.Take(size))
-            {
-                primitiveList.Add(item);
-            }
-
-            list = primitiveList;
             return true;
         }
     }
@@ -331,7 +326,7 @@ internal static class BinaryFormattedObjectExtensions
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
             value = null;
-            if (format.RecordCount != 3)
+            if (format.RecordCount != 3 || format[1] is not ArrayRecord)
             {
                 return false;
             }
@@ -342,28 +337,28 @@ internal static class BinaryFormattedObjectExtensions
                 return true;
             }
 
-            if (format[1] is not ArraySinglePrimitive primitiveArray)
+            if (format[1] is not IPrimitiveTypeRecord primitiveArray)
             {
                 return false;
             }
 
             value = primitiveArray.PrimitiveType switch
             {
-                PrimitiveType.Boolean => primitiveArray.ArrayObjects.Cast<bool>().ToArray(),
-                PrimitiveType.Byte => primitiveArray.ArrayObjects.Cast<byte>().ToArray(),
-                PrimitiveType.Char => primitiveArray.ArrayObjects.Cast<char>().ToArray(),
-                PrimitiveType.Decimal => primitiveArray.ArrayObjects.Cast<decimal>().ToArray(),
-                PrimitiveType.Double => primitiveArray.ArrayObjects.Cast<double>().ToArray(),
-                PrimitiveType.Int16 => primitiveArray.ArrayObjects.Cast<short>().ToArray(),
-                PrimitiveType.Int32 => primitiveArray.ArrayObjects.Cast<int>().ToArray(),
-                PrimitiveType.Int64 => primitiveArray.ArrayObjects.Cast<long>().ToArray(),
-                PrimitiveType.SByte => primitiveArray.ArrayObjects.Cast<sbyte>().ToArray(),
-                PrimitiveType.Single => primitiveArray.ArrayObjects.Cast<float>().ToArray(),
-                PrimitiveType.TimeSpan => primitiveArray.ArrayObjects.Cast<TimeSpan>().ToArray(),
-                PrimitiveType.DateTime => primitiveArray.ArrayObjects.Cast<DateTime>().ToArray(),
-                PrimitiveType.UInt16 => primitiveArray.ArrayObjects.Cast<ushort>().ToArray(),
-                PrimitiveType.UInt32 => primitiveArray.ArrayObjects.Cast<uint>().ToArray(),
-                PrimitiveType.UInt64 => primitiveArray.ArrayObjects.Cast<ulong>().ToArray(),
+                PrimitiveType.Boolean => ((ArrayRecord<bool>)primitiveArray).ArrayObjects,
+                PrimitiveType.Byte => ((ArrayRecord<byte>)primitiveArray).ArrayObjects,
+                PrimitiveType.Char => ((ArrayRecord<char>)primitiveArray).ArrayObjects,
+                PrimitiveType.Decimal => ((ArrayRecord<decimal>)primitiveArray).ArrayObjects,
+                PrimitiveType.Double => ((ArrayRecord<double>)primitiveArray).ArrayObjects,
+                PrimitiveType.Int16 => ((ArrayRecord<short>)primitiveArray).ArrayObjects,
+                PrimitiveType.Int32 => ((ArrayRecord<int>)primitiveArray).ArrayObjects,
+                PrimitiveType.Int64 => ((ArrayRecord<long>)primitiveArray).ArrayObjects,
+                PrimitiveType.SByte => ((ArrayRecord<sbyte>)primitiveArray).ArrayObjects,
+                PrimitiveType.Single => ((ArrayRecord<float>)primitiveArray).ArrayObjects,
+                PrimitiveType.TimeSpan => ((ArrayRecord<TimeSpan>)primitiveArray).ArrayObjects,
+                PrimitiveType.DateTime => ((ArrayRecord<DateTime>)primitiveArray).ArrayObjects,
+                PrimitiveType.UInt16 => ((ArrayRecord<ushort>)primitiveArray).ArrayObjects,
+                PrimitiveType.UInt32 => ((ArrayRecord<uint>)primitiveArray).ArrayObjects,
+                PrimitiveType.UInt64 => ((ArrayRecord<ulong>)primitiveArray).ArrayObjects,
                 _ => null
             };
 
@@ -372,7 +367,7 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
-    ///  Trys to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
+    ///  Tries to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
     /// </summary>
     public static bool TryGetPrimitiveHashtable(this BinaryFormattedObject format, [NotNullWhen(true)] out Hashtable? hashtable)
     {
@@ -382,7 +377,7 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
-    ///  Trys to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
+    ///  Tries to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
     /// </summary>
     public static bool TryGetPrimitiveHashtable(this BinaryFormattedObject format, [NotNullWhen(true)] out object? hashtable)
     {
@@ -459,7 +454,7 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
-    ///  Trys to get this object as a binary formatted <see cref="NotSupportedException"/>.
+    ///  Tries to get this object as a binary formatted <see cref="NotSupportedException"/>.
     /// </summary>
     public static bool TryGetNotSupportedException(
         this BinaryFormattedObject format,

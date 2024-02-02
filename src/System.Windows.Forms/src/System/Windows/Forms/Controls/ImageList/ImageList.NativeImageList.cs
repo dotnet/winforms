@@ -93,7 +93,7 @@ public sealed partial class ImageList
             //      resources.ApplyResources(this.listView1, "listView1");
             //
             // In those cases the loose instances will be collected by the GC.
-            Dispose(false);
+            Dispose(disposing: false);
         }
 
         internal NativeImageList Duplicate()

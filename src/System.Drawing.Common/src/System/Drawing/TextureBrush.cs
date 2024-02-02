@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 
 namespace System.Drawing;
 
-public unsafe sealed class TextureBrush : Brush
+public sealed unsafe class TextureBrush : Brush
 {
     // When creating a texture brush from a metafile image, the dstRect
     // is used to specify the size that the metafile image should be
@@ -28,7 +28,7 @@ public unsafe sealed class TextureBrush : Brush
         }
 
         GpTexture* brush;
-        PInvoke.GdipCreateTexture(image._nativeImage, (WrapMode)wrapMode, &brush).ThrowIfFailed();
+        PInvoke.GdipCreateTexture(image.Pointer(), (WrapMode)wrapMode, &brush).ThrowIfFailed();
         GC.KeepAlive(image);
         SetNativeBrushInternal((GpBrush*)brush);
     }
@@ -44,7 +44,7 @@ public unsafe sealed class TextureBrush : Brush
 
         GpTexture* brush;
         PInvoke.GdipCreateTexture2(
-            image._nativeImage,
+            image.Pointer(),
             (WrapMode)wrapMode,
             dstRect.X, dstRect.Y, dstRect.Width, dstRect.Height, &brush).ThrowIfFailed();
 
@@ -65,7 +65,7 @@ public unsafe sealed class TextureBrush : Brush
 
         GpTexture* brush;
         PInvoke.GdipCreateTextureIA(
-            image._nativeImage,
+            image.Pointer(),
             imageAttr is null ? null : imageAttr._nativeImageAttributes,
             dstRect.X,
             dstRect.Y,

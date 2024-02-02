@@ -2751,17 +2751,13 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             if (IsCurrentlyDragging)
             {
-                Region? transparentRegion = Renderer.GetTransparentRegion(this);
-                if (transparentRegion is not null && (location.X != x || location.Y != y))
+                if (location.X != x || location.Y != y)
                 {
-                    try
+                    using Region? transparentRegion = Renderer.GetTransparentRegion(this);
+                    if (transparentRegion is not null)
                     {
                         Invalidate(transparentRegion);
                         Update();
-                    }
-                    finally
-                    {
-                        transparentRegion.Dispose();
                     }
                 }
             }

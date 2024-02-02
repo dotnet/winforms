@@ -71,8 +71,10 @@ public class ImageListTests : ControlTestBase
         {
             GC.GetTotalMemory(true);
 
-            uint result = PInvoke.GetGuiResources((HANDLE)Process.GetCurrentProcess().Handle,
+            uint result = PInvokeCore.GetGuiResources(
+                (HANDLE)Process.GetCurrentProcess().Handle,
                 GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
+
             if (result == 0)
             {
                 int lastWin32Error = Marshal.GetLastWin32Error();
@@ -120,7 +122,6 @@ public class ImageListTests : ControlTestBase
     private static ImageListStreamer DeserializeStreamer(string base64String)
     {
         byte[] bytes = Convert.FromBase64String(base64String);
-        using MemoryStream ms = new(bytes);
-        return new ImageListStreamer(ms);
+        return new ImageListStreamer(bytes);
     }
 }

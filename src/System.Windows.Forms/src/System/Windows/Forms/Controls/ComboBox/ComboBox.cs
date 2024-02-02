@@ -3530,7 +3530,7 @@ public partial class ComboBox : ListControl
         else if (DrawMode == DrawMode.OwnerDrawVariable)
         {
             PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
-            Graphics graphics = CreateGraphicsInternal();
+            using Graphics graphics = CreateGraphicsInternal();
             for (int i = 0; i < Items.Count; i++)
             {
                 int original = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
@@ -3541,8 +3541,6 @@ public partial class ComboBox : ListControl
                     PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
                 }
             }
-
-            graphics.Dispose();
         }
     }
 
@@ -3590,7 +3588,7 @@ public partial class ComboBox : ListControl
     {
         if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal is not null)
         {
-            PInvoke.GetClientRect(this, out RECT rect);
+            PInvokeCore.GetClientRect(this, out RECT rect);
             HDC hdc = (HDC)m.WParamInternal;
             using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
             hdc.FillRectangle(rect, hbrush);

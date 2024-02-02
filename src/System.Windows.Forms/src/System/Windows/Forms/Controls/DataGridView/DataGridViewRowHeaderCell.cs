@@ -1042,7 +1042,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         s_colorMap[0].NewColor = foreColor;
         s_colorMap[0].OldColor = Color.Black;
 
-        ImageAttributes attr = new();
+        using ImageAttributes attr = new();
         attr.SetRemapTable(s_colorMap, ColorAdjustType.Bitmap);
 
         if (SystemInformation.HighContrast &&
@@ -1059,8 +1059,6 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         {
             g.DrawImage(bmp, bmpRect, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel, attr);
         }
-
-        attr.Dispose();
     }
 
     protected override bool SetValue(int rowIndex, object? value)

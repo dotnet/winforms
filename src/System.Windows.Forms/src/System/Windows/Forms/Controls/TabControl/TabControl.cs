@@ -1933,11 +1933,13 @@ public partial class TabControl : Control
         DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
         using DrawItemEventArgs e = new(
-            dis->hDC.CreateGraphics(),
+            dis->hDC,
             Font,
             dis->rcItem,
-            (int)dis->itemID,
-            (DrawItemState)(int)dis->itemState);
+            dis->itemID,
+            dis->itemState,
+            ForeColor,
+            BackColor);
 
         OnDrawItem(e);
 

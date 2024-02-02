@@ -4723,6 +4723,19 @@ public class TreeViewTests
     }
 
     [WinFormsFact]
+    public void TreeViewNodeSorter_Set_SortedFalseIfNull()
+    {
+        using TreeView treeView = new()
+        {
+            TreeViewNodeSorter = StringComparer.CurrentCulture
+        };
+        Assert.True(treeView.Sorted);
+
+        treeView.TreeViewNodeSorter = null;
+        Assert.False(treeView.Sorted);
+    }
+
+    [WinFormsFact]
     public void AddExistingNodeAsChild_ThrowsArgumentException()
     {
         using TreeView treeView = new();

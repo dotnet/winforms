@@ -8,26 +8,26 @@ namespace System.Drawing.Printing;
 
 public partial class PrinterSettings
 {
-    public class StringCollection : ICollection
+    public class StringCollection : ICollection, IReadOnlyList<string>
     {
-        private string[] _array;
+        private readonly List<string> _list;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='StringCollection'/> class.
         /// </summary>
-        public StringCollection(string[] array) => _array = array;
+        public StringCollection(string[] array) => _list = new(array);
 
         /// <summary>
         ///  Gets a value indicating the number of strings.
         /// </summary>
-        public int Count => _array.Length;
+        public int Count => _list.Count;
 
         /// <summary>
         ///  Gets the string with the specified index.
         /// </summary>
-        public virtual string this[int index] => _array[index];
+        public virtual string this[int index] => _list[index];
 
-        public IEnumerator GetEnumerator() => new ArrayEnumerator(_array, Count);
+        public IEnumerator GetEnumerator() => ((IEnumerable)_list).GetEnumerator();
 
         int ICollection.Count => Count;
 
@@ -35,20 +35,19 @@ public partial class PrinterSettings
 
         object ICollection.SyncRoot => this;
 
-        void ICollection.CopyTo(Array array, int index) => Array.Copy(_array, index, array, 0, _array.Length);
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)_list).CopyTo(array, index);
 
-        public void CopyTo(string[] strings, int index) => Array.Copy(_array, index, strings, 0, _array.Length);
+        public void CopyTo(string[] strings, int index) => ((ICollection)_list).CopyTo(strings, index);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public int Add(string value)
         {
-            string[] newArray = new string[Count + 1];
-            ((ICollection)this).CopyTo(newArray, 0);
-            newArray[Count] = value;
-            _array = newArray;
-            return Count;
+            _list.Add(value);
+            return _list.Count;
         }
+
+        IEnumerator<string> IEnumerable<string>.GetEnumerator() => _list.GetEnumerator();
     }
 }

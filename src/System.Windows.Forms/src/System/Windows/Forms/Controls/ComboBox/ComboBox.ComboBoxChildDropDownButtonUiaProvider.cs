@@ -99,15 +99,14 @@ public partial class ComboBox
 
         public override AccessibleRole Role => SystemIAccessible.TryGetRole(GetChildId());
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
+        internal override int[] RuntimeId =>
+            [
                 RuntimeIDFirstItem,
-                PARAM.ToInt(_owner.InternalHandle),
+                (int)_owner.InternalHandle,
                 _owner.GetHashCode(),
                 GeneratedRuntimeId,
                 COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX
-            };
+            ];
 
         public override AccessibleStates State => SystemIAccessible.TryGetState(GetChildId());
     }
