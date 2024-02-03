@@ -90,30 +90,24 @@ public class CursorConverter : TypeConverter
                 {
                     return propertyName;
                 }
+                else if (cursor.Handle == Cursors.Arrow.Handle)
+                {
+                    // Arrow and Default cursors share the same HCURSOR.
+                    // Always return "Default" in this case.
+                    return nameof(Cursors.Default);
+                }
 
+                // We have a cursor that only has handle information. This can happen if other processes set the cursor.
+                // Try to find an exact instance match to a known cursor from Cursors properties using HCURSOR equality (==).
                 PropertyInfo[] props = GetProperties();
-                int bestMatch = -1;
-
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
                     Cursor? knownCursor = (Cursor?)prop.GetValue(obj: null, index: null);
                     if (knownCursor == cursor)
                     {
-                        if (ReferenceEquals(knownCursor, value))
-                        {
-                            return prop.Name;
-                        }
-                        else
-                        {
-                            bestMatch = i;
-                        }
+                        return prop.Name;
                     }
-                }
-
-                if (bestMatch != -1)
-                {
-                    return props[bestMatch].Name;
                 }
 
                 // We throw here because we cannot meaningfully convert a custom
