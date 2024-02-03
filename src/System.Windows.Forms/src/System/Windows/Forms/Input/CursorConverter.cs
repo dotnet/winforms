@@ -91,6 +91,32 @@ public class CursorConverter : TypeConverter
                     return propertyName;
                 }
 
+                PropertyInfo[] props = GetProperties();
+                int bestMatch = -1;
+
+                for (int i = 0; i < props.Length; i++)
+                {
+                    PropertyInfo prop = props[i];
+                    object[]? tempIndex = null;
+                    Cursor? c = (Cursor?)prop.GetValue(null, tempIndex);
+                    if (c == cursor)
+                    {
+                        if (ReferenceEquals(c, value))
+                        {
+                            return prop.Name;
+                        }
+                        else
+                        {
+                            bestMatch = i;
+                        }
+                    }
+                }
+
+                if (bestMatch != -1)
+                {
+                    return props[bestMatch].Name;
+                }
+
                 // We throw here because we cannot meaningfully convert a custom
                 // cursor into a string. In fact, the ResXResourceWriter will use
                 // this exception to indicate to itself that this object should
