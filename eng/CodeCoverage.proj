@@ -39,6 +39,7 @@
     <Exec Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_IntegrationCoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/integration -reporttypes:Cobertura -filefilters:-*.g.cs" />
 
     <ItemGroup>
+      <_CodecovFullArgs Include="-f;$(BaseOutputPath)coverage\full\Cobertura.xml" />
       <_CodecovUnitArgs Include="-f;$(BaseOutputPath)coverage\unit\Cobertura.xml" />
       <_CodecovIntegrationArgs Include="-f;$(BaseOutputPath)coverage\integration\Cobertura.xml" />
 
@@ -66,17 +67,14 @@
     <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovUnitArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionUnitFlags, ',')" />
     <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovUnitArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionUnitFlags, ',')" />
 
-    <!-- Upload the unit test coverage file with a 'test' flag, which will be filtered by codecov.io to test code -->
-    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovUnitArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestUnitFlags, ',')" />
-    <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovUnitArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestUnitFlags, ',')" />
-
     <!-- Upload the integration test coverage file with a 'production' flag, which will be filtered by codecov.io to production code -->
     <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovIntegrationArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionIntegrationFlags, ',')" />
     <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovIntegrationArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionIntegrationFlags, ',')" />
 
-    <!-- Upload the integration test coverage file with a 'test' flag, which will be filtered by codecov.io to test code -->
-    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovIntegrationArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestIntegrationFlags, ',')" />
-    <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovIntegrationArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestIntegrationFlags, ',')" />
+    <!-- Upload the full test coverage file with a 'test' flag, which will be filtered by codecov.io to test code. We
+    don't further separate this by integration vs. unit tests because the answer is clear from the file path. -->
+    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovFullArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestFlags, ',')" />
+    <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovFullArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestFlags, ',')" />
   </Target>
 
 </Project>
