@@ -4157,7 +4157,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         if (_viewTabProperties is not null && _viewTabProperties.TryGetValue(tabName, out GridEntry? value))
         {
             _rootEntry = value;
-            _rootEntry?.Refresh();
+            _rootEntry.Refresh();
         }
         else
         {
@@ -4193,8 +4193,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         // Get entries.
-        _currentEntries = _rootEntry?.Children;
-        _defaultEntry = _rootEntry?.DefaultChild;
+        _currentEntries = _rootEntry.Children;
+        _defaultEntry = _rootEntry.DefaultChild;
         _gridView.Invalidate();
     }
 
