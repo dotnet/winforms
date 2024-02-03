@@ -17,7 +17,7 @@ public partial class Control
         internal object? _retVal;
         internal Exception? _exception;
         internal bool _synchronous;
-        private ManualResetEventPrivate? _resetEvent;
+        private ManualResetEvent? _resetEvent;
         private readonly object _invokeSyncObject = new();
 
         // Store the execution context associated with the caller thread, and
@@ -42,16 +42,6 @@ public partial class Control
             _args = args;
             _synchronous = synchronous;
             _executionContext = executionContext;
-            // We need finalization only if we will create _resetEvent instance.
-            GC.SuppressFinalize(this);
-        }
-
-        ~ThreadMethodEntry()
-        {
-            // If something new is added here, it is necessary to reconsider the conditions of finalization.
-            // Look GC.SuppressFinalize(this); in constructor and GC.ReRegisterForFinalize(this); in AsyncWaitHandle.
-            _resetEvent?.Close();
-            Debug.Fail($"{nameof(ThreadMethodEntry)} finalization hit!");
         }
 
         public object? AsyncState
@@ -76,8 +66,7 @@ public partial class Control
                         // boolean flag and resetEvent mutex in multiproc scenarios.
                         if (_resetEvent is null)
                         {
-                            _resetEvent = new ManualResetEventPrivate(this);
-                            GC.ReRegisterForFinalize(this);
+                            _resetEvent = new ManualResetEvent(false);
                             if (IsCompleted)
                             {
                                 _resetEvent.Set();
@@ -111,28 +100,6 @@ public partial class Control
             {
                 IsCompleted = true;
                 _resetEvent?.Set();
-            }
-        }
-
-        private sealed class ManualResetEventPrivate : EventWaitHandle
-        {
-            private readonly object _owner;
-
-            public ManualResetEventPrivate(object owner) : base(false, EventResetMode.ManualReset)
-            {
-                _owner = owner;
-            }
-
-            protected override void Dispose(bool explicitDisposing)
-            {
-                base.Dispose(explicitDisposing);
-                if (explicitDisposing)
-                {
-                    // The owner (ThreadMethodEntry) need to free only this waitHandle.
-                    // But ThreadMethodEntry can't be Disposed directly because it exposed though IAsyncResult interface.
-                    // So after freeing this waitHandle we mark owner ThreadMethodEntry to suppress finalization.
-                    GC.SuppressFinalize(_owner);
-                }
             }
         }
     }
