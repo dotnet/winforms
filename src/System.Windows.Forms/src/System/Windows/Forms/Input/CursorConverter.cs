@@ -97,10 +97,10 @@ public class CursorConverter : TypeConverter
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
-                    Cursor? c = (Cursor?)prop.GetValue(obj: null, index: null);
-                    if (c == cursor)
+                    Cursor? knownCursor = (Cursor?)prop.GetValue(obj: null, index: null);
+                    if (knownCursor == cursor)
                     {
-                        if (ReferenceEquals(c, value))
+                        if (ReferenceEquals(knownCursor, value))
                         {
                             return prop.Name;
                         }
