@@ -97,7 +97,7 @@ public class CursorConverter : TypeConverter
                     return nameof(Cursors.Default);
                 }
 
-                // We have a cursor that only has handle information. This can happen if other processes set the cursor.
+                // We have a cursor that only has handle information. This can happen when the cursor was read via PInvoke.
                 // Try to find an exact instance match to a known cursor from Cursors properties using HCURSOR equality (==).
                 PropertyInfo[] props = GetProperties();
                 for (int i = 0; i < props.Length; i++)
