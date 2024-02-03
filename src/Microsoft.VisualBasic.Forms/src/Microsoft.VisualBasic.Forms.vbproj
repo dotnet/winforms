@@ -4,12 +4,12 @@
     https://github.com/microsoft/msbuild/issues/4923#issuecomment-554265394
     -->
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-  
+
   <PropertyGroup>
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <RootNamespace></RootNamespace>
-    <LangVersion>15.0</LangVersion>
+    <LangVersion>16.9</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
