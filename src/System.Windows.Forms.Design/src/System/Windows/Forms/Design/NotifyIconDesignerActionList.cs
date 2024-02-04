@@ -20,13 +20,14 @@ namespace System.Windows.Forms.Design
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items =
-            [
+            DesignerActionItemCollection items = new()
+            {
                 new DesignerActionMethodItem(this,
                     memberName: nameof(ChooseIcon),
                     displayName: SR.ChooseIconDisplayName,
                     includeAsDesignerVerb: true)
-            ];
+            };
+
             return items;
         }
     }

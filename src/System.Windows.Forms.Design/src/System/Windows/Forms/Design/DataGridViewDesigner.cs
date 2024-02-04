@@ -1,4 +1,4 @@
-﻿﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -871,8 +871,8 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items =
-            [
+            DesignerActionItemCollection items = new()
+            {
                 new DesignerActionMethodItem(this,
                     memberName: nameof(EditColumns),
                     displayName: SR.DataGridViewEditColumnsVerb,
@@ -881,7 +881,7 @@ internal class DataGridViewDesigner : ControlDesigner
                     memberName: nameof(AddColumn),
                     displayName: SR.DataGridViewAddColumnVerb,
                     includeAsDesignerVerb: true),
-            ];
+            };
 
             return items;
         }

@@ -410,8 +410,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {
-            DesignerActionItemCollection items =
-            [
+            DesignerActionItemCollection items = new()
+            {
                 // We don't promote these Items to DesignerVerbs, since we need to be able
                 // to disable/enable the Remove entries, based on the number of Rows/Cols.
                 // Unfortunately, you cannot do that via the DesignerAction stuff.
@@ -423,7 +423,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     memberName: nameof(AddRow),
                     displayName: SR.TableLayoutPanelDesignerAddRow,
                     includeAsDesignerVerb: false),
-            ];
+            };
 
             if (owner.Table.ColumnCount > 1)
             {
