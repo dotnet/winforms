@@ -3,6 +3,10 @@
 
 using System.Runtime.InteropServices;
 using Microsoft.DotNet.RemoteExecutor;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.System.Threading;
 using Xunit.Sdk;
 
 namespace System.Drawing.Tests;
@@ -16,17 +20,17 @@ public static class GdiPlusHandlesTests
     {
         RemoteExecutor.Invoke(() =>
         {
-            const int handleTreshold = 1;
+            const int HandleThreshold = 1;
             using Bitmap bmp = new(100, 100);
             using Icon ico = new(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico"));
 
-            IntPtr hdc = Helpers.GetDC(Helpers.GetForegroundWindow());
+            using GetDcScope hdc = new(PInvokeCore.GetForegroundWindow());
             using Graphics graphicsFromHdc = Graphics.FromHdc(hdc);
 
             using Process currentProcess = Process.GetCurrentProcess();
-            IntPtr processHandle = currentProcess.Handle;
+            HANDLE processHandle = new(currentProcess.Handle);
 
-            int initialHandles = Helpers.GetGuiResources(processHandle, 0);
+            uint initialHandles = PInvokeCore.GetGuiResources(processHandle, GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
             ValidateNoWin32Error(initialHandles);
 
             for (int i = 0; i < 5000; i++)
@@ -34,14 +38,14 @@ public static class GdiPlusHandlesTests
                 graphicsFromHdc.DrawIcon(ico, 100, 100);
             }
 
-            int finalHandles = Helpers.GetGuiResources(processHandle, 0);
+            uint finalHandles = PInvokeCore.GetGuiResources(processHandle, GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
             ValidateNoWin32Error(finalHandles);
 
-            Assert.InRange(finalHandles, initialHandles - handleTreshold, initialHandles + handleTreshold);
+            Assert.InRange(finalHandles, initialHandles - HandleThreshold, initialHandles + HandleThreshold);
         }).Dispose();
     }
 
-    private static void ValidateNoWin32Error(int handleCount)
+    private static void ValidateNoWin32Error(uint handleCount)
     {
         if (handleCount == 0)
         {

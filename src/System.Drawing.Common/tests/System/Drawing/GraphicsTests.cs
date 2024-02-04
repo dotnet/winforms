@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
 namespace System.Drawing.Tests;
 
@@ -74,42 +77,28 @@ public partial class GraphicsTests
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.GetHdc());
     }
 
-    public static IEnumerable<object[]> FromHdc_TestData()
+    [Fact]
+    public void FromHdc_ValidHdc_ReturnsExpected()
     {
-        yield return new object[] { Helpers.GetDC(IntPtr.Zero) };
-        yield return new object[] { Helpers.GetWindowDC(IntPtr.Zero) };
-
-        // Likely the source of #51097- grabbing whatever the current foreground window is is not a great idea.
-        // Whatever that window is it could disappear at any time and what it's clipping info would be pretty
-        // random.
-        // https://github.com/dotnet/winforms/issues/8829
-
-        // IntPtr foregroundWindow = Helpers.GetForegroundWindow();
-        // yield return new object[] { Helpers.GetDC(foregroundWindow) };
-    }
-
-    [Theory]
-    [MemberData(nameof(FromHdc_TestData))]
-    public void FromHdc_ValidHdc_ReturnsExpected(IntPtr hdc)
-    {
+        using var hdc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdc(hdc);
         Rectangle expected = Helpers.GetWindowDCRect(hdc);
         VerifyGraphics(graphics, expected);
     }
 
-    [Theory]
-    [MemberData(nameof(FromHdc_TestData))]
-    public void FromHdc_ValidHdcWithContext_ReturnsExpected(IntPtr hdc)
+    [Fact]
+    public void FromHdc_ValidHdcWithContext_ReturnsExpected()
     {
+        using var hdc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdc(hdc, IntPtr.Zero);
         Rectangle expected = Helpers.GetWindowDCRect(hdc);
         VerifyGraphics(graphics, expected);
     }
 
-    [Theory]
-    [MemberData(nameof(FromHdc_TestData))]
-    public void FromHdcInternal_GetDC_ReturnsExpected(IntPtr hdc)
+    [Fact]
+    public void FromHdcInternal_GetDC_ReturnsExpected()
     {
+        using var hdc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(hdc);
         Rectangle expected = Helpers.GetWindowDCRect(hdc);
         VerifyGraphics(graphics, expected);
@@ -217,25 +206,25 @@ public partial class GraphicsTests
 
     public static IEnumerable<object[]> Hwnd_TestData()
     {
-        yield return new object[] { IntPtr.Zero };
-        yield return new object[] { Helpers.GetForegroundWindow() };
+        yield return new object[] { (nint)0 };
+        yield return new object[] { (nint)PInvokeCore.GetForegroundWindow() };
     }
 
     [Theory]
     [MemberData(nameof(Hwnd_TestData))]
-    public void FromHwnd_ValidHwnd_ReturnsExpected(IntPtr hWnd)
+    public void FromHwnd_ValidHwnd_ReturnsExpected(nint hwnd)
     {
-        using Graphics graphics = Graphics.FromHwnd(hWnd);
-        Rectangle expected = Helpers.GetHWndRect(hWnd);
+        using Graphics graphics = Graphics.FromHwnd(hwnd);
+        Rectangle expected = Helpers.GetHWndRect((HWND)hwnd);
         VerifyGraphics(graphics, expected);
     }
 
     [Theory]
     [MemberData(nameof(Hwnd_TestData))]
-    public void FromHwndInternal_ValidHwnd_ReturnsExpected(IntPtr hWnd)
+    public void FromHwndInternal_ValidHwnd_ReturnsExpected(nint hwnd)
     {
-        using Graphics graphics = Graphics.FromHwnd(hWnd);
-        Rectangle expected = Helpers.GetHWndRect(hWnd);
+        using Graphics graphics = Graphics.FromHwnd(hwnd);
+        Rectangle expected = Helpers.GetHWndRect((HWND)hwnd);
         VerifyGraphics(graphics, expected);
     }
 

@@ -3588,7 +3588,7 @@ public partial class ComboBox : ListControl
     {
         if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal is not null)
         {
-            PInvoke.GetClientRect(this, out RECT rect);
+            PInvokeCore.GetClientRect(this, out RECT rect);
             HDC hdc = (HDC)m.WParamInternal;
             using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
             hdc.FillRectangle(rect, hbrush);

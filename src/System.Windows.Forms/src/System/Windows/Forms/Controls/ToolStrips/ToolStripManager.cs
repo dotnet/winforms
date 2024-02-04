@@ -965,7 +965,7 @@ public static partial class ToolStripManager
 
                     // If we've alt-tabbed away don't snap/restore focus.
                     HWND topmostParentOfMenu = PInvoke.GetAncestor(menuStripToActivate, GET_ANCESTOR_FLAGS.GA_ROOT);
-                    HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                    HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
 
                     if (topmostParentOfMenu == foregroundWindow)
                     {

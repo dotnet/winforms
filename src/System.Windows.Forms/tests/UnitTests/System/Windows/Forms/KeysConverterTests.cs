@@ -30,11 +30,27 @@ public class KeysConverterTests
     public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string localizedKeyName, Keys expectedKey)
     {
         CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-
         KeysConverter converter = new();
-        var result = (Keys?)converter.ConvertFrom(null, culture, localizedKeyName);
 
-        Assert.Equal(expectedKey, result);
+        // The 'localizedKeyName' is converted into the corresponding key value according to the specified culture.
+        var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedKeyName);
+        Assert.Equal(expectedKey, resultFromSpecificCulture);
+
+        // Record original UI culture.
+        CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
+
+        try
+        {
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+            // When the culture is empty, the 'localizedKeyName' is converted to the corresponding key value based on CurrentUICulture.
+            var resultFromUICulture = (Keys?)converter.ConvertFrom(context: null, culture: null, localizedKeyName);
+            Assert.Equal(expectedKey, resultFromUICulture);
+        }
+        finally
+        {
+            Thread.CurrentThread.CurrentUICulture = originalUICulture;
+        }
     }
 
     [Theory]
@@ -68,22 +84,38 @@ public class KeysConverterTests
 
     public static IEnumerable<object[]> ConvertToEnumArray_ShouldConvertKeys_TestData()
     {
-        yield return new object[] { Keys.None, new Enum[] { Keys.None } };
-        yield return new object[] { Keys.S, new Enum[] { Keys.S } };
-        yield return new object[] { Keys.Control | Keys.C, new Enum[] { Keys.Control, Keys.C } };
-        yield return new object[] { Keys.Control | Keys.Add, new Enum[] { Keys.Control, Keys.Add } };
-        yield return new object[] { Keys.Control | Keys.Alt | Keys.D, new Enum[] { Keys.Control, Keys.Alt, Keys.D } };
-        yield return new object[] { Keys.Control | Keys.Alt | Keys.Shift | Keys.A, new Enum[] { Keys.Control, Keys.Alt, Keys.Shift, Keys.A } };
-        yield return new object[] { Keys.Control | Keys.Alt | Keys.Shift | Keys.F1, new Enum[] { Keys.Control, Keys.Alt, Keys.Shift, Keys.F1 } };
+        yield return new object[] { "fr-FR", Keys.None, new Enum[] { Keys.None } };
+        yield return new object[] { "de-DE", Keys.S, new Enum[] { Keys.S } };
+        yield return new object[] { "zh-CN", Keys.Control | Keys.C, new Enum[] { Keys.Control, Keys.C } };
+        yield return new object[] { "it-IT", Keys.Control | Keys.Add, new Enum[] { Keys.Control, Keys.Add } };
+        yield return new object[] { "ko-KR", Keys.Control | Keys.Alt | Keys.D, new Enum[] { Keys.Control, Keys.Alt, Keys.D } };
+        yield return new object[] { "ru-RU", Keys.Control | Keys.Alt | Keys.Shift | Keys.A, new Enum[] { Keys.Control, Keys.Alt, Keys.Shift, Keys.A } };
+        yield return new object[] { "zh-TW", Keys.Control | Keys.Alt | Keys.Shift | Keys.F1, new Enum[] { Keys.Control, Keys.Alt, Keys.Shift, Keys.F1 } };
     }
 
     [Theory]
     [MemberData(nameof(ConvertToEnumArray_ShouldConvertKeys_TestData))]
-    public void ConvertToEnumArray_ShouldConvertKeys(Keys keys, Enum[] expectedResult)
+    public void ConvertToEnumArray_ShouldConvertKeys(string cultureName, Keys keys, Enum[] expectedResult)
     {
         KeysConverter converter = new();
         object result = converter.ConvertTo(keys, typeof(Enum[]));
         Assert.Equal(expectedResult, result);
+
+        CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
+        try
+        {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(cultureName);
+
+            object resultWithoutCulture = converter.ConvertTo(context: null, culture: null, keys, typeof(Enum[]));
+            object resultWithUICulture = converter.ConvertTo(context: null, culture: Thread.CurrentThread.CurrentUICulture, keys, typeof(Enum[]));
+
+            Assert.Equal(expectedResult, resultWithoutCulture);
+            Assert.Equal(resultWithUICulture, resultWithoutCulture);
+        }
+        finally
+        {
+            Thread.CurrentThread.CurrentUICulture = originalUICulture;
+        }
     }
 
     [Theory]
