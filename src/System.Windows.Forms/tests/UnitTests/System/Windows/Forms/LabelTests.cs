@@ -352,7 +352,7 @@ public class LabelTests
     [InlineData(FlatStyle.Flat)]
     public void Label_FlatStyle_Set_GetReturnsExpected(FlatStyle style)
     {
-        using Label label = new Label();
+        using Label label = new();
         label.FlatStyle = style;
         label.CreateControl();
 
@@ -388,7 +388,7 @@ public class LabelTests
     [InlineData(ContentAlignment.BottomRight)]
     public void Label_TextAlign_Set_GetReturnsExpected(ContentAlignment alignment)
     {
-        using Label label = new Label();
+        using Label label = new();
         label.TextAlign = alignment;
 
         Assert.Equal(alignment, label.TextAlign);
@@ -398,7 +398,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_TextAlign_SetSameValue_DoesNotInvalidate()
     {
-        using Label label = new Label();
+        using Label label = new();
         label.TextAlign = ContentAlignment.TopLeft;
 
         label.CreateControl();
@@ -411,7 +411,7 @@ public class LabelTests
     [WinFormsFact]
     public void Label_TextAlign_SetDifferentValue_Invalidate()
     {
-        using Label label = new Label();
+        using Label label = new();
         label.TextAlign = ContentAlignment.TopLeft;
 
         label.CreateControl();
