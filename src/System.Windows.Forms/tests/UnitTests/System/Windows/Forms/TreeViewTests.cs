@@ -4,6 +4,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 
@@ -7294,6 +7295,92 @@ public class TreeViewTests
         parent.Nodes.Remove(parent.Nodes[1]);
         Assert.Equal(1, parent.Nodes.Count);
         Assert.Equal(treeNode2, parent.Nodes[0]);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public unsafe void Verify_Order_AfterSort_ContextSwitch(bool switchValue)
+    {
+        dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
+
+        try
+        {
+            // Set the context switch
+            AppContext.SetSwitch(LocalAppContextSwitches.TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName, switchValue);
+            Assert.Equal(switchValue, LocalAppContextSwitches.TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView);
+
+            using TreeView treeView = new();
+
+            TreeNode Node1 = new("1");
+            TreeNode Node2 = new("2");
+            TreeNode Node3 = new("3");
+            TreeNode Node4 = new("4");
+            TreeNode Node5 = new("5");
+
+            treeView.Nodes.Add(Node2);
+
+            // Set the sort
+            treeView.Sort();
+            treeView.CreateControl();
+
+            // Nodes
+            treeView.Nodes.AddRange(
+            [
+                Node5,
+                Node4,
+                Node3,
+                Node1
+            ]);
+
+            // Assert standard ordering
+            Assert.Null(Node1.PrevNode);
+            Assert.Equal(Node1, Node2.PrevNode);
+            Assert.Equal(Node2, Node3.PrevNode);
+            Assert.Equal(Node3, Node4.PrevNode);
+            Assert.Equal(Node4, Node5.PrevNode);
+
+            // Expected orders based on switchValue
+            List<string> expectedOrder = switchValue ? ["1", "2", "3", "4", "5"] : ["2", "5", "3", "1", "4"];
+
+            // Get root node
+            IntPtr rootItem = PInvoke.SendMessage(treeView, PInvoke.TVM_GETNEXTITEM, PInvoke.TVGN_ROOT, IntPtr.Zero);
+
+            // Iterate through items
+            List<string> actualOrder = [];
+            IntPtr currentItem = rootItem;
+            char* textBuffer = stackalloc char[256];
+            int index = 0; // Initialize index
+            while (currentItem != IntPtr.Zero && index < expectedOrder.Count)
+            {
+                TVITEMW item = new()
+                {
+                    hItem = (HTREEITEM)currentItem,
+                    mask = TVITEM_MASK.TVIF_TEXT,
+                    pszText = textBuffer,
+                    cchTextMax = 256
+                };
+
+                // Send the TVM_GETITEM message to fill the item structure
+                PInvoke.SendMessage(treeView, PInvoke.TVM_GETITEMW, 0, ref item);
+
+                // Convert the buffer to a string and check if equal
+                actualOrder.Add(new string((char*)item.pszText));
+
+                // Increment the index for the next item
+                index++;
+
+                // Move to the next item. This example only moves to the next sibling.
+                // To traverse children, you would need to first attempt to get a child with TVGN_CHILD, then siblings.
+                currentItem = PInvoke.SendMessage(treeView, PInvoke.TVM_GETNEXTITEM, PInvoke.TVGN_NEXT, currentItem);
+            }
+
+            // Is actual order the same as expected?
+            Assert.Equal(expectedOrder, actualOrder);
+        }
+        finally
+        {
+            testAccessor.s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView = 0;
+        }
     }
 
     private class SubTreeView : TreeView
