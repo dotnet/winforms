@@ -887,6 +887,15 @@ public class ToolTipTests
         Assert.Equal(tabControl.TabCount, (int)PInvoke.SendMessage(toolTip, PInvoke.TTM_GETTOOLCOUNT));
     }
 
+    [WinFormsFact]
+    public unsafe void ToolTip_TTTOOLINFOW_Struct_Size_IsExpected()
+    {
+        TTTOOLINFOW toolInfo = new();
+        int size = (int)&toolInfo.lParam - (int)&toolInfo + sizeof(LPARAM);
+        int expected = (int)new ToolInfoWrapper<Control>().TestAccessor().Dynamic.TTTOOLINFO_V2_Size;
+        size.Should().Be(expected);
+    }
+
     private class SubToolTip : ToolTip
     {
         public SubToolTip() : base()

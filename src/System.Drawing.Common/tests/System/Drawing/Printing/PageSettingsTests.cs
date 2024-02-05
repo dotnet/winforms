@@ -31,7 +31,7 @@ namespace System.Drawing.Printing.Tests;
 
 public class PageSettingsTests
 {
-    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void Clone_Success()
     {
         PageSettings ps = new();

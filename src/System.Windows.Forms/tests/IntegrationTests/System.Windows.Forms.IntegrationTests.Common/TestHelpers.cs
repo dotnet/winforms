@@ -434,7 +434,7 @@ public static class TestHelpers
             PInvoke.SetForegroundWindow(mainWindowHandle);
         }
 
-        HWND foregroundWindow = PInvoke.GetForegroundWindow();
+        HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
 
         string windowTitle = PInvoke.GetWindowText(foregroundWindow);
 

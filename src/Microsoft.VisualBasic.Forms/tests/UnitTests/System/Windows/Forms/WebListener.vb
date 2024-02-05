@@ -8,22 +8,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
 
-        Friend Shared Function ProcessRequests(prefixes() As String) As HttpListener
+        Friend Shared Function ProcessRequests(urlPrefix As String, testName As String) As HttpListener
 
             If Not HttpListener.IsSupported Then
                 Console.WriteLine("Windows XP SP2, Server 2003, or higher is required to use the HttpListener class.")
             End If
 
             ' URI prefixes are required,
-            If prefixes Is Nothing OrElse prefixes.Length = 0 Then
-                Throw New ArgumentException("prefixes")
+            If urlPrefix Is Nothing Then
+                Throw New ArgumentException(NameOf(urlPrefix))
             End If
 
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
-            For Each s As String In prefixes
-                listener.Prefixes.Add(s)
-            Next
+            listener.Prefixes.Add(urlPrefix.Replace(NameOf(HttpListener), testName))
             listener.Start()
             Task.Run(
                 Sub()
