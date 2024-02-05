@@ -39,7 +39,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             Dim rawUrl As String = context.Request.RawUrl.Split("/").Last.Substring(1)
                             Dim size As Integer = Integer.Parse(rawUrl)
                             Dim responseString As String = Strings.StrDup(size, "A")
-                            ' simulate network traffic
+                            ' Simulate network traffic
                             Threading.Thread.Sleep(2000)
                             Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
                             response.ContentLength64 = buffer.Length
