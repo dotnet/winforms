@@ -4976,7 +4976,7 @@ public partial class ListView : Control
         if (!headerWindow.IsNull)
         {
             WINDOWPOS position = default;
-            PInvoke.GetClientRect(this, out RECT clientRect);
+            PInvokeCore.GetClientRect(this, out RECT clientRect);
             HDLAYOUT hd = new()
             {
                 prc = &clientRect,

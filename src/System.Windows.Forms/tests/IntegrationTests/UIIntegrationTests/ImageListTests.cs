@@ -71,8 +71,10 @@ public class ImageListTests : ControlTestBase
         {
             GC.GetTotalMemory(true);
 
-            uint result = PInvoke.GetGuiResources((HANDLE)Process.GetCurrentProcess().Handle,
+            uint result = PInvokeCore.GetGuiResources(
+                (HANDLE)Process.GetCurrentProcess().Handle,
                 GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
+
             if (result == 0)
             {
                 int lastWin32Error = Marshal.GetLastWin32Error();

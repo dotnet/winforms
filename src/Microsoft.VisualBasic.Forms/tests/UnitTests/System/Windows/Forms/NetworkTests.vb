@@ -4,7 +4,6 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
-Imports System.Threading
 
 Imports Xunit
 
@@ -12,15 +11,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Partial Public Class NetworkTests
 
-        Private Const DownloadFileUrl As String = "http://127.0.0.1:8080/HttpListener/t18135"
-        Private Const DownloadLargeFileUrl As String = "http://127.0.0.1:8080/HttpListener/T104857600"
-
         ' The following URL MUST be replaced with a local URL
         Private Const UploadFileUrl As String = "ftp://speedtest.tele2.net/upload/testing.txt"
 
-        Private Shared ReadOnly s_prefixes As String() = {"http://127.0.0.1:8080/HttpListener/"}
         Private ReadOnly _baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
-        Private ReadOnly _mutex As New Mutex
+        Private ReadOnly _downloadBaseListenerUrl As String = $"http://127.0.0.1:8080/{NameOf(HttpListener)}/"
+        Private ReadOnly _downloadFileUrl As String = $"{_downloadBaseListenerUrl}t18135"
+        Private ReadOnly _downloadLargeFileUrl As String = $"{_downloadBaseListenerUrl}T104857600"
 
         ''' <summary>
         ''' If size >= 0 then create the file with size length
@@ -53,7 +50,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Sub CleanUp(listener As HttpListener, Optional tmpFilePath As String = Nothing)
             listener.Stop()
             listener.Close()
-            _mutex.ReleaseMutex()
             If tmpFilePath IsNot Nothing Then
                 Directory.Delete(tmpFilePath, True)
             End If
@@ -78,7 +74,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Dim tmpFilePath As String = CreateTempDirectory()
                     Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
                     Try
-                        My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                        Dim address As String = _downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWhereFileExistsNoOverwrite))
+                        My.Computer.Network.DownloadFile(address,
                             destinationFilename,
                             userName:="",
                             password:="",
@@ -97,10 +94,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWhereFileExistsOverwrite()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWhereFileExistsOverwrite))
             Try
-                My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                Dim address As String = _downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWhereFileExistsOverwrite))
+                My.Computer.Network.DownloadFile(address,
                         destinationFilename,
                         userName:="",
                         password:="",
@@ -118,12 +115,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWhereTimeoutNegative()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWhereTimeoutNegative))
             Try
                 Assert.Throws(Of ArgumentException)(
                 Sub()
-                    My.Computer.Network.DownloadFile(address:=DownloadLargeFileUrl,
+                    Dim address As String = _downloadLargeFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWhereTimeoutNegative))
+                    My.Computer.Network.DownloadFile(address,
                         destinationFilename,
                         userName:="",
                         password:="",
@@ -141,12 +138,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithExpectedTimeOut()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithExpectedTimeOut))
             Try
                 Assert.Throws(Of WebException)(
                         Sub()
-                            My.Computer.Network.DownloadFile(address:=DownloadLargeFileUrl,
+                            Dim address As String = _downloadLargeFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWhereTimeoutNegative))
+                            My.Computer.Network.DownloadFile(address,
                                 destinationFilename,
                                 userName:="",
                                 password:="",
@@ -163,12 +160,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub DownloadWithNothingDestinationFile()
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithNothingDestinationFile))
             Try
                 Assert.Throws(Of ArgumentNullException)(
                     Sub()
-                        My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                        Dim address As String = _downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithNothingDestinationFile))
+                        My.Computer.Network.DownloadFile(address,
                             destinationFileName:=Nothing,
                             userName:="",
                             password:="",
@@ -185,10 +182,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithNothingPassword()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithNothingPassword))
             Try
-                My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                Dim address As String = _downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithNothingPassword))
+                My.Computer.Network.DownloadFile(address,
                     destinationFilename,
                     userName:="",
                     password:=Nothing)
@@ -202,8 +199,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithNothingUri()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithNothingUri))
             Try
                 Assert.Throws(Of ArgumentNullException)(
                     Sub()
@@ -224,10 +220,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithNothingUsername()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithNothingUsername))
             Try
-                My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                Dim address As String = _downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithNothingUsername))
+                My.Computer.Network.DownloadFile(address,
                         destinationFilename,
                         userName:=Nothing,
                         password:="",
@@ -244,8 +240,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithNothingWebAddress()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithNothingWebAddress))
             Try
                 Assert.Throws(Of ArgumentNullException)(
                     Sub()
@@ -261,10 +256,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUI()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=0)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithUI))
             Try
-                My.Computer.Network.DownloadFile(address:=DownloadLargeFileUrl,
+                Dim address As String = _downloadLargeFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithUI))
+                My.Computer.Network.DownloadFile(address,
                     destinationFilename,
                     userName:="",
                     password:="",
@@ -281,10 +276,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUriFilename()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithUriFilename))
             Try
-                My.Computer.Network.DownloadFile(address:=New Uri(DownloadFileUrl),
+                Dim address As New Uri(_downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithUriFilename)))
+                My.Computer.Network.DownloadFile(address,
                     destinationFileName:=destinationFilename)
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             Finally
@@ -296,10 +291,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUriFilenameAndUserCredentials()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithUriFilenameAndUserCredentials))
             Try
-                My.Computer.Network.DownloadFile(address:=New Uri(DownloadFileUrl),
+                Dim address As New Uri(_downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithUriFilenameAndUserCredentials)))
+                My.Computer.Network.DownloadFile(address,
                     destinationFilename,
                     userName:="TDB",
                     password:="TBD")
@@ -313,10 +308,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadWithUrlDestinationFilename()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, -1)
-            _mutex.WaitOne()
-            Dim listener As HttpListener = WebListener.ProcessRequests(s_prefixes)
+            Dim listener As HttpListener = WebListener.ProcessRequests(_downloadBaseListenerUrl, NameOf(DownloadWithUrlDestinationFilename))
             Try
-                My.Computer.Network.DownloadFile(address:=DownloadFileUrl,
+                Dim address As String = _downloadFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithUrlDestinationFilename))
+                My.Computer.Network.DownloadFile(address,
                    destinationFilename)
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             Finally

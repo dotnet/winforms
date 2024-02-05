@@ -1508,7 +1508,7 @@ public partial class ListBox : ListControl
     {
         // NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
         // call SendMessage.
-        PInvoke.GetClientRect(this, out RECT r);
+        PInvokeCore.GetClientRect(this, out RECT r);
         if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
         {
             int index = (int)PInvoke.SendMessage(this, PInvoke.LB_ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));

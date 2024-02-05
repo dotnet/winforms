@@ -2581,7 +2581,7 @@ internal sealed partial class PropertyGridView :
         if (_dropDownHolder is not null && _dropDownHolder.Visible)
         {
             bool found = false;
-            for (HWND hwnd = PInvoke.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
+            for (HWND hwnd = PInvokeCore.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
             {
                 if (hwnd == _dropDownHolder.Handle)
                 {
@@ -3126,8 +3126,8 @@ internal sealed partial class PropertyGridView :
 
             // Ensure that tooltips don't display when host application is not foreground app.
             // Assume that we don't want to display the tooltips
-            HWND foregroundWindow = PInvoke.GetForegroundWindow();
-            if (PInvoke.IsChild(PInvoke.GetForegroundWindow(), this))
+            HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
+            if (PInvoke.IsChild(PInvokeCore.GetForegroundWindow(), this))
             {
                 // Don't show the tips if a dropdown is showing
                 if (_dropDownHolder is null || _dropDownHolder.Component is null || rowMoveCurrent == _selectedRow)

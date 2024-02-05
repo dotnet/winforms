@@ -71,9 +71,9 @@ public partial class Screen
             };
 
             // API takes EX, determines which one you pass by size.
-            PInvoke.GetMonitorInfo(monitor, (MONITORINFO*)&info);
+            PInvokeCore.GetMonitorInfo(monitor, (MONITORINFO*)&info);
             _bounds = info.monitorInfo.rcMonitor;
-            _primary = ((info.monitorInfo.dwFlags & PInvoke.MONITORINFOF_PRIMARY) != 0);
+            _primary = ((info.monitorInfo.dwFlags & PInvokeCore.MONITORINFOF_PRIMARY) != 0);
 
             _deviceName = new string(info.szDevice.ToString());
 
@@ -202,7 +202,7 @@ public partial class Screen
                     };
 
                     // API takes EX, determines which one you pass by size.
-                    PInvoke.GetMonitorInfo(_hmonitor, (MONITORINFO*)&info);
+                    PInvokeCore.GetMonitorInfo(_hmonitor, (MONITORINFO*)&info);
                     _workingArea = info.monitorInfo.rcWork;
                 }
             }
@@ -248,7 +248,7 @@ public partial class Screen
     /// </summary>
     public static Screen FromPoint(Point point)
         => SystemInformation.MultiMonitorSupport
-        ? new Screen(PInvoke.MonitorFromPoint(point, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
+        ? new Screen(PInvokeCore.MonitorFromPoint(point, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
         : new Screen(PRIMARY_MONITOR);
 
     /// <summary>
@@ -256,7 +256,7 @@ public partial class Screen
     /// </summary>
     public static Screen FromRectangle(Rectangle rect)
         => SystemInformation.MultiMonitorSupport
-        ? new Screen(PInvoke.MonitorFromRect(rect, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
+        ? new Screen(PInvokeCore.MonitorFromRect(rect, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
         : new Screen(PRIMARY_MONITOR, default);
 
     /// <summary>
@@ -274,7 +274,7 @@ public partial class Screen
     /// </summary>
     public static Screen FromHandle(IntPtr hwnd)
         => SystemInformation.MultiMonitorSupport
-        ? new Screen(PInvoke.MonitorFromWindow((HWND)hwnd, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
+        ? new Screen(PInvokeCore.MonitorFromWindow((HWND)hwnd, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
         : new Screen(PRIMARY_MONITOR, default);
 
     /// <summary>
