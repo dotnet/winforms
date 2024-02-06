@@ -344,7 +344,7 @@ public partial class ComboBox
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
             if (PInvoke.MapWindowPoints((HWND)default, _owningChildEdit, ref clientLocation) == 0)
             {
-                *pRetVal  = ComHelpers.GetComPointer<ITextRangeProvider>(
+                *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(
                         _owningComboBox.ChildEditAccessibleObject,
                         this,

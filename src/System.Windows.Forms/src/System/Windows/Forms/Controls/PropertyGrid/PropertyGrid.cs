@@ -3558,7 +3558,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             SelectViewTabButtonDefault(selectedButton);
 
             // Clear the component refs of the tabs.
-            foreach (TabInfo info  in _tabs)
+            foreach (TabInfo info in _tabs)
             {
                 info.Tab.Components = Array.Empty<object>();
             }
@@ -3638,7 +3638,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void ResetHelpBackColor() => _helpPane.ResetBackColor();
 
-    private void ResetHelpForeColor() =>  _helpPane.ResetBackColor();
+    private void ResetHelpForeColor() => _helpPane.ResetBackColor();
 
     /// <summary>
     ///  This method is intended for use in replacing a specific selected root object with another object of the

@@ -5202,7 +5202,10 @@ internal sealed partial class PropertyGridView :
             _dropDownHolder.FocusComponent();
             return;
         }
-        else _currentEditor?.Focus();
+        else
+        {
+            _currentEditor?.Focus();
+        }
 
         return;
     }
