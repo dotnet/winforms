@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -446,6 +447,11 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
+        if (LocalAppContextSwitches.NoClientNotifications)
+        {
+            return DialogResult.None;
+        }
+
         MESSAGEBOX_STYLE style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
 
         HandleRef<HWND> handle = default;
