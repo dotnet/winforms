@@ -122,7 +122,7 @@ jobs:
       env:
         XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
-      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), contains(variables['System.PullRequest.TargetBranch'], 'main'))
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd
