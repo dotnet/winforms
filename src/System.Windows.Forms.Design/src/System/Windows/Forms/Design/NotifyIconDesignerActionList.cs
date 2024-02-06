@@ -27,7 +27,6 @@ namespace System.Windows.Forms.Design
                     displayName: SR.ChooseIconDisplayName,
                     includeAsDesignerVerb: true)
             ];
-
             return items;
         }
     }
