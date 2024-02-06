@@ -6,7 +6,7 @@ namespace System.Windows.Forms;
 public partial class BindingSource
 {
     [Flags]
-    private enum BindingSourceStates
+    private enum BindingSourceStates : short
     {
         ParentsCurrentItemChanging = 1 << 0,
         DisposedOrFinalized = 1 << 1,
