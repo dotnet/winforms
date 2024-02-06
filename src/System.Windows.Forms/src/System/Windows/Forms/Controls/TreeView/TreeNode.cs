@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -812,17 +813,20 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             }
 
             // fixedIndex is used for perf. optimization in case of adding big ranges of nodes
-            int currentInd = _index;
-            int fixedInd = _parent.Nodes.FixedIndex;
+            int currentIndex = _index;
+            int fixedIndex = _parent.Nodes.FixedIndex;
 
-            if (fixedInd > 0)
+            if (fixedIndex > 0)
             {
-                currentInd = fixedInd;
+                if (!LocalAppContextSwitches.TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView || TreeView is null || !TreeView.Sorted)
+                {
+                    currentIndex = fixedIndex;
+                }
             }
 
-            if (currentInd > 0 && currentInd <= _parent.Nodes.Count)
+            if (currentIndex > 0 && currentIndex <= _parent.Nodes.Count)
             {
-                return _parent.Nodes[currentInd - 1];
+                return _parent.Nodes[currentIndex - 1];
             }
             else
             {

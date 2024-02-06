@@ -21,6 +21,7 @@ internal static partial class LocalAppContextSwitches
     internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
+    internal const string TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName = "System.Windows.Forms.TreeNodeDoNotUseFixedIndexWithSortedTreeView";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -28,6 +29,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_trackBarModernRendering;
     private static int s_doNotCatchUnhandledExceptions;
     private static int s_dataGridViewUIAStartRowCountAtZero;
+    private static int s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -158,6 +160,16 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(DataGridViewUIAStartRowCountAtZeroSwitchName, ref s_dataGridViewUIAStartRowCountAtZero);
+    }
+
+    /// <summary>
+    ///  Indicates whether TreeNode.PrevNode uses a fixed index to return its value.
+    ///  Thus mirroring the behaviour of the TreeNodeCollection.
+    /// </summary>
+    public static bool TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(TreeNodePrevNodeDoNotUseFixedIndexWithSortedTreeViewSwitchName, ref s_treeNodePrevNodeDoNotUseFixedIndexWithSortedTreeView);
     }
 
     internal static void SetDataGridViewUIAStartRowCountAtZero(bool value) => s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
