@@ -5,6 +5,13 @@ using System.Collections;
 
 namespace System.ComponentModel.Design;
 
+internal static class DesignerActionItemCollectionExtensions
+{
+    public static int Add(this DesignerActionItemCollection collection, object value) => value is DesignerActionItem item
+        ? collection.Add(item)
+        : throw new ArgumentException($"Value must be of type {nameof(DesignerActionItem)}", nameof(value));
+}
+
 public class DesignerActionItemCollection : CollectionBase
 {
     public DesignerActionItem this[int index]
