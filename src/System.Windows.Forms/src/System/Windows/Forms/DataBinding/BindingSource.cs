@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
 [Designer($"System.Windows.Forms.Design.BindingSourceDesigner, {AssemblyRef.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionBindingSource))]
-public class BindingSource : Component,
+public partial class BindingSource : Component,
                              IBindingListView,
                              ITypedList,
                              ICancelAddNew,
@@ -33,20 +33,23 @@ public class BindingSource : Component,
     private static readonly object s_eventPositionChanged = new();
     private static readonly object s_eventInitialized = new();
 
+    // flags enum field to hold private bool fields
+    private BindingSourceStates _state;
+
     // Public property values
     private object? _dataSource;
     private string _dataMember = string.Empty;
     private string? _sort;
     private string? _filter;
     private readonly CurrencyManager _currencyManager;
-    private bool _parentsCurrentItemChanging;
-    private bool _disposedOrFinalized;
+    private bool _parentsCurrentItemChanging { get => _state.HasFlag(BindingSourceStates.ParentsCurrentItemChanging); set => _state.ChangeFlags(BindingSourceStates.ParentsCurrentItemChanging, value); }
+    private bool _disposedOrFinalized { get => _state.HasFlag(BindingSourceStates.DisposedOrFinalized); set => _state.ChangeFlags(BindingSourceStates.DisposedOrFinalized, value); }
 
     // Description of the current bound list
     private IList _innerList; // ...DON'T access this directly. ALWAYS use the List property.
-    private bool _isBindingList;
-    private bool _listRaisesItemChangedEvents;
-    private bool _listExtractedFromEnumerable;
+    private bool _isBindingList { get => _state.HasFlag(BindingSourceStates.IsBindingList); set => _state.ChangeFlags(BindingSourceStates.IsBindingList, value); }
+    private bool _listRaisesItemChangedEvents { get => _state.HasFlag(BindingSourceStates.ListRaisesItemChangedEvents); set => _state.ChangeFlags(BindingSourceStates.ListRaisesItemChangedEvents, value); }
+    private bool _listExtractedFromEnumerable { get => _state.HasFlag(BindingSourceStates.ListExtractedFromEnumerable); set => _state.ChangeFlags(BindingSourceStates.ListExtractedFromEnumerable, value); }
 
     // Description of items in the current bound list
     private Type? _itemType;
@@ -57,8 +60,8 @@ public class BindingSource : Component,
     private Dictionary<string, BindingSource>? _relatedBindingSources;
 
     // Support for user-overriding of the AllowNew property
-    private bool _allowNewIsSet;
-    private bool _allowNewSetValue = true;
+    private bool _allowNewIsSet { get => _state.HasFlag(BindingSourceStates.AllowNewIsSet); set => _state.ChangeFlags(BindingSourceStates.AllowNewIsSet, value); }
+    private bool _allowNewSetValue { get => _state.HasFlag(BindingSourceStates.AllowNewSetValue); set => _state.ChangeFlags(BindingSourceStates.AllowNewSetValue, value); }
 
     // Support for property change event hooking on list items
     private object? _currentItemHookedForItemChange;
@@ -67,11 +70,11 @@ public class BindingSource : Component,
 
     // State data
     private int _addNewPos = -1;
-    private bool _initializing;
-    private bool _needToSetList;
-    private bool _recursionDetectionFlag;
-    private bool _innerListChanging;
-    private bool _endingEdit;
+    private bool _initializing { get => _state.HasFlag(BindingSourceStates.Initializing); set => _state.ChangeFlags(BindingSourceStates.Initializing, value); }
+    private bool _needToSetList { get => _state.HasFlag(BindingSourceStates.NeedToSetList); set => _state.ChangeFlags(BindingSourceStates.NeedToSetList, value); }
+    private bool _recursionDetectionFlag { get => _state.HasFlag(BindingSourceStates.RecursionDetectionFlag); set => _state.ChangeFlags(BindingSourceStates.RecursionDetectionFlag, value); }
+    private bool _innerListChanging { get => _state.HasFlag(BindingSourceStates.InnerListChanging); set => _state.ChangeFlags(BindingSourceStates.InnerListChanging, value); }
+    private bool _endingEdit { get => _state.HasFlag(BindingSourceStates.EndingEdit); set => _state.ChangeFlags(BindingSourceStates.EndingEdit, value); }
 
     public BindingSource()
         : this(dataSource: null, dataMember: string.Empty)
@@ -81,6 +84,9 @@ public class BindingSource : Component,
     public BindingSource(object? dataSource, string dataMember)
         : base()
     {
+        // default values for state
+        _allowNewSetValue = true;
+
         // Set data source and data member
         _dataSource = dataSource;
         _dataMember = dataMember;

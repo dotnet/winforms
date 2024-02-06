@@ -10,21 +10,24 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Manages the position and bindings of a list.
 /// </summary>
-public class CurrencyManager : BindingManagerBase
+public partial class CurrencyManager : BindingManagerBase
 {
     private object? _dataSource;
     private IList _list;
 
-    private bool _bound;
-    private bool _shouldBind = true;
+    // flags enum field to hold private bool fields
+    private CurrencyManagerStates _state;
+
+    private bool _bound { get => _state.HasFlag(CurrencyManagerStates.Bound); set => _state.ChangeFlags(CurrencyManagerStates.Bound, value); }
+    private bool _shouldBind { get => _state.HasFlag(CurrencyManagerStates.ShouldBind); set => _state.ChangeFlags(CurrencyManagerStates.ShouldBind, value); }
 
     protected int listposition = -1;
 
     private int _lastGoodKnownRow = -1;
-    private bool _pullingData;
+    private bool _pullingData { get => _state.HasFlag(CurrencyManagerStates.PullingData); set => _state.ChangeFlags(CurrencyManagerStates.PullingData, value); }
 
-    private bool _inChangeRecordState;
-    private bool _suspendPushDataInCurrentChanged;
+    private bool _inChangeRecordState { get => _state.HasFlag(CurrencyManagerStates.InChangeRecordState); set => _state.ChangeFlags(CurrencyManagerStates.InChangeRecordState, value); }
+    private bool _suspendPushDataInCurrentChanged { get => _state.HasFlag(CurrencyManagerStates.SuspendPushDataInCurrentChanged); set => _state.ChangeFlags(CurrencyManagerStates.SuspendPushDataInCurrentChanged, value); }
     private ItemChangedEventHandler? _onItemChanged;
     private ListChangedEventHandler? _onListChanged;
     private readonly ItemChangedEventArgs _resetEvent = new(-1);
@@ -55,6 +58,7 @@ public class CurrencyManager : BindingManagerBase
 
     internal CurrencyManager(object? dataSource)
     {
+        _shouldBind = true;
         _list = null!;
         SetDataSource(dataSource);
     }
