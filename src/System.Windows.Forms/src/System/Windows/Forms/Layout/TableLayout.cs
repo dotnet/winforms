@@ -36,9 +36,6 @@ internal partial class TableLayout : LayoutEngine
     // Singleton instance shared by all containers.
     internal static readonly TableLayout Instance = new();
 
-    private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
-    private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
-
     private static readonly string?[] _propertiesWhichInvalidateCache = new string?[]
     {
        // suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
@@ -1310,7 +1307,7 @@ internal partial class TableLayout : LayoutEngine
 
         for (int i = 0; i < children.Count; i++)
         {
-            LayoutInfo layoutInfo = GetLayoutInfo(children[i]);
+            LayoutInfo layoutInfo = children[i].LayoutInfo;
             // the row and column specified is within the region enclosed by the element.
             if (layoutInfo.ColumnStart <= column && (layoutInfo.ColumnStart + layoutInfo.ColumnSpan - 1) >= column &&
                 layoutInfo.RowStart <= row && (layoutInfo.RowStart + layoutInfo.RowSpan - 1) >= row)
@@ -1344,26 +1341,8 @@ internal partial class TableLayout : LayoutEngine
             EnsureRowAndColumnAssignments(container, containerInfo, doNotCache: true);
         }
 
-        LayoutInfo layoutInfo = GetLayoutInfo(child);
+        LayoutInfo layoutInfo = child.LayoutInfo;
         return new TableLayoutPanelCellPosition(layoutInfo.ColumnStart, layoutInfo.RowStart);
-    }
-
-    internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
-    {
-        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(_layoutInfoProperty);
-        if (layoutInfo is null)
-        {
-            layoutInfo = new LayoutInfo(element);
-            SetLayoutInfo(element, layoutInfo);
-        }
-
-        return layoutInfo;
-    }
-
-    internal static void SetLayoutInfo(IArrangedElement element, LayoutInfo value)
-    {
-        element.Properties.SetObject(_layoutInfoProperty, value);
-        Debug.Assert(GetLayoutInfo(element) == value, "GetLayoutInfo should return the same value as we set it to");
     }
 
     #region ContainerInfo
@@ -1374,17 +1353,8 @@ internal partial class TableLayout : LayoutEngine
     // we make sure that our containerInfo never returns null. If there is no
     // existing containerInfo, instantiate a new one and store it in the property
     // store.
-    internal static ContainerInfo GetContainerInfo(IArrangedElement container)
-    {
-        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(_containerInfoProperty);
-        if (containerInfo is null)
-        {
-            containerInfo = new ContainerInfo(container);
-            container.Properties.SetObject(_containerInfoProperty, containerInfo);
-        }
+    internal static ContainerInfo GetContainerInfo(IArrangedElement container) => container.ContainerInfo;
 
-        return containerInfo;
-    }
     #endregion
 
     #region DEBUG
@@ -1409,7 +1379,7 @@ internal partial class TableLayout : LayoutEngine
                 continue;
             }
 
-            LayoutInfo layoutInfo = GetLayoutInfo(element);
+            LayoutInfo layoutInfo = element.LayoutInfo;
             childrenInfo.Add(layoutInfo);
             minSpace += layoutInfo.RowSpan * layoutInfo.ColumnSpan;
             if (layoutInfo.IsAbsolutelyPositioned)
@@ -1438,7 +1408,7 @@ internal partial class TableLayout : LayoutEngine
         {
             Debug.Assert(layoutInfo.Equals(oldLayoutInfo[layoutInfo.Element]),
                 $"Cached assignment info is invalid: LayoutInfo has changed. old layoutinfo: {oldLayoutInfo[layoutInfo.Element].RowStart} {oldLayoutInfo[layoutInfo.Element].ColumnStart} new layoutinfo: {layoutInfo.RowStart} {layoutInfo.ColumnStart} and the element is {layoutInfo.Element}");
-            SetLayoutInfo(layoutInfo.Element, oldLayoutInfo[layoutInfo.Element]);
+            layoutInfo.Element.LayoutInfo = oldLayoutInfo[layoutInfo.Element];
         }
 
         // Restore the information in row and column strips. Note that whenever we do a AssignRowAndColumns()
@@ -1468,7 +1438,7 @@ internal partial class TableLayout : LayoutEngine
                 continue;
             }
 
-            layoutInfos.Add(GetLayoutInfo(element));
+            layoutInfos.Add(element.LayoutInfo);
         }
 
         for (int i = 0; i < layoutInfos.Count; i++)

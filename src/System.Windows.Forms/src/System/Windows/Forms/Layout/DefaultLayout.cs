@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Primitives;
@@ -13,9 +11,6 @@ namespace System.Windows.Forms.Layout;
 internal partial class DefaultLayout : LayoutEngine
 {
     internal static readonly DefaultLayout Instance = new();
-
-    private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
-    private static readonly int s_cachedBoundsProperty = PropertyStore.CreateKey();
 
     /// <summary>
     ///  Loop through the AutoSized controls and expand them if they are smaller than
@@ -173,7 +168,7 @@ internal partial class DefaultLayout : LayoutEngine
             return bounds;
         }
 
-        AnchorInfo? anchorInfo = GetAnchorInfo(element);
+        AnchorInfo? anchorInfo = element.AnchorInfo;
         if (anchorInfo is null)
         {
             return bounds;
@@ -246,7 +241,7 @@ internal partial class DefaultLayout : LayoutEngine
 
     private static Rectangle ComputeAnchoredBounds(IArrangedElement element, Rectangle displayRect, bool measureOnly)
     {
-        AnchorInfo layout = GetAnchorInfo(element)!;
+        AnchorInfo layout = element.AnchorInfo!;
 
         int left = layout.Left + displayRect.X;
         int top = layout.Top + displayRect.Y;
@@ -388,7 +383,7 @@ internal partial class DefaultLayout : LayoutEngine
                 continue;
             }
 
-            Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+            Debug.Assert(element.AnchorInfo is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
             SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
         }
     }
@@ -703,7 +698,7 @@ internal partial class DefaultLayout : LayoutEngine
             preferredSizeForAnchoring.Width -= containerPadding.Left;
             preferredSizeForAnchoring.Height -= containerPadding.Top;
 
-            ClearCachedBounds(container);
+            container.CachedBounds.Clear();
             preferredSize = LayoutUtils.UnionSizes(preferredSizeForDocking, preferredSizeForAnchoring);
         }
 
@@ -753,11 +748,11 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        AnchorInfo? anchorInfo = GetAnchorInfo(element);
+        AnchorInfo? anchorInfo = element.AnchorInfo;
         if (anchorInfo is null)
         {
             anchorInfo = new AnchorInfo();
-            SetAnchorInfo(element, anchorInfo);
+            element.AnchorInfo = anchorInfo;
         }
 
         Rectangle cachedBounds = GetCachedBounds(element);
@@ -873,7 +868,7 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        AnchorInfo? anchorInfo = GetAnchorInfo(control);
+        AnchorInfo? anchorInfo = ((IArrangedElement)control).AnchorInfo;
 
         // AnchorsInfo is not computed yet. Check if control is ready for AnchorInfo calculation at this time.
         if (anchorInfo is null)
@@ -901,7 +896,7 @@ internal partial class DefaultLayout : LayoutEngine
         if (anchorInfo is null)
         {
             anchorInfo = new AnchorInfo();
-            SetAnchorInfo(control, anchorInfo);
+            ((IArrangedElement)control).AnchorInfo = anchorInfo;
         }
 
         // Reset parent flag as we now ready to iterate over all children requiring AnchorInfo calculation.
@@ -941,7 +936,7 @@ internal partial class DefaultLayout : LayoutEngine
             }
             else
             {
-                SetAnchorInfo(element, value: null);
+                element.AnchorInfo = null;
             }
 
             if (element.Container is not null)
@@ -1005,7 +1000,7 @@ internal partial class DefaultLayout : LayoutEngine
 
     public static void ScaleAnchorInfo(IArrangedElement element, SizeF factor)
     {
-        AnchorInfo? anchorInfo = GetAnchorInfo(element);
+        AnchorInfo? anchorInfo = element.AnchorInfo;
 
         // some controls don't have AnchorInfo, i.e. Panels
         if (anchorInfo is not null)
@@ -1029,32 +1024,21 @@ internal partial class DefaultLayout : LayoutEngine
             anchorInfo.Right = (int)Math.Round(anchorInfo.Right * widthFactor);
             anchorInfo.Bottom = (int)Math.Round(anchorInfo.Bottom * heightFactor);
 
-            SetAnchorInfo(element, anchorInfo);
+            element.AnchorInfo = anchorInfo;
         }
     }
 
     private static Rectangle GetCachedBounds(IArrangedElement element)
     {
-        if (element.Container is not null)
+        if (element.Container?.CachedBounds.TryGetValue(element, out Rectangle bounds) == true)
         {
-            IDictionary? dictionary = (IDictionary?)element.Container.Properties.GetObject(s_cachedBoundsProperty);
-            if (dictionary is not null)
-            {
-                object? bounds = dictionary[element];
-                if (bounds is not null)
-                {
-                    return (Rectangle)bounds;
-                }
-            }
+            return bounds;
         }
 
         return element.Bounds;
     }
 
-    private static bool HasCachedBounds(IArrangedElement? container)
-    {
-        return container is not null && container.Properties.ContainsObjectThatIsNotNull(s_cachedBoundsProperty);
-    }
+    private static bool HasCachedBounds(IArrangedElement? container) => container is not null && container.CachedBounds.Count != 0;
 
     private static void ApplyCachedBounds(IArrangedElement container)
     {
@@ -1064,13 +1048,12 @@ internal partial class DefaultLayout : LayoutEngine
             Rectangle displayRectangle = container.DisplayRectangle;
             if ((displayRectangle.Width == 0) || (displayRectangle.Height == 0))
             {
-                ClearCachedBounds(container);
+                container.CachedBounds.Clear();
                 return;
             }
         }
 
-        IDictionary? dictionary = (IDictionary?)container.Properties.GetObject(s_cachedBoundsProperty);
-        if (dictionary is not null)
+        if (container.CachedBounds is Dictionary<IArrangedElement, Rectangle> dictionary)
         {
 #if DEBUG
             // In debug builds, we need to modify the collection, so we add a break and an
@@ -1079,18 +1062,15 @@ internal partial class DefaultLayout : LayoutEngine
             while (dictionary.Count > 0)
             {
 #endif
-                foreach (DictionaryEntry entry in dictionary)
+                foreach ((IArrangedElement element, Rectangle bounds) in dictionary)
                 {
-                    IArrangedElement element = (IArrangedElement)entry.Key;
-
                     Debug.Assert(element.Container == container, "We have non-children in our containers cached bounds store.");
 #if DEBUG
                     // We are about to set the bounds to the cached value. We clear the cached value
                     // before SetBounds because some controls fiddle with the bounds on SetBounds
                     // and will callback InitLayout with a different bounds and BoundsSpecified.
-                    dictionary.Remove(entry.Key);
+                    dictionary.Remove(element);
 #endif
-                    Rectangle bounds = (Rectangle)entry.Value!;
                     element.SetBounds(bounds, BoundsSpecified.None);
 #if DEBUG
                     break;
@@ -1098,38 +1078,16 @@ internal partial class DefaultLayout : LayoutEngine
 #endif
             }
 
-            ClearCachedBounds(container);
+            container.CachedBounds.Clear();
         }
-    }
-
-    private static void ClearCachedBounds(IArrangedElement container)
-    {
-        container.Properties.SetObject(s_cachedBoundsProperty, null);
     }
 
     private static void SetCachedBounds(IArrangedElement element, Rectangle bounds)
     {
         if (bounds != GetCachedBounds(element))
         {
-            IDictionary? dictionary = (IDictionary?)element.Container!.Properties.GetObject(s_cachedBoundsProperty);
-            if (dictionary is null)
-            {
-                dictionary = new HybridDictionary();
-                element.Container.Properties.SetObject(s_cachedBoundsProperty, dictionary);
-            }
-
-            dictionary[element] = bounds;
+            element.Container!.CachedBounds[element] = bounds;
         }
-    }
-
-    internal static AnchorInfo? GetAnchorInfo(IArrangedElement element)
-    {
-        return (AnchorInfo?)element.Properties.GetObject(s_layoutInfoProperty);
-    }
-
-    internal static void SetAnchorInfo(IArrangedElement element, AnchorInfo? value)
-    {
-        element.Properties.SetObject(s_layoutInfoProperty, value);
     }
 
     private protected override void InitLayoutCore(IArrangedElement element, BoundsSpecified specified)
@@ -1187,7 +1145,7 @@ internal partial class DefaultLayout : LayoutEngine
                     // the container is, and make sure our container is large enough to accomodate us.
                     if (useV2Layout)
                     {
-                        AnchorInfo? anchorInfo = GetAnchorInfo(element);
+                        AnchorInfo? anchorInfo = element.AnchorInfo;
                         Rectangle bounds = GetCachedBounds(element);
                         prefSize.Width = Math.Max(prefSize.Width, anchorInfo is null ? bounds.Right : bounds.Right + anchorInfo.Right);
                     }
@@ -1207,7 +1165,7 @@ internal partial class DefaultLayout : LayoutEngine
                     Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, measureOnly: true);
                     if (useV2Layout)
                     {
-                        AnchorInfo? anchorInfo = GetAnchorInfo(element);
+                        AnchorInfo? anchorInfo = element.AnchorInfo;
                         Rectangle bounds = GetCachedBounds(element);
                         prefSize.Height = Math.Max(prefSize.Height, anchorInfo is null ? bounds.Bottom : bounds.Bottom + anchorInfo.Bottom);
                     }

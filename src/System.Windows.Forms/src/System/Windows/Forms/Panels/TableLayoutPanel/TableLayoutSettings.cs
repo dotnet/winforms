@@ -243,7 +243,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         else
         {
             IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-            return TableLayout.GetLayoutInfo(element).ColumnSpan;
+            return element.LayoutInfo.ColumnSpan;
         }
     }
 
@@ -264,7 +264,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
                 TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
             }
 
-            TableLayout.GetLayoutInfo(element).ColumnSpan = value;
+            element.LayoutInfo.ColumnSpan = value;
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
             Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
         }
@@ -281,7 +281,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         else
         {
             IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-            return TableLayout.GetLayoutInfo(element).RowSpan;
+            return element.LayoutInfo.RowSpan;
         }
     }
 
@@ -302,7 +302,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
                 TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
             }
 
-            TableLayout.GetLayoutInfo(element).RowSpan = value;
+            element.LayoutInfo.RowSpan = value;
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.RowSpan);
             Debug.Assert(GetRowSpan(element) == value, "row span should equal to the value we set");
         }
@@ -325,8 +325,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         else
         {
             IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-            TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-            return layoutInfo.RowPosition;
+            return element.LayoutInfo.RowPosition;
         }
     }
 
@@ -386,8 +385,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         else
         {
             IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-            TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-            return layoutInfo.ColumnPosition;
+            return element.LayoutInfo.ColumnPosition;
         }
     }
 
@@ -433,15 +431,14 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
                 TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
             }
 
-            TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
             if (colSpecified)
             {
-                layoutInfo.ColumnPosition = column;
+                element.LayoutInfo.ColumnPosition = column;
             }
 
             if (rowSpecified)
             {
-                layoutInfo.RowPosition = row;
+                element.LayoutInfo.RowPosition = row;
             }
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
