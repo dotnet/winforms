@@ -6544,7 +6544,7 @@ public partial class ListView : Control
                     string? text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
                     LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                     OnAfterLabelEdit(e);
-                    m.ResultInternal = (LRESULT)(nint)(BOOL)e.CancelEdit;
+                    m.ResultInternal = (LRESULT)(nint)(BOOL)!e.CancelEdit;
 
                     // from msdn:
                     //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
