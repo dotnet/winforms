@@ -446,7 +446,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
             _nativeImageList = new NativeImageList(_imageSize, flags);
         }
 
-        PInvoke.ImageList.SetBkColor(this, Color.FromArgb(PInvoke.CLR_NONE));
+        PInvoke.ImageList.SetBkColor(this, (COLORREF)PInvoke.CLR_NONE);
 
         Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
         for (int i = 0; i < _originals.Count; i++)
@@ -553,8 +553,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                 y,
                 width,
                 height,
-                Color.FromArgb(PInvoke.CLR_NONE),
-                Color.FromArgb(PInvoke.CLR_NONE),
+                (COLORREF)PInvoke.CLR_NONE,
+                (COLORREF)PInvoke.CLR_NONE,
                 (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
         }
         finally
@@ -691,8 +691,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                         0,
                         _imageSize.Width,
                         _imageSize.Height,
-                        Color.FromArgb(PInvoke.CLR_NONE),
-                        Color.FromArgb(PInvoke.CLR_NONE),
+                        (COLORREF)PInvoke.CLR_NONE,
+                        (COLORREF)PInvoke.CLR_NONE,
                         (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
                 }
                 finally

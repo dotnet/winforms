@@ -18,6 +18,9 @@ public abstract partial class TextBoxBase
             _textProvider = new TextBoxBaseUiaTextProvider(owner);
         }
 
+        internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out TextBoxBase? owner) ?
+            owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
+
         internal void ClearObjects()
         {
             _textProvider = null;
