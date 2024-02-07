@@ -32,30 +32,34 @@ internal class LabelDesigner : ControlDesigner
             IList<SnapLine> snapLines = SnapLinesInternal;
             ContentAlignment alignment = ContentAlignment.TopLeft;
 
-            PropertyDescriptor? prop;
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-            if ((prop = props["TextAlign"]) is not null)
-            {
-                alignment = (ContentAlignment)prop.GetValue(Component)!;
-            }
+            TryGetPropertyDescriptorValue(
+                props,
+                "TextAlign",
+                Component,
+                ref alignment);
 
             // a single text-baseline for the label (and linklabel) control
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
-            if ((prop = props["AutoSize"]) is not null)
+            bool autoSize = false;
+            if (TryGetPropertyDescriptorValue(
+                props,
+                "AutoSize",
+                Component,
+                ref autoSize)
+                && !autoSize)
             {
-                if ((bool)prop.GetValue(Component)! == false)
-                {
-                    // Only adjust if AutoSize is false
-                    BorderStyle borderStyle = BorderStyle.None;
-                    if ((prop = props["BorderStyle"]) is not null)
-                    {
-                        borderStyle = (BorderStyle)prop.GetValue(Component)!;
-                    }
+                // Only adjust if AutoSize is false
+                BorderStyle borderStyle = BorderStyle.None;
+                TryGetPropertyDescriptorValue(
+                    props,
+                    "BorderStyle",
+                    Component,
+                    ref borderStyle);
 
-                    baseline += LabelBaselineOffset(alignment, borderStyle);
-                }
+                baseline += LabelBaselineOffset(alignment, borderStyle);
             }
 
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));

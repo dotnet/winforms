@@ -2518,4 +2518,21 @@ public partial class ControlDesigner : ComponentDesigner
 
         Control.Invalidate(true);
     }
+
+    internal static bool TryGetPropertyDescriptorValue<T>(
+        PropertyDescriptorCollection propertyDescriptors,
+        string name,
+        IComponent component,
+        ref T value)
+    {
+        PropertyDescriptor propertyDescriptor = propertyDescriptors[name];
+        if (propertyDescriptor is not null)
+        {
+            value = (T)propertyDescriptor.GetValue(component)!;
+
+            return true;
+        }
+
+        return false;
+    }
 }

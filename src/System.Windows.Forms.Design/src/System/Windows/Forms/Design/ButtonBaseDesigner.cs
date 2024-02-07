@@ -51,18 +51,19 @@ internal class ButtonBaseDesigner : ControlDesigner
             FlatStyle flatStyle = FlatStyle.Standard;
             ContentAlignment alignment = ContentAlignment.MiddleCenter;
 
-            PropertyDescriptor? prop;
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-            if ((prop = props["TextAlign"]) is not null)
-            {
-                alignment = (ContentAlignment)prop.GetValue(Component)!;
-            }
+            TryGetPropertyDescriptorValue(
+                props,
+                "TextAlign",
+                Component,
+                ref alignment);
 
-            if ((prop = props["FlatStyle"]) is not null)
-            {
-                flatStyle = (FlatStyle)prop.GetValue(Component)!;
-            }
+            TryGetPropertyDescriptorValue(
+                props,
+                "FlatStyle",
+                Component,
+                ref flatStyle);
 
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
@@ -73,10 +74,12 @@ internal class ButtonBaseDesigner : ControlDesigner
             if ((Control is CheckBox) || (Control is RadioButton))
             {
                 Appearance appearance = Appearance.Normal;
-                if ((prop = props["Appearance"]) is not null)
-                {
-                    appearance = (Appearance)prop.GetValue(Component)!;
-                }
+
+                TryGetPropertyDescriptorValue(
+                    props,
+                    "Appearance",
+                    Component,
+                    ref appearance);
 
                 if (appearance == Appearance.Normal)
                 {
