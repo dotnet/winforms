@@ -74,7 +74,7 @@ internal class LabelDesigner : ControlDesigner
                     MethodInfo? info = type.GetMethod("GetLeadingTextPaddingFromTextFormatFlags", BindingFlags.Instance | BindingFlags.NonPublic);
                     if (info is not null)
                     {
-                        int offset = (int)info.Invoke(Component, parameters: null)!;
+                        int offset = (int)(info.Invoke(Component, parameters: null) ?? 0);
                         bool rtl = (label.RightToLeft == RightToLeft.Yes);
 
                         for (int i = 0; i < snapLines.Count; i++)
