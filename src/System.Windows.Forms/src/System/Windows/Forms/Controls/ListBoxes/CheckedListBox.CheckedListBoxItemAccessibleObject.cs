@@ -113,7 +113,7 @@ public partial class CheckedListBox
         {
             get
             {
-                ToggleState toggleState= ToggleState.ToggleState_Off;
+                ToggleState toggleState = ToggleState.ToggleState_Off;
                 switch (_owningCheckedListBox.GetItemCheckState(CurrentIndex))
                 {
                     case CheckState.Checked:

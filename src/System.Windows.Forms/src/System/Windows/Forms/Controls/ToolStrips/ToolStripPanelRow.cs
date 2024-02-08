@@ -724,7 +724,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         }
     }
 
-#region MouseStuff
+    #region MouseStuff
 
 #if DEBUG
     internal static readonly TraceSwitch ToolStripPanelMouseDebug = new("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
@@ -762,5 +762,5 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
         }
     }
 
-#endregion
+    #endregion
 }

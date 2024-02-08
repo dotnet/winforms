@@ -43,7 +43,7 @@ internal partial class TableLayout
 
         public int RowSpan { get; set; } = 1;
 
-        #if DEBUG
+#if DEBUG
         public LayoutInfo Clone() => new(Element)
         {
             RowStart = RowStart,
@@ -77,6 +77,6 @@ internal partial class TableLayout
             hash.Add(ColumnPosition);
             return hash.ToHashCode();
         }
-        #endif
+#endif
     }
 }

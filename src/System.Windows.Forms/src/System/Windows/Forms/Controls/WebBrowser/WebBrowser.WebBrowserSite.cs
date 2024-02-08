@@ -3,10 +3,10 @@
 
 using System.Drawing;
 using Windows.Win32.System.Ole;
-using MsHtml = Windows.Win32.Web.MsHtml;
 using static Interop.Mshtml;
-using Ole = Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
+using MsHtml = Windows.Win32.Web.MsHtml;
+using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 

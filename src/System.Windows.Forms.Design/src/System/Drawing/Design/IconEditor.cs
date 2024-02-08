@@ -116,10 +116,6 @@ public class IconEditor : UITypeEditor
 
         // If icon is smaller than rectangle, just center it unscaled in the rectangle.
         Rectangle rectangle = e.Bounds;
-        Graphics g = e.Graphics;
-        using var transform = g.Transform;
-        rectangle.X -= (int)transform.OffsetX;
-        rectangle.Y -= (int)transform.OffsetY;
 
         if (icon.Width < rectangle.Width)
         {

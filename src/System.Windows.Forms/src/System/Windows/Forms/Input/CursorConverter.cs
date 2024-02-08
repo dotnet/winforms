@@ -90,6 +90,25 @@ public class CursorConverter : TypeConverter
                 {
                     return propertyName;
                 }
+                else if (cursor.Handle == Cursors.Arrow.Handle)
+                {
+                    // Arrow and Default cursors share the same HCURSOR.
+                    // Always return "Default" in this case.
+                    return nameof(Cursors.Default);
+                }
+
+                // We have a cursor that only has handle information. This can happen when the cursor was read via PInvoke.
+                // Try to find an exact instance match to a known cursor from Cursors properties using HCURSOR equality (==).
+                PropertyInfo[] props = GetProperties();
+                for (int i = 0; i < props.Length; i++)
+                {
+                    PropertyInfo prop = props[i];
+                    Cursor? knownCursor = (Cursor?)prop.GetValue(obj: null, index: null);
+                    if (knownCursor == cursor)
+                    {
+                        return prop.Name;
+                    }
+                }
 
                 // We throw here because we cannot meaningfully convert a custom
                 // cursor into a string. In fact, the ResXResourceWriter will use

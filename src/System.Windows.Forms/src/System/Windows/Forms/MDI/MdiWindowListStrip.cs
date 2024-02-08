@@ -31,9 +31,9 @@ internal class MdiWindowListStrip : MenuStrip
         get
         {
             _mergeItem ??= new ToolStripMenuItem
-                {
-                    MergeAction = MergeAction.MatchOnly
-                };
+            {
+                MergeAction = MergeAction.MatchOnly
+            };
 
             if (_mergeItem.Owner is null)
             {

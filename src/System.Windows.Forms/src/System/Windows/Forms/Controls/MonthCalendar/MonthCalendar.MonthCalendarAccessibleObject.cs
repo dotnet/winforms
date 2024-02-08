@@ -619,7 +619,7 @@ public partial class MonthCalendar
 
         internal void UpdateDisplayRange()
         {
-            if(!this.TryGetOwnerAs(out MonthCalendar? owner))
+            if (!this.TryGetOwnerAs(out MonthCalendar? owner))
             {
                 return;
             }
