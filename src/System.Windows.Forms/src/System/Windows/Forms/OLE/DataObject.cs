@@ -40,14 +40,14 @@ public unsafe partial class DataObject :
     // We use this to identify that a stream is actually a serialized object. On read, we don't know if the contents
     // of a stream were saved "raw" or if the stream is really pointing to a serialized object. If we saved an object,
     // we prefix it with this guid.
-    private static readonly byte[] s_serializedObjectID = new byte[]
-    {
+    private static readonly byte[] s_serializedObjectID =
+    [
         // FD9EA796-3B13-4370-A679-56106BB288FB
         0x96, 0xa7, 0x9e, 0xfd,
         0x13, 0x3b,
         0x70, 0x43,
         0xa6, 0x79, 0x56, 0x10, 0x6b, 0xb2, 0x88, 0xfb
-    };
+    ];
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IDataObject"/>.
@@ -88,6 +88,13 @@ public unsafe partial class DataObject :
             _innerData = new ComDataObjectAdapter(data);
         }
     }
+
+    /// <summary>
+    ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>.
+    ///  This should be used if the object the <see cref="Com.IDataObject"/> is associated with is not a ComWrappers-created
+    ///  object and built in COM is not supported.
+    /// </summary>
+    internal DataObject(Com.IDataObject* data) : this(new ComDataObjectWrapper(data)) { }
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.

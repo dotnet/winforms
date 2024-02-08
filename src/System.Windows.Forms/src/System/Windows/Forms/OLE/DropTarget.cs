@@ -50,18 +50,28 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     /// <summary>
     ///  Prepares the drag data to be passed out.
-    ///  <paramref name="dataObj"/> should implement <see cref="IDataObject"/> to be passed out as is.
+    ///  <paramref name="managedDataObject"/> should implement <see cref="IDataObject"/> to be passed out as is.
     ///  Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
     /// </summary>
-    private static IDataObject? PrepareOutgoingDropData(object dataObj)
+    private static IDataObject? PrepareOutgoingDropData(object managedDataObject)
     {
-        if (dataObj is IDataObject dataObject)
+        if (managedDataObject is IDataObject dataObject)
         {
             return dataObject;
         }
-        else if (dataObj is ComTypes.IDataObject nativeDataObject)
+        else if (managedDataObject is ComTypes.IDataObject nativeDataObject)
         {
             return new DataObject(nativeDataObject);
+        }
+        else if (!ComHelpers.BuiltInComSupported)
+        {
+            // The object is likely not a ComWrappers created COM object and since built-in COM interop is not supported,
+            // we need to wrap it in an RCW ourselves.
+            var comDataObjectPtr = ComHelpers.TryGetComPointer<Com.IDataObject>(managedDataObject, out HRESULT hr);
+            if (hr.Succeeded)
+            {
+                return new DataObject(comDataObjectPtr);
+            }
         }
 
         return null; // Unknown data object interface; we can't work with this so return null
@@ -84,7 +94,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
             }
         }
 
-        DragEventArgs drgevent = _lastDragEventArgs is null
+        DragEventArgs dragEvent = _lastDragEventArgs is null
             ? new DragEventArgs(data, (int)grfKeyState, pt.x, pt.y, (DragDropEffects)pdwEffect, _lastEffect)
             : new DragEventArgs(
                 data,
@@ -98,7 +108,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
                 _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
 
         _lastDataObject = data;
-        return drgevent;
+        return dragEvent;
     }
 
     HRESULT Ole.IDropTarget.Interface.DragEnter(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)

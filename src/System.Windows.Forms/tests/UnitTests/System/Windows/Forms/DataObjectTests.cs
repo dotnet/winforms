@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using Moq;
 using Windows.Win32.System.Ole;
+using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Point = System.Drawing.Point;
 
@@ -2505,6 +2506,42 @@ public class DataObjectTests
         outData.Should().BeSameAs(inData);
     }
 
+    [WinFormsTheory]
+    [BoolData]
+    public unsafe void DataObject_IDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
+    {
+        string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
+        AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
+
+        try
+        {
+            AppContext.SetSwitch(builtInComInteropSwitch, builtInComSupported);
+            AppContext.TryGetSwitch(builtInComInteropSwitch, out bool isEnabled).Should().BeTrue();
+            isEnabled.Should().Be(builtInComSupported);
+
+            CustomIDataObject data = new();
+            dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+            dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+
+            IComDataObject inData = accessor.PrepareIncomingDragData(data);
+            inData.Should().BeAssignableTo<DataObject>();
+            inData.Should().NotBeSameAs(data);
+
+            // Simulate COM call. The COM call will eventually hit PrepareOutgoingDropData.
+            // Note that this will be a ComWrappers created object since data has been wrapped in our DataObject.
+            var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+            object managedDataObject = ComHelpers.GetObjectForIUnknown(inDataPtr.AsUnknown);
+
+            IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(managedDataObject);
+
+            outData.Should().BeSameAs(inData);
+        }
+        finally
+        {
+            AppContext.SetSwitch(builtInComInteropSwitch, original);
+        }
+    }
+
     private class CustomIDataObject : IDataObject
     {
         public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
@@ -2534,6 +2571,42 @@ public class DataObjectTests
         IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
         outData.Should().BeAssignableTo<DataObject>();
         outData.Should().NotBeSameAs(inData);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public unsafe void DataObject_ComTypesIDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
+    {
+        string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
+        AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
+
+        try
+        {
+            AppContext.SetSwitch(builtInComInteropSwitch, builtInComSupported);
+            AppContext.TryGetSwitch(builtInComInteropSwitch, out bool isEnabled).Should().BeTrue();
+            isEnabled.Should().Be(builtInComSupported);
+
+            CustomComTypesDataObject data = new();
+            dynamic accessor = typeof(Control).TestAccessor().Dynamic;
+            dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+
+            IComDataObject inData = accessor.PrepareIncomingDragData(data);
+            inData.Should().BeSameAs(data);
+
+            // Simulate COM call. The COM call will eventually hit PrepareOutgoingDropData.
+            // Note that this will not be a ComWrappers created object since IComDataObject does not get wrapped in our DataObject.
+            var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+            object managedDataObject = ComHelpers.GetObjectForIUnknown(inDataPtr.AsUnknown);
+
+            IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(ComHelpers.GetObjectForIUnknown(inDataPtr.AsUnknown));
+
+            outData.Should().BeAssignableTo<DataObject>();
+            outData.Should().NotBeSameAs(inData);
+        }
+        finally
+        {
+            AppContext.SetSwitch(builtInComInteropSwitch, original);
+        }
     }
 
     private class CustomComTypesDataObject : IComDataObject
