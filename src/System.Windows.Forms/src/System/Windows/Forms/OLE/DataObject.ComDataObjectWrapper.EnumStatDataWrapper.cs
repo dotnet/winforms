@@ -23,7 +23,7 @@ public unsafe partial class DataObject
 #if DEBUG
                 _enumStatData = new(enumStatData, takeOwnership: true, trackDisposal: false);
 #else
-                _dataObject = new(enumStatData, takeOwnership: true);
+                _enumStatData = new(enumStatData, takeOwnership: true);
 #endif
             }
 
