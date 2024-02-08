@@ -29732,7 +29732,7 @@ public partial class DataGridView
 
         if (Columns.DisplayInOrder(oldEdgeColumnIndex, newEdgeColumnIndex)
             && (Columns.DisplayInOrder(anchorColumnIndex, oldEdgeColumnIndex) || anchorColumnIndex == oldEdgeColumnIndex)
-            &&  oldEdgeRowIndex == newEdgeRowIndex)
+            && oldEdgeRowIndex == newEdgeRowIndex)
         {
             // h1
             DataGridViewColumn? dataGridViewColumn = Columns.GetNextColumn(Columns[oldEdgeColumnIndex], DataGridViewElementStates.Visible, DataGridViewElementStates.None);

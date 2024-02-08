@@ -299,6 +299,128 @@ public class LabelTests
         Assert.Equal(expected, newSize == oldSize);
     }
 
+    public static IEnumerable<object[]> BorderStyles_Set_TestData()
+    {
+        foreach (bool autoSize in new bool[] { true, false })
+        {
+            foreach (BorderStyle style in Enum.GetValues(typeof(BorderStyle)))
+            {
+                yield return new object[] { autoSize, style };
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(BorderStyles_Set_TestData))]
+    public void Label_BorderStyle_Set_GetReturnsExpected(bool autoSize, BorderStyle style)
+    {
+        using Label control = new()
+        {
+            AutoSize = autoSize
+        };
+        int layoutCallCount = 0;
+        control.Layout += (sender, e) => layoutCallCount++;
+
+        control.BorderStyle = style;
+        Assert.Equal(style, control.BorderStyle);
+        Assert.Equal(0, layoutCallCount);
+        Assert.Equal(autoSize, control.AutoSize);
+        Assert.False(control.IsHandleCreated);
+
+        // Set same.
+        control.BorderStyle = style;
+        Assert.Equal(style, control.BorderStyle);
+        Assert.Equal(0, layoutCallCount);
+        Assert.Equal(autoSize, control.AutoSize);
+        Assert.False(control.IsHandleCreated);
+
+        // Set different.
+        if (style != BorderStyle.None)
+        {
+            control.BorderStyle = BorderStyle.None;
+            Assert.Equal(BorderStyle.None, control.BorderStyle);
+            Assert.Equal(0, layoutCallCount);
+            Assert.Equal(autoSize, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
+        }   
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.System)]
+    [InlineData(FlatStyle.Popup)]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    public void Label_FlatStyle_Set_GetReturnsExpected(FlatStyle style)
+    {
+        using Label label = new();
+        label.FlatStyle = style;
+        label.CreateControl();
+
+        Assert.True(label.IsHandleCreated);
+        Assert.Equal(style, label.FlatStyle);
+
+        // Set same.
+        label.FlatStyle = style;
+        label.CreateControl();
+
+        Assert.True(label.IsHandleCreated);
+        Assert.Equal(style, label.FlatStyle);
+
+        // Set different.
+        if (style != FlatStyle.Flat)
+        {
+            label.FlatStyle = FlatStyle.Flat;
+            label.CreateControl();
+            Assert.True(label.IsHandleCreated);
+            Assert.Equal(FlatStyle.Flat, label.FlatStyle); 
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(ContentAlignment.TopLeft)]
+    [InlineData(ContentAlignment.TopCenter)]
+    [InlineData(ContentAlignment.TopRight)]
+    [InlineData(ContentAlignment.MiddleLeft)]
+    [InlineData(ContentAlignment.MiddleCenter)]
+    [InlineData(ContentAlignment.MiddleRight)]
+    [InlineData(ContentAlignment.BottomLeft)]
+    [InlineData(ContentAlignment.BottomCenter)]
+    [InlineData(ContentAlignment.BottomRight)]
+    public void Label_TextAlign_Set_GetReturnsExpected(ContentAlignment alignment)
+    {
+        using Label label = new();
+        label.TextAlign = alignment;
+
+        Assert.Equal(alignment, label.TextAlign);
+        Assert.True(label.OwnerDraw);
+    }
+
+    [WinFormsFact]
+    public void Label_TextAlign_SetSameValue_DoesNotInvalidate()
+    {
+        using Label label = new();
+        label.TextAlign = ContentAlignment.TopLeft;
+
+        label.CreateControl();
+        Assert.True(label.IsHandleCreated);
+
+        label.TextAlign = ContentAlignment.TopLeft;
+        Assert.True(label.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Label_TextAlign_SetDifferentValue_Invalidate()
+    {
+        using Label label = new();
+        label.TextAlign = ContentAlignment.TopLeft;
+
+        label.CreateControl();
+        Assert.True(label.IsHandleCreated);
+
+        label.TextAlign = ContentAlignment.MiddleCenter;
+        Assert.True(label.IsHandleCreated);
+    }
+
     public class SubLabel : Label
     {
         public new bool CanEnableIme => base.CanEnableIme;

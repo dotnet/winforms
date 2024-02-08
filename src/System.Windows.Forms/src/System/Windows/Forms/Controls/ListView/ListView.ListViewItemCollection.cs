@@ -164,7 +164,7 @@ public partial class ListView
                 return IndexOf(Add(listViewItem));
             }
 
-            if (item is {} obj)
+            if (item is { } obj)
             {
                 return IndexOf(Add(obj.ToString()));
             }
@@ -425,7 +425,7 @@ public partial class ListView
             {
                 Insert(index, listViewItem);
             }
-            else if (item is {} obj)
+            else if (item is { } obj)
             {
                 Insert(index, obj.ToString());
             }
@@ -438,15 +438,15 @@ public partial class ListView
 
         public virtual ListViewItem Insert(int index, string? key, string? text, string? imageKey)
             => Insert(index, new ListViewItem(text, imageKey)
-                {
-                    Name = key
-                });
+            {
+                Name = key
+            });
 
         public virtual ListViewItem Insert(int index, string? key, string? text, int imageIndex)
             => Insert(index, new ListViewItem(text, imageIndex)
-                {
-                    Name = key
-                });
+            {
+                Name = key
+            });
 
         // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 

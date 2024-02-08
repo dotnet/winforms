@@ -3558,7 +3558,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             SelectViewTabButtonDefault(selectedButton);
 
             // Clear the component refs of the tabs.
-            foreach (TabInfo info  in _tabs)
+            foreach (TabInfo info in _tabs)
             {
                 info.Tab.Components = Array.Empty<object>();
             }
@@ -3638,7 +3638,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void ResetHelpBackColor() => _helpPane.ResetBackColor();
 
-    private void ResetHelpForeColor() =>  _helpPane.ResetBackColor();
+    private void ResetHelpForeColor() => _helpPane.ResetBackColor();
 
     /// <summary>
     ///  This method is intended for use in replacing a specific selected root object with another object of the
@@ -4011,7 +4011,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         UpdatePropertiesViewTabVisibility();
     }
-#nullable disable
+
     /// <summary>
     ///  This 16x16 Bitmap is applied to the button which orders properties alphabetically.
     /// </summary>
@@ -4061,7 +4061,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             if (_connectionPointCookies[i] is not null)
             {
                 _connectionPointCookies[i].Disconnect();
-                _connectionPointCookies[i] = null;
+                _connectionPointCookies[i] = null!;
             }
         }
 
@@ -4081,9 +4081,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             try
             {
-                object obj = GetUnwrappedObject(i);
+                object? obj = GetUnwrappedObject(i);
 
-                if (!Marshal.IsComObject(obj))
+                if (obj is not null && !Marshal.IsComObject(obj))
                 {
                     continue;
                 }
@@ -4096,8 +4096,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    private bool ShouldForwardChildMouseMessage(Control child, MouseEventArgs e, ref Point point)
+    private bool ShouldForwardChildMouseMessage(Control? child, MouseEventArgs e, ref Point point)
     {
+        if (child is null)
+        {
+            return false;
+        }
+
         Size size = child.Size;
 
         // Are we within two pixels of the edge?
@@ -4147,12 +4152,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        string tabName = $"{_selectedTab.Tab.TabName}{_propertySortValue}";
+        string tabName = $"{_selectedTab?.Tab.TabName}{_propertySortValue}";
 
-        if (_viewTabProperties is not null && _viewTabProperties.TryGetValue(tabName, out GridEntry value))
+        if (_viewTabProperties is not null && _viewTabProperties.TryGetValue(tabName, out GridEntry? value))
         {
             _rootEntry = value;
-            _rootEntry?.Refresh();
+            _rootEntry.Refresh();
         }
         else
         {
@@ -4386,7 +4391,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                     int index = (int)m.WParamInternal;
                     if (index >= 0 && index < _toolStrip.Items.Count)
                     {
-                        string text;
+                        string? text;
                         if (m.Msg == AutomationMessages.PGM_GETBUTTONTEXT)
                         {
                             text = _toolStrip.Items[index].Text;
@@ -4431,7 +4436,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             case (uint)AutomationMessages.PGM_SETSELECTEDTAB:
                 if (m.LParamInternal != 0)
                 {
-                    string tabTypeName = AutomationMessages.ReadAutomationText(m.LParamInternal);
+                    string? tabTypeName = AutomationMessages.ReadAutomationText(m.LParamInternal);
 
                     foreach (TabInfo info in _tabs)
                     {

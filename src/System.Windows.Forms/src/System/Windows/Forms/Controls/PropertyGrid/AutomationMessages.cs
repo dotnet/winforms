@@ -22,7 +22,7 @@ internal static class AutomationMessages
     ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the
     ///  file after used.
     /// </summary>
-    public static IntPtr WriteAutomationText(string text)
+    public static IntPtr WriteAutomationText(string? text)
     {
         IntPtr fileId = IntPtr.Zero;
         string? fullFileName = GenerateLogFileName(ref fileId);
