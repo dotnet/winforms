@@ -456,7 +456,7 @@ public abstract partial class FileDialog : CommonDialog
     private static string[] GetMultiselectFiles(ReadOnlySpan<char> fileBuffer)
     {
         var directory = fileBuffer.SliceAtFirstNull();
-        var fileNames = fileBuffer[directory.Length..];
+        var fileNames = fileBuffer[(directory.Length + 1)..];
         if (fileNames.Length == 0)
         {
             return [directory.ToString()];
@@ -470,7 +470,7 @@ public abstract partial class FileDialog : CommonDialog
                 ? fileName.ToString()
                 : Path.Join(directory, fileName));
 
-            fileNames = fileNames[fileName.Length..];
+            fileNames = fileNames[(fileName.Length + 1)..];
             fileName = fileNames.SliceAtFirstNull();
         }
 
