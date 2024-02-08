@@ -1350,7 +1350,7 @@ internal sealed partial class PropertyGridView :
 
     public int GridEntryHeight => RowHeight;
 
-    internal int GetPropertyLocation(string propertyName, bool getXY, bool rowValue)
+    internal int GetPropertyLocation(string? propertyName, bool getXY, bool rowValue)
     {
         if (_allGridEntries is null || _allGridEntries.Count <= 0)
         {
@@ -5202,7 +5202,10 @@ internal sealed partial class PropertyGridView :
             _dropDownHolder.FocusComponent();
             return;
         }
-        else _currentEditor?.Focus();
+        else
+        {
+            _currentEditor?.Focus();
+        }
 
         return;
     }

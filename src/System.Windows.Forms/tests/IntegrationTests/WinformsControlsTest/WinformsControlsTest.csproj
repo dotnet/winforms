@@ -19,6 +19,8 @@
   <PropertyGroup>
     <ApplicationDefaultFont>Calibri, 11pt, style=regular</ApplicationDefaultFont>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <ApplicationVisualStyles>true</ApplicationVisualStyles>
+    <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
   </PropertyGroup>
 
   <PropertyGroup>

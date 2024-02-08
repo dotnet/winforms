@@ -91,7 +91,11 @@ public abstract class BindingManagerBase
         return GetItemProperties(BindType, 0, dataSources, listAccessors);
     }
 
-    protected virtual PropertyDescriptorCollection? GetItemProperties([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)
+    protected virtual PropertyDescriptorCollection? GetItemProperties(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type listType,
+        int offset,
+        ArrayList dataSources,
+        ArrayList listAccessors)
     {
         if (listAccessors.Count < offset)
         {

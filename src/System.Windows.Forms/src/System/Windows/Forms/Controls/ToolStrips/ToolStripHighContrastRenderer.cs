@@ -489,7 +489,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
 
         using ImageAttributes attrs = new();
 
-        if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (item.Pressed || item. Selected)))
+        if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (item.Pressed || item.Selected)))
         {
             // Translate white, black and blue to colors visible in high contrast mode.
             ColorMap cm1 = new();

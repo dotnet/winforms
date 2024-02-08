@@ -10,7 +10,7 @@
     <PackageReference Include="ReportGenerator" Version="$(ReportGeneratorVersion)" GeneratePathProperty="true" />
   </ItemGroup>
 
-  <Target Name="Codecov">
+  <Target Name="GatherCoverageInputs">
     <PropertyGroup>
       <_CodecovPath>$(PkgCodecov)\tools\Codecov.exe</_CodecovPath>
       <_ReportGeneratorPath>$(PkgReportGenerator)\tools\net47\ReportGenerator.exe</_ReportGeneratorPath>
@@ -19,15 +19,34 @@
     <ItemGroup>
       <!-- [...\artifacts\bin\][project]\[configuration]\[framework]\coverage\[project].coverage-->
       <_CoverageReports Include="$(ArtifactsBinDir)*\$(Configuration)\*\coverage\*.coverage" />
+      <_UnitCoverageReports Include="@(_CoverageReports)" Condition="!$([System.String]::Copy('%(Identity)').EndsWith('.IntegrationTests.coverage'))" />
+      <_IntegrationCoverageReports Include="@(_CoverageReports)" Condition="$([System.String]::Copy('%(Identity)').EndsWith('.IntegrationTests.coverage'))" />
     </ItemGroup>
+  </Target>
+
+  <Target Name="MergeCoverage" DependsOnTargets="GatherCoverageInputs">
+    <!-- Merge multiple coverlet reports into a single Cobertura report before uploading to codecov.io, in order to
+      reduce upload size and load on the codecov.io processing servers. -->
+    <Message Importance="high" Text="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/full -reporttypes:Cobertura -filefilters:-*.g.cs" />
+    <Exec Condition="'@(_CoverageReports)' != ''" Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/full -reporttypes:Cobertura -filefilters:-*.g.cs" />
 
     <!-- Merge multiple coverlet reports into a single Cobertura report before uploading to codecov.io, in order to
       reduce upload size and load on the codecov.io processing servers. -->
-    <Message Importance="high" Text="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage -reporttypes:Cobertura -filefilters:-*.g.cs" />
-    <Exec Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_CoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage -reporttypes:Cobertura -filefilters:-*.g.cs" />
+    <Message Importance="high" Text="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_UnitCoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/unit -reporttypes:Cobertura -filefilters:-*.g.cs" />
+    <Exec Condition="'@(_UnitCoverageReports)' != ''" Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_UnitCoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/unit -reporttypes:Cobertura -filefilters:-*.g.cs" />
+
+    <!-- Merge multiple coverlet reports into a single Cobertura report before uploading to codecov.io, in order to
+      reduce upload size and load on the codecov.io processing servers. -->
+    <Message Importance="high" Text="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_IntegrationCoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/integration -reporttypes:Cobertura -filefilters:-*.g.cs" />
+    <Exec Condition="'@(_IntegrationCoverageReports)' != ''" Command="&quot;$(_ReportGeneratorPath)&quot; &quot;-reports:@(_IntegrationCoverageReports)&quot; -targetdir:$(BaseOutputPath)coverage/integration -reporttypes:Cobertura -filefilters:-*.g.cs" />
+  </Target>
+
+  <Target Name="Codecov" DependsOnTargets="MergeCoverage">
 
     <ItemGroup>
-      <_CodecovArgs Include="-f;$(BaseOutputPath)coverage\Cobertura.xml" />
+      <_CodecovFullArgs Include="-f;$(BaseOutputPath)coverage\full\Cobertura.xml" />
+      <_CodecovUnitArgs Include="-f;$(BaseOutputPath)coverage\unit\Cobertura.xml" />
+      <_CodecovIntegrationArgs Include="-f;$(BaseOutputPath)coverage\integration\Cobertura.xml" />
 
       <!-- Report an error if the upload fails -->
       <_CodecovArgs Include="--required" />
@@ -37,15 +56,30 @@
       <_CodecovProductionFlags Include="production" />
       <_CodecovTestFlags Include="@(_CodecovFlags)" />
       <_CodecovTestFlags Include="test" />
+
+      <_CodecovProductionUnitFlags Include="@(_CodecovProductionFlags)" />
+      <_CodecovProductionUnitFlags Include="unit" />
+      <_CodecovTestUnitFlags Include="@(_CodecovTestFlags)" />
+      <_CodecovTestUnitFlags Include="unit" />
+
+      <_CodecovProductionIntegrationFlags Include="@(_CodecovProductionFlags)" />
+      <_CodecovProductionIntegrationFlags Include="integration" />
+      <_CodecovTestIntegrationFlags Include="@(_CodecovTestFlags)" />
+      <_CodecovTestIntegrationFlags Include="integration" />
     </ItemGroup>
 
-    <!-- Upload the coverage file with a 'production' flag, which will be filtered by codecov.io to production code -->
-    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovArgs, ' ') --flag @(_CodecovProductionFlags, ',')" />
-    <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovArgs, ' ') --flag @(_CodecovProductionFlags, ',')" />
+    <!-- Upload the unit test coverage file with a 'production' flag, which will be filtered by codecov.io to production code -->
+    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovUnitArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionUnitFlags, ',')" />
+    <Exec Condition="'@(_UnitCoverageReports)' != ''" Command="&quot;$(_CodecovPath)&quot; @(_CodecovUnitArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionUnitFlags, ',')" />
 
-    <!-- Upload the coverage file with a 'test' flag, which will be filtered by codecov.io to test code -->
-    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovArgs, ' ') --flag @(_CodecovTestFlags, ',')" />
-    <Exec Command="&quot;$(_CodecovPath)&quot; @(_CodecovArgs, ' ') --flag @(_CodecovTestFlags, ',')" />
+    <!-- Upload the integration test coverage file with a 'production' flag, which will be filtered by codecov.io to production code -->
+    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovIntegrationArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionIntegrationFlags, ',')" />
+    <Exec Condition="'@(_IntegrationCoverageReports)' != ''" Command="&quot;$(_CodecovPath)&quot; @(_CodecovIntegrationArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovProductionIntegrationFlags, ',')" />
+
+    <!-- Upload the full test coverage file with a 'test' flag, which will be filtered by codecov.io to test code. We
+    don't further separate this by integration vs. unit tests because the answer is clear from the file path. -->
+    <Message Importance="high" Text="&quot;$(_CodecovPath)&quot; @(_CodecovFullArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestFlags, ',')" />
+    <Exec Condition="'@(_CoverageReports)' != ''" Command="&quot;$(_CodecovPath)&quot; @(_CodecovFullArgs, ' ') @(_CodecovArgs, ' ') --flag @(_CodecovTestFlags, ',')" />
   </Target>
 
 </Project>

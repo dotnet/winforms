@@ -231,4 +231,12 @@ public class CursorConverterTests
         CursorConverter converter = new();
         Assert.True(converter.GetStandardValuesSupported());
     }
+
+    [Fact]
+    public void CursorConverter_ConvertTo_FromKnownCursorHandle()
+    {
+        CursorConverter converter = new();
+        string converted = (string)converter.ConvertTo(new Cursor(Cursors.Default.Handle), typeof(string));
+        converted.Should().Be(nameof(Cursors.Default));
+    }
 }

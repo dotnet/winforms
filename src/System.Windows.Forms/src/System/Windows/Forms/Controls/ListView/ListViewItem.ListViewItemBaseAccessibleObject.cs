@@ -174,10 +174,14 @@ public partial class ListViewItem
         {
             switch (propertyID)
             {
-                case UIA_PROPERTY_ID.UIA_ControlTypePropertyId: return (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId;
-                case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId: return (VARIANT)OwningListItemFocused;
-                case UIA_PROPERTY_ID.UIA_IsEnabledPropertyId: return (VARIANT)_owningListView.Enabled;
-                case UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId: return (VARIANT)State.HasFlag(AccessibleStates.Focusable);
+                case UIA_PROPERTY_ID.UIA_ControlTypePropertyId:
+                    return (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId;
+                case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId:
+                    return (VARIANT)OwningListItemFocused;
+                case UIA_PROPERTY_ID.UIA_IsEnabledPropertyId:
+                    return (VARIANT)_owningListView.Enabled;
+                case UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId:
+                    return (VARIANT)State.HasFlag(AccessibleStates.Focusable);
                 case UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId:
                     if (OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed)
                     {
@@ -188,7 +192,8 @@ public partial class ListViewItem
                     return result.IsEmpty ? VARIANT.False : result;
                 case UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId:
                     return UIAHelper.WindowHandleToVariant(HWND.Null);
-                default: return base.GetPropertyValue(propertyID);
+                default:
+                    return base.GetPropertyValue(propertyID);
             }
         }
 

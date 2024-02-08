@@ -3,13 +3,13 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Primitives;
+using Microsoft.Office;
 using Windows.Win32.System.Com;
 using ComIMessageFilter = Windows.Win32.Media.Audio.IMessageFilter;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
-using Microsoft.Office;
-using System.Windows.Forms.Primitives;
-using System.Runtime.ExceptionServices;
 
 namespace System.Windows.Forms;
 

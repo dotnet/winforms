@@ -115,15 +115,14 @@ jobs:
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
+        /p:Coverage=$(_Coverage)
         /p:TestRunnerAdditionalArguments='-notrait Category=IgnoreForCI -notrait Category=failing'
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
         /m:1
       env:
         XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
-      # UI tests are blocked from execution until we find solution for https://github.com/dotnet/winforms/issues/9318.
-      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), contains(variables['System.PullRequest.TargetBranch'], 'main'), false)
-      retryCountOnTaskFailure: 3
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd
@@ -150,9 +149,9 @@ jobs:
     - task: PublishCodeCoverageResults@1
       inputs:
         codeCoverageTool: 'cobertura'
-        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\Cobertura.xml'
+        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full\Cobertura.xml'
         pathToSources: '$(Build.SourcesDirectory)'
-        reportDirectory: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage'
+        reportDirectory: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full'
       displayName: PublishCodeCoverageResults
       condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
