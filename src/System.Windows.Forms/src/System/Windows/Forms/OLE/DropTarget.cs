@@ -5,7 +5,6 @@ using System.ComponentModel;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.SystemServices;
 using Com = Windows.Win32.System.Com;
-using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
@@ -59,19 +58,11 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         {
             return dataObject;
         }
-        else if (managedDataObject is ComTypes.IDataObject nativeDataObject)
+
+        var comDataObjectPtr = ComHelpers.TryGetComPointer<Com.IDataObject>(managedDataObject, out HRESULT hr);
+        if (hr.Succeeded)
         {
-            return new DataObject(nativeDataObject);
-        }
-        else if (!ComHelpers.BuiltInComSupported)
-        {
-            // The object is likely not a ComWrappers created COM object and since built-in COM interop is not supported,
-            // we need to wrap it in an RCW ourselves.
-            var comDataObjectPtr = ComHelpers.TryGetComPointer<Com.IDataObject>(managedDataObject, out HRESULT hr);
-            if (hr.Succeeded)
-            {
-                return new DataObject(comDataObjectPtr);
-            }
+            return new DataObject(comDataObjectPtr, managedDataObject);
         }
 
         return null; // Unknown data object interface; we can't work with this so return null

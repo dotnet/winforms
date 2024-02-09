@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -129,7 +130,7 @@ public partial class DataObject
             int result = Next((int)celt, elt, pceltFetched is null ? null! : celtFetched);
             for (int i = 0; i < celt; i++)
             {
-                rgelt[i] = elt[i];
+                rgelt[i] = Unsafe.As<ComTypes.FORMATETC, FORMATETC>(ref elt[i]);
             }
 
             if (pceltFetched is not null)

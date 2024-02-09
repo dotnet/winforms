@@ -90,11 +90,14 @@ public unsafe partial class DataObject :
     }
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>.
-    ///  This should be used if the object the <see cref="Com.IDataObject"/> is associated with is not a ComWrappers-created
-    ///  object and built in COM is not supported.
+    ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
+    ///  and the managed data object the raw pointer is associated with.
     /// </summary>
-    internal DataObject(Com.IDataObject* data) : this(new ComDataObjectWrapper(data)) { }
+    internal DataObject(Com.IDataObject* data, object managedDataObject)
+    {
+        CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IComDataObject");
+        _innerData = new ComDataObjectAdapter(data, managedDataObject);
+    }
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
@@ -352,7 +355,14 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("DAdvise");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            return converter.OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
+            using var comAdviseSink = ComHelpers.TryGetComScope<Com.IAdviseSink>(pAdvSink);
+            HRESULT result = converter.OleDataObject->DAdvise(
+                Unsafe.As<FORMATETC, Com.FORMATETC>(ref pFormatetc),
+                (uint)advf,
+                comAdviseSink,
+                out uint connection);
+            pdwConnection = (int)connection;
+            return result;
         }
 
         pdwConnection = 0;
@@ -364,7 +374,7 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("DUnadvise");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            converter.OleDataObject.DUnadvise(dwConnection);
+            converter.OleDataObject->DUnadvise((uint)dwConnection).ThrowOnFailure();
             return;
         }
 
@@ -376,7 +386,14 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("EnumDAdvise");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            return converter.OleDataObject.EnumDAdvise(out enumAdvise);
+            using ComScope<Com.IEnumSTATDATA> statData = new(null);
+            HRESULT result = converter.OleDataObject->EnumDAdvise(statData);
+            enumAdvise = statData.IsNull
+                ? null
+                : ComHelpers.TryGetObjectForIUnknown(statData.Query<Com.IUnknown>(), out IEnumSTATDATA? managedStatData)
+                    ? managedStatData
+                    : new EnumStatDataWrapper(statData);
+            return result;
         }
 
         enumAdvise = null;
@@ -388,7 +405,11 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose($"EnumFormatEtc: {dwDirection}");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            return converter.OleDataObject.EnumFormatEtc(dwDirection);
+            using ComScope<Com.IEnumFORMATETC> formatEtc = new(null);
+            converter.OleDataObject->EnumFormatEtc((uint)dwDirection, formatEtc).ThrowOnFailure();
+            return ComHelpers.TryGetObjectForIUnknown(formatEtc.Query<Com.IUnknown>(), out IEnumFORMATETC? result)
+                    ? result
+                    : new EnumFormatEtcWrapper(formatEtc);
         }
 
         if (dwDirection == DATADIR.DATADIR_GET)
@@ -404,7 +425,11 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("GetCanonicalFormatEtc");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            return converter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
+            HRESULT result = converter.OleDataObject->GetCanonicalFormatEtc(
+                Unsafe.As<FORMATETC, Com.FORMATETC>(ref pformatetcIn),
+                out Com.FORMATETC formatEtcOut);
+            pformatetcOut = Unsafe.As<Com.FORMATETC, FORMATETC>(ref formatEtcOut);
+            return result;
         }
 
         pformatetcOut = default;
@@ -416,7 +441,8 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("GetData");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            converter.OleDataObject.GetData(ref formatetc, out medium);
+            converter.OleDataObject->GetData(Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatetc), out Com.STGMEDIUM comMedium).ThrowOnFailure();
+            medium = (STGMEDIUM)comMedium;
             return;
         }
 
@@ -477,7 +503,9 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("GetDataHere");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
+            Com.STGMEDIUM comMedium = default;
+            converter.OleDataObject->GetDataHere(Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatetc), ref comMedium).ThrowOnFailure();
+            medium = (STGMEDIUM)comMedium;
             return;
         }
 
@@ -563,7 +591,7 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("QueryGetData");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            return converter.OleDataObject.QueryGetData(ref formatetc);
+            return converter.OleDataObject->QueryGetData(Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatetc));
         }
 
         if (formatetc.dwAspect != DVASPECT.DVASPECT_CONTENT)
@@ -596,11 +624,13 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("SetData");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
+            Com.STGMEDIUM comMedium = default;
+            converter.OleDataObject->SetData(Unsafe.As<FORMATETC, Com.FORMATETC>(ref pFormatetcIn), comMedium, fRelease).ThrowOnFailure();
+            pmedium = (STGMEDIUM)comMedium;
             return;
         }
 
-        if (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.IsInDragLoop(_innerData))
+        if (DragDropHelper.IsInDragLoopFormat(Unsafe.As<FORMATETC, Com.FORMATETC>(ref pFormatetcIn)) || DragDropHelper.IsInDragLoop(_innerData))
         {
             string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
             if (_innerData.GetDataPresent(formatName) && _innerData.GetData(formatName) is DragDropFormat dragDropFormat)

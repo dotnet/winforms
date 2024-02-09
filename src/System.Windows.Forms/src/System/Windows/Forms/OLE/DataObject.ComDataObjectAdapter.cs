@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Buffers;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -21,18 +20,30 @@ public partial class DataObject
     /// <summary>
     ///  Maps <see cref="IComDataObject"/> to <see cref="IDataObject"/> for reading data only.
     /// </summary>
-    private sealed class ComDataObjectAdapter : IDataObject
+    private unsafe sealed class ComDataObjectAdapter : IDataObject
     {
-        private readonly IComDataObject _innerData;
+        // We use the pointer, but ComWrappers is managing the lifetime for us.
+        // Keep a referenced to the managed object to prevent it from being collected.
+        private readonly object _innerData;
+        private readonly Com.IDataObject* _innerDataPtr;
 
         public ComDataObjectAdapter(IComDataObject data)
         {
             Debug.Assert(data is not null);
             CompModSwitches.DataObject.TraceVerbose("OleConverter: Constructed OleConverter");
             _innerData = data;
+            _innerDataPtr = ComHelpers.GetComPointer<Com.IDataObject>(data);
         }
 
-        public IComDataObject OleDataObject => _innerData;
+        public ComDataObjectAdapter(Com.IDataObject* dataPtr, object managedData)
+        {
+            Debug.Assert(managedData is not null);
+            CompModSwitches.DataObject.TraceVerbose("OleConverter: Constructed OleConverter");
+            _innerData = managedData;
+            _innerDataPtr = dataPtr;
+        }
+
+        public Com.IDataObject* OleDataObject => _innerDataPtr;
 
         /// <summary>
         ///  Retrieves the specified format from the specified hglobal.
@@ -188,7 +199,7 @@ public partial class DataObject
         /// <param name="doNotContinue">
         ///  A restricted type was encountered, do not continue trying to deserialize.
         /// </param>
-        private static object? GetObjectFromDataObject(IComDataObject dataObject, string format, out bool doNotContinue)
+        private static object? GetObjectFromDataObject(Com.IDataObject* dataObject, string format, out bool doNotContinue)
         {
             object? data = null;
             doNotContinue = false;
@@ -213,28 +224,28 @@ public partial class DataObject
 
             return data;
 
-            static object? TryGetBitmapData(IComDataObject dataObject, string format)
+            static object? TryGetBitmapData(Com.IDataObject* dataObject, string format)
             {
                 if (format != DataFormats.BitmapConstant)
                 {
                     return null;
                 }
 
-                FORMATETC formatetc = new()
+                Com.FORMATETC formatEtc = new()
                 {
-                    cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
-                    tymed = TYMED.TYMED_GDI
+                    tymed = (uint)Com.TYMED.TYMED_GDI
                 };
 
-                STGMEDIUM medium = default;
+                Com.STGMEDIUM medium = default;
 
-                if (dataObject.QueryGetData(ref formatetc) == (int)HRESULT.S_OK)
+                if (dataObject->QueryGetData(formatEtc).Succeeded)
                 {
                     try
                     {
-                        dataObject.GetData(ref formatetc, out medium);
+                        dataObject->GetData(formatEtc, out medium);
                     }
                     catch
                     {
@@ -247,10 +258,10 @@ public partial class DataObject
                 {
                     // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
                     // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
-                    if (medium.tymed == TYMED.TYMED_GDI
-                        && medium.unionmember != 0
+                    if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
+                        && !medium.hGlobal.IsNull
                         && format.Equals(DataFormats.BitmapConstant)
-                        && Image.FromHbitmap(medium.unionmember) is Image clipboardImage)
+                        && Image.FromHbitmap(medium.hGlobal) is Image clipboardImage)
                     {
                         data = (Image)clipboardImage.Clone();
                         clipboardImage.Dispose();
@@ -258,40 +269,39 @@ public partial class DataObject
                 }
                 finally
                 {
-                    var comMedium = (Com.STGMEDIUM)medium;
-                    PInvoke.ReleaseStgMedium(ref comMedium);
+                    PInvoke.ReleaseStgMedium(ref medium);
                 }
 
                 return data;
             }
 
-            static object? TryGetHGLOBALData(IComDataObject dataObject, string format, out bool doNotContinue)
+            static object? TryGetHGLOBALData(Com.IDataObject* dataObject, string format, out bool doNotContinue)
             {
                 doNotContinue = false;
 
-                FORMATETC formatetc = new()
+                Com.FORMATETC formatetc = new()
                 {
-                    cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
-                    tymed = TYMED.TYMED_HGLOBAL
+                    tymed = (uint)Com.TYMED.TYMED_HGLOBAL
                 };
 
-                if (dataObject.QueryGetData(ref formatetc) != (int)HRESULT.S_OK)
+                if (dataObject->QueryGetData(formatetc).Failed)
                 {
                     return null;
                 }
 
                 object? data = null;
-                STGMEDIUM medium = default;
+                Com.STGMEDIUM medium = default;
 
                 try
                 {
-                    dataObject.GetData(ref formatetc, out medium);
+                    dataObject->GetData(formatetc, out medium);
 
-                    if (medium.tymed == TYMED.TYMED_HGLOBAL && medium.unionmember != 0)
+                    if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull)
                     {
-                        data = GetDataFromHGLOBAL((HGLOBAL)medium.unionmember, format);
+                        data = GetDataFromHGLOBAL(medium.hGlobal, format);
                     }
                 }
                 catch (RestrictedTypeDeserializationException)
@@ -311,34 +321,33 @@ public partial class DataObject
                 }
                 finally
                 {
-                    var comMedium = (Com.STGMEDIUM)medium;
-                    PInvoke.ReleaseStgMedium(ref comMedium);
+                    PInvoke.ReleaseStgMedium(ref medium);
                 }
 
                 return data;
             }
 
-            static unsafe object? TryGetIStreamData(IComDataObject dataObject, string format)
+            static unsafe object? TryGetIStreamData(Com.IDataObject* dataObject, string format)
             {
-                STGMEDIUM medium = default;
+                Com.STGMEDIUM medium = default;
 
-                FORMATETC formatetc = new()
+                Com.FORMATETC formatEtc = new()
                 {
-                    cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
-                    tymed = TYMED.TYMED_ISTREAM
+                    tymed = (uint)Com.TYMED.TYMED_ISTREAM
                 };
 
                 // Limit the # of exceptions we may throw below.
-                if (dataObject.QueryGetData(ref formatetc) != (int)HRESULT.S_OK)
+                if (dataObject->QueryGetData(formatEtc).Failed)
                 {
                     return null;
                 }
 
                 try
                 {
-                    dataObject.GetData(ref formatetc, out medium);
+                    dataObject->GetData(formatEtc, out medium);
                 }
                 catch
                 {
@@ -348,19 +357,19 @@ public partial class DataObject
                 HGLOBAL hglobal = default;
                 try
                 {
-                    if (medium.tymed != TYMED.TYMED_ISTREAM || medium.unionmember == 0)
+                    if (medium.tymed != Com.TYMED.TYMED_ISTREAM || medium.hGlobal.IsNull)
                     {
                         return null;
                     }
 
-                    using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.unionmember);
+                    using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.hGlobal);
                     pStream.Value->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
 
                     hglobal = PInvokeCore.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (uint)sstg.cbSize);
 
                     // Not throwing here because the other out of memory condition on GlobalAlloc
                     // happens inside innerData.GetData and gets turned into a null return value.
-                    if (hglobal == 0)
+                    if (hglobal.IsNull)
                     {
                         return null;
                     }
@@ -373,13 +382,12 @@ public partial class DataObject
                 }
                 finally
                 {
-                    if (hglobal != 0)
+                    if (!hglobal.IsNull)
                     {
                         PInvokeCore.GlobalFree(hglobal);
                     }
 
-                    var comMedium = (Com.STGMEDIUM)medium;
-                    PInvoke.ReleaseStgMedium(ref comMedium);
+                    PInvoke.ReleaseStgMedium(ref medium);
                 }
             }
         }
@@ -434,16 +442,16 @@ public partial class DataObject
 
         private bool GetDataPresentInner(string format)
         {
-            FORMATETC formatetc = new()
+            Com.FORMATETC formatEtc = new()
             {
-                cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
-                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                cfFormat = (ushort)(DataFormats.GetFormat(format).Id),
+                dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
-                tymed = AllowedTymeds
+                tymed = (uint)AllowedTymeds
             };
 
-            int hr = OleDataObject.QueryGetData(ref formatetc);
-            return hr == (int)HRESULT.S_OK;
+            HRESULT hr = OleDataObject->QueryGetData(formatEtc);
+            return hr.Succeeded;
         }
 
         public bool GetDataPresent(string format, bool autoConvert)
@@ -472,38 +480,29 @@ public partial class DataObject
         {
             Debug.Assert(OleDataObject is not null, "You must have an innerData on all DataObjects");
 
-            IEnumFORMATETC? enumFORMATETC = null;
+            using ComScope<Com.IEnumFORMATETC> enumFORMATETC = new(null);
+            OleDataObject->EnumFormatEtc((uint)DATADIR.DATADIR_GET, enumFORMATETC);
 
-            try
+            if (enumFORMATETC.IsNull)
             {
-                enumFORMATETC = OleDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
-            }
-            catch
-            {
-            }
-
-            if (enumFORMATETC is null)
-            {
-                return Array.Empty<string>();
+                return [];
             }
 
             // Since we are only adding elements to the HashSet, the order will be preserved.
-            HashSet<string> distinctFormats = new();
+            HashSet<string> distinctFormats = [];
 
-            enumFORMATETC.Reset();
+            enumFORMATETC.Value->Reset();
 
-            FORMATETC[] formatetc = [default];
-            int[] retrieved = [1];
+            Com.FORMATETC[] formatEtc = [default];
+            uint[] retrieved = [1];
 
             while (retrieved[0] > 0)
             {
                 retrieved[0] = 0;
-                try
+                fixed (uint* pRetrieved = retrieved)
+                fixed (Com.FORMATETC* pFormatEtc = formatEtc)
                 {
-                    enumFORMATETC.Next(1, formatetc, retrieved);
-                }
-                catch
-                {
+                    enumFORMATETC.Value->Next(1, pFormatEtc, pRetrieved);
                 }
 
                 if (retrieved[0] <= 0)
@@ -511,7 +510,7 @@ public partial class DataObject
                     continue;
                 }
 
-                string name = DataFormats.GetFormat(formatetc[0].cfFormat).Name;
+                string name = DataFormats.GetFormat(formatEtc[0].cfFormat).Name;
                 if (autoConvert)
                 {
                     string[] mappedFormats = GetMappedFormats(name)!;
@@ -526,7 +525,7 @@ public partial class DataObject
                 }
             }
 
-            return distinctFormats.ToArray();
+            return [.. distinctFormats];
         }
 
         public string[] GetFormats() => GetFormats(autoConvert: true);
