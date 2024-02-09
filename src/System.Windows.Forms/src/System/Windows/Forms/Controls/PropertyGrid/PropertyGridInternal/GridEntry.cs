@@ -853,6 +853,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
         if (TypeConverter.CanConvertFrom(this, typeof(string)))
         {
+            // We will return an empty string when text is null.
             return TypeConverter.ConvertFromString(this, text!);
         }
 
