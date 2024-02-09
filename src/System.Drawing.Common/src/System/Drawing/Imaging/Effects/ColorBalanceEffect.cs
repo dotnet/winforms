@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Adjusts the color balance of an image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class ColorBalanceEffect : Effect
+public class ColorBalanceEffect : Effect
 {
     private readonly ColorBalanceParams _colorBalanceParams;
 

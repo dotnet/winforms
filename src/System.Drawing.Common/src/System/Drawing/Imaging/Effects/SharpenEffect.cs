@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Sharpens an image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed unsafe class SharpenEffect : Effect
+public unsafe class SharpenEffect : Effect
 {
     private readonly SharpenParams _sharpenParams;
 

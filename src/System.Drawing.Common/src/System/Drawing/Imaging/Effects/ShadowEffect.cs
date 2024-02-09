@@ -13,7 +13,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  the light areas.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class ShadowEffect : ColorCurveEffect
+public class ShadowEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="ShadowEffect"/> with the given <paramref name="shadow"/>.
