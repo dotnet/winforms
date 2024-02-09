@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
+using SourceGenerated;
 using Microsoft.Win32;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
