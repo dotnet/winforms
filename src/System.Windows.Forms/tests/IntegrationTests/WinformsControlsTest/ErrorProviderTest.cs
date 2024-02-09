@@ -21,5 +21,15 @@ public partial class ErrorProviderTest : Form
             errorProvider1.Clear();
             MessageBox.Show("All right!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        if (textBox2.TextLength < 5 || textBox2.TextLength > 20)
+        {
+            errorProvider2.SetError(textBox2, "The length of the testbox is invalid!");
+        }
+        else
+        {
+            errorProvider2.Clear();
+            MessageBox.Show("All right!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
