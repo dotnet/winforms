@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using SourceGenerated;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 

@@ -8,9 +8,9 @@ internal abstract partial class GridEntry
     [Flags]
     internal enum PaintValueFlags
     {
-        None                    = 0x0,
-        DrawSelected            = 0x1,
-        CheckShouldSerialize    = 0x4,
-        PaintInPlace            = 0x8
+        None = 0x0,
+        DrawSelected = 0x1,
+        CheckShouldSerialize = 0x4,
+        PaintInPlace = 0x8
     }
 }

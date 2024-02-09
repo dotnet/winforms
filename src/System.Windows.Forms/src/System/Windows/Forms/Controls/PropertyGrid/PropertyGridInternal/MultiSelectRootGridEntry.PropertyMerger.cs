@@ -287,7 +287,7 @@ internal partial class MultiSelectRootGridEntry
                     int result = string.Compare(entryName, sortString, ignoreCase: false, CultureInfo.InvariantCulture);
                     if (result == 0)
                     {
-                        mergedEntries.Add([basePropertyDescriptor, ..propertyDescriptors]);
+                        mergedEntries.Add([basePropertyDescriptor, .. propertyDescriptors]);
                         break;
                     }
                     else if (result < 0)
