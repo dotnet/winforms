@@ -40,17 +40,8 @@ public partial class Control
             _marshaler = marshaler;
             _method = method;
             _args = args;
-            _exception = null;
-            _retVal = null;
             _synchronous = synchronous;
-            IsCompleted = false;
-            _resetEvent = null;
             _executionContext = executionContext;
-        }
-
-        ~ThreadMethodEntry()
-        {
-            _resetEvent?.Close();
         }
 
         public object? AsyncState
@@ -84,7 +75,7 @@ public partial class Control
                     }
                 }
 
-                return (WaitHandle)_resetEvent;
+                return _resetEvent;
             }
         }
 

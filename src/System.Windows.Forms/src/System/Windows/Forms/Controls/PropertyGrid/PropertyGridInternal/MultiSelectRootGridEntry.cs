@@ -19,10 +19,16 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
         PropertyGridView view,
         object[] target,
         IServiceProvider baseProvider,
-        IDesignerHost host,
+        IDesignerHost? host,
         PropertyTab tab,
         PropertySort sortType)
-        : base(view, target, baseProvider, host, tab, sortType)
+        : base(
+            view,
+            target,
+            baseProvider,
+            host,
+            tab,
+            sortType)
     {
     }
 

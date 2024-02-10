@@ -12,7 +12,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  are converted to white.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class WhiteSaturationEffect : ColorCurveEffect
+public class WhiteSaturationEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="WhiteSaturationEffect"/> with the given parameters.

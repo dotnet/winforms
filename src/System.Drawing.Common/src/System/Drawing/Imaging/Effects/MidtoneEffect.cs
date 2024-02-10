@@ -13,7 +13,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  an image without loosing the contrast between the darkest and lightest portions of the image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class MidtoneEffect : ColorCurveEffect
+public class MidtoneEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="MidtoneEffect"/> with the given <paramref name="midtone"/> adjustment.

@@ -12,7 +12,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  are converted to black.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class BlackSaturationEffect : ColorCurveEffect
+public class BlackSaturationEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="BlackSaturationEffect"/> with the given parameters.
