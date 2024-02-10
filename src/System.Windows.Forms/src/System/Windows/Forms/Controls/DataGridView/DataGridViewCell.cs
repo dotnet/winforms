@@ -242,6 +242,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [Browsable(false)]
     public virtual Type? FormattedValueType => ValueType;
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private TypeConverter? FormattedValueTypeConverter
     {
         get
@@ -755,6 +756,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private TypeConverter? ValueTypeConverter
     {
         get

@@ -27,6 +27,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
 
     public override Type ComponentType => _descriptors[0].ComponentType;
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     public override TypeConverter Converter
     {
         [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage)]

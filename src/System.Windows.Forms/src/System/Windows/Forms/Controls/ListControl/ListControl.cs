@@ -131,6 +131,7 @@ public abstract class ListControl : Control
     /// <summary>
     ///  Cached type converter of the property associated with the display member
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private TypeConverter? DisplayMemberConverter
     {
         get
@@ -497,6 +498,7 @@ public abstract class ListControl : Control
         return -1;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     public string? GetItemText(object? item)
     {
         if (!_formattingEnabled)

@@ -265,6 +265,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal override TypeConverter TypeConverter
     {
         get
@@ -280,6 +281,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal override UITypeEditor UITypeEditor
     {
         get

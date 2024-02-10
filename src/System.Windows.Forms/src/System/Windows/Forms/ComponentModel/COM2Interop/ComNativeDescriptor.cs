@@ -94,6 +94,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         return typeInfoName.AsSpan().TrimStart('_').ToString();
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal static TypeConverter GetIComponentConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
 
     internal static object? GetEditor(object component, Type baseEditorType)

@@ -71,6 +71,7 @@ internal sealed unsafe partial class Com2IPerPropertyBrowsingHandler : Com2Exten
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private void OnGetDisplayValue(Com2PropertyDescriptor sender, GetNameItemEvent e)
     {
         using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);

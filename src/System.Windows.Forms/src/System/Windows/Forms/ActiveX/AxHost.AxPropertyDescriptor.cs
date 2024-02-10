@@ -72,6 +72,7 @@ public abstract partial class AxHost
             }
         }
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         public override TypeConverter Converter
         {
             [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]

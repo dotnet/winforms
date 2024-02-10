@@ -406,6 +406,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  The text used color for category headings. The background color is determined by the LineColor property.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridCategoryForeColorDesc))]
     [DefaultValue(typeof(Color), "ControlText")]
@@ -488,6 +489,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  The border color for the hot commands region
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridCommandsBorderColorDesc))]
     [DefaultValue(typeof(Color), "ControlDark")]
@@ -627,6 +629,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  The background color for the help region.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridHelpBackColorDesc))]
     [DefaultValue(typeof(Color), "Control")]
@@ -639,6 +642,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  The foreground color for the help region.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridHelpForeColorDesc))]
     [DefaultValue(typeof(Color), "ControlText")]
@@ -651,6 +655,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  The border color for the help region.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridHelpBorderColorDesc))]
     [DefaultValue(typeof(Color), "ControlDark")]
@@ -699,6 +704,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  Background color for Highlighted text.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusBackColorDesc))]
     [DefaultValue(typeof(Color), "Highlight")]
@@ -718,6 +724,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  Foreground color for Highlighted (selected) text.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusForeColorDesc))]
     [DefaultValue(typeof(Color), "HighlightText")]
@@ -737,6 +744,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  Foreground color for disabled text in the Grid View
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridDisabledItemForeColorDesc))]
     [DefaultValue(typeof(Color), "GrayText")]
@@ -753,6 +761,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  Color for the horizontal splitter line separating property categories.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridCategorySplitterColorDesc))]
     [DefaultValue(typeof(Color), "Control")]
@@ -773,6 +782,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     ///  Gets or sets a value that indicates whether OS-specific visual style glyphs are used for the expansion
     ///  nodes in the grid area.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridCanShowVisualStyleGlyphsDesc))]
     [DefaultValue(true)]
@@ -789,6 +799,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridLineColorDesc))]
     [DefaultValue(typeof(Color), "InactiveBorder")]
@@ -1271,6 +1282,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridViewBackColorDesc))]
     [DefaultValue(typeof(Color), "Window")]
@@ -1284,6 +1296,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridViewForeColorDesc))]
     [DefaultValue(typeof(Color), "WindowText")]
@@ -1300,6 +1313,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  Border color for the property grid view.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.PropertyGridViewBorderColorDesc))]
     [DefaultValue(typeof(Color), "ControlDark")]

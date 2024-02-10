@@ -466,6 +466,7 @@ public abstract partial class AxHost
 
         // IPropertyNotifySink methods
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         HRESULT IPropertyNotifySink.Interface.OnChanged(int dispid)
         {
             // Some controls fire OnChanged() notifications when getting values of some properties.

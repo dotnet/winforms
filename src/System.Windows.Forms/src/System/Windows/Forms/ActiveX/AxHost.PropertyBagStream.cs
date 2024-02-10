@@ -18,6 +18,7 @@ public abstract unsafe partial class AxHost
 
         internal PropertyBagStream() => _bag = new();
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         internal PropertyBagStream(Stream stream)
         {
             long position = stream.Position;
@@ -93,6 +94,7 @@ public abstract unsafe partial class AxHost
             return HRESULT.S_OK;
         }
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         internal void Save(Stream stream)
         {
             long position = stream.Position;

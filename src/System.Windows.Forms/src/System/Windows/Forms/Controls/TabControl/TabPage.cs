@@ -336,6 +336,7 @@ public partial class TabPage : Panel
         remove => base.LocationChanged -= value;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [DefaultValue(typeof(Size), "0, 0")]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

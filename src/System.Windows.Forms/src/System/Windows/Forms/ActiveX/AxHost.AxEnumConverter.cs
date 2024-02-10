@@ -22,6 +22,7 @@ public abstract partial class AxHost
             _target = target;
         }
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         public override StandardValuesCollection? GetStandardValues(ITypeDescriptorContext? context)
         {
             // Make sure the converter has been properly refreshed by calling the Converter property.

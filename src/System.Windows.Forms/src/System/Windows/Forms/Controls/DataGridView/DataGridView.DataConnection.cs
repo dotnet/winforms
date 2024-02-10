@@ -905,6 +905,7 @@ public partial class DataGridView
             CurrencyManager = null;
         }
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         private static DataGridViewColumn GetDataGridViewColumnFromType(Type type)
         {
             DataGridViewColumn dataGridViewColumn;
@@ -925,6 +926,7 @@ public partial class DataGridView
             return dataGridViewColumn;
         }
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         public List<DataGridViewColumn>? GetCollectionOfBoundDataGridViewColumns()
         {
             if (_props is null)

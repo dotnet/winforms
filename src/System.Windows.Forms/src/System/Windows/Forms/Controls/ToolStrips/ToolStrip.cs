@@ -954,6 +954,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         get => base.HorizontalScroll;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [DefaultValue(typeof(Size), "16,16")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.ToolStripImageScalingSizeDescr))]

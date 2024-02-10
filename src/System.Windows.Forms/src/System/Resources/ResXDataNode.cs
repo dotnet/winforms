@@ -287,6 +287,7 @@ public sealed class ResXDataNode : ISerializable
 #pragma warning restore SYSLIB0051
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         static void SerializeWithBinaryFormatter(
             IFormatter? binaryFormatter,
             DataNodeInfo nodeInfo,
@@ -414,6 +415,7 @@ public sealed class ResXDataNode : ISerializable
     }
 
     [Obsolete(DiagnosticId = "SYSLIB0051")]
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private object? GenerateObjectFromBinaryDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
     {
         if (!string.Equals(dataNodeInfo.MimeType, ResXResourceWriter.BinSerializedObjectMimeType))
@@ -595,6 +597,7 @@ public sealed class ResXDataNode : ISerializable
     /// <summary>
     ///  Retrieves the object that is stored by this node by using the specified type resolution service.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     public object? GetValue(ITypeResolutionService? typeResolver)
     {
         if (_value is not null)

@@ -361,6 +361,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private TypeConverter DisplayTypeConverter => DataGridView is not null
         ? DataGridView.GetCachedTypeConverter(DisplayType)
         : TypeDescriptor.GetConverter(DisplayType);
@@ -997,6 +998,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         return errorIconBounds;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     protected override object? GetFormattedValue(
         object? value,
         int rowIndex,
@@ -2478,6 +2480,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         return resultBounds;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     public override object? ParseFormattedValue(
         object? formattedValue,
         DataGridViewCellStyle cellStyle,

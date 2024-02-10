@@ -89,6 +89,7 @@ public class FontDialog : CommonDialog
     /// <summary>
     ///  Gets or sets a value indicating the selected font color.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.FnDcolorDescr))]
     [DefaultValue(typeof(Color), "Black")]

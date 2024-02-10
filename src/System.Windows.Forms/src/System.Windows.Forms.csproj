@@ -11,12 +11,23 @@
       IL Trim warnings which should be removed in order to make WinForms trimmable
       See https://github.com/dotnet/winforms/issues/4649
     -->
-    <NoWarn>$(NoWarn);IL2026;IL2050;IL2057;IL2062;IL2067;IL2070;IL2072;IL2075;IL2077;IL2080;IL2092;IL2093;IL2094;IL2096;IL2111</NoWarn>
+    <NoWarn>$(NoWarn);IL2050;IL2057;IL2062;IL2067;IL2070;IL2072;IL2075;IL2077;IL2080;IL2092;IL2093;IL2094;IL2096;IL2111</NoWarn>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
+    <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
+
+  <Target Name="UseLiveTrimAnalyzer"
+          BeforeTargets="CoreCompile">
+      <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="'%(FileName)' == 'ILLink.RoslynAnalyzer'" />
+      <Analyzer Remove="@(Analyzer)" Condition="'%(FileName)' == 'ILLink.CodeFixProvider'" />
+      <Analyzer Include="c:\work\core\CurrentWork\runtime\artifacts\bin\ILLink.RoslynAnalyzer\Debug\netstandard2.0\ILLink.RoslynAnalyzer.dll" />
+      <Analyzer Include="c:\work\core\CurrentWork\runtime\artifacts\bin\ILLink.CodeFixProvider\Debug\netstandard2.0\ILLink.CodeFixProvider.dll" />
+      </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <None Remove="Resources\System\Windows\Forms\XPThemes.manifest" />

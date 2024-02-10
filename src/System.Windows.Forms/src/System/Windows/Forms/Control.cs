@@ -769,6 +769,7 @@ public unsafe partial class Control :
     ///  Controls the location of where this control is scrolled to in ScrollableControl.ScrollControlIntoView.
     ///  Default is the upper left hand corner of the control.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DefaultValue(typeof(Point), "0, 0")]
@@ -2780,6 +2781,7 @@ public unsafe partial class Control :
     [Localizable(true)]
     [SRDescription(nameof(SR.ControlMaximumSizeDescr))]
     [AmbientValue(typeof(Size), "0, 0")]
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     public virtual Size MaximumSize
     {
         get { return CommonProperties.GetMaximumSize(this, DefaultMaximumSize); }

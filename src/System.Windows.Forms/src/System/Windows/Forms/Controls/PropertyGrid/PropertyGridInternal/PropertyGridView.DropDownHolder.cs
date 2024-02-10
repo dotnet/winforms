@@ -175,6 +175,7 @@ internal partial class PropertyGridView
 
         public Control? Component => _currentControl;
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         private static InstanceCreationEditor? GetInstanceCreationEditor(PropertyDescriptorGridEntry? entry)
         {
             // First we look on the property type, and if we don't find that we'll go up to the editor type

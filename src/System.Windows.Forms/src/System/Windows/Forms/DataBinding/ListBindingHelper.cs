@@ -572,6 +572,7 @@ public static class ListBindingHelper
         return indexer;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type)
     {
         return TypeDescriptor.GetProperties(GetListItemType(type), BrowsableAttributeList);

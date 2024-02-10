@@ -129,6 +129,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         set => base.AutoScroll = value;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DefaultValue(typeof(Point), "0, 0")]

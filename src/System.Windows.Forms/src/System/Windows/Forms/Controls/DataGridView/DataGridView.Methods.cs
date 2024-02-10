@@ -6977,6 +6977,7 @@ public partial class DataGridView
         return AccessibilityObject.GetChild(objectId - 1);
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal TypeConverter GetCachedTypeConverter(Type type)
     {
         if (_converters.TryGetValue(type, out TypeConverter? converter))

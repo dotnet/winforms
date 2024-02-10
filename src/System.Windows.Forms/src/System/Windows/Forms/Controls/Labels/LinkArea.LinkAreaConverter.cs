@@ -83,6 +83,7 @@ public partial struct LinkArea
         ///  type is string. If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (value is LinkArea pt)

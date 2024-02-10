@@ -116,6 +116,7 @@ public partial class DataObject
                 return files;
             }
 
+            [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
             static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
             {
                 Stream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);

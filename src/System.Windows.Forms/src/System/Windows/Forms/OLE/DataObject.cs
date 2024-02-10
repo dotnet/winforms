@@ -662,6 +662,7 @@ public unsafe partial class DataObject :
         _ => HRESULT.E_FAIL
     };
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
     {
         using MemoryStream stream = new();

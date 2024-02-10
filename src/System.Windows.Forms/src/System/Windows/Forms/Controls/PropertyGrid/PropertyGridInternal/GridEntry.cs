@@ -744,6 +744,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Returns the type converter for this entry.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal virtual TypeConverter TypeConverter
         => _typeConverter ??= TypeDescriptor.GetConverter(PropertyValue ?? PropertyType);
 

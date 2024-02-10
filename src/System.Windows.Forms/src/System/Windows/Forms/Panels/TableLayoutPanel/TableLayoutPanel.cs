@@ -219,6 +219,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
     }
 
     // get the row and column position of the control
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [DefaultValue(typeof(TableLayoutPanelCellPosition), "-1,-1")]  // if change this value, also change the SerializeViaAdd in TableLayoutControlCollectionCodeDomSerializer
     [SRDescription(nameof(SR.GridPanelCellPositionDescr))]
     [SRCategory(nameof(SR.CatLayout))]

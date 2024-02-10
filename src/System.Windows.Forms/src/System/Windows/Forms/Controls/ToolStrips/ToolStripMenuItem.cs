@@ -1112,6 +1112,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     /// <summary> this is to support routing to native menu commands </summary>
     internal void SetNativeTargetMenu(HMENU hmenu) => _nativeMenuHandle = hmenu;
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal static string? ShortcutToText(Keys shortcutKeys, string? shortcutKeyDisplayString)
     {
         if (!string.IsNullOrEmpty(shortcutKeyDisplayString))

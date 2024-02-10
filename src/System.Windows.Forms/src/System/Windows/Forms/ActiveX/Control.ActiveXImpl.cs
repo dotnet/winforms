@@ -970,6 +970,7 @@ public partial class Control
         /// <summary>
         ///  Looks at the property to see if it should be loaded / saved as a resource or  through a type converter.
         /// </summary>
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         private bool IsResourceProperty(PropertyDescriptor property)
         {
             TypeConverter converter = property.Converter;
@@ -1105,6 +1106,7 @@ public partial class Control
                 }
             }
 
+            [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
             bool SetValue(PropertyDescriptor currentProperty, object data)
             {
                 string? value = data as string ?? Convert.ToString(data, CultureInfo.InvariantCulture);
@@ -1467,6 +1469,7 @@ public partial class Control
         }
 
         /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
+        [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
         internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(

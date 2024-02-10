@@ -57,6 +57,7 @@ public class FlatButtonAppearance
     /// <summary>
     ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [Browsable(true)]
     [ApplicableToButton]
     [NotifyParentProperty(true)]
@@ -86,6 +87,7 @@ public class FlatButtonAppearance
     ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
     ///  of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [Browsable(true)]
     [NotifyParentProperty(true)]
     [SRCategory(nameof(SR.CatAppearance))]
@@ -109,6 +111,7 @@ public class FlatButtonAppearance
     ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
     ///  of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [Browsable(true)]
     [ApplicableToButton]
     [NotifyParentProperty(true)]
@@ -133,6 +136,7 @@ public class FlatButtonAppearance
     ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
     ///  area of the button when the mouse cursor is within the bounds of the control.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [Browsable(true)]
     [ApplicableToButton]
     [NotifyParentProperty(true)]

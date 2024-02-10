@@ -1252,6 +1252,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Gets the maximum size the form can be resized to.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatLayout))]
     [Localizable(true)]
     [SRDescription(nameof(SR.FormMaximumSizeDescr))]

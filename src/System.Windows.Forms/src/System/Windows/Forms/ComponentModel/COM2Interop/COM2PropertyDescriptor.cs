@@ -469,6 +469,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
 
     protected sealed override AttributeCollection CreateAttributeCollection() => new(AttributeArray);
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private TypeConverter GetBaseTypeConverter()
     {
         if (PropertyType is null)
@@ -509,6 +510,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
         return localConverter ?? new TypeConverter();
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     private object? GetBaseTypeEditor(Type editorBaseType)
     {
         if (PropertyType is null)

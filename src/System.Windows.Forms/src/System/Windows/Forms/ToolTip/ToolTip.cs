@@ -170,6 +170,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     /// <summary>
     ///  Gets or sets the BackColor for the <see cref="ToolTip"/> control.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRDescription(nameof(SR.ToolTipBackColorDescr))]
     [DefaultValue(typeof(Color), "Info")]
     public Color BackColor
@@ -234,6 +235,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     /// <summary>
     ///  Gets or sets the ForeColor for the <see cref="ToolTip"/> control.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRDescription(nameof(SR.ToolTipForeColorDescr))]
     [DefaultValue(typeof(Color), "InfoText")]
     public Color ForeColor

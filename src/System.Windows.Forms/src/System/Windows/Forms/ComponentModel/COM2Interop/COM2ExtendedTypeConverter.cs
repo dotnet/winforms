@@ -19,6 +19,7 @@ internal class Com2ExtendedTypeConverter : TypeConverter
         _innerConverter = innerConverter;
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     public Com2ExtendedTypeConverter([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type baseType)
     {
         _innerConverter = TypeDescriptor.GetConverter(baseType);

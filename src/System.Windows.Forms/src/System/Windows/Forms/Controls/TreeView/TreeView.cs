@@ -844,6 +844,7 @@ public partial class TreeView : Control
     /// <summary>
     ///  This is the color of the lines that connect the nodes of the TreeView.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewLineColorDescr))]
     [DefaultValue(typeof(Color), "Black")]
