@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Changes the brightness and contrast of an image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed unsafe class BrightnessContrastEffect : Effect
+public unsafe class BrightnessContrastEffect : Effect
 {
     private readonly BrightnessContrastParams _brightnessContrastParams;
 

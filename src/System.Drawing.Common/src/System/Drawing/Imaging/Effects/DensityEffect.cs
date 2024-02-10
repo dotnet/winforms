@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Simulates increasing or decreasing the film density of a photograph.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class DensityEffect : ColorCurveEffect
+public class DensityEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="DensityEffect"/> with the given <paramref name="density"/>.
