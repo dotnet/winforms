@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Allows you to apply a tint to an image.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed unsafe class TintEffect : Effect
+public unsafe class TintEffect : Effect
 {
     private readonly TintParams _tintParams;
 

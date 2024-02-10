@@ -14,7 +14,7 @@ public class EffectsTests
         using Bitmap bitmap = new(10, 10);
         using var graphics = Graphics.FromImage(bitmap);
         graphics.FillRectangle(Brushes.White, new(default, bitmap.Size));
-        using var effect = ColorMatrixEffect.SepiaEffect();
+        using SepiaEffect effect = new();
         bitmap.ApplyEffect(effect);
 
         // We don't really need to check all effect results, just seeing that something changed for one is probably

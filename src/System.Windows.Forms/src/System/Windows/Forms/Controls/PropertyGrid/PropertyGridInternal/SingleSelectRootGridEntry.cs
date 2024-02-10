@@ -27,7 +27,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
         PropertyGridView ownerGridView,
         object target,
         IServiceProvider baseProvider,
-        IDesignerHost host,
+        IDesignerHost? host,
         PropertyTab ownerTab,
         PropertySort sortType)
         : base(ownerGridView.OwnerGrid, parent: null)
