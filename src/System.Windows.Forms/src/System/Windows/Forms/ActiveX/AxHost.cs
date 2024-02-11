@@ -2448,7 +2448,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     //
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetAttributes(Object, Boolean)")]
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "ICustomTypeDescriptor")]
     AttributeCollection ICustomTypeDescriptor.GetAttributes()
     {
         if (!_axState[s_editorRefresh] && HasPropertyPages())
@@ -2530,7 +2530,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEvents(Object, Boolean)")]
+    [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "ICustomTypeDescriptor")]
     EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
         => TypeDescriptor.GetEvents(this, noCustomTypeDesc: true);
 
