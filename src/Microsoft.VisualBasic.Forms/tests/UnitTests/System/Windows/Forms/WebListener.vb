@@ -43,21 +43,21 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Friend Function ProcessRequests() As HttpListener
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
-
-            listener.Prefixes.Add(_downloadFileUrlPrefix)
-            If _userName IsNot Nothing OrElse _password IsNot Nothing Then
-                listener.AuthenticationSchemes = AuthenticationSchemes.Basic
-            End If
+            listener.Prefixes.Add(urlPrefix.Replace(NameOf(HttpListener), testName))
             listener.Start()
             Task.Run(
+                Sub()
+                    End If
+                    listener.Start()
+                    Task.Run(
                 Sub()
                     ' Start the listener to begin listening for requests.
                     Dim response As HttpListenerResponse = Nothing
 
+                    Dim response As HttpListenerResponse = Nothing
                     Try
                         ' Note: GetContext blocks while waiting for a request.
                         Dim context As HttpListenerContext = listener.GetContext()
-                        ' Create the response.
                         response = context.Response
                         Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
                         If context.User?.Identity.IsAuthenticated Then
@@ -77,7 +77,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         response?.Close()
                     End Try
                 End Sub)
-            Return listener
+                    Return listener
         End Function
 
     End Class
