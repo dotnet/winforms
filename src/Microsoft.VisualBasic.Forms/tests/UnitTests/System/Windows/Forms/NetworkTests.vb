@@ -142,7 +142,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 Assert.Throws(Of WebException)(
                         Sub()
-                            Dim address As String = _downloadLargeFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWhereTimeoutNegative))
+                            Dim address As String = _downloadLargeFileUrl.Replace(NameOf(HttpListener), NameOf(DownloadWithExpectedTimeOut))
                             My.Computer.Network.DownloadFile(address,
                                 destinationFilename,
                                 userName:="",

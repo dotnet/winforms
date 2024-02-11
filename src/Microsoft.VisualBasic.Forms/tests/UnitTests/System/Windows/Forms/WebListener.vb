@@ -40,7 +40,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             Dim size As Integer = Integer.Parse(rawUrl)
                             Dim responseString As String = Strings.StrDup(size, "A")
                             ' Simulate network traffic
-                            Threading.Thread.Sleep(2000)
+                            Threading.Thread.Sleep(20)
                             Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
                             response.ContentLength64 = buffer.Length
                             Dim output As Stream = response.OutputStream
