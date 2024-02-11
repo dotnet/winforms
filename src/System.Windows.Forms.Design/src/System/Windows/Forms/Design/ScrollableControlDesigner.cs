@@ -55,7 +55,7 @@ public class ScrollableControlDesigner : ParentControlDesigner
                 // When we scroll, we reposition a control without causing a
                 // property change event.  Therefore, we must tell the
                 // SelectionManager to refresh its glyphs.
-                _selectionManager ??= GetService(typeof(SelectionManager)) as SelectionManager;
+                _selectionManager ??= GetService<SelectionManager>();
 
                 _selectionManager?.Refresh();
 
