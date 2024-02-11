@@ -1,10 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
-
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
@@ -18,6 +14,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <value>A Date whose value is the current date and time.</value>
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+
         Public ReadOnly Property LocalTime() As DateTime
             Get
                 Return DateTime.Now
@@ -34,6 +31,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return DateTime.UtcNow
             End Get
         End Property
+
 #Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
@@ -48,4 +46,5 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
     End Class 'Clock
+
 End Namespace

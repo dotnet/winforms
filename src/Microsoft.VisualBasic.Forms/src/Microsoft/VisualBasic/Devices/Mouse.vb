@@ -1,16 +1,13 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    ''' A wrapper object that acts as a discovery mechanism for finding 
+    ''' A wrapper object that acts as a discovery mechanism for finding
     ''' information about the mouse on your computer such as whether the mouse
     ''' exists, the number of buttons, WheelScrolls details.
     '''
@@ -23,7 +20,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' mouses buttons have been swapped.
         ''' </summary>
         ''' <value>
-        ''' true if the functions of the left and right mouse buttons are swapped. false otherwise. 
+        ''' true if the functions of the left and right mouse buttons are swapped. false otherwise.
         ''' </value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property ButtonsSwapped() As Boolean
@@ -67,4 +64,5 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
     End Class 'Mouse
+
 End Namespace

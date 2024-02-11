@@ -1,17 +1,13 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-Option Infer On
-
 Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Exception for when we launch a single-instance application and it can't connect with the 
+    ''' Exception for when we launch a single-instance application and it can't connect with the
     ''' original instance.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
@@ -39,5 +35,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Sub New(ByVal info As Runtime.Serialization.SerializationInfo, ByVal context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
+
     End Class
+
 End Namespace

@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.ComponentModel
 Imports System.Security.Principal
 
@@ -65,7 +62,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' The principal representing the current user.
         ''' </summary>
         ''' <value>An IPrincipal representing the current user</value>
-        ''' <remarks> 
+        ''' <remarks>
         ''' This should be overridden by derived classes that don't get the current
         ''' user from the current thread
         ''' </remarks>
@@ -81,4 +78,3 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Class 'User
 
 End Namespace
-

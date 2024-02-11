@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
@@ -221,6 +218,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             End If
             MyBase.Dispose(disposing)
         End Sub
+
         Friend WithEvents LabelInfo As Label
         Friend WithEvents ProgressBarWork As ProgressBar
         Friend WithEvents ButtonCloseDialog As Button
@@ -274,4 +272,5 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 #End Region
 
     End Class
+
 End Namespace
