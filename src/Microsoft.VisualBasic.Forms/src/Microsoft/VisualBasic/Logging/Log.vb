@@ -161,7 +161,7 @@ Namespace Microsoft.VisualBasic.Logging
                         _listenerAttributes = Attributes
                     End If
 
-                    ' TODO: This is a tempory fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
+                    ' TODO: This is a temporary fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
                     Return False
                 End Get
             End Property
@@ -232,7 +232,7 @@ Namespace Microsoft.VisualBasic.Logging
         ' Names of TraceSources
         Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
 
-        Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appconfig
+        Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appConfig
     End Class
 
 End Namespace
