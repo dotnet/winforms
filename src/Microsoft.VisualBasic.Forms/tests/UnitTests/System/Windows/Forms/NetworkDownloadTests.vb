@@ -3,7 +3,6 @@
 
 Imports System.IO
 Imports System.Net
-Imports System.Runtime.CompilerServices
 
 Imports Xunit
 
@@ -11,33 +10,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Partial Public Class NetworkTests
 
-        ' The following URL MUST be replaced with a local URL
-        Private Const UploadFileUrl As String = "ftp://speedtest.tele2.net/upload/testing.txt"
-
-        Private ReadOnly _baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
         Private ReadOnly _downloadFileSize As Integer = 18135
         Private ReadOnly _downloadLargeFileSize As Integer = 104857600
-
-        ''' <summary>
-        ''' If size >= 0 then create the file with size length
-        ''' The file will contain the letters A-Z repeating as needed.
-        ''' </summary>
-        ''' <param name="tmpFilePath">Full path to working directory</param>
-        ''' <param name="size">File size to be created</param>
-        ''' <returns></returns>
-        Private Shared Function CreateTempFile(tmpFilePath As String, Optional size As Integer = -1) As String
-            Dim filename As String = Path.Combine(tmpFilePath, "testing.txt")
-            If size >= 0 Then
-                Using destinationStream As FileStream = File.Create(filename)
-                    For i As Long = 0 To size - 1
-                        destinationStream.WriteByte(CByte((AscW("A") + (i Mod 26))))
-                    Next
-                    destinationStream.Flush()
-                    destinationStream.Close()
-                End Using
-            End If
-            Return filename
-        End Function
 
         Private Shared Function ValidateDownload(tmpFilePath As String, destinationFilename As String) As Long
             Assert.True(Directory.Exists(tmpFilePath))
@@ -53,18 +27,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Directory.Delete(tmpFilePath, True)
             End If
         End Sub
-
-        Private Sub CleanupTempDirectory(path As String)
-            Directory.Delete(path, True)
-        End Sub
-
-        Private Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing) As String
-
-            Directory.CreateDirectory(_baseTempPath)
-            Dim folder As String = Path.Combine(_baseTempPath, $"{memberName}Test")
-            Directory.CreateDirectory(folder)
-            Return folder
-        End Function
 
         <WinFormsFact>
         Public Sub DownloadWhereFileExistsNoOverwrite()
@@ -318,112 +280,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             Finally
                 CleanUp(listener, tmpFilePath)
-            End Try
-        End Sub
-
-        <WinFormsFact(Skip:="Until UploadAsync Implemented")>
-        Public Sub UploadFilenameUrl()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, size:=1)
-            My.Computer.Network.UploadFile(sourceFilename,
-                address:=UploadFileUrl)
-            CleanupTempDirectory(tmpFilePath)
-        End Sub
-
-        <WinFormsFact(Skip:="Until UploadAsync Implemented")>
-        Public Sub UploadWhereTimeoutNegative()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, size:=&H100_0000)
-            Assert.Throws(Of ArgumentException)(
-                Sub()
-                    My.Computer.Network.UploadFile(sourceFilename,
-                        address:=UploadFileUrl,
-                        userName:="anonymous",
-                        password:="anonymous",
-                        showUI:=True,
-                        connectionTimeout:=-1)
-                End Sub)
-            CleanupTempDirectory(tmpFilePath)
-        End Sub
-
-        <WinFormsFact(Skip:="Issue #10706")>
-        Public Sub UploadWithExpectedTimeOut()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, &H10_0000)
-            Try
-
-                Assert.Throws(Of WebException)(
-                    Sub()
-                        My.Computer.Network.UploadFile(sourceFilename,
-                            address:=UploadFileUrl,
-                            userName:="anonymous",
-                            password:="anonymous",
-                            showUI:=True,
-                            connectionTimeout:=1)
-                    End Sub)
-            Finally
-                CleanupTempDirectory(tmpFilePath)
-            End Try
-        End Sub
-
-        <WinFormsFact(Skip:="Until UploadAsync Implemented")>
-        Public Sub UploadWithNothingPassword()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
-            Try
-                My.Computer.Network.UploadFile(sourceFilename,
-                    address:=UploadFileUrl,
-                    userName:="anonymous",
-                    password:=Nothing)
-            Finally
-                CleanupTempDirectory(tmpFilePath)
-            End Try
-        End Sub
-
-        <WinFormsFact(Skip:="Until UploadAsync Implemented")>
-        Public Sub UploadWithNothingSourceFile()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
-            Try
-                Assert.Throws(Of ArgumentNullException)(
-                    Sub()
-                        My.Computer.Network.UploadFile(sourceFileName:=Nothing,
-                            address:=UploadFileUrl,
-                            userName:="anonymous",
-                            password:="anonymous")
-                    End Sub)
-            Finally
-                CleanupTempDirectory(tmpFilePath)
-            End Try
-        End Sub
-
-        <WinFormsFact(Skip:="Until UploadAsync Implemented")>
-        Public Sub UploadWithNothingUri()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
-            Assert.Throws(Of ArgumentNullException)(
-                Sub()
-                    My.Computer.Network.UploadFile(sourceFilename,
-                        address:=CType(Nothing, Uri),
-                        userName:="anonymous",
-                        password:="anonymous")
-                End Sub)
-            CleanupTempDirectory(tmpFilePath)
-        End Sub
-
-        <WinFormsFact(Skip:="Until UploadAsync Implemented")>
-        Public Sub UploadWithUI()
-            Dim tmpFilePath As String = CreateTempDirectory()
-            Dim sourceFilename As String = CreateTempFile(tmpFilePath, 1)
-            Try
-                My.Computer.Network.UploadFile(sourceFilename,
-                    address:=UploadFileUrl,
-                    userName:="anonymous",
-                    password:="anonymous",
-                    showUI:=True,
-                    connectionTimeout:=100000)
-            Finally
-                CleanupTempDirectory(tmpFilePath)
             End Try
         End Sub
 
