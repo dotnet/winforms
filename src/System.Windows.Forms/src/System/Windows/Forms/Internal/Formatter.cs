@@ -82,6 +82,7 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException is no suitable conversion can be found
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Type)")]
     private static object? FormatObjectInternal(
         object? value,
         Type targetType,
@@ -263,6 +264,7 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException if no suitable conversion can be found
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Type)")]
     private static object? ParseObjectInternal(
         object? value,
         Type targetType,

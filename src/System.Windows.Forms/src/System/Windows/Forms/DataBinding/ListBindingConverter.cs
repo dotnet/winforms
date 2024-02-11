@@ -111,6 +111,7 @@ public class ListBindingConverter : TypeConverter
     ///  Gets the best matching ctor for a given binding and fills it out, based on the
     ///  state of the Binding and the optimal ctor.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     private static InstanceDescriptor GetInstanceDescriptorFromValues(Binding b)
     {
         // The BindingFormattingDialog turns on Binding::FormattingEnabled property.

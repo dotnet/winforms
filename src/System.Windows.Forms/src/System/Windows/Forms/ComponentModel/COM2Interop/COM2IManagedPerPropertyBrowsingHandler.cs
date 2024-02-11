@@ -43,6 +43,7 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
     internal static Attribute[] GetComponentAttributes(IVSMDPerPropertyBrowsing* propertyBrowsing, int dispid)
     {
         uint attributeCount = 0;

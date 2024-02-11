@@ -15,6 +15,7 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
 {
     private static readonly PropertyDescriptorComparer s_propertyComparer = new();
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.PropertyGridInternal.SingleSelectRootGridEntry.SingleSelectRootGridEntry(PropertyGridView, Object, IServiceProvider, IDesignerHost, PropertyTab, PropertySort)")]
     internal MultiSelectRootGridEntry(
         PropertyGridView view,
         object[] target,
@@ -28,6 +29,7 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
 
     internal override bool ForceReadOnly
     {
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetAttributes(Object)")]
         get
         {
             if (!_forceReadOnlyChecked)

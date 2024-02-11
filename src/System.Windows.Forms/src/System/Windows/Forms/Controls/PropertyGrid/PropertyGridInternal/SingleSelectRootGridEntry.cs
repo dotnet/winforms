@@ -23,6 +23,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     private IComponentChangeService? _changeService;
     protected bool _forceReadOnlyChecked;
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetClassName(Object)")]
     internal SingleSelectRootGridEntry(
         PropertyGridView ownerGridView,
         object target,
@@ -119,6 +120,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 
     internal override bool ForceReadOnly
     {
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetAttributes(Object)")]
         get
         {
             if (!_forceReadOnlyChecked)
@@ -175,6 +177,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     public override object PropertyValue
     {
         get => Target;
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetClassName(Object)")]
         set
         {
             object old = Target;

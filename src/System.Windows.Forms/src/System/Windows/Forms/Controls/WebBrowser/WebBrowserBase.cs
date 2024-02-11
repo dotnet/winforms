@@ -740,6 +740,7 @@ public unsafe partial class WebBrowserBase : Control
         _axEditMode = em;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     internal void SetSelectionStyle(WebBrowserHelper.SelectionStyle selectionStyle)
     {
         if (DesignMode)
@@ -1062,6 +1063,7 @@ public unsafe partial class WebBrowserBase : Control
     //
     // We need to do special stuff (convert window messages to interface calls)
     // during design time when selection changes.
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     private void OnNewSelection(object? sender, EventArgs e)
     {
         if (DesignMode)

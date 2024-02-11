@@ -711,6 +711,7 @@ public class BindingSource : Component,
     ///  Decides whether this would be a good time to blow away the data member field, since it
     ///  might not refer to a valid data source property any more.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ListBindingHelper.GetListItemProperties(Object)")]
     private bool IsDataMemberValid()
     {
         // Don't mess with things during initialization because the data
@@ -1152,6 +1153,7 @@ public class BindingSource : Component,
     ///  Binds the BindingSource to the specified list, rewiring internal event handlers,
     ///  firing any appropriate external events, and updating all relevant field members.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ListBindingHelper.GetListItemProperties(Object)")]
     private void SetList(IList list, bool metaDataChanged, bool applySortAndFilter)
     {
         if (list is null)

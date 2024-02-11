@@ -106,6 +106,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
     ///  This method attempts to copy the given value so unique values are always passed to each object.
     ///  If the value cannot be copied the original value will be returned.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Object)")]
     private static object? CopyValue(object? value)
     {
         // Null is always OK.

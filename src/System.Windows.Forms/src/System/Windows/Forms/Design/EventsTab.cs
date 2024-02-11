@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -30,6 +30,7 @@ public class EventsTab : PropertyTab
     private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
         => _currentHost = e.NewDesigner;
 
+    [RequiresUnreferencedCode("")]
     public override PropertyDescriptor? GetDefaultProperty(object obj)
     {
         if (GetEventBindingService(obj, context: null) is not IEventBindingService eventPropertyService)
@@ -94,6 +95,7 @@ public class EventsTab : PropertyTab
     ///  The <see cref="EventsTab"/> uses <see cref="IEventBindingService.GetEventProperties(EventDescriptorCollection)"/>
     ///  to get <paramref name="component"/> property descriptors from <see cref="TypeDescriptor.GetEvents(object)"/>.
     /// </devdoc>
+    [RequiresUnreferencedCode("")]
     public override PropertyDescriptorCollection GetProperties(
         ITypeDescriptorContext? context,
         object component,

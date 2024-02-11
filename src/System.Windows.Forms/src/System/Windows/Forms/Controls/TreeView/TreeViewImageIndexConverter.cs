@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -72,6 +72,7 @@ public class TreeViewImageIndexConverter : ImageIndexConverter
     ///  will return null if the data type does not support a
     ///  standard set of values.
     /// </summary>
+    [RequiresUnreferencedCode("")]
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
         if (context is not null && context.Instance is not null)

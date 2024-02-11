@@ -8,6 +8,7 @@ namespace System.Windows.Forms;
 // Miscellaneous utilities
 internal static class ImageListUtils
 {
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     public static PropertyDescriptor? GetImageListProperty(PropertyDescriptor? currentComponent, ref object instance)
     {
         // Multiple selection is not supported.

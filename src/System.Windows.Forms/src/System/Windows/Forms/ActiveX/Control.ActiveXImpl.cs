@@ -1034,6 +1034,7 @@ public partial class Control
         }
 
         /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object, Attribute[])")]
         internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
@@ -1418,6 +1419,7 @@ public partial class Control
             return HRESULT.S_OK;
 
             // Get the default COM events interface declared on a .NET class.
+            [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String, Boolean)")]
             static Type? GetDefaultEventsInterface(Type controlType)
             {
                 Type? eventInterface = null;

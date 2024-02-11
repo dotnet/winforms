@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -345,6 +345,7 @@ public abstract class ListControl : Control
     [DisallowNull]
     public object? SelectedValue
     {
+        [RequiresUnreferencedCode("")]
         get
         {
             if (SelectedIndex != -1 && _dataManager is not null)
@@ -414,11 +415,13 @@ public abstract class ListControl : Control
         }
     }
 
+    [RequiresUnreferencedCode("")]
     protected object? FilterItemOnProperty(object? item)
     {
         return FilterItemOnProperty(item, _displayMember.BindingField);
     }
 
+    [RequiresUnreferencedCode("")]
     protected object? FilterItemOnProperty(object? item, string? field)
     {
         if (item is not null && !string.IsNullOrEmpty(field))

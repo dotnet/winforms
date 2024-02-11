@@ -196,6 +196,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.AttributeCollection.Contains(Attribute)")]
     protected override void NotifyParentsOfChanges(GridEntry entry)
     {
         // Now see if we need to notify the parent(s) up the chain.

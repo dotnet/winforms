@@ -2002,6 +2002,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEditor(Object, Type)")]
     private bool EnablePropPageButton(object? obj)
     {
         if (_viewPropertyPagesButton is null)
@@ -2374,6 +2375,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     /// <summary>
     ///  Called when a property on an Ole32 Object changes.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetClassName(Object)")]
     HRESULT IPropertyNotifySink.Interface.OnChanged(int dispID)
     {
         // We don't want the grid's own property sets doing this, but if we're getting
@@ -2951,6 +2953,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         ((PropertyValueChangedEventHandler?)Events[s_propertyValueChangedEvent])?.Invoke(this, e);
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEditor(Type, Type)")]
     internal void OnPropertyValueSet(GridItem changedItem, object? oldValue)
     {
         OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
@@ -3129,6 +3132,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         OnButtonClick(sender, e);
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEditor(Object, Type)")]
     private void OnViewPropertyPagesButtonClick(object? sender, EventArgs e)
     {
         if (_viewPropertyPagesButton!.Enabled &&

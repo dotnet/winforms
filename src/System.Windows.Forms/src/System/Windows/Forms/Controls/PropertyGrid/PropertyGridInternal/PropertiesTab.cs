@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -40,6 +40,7 @@ public class PropertiesTab : PropertyTab
     public override PropertyDescriptorCollection? GetProperties(object component, Attribute[]? attributes)
         => GetProperties(context: null, component, attributes);
 
+    [RequiresUnreferencedCode("")]
     public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object component, Attribute[]? attributes)
     {
         attributes ??= new Attribute[] { BrowsableAttribute.Yes };

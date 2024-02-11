@@ -97,6 +97,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     [UnconditionalSuppressMessage("Trimming", "IL2026:", Justification = "<Pending>")]
     internal static TypeConverter GetIComponentConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEditor(Type, Type)")]
     internal static object? GetEditor(object component, Type baseEditorType)
         => TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
 
@@ -326,6 +327,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     ///  Looks at value's type and creates an editor based on that. We use this to decide which editor to use
     ///  for a generic variant.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Type)")]
     internal static void ResolveVariantTypeConverterAndTypeEditor(
         object? propertyValue,
         ref TypeConverter currentConverter,

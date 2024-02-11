@@ -33,6 +33,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
     public override object? PropertyValue
     {
         get => base.PropertyValue;
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeConverter.GetProperties(ITypeDescriptorContext, Object)")]
         set
         {
             // Create a new instance of the value and set it into the parent grid entry.

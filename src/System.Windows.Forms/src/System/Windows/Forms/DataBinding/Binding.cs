@@ -468,6 +468,7 @@ public partial class Binding
         CheckBinding();
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetAttributes(Object)")]
     private void CheckBinding()
     {
         _bindToObject.CheckBinding();
@@ -668,6 +669,7 @@ public partial class Binding
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.PropertyDescriptor.Converter")]
     private object? ParseObject(object? value)
     {
         Type? type = _bindToObject.BindToType;
@@ -736,6 +738,7 @@ public partial class Binding
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.PropertyDescriptor.Converter")]
     private object? FormatObject(object? value)
     {
         // We will not format the object when the control is in design time.

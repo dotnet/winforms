@@ -719,6 +719,7 @@ internal partial class CommonProperties
 
     internal static readonly TraceSwitch PreferredSize = new("PreferredSize", "Debug preferred size assertion");
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     internal static string Debug_GetChangedProperties(IArrangedElement element)
     {
         string diff = string.Empty;
@@ -759,6 +760,7 @@ internal partial class CommonProperties
         element.Properties.SetObject(_lastKnownStateProperty, null);
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     public static Dictionary<string, string?> Debug_GetCurrentPropertyState(object obj)
     {
         Dictionary<string, string?> propertyHash = new();

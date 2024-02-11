@@ -21,6 +21,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
     public Assembly? GetAssembly(AssemblyName name) => GetAssembly(name, true);
 
     [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Handles single file case")]
+    [RequiresUnreferencedCode("Calls System.Reflection.Assembly.LoadFrom(String)")]
     public Assembly? GetAssembly(AssemblyName name, bool throwOnError)
     {
         _cachedAssemblies ??= new();
@@ -71,6 +72,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 
     public Type? GetType(string name, bool throwOnError) => GetType(name, throwOnError, false);
 
+    [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String, Boolean, Boolean)")]
     public Type? GetType(string name, bool throwOnError, bool ignoreCase)
     {
         // Check type cache first

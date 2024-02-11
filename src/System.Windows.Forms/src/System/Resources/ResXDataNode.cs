@@ -217,6 +217,7 @@ public sealed class ResXDataNode : ISerializable
         return raw;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Type)")]
     private void FillDataNodeInfoFromObject(DataNodeInfo nodeInfo, object? value)
     {
         if (value is CultureInfo cultureInfo)
@@ -326,6 +327,7 @@ public sealed class ResXDataNode : ISerializable
 #pragma warning restore SYSLIB0011
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Type)")]
     private object? GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
     {
         string? mimeTypeName = dataNodeInfo.MimeType;
@@ -399,6 +401,7 @@ public sealed class ResXDataNode : ISerializable
             return type;
         }
 
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Type)")]
         object? ResolveMimeType(string mimeTypeName)
         {
             if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)

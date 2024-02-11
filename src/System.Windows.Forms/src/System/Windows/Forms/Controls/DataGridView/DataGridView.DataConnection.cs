@@ -268,6 +268,7 @@ public partial class DataGridView
             }
         }
 
+        [RequiresUnreferencedCode("Calls System.ComponentModel.PropertyDescriptor.Converter")]
         public TypeConverter BoundColumnConverter(int boundColumnIndex)
         {
             Debug.Assert(_props is not null);

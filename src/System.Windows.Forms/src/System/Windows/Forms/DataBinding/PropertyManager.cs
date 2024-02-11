@@ -24,6 +24,7 @@ public class PropertyManager : BindingManagerBase
         OnCurrentChanged(EventArgs.Empty);
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     private protected override void SetDataSource(object? dataSource)
     {
         if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
@@ -67,6 +68,7 @@ public class PropertyManager : BindingManagerBase
 
     internal override Type BindType => _dataSource!.GetType();
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetClassName(Object)")]
     internal override string GetListName()
     {
         return $"{TypeDescriptor.GetClassName(_dataSource!)}.{_propName}";

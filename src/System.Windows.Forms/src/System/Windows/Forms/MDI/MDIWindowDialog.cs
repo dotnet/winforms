@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+
 namespace System.Windows.Forms;
 
 internal sealed partial class MdiWindowDialog : Form
@@ -72,6 +73,7 @@ internal sealed partial class MdiWindowDialog : Form
     [MemberNotNull(nameof(_okButton))]
     [MemberNotNull(nameof(_cancelButton))]
     [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
+    [RequiresUnreferencedCode("Calls System.ComponentModel.ComponentResourceManager.ApplyResources(Object, String)")]
     private void InitializeComponent()
     {
         System.ComponentModel.ComponentResourceManager resources = new(typeof(MdiWindowDialog));

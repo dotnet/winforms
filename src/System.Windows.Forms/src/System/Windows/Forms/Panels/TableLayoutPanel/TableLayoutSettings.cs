@@ -39,6 +39,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Object)")]
     private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context)
         : this()
     {
@@ -465,6 +466,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
     #endregion
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetConverter(Object)")]
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(this);
@@ -476,6 +478,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     internal List<ControlInformation> GetControlsInformation()
     {
         if (IsStub)

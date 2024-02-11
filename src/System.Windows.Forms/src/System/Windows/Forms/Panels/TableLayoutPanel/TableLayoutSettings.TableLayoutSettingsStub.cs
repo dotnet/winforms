@@ -26,6 +26,7 @@ public sealed partial class TableLayoutSettings
         ///  as a result of calling this function. We hand as much over to the other settings
         ///  so we don't have to reallocate anything
         /// </summary>
+        [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
         internal void ApplySettings(TableLayoutSettings settings)
         {
             // apply row,column,rowspan,colspan

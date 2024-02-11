@@ -751,6 +751,7 @@ public partial class PrintPreviewDialog : Form
     [MemberNotNull(nameof(_pageCounterItem))]
     [MemberNotNull(nameof(_pageCounter))]
     [MemberNotNull(nameof(_pageToolStripLabel))]
+    [RequiresUnreferencedCode("Calls System.ComponentModel.ComponentResourceManager.ApplyResources(Object, String)")]
     private void InitForm()
     {
         ComponentResourceManager resources = new(typeof(PrintPreviewDialog));

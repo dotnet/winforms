@@ -1148,6 +1148,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             : string.Empty;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     internal object? GetItemDisplayValue(object item)
     {
         Debug.Assert(item is not null);
@@ -1224,6 +1225,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         return items;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     internal object? GetItemValue(object item)
     {
         bool valueSet = false;
@@ -1551,6 +1553,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         return item;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     private object? ItemFromComboBoxItems(int rowIndex, string field, object key)
     {
         Debug.Assert(!string.IsNullOrEmpty(field));

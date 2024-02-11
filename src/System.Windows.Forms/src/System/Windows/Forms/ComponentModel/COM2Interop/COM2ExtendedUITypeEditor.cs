@@ -17,6 +17,7 @@ internal class Com2ExtendedUITypeEditor : UITypeEditor
         _innerEditor = baseTypeEditor;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEditor(Type, Type)")]
     public Com2ExtendedUITypeEditor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type baseType)
     {
         _innerEditor = (UITypeEditor?)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));

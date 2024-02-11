@@ -980,6 +980,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     private void OnNewSelection(object? sender, EventArgs e)
     {
         if (IsUserMode() || !Site.TryGetService(out ISelectionService? selectionService))
@@ -2398,6 +2399,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         return null;
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object)")]
     private void SetSelectionStyle(int selectionStyle)
     {
         if (IsUserMode())
@@ -2446,6 +2448,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     //
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetAttributes(Object, Boolean)")]
     AttributeCollection ICustomTypeDescriptor.GetAttributes()
     {
         if (!_axState[s_editorRefresh] && HasPropertyPages())
@@ -2527,6 +2530,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetEvents(Object, Boolean)")]
     EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
         => TypeDescriptor.GetEvents(this, noCustomTypeDesc: true);
 
@@ -2565,6 +2569,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object, Attribute[], Boolean)")]
     private PropertyDescriptorCollection FillProperties(Attribute[]? attributes)
     {
         if (RefreshAllProperties)

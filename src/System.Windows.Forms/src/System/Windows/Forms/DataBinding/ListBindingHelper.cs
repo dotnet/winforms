@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -124,6 +124,7 @@ public static class ListBindingHelper
         return name;
     }
 
+    [RequiresUnreferencedCode("")]
     public static PropertyDescriptorCollection GetListItemProperties(object? list)
     {
         PropertyDescriptorCollection pdc;
@@ -452,6 +453,7 @@ public static class ListBindingHelper
         return (instance is not null) ? instance.GetType() : typeof(object);
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Object, Attribute[])")]
     private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object? target, PropertyDescriptor[] listAccessors, int startIndex)
     {
         Debug.Assert(listAccessors is not null);
@@ -578,6 +580,7 @@ public static class ListBindingHelper
         return TypeDescriptor.GetProperties(GetListItemType(type), BrowsableAttributeList);
     }
 
+    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.GetProperties(Type, Attribute[])")]
     private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable enumerable)
     {
         PropertyDescriptorCollection? pdc = null;

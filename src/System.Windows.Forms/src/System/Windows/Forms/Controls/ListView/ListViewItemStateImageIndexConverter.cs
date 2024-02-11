@@ -39,6 +39,7 @@ public class ListViewItemStateImageIndexConverter : ImageIndexConverter
     ///  this collection contains a single object with a value of -1. This method returns<see langword="null" />
     ///  if the data type doesn't support a standard set of values.
     /// </returns>
+    [RequiresUnreferencedCode("")]
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
         if (context is not null && context.Instance is not null)
