@@ -33,6 +33,7 @@ public static class ListBindingHelper
         }
     }
 
+    [RequiresUnreferencedCode("")]
     public static object? GetList(object? dataSource, string? dataMember)
     {
         //
@@ -158,6 +159,7 @@ public static class ListBindingHelper
         return pdc;
     }
 
+    [RequiresUnreferencedCode("")]
     public static PropertyDescriptorCollection GetListItemProperties(object? list, PropertyDescriptor[]? listAccessors)
     {
         if (listAccessors is null || listAccessors.Length == 0)
@@ -183,6 +185,7 @@ public static class ListBindingHelper
         return GetListItemPropertiesByInstance(target, listAccessors, 0);
     }
 
+    [RequiresUnreferencedCode("")]
     public static PropertyDescriptorCollection GetListItemProperties(object? dataSource, string? dataMember, PropertyDescriptor[]? listAccessors)
     {
         dataSource = GetList(dataSource);
@@ -282,6 +285,7 @@ public static class ListBindingHelper
         return instancedObject;
     }
 
+    [RequiresUnreferencedCode("")]
     public static Type GetListItemType(object? dataSource, string? dataMember)
     {
         // No data source
@@ -354,6 +358,7 @@ public static class ListBindingHelper
         return name;
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ListBindingHelper.GetListItemProperties(Object)")]
     private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors, int startIndex)
     {
         PropertyDescriptorCollection? pdc = null;
@@ -389,6 +394,7 @@ public static class ListBindingHelper
         return pdc;
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ListBindingHelper.GetListItemPropertiesByEnumerable(IEnumerable)")]
     private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable iEnumerable, PropertyDescriptor[] listAccessors, int startIndex)
     {
         PropertyDescriptorCollection? pdc = null;

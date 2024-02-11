@@ -748,6 +748,7 @@ internal partial class CommonProperties
         return diff;
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Layout.CommonProperties.Debug_GetCurrentPropertyState(Object)")]
     internal static void Debug_SnapProperties(IArrangedElement element)
     {
         // DEBUG - store off the old state so we can figure out what has changed in a GPS assert

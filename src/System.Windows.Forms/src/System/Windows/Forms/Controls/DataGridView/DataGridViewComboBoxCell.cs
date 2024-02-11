@@ -1140,6 +1140,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.DataGridViewComboBoxCell.GetItemDisplayValue(Object)")]
     internal string? GetItemDisplayText(object item)
     {
         object? displayValue = GetItemDisplayValue(item);
@@ -1643,6 +1644,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     ///  ComboBox datasource. We then use DisplayMember to get the
     ///  text to display.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.DataGridViewComboBoxCell.ItemFromComboBoxItems(Int32, String, Object)")]
     private bool LookupDisplayValue(int rowIndex, object value, out object? displayValue)
     {
         Debug.Assert(value is not null);
@@ -1681,6 +1683,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     ///  We use the display value and DisplayMember to look up the item in the
     ///  ComboBox datasource. We then use ValueMember to get the value.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.DataGridViewComboBoxCell.ItemFromComboBoxItems(Int32, String, Object)")]
     private bool LookupValue(object? formattedValue, out object? value)
     {
         if (formattedValue is null)

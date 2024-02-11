@@ -235,6 +235,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         return properties;
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ComponentModel.Com2Interop.Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes(IVSMDPerPropertyBrowsing*, Int32)")]
     internal static AttributeCollection GetAttributes(object component)
     {
         List<Attribute> attributes = [];

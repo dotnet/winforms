@@ -1461,6 +1461,7 @@ public partial class DataGridView
             }
         }
 
+        [RequiresUnreferencedCode("Calls System.Windows.Forms.DataGridView.DataGridViewDataConnection.BoundColumnConverter(Int32)")]
         public bool PushValue(int boundColumnIndex, int columnIndex, int rowIndex, object? value)
         {
             try

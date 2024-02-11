@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -510,6 +510,7 @@ public class BindingSource : Component,
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BindingSource.IsDataMemberValid()")]
     private void ClearInvalidDataMember()
     {
         if (!IsDataMemberValid())
@@ -873,6 +874,7 @@ public class BindingSource : Component,
     ///  In either case, we only have to change lists, not metadata, since we can assume
     ///  that the new list has the same item properties as the old list.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BindingSource.SetList(IList, Boolean, Boolean)")]
     private void ParentCurrencyManager_CurrentItemChanged(object? sender, EventArgs e)
     {
         if (_initializing)
@@ -1073,6 +1075,7 @@ public class BindingSource : Component,
     ///  Binds the BindingSource to the list specified by its DataSource and DataMember
     ///  properties.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ListBindingHelper.GetList(Object, String)")]
     private void ResetList()
     {
         // Don't bind during initialization, since the data source may not have been initialized yet.
@@ -1471,6 +1474,7 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual object SyncRoot => List.SyncRoot;
 
+    [RequiresUnreferencedCode("")]
     public virtual int Add(object? value)
     {
         int ret = -1;
@@ -1557,6 +1561,7 @@ public class BindingSource : Component,
     public virtual string GetListName(PropertyDescriptor[]? listAccessors) =>
         ListBindingHelper.GetListName(List, listAccessors);
 
+    [RequiresUnreferencedCode("")]
     public virtual PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
     {
         object? ds = ListBindingHelper.GetList(_dataSource);

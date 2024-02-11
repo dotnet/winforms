@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -60,6 +60,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
         return base.ConvertFrom(context, culture, value);
     }
 
+    [RequiresUnreferencedCode("")]
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
     {
         if (value is TableLayoutSettings tableLayoutSettings && (destinationType == typeof(string)))

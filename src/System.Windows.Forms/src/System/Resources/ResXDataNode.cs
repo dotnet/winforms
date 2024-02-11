@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -464,6 +464,7 @@ public sealed class ResXDataNode : ISerializable
         return result;
     }
 
+    [RequiresUnreferencedCode("Calls System.Resources.ResXDataNode.FillDataNodeInfoFromObject(DataNodeInfo, Object)")]
     internal DataNodeInfo GetDataNodeInfo()
     {
         bool shouldSerialize = true;
@@ -517,6 +518,7 @@ public sealed class ResXDataNode : ISerializable
     /// <summary>
     ///  Retrieves the type name for the value by using the specified type resolution service
     /// </summary>
+    [RequiresUnreferencedCode("")]
     public string? GetValueTypeName(ITypeResolutionService? typeResolver)
     {
         // The type name here is always a fully qualified name.

@@ -675,6 +675,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
     ///   the parameter will be passed in.
     ///  </para>
     /// </remarks>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ComponentModel.Com2Interop.ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(Object, ref TypeConverter, Type, ref Object)")]
     public void GetTypeConverterAndTypeEditor([NotNull] ref TypeConverter? typeConverter, Type editorBaseType, ref object? typeEditor)
     {
         // Get the base editor and converter, attributes first.

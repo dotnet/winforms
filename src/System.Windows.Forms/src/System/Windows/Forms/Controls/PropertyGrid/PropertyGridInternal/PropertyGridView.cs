@@ -4756,6 +4756,7 @@ internal sealed partial class PropertyGridView :
         return CommitValue(currentEntry, value);
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.PropertyGrid.OnPropertyValueSet(GridItem, Object)")]
     internal bool CommitValue(GridEntry entry, object value, bool closeDropDown = true)
     {
         CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({value?.ToString() ?? "null"})");

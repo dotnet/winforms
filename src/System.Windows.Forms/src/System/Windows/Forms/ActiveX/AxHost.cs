@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
@@ -2422,6 +2422,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [RequiresUnreferencedCode("")]
     public void InvokeEditMode()
     {
         Debug.Assert((_flags & AxFlags.PreventEditMode) == 0, "edit mode should have been disabled");
@@ -2740,6 +2741,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         return this;
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.AxHost.FillProperties(Attribute[])")]
     private AxPropertyDescriptor? GetPropertyDescriptorFromDispid(int dispid)
     {
         Debug.Assert(dispid != PInvokeCore.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");

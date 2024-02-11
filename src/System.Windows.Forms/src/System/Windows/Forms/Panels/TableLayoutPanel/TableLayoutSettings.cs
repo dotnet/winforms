@@ -214,6 +214,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.TableLayoutSettings.TableLayoutSettingsStub.ApplySettings(TableLayoutSettings)")]
     internal void ApplySettings(TableLayoutSettings settings)
     {
         if (settings.IsStub)

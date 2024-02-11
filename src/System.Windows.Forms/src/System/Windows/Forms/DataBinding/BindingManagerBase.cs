@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -73,6 +73,7 @@ public abstract class BindingManagerBase
 
     public virtual PropertyDescriptorCollection GetItemProperties() => GetItemProperties(listAccessors: null);
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.BindingManagerBase.GetItemProperties(Type, Int32, ArrayList, ArrayList)")]
     protected internal virtual PropertyDescriptorCollection? GetItemProperties(ArrayList dataSources, ArrayList listAccessors)
     {
         IList? list = null;

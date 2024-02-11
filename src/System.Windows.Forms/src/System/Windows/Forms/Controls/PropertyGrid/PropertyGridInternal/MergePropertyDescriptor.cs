@@ -310,6 +310,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.PropertyGridInternal.MergePropertyDescriptor.CopyValue(Object)")]
     public override void SetValue(object? component, object? value)
     {
         Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");

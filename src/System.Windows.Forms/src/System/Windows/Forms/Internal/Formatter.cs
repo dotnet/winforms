@@ -25,6 +25,7 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Formatter.FormatObjectInternal(Object, Type, TypeConverter, TypeConverter, String, IFormatProvider, Object)")]
     public static object? FormatObject(
         object? value,
         Type targetType,
@@ -213,6 +214,7 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Formatter.ParseObjectInternal(Object, Type, Type, TypeConverter, TypeConverter, IFormatProvider, Object)")]
     public static object? ParseObject(
         object? value,
         Type targetType,

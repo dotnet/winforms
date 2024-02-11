@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -133,6 +133,7 @@ public partial class Binding
     {
     }
 
+    [RequiresUnreferencedCode("")]
     public Binding(
         string propertyName,
         object? dataSource,
@@ -188,6 +189,7 @@ public partial class Binding
     /// </summary>
     internal bool ComponentCreated => IsComponentCreated(BindableComponent);
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Binding.CheckBinding()")]
     private void FormLoaded(object? sender, EventArgs e)
     {
         Debug.Assert(sender == BindableComponent, "which other control can send us the Load event?");
@@ -195,6 +197,7 @@ public partial class Binding
         CheckBinding();
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Binding.CheckBinding()")]
     internal void SetBindableComponent(IBindableComponent? value)
     {
         if (BindableComponent != value)
@@ -237,6 +240,7 @@ public partial class Binding
     public BindingManagerBase? BindingManagerBase
     {
         get => _bindingManagerBase;
+        [RequiresUnreferencedCode("Calls System.Windows.Forms.Binding.CheckBinding()")]
         internal set
         {
             if (_bindingManagerBase != value)
@@ -462,6 +466,7 @@ public partial class Binding
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Binding.CheckBinding()")]
     private void binding_MetaDataChanged(object? sender, EventArgs e)
     {
         Debug.Assert(sender == _bindingManagerBase, "we should only receive notification from our binding manager base");
@@ -826,6 +831,7 @@ public partial class Binding
 
     internal bool PullData(bool reformat) => PullData(reformat, force: false);
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Binding.ParseObject(Object)")]
     internal bool PullData(bool reformat, bool force)
     {
         // Don't update the control if the control update mode is never.
@@ -962,6 +968,7 @@ public partial class Binding
     /// </summary>
     internal bool PushData() => PushData(force: false);
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Binding.FormatObject(Object)")]
     internal bool PushData(bool force)
     {
         object? dataSourceValue = null;

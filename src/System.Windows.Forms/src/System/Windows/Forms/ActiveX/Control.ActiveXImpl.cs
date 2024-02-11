@@ -1023,6 +1023,7 @@ public partial class Control
         }
 
         /// <inheritdoc cref="IPersistStreamInit.Load(IStream*)"/>
+        [RequiresUnreferencedCode("Calls System.Windows.Forms.Control.ActiveXImpl.Load(IPropertyBag*, IErrorLog*)")]
         internal void Load(IStream* stream)
         {
             // We do everything through property bags because we support full fidelity
@@ -1339,6 +1340,7 @@ public partial class Control
         };
 
         /// <inheritdoc cref="IQuickActivate.QuickActivate(QACONTAINER*, QACONTROL*)"/>
+        [RequiresUnreferencedCode("Calls GetDefaultEventsInterface(Type)")]
         internal unsafe HRESULT QuickActivate(QACONTAINER* pQaContainer, QACONTROL* pQaControl)
         {
             if (pQaControl is null)

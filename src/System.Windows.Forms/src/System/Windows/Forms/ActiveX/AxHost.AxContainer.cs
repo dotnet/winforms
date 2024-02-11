@@ -460,6 +460,7 @@ public abstract partial class AxHost
             }
         }
 
+        [RequiresUnreferencedCode("Calls System.Windows.Forms.AxHost.SetSelectionStyle(Int32)")]
         internal void OnUIDeactivate(AxHost site)
         {
             Debug.Assert(_siteUIActive is null || _siteUIActive == site, "Deactivating when not active");
@@ -634,6 +635,7 @@ public abstract partial class AxHost
             _controlInEditMode = null;
         }
 
+        [RequiresUnreferencedCode("Calls System.Windows.Forms.AxHost.SetSelectionStyle(Int32)")]
         HRESULT IOleInPlaceFrame.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
         {
             if (_siteUIActive is { } activeHost)

@@ -18,6 +18,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 
     internal AssemblyNamesTypeResolutionService(AssemblyName[]? names) => _names = names;
 
+    [RequiresUnreferencedCode("Calls System.Resources.AssemblyNamesTypeResolutionService.GetAssembly(AssemblyName, Boolean)")]
     public Assembly? GetAssembly(AssemblyName name) => GetAssembly(name, true);
 
     [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Handles single file case")]
@@ -70,6 +71,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 
     public Type? GetType(string name) => GetType(name, true);
 
+    [RequiresUnreferencedCode("Calls System.Resources.AssemblyNamesTypeResolutionService.GetType(String, Boolean, Boolean)")]
     public Type? GetType(string name, bool throwOnError) => GetType(name, throwOnError, false);
 
     [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String, Boolean, Boolean)")]

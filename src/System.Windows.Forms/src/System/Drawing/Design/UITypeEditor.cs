@@ -14,7 +14,6 @@ namespace System.Drawing.Design;
 /// </summary>
 public class UITypeEditor
 {
-    [RequiresUnreferencedCode("Calls System.ComponentModel.TypeDescriptor.AddEditorTable(Type, Hashtable)")]
     static UITypeEditor()
     {
         // Our set of intrinsic editors.

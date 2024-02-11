@@ -176,6 +176,7 @@ internal partial class PropertyGridView
             }
         }
 
+        [RequiresUnreferencedCode("Calls System.Windows.Forms.PropertyGrid.OnPropertyValueSet(GridItem, Object)")]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             // Make sure we allow the Edit to handle ctrl-z.

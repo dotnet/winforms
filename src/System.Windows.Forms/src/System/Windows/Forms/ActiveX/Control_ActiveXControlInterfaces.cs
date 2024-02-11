@@ -377,6 +377,7 @@ public unsafe partial class Control :
     }
 
     /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Control.ActiveXImpl.Load(IPropertyBag*, IErrorLog*)")]
     HRESULT IPersistPropertyBag.Interface.Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
     {
         ActiveXInstance.Load(pPropBag, pErrorLog);
@@ -452,6 +453,7 @@ public unsafe partial class Control :
     HRESULT IPersistStreamInit.Interface.IsDirty() => ActiveXInstance.IsDirty();
 
     /// <inheritdoc cref="IPersistStreamInit.Load(IStream*)"/>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Control.ActiveXImpl.Load(IStream*)")]
     HRESULT IPersistStreamInit.Interface.Load(IStream* pStm)
     {
         if (pStm is null)
@@ -482,6 +484,7 @@ public unsafe partial class Control :
     HRESULT IPersistStreamInit.Interface.InitNew() => HRESULT.S_OK;
 
     /// <inheritdoc cref="IQuickActivate.QuickActivate(QACONTAINER*, QACONTROL*)"/>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.Control.ActiveXImpl.QuickActivate(QACONTAINER*, QACONTROL*)")]
     HRESULT IQuickActivate.Interface.QuickActivate(QACONTAINER* pQaContainer, QACONTROL* pQaControl) =>
         ActiveXInstance.QuickActivate(pQaContainer, pQaControl);
 

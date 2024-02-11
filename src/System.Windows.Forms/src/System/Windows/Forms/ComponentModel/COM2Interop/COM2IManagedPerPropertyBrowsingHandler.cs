@@ -30,6 +30,7 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
     ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.
     ///  Hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.ComponentModel.Com2Interop.Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes(IVSMDPerPropertyBrowsing*, Int32)")]
     private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent e)
     {
         using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);

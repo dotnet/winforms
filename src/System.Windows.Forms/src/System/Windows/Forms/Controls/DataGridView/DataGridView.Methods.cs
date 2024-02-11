@@ -10865,6 +10865,7 @@ public partial class DataGridView
         Invalidate(CalcRowResizeFeedbackRect(_currentRowSplitBar));
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.DataGridView.DataGridViewDataConnection.BoundColumnConverter(Int32)")]
     private void MapDataGridViewColumnToDataBoundField(DataGridViewColumn dataGridViewColumn)
     {
         Debug.Assert(DataSource is not null, "this method should only be called when we have a data connection");

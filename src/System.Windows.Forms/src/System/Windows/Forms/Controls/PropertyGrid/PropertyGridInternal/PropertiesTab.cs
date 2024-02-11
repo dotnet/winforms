@@ -13,6 +13,7 @@ public class PropertiesTab : PropertyTab
     public override string HelpKeyword => "vs.properties"; // do not localize.
 
 #pragma warning disable CA1725 // Parameter names should match base declaration - publicly shipped API
+    [RequiresUnreferencedCode("")]
     public override PropertyDescriptor? GetDefaultProperty(object obj)
 #pragma warning restore CA1725
     {

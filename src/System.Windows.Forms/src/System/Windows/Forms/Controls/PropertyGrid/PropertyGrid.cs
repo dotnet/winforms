@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -913,6 +913,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     public object[] SelectedObjects
     {
         get => _selectedObjects is null ? Array.Empty<object>() : (object[])_selectedObjects.Clone();
+        [RequiresUnreferencedCode("")]
         set
         {
             using FreezePaintScope _ = new(this);
@@ -3846,6 +3847,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void SetupToolbar() => SetupToolbar(fullRebuild: false);
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.PropertyGrid.OnViewPropertyPagesButtonClick(Object, EventArgs)")]
     private void SetupToolbar(bool fullRebuild)
     {
         // If the tab array hasn't changed, don't bother to do all this work.
@@ -4279,6 +4281,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         _toolStripButtonPaddingY = LogicalToDeviceUnits(ToolStripButtonPaddingY);
     }
 
+    [RequiresUnreferencedCode("")]
     protected override unsafe void WndProc(ref Message m)
     {
         switch (m.MsgInternal)

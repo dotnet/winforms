@@ -86,6 +86,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     HRESULT IOleInPlaceFrame.Interface.SetBorderSpace(RECT* pborderwidths) => HRESULT.E_NOTIMPL;
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.WebBrowserBase.SetSelectionStyle(SelectionStyle)")]
     HRESULT IOleInPlaceFrame.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
     {
         if (pActiveObject is null)
@@ -387,6 +388,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         }
     }
 
+    [RequiresUnreferencedCode("Calls System.Windows.Forms.WebBrowserBase.SetSelectionStyle(SelectionStyle)")]
     internal void OnUIDeactivate(WebBrowserBase site)
     {
 #if DEBUG
