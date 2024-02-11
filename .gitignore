@@ -222,6 +222,9 @@ _pkginfo.txt
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
 
+# Windows image file caches
+**/Thumbs.db
+
 # Others
 ClientBin/
 ~$*
