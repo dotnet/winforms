@@ -3,25 +3,30 @@
 
 Imports System.IO
 Imports System.Net
+Imports System.Runtime.CompilerServices
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
+        Private ReadOnly _downloadFileUrlPrefix As String
+        Private ReadOnly _fileSize As Integer
+        Public ReadOnly Address As String
 
-        Friend Shared Function ProcessRequests(urlPrefix As String, testName As String) As HttpListener
+        Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
+            _fileSize = fileSize
+            _downloadFileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
+            Address = $"{_downloadFileUrlPrefix}T{fileSize}"
+        End Sub
+
+        Friend Function ProcessRequests() As HttpListener
 
             If Not HttpListener.IsSupported Then
                 Console.WriteLine("Windows XP SP2, Server 2003, or higher is required to use the HttpListener class.")
             End If
 
-            ' URI prefixes are required,
-            If urlPrefix Is Nothing Then
-                Throw New ArgumentException(NameOf(urlPrefix))
-            End If
-
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
-            listener.Prefixes.Add(urlPrefix.Replace(NameOf(HttpListener), testName))
+            listener.Prefixes.Add(_downloadFileUrlPrefix)
             listener.Start()
             Task.Run(
                 Sub()
@@ -36,9 +41,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                             ' Create the response.
                             response = context.Response
-                            Dim rawUrl As String = context.Request.RawUrl.Split("/").Last.Substring(1)
-                            Dim size As Integer = Integer.Parse(rawUrl)
-                            Dim responseString As String = Strings.StrDup(size, "A")
+                            Dim responseString As String = Strings.StrDup(_fileSize, "A")
                             ' Simulate network traffic
                             Threading.Thread.Sleep(20)
                             Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
