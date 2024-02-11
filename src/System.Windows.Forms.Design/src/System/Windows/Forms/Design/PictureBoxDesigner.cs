@@ -82,13 +82,14 @@ internal class PictureBoxDesigner : ControlDesigner
         get
         {
             SelectionRules rules = base.SelectionRules;
-            object component = Component;
-
+            PictureBoxSizeMode sizeMode = PictureBoxSizeMode.Normal;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
             PropertyDescriptor? propSizeMode = TypeDescriptor.GetProperties(Component)["SizeMode"];
-            if (propSizeMode is not null)
+            if (props.TryGetPropertyDescriptorValue(
+                "SizeMode",
+                Component,
+                ref sizeMode))
             {
-                PictureBoxSizeMode sizeMode = (PictureBoxSizeMode)propSizeMode.GetValue(component)!;
-
                 if (sizeMode == PictureBoxSizeMode.AutoSize)
                 {
                     rules &= ~SelectionRules.AllSizeable;

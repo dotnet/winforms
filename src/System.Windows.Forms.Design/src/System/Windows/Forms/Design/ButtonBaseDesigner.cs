@@ -53,14 +53,12 @@ internal class ButtonBaseDesigner : ControlDesigner
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-            TryGetPropertyDescriptorValue(
-                props,
+            props.TryGetPropertyDescriptorValue(
                 "TextAlign",
                 Component,
                 ref alignment);
 
-            TryGetPropertyDescriptorValue(
-                props,
+            props.TryGetPropertyDescriptorValue(
                 "FlatStyle",
                 Component,
                 ref flatStyle);
@@ -75,8 +73,7 @@ internal class ButtonBaseDesigner : ControlDesigner
             {
                 Appearance appearance = Appearance.Normal;
 
-                TryGetPropertyDescriptorValue(
-                    props,
+                props.TryGetPropertyDescriptorValue(
                     "Appearance",
                     Component,
                     ref appearance);

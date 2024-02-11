@@ -34,8 +34,7 @@ internal class LabelDesigner : ControlDesigner
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-            TryGetPropertyDescriptorValue(
-                props,
+            props.TryGetPropertyDescriptorValue(
                 "TextAlign",
                 Component,
                 ref alignment);
@@ -44,8 +43,7 @@ internal class LabelDesigner : ControlDesigner
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
             bool autoSize = false;
-            if (TryGetPropertyDescriptorValue(
-                props,
+            if (props.TryGetPropertyDescriptorValue(
                 "AutoSize",
                 Component,
                 ref autoSize)
@@ -53,8 +51,7 @@ internal class LabelDesigner : ControlDesigner
             {
                 // Only adjust if AutoSize is false
                 BorderStyle borderStyle = BorderStyle.None;
-                TryGetPropertyDescriptorValue(
-                    props,
+                props.TryGetPropertyDescriptorValue(
                     "BorderStyle",
                     Component,
                     ref borderStyle);
@@ -146,15 +143,17 @@ internal class LabelDesigner : ControlDesigner
         get
         {
             SelectionRules rules = base.SelectionRules;
-            object component = Component;
-
-            PropertyDescriptor? propAutoSize = TypeDescriptor.GetProperties(component)["AutoSize"];
-            if (propAutoSize is not null)
+            bool autoSize = false;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            if (props.TryGetPropertyDescriptorValue(
+                "AutoSize",
+                Component,
+                ref autoSize))
             {
-                bool autoSize = (bool)propAutoSize.GetValue(component)!;
-
                 if (autoSize)
+                {
                     rules &= ~SelectionRules.AllSizeable;
+                }
             }
 
             return rules;

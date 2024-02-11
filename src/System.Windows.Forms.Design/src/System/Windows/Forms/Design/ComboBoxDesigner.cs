@@ -106,16 +106,18 @@ internal class ComboBoxDesigner : ControlDesigner
         get
         {
             SelectionRules rules = base.SelectionRules;
-            object component = Component;
-
-            PropertyDescriptor? propStyle = TypeDescriptor.GetProperties(component)["DropDownStyle"];
-            if (propStyle is not null)
+            ComboBoxStyle style = ComboBoxStyle.Simple;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            if (props.TryGetPropertyDescriptorValue(
+                "DropDownStyle",
+                Component,
+                ref style))
             {
-                ComboBoxStyle style = (ComboBoxStyle)propStyle.GetValue(component)!;
-
                 // Height is not user-changable for these styles
                 if (style == ComboBoxStyle.DropDown || style == ComboBoxStyle.DropDownList)
+                {
                     rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+                }
             }
 
             return rules;
