@@ -21,5 +21,4 @@ public partial class BindingSource
         InnerListChanging           = 0b0000_0100_0000_0000,
         EndingEdit                  = 0b0000_1000_0000_0000,
     }
-
 }
