@@ -457,12 +457,12 @@ public abstract partial class FileDialog : CommonDialog
     {
         var directory = fileBuffer.SliceAtFirstNull();
         var fileNames = fileBuffer[(directory.Length + 1)..];
-        if (fileNames.Length == 0)
+        if (fileNames[0] == '\0')
         {
             return [directory.ToString()];
         }
 
-        List<string> names = new();
+        List<string> names = [];
         var fileName = fileNames.SliceAtFirstNull();
         while (fileName.Length > 0)
         {
