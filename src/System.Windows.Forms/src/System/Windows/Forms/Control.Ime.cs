@@ -1310,9 +1310,7 @@ public static class ImeContext
 ///  Helper class that provides information about IME conversion mode.  Conversion mode refers to how IME interprets input like
 ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME conversion window appropriately.
 /// </summary>
-#pragma warning disable CA1815 // Override equals and operator equals on value types
 public readonly struct ImeModeConversion
-#pragma warning restore CA1815 // Override equals and operator equals on value types
 {
     private static volatile Dictionary<ImeMode, ImeModeConversion>? s_imeModeConversionBits;
 
