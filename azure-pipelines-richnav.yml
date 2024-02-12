@@ -2,6 +2,8 @@ trigger:
 - master
 - main
 
+pr: none
+
 variables:
 - template: /eng/common/templates/variables/pool-providers.yml
 
