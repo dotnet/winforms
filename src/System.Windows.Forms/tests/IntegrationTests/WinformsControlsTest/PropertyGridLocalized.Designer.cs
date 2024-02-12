@@ -12,19 +12,6 @@ partial class PropertyGridLocalized
     /// </summary>
     private System.ComponentModel.IContainer components = null;
 
-    /// <summary>
-    ///  Clean up any resources being used.
-    /// </summary>
-    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing && (components != null))
-        {
-            components.Dispose();
-        }
-        base.Dispose(disposing);
-    }
-
     #region Windows Form Designer generated code
 
     /// <summary>
@@ -33,21 +20,21 @@ partial class PropertyGridLocalized
     /// </summary>
     private void InitializeComponent()
     {
-        this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+        propertyGrid1 = new System.Windows.Forms.PropertyGrid();
         cultureComboBox = new ComboBox();
         tableLayoutPanel1 = new TableLayoutPanel();
         tableLayoutPanel1.SuspendLayout();
-        this.SuspendLayout();
+        SuspendLayout();
         //
         // propertyGrid1
         //
-        this.propertyGrid1.CommandsBorderColor = System.Drawing.SystemColors.Control;
-        this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.propertyGrid1.Location = new System.Drawing.Point(3, 32);
-        this.propertyGrid1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-        this.propertyGrid1.Name = "propertyGrid1";
-        this.propertyGrid1.Size = new System.Drawing.Size(460, 400);
-        this.propertyGrid1.TabIndex = 0;
+        propertyGrid1.CommandsBorderColor = System.Drawing.SystemColors.Control;
+        propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+        propertyGrid1.Location = new System.Drawing.Point(3, 32);
+        propertyGrid1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+        propertyGrid1.Name = "propertyGrid1";
+        propertyGrid1.Size = new System.Drawing.Size(460, 400);
+        propertyGrid1.TabIndex = 0;
         // 
         // comboBox1
         // 
@@ -75,15 +62,15 @@ partial class PropertyGridLocalized
         //
         // PropertyGrid
         //
-        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(465, 413);
-        this.Controls.Add(this.tableLayoutPanel1);
-        this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-        this.Name = "PropertyGridLocalized";
-        this.Text = "Localized Property Grid Test";
+        AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        ClientSize = new System.Drawing.Size(465, 413);
+        Controls.Add(tableLayoutPanel1);
+        Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+        Name = "PropertyGridLocalized";
+        Text = "Localized Property Grid Test";
         tableLayoutPanel1.ResumeLayout(false);
-        this.ResumeLayout(false);
+        ResumeLayout(false);
     }
 
     #endregion
