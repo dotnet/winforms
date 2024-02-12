@@ -22,7 +22,7 @@ public partial class DataObject
     /// </summary>
     private unsafe sealed class ComDataObjectAdapter : IDataObject
     {
-        // We use the pointer, but ComWrappers is managing the lifetime for us.
+        // We use the pointer, but ComWrappers or built-in Com interop is managing the lifetime for us.
         // Keep a referenced to the managed object to prevent it from being collected.
         private readonly object _innerData;
         private readonly Com.IDataObject* _innerDataPtr;
@@ -243,13 +243,7 @@ public partial class DataObject
 
                 if (dataObject->QueryGetData(formatEtc).Succeeded)
                 {
-                    try
-                    {
-                        dataObject->GetData(formatEtc, out medium);
-                    }
-                    catch
-                    {
-                    }
+                    dataObject->GetData(formatEtc, out medium).AssertSuccess();
                 }
 
                 object? data = null;
@@ -293,12 +287,16 @@ public partial class DataObject
                 }
 
                 object? data = null;
-                Com.STGMEDIUM medium = default;
+                HRESULT result = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+
+                // One of the ways this can happen is when we attempt to put binary formatted data onto the
+                // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
+                // The data state, however, is not good, and this error will be returned by Windows when asking to
+                // get the data out.
+                Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
 
                 try
                 {
-                    dataObject->GetData(formatetc, out medium);
-
                     if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull)
                     {
                         data = GetDataFromHGLOBAL(medium.hGlobal, format);
@@ -307,14 +305,6 @@ public partial class DataObject
                 catch (RestrictedTypeDeserializationException)
                 {
                     doNotContinue = true;
-                }
-                catch (COMException ex) when (ex.HResult == HRESULT.CLIPBRD_E_BAD_DATA)
-                {
-                    // One of the ways this can happen is when we attempt to put binary formatted data onto the
-                    // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
-                    // The data state, however, is not good, and this error will be returned by Windows when asking to
-                    // get the data out.
-                    Debug.WriteLine("CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                 }
                 catch
                 {
@@ -329,8 +319,6 @@ public partial class DataObject
 
             static unsafe object? TryGetIStreamData(Com.IDataObject* dataObject, string format)
             {
-                Com.STGMEDIUM medium = default;
-
                 Com.FORMATETC formatEtc = new()
                 {
                     cfFormat = (ushort)DataFormats.GetFormat(format).Id,
@@ -340,16 +328,8 @@ public partial class DataObject
                 };
 
                 // Limit the # of exceptions we may throw below.
-                if (dataObject->QueryGetData(formatEtc).Failed)
-                {
-                    return null;
-                }
-
-                try
-                {
-                    dataObject->GetData(formatEtc, out medium);
-                }
-                catch
+                if (dataObject->QueryGetData(formatEtc).Failed
+                    || dataObject->GetData(formatEtc, out Com.STGMEDIUM medium).Failed)
                 {
                     return null;
                 }
@@ -481,7 +461,7 @@ public partial class DataObject
             Debug.Assert(OleDataObject is not null, "You must have an innerData on all DataObjects");
 
             using ComScope<Com.IEnumFORMATETC> enumFORMATETC = new(null);
-            OleDataObject->EnumFormatEtc((uint)DATADIR.DATADIR_GET, enumFORMATETC);
+            OleDataObject->EnumFormatEtc((uint)DATADIR.DATADIR_GET, enumFORMATETC).AssertSuccess();
 
             if (enumFORMATETC.IsNull)
             {

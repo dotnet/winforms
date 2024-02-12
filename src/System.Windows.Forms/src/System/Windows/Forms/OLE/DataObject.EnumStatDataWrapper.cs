@@ -21,7 +21,7 @@ public unsafe partial class DataObject
 #if DEBUG
             _enumStatData = new(enumStatData, takeOwnership: true, trackDisposal: false);
 #else
-                _enumStatData = new(enumStatData, takeOwnership: true);
+            _enumStatData = new(enumStatData, takeOwnership: true);
 #endif
         }
 
@@ -39,14 +39,23 @@ public unsafe partial class DataObject
             Com.STATDATA[] nativeStatData = new Com.STATDATA[rgelt.Length];
             for (int i = 0; i < nativeStatData.Length; i++)
             {
-                nativeStatData[i] = rgelt[i];
+                // This cast will allocate. We need to clean this up afterwards.
+                nativeStatData[i] = (Com.STATDATA)rgelt[i];
             }
 
+            HRESULT result;
             fixed (int* ppceltFetched = pceltFetched)
             fixed (Com.STATDATA* pNativeStatData = nativeStatData)
             {
-                return enumStataData.Value->Next((uint)celt, pNativeStatData, (uint*)ppceltFetched);
+                result = enumStataData.Value->Next((uint)celt, pNativeStatData, (uint*)ppceltFetched);
             }
+
+            foreach (Com.STATDATA data in nativeStatData)
+            {
+                data.pAdvSink->Release();
+            }
+
+            return result;
         }
 
         int IEnumSTATDATA.Reset()

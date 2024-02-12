@@ -8,7 +8,7 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct STATDATA
 {
-    public static implicit operator STATDATA(ComType.STATDATA statData) =>
+    public static explicit operator STATDATA(ComType.STATDATA statData) =>
         new()
         {
             formatetc = Unsafe.As<ComType.FORMATETC, FORMATETC>(ref statData.formatetc),

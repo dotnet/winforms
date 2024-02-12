@@ -21,7 +21,7 @@ public unsafe partial class DataObject
 #if DEBUG
             _enumFormatEtc = new(enumFormatEtc, takeOwnership: true, trackDisposal: false);
 #else
-                _enumFormatEtc = new(enumFormatEtc, takeOwnership: true);
+            _enumFormatEtc = new(enumFormatEtc, takeOwnership: true);
 #endif
         }
 

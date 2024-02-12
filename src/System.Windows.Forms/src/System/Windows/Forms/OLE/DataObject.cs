@@ -390,9 +390,12 @@ public unsafe partial class DataObject :
             HRESULT result = converter.OleDataObject->EnumDAdvise(statData);
             enumAdvise = statData.IsNull
                 ? null
-                : ComHelpers.TryGetObjectForIUnknown(statData.Query<Com.IUnknown>(), out IEnumSTATDATA? managedStatData)
-                    ? managedStatData
-                    : new EnumStatDataWrapper(statData);
+                : ComHelpers.TryGetObjectForIUnknown(
+                    statData.Query<Com.IUnknown>(),
+                    takeOwnership: true,
+                    out IEnumSTATDATA? managedStatData)
+                        ? managedStatData
+                        : new EnumStatDataWrapper(statData);
             return result;
         }
 
@@ -407,7 +410,10 @@ public unsafe partial class DataObject :
         {
             using ComScope<Com.IEnumFORMATETC> formatEtc = new(null);
             converter.OleDataObject->EnumFormatEtc((uint)dwDirection, formatEtc).ThrowOnFailure();
-            return ComHelpers.TryGetObjectForIUnknown(formatEtc.Query<Com.IUnknown>(), out IEnumFORMATETC? result)
+            return ComHelpers.TryGetObjectForIUnknown(
+                formatEtc.Query<Com.IUnknown>(),
+                takeOwnership: true,
+                out IEnumFORMATETC? result)
                     ? result
                     : new EnumFormatEtcWrapper(formatEtc);
         }
