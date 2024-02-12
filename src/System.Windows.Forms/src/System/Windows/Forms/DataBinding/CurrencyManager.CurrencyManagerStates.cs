@@ -8,10 +8,10 @@ public partial class CurrencyManager
     [Flags]
     private enum CurrencyManagerStates : byte
     {
-        Bound = 1 << 0,
-        ShouldBind = 1 << 1,
-        PullingData = 1 << 2,
-        InChangeRecordState = 1 << 3,
-        SuspendPushDataInCurrentChanged = 1 << 4,
+        Bound                           = 0b0000_0001,
+        ShouldBind                      = 0b0000_0010,
+        PullingData                     = 0b0000_0100,
+        InChangeRecordState             = 0b0000_1000,
+        SuspendPushDataInCurrentChanged = 0b0001_0000,
     }
 }

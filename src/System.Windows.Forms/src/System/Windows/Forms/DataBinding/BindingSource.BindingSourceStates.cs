@@ -8,17 +8,18 @@ public partial class BindingSource
     [Flags]
     private enum BindingSourceStates : short
     {
-        ParentsCurrentItemChanging = 1 << 0,
-        DisposedOrFinalized = 1 << 1,
-        IsBindingList = 1 << 2,
-        ListRaisesItemChangedEvents = 1 << 3,
-        ListExtractedFromEnumerable = 1 << 4,
-        AllowNewIsSet = 1 << 5,
-        AllowNewSetValue = 1 << 6,
-        Initializing = 1 << 7,
-        NeedToSetList = 1 << 8,
-        RecursionDetectionFlag = 1 << 9,
-        InnerListChanging = 1 << 10,
-        EndingEdit = 1 << 11,
+        ParentsCurrentItemChanging  = 0b0000_0000_0000_0001,
+        DisposedOrFinalized         = 0b0000_0000_0000_0010,
+        IsBindingList               = 0b0000_0000_0000_0100,
+        ListRaisesItemChangedEvents = 0b0000_0000_0000_1000,
+        ListExtractedFromEnumerable = 0b0000_0000_0001_0000,
+        AllowNewIsSet               = 0b0000_0000_0010_0000,
+        AllowNewSetValue            = 0b0000_0000_0100_0000,
+        Initializing                = 0b0000_0000_1000_0000,
+        NeedToSetList               = 0b0000_0001_0000_0000,
+        RecursionDetectionFlag      = 0b0000_0010_0000_0000,
+        InnerListChanging           = 0b0000_0100_0000_0000,
+        EndingEdit                  = 0b0000_1000_0000_0000,
     }
+
 }
