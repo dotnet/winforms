@@ -3,6 +3,8 @@
   <PropertyGroup>
     <AssemblyName>System.Private.Windows.Core</AssemblyName>
     <TargetFrameworks>$(NetCurrent);$(NetPrevious);$(NetMinimum)</TargetFrameworks>
+    <!-- Unset TargetFramework as this property gets set in Directory.Build.props. This is necessary to avoid over-building. -->
+    <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <!--
