@@ -119,6 +119,10 @@ public partial class MainForm : Form
             new InitInfo("PropertyGrid", (obj, e) => new PropertyGrid(new UserControlWithObjectCollectionEditor()).Show(this))
         },
         {
+            MainFormControlsTabOrder.LocalizedPropertyGridButton,
+            new InitInfo("Localized PropertyGrid", (obj, e) => new PropertyGridLocalized().Show(this))
+        },
+        {
             MainFormControlsTabOrder.ListViewButton,
             new InitInfo("ListView", (obj, e) => new ListViewTest().Show(this))
         },

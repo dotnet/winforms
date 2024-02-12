@@ -21,6 +21,7 @@ public enum MainFormControlsTabOrder
     SplitterButton,
     MdiParentButton,
     PropertyGridButton,
+    LocalizedPropertyGridButton,
     ListViewButton,
     FontNameEditorButton,
     CollectionEditorsButton,

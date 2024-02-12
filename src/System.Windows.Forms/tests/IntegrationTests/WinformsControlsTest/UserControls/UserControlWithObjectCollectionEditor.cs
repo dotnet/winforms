@@ -25,11 +25,6 @@ internal class UserControlWithObjectCollectionEditor : UserControl
         get { return new List<int>(new int[] { 1, 2, 3 }); }
         set { }
     }
-
-    // https://github.com/dotnet/runtime/issues/94365
-    [Browsable(true)]
-    [EditorBrowsable(EditorBrowsableState.Always)]
-    public string MiscValue { get; set; }
 }
 
 internal class SomeCollectionTypeConverter : TypeConverter
