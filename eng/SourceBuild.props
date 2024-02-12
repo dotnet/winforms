@@ -4,6 +4,5 @@
   <PropertyGroup>
     <GitHubRepositoryName>winforms</GitHubRepositoryName>
     <SourceBuildManagedOnly>true</SourceBuildManagedOnly>
-    <InnerBuildArgs>$(InnerBuildArgs) -warnNotAsError:MSB3026</InnerBuildArgs>
   </PropertyGroup>
 </Project>
