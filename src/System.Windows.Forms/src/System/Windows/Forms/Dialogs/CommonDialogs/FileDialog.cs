@@ -457,6 +457,9 @@ public abstract partial class FileDialog : CommonDialog
     {
         var directory = fileBuffer.SliceAtFirstNull();
         var fileNames = fileBuffer[(directory.Length + 1)..];
+
+        // When a single file is returned, the directory is not null delimited.
+        // So we check here to see if the filename starts with a null.
         if (fileNames[0] == '\0')
         {
             return [directory.ToString()];
