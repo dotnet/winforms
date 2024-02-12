@@ -805,13 +805,13 @@ public class FileDialogTests
         Assert.Equal(expected, result);
 
         // Test single file with directory
-        buffer = "C:\\test\testfile.txt\0";
+        buffer = "C:\\test\\testfile.txt\0";
         expected = ["C:\\test\\testfile.txt"];
         result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);
         Assert.Equal(expected, result);
 
         // Test single file without directory
-        buffer = "C:\\\testfile.txt\0";
+        buffer = "C:\\testfile.txt\0";
         expected = ["C:\\testfile.txt"];
         result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);
         Assert.Equal(expected, result);

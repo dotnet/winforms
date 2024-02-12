@@ -460,7 +460,7 @@ public abstract partial class FileDialog : CommonDialog
 
         // When a single file is returned, the directory is not null delimited.
         // So we check here to see if the filename starts with a null.
-        if (fileNames[0] == '\0')
+        if (fileNames.Length == 0 || fileNames[0] == '\0')
         {
             return [directory.ToString()];
         }
