@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyName>System.Private.Windows.Core</AssemblyName>
     <TargetFrameworks>$(NetCurrent);$(NetPrevious);$(NetMinimum)</TargetFrameworks>
+    <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <!--
