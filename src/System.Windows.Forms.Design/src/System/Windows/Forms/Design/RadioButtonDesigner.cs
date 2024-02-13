@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -20,7 +18,7 @@ internal class RadioButtonDesigner : ButtonBaseDesigner
         base.InitializeNewComponent(defaultValues);
 
         // In Whidbey, default the TabStop to true.
-        PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["TabStop"];
+        PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["TabStop"];
         if (prop is not null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
         {
             prop.SetValue(Component, true);

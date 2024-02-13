@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -15,8 +13,8 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 {
-    private DesignerVerbCollection _verbs;
-    private DesignerActionListCollection _actions;
+    private DesignerVerbCollection? _verbs;
+    private DesignerActionListCollection? _actions;
 
     // Overridden to avoid setting the default property ("Mask")
     // to the Site.Name (i.e. maskedTextBox1).
@@ -54,7 +52,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
         }
         else
         {
-            MaskedTextProvider maskedTextProvider = maskedTextBox.MaskedTextProvider;
+            MaskedTextProvider? maskedTextProvider = maskedTextBox.MaskedTextProvider;
 
             if (maskedTextProvider is null)
             {
@@ -63,7 +61,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
             }
             else
             {
-                designMaskedTextBox = new MaskedTextBox(maskedTextBox.MaskedTextProvider);
+                designMaskedTextBox = new MaskedTextBox(maskedTextProvider);
             }
 
             // Clone MTB properties.
@@ -143,7 +141,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     /// <summary>
     ///  Event handler for the set mask verb.
     /// </summary>
-    private void OnVerbSetMask(object sender, EventArgs e)
+    private void OnVerbSetMask(object? sender, EventArgs e)
     {
         MaskedTextBoxDesignerActionList actionList = new(this);
         actionList.SetMask();
@@ -162,8 +160,6 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     {
         base.PreFilterProperties(properties);
 
-        PropertyDescriptor prop;
-
         string[] shadowProps = new string[]
         {
             "Text",
@@ -172,9 +168,10 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 
         Attribute[] empty = Array.Empty<Attribute>();
 
+        PropertyDescriptor? prop;
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            prop = (PropertyDescriptor)properties[shadowProps[i]];
+            prop = (PropertyDescriptor?)properties[shadowProps[i]];
             if (prop is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(MaskedTextBoxDesigner), prop, empty);
@@ -207,7 +204,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     {
         get
         {
-            MaskedTextBox maskedTextBox = Control as MaskedTextBox;
+            MaskedTextBox? maskedTextBox = Control as MaskedTextBox;
             Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
             if (maskedTextBox.UseSystemPasswordChar)
@@ -225,7 +222,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
         }
         set
         {
-            MaskedTextBox maskedTextBox = Control as MaskedTextBox;
+            MaskedTextBox? maskedTextBox = Control as MaskedTextBox;
             Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
             maskedTextBox.PasswordChar = value;
@@ -239,12 +236,12 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     ///  Observe that if the MTB is hooked to a PropertyBrowser at design time, shadowing of the property won't work unless the
     ///  application is a well written control designer (implements corresponding interfaces).
     /// </summary>
-    private string Text
+    private string? Text
     {
         get
         {
             // Return text w/o literals or prompt.
-            MaskedTextBox maskedTextBox = Control as MaskedTextBox;
+            MaskedTextBox? maskedTextBox = Control as MaskedTextBox;
             Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
             // Text w/o prompt or literals.
@@ -253,11 +250,11 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
                 return maskedTextBox.Text;
             }
 
-            return maskedTextBox.MaskedTextProvider.ToString(false, false);
+            return maskedTextBox.MaskedTextProvider?.ToString(includePrompt: false, includeLiterals: false);
         }
         set
         {
-            MaskedTextBox maskedTextBox = Control as MaskedTextBox;
+            MaskedTextBox? maskedTextBox = Control as MaskedTextBox;
             Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
             if (string.IsNullOrEmpty(maskedTextBox.Mask))

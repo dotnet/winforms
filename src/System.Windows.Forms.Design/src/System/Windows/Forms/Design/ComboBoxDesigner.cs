@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
@@ -17,7 +15,9 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ComboBoxDesigner : ControlDesigner
 {
-    private EventHandler propChanged; // Delegate used to dirty the selectionUIItem when needed.
+    private EventHandler? _propChanged; // Delegate used to dirty the selectionUIItem when needed.
+
+    private DesignerActionListCollection? _actionLists;
 
     public override ComboBox Control => (ComboBox)Component;
 
@@ -48,9 +48,9 @@ internal class ComboBoxDesigner : ControlDesigner
         if (disposing)
         {
             // Hook up the property change notification so that we can dirty the SelectionUIItem when needed.
-            if (HasComponent && propChanged is not null)
+            if (HasComponent && _propChanged is not null)
             {
-                Control.StyleChanged -= propChanged;
+                Control.StyleChanged -= _propChanged;
             }
         }
 
@@ -67,8 +67,8 @@ internal class ComboBoxDesigner : ControlDesigner
         AutoResizeHandles = true;
 
         // Hook up the property change notification so that we can dirty the SelectionUIItem when needed.
-        propChanged = new EventHandler(OnControlPropertyChanged);
-        Control.StyleChanged += propChanged;
+        _propChanged = new EventHandler(OnControlPropertyChanged);
+        Control.StyleChanged += _propChanged;
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ internal class ComboBoxDesigner : ControlDesigner
         // in Whidbey, formattingEnabled is TRUE
         Control.FormattingEnabled = true;
 
-        PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
+        PropertyDescriptor? textProp = TypeDescriptor.GetProperties(Component)["Text"];
         if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
         {
             textProp.SetValue(Component, string.Empty);
@@ -91,7 +91,7 @@ internal class ComboBoxDesigner : ControlDesigner
     /// <summary>
     ///  For controls, we sync their property changed event so our component can track their location.
     /// </summary>
-    private void OnControlPropertyChanged(object sender, EventArgs e)
+    private void OnControlPropertyChanged(object? sender, EventArgs e)
     {
         BehaviorService?.SyncSelection();
     }
@@ -106,23 +106,23 @@ internal class ComboBoxDesigner : ControlDesigner
         get
         {
             SelectionRules rules = base.SelectionRules;
-            object component = Component;
-
-            PropertyDescriptor propStyle = TypeDescriptor.GetProperties(component)["DropDownStyle"];
-            if (propStyle is not null)
+            ComboBoxStyle style = ComboBoxStyle.Simple;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            if (props.TryGetPropertyDescriptorValue(
+                "DropDownStyle",
+                Component,
+                ref style))
             {
-                ComboBoxStyle style = (ComboBoxStyle)propStyle.GetValue(component);
-
                 // Height is not user-changable for these styles
                 if (style == ComboBoxStyle.DropDown || style == ComboBoxStyle.DropDownList)
+                {
                     rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+                }
             }
 
             return rules;
         }
     }
-
-    private DesignerActionListCollection _actionLists;
 
     public override DesignerActionListCollection ActionLists
     {
