@@ -36,42 +36,45 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
         set
         {
             // Create a new instance of the value and set it into the parent grid entry.
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             object? newObject = null;
             GridEntry parentEntry = InstanceParentGridEntry;
             TypeConverter parentConverter = parentEntry.TypeConverter;
 
-            PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
-            if (properties is not null)
+            if (owner is not null)
             {
-                IDictionary values = new Hashtable(properties.Count);
-                for (int i = 0; i < properties.Count; i++)
+                PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
+                if (properties is not null)
                 {
-                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
+                    IDictionary values = new Hashtable(properties.Count);
+                    for (int i = 0; i < properties.Count; i++)
                     {
-                        values[properties[i].Name] = value;
+                        if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
+                        {
+                            values[properties[i].Name] = value;
+                        }
+                        else
+                        {
+                            values[properties[i].Name] = properties[i].GetValue(owner);
+                        }
                     }
-                    else
-                    {
-                        values[properties[i].Name] = properties[i].GetValue(owner);
-                    }
-                }
 
-                try
-                {
-                    newObject = parentConverter.CreateInstance(parentEntry, values);
-                }
-                catch (Exception e)
-                {
-                    if (string.IsNullOrEmpty(e.Message))
+                    try
                     {
-                        throw new TargetInvocationException(
-                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
-                            e);
+                        newObject = parentConverter.CreateInstance(parentEntry, values);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        throw; // rethrow the same exception
+                        if (string.IsNullOrEmpty(e.Message))
+                        {
+                            throw new TargetInvocationException(
+                                string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
+                                e);
+                        }
+                        else
+                        {
+                            throw; // rethrow the same exception
+                        }
                     }
                 }
             }

@@ -153,7 +153,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         }
     }
 
-    internal override object GetValueOwnerInternal()
+    internal override object? GetValueOwnerInternal()
         => _mergedDescriptor.PropertyType.IsValueType || EntryFlags.HasFlag(Flags.Immutable)
             ? base.GetValueOwnerInternal()
             : _mergedDescriptor.GetValues(_objects);
@@ -203,7 +203,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
         {
             // Find the next parent property with a different value owner.
-            object owner = entry.GetValueOwner();
+            object? owner = entry.GetValueOwner();
 
             // Find the next property descriptor with a different parent.
             while (entry is not PropertyDescriptorGridEntry || OwnersEqual(owner, entry.GetValueOwner()))
@@ -251,8 +251,11 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
             }
             else
             {
-                changeService.OnComponentChanging(owner, entry.PropertyDescriptor);
-                changeService.OnComponentChanged(owner, entry.PropertyDescriptor);
+                if (owner is not null)
+                {
+                    changeService.OnComponentChanging(owner, entry.PropertyDescriptor);
+                    changeService.OnComponentChanged(owner, entry.PropertyDescriptor);
+                }
             }
         }
     }
@@ -336,7 +339,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         return base.SendNotification(owner, notification);
     }
 
-    private static bool OwnersEqual(object owner1, object owner2)
+    private static bool OwnersEqual(object? owner1, object? owner2)
     {
         if (owner1 is not Array)
         {

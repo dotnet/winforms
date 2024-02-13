@@ -172,15 +172,18 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
         }
     }
 
-    public override object PropertyValue
+    public override object? PropertyValue
     {
         get => Target;
         set
         {
             object old = Target;
-            Target = value;
-            _valueClassName = TypeDescriptor.GetClassName(Target);
-            OwnerGrid.ReplaceSelectedObject(old, value);
+            if (value is not null)
+            {
+                Target = value;
+                _valueClassName = TypeDescriptor.GetClassName(Target);
+                OwnerGrid.ReplaceSelectedObject(old, value);
+            }
         }
     }
 
