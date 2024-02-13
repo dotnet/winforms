@@ -154,7 +154,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 category = base.PropertyCategory;
             }
 
-            return category;
+            return SRCategoryAttribute.GetLocalizedCategory(category);
         }
     }
 
