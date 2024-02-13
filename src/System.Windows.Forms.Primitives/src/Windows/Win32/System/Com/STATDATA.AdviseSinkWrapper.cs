@@ -33,6 +33,11 @@ internal unsafe partial struct STATDATA
             STGMEDIUM comMedium = (STGMEDIUM)stgmedium;
             adviseSink.Value->OnDataChange(Unsafe.As<ComType.FORMATETC, FORMATETC>(ref format), comMedium);
             stgmedium = (ComType.STGMEDIUM)comMedium;
+
+            if (comMedium.pUnkForRelease is not null)
+            {
+                comMedium.pUnkForRelease->Release();
+            }
         }
 
         void ComType.IAdviseSink.OnRename(ComType.IMoniker moniker)
