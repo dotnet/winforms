@@ -8,7 +8,6 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct STATDATA
 {
-
     /// <summary>
     ///  Converts <see cref="STATDATA"/> to <see cref="ComType.STATDATA"/>
     /// </summary>
