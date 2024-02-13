@@ -84,9 +84,9 @@ internal unsafe class DataStreamFromComStream : Stream
 
     public override int ReadByte()
     {
-        Span<byte> oneByteArray = stackalloc byte[1];
-        int r = Read(oneByteArray);
-        return r == 0 ? -1 : oneByteArray[0];
+        byte data = default;
+        int r = Read(new Span<byte>(ref data));
+        return r == 0 ? -1 : data;
     }
 
     public override void SetLength(long value)
