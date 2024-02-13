@@ -8,7 +8,6 @@ namespace System.Windows.Forms;
 [AttributeUsage(AttributeTargets.All)]
 internal sealed class SRCategoryAttribute : CategoryAttribute
 {
-    private static volatile SRCategoryAttribute? s_defaultAttribute;
     public SRCategoryAttribute(string category) : base(category)
     {
     }
@@ -45,9 +44,4 @@ internal sealed class SRCategoryAttribute : CategoryAttribute
         "WindowStyle" => SR.CatWindowStyle,
         _ => category
     };
-
-    public static new SRCategoryAttribute Default
-    {
-        get => s_defaultAttribute ??= new SRCategoryAttribute("PropertyCategoryMisc");
-    }
 }

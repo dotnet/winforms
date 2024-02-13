@@ -697,7 +697,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Returns the category name of the current property.
     /// </summary>
-    public virtual string PropertyCategory => SRCategoryAttribute.Default.Category;
+    public virtual string PropertyCategory => CategoryAttribute.Default.Category;
 
     /// <summary>
     ///  Returns "depth" of this property.  That is, how many parents between
