@@ -243,7 +243,12 @@ public partial class DataObject
 
                 if (dataObject->QueryGetData(formatEtc).Succeeded)
                 {
-                    dataObject->GetData(formatEtc, out medium).AssertSuccess();
+                    HRESULT hr = dataObject->GetData(formatEtc, out medium);
+                    // One of the ways this can happen is when we attempt to put binary formatted data onto the
+                    // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
+                    // The data state, however, is not good, and this error will be returned by Windows when asking to
+                    // get the data out.
+                    Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                 }
 
                 object? data = null;
@@ -474,22 +479,15 @@ public partial class DataObject
             enumFORMATETC.Value->Reset();
 
             Com.FORMATETC[] formatEtc = [default];
-            uint[] retrieved = [1];
+            HRESULT hr;
 
-            while (retrieved[0] > 0)
+            fixed (Com.FORMATETC* pFormatEtc = formatEtc)
             {
-                retrieved[0] = 0;
-                fixed (uint* pRetrieved = retrieved)
-                fixed (Com.FORMATETC* pFormatEtc = formatEtc)
-                {
-                    enumFORMATETC.Value->Next(1, pFormatEtc, pRetrieved);
-                }
+                hr = enumFORMATETC.Value->Next(1, pFormatEtc);
+            }
 
-                if (retrieved[0] <= 0)
-                {
-                    continue;
-                }
-
+            if (hr == HRESULT.S_OK)
+            {
                 string name = DataFormats.GetFormat(formatEtc[0].cfFormat).Name;
                 if (autoConvert)
                 {

@@ -386,16 +386,23 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose("EnumDAdvise");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            using ComScope<Com.IEnumSTATDATA> statData = new(null);
+            ComScope<Com.IEnumSTATDATA> statData = new(null);
             HRESULT result = converter.OleDataObject->EnumDAdvise(statData);
+            IEnumSTATDATA? managedStatData = null;
             enumAdvise = statData.IsNull
                 ? null
                 : ComHelpers.TryGetObjectForIUnknown(
                     statData.Query<Com.IUnknown>(),
                     takeOwnership: true,
-                    out IEnumSTATDATA? managedStatData)
+                    out managedStatData)
                         ? managedStatData
                         : new EnumStatDataWrapper(statData);
+
+            if (managedStatData is not null)
+            {
+                statData.Dispose();
+            }
+
             return result;
         }
 
@@ -408,14 +415,21 @@ public unsafe partial class DataObject :
         CompModSwitches.DataObject.TraceVerbose($"EnumFormatEtc: {dwDirection}");
         if (_innerData is ComDataObjectAdapter converter)
         {
-            using ComScope<Com.IEnumFORMATETC> formatEtc = new(null);
+            ComScope<Com.IEnumFORMATETC> formatEtc = new(null);
             converter.OleDataObject->EnumFormatEtc((uint)dwDirection, formatEtc).ThrowOnFailure();
-            return ComHelpers.TryGetObjectForIUnknown(
+            IEnumFORMATETC result = ComHelpers.TryGetObjectForIUnknown(
                 formatEtc.Query<Com.IUnknown>(),
                 takeOwnership: true,
-                out IEnumFORMATETC? result)
-                    ? result
+                out IEnumFORMATETC? managedEnumFormat)
+                    ? managedEnumFormat
                     : new EnumFormatEtcWrapper(formatEtc);
+
+            if (managedEnumFormat is not null)
+            {
+                formatEtc.Dispose();
+            }
+
+            return result;
         }
 
         if (dwDirection == DATADIR.DATADIR_GET)

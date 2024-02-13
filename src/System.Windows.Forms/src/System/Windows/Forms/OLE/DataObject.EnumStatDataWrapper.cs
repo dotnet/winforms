@@ -35,14 +35,24 @@ public unsafe partial class DataObject
 
         unsafe int IEnumSTATDATA.Next(int celt, STATDATA[] rgelt, int[] pceltFetched)
         {
-            using var enumStataData = _enumStatData.GetInterface();
-            Com.STATDATA[] nativeStatData = new Com.STATDATA[rgelt.Length];
-            for (int i = 0; i < nativeStatData.Length; i++)
+            if ((pceltFetched is not null && pceltFetched.Length == 0)
+                || (celt > 1 && pceltFetched is null))
             {
-                // This cast will allocate. We need to clean this up afterwards.
-                nativeStatData[i] = (Com.STATDATA)rgelt[i];
+                return HRESULT.E_INVALIDARG;
             }
 
+            if (celt > rgelt.Length)
+            {
+                if (pceltFetched is not null)
+                {
+                    pceltFetched[0] = 0;
+                }
+
+                return HRESULT.E_INVALIDARG;
+            }
+
+            using var enumStataData = _enumStatData.GetInterface();
+            Com.STATDATA[] nativeStatData = new Com.STATDATA[rgelt.Length];
             HRESULT result;
             fixed (int* ppceltFetched = pceltFetched)
             fixed (Com.STATDATA* pNativeStatData = nativeStatData)
@@ -50,9 +60,9 @@ public unsafe partial class DataObject
                 result = enumStataData.Value->Next((uint)celt, pNativeStatData, (uint*)ppceltFetched);
             }
 
-            foreach (Com.STATDATA data in nativeStatData)
+            for (int i = 0; i < nativeStatData.Length; i++)
             {
-                data.pAdvSink->Release();
+                rgelt[i] = Com.STATDATA.ConvertToRuntimeStatData(nativeStatData[i]);
             }
 
             return result;

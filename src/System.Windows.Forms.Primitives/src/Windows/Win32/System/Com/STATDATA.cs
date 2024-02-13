@@ -8,12 +8,37 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct STATDATA
 {
-    public static explicit operator STATDATA(ComType.STATDATA statData) =>
-        new()
+
+    /// <summary>
+    ///  Converts <see cref="STATDATA"/> to <see cref="ComType.STATDATA"/>
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This will release the <see cref="pAdvSink"/> of the <see cref="STATDATA"/> that was passed in
+    ///   so that the runtime type will have ownership.
+    ///  </para>
+    /// </remarks>
+    public static ComType.STATDATA ConvertToRuntimeStatData(STATDATA statData)
+    {
+        ComScope<IAdviseSink> pAdvSink = new(statData.pAdvSink);
+        ComType.STATDATA result = new()
         {
-            formatetc = Unsafe.As<ComType.FORMATETC, FORMATETC>(ref statData.formatetc),
-            advf = (uint)statData.advf,
-            pAdvSink = ComHelpers.GetComPointer<IAdviseSink>(statData.advSink),
-            dwConnection = (uint)statData.connection
+            formatetc = Unsafe.As<FORMATETC, ComType.FORMATETC>(ref statData.formatetc),
+            advf = (ComType.ADVF)statData.advf,
+            advSink = ComHelpers.TryGetObjectForIUnknown(
+                pAdvSink.Query<IUnknown>(),
+                takeOwnership: true,
+                out ComType.IAdviseSink? adviseSink)
+                    ? adviseSink
+                    : new AdviseSinkWrapper(pAdvSink),
+            connection = (int)statData.dwConnection
         };
+
+        if (adviseSink is not null)
+        {
+            pAdvSink.Dispose();
+        }
+
+        return result;
+    }
 }

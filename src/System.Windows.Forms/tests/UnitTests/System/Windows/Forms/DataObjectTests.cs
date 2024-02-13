@@ -2105,11 +2105,6 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> EnumFormatEtc_CustomComDataObject_TestData()
     {
-/*        yield return new object[] { DATADIR.DATADIR_GET, null };
-        yield return new object[] { DATADIR.DATADIR_SET, null };
-        yield return new object[] { DATADIR.DATADIR_GET - 1, null };
-        yield return new object[] { DATADIR.DATADIR_SET + 1, null };*/
-
         Mock<IEnumFORMATETC> mockEnumFormatEtc = new(MockBehavior.Strict);
         yield return new object[] { DATADIR.DATADIR_GET, mockEnumFormatEtc.Object };
         yield return new object[] { DATADIR.DATADIR_SET, mockEnumFormatEtc.Object };
