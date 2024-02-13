@@ -18,25 +18,25 @@ public unsafe partial class DataObject
 
         public EnumStatDataWrapper(Com.IEnumSTATDATA* enumStatData)
         {
-#if DEBUG
-            _enumStatData = new(enumStatData, takeOwnership: true, trackDisposal: false);
-#else
-            _enumStatData = new(enumStatData, takeOwnership: true);
-#endif
+            _enumStatData = new(enumStatData, takeOwnership: false);
         }
 
         void IEnumSTATDATA.Clone(out IEnumSTATDATA newEnum)
         {
             using var enumStatData = _enumStatData.GetInterface();
-            Com.IEnumSTATDATA* result;
-            enumStatData.Value->Clone(&result).ThrowOnFailure();
+            using ComScope<Com.IEnumSTATDATA> result = new(null);
+            enumStatData.Value->Clone(result).ThrowOnFailure();
             newEnum = new EnumStatDataWrapper(result);
         }
 
         unsafe int IEnumSTATDATA.Next(int celt, STATDATA[] rgelt, int[] pceltFetched)
         {
-            if ((pceltFetched is not null && pceltFetched.Length == 0)
-                || (celt > 1 && pceltFetched is null))
+            if (rgelt is null || (pceltFetched is not null && pceltFetched.Length == 0))
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            if (celt > 1 && pceltFetched is null)
             {
                 return HRESULT.E_INVALIDARG;
             }
@@ -58,11 +58,11 @@ public unsafe partial class DataObject
             fixed (Com.STATDATA* pNativeStatData = nativeStatData)
             {
                 result = enumStataData.Value->Next((uint)celt, pNativeStatData, (uint*)ppceltFetched);
-            }
 
-            for (int i = 0; i < nativeStatData.Length; i++)
-            {
-                rgelt[i] = Com.STATDATA.ConvertToRuntimeStatData(nativeStatData[i]);
+                for (int i = 0; i < *ppceltFetched; i++)
+                {
+                    rgelt[i] = Com.STATDATA.ConvertToRuntimeStatData(nativeStatData[i]);
+                }
             }
 
             return result;

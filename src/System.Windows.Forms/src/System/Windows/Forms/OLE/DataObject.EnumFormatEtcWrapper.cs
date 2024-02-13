@@ -18,18 +18,14 @@ public unsafe partial class DataObject
 
         public EnumFormatEtcWrapper(Com.IEnumFORMATETC* enumFormatEtc)
         {
-#if DEBUG
-            _enumFormatEtc = new(enumFormatEtc, takeOwnership: true, trackDisposal: false);
-#else
-            _enumFormatEtc = new(enumFormatEtc, takeOwnership: true);
-#endif
+            _enumFormatEtc = new(enumFormatEtc, takeOwnership: false);
         }
 
         void IEnumFORMATETC.Clone(out IEnumFORMATETC newEnum)
         {
             using var formatEtc = _enumFormatEtc.GetInterface();
-            Com.IEnumFORMATETC* result;
-            formatEtc.Value->Clone(&result).ThrowOnFailure();
+            using ComScope<Com.IEnumFORMATETC> result = new(null);
+            formatEtc.Value->Clone(result).ThrowOnFailure();
             newEnum = new EnumFormatEtcWrapper(result);
         }
 

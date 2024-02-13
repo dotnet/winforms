@@ -14,11 +14,7 @@ internal unsafe partial struct STATDATA
 
         public AdviseSinkWrapper(IAdviseSink* adviseSink)
         {
-#if DEBUG
-            _adviseSink = new(adviseSink, takeOwnership: true, trackDisposal: false);
-#else
-            _adviseSink = new(adviseSink, takeOwnership: true);
-#endif
+            _adviseSink = new(adviseSink, takeOwnership: false);
         }
 
         void ComType.IAdviseSink.OnClose()
