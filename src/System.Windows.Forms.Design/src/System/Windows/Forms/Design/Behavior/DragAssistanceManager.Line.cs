@@ -96,9 +96,7 @@ internal sealed partial class DragAssistanceManager
             return null;
         }
 
-        public override string ToString()
-        {
-            return $"Line, type = {LineType}, dims =({X1}, {Y1})->({X2}, {Y2})";
-        }
+        public override string ToString() =>
+            $"Line, type = {LineType}, dims =({X1}, {Y1})->({X2}, {Y2})";
     }
 }
