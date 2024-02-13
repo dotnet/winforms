@@ -311,7 +311,7 @@ internal sealed partial class DragAssistanceManager
                         {
                             for (int k = 0; k < diffs.Length; k++)
                             {
-                                invalidRect = new Rectangle(diffs[k].x1, diffs[k].y1, diffs[k].x2 - diffs[k].x1, diffs[k].y2 - diffs[k].y1);
+                                invalidRect = new Rectangle(diffs[k].X1, diffs[k].Y1, diffs[k].X2 - diffs[k].X1, diffs[k].Y2 - diffs[k].Y1);
 
                                 invalidRect.Inflate(1, 1);
                                 if (_backgroundImage is not null)
@@ -332,7 +332,7 @@ internal sealed partial class DragAssistanceManager
 
                 if (!foundMatch)
                 {
-                    invalidRect = new Rectangle(line.x1, line.y1, line.x2 - line.x1, line.y2 - line.y1);
+                    invalidRect = new Rectangle(line.X1, line.Y1, line.X2 - line.X1, line.Y2 - line.Y1);
                     invalidRect.Inflate(1, 1);
                     if (_backgroundImage is not null)
                     {
@@ -749,75 +749,75 @@ internal sealed partial class DragAssistanceManager
             if (lines[i].LineType == LineType.Margin || lines[i].LineType == LineType.Padding)
             {
                 currentPen = _edgePen;
-                if (lines[i].x1 == lines[i].x2)
+                if (lines[i].X1 == lines[i].X2)
                 {// vertical margin
                     int coord = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
                     coord += (Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom) - coord) / 2;
-                    lines[i].y1 = lines[i].y2 = coord;
+                    lines[i].Y1 = lines[i].Y2 = coord;
                     if (lines[i].LineType == LineType.Margin)
                     {
-                        lines[i].x1 = Math.Min(dragRect.Right, lines[i].OriginalBounds.Right);
-                        lines[i].x2 = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
+                        lines[i].X1 = Math.Min(dragRect.Right, lines[i].OriginalBounds.Right);
+                        lines[i].X2 = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
                     }
                     else if (lines[i].PaddingLineType == PaddingLineType.PaddingLeft)
                     {
-                        lines[i].x1 = lines[i].OriginalBounds.Left;
-                        lines[i].x2 = dragRect.Left;
+                        lines[i].X1 = lines[i].OriginalBounds.Left;
+                        lines[i].X2 = dragRect.Left;
                     }
                     else
                     {
                         Debug.Assert(lines[i].PaddingLineType == PaddingLineType.PaddingRight);
-                        lines[i].x1 = dragRect.Right;
-                        lines[i].x2 = lines[i].OriginalBounds.Right;
+                        lines[i].X1 = dragRect.Right;
+                        lines[i].X2 = lines[i].OriginalBounds.Right;
                     }
 
-                    lines[i].x2--; // off by 1 adjust
+                    lines[i].X2--; // off by 1 adjust
                 }
                 else
                 {// horizontal margin
                     int coord = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
                     coord += (Math.Min(dragRect.Right, lines[i].OriginalBounds.Right) - coord) / 2;
-                    lines[i].x1 = lines[i].x2 = coord;
+                    lines[i].X1 = lines[i].X2 = coord;
                     if (lines[i].LineType == LineType.Margin)
                     {
-                        lines[i].y1 = Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom);
-                        lines[i].y2 = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
+                        lines[i].Y1 = Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom);
+                        lines[i].Y2 = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
                     }
                     else if (lines[i].PaddingLineType == PaddingLineType.PaddingTop)
                     {
-                        lines[i].y1 = lines[i].OriginalBounds.Top;
-                        lines[i].y2 = dragRect.Top;
+                        lines[i].Y1 = lines[i].OriginalBounds.Top;
+                        lines[i].Y2 = dragRect.Top;
                     }
                     else
                     {
                         Debug.Assert(lines[i].PaddingLineType == PaddingLineType.PaddingBottom);
-                        lines[i].y1 = dragRect.Bottom;
-                        lines[i].y2 = lines[i].OriginalBounds.Bottom;
+                        lines[i].Y1 = dragRect.Bottom;
+                        lines[i].Y2 = lines[i].OriginalBounds.Bottom;
                     }
 
-                    lines[i].y2--; // off by 1 adjust
+                    lines[i].Y2--; // off by 1 adjust
                 }
             }
             else if (lines[i].LineType == LineType.Baseline)
             {
                 currentPen = _baselinePen;
-                lines[i].x2 -= 1; // off by 1 adjust
+                lines[i].X2 -= 1; // off by 1 adjust
             }
             else
             {
                 // default to edgePen
                 currentPen = _edgePen;
-                if (lines[i].x1 == lines[i].x2)
+                if (lines[i].X1 == lines[i].X2)
                 {
-                    lines[i].y2--; // off by 1 adjustment
+                    lines[i].Y2--; // off by 1 adjustment
                 }
                 else
                 {
-                    lines[i].x2--; // off by 1 adjustment
+                    lines[i].X2--; // off by 1 adjustment
                 }
             }
 
-            _graphics.DrawLine(currentPen, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
+            _graphics.DrawLine(currentPen, lines[i].X1, lines[i].Y1, lines[i].X2, lines[i].Y2);
         }
     }
 
