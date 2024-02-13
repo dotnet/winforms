@@ -34,7 +34,7 @@ public partial class Dialogs : Form
             if (propertyGrid1.SelectedObject is OpenFileDialog openFileDialog)
             {
                 openFileDialog.ShowDialog(this);
-                MessageBox.Show(string.Join(',', openFileDialog.FileNames),"File Names");
+                MessageBox.Show(string.Join(',', openFileDialog.FileNames), "File Names");
                 return;
             }
 
