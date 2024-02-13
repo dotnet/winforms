@@ -13,9 +13,6 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 {
     private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
 
-    // ColorMap used to map the black color of the resource bitmaps to the fore color in use in the row header cell
-    private static readonly ColorMap[] s_colorMap = [new()];
-
     private static Bitmap? s_rightArrowBmp;
     private static Bitmap? s_leftArrowBmp;
     private static Bitmap? s_rightArrowStarBmp;
@@ -1039,11 +1036,9 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         int height = bounds.Y + (bounds.Height - s_iconsHeight) / 2;
         Rectangle bmpRect = new(width, height, s_iconsWidth, s_iconsHeight);
 
-        s_colorMap[0].NewColor = foreColor;
-        s_colorMap[0].OldColor = Color.Black;
-
+        ValueColorMap map = new(Color.Black, foreColor);
         using ImageAttributes attr = new();
-        attr.SetRemapTable(s_colorMap, ColorAdjustType.Bitmap);
+        attr.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<ValueColorMap>(ref map));
 
         if (SystemInformation.HighContrast &&
             // We can't replace black with white and vice versa as in other cases due to the colors of images are not exactly black and white.

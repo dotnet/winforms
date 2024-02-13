@@ -8,14 +8,14 @@ namespace System;
 ///  types being tested.
 /// </summary>
 /// <remarks>
-///  In the System namespace for implicit discovery.
+///  <para>In the System namespace for implicit discovery.</para>
 /// </remarks>
 public static partial class TestAccessors
 {
     // Need to pass a null parameter when constructing a static instance
     // of TestAccessor. As this is pretty common and never changes, caching
     // the array here.
-    private static object?[] s_nullObjectParam = { null };
+    private static object?[] s_nullObjectParam = [null];
 
     /// <summary>
     ///  Extension that creates a generic internals test accessor for a
@@ -24,23 +24,29 @@ public static partial class TestAccessors
     /// <param name="instanceOrType">
     ///  Instance or Type class (if only accessing statics).
     /// </param>
-    /// <example>
-    /// <![CDATA[
-    ///  Version version = new Version(4, 1);
-    ///  Assert.Equal(4, version.TestAccessor().Dynamic._Major));
-    ///
-    ///  // Or
-    ///
-    ///  dynamic accessor = version.TestAccessor().Dynamic;
-    ///  Assert.Equal(4, accessor._Major));
-    ///
-    /// // Or
-    ///
-    ///  Version version2 = new Version("4.1");
-    ///  dynamic accessor = typeof(Version).TestAccessor().Dynamic;
-    ///  Assert.Equal(version2, accessor.Parse("4.1")));
-    /// ]]>
-    /// </example>
+    /// <remarks>
+    ///  <para>
+    ///   Use <see cref="ITestAccessor.CreateDelegate">CreateDelegate</see> to deal with methods that take spans or
+    ///   other ref structs. For other members, use the dynamic accessor:
+    ///  </para>
+    ///  <code>
+    ///   <![CDATA[
+    ///   Version version = new Version(4, 1);
+    ///    Assert.Equal(4, version.TestAccessor().Dynamic._Major));
+    ///   
+    ///    // Or
+    ///   
+    ///    dynamic accessor = version.TestAccessor().Dynamic;
+    ///    Assert.Equal(4, accessor._Major));
+    ///   
+    ///    // Or
+    ///   
+    ///    Version version2 = new Version("4.1");
+    ///    dynamic accessor = typeof(Version).TestAccessor().Dynamic;
+    ///    Assert.Equal(version2, accessor.Parse("4.1")));
+    ///   ]]>
+    ///  </code>
+    /// </remarks>
     public static ITestAccessor TestAccessor(this object instanceOrType)
     {
         ITestAccessor? testAccessor = instanceOrType is Type type
@@ -51,11 +57,7 @@ public static partial class TestAccessors
                 typeof(TestAccessor<>).MakeGenericType(instanceOrType.GetType()),
                 instanceOrType);
 
-        if (testAccessor is null)
-        {
-            throw new ArgumentException("Cannot create TestAccessor for Nullable<T> instances with no value.");
-        }
-
-        return testAccessor;
+        return testAccessor
+            ?? throw new ArgumentException("Cannot create TestAccessor for Nullable<T> instances with no value.");
     }
 }
