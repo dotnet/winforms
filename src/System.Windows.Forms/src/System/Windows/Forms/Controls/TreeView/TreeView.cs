@@ -10,6 +10,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
+using static System.Windows.Forms.TreeNode;
 
 namespace System.Windows.Forms;
 
@@ -1830,12 +1831,10 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the DrawNode event.
+    ///  Raises the DrawNode event.
     /// </summary>
-    protected virtual void OnDrawNode(DrawTreeNodeEventArgs e)
-    {
+    protected virtual void OnDrawNode(DrawTreeNodeEventArgs e) =>
         _onDrawNode?.Invoke(this, e);
-    }
 
     protected override void OnHandleCreated(EventArgs e)
     {
@@ -2080,15 +2079,13 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the beforeLabelEdit event.
+    ///  Raises the beforeLabelEdit event.
     /// </summary>
-    protected virtual void OnBeforeLabelEdit(NodeLabelEditEventArgs e)
-    {
+    protected virtual void OnBeforeLabelEdit(NodeLabelEditEventArgs e) =>
         _onBeforeLabelEdit?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the afterLabelEdit event.
+    ///  Raises the afterLabelEdit event.
     /// </summary>
     protected virtual void OnAfterLabelEdit(NodeLabelEditEventArgs e)
     {
@@ -2103,15 +2100,13 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the beforeCheck event.
+    ///  Raises the beforeCheck event.
     /// </summary>
-    protected virtual void OnBeforeCheck(TreeViewCancelEventArgs e)
-    {
+    protected virtual void OnBeforeCheck(TreeViewCancelEventArgs e) =>
         _onBeforeCheck?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the afterCheck event.
+    ///  Raises the afterCheck event.
     /// </summary>
     protected virtual void OnAfterCheck(TreeViewEventArgs e)
     {
@@ -2139,15 +2134,13 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the beforeCollapse event.
+    ///  Raises the beforeCollapse event.
     /// </summary>
-    protected internal virtual void OnBeforeCollapse(TreeViewCancelEventArgs e)
-    {
+    protected internal virtual void OnBeforeCollapse(TreeViewCancelEventArgs e) =>
         _onBeforeCollapse?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the afterCollapse event.
+    ///  Raises the afterCollapse event.
     /// </summary>
     protected internal virtual void OnAfterCollapse(TreeViewEventArgs e)
     {
@@ -2164,15 +2157,13 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the beforeExpand event.
+    ///  Raises the beforeExpand event.
     /// </summary>
-    protected virtual void OnBeforeExpand(TreeViewCancelEventArgs e)
-    {
+    protected virtual void OnBeforeExpand(TreeViewCancelEventArgs e) =>
         _onBeforeExpand?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the afterExpand event.
+    ///  Raises the afterExpand event.
     /// </summary>
     protected virtual void OnAfterExpand(TreeViewEventArgs e)
     {
@@ -2189,31 +2180,25 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the ItemDrag event.
+    ///  Raises the ItemDrag event.
     /// </summary>
-    protected virtual void OnItemDrag(ItemDragEventArgs e)
-    {
+    protected virtual void OnItemDrag(ItemDragEventArgs e) =>
         _onItemDrag?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the NodeMouseHover event.
+    ///  Raises the NodeMouseHover event.
     /// </summary>
-    protected virtual void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e)
-    {
+    protected virtual void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) =>
         _onNodeMouseHover?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the beforeSelect event.
+    ///  Raises the beforeSelect event.
     /// </summary>
-    protected virtual void OnBeforeSelect(TreeViewCancelEventArgs e)
-    {
+    protected virtual void OnBeforeSelect(TreeViewCancelEventArgs e) =>
         _onBeforeSelect?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the afterSelect event.
+    ///  Raises the afterSelect event.
     /// </summary>
     protected virtual void OnAfterSelect(TreeViewEventArgs e)
     {
@@ -2240,20 +2225,16 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Fires the onNodeMouseClick event.
+    ///  Raises the onNodeMouseClick event.
     /// </summary>
-    protected virtual void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
-    {
+    protected virtual void OnNodeMouseClick(TreeNodeMouseClickEventArgs e) =>
         _onNodeMouseClick?.Invoke(this, e);
-    }
 
     /// <summary>
-    ///  Fires the onNodeMouseDoubleClick event.
+    ///  Raises the onNodeMouseDoubleClick event.
     /// </summary>
-    protected virtual void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e)
-    {
+    protected virtual void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e) =>
         _onNodeMouseDoubleClick?.Invoke(this, e);
-    }
 
     /// <summary>
     ///  Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
@@ -2383,20 +2364,20 @@ public partial class TreeView : Control
     {
         if (_imageList is not null)
         {
-            return (SelectedImageIndex != 0);
+            return SelectedImageIndex != 0;
         }
 
-        return (SelectedImageIndex != ImageList.Indexer.DefaultIndex);
+        return SelectedImageIndex != ImageList.Indexer.DefaultIndex;
     }
 
     private bool ShouldSerializeImageIndex()
     {
         if (_imageList is not null)
         {
-            return (ImageIndex != 0);
+            return ImageIndex != 0;
         }
 
-        return (ImageIndex != ImageList.Indexer.DefaultIndex);
+        return ImageIndex != ImageList.Indexer.DefaultIndex;
     }
 
     /// <summary>
@@ -2443,14 +2424,14 @@ public partial class TreeView : Control
         OnItemDrag(new ItemDragEventArgs(buttons, node));
     }
 
-    private unsafe IntPtr TvnExpanding(NMTREEVIEWW* nmtv)
+    private unsafe nint TvnExpanding(NMTREEVIEWW* nmtv)
     {
         TVITEMW item = nmtv->itemNew;
 
         // Check for invalid node handle
         if (item.hItem == IntPtr.Zero)
         {
-            return IntPtr.Zero;
+            return 0;
         }
 
         TreeViewCancelEventArgs? e = null;
@@ -2465,7 +2446,7 @@ public partial class TreeView : Control
             OnBeforeCollapse(e);
         }
 
-        return (IntPtr)(e.Cancel ? 1 : 0);
+        return e.Cancel ? 1 : 0;
     }
 
     private unsafe void TvnExpanded(NMTREEVIEWW* nmtv)
@@ -2494,17 +2475,17 @@ public partial class TreeView : Control
         }
     }
 
-    private unsafe IntPtr TvnSelecting(NMTREEVIEWW* nmtv)
+    private unsafe nint TvnSelecting(NMTREEVIEWW* nmtv)
     {
         if (_treeViewState[TREEVIEWSTATE_ignoreSelects])
         {
-            return (IntPtr)1;
+            return 1;
         }
 
         // Check for invalid node handle
         if (nmtv->itemNew.hItem == IntPtr.Zero)
         {
-            return IntPtr.Zero;
+            return 0;
         }
 
         TreeNode? node = NodeFromHandle(nmtv->itemNew.hItem);
@@ -2524,7 +2505,7 @@ public partial class TreeView : Control
         TreeViewCancelEventArgs e = new(node, false, action);
         OnBeforeSelect(e);
 
-        return (IntPtr)(e.Cancel ? 1 : 0);
+        return e.Cancel ? 1 : 0;
     }
 
     private unsafe void TvnSelected(NMTREEVIEWW* nmtv)
@@ -3115,7 +3096,7 @@ public partial class TreeView : Control
     }
 
     /// <summary>
-    ///  Shows the context menu for the Treenode.
+    ///  Shows the context menu for the <see cref="TreeNode"/>.
     /// </summary>
     private void ShowContextMenu(TreeNode treeNode)
     {

@@ -13,10 +13,10 @@ using System.Text;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Implements a node of a <see cref="Forms.TreeView"/>.
+///  Implements a node of a <see cref="TreeView"/>.
 /// </summary>
-[TypeConverterAttribute(typeof(TreeNodeConverter))]
-[Serializable]  // This class participates in resx serialization.
+[TypeConverter(typeof(TreeNodeConverter))]
+[Serializable]  // This class participates in ResX serialization.
 [DefaultProperty(nameof(Text))]
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
 public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
@@ -152,9 +152,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         Nodes.AddRange(children);
     }
 
-    /**
-     * Constructor used in deserialization
-     */
+    /// <summary>
+    ///  Constructor used in deserialization from resources.
+    /// </summary>
     protected TreeNode(SerializationInfo serializationInfo, StreamingContext context)
         : this()
     {
@@ -1686,7 +1686,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal List<TreeNode> GetSelfAndChildNodes()
     {
-        List<TreeNode> nodes = new() { this };
+        List<TreeNode> nodes = [this];
         AggregateChildNodesToList(this);
         return nodes;
 
