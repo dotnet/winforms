@@ -1101,7 +1101,7 @@ public partial class Binding
         }
     }
 
-    private void SetPropValue(PropertyDescriptor property, IBindableComponent component, object value)
+    private void SetPropValue(PropertyDescriptor property, IBindableComponent? component, object? value)
     {
         // If possible, we should use Invoke in order to work with the UI Thread
         if (Control is not null && Control.InvokeRequired && _invokeControl)
