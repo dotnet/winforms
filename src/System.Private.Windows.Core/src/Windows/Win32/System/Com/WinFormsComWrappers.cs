@@ -71,6 +71,10 @@ internal unsafe partial class WinFormsComWrappers : ComWrappers
         }
     }
 
+    /// <inheritdoc cref="UnwrapAndInvoke{TThis, TInterface}(TThis*, Func{TInterface, HRESULT})"/>
+    /// <remarks>
+    ///  <para>Handles exceptions and returns default{T}.</para>
+    /// </remarks>
     internal static TReturnType UnwrapAndInvoke<TThis, TInterface, TReturnType>(TThis* @this, Func<TInterface, TReturnType> func)
         where TThis : unmanaged
         where TInterface : class
