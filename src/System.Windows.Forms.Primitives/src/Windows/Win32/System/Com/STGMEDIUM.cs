@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
 using ComType = System.Runtime.InteropServices.ComTypes;
 
 namespace Windows.Win32.System.Com;
@@ -30,7 +29,7 @@ internal unsafe partial struct STGMEDIUM
     {
         pUnkForRelease = stg.pUnkForRelease is null
             ? null
-            : Marshal.GetObjectForIUnknown((nint)stg.pUnkForRelease),
+            : ComHelpers.GetObjectForIUnknown(stg.pUnkForRelease),
         tymed = (ComType.TYMED)stg.tymed,
         unionmember = stg.u.hGlobal
     };

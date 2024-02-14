@@ -4,7 +4,9 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
+using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests;
@@ -96,7 +98,7 @@ public class DragDropHelperTests
             tymed = TYMED.TYMED_HGLOBAL
         };
 
-        Assert.Equal(expectedIsInDragLoopFormat, DragDropHelper.IsInDragLoopFormat(formatEtc));
+        Assert.Equal(expectedIsInDragLoopFormat, DragDropHelper.IsInDragLoopFormat(Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatEtc)));
     }
 
     [WinFormsTheory(Skip ="Causing issues with other tests on x86 from the command line")]
