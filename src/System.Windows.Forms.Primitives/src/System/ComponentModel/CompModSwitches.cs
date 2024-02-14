@@ -26,7 +26,6 @@ internal static class CompModSwitches
     private static TraceSwitch? dragDrop;
     private static TraceSwitch? imeMode;
     private static TraceSwitch? msaa;
-    private static TraceSwitch? msoComponentManager;
     private static TraceSwitch? layoutPerformance;
     private static TraceSwitch? layoutSuspendResume;
     private static TraceSwitch? richLayout;
@@ -275,16 +274,6 @@ internal static class CompModSwitches
             msaa ??= new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
 
             return msaa;
-        }
-    }
-
-    public static TraceSwitch MSOComponentManager
-    {
-        get
-        {
-            msoComponentManager ??= new TraceSwitch("MSOComponentManager", "Debug MSO Component Manager support");
-
-            return msoComponentManager;
         }
     }
 
