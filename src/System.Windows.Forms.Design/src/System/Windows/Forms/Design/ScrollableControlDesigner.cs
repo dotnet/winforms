@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
 
@@ -14,7 +12,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 public class ScrollableControlDesigner : ParentControlDesigner
 {
-    private SelectionManager selManager;
+    private SelectionManager? _selectionManager;
 
     /// <summary>
     ///  Overrides the base class's GetHitTest method to determine regions of the
@@ -57,9 +55,9 @@ public class ScrollableControlDesigner : ParentControlDesigner
                 // When we scroll, we reposition a control without causing a
                 // property change event.  Therefore, we must tell the
                 // SelectionManager to refresh its glyphs.
-                selManager ??= GetService(typeof(SelectionManager)) as SelectionManager;
+                _selectionManager ??= GetService<SelectionManager>();
 
-                selManager?.Refresh();
+                _selectionManager?.Refresh();
 
                 // Now we must paint our adornments, since the scroll does not
                 // trigger a paint event

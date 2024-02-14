@@ -456,13 +456,16 @@ public abstract partial class FileDialog : CommonDialog
     private static string[] GetMultiselectFiles(ReadOnlySpan<char> fileBuffer)
     {
         var directory = fileBuffer.SliceAtFirstNull();
-        var fileNames = fileBuffer[directory.Length..];
-        if (fileNames.Length == 0)
+        var fileNames = fileBuffer[(directory.Length + 1)..];
+
+        // When a single file is returned, the directory is not null delimited.
+        // So we check here to see if the filename starts with a null.
+        if (fileNames.Length == 0 || fileNames[0] == '\0')
         {
             return [directory.ToString()];
         }
 
-        List<string> names = new();
+        List<string> names = [];
         var fileName = fileNames.SliceAtFirstNull();
         while (fileName.Length > 0)
         {
@@ -470,7 +473,7 @@ public abstract partial class FileDialog : CommonDialog
                 ? fileName.ToString()
                 : Path.Join(directory, fileName));
 
-            fileNames = fileNames[fileName.Length..];
+            fileNames = fileNames[(fileName.Length + 1)..];
             fileName = fileNames.SliceAtFirstNull();
         }
 

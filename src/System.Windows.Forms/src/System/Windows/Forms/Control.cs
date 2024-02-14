@@ -5198,7 +5198,7 @@ public unsafe partial class Control :
     ///   value.
     ///  </para>
     /// </remarks>
-    public unsafe DragDropEffects DoDragDrop(
+    public DragDropEffects DoDragDrop(
         object data,
         DragDropEffects allowedEffects,
         Bitmap? dragImage,

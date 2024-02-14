@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -34,45 +32,46 @@ internal class LabelDesigner : ControlDesigner
             IList<SnapLine> snapLines = SnapLinesInternal;
             ContentAlignment alignment = ContentAlignment.TopLeft;
 
-            PropertyDescriptor prop;
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-            if ((prop = props["TextAlign"]) is not null)
-            {
-                alignment = (ContentAlignment)prop.GetValue(Component);
-            }
+            props.TryGetPropertyDescriptorValue(
+                "TextAlign",
+                Component,
+                ref alignment);
 
             // a single text-baseline for the label (and linklabel) control
             int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
-            if ((prop = props["AutoSize"]) is not null)
+            bool autoSize = false;
+            if (props.TryGetPropertyDescriptorValue(
+                "AutoSize",
+                Component,
+                ref autoSize)
+                && !autoSize)
             {
-                if ((bool)prop.GetValue(Component) == false)
-                {
-                    // Only adjust if AutoSize is false
-                    BorderStyle borderStyle = BorderStyle.None;
-                    if ((prop = props["BorderStyle"]) is not null)
-                    {
-                        borderStyle = (BorderStyle)prop.GetValue(Component);
-                    }
+                // Only adjust if AutoSize is false
+                BorderStyle borderStyle = BorderStyle.None;
+                props.TryGetPropertyDescriptorValue(
+                    "BorderStyle",
+                    Component,
+                    ref borderStyle);
 
-                    baseline += LabelBaselineOffset(alignment, borderStyle);
-                }
+                baseline += LabelBaselineOffset(alignment, borderStyle);
             }
 
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
             // VSWhidbey# 414468
-            Label label = Control as Label;
+            Label? label = Control as Label;
             if (label is not null && label.BorderStyle == BorderStyle.None)
             {
-                Type type = Type.GetType("System.Windows.Forms.Label");
+                Type? type = Type.GetType("System.Windows.Forms.Label");
                 if (type is not null)
                 {
-                    MethodInfo info = type.GetMethod("GetLeadingTextPaddingFromTextFormatFlags", BindingFlags.Instance | BindingFlags.NonPublic);
+                    MethodInfo? info = type.GetMethod("GetLeadingTextPaddingFromTextFormatFlags", BindingFlags.Instance | BindingFlags.NonPublic);
                     if (info is not null)
                     {
-                        int offset = (int)info.Invoke(Component, null);
+                        int offset = (int)(info.Invoke(Component, parameters: null) ?? 0);
                         bool rtl = (label.RightToLeft == RightToLeft.Yes);
 
                         for (int i = 0; i < snapLines.Count; i++)
@@ -144,15 +143,17 @@ internal class LabelDesigner : ControlDesigner
         get
         {
             SelectionRules rules = base.SelectionRules;
-            object component = Component;
-
-            PropertyDescriptor propAutoSize = TypeDescriptor.GetProperties(component)["AutoSize"];
-            if (propAutoSize is not null)
+            bool autoSize = false;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            if (props.TryGetPropertyDescriptorValue(
+                "AutoSize",
+                Component,
+                ref autoSize))
             {
-                bool autoSize = (bool)propAutoSize.GetValue(component);
-
                 if (autoSize)
+                {
                     rules &= ~SelectionRules.AllSizeable;
+                }
             }
 
             return rules;

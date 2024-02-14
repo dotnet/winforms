@@ -3,6 +3,7 @@
 
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace System.Drawing.Imaging;
 
@@ -32,6 +33,8 @@ namespace System.Drawing.Imaging;
 [StructLayout(LayoutKind.Sequential)]
 public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 {
+    private const int ColorMapStackSpace = 32;
+
 #if FINALIZATION_WATCH
     private string allocationSite = Graphics.GetAllocationStack();
 #endif
@@ -337,19 +340,52 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
         GC.KeepAlive(this);
     }
 
+    /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
     public void SetRemapTable(ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Default);
 
-    public unsafe void SetRemapTable(ColorMap[] map, ColorAdjustType type)
+    /// <summary>
+    ///  Sets the default color-remap table.
+    /// </summary>
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+    public void SetRemapTable(ColorMap[] map, ColorAdjustType type)
     {
         ArgumentNullException.ThrowIfNull(map);
+        SetRemapTable(type, map);
+    }
 
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
+    public void SetRemapTable(ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
+
+    /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
+    public void SetRemapTable(ReadOnlySpan<ValueColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
+#endif
+
+    /// <summary>
+    ///  Sets the color-remap table for a specified category.
+    /// </summary>
+    /// <param name="type">
+    ///  An element of <see cref="ColorAdjustType"/> that specifies the category for which the color-remap table is set.
+    /// </param>
+    /// <param name="map">
+    ///  A series of color pairs mapping an existing color to a new color.
+    /// </param>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void SetRemapTable(ColorAdjustType type, ReadOnlySpan<ColorMap> map)
+    {
         // Color is being generated incorrectly so we can't use GdiPlus.ColorMap directly.
         // https://github.com/microsoft/CsWin32/issues/1121
-        using BufferScope<(int, int)> buffer = new(map.Length * 2);
+
+        StackBuffer stackBuffer = default;
+        using BufferScope<(ARGB, ARGB)> buffer = new(stackBuffer, map.Length);
 
         for (int i = 0; i < map.Length; i++)
         {
-            buffer[i] = (map[i].OldColor.ToArgb(), map[i].NewColor.ToArgb());
+            buffer[i] = (map[i].OldColor, map[i].NewColor);
         }
 
         fixed (void* m = buffer)
@@ -363,6 +399,38 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
         }
 
         GC.KeepAlive(this);
+    }
+
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+    public void SetRemapTable(ColorAdjustType type, ReadOnlySpan<ValueColorMap> map)
+    {
+        StackBuffer stackBuffer = default;
+        using BufferScope<(ARGB, ARGB)> buffer = new(stackBuffer, map.Length);
+
+        for (int i = 0; i < map.Length; i++)
+        {
+            buffer[i] = (map[i].OldColor, map[i].NewColor);
+        }
+
+        fixed (void* m = buffer)
+        {
+            PInvoke.GdipSetImageAttributesRemapTable(
+                _nativeImageAttributes,
+                (GdiPlus.ColorAdjustType)type,
+                enableFlag: true,
+                (uint)map.Length,
+                (GdiPlus.ColorMap*)m).ThrowIfFailed();
+        }
+
+        GC.KeepAlive(this);
+    }
+#endif
+
+    [InlineArray(ColorMapStackSpace)]
+    private struct StackBuffer
+    {
+        internal (ARGB, ARGB) _element0;
     }
 
     public void ClearRemapTable() => ClearRemapTable(ColorAdjustType.Default);
@@ -380,6 +448,10 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     }
 
     public void SetBrushRemapTable(ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Brush);
+
+#if NET9_0_OR_GREATER
+    public void SetBrushRemapTable(ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Brush, map);
+#endif
 
     public void ClearBrushRemapTable() => ClearRemapTable(ColorAdjustType.Brush);
 

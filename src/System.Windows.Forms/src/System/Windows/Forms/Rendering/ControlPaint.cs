@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms;
 
@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///  The ControlPaint class provides a series of methods that can be used to paint common Windows UI pieces. Many
 ///  Windows Forms controls use this class to paint their UI elements.
 /// </summary>
-public static partial class ControlPaint
+public static unsafe partial class ControlPaint
 {
     [ThreadStatic]
     private static Bitmap? t_checkImage;         // image used to render checkmarks
@@ -67,14 +67,9 @@ public static partial class ControlPaint
     // Otherwise, we will recolor intermediate shades and the icon will look inconsistent (too bold).
     private const int MaximumLuminosityDifference = 20;
 
-    internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
+    internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Size imageSize, ImageLayout imageLayout)
     {
         Rectangle result = bounds;
-
-        if (backgroundImage is null)
-        {
-            return result;
-        }
 
         switch (imageLayout)
         {
@@ -83,27 +78,25 @@ public static partial class ControlPaint
                 break;
 
             case ImageLayout.None:
-                result.Size = backgroundImage.Size;
+                result.Size = imageSize;
                 break;
 
             case ImageLayout.Center:
-                result.Size = backgroundImage.Size;
-                Size szCtl = bounds.Size;
+                result.Size = imageSize;
 
-                if (szCtl.Width > result.Width)
+                if (bounds.Width > result.Width)
                 {
-                    result.X = (szCtl.Width - result.Width) / 2;
+                    result.X = (bounds.Width - result.Width) / 2;
                 }
 
-                if (szCtl.Height > result.Height)
+                if (bounds.Height > result.Height)
                 {
-                    result.Y = (szCtl.Height - result.Height) / 2;
+                    result.Y = (bounds.Height - result.Height) / 2;
                 }
 
                 break;
 
             case ImageLayout.Zoom:
-                Size imageSize = backgroundImage.Size;
                 float xRatio = bounds.Width / (float)imageSize.Width;
                 float yRatio = bounds.Height / (float)imageSize.Height;
                 if (xRatio < yRatio)
@@ -269,22 +262,23 @@ public static partial class ControlPaint
             monochromeStride++;
         }
 
-        // This needs to be zero'ed out so we cannot use the ArrayPool
+        // This needs to be zeroed out so we cannot use the ArrayPool
         byte[] bits = new byte[monochromeStride * height];
         BitmapData data = bitmap.LockBits(
             new Rectangle(0, 0, width, height),
             ImageLockMode.ReadOnly,
             PixelFormat.Format32bppArgb);
 
-        Debug.Assert(data.Scan0 != IntPtr.Zero, "BitmapData.Scan0 is null; check marshalling");
+        Debug.Assert(data.Scan0 != 0, "BitmapData.Scan0 is null; check marshalling");
+
+        ReadOnlySpan<ARGB> colors = new((ARGB*)data.Scan0, width * height);
 
         for (int y = 0; y < height; y++)
         {
-            IntPtr scan = (IntPtr)((long)data.Scan0 + y * data.Stride);
             for (int x = 0; x < width; x++)
             {
-                int color = Marshal.ReadInt32(scan, x * 4);
-                if (color >> 24 == 0)
+                ARGB color = colors[y * width + x];
+                if (color.A == 0)
                 {
                     // Pixel is transparent; set bit to 1
                     int index = monochromeStride * y + x / 8;
@@ -448,7 +442,7 @@ public static partial class ControlPaint
         {
             // Center, Stretch, Zoom
 
-            Rectangle imageRectangle = CalculateBackgroundImageRectangle(bounds, backgroundImage, backgroundImageLayout);
+            Rectangle imageRectangle = CalculateBackgroundImageRectangle(bounds, backgroundImage.Size, backgroundImageLayout);
 
             // Flip the coordinates only if we don't do any layout, since otherwise the image should be at the
             // center of the displayRectangle anyway.
@@ -469,7 +463,7 @@ public static partial class ControlPaint
 
             if (!clipRect.Contains(imageRectangle))
             {
-                if (backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Zoom)
+                if (backgroundImageLayout is ImageLayout.Stretch or ImageLayout.Zoom)
                 {
                     imageRectangle.Intersect(clipRect);
                     g.DrawImage(backgroundImage, imageRectangle);
@@ -584,34 +578,25 @@ public static partial class ControlPaint
         ArgumentOutOfRangeException.ThrowIfNegative(bottomWidth);
 
         int totalData = (topWidth + leftWidth + bottomWidth + rightWidth) * 2;
-        Span<int> allData;
 
-        if (totalData <= 40)
-        {
-            // Reasonable to put on the stack (40 * 8 bytes)
-            int* data = stackalloc int[totalData];
-            allData = new Span<int>(data, totalData);
-        }
-        else
-        {
-            allData = new int[totalData];
-        }
-
-        Span<int> topLineLefts = allData.Slice(0, topWidth);
-        allData = allData.Slice(topWidth);
-        Span<int> topLineRights = allData.Slice(0, topWidth);
-        allData = allData.Slice(topWidth);
-        Span<int> leftLineTops = allData.Slice(0, leftWidth);
-        allData = allData.Slice(leftWidth);
-        Span<int> leftLineBottoms = allData.Slice(0, leftWidth);
-        allData = allData.Slice(leftWidth);
-        Span<int> bottomLineLefts = allData.Slice(0, bottomWidth);
-        allData = allData.Slice(bottomWidth);
-        Span<int> bottomLineRights = allData.Slice(0, bottomWidth);
-        allData = allData.Slice(bottomWidth);
-        Span<int> rightLineTops = allData.Slice(0, rightWidth);
-        allData = allData.Slice(rightWidth);
-        Span<int> rightLineBottoms = allData.Slice(0, rightWidth);
+        // Reasonable to put on the stack (40 * 8 bytes)
+        using BufferScope<int> buffer = new(stackalloc int[40], totalData);
+        Span<int> allData = buffer;
+        Span<int> topLineLefts = allData[..topWidth];
+        allData = allData[topWidth..];
+        Span<int> topLineRights = allData[..topWidth];
+        allData = allData[topWidth..];
+        Span<int> leftLineTops = allData[..leftWidth];
+        allData = allData[leftWidth..];
+        Span<int> leftLineBottoms = allData[..leftWidth];
+        allData = allData[leftWidth..];
+        Span<int> bottomLineLefts = allData[..bottomWidth];
+        allData = allData[bottomWidth..];
+        Span<int> bottomLineRights = allData[..bottomWidth];
+        allData = allData[bottomWidth..];
+        Span<int> rightLineTops = allData[..rightWidth];
+        allData = allData[rightWidth..];
+        Span<int> rightLineBottoms = allData[..rightWidth];
 
         float topToLeft = 0.0f;
         float bottomToLeft = 0.0f;
@@ -738,23 +723,19 @@ public static partial class ControlPaint
                             hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i] + 1, bounds.Y + i);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
+                        using var pen = topColor.CreateStaticPen(
+                        topStyle switch
                         {
-                            using var pen = topColor.CreateStaticPen(
-                            topStyle switch
-                            {
-                                ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                _ => DashStyle.Solid,
-                            });
+                            ButtonBorderStyle.Dotted => DashStyle.Dot,
+                            ButtonBorderStyle.Dashed => DashStyle.Dash,
+                            _ => DashStyle.Solid,
+                        });
 
-                            for (int i = 0; i < topWidth; i++)
-                            {
-                                graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                            }
+                        for (int i = 0; i < topWidth; i++)
+                        {
+                            graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
                         }
                     }
 
@@ -801,23 +782,19 @@ public static partial class ControlPaint
                             hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i] + 1);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
-                        {
-                            using var pen = leftColor.CreateStaticPen(
-                               leftStyle switch
-                               {
-                                   ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                   ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                   _ => DashStyle.Solid,
-                               });
-
-                            for (int i = 0; i < leftWidth; i++)
+                        using var pen = leftColor.CreateStaticPen(
+                            leftStyle switch
                             {
-                                graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                            }
+                                ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                _ => DashStyle.Solid,
+                            });
+
+                        for (int i = 0; i < leftWidth; i++)
+                        {
+                            graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                         }
                     }
 
@@ -869,28 +846,24 @@ public static partial class ControlPaint
                                 bounds.Y + bounds.Height - 1 - i);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
-                        {
-                            using var pen = bottomColor.CreateStaticPen(
-                               bottomStyle switch
-                               {
-                                   ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                   ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                   _ => DashStyle.Solid,
-                               });
-
-                            for (int i = 0; i < bottomWidth; i++)
+                        using var pen = bottomColor.CreateStaticPen(
+                            bottomStyle switch
                             {
-                                graphics.DrawLine(
-                                    pen,
-                                    bottomLineLefts[i],
-                                    bounds.Y + bounds.Height - 1 - i,
-                                    bottomLineRights[i],
-                                    bounds.Y + bounds.Height - 1 - i);
-                            }
+                                ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                _ => DashStyle.Solid,
+                            });
+
+                        for (int i = 0; i < bottomWidth; i++)
+                        {
+                            graphics.DrawLine(
+                                pen,
+                                bottomLineLefts[i],
+                                bounds.Y + bounds.Height - 1 - i,
+                                bottomLineRights[i],
+                                bounds.Y + bounds.Height - 1 - i);
                         }
                     }
 
@@ -947,28 +920,24 @@ public static partial class ControlPaint
                                 rightLineBottoms[i] + 1);
                         }
                     }
-                    else
+                    else if (deviceContext.TryGetGraphics(create: true) is Graphics graphics)
                     {
-                        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-                        if (graphics is not null)
-                        {
-                            using var pen = rightColor.CreateStaticPen(
-                                                            rightStyle switch
-                                                            {
-                                                                ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                                                ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                                                _ => DashStyle.Solid,
-                                                            });
-
-                            for (int i = 0; i < rightWidth; i++)
+                        using var pen = rightColor.CreateStaticPen(
+                            rightStyle switch
                             {
-                                graphics.DrawLine(
-                                    pen,
-                                    bounds.X + bounds.Width - 1 - i,
-                                    rightLineTops[i],
-                                    bounds.X + bounds.Width - 1 - i,
-                                    rightLineBottoms[i]);
-                            }
+                                ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                _ => DashStyle.Solid,
+                            });
+
+                        for (int i = 0; i < rightWidth; i++)
+                        {
+                            graphics.DrawLine(
+                                pen,
+                                bounds.X + bounds.Width - 1 - i,
+                                rightLineTops[i],
+                                bounds.X + bounds.Width - 1 - i,
+                                rightLineBottoms[i]);
                         }
                     }
 
@@ -1061,7 +1030,7 @@ public static partial class ControlPaint
         RECT rc = new Rectangle(x, y, width, height);
 
         // Windows just draws the border to size, and then shrinks the rectangle so the user can paint the client
-        // area. We can't really do that, so we do the opposite: We precalculate the size of the border and enlarge
+        // area. We can't really do that, so we do the opposite: We pre-calculate the size of the border and enlarge
         // the rectangle so the client size is preserved.
         if (flags.HasFlag((DRAW_EDGE_FLAGS)Border3DStyle.Adjust))
         {
@@ -1486,26 +1455,21 @@ public static partial class ControlPaint
         else
         {
             // Replace black/white with foreColor/backColor.
-            ImageAttributes attrs = new();
-            ColorMap cm1 = new()
-            {
-                OldColor = Color.Black,
-                NewColor = foreColor
-            };
+            ImageAttributes attributes = new();
 
-            ColorMap cm2 = new()
-            {
-                OldColor = Color.White,
-                NewColor = backColor
-            };
+            Span<ValueColorMap> map =
+            [
+                new(Color.Black, foreColor),
+                new(Color.White, backColor)
+            ];
 
-            attrs.SetRemapTable(new ColorMap[2] { cm1, cm2 }, ColorAdjustType.Bitmap);
+            attributes.SetRemapTable(ColorAdjustType.Bitmap, map);
             graphics.DrawImage(
                 bitmap,
                 new Rectangle(x, y, width, height),
                 0, 0, width, height,
                 GraphicsUnit.Pixel,
-                attrs,
+                attributes,
                 null,
                 IntPtr.Zero);
         }
@@ -1605,7 +1569,7 @@ public static partial class ControlPaint
             GraphicsUnit.Pixel,
             attributes,
             null,
-            IntPtr.Zero);
+            0);
     }
 
     internal static bool IsImageTransparent(Image? backgroundImage)
@@ -1615,17 +1579,12 @@ public static partial class ControlPaint
     // the supplied Graphics object.
     internal static void DrawImageReplaceColor(Graphics g, Image image, Rectangle dest, Color oldColor, Color newColor)
     {
-        using ImageAttributes attrs = new();
+        using ImageAttributes attributes = new();
 
-        ColorMap cm = new()
-        {
-            OldColor = oldColor,
-            NewColor = newColor
-        };
+        ValueColorMap map = new(oldColor, newColor);
+        attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<ValueColorMap>(ref map));
 
-        attrs.SetRemapTable(new ColorMap[] { cm }, ColorAdjustType.Bitmap);
-
-        g.DrawImage(image, dest, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
+        g.DrawImage(image, dest, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes, null, 0);
     }
 
     /// <summary>
@@ -1639,6 +1598,7 @@ public static partial class ControlPaint
     /// <summary>
     ///  Draws an image and makes it look disabled.
     /// </summary>
+    [SkipLocalsInit]
     internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, bool unscaledImage)
     {
         ArgumentNullException.ThrowIfNull(graphics);
@@ -1648,7 +1608,7 @@ public static partial class ControlPaint
 
         if (t_disabledImageAttr is null)
         {
-            // This ColorMatrix is set up to resemble Office 10 commandbars, but still be able to deal with
+            // This ColorMatrix is set up to resemble Office 10 command bars, but still be able to deal with
             // hi-color (256+) icons and images.
             //
             // The idea is to scale everything down (more than just a grayscale does, therefore the small numbers
@@ -1657,12 +1617,14 @@ public static partial class ControlPaint
             // Second part of the matrix is to translate everything, so all colors are a bit brighter. Grays become
             // lighter and washed out looking black becomes a shade of gray as well.
 
-            float[][] array = new float[5][];
-            array[0] = new float[5] { 0.2125f, 0.2125f, 0.2125f, 0, 0 };
-            array[1] = new float[5] { 0.2577f, 0.2577f, 0.2577f, 0, 0 };
-            array[2] = new float[5] { 0.0361f, 0.0361f, 0.0361f, 0, 0 };
-            array[3] = new float[5] { 0, 0, 0, 1, 0 };
-            array[4] = new float[5] { 0.38f, 0.38f, 0.38f, 0, 1 };
+            Span<float> array =
+            [
+                0.2125f, 0.2125f, 0.2125f, 0, 0,
+                0.2577f, 0.2577f, 0.2577f, 0, 0,
+                0.0361f, 0.0361f, 0.0361f, 0, 0,
+                0, 0, 0, 1, 0,
+                0.38f, 0.38f, 0.38f, 0, 1
+            ];
 
             ColorMatrix grayMatrix = new(array);
 
@@ -2634,7 +2596,7 @@ public static partial class ControlPaint
 
         // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens
         // when AutoSize is false and a one-word line still doesn't fit the binding box (width). The other effect
-        // is that partially visiblelines are clipped; this is how GDI+ works by default.
+        // is that partially visible lines are clipped; this is how GDI+ works by default.
         flags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
 
         if (showEllipsis)
