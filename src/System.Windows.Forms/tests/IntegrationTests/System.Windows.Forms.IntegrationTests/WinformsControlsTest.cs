@@ -219,7 +219,51 @@ public partial class WinformsControlsTest
         // remove bindings
         textBox.DataBindings.Clear();
 
-        // bindings unset
-        Assert.False(mainObject.IsPropertyChangedAssigned);
+            // bindings unset
+            Assert.False(mainObject.IsPropertyChangedAssigned);
+        }
+
+#if MAUI
+        [Fact]
+#endif
+        public void DataBindings_update_thread_throws()
+        {
+            var mainObject = new Mocks.MainObject();
+            mainObject.Text = "Test text";
+            Form form = new Form();
+            TextBox textBox = new TextBox();
+            Binding binding = new Binding("Text", mainObject, "Text");
+            textBox.DataBindings.Add(binding);
+            textBox.Parent = form;
+            form.Show();
+
+            var thread = new Thread(() => Assert.Throws<InvalidOperationException>(() => textBox.Text = "Updated test text"));
+            thread.Start();
+        }
+
+#if MAUI
+        [Fact]
+#endif
+        public void DataBindings_update_thread_with_invoke_updates()
+        {
+            var mainObject = new Mocks.MainObject();
+            mainObject.Text = "Test text";
+            Form form = new Form();
+            TextBox textBox = new TextBox();
+            Binding binding = new Binding("Text", mainObject, "Text", false, 0, null, string.Empty, null, true);
+            textBox.DataBindings.Add(binding);
+            textBox.Parent = form;
+            form.Show();
+
+            var thread = new Thread(() =>
+            {
+                textBox.Text = "Updated test text";
+
+                Assert.Equal("Updated test text", textBox.Text);
+                Assert.Equal("Updated test text", mainObject.Text);
+            });
+
+            thread.Start();
+        }
     }
 }

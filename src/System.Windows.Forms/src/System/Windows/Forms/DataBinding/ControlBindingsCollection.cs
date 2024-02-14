@@ -142,7 +142,28 @@ public class ControlBindingsCollection : BindingsCollection
         DataSourceUpdateMode updateMode,
         object? nullValue,
         string formatString,
-        IFormatProvider? formatInfo)
+        IFormatProvider? formatInfo) =>
+        Add(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled,
+            updateMode,
+            nullValue,
+            formatString,
+            formatInfo,
+            false);
+
+    public Binding Add(
+        string propertyName,
+        object dataSource,
+        string dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode updateMode,
+        object nullValue,
+        string formatString,
+        IFormatProvider formatInfo,
+        bool invokeControl)
     {
         ArgumentNullException.ThrowIfNull(dataSource);
 
@@ -154,7 +175,9 @@ public class ControlBindingsCollection : BindingsCollection
             updateMode,
             nullValue,
             formatString,
-            formatInfo);
+            formatInfo,
+            invokeControl);
+
         Add(binding);
         return binding;
     }

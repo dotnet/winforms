@@ -23,6 +23,7 @@ public partial class Binding
 
     private bool _formattingEnabled;
     private bool _modified;
+    private bool _invokeControl;
 
     // Recursion guards
     private bool _inSetPropValue;
@@ -142,6 +143,29 @@ public partial class Binding
         object? nullValue,
         string formatString,
         IFormatProvider? formatInfo)
+        : this(
+              propertyName,
+              dataSource,
+              dataMember,
+              formattingEnabled,
+              dataSourceUpdateMode,
+              nullValue,
+              formatString,
+              formatInfo,
+              invokeControl:false)
+    {
+    }
+
+    public Binding(
+        string propertyName,
+        object? dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode dataSourceUpdateMode,
+        object? nullValue,
+        string formatString,
+        IFormatProvider? formatInfo,
+        bool invokeControl)
     {
         DataSource = dataSource;
         BindingMemberInfo = new BindingMemberInfo(dataMember);
@@ -153,6 +177,7 @@ public partial class Binding
         _nullValue = nullValue;
         _formatInfo = formatInfo;
         DataSourceUpdateMode = dataSourceUpdateMode;
+        _invokeControl = invokeControl;
 
         CheckBinding();
     }
@@ -1047,28 +1072,45 @@ public partial class Binding
             {
                 if (_propIsNullInfo is not null)
                 {
-                    _propIsNullInfo.SetValue(BindableComponent, true);
+                    // _propIsNullInfo.SetValue(BindableComponent, true);
+                    SetPropValue(_propIsNullInfo, BindableComponent, true);
                 }
                 else if (_propInfo is not null)
                 {
                     if (_propInfo.PropertyType == typeof(object))
                     {
-                        _propInfo.SetValue(BindableComponent, DataSourceNullValue);
+                        // _propInfo.SetValue(BindableComponent, DataSourceNullValue);
+                        SetPropValue(_propInfo, BindableComponent, DataSourceNullValue);
                     }
                     else
                     {
-                        _propInfo.SetValue(BindableComponent, null);
+                        // _propInfo.SetValue(BindableComponent, null);
+                        SetPropValue(_propInfo, BindableComponent, null);
                     }
                 }
             }
             else
             {
-                _propInfo!.SetValue(BindableComponent, value);
+                // _propInfo!.SetValue(BindableComponent, value);
+                SetPropValue(_propInfo!, BindableComponent, value);
             }
         }
         finally
         {
             _inSetPropValue = false;
+        }
+    }
+
+    private void SetPropValue(PropertyDescriptor property, IBindableComponent component, object value)
+    {
+        // If possible, we should use Invoke in order to work with the UI Thread
+        if (Control is not null && Control.InvokeRequired && _invokeControl)
+        {
+            Control.Invoke(() => property.SetValue(component, value));
+        }
+        else
+        {
+            property.SetValue(component, value);
         }
     }
 
