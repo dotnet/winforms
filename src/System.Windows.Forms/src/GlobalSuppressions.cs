@@ -20,6 +20,7 @@
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.FontDialog.EventApply")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.FileDialog.EventFileOk")]
+[assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
 
 // Thread locals (there is no way to configure this style yet)
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.ButtonInternal.CheckBoxBaseAdapter.t_checkImageChecked")]
@@ -31,5 +32,3 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.VisualStyles.VisualStyleRenderer.t_themeHandles")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.VisualStyles.VisualStyleRenderer.t_threadCacheVersion")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.RadioButtonRenderer.t_visualStyleRenderer")]
-
-[assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
