@@ -1,9 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Microsoft.Office;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -21,23 +20,23 @@ public sealed partial class Application
     ///   This class is not used when running inside the Visual Studio shell.
     ///  </para>
     /// </remarks>
-    private unsafe class ComponentManager : IMsoComponentManager
+    private unsafe class ComponentManager : IMsoComponentManager.Interface
     {
         private struct ComponentHashtableEntry
         {
-            public IMsoComponent component;
+            public AgileComPointer<IMsoComponent> component;
             public MSOCRINFO componentInfo;
         }
 
         private Dictionary<nuint, ComponentHashtableEntry>? _oleComponents;
         private UIntPtr _cookieCounter = UIntPtr.Zero;
-        private IMsoComponent? _activeComponent;
-        private IMsoComponent? _trackingComponent;
+        private AgileComPointer<IMsoComponent>? _activeComponent;
+        private AgileComPointer<IMsoComponent>? _trackingComponent;
         private msocstate _currentState;
 
         private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= new();
 
-        unsafe HRESULT IMsoComponentManager.QueryService(
+        unsafe HRESULT IMsoComponentManager.Interface.QueryService(
             Guid* guidService,
             Guid* iid,
             void** ppvObj)
@@ -50,7 +49,7 @@ public sealed partial class Application
             return HRESULT.E_NOINTERFACE;
         }
 
-        BOOL IMsoComponentManager.FDebugMessage(
+        BOOL IMsoComponentManager.Interface.FDebugMessage(
             nint dwReserved,
             uint msg,
             WPARAM wParam,
@@ -59,13 +58,12 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FRegisterComponent(
-            IMsoComponent component,
+        BOOL IMsoComponentManager.Interface.FRegisterComponent(
+            IMsoComponent* component,
             MSOCRINFO* pcrinfo,
             nuint* pdwComponentID)
         {
-            if (pcrinfo is null || pdwComponentID is null
-                || pcrinfo->cbSize < sizeof(MSOCRINFO))
+            if (pcrinfo is null || pdwComponentID is null || component is null || pcrinfo->cbSize < sizeof(MSOCRINFO))
             {
                 return false;
             }
@@ -73,7 +71,12 @@ public sealed partial class Application
             // Construct Hashtable entry for this component
             ComponentHashtableEntry entry = new ComponentHashtableEntry
             {
-                component = component,
+                component
+#if DEBUG
+                    = new(component, takeOwnership: false, trackDisposal: false),
+#else
+                    = new(component, takeOwnership: false),
+#endif
                 componentInfo = *pcrinfo
             };
 
@@ -82,41 +85,36 @@ public sealed partial class Application
 
             // Return the cookie
             *pdwComponentID = _cookieCounter;
-            Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component registered.  ID: {_cookieCounter}");
             return true;
         }
 
-        BOOL IMsoComponentManager.FRevokeComponent(nuint dwComponentID)
+        BOOL IMsoComponentManager.Interface.FRevokeComponent(nuint dwComponentID)
         {
-            Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Revoking component {dwComponentID}.");
-
             if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
             {
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Component not registered.");
                 return false;
             }
 
             if (entry.component == _activeComponent)
             {
-                _activeComponent = null;
+                DisposeHelper.NullAndDispose(ref _activeComponent);
             }
 
             if (entry.component == _trackingComponent)
             {
-                _trackingComponent = null;
+                DisposeHelper.NullAndDispose(ref _trackingComponent);
             }
 
             OleComponents.Remove(dwComponentID);
             return true;
         }
 
-        BOOL IMsoComponentManager.FUpdateComponentRegistration(
+        BOOL IMsoComponentManager.Interface.FUpdateComponentRegistration(
             nuint dwComponentID,
             MSOCRINFO* pcrinfo)
         {
             // Update the registration info
-            if (pcrinfo is null
-                || !OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
+            if (pcrinfo is null || !OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
             {
                 return false;
             }
@@ -126,22 +124,18 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FOnComponentActivate(nuint dwComponentID)
+        BOOL IMsoComponentManager.Interface.FOnComponentActivate(nuint dwComponentID)
         {
-            Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component activated.  ID: {dwComponentID}");
-
             if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
             {
-                Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "*** Component not registered ***");
                 return false;
             }
 
-            Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"New active component is : {entry}");
             _activeComponent = entry.component;
             return true;
         }
 
-        BOOL IMsoComponentManager.FSetTrackingComponent(nuint dwComponentID, BOOL fTrack)
+        BOOL IMsoComponentManager.Interface.FSetTrackingComponent(nuint dwComponentID, BOOL fTrack)
         {
             if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
                 || !((entry.component == _trackingComponent) ^ fTrack))
@@ -154,56 +148,45 @@ public sealed partial class Application
             return true;
         }
 
-        void IMsoComponentManager.OnComponentEnterState(
+        void IMsoComponentManager.Interface.OnComponentEnterState(
             nuint dwComponentID,
             msocstate uStateID,
             msoccontext uContext,
             uint cpicmExclude,
-            void** rgpicmExclude,
+            IMsoComponentManager** rgpicmExclude,
             uint dwReserved)
         {
             _currentState = uStateID;
 
-            Debug.WriteLineIf(
-                CompModSwitches.MSOComponentManager.TraceInfo,
-                $"ComponentManager: Component enter state.  ID: {dwComponentID} state: {uStateID}");
-
-            if (uContext == msoccontext.All || uContext == msoccontext.Mine)
+            if (uContext is msoccontext.All or msoccontext.Mine)
             {
-                Debug.Indent();
-
                 // We should notify all components we contain that the state has changed.
                 foreach (ComponentHashtableEntry entry in OleComponents.Values)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"Notifying {entry.component}");
-                    entry.component.OnEnterState(uStateID, true);
+                    using var component = entry.component.GetInterface();
+                    component.Value->OnEnterState(uStateID, true);
                 }
-
-                Debug.Unindent();
             }
         }
 
-        BOOL IMsoComponentManager.FOnComponentExitState(
+        BOOL IMsoComponentManager.Interface.FOnComponentExitState(
             nuint dwComponentID,
             msocstate uStateID,
             msoccontext uContext,
             uint cpicmExclude,
-            void** rgpicmExclude)
+            IMsoComponentManager** rgpicmExclude)
         {
             _currentState = 0;
-            Debug.WriteLineIf(
-                CompModSwitches.MSOComponentManager.TraceInfo,
-                $"ComponentManager: Component exit state.  ID: {dwComponentID} state: {uStateID}");
 
-            if (uContext == msoccontext.All || uContext == msoccontext.Mine)
+            if (uContext is msoccontext.All or msoccontext.Mine)
             {
                 Debug.Indent();
 
                 // We should notify all components we contain that the state has changed.
                 foreach (ComponentHashtableEntry entry in OleComponents.Values)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"Notifying {entry.component}");
-                    entry.component.OnEnterState(uStateID, false);
+                    using var component = entry.component.GetInterface();
+                    component.Value->OnEnterState(uStateID, false);
                 }
 
                 Debug.Unindent();
@@ -212,17 +195,17 @@ public sealed partial class Application
             return false;
         }
 
-        BOOL IMsoComponentManager.FInState(msocstate uStateID, void* pvoid)
-            => _currentState == uStateID ? true : false;
+        BOOL IMsoComponentManager.Interface.FInState(msocstate uStateID, void* pvoid)
+            => _currentState == uStateID;
 
-        BOOL IMsoComponentManager.FContinueIdle()
+        BOOL IMsoComponentManager.Interface.FContinueIdle()
         {
             // If we have a message in the queue, then don't continue idle processing.
             MSG msg = default;
             return PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE);
         }
 
-        BOOL IMsoComponentManager.FPushMessageLoop(
+        BOOL IMsoComponentManager.Interface.FPushMessageLoop(
             nuint dwComponentID,
             msoloop uReason,
             void* pvLoopData)
@@ -236,27 +219,22 @@ public sealed partial class Application
                 return false;
             }
 
-            IMsoComponent? prevActive = _activeComponent;
+            AgileComPointer<IMsoComponent>? prevActive = _activeComponent;
 
             try
             {
                 MSG msg = default;
-                IMsoComponent requestingComponent = entry.component;
+                AgileComPointer<IMsoComponent>? requestingComponent = entry.component;
                 _activeComponent = requestingComponent;
-
-                Debug.WriteLineIf(
-                    CompModSwitches.MSOComponentManager.TraceInfo,
-                    $"ComponentManager : Pushing message loop {uReason}");
-                Debug.Indent();
 
                 while (true)
                 {
                     // Determine the component to route the message to
-                    IMsoComponent component = _trackingComponent ?? _activeComponent ?? requestingComponent;
+                    using var component = (_trackingComponent ?? _activeComponent ?? requestingComponent).GetInterface();
 
                     if (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                     {
-                        if (!component.FContinueMessageLoop(uReason, pvLoopData, &msg))
+                        if (!component.Value->FContinueMessageLoop(uReason, pvLoopData, &msg))
                         {
                             return true;
                         }
@@ -266,10 +244,6 @@ public sealed partial class Application
 
                         if (msg.message == PInvoke.WM_QUIT)
                         {
-                            Debug.WriteLineIf(
-                                CompModSwitches.MSOComponentManager.TraceInfo,
-                                "ComponentManager : Normal message loop termination");
-
                             ThreadContext.FromCurrent().DisposeThreadWindows();
 
                             if (uReason != msoloop.Main)
@@ -284,7 +258,7 @@ public sealed partial class Application
                         //
                         // Reading through the rather sparse documentation, it seems we should only call
                         // FPreTranslateMessage on the active component.
-                        if (!component.FPreTranslateMessage(&msg))
+                        if (!component.Value->FPreTranslateMessage(&msg))
                         {
                             PInvoke.TranslateMessage(msg);
                             PInvoke.DispatchMessage(&msg);
@@ -293,7 +267,7 @@ public sealed partial class Application
                     else
                     {
                         // If this is a DoEvents loop, then get out. There's nothing left for us to do.
-                        if (uReason == msoloop.DoEvents || uReason == msoloop.DoEventsModal)
+                        if (uReason is msoloop.DoEvents or msoloop.DoEventsModal)
                         {
                             break;
                         }
@@ -305,12 +279,13 @@ public sealed partial class Application
                         {
                             foreach (ComponentHashtableEntry idleEntry in OleComponents.Values)
                             {
-                                continueIdle |= idleEntry.component.FDoIdle(msoidlef.All);
+                                using var idleComponent = idleEntry.component.GetInterface();
+                                continueIdle |= idleComponent.Value->FDoIdle(msoidlef.All);
                             }
                         }
 
                         // Give the component one more chance to terminate the message loop.
-                        if (!component.FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked: null))
+                        if (!component.Value->FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked: null))
                         {
                             return true;
                         }
@@ -342,11 +317,6 @@ public sealed partial class Application
                         }
                     }
                 }
-
-                Debug.Unindent();
-                Debug.WriteLineIf(
-                    CompModSwitches.MSOComponentManager.TraceInfo,
-                    $"ComponentManager : message loop {uReason} complete.");
             }
             finally
             {
@@ -357,9 +327,9 @@ public sealed partial class Application
             return !continueLoop;
         }
 
-        unsafe BOOL IMsoComponentManager.FCreateSubComponentManager(
-            IntPtr punkOuter,
-            IntPtr punkServProv,
+        BOOL IMsoComponentManager.Interface.FCreateSubComponentManager(
+            IUnknown* punkOuter,
+            IUnknown* punkServProv,
             Guid* riid,
             void** ppvObj)
         {
@@ -372,7 +342,7 @@ public sealed partial class Application
             return false;
         }
 
-        BOOL IMsoComponentManager.FGetParentComponentManager(void** ppicm)
+        BOOL IMsoComponentManager.Interface.FGetParentComponentManager(IMsoComponentManager** ppicm)
         {
             // We have no parent.
             if (ppicm is not null)
@@ -383,13 +353,13 @@ public sealed partial class Application
             return false;
         }
 
-        BOOL IMsoComponentManager.FGetActiveComponent(
+        BOOL IMsoComponentManager.Interface.FGetActiveComponent(
             msogac dwgac,
-            void** ppic,
+            IMsoComponent** ppic,
             MSOCRINFO* pcrinfo,
             uint dwReserved)
         {
-            IMsoComponent? component = dwgac switch
+            AgileComPointer<IMsoComponent>? component = dwgac switch
             {
                 msogac.Active => _activeComponent,
                 msogac.Tracking => _trackingComponent,
@@ -421,8 +391,8 @@ public sealed partial class Application
 
             if (ppic is not null)
             {
-                // This will addref the interface
-                *ppic = (void*)Marshal.GetComInterfaceForObject<IMsoComponent, IMsoComponent>(component);
+                // Adding ref by not releasing the ComScope.
+                *ppic = component.GetInterface().Value;
             }
 
             return true;
