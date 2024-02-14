@@ -4976,7 +4976,7 @@ public partial class ListView : Control
         if (!headerWindow.IsNull)
         {
             WINDOWPOS position = default;
-            PInvoke.GetClientRect(this, out RECT clientRect);
+            PInvokeCore.GetClientRect(this, out RECT clientRect);
             HDLAYOUT hd = new()
             {
                 prc = &clientRect,
@@ -6536,7 +6536,7 @@ public partial class ListView : Control
                     string? text = dispInfo->item.pszText.ToString();
                     LabelEditEventArgs e = new(dispInfo->item.iItem, text);
                     OnAfterLabelEdit(e);
-                    m.ResultInternal = (LRESULT)(nint)(BOOL)e.CancelEdit;
+                    m.ResultInternal = (LRESULT)(nint)(BOOL)!e.CancelEdit;
 
                     // from msdn:
                     //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"

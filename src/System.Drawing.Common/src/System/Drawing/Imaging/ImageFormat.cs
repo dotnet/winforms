@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -7,198 +7,139 @@ using System.Runtime.Versioning;
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Specifies the format of the image.
+///  Specifies the format of the image.
 /// </summary>
 [TypeConverter(typeof(ImageFormatConverter))]
 public sealed class ImageFormat
 {
     // Format IDs
     // private static ImageFormat undefined = new ImageFormat(new Guid("{b96b3ca9-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_memoryBMP = new(new Guid("{b96b3caa-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_bmp = new(new Guid("{b96b3cab-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_emf = new(new Guid("{b96b3cac-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_wmf = new(new Guid("{b96b3cad-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_jpeg = new(new Guid("{b96b3cae-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_png = new(new Guid("{b96b3caf-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_gif = new(new Guid("{b96b3cb0-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_tiff = new(new Guid("{b96b3cb1-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_exif = new(new Guid("{b96b3cb2-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_icon = new(new Guid("{b96b3cb5-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_heif = new(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_webp = new(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_memoryBMP = new(PInvokeCore.ImageFormatMemoryBMP);
+    private static readonly ImageFormat s_bmp = new(PInvokeCore.ImageFormatBMP);
+    private static readonly ImageFormat s_emf = new(PInvokeCore.ImageFormatEMF);
+    private static readonly ImageFormat s_wmf = new(PInvokeCore.ImageFormatWMF);
+    private static readonly ImageFormat s_jpeg = new(PInvokeCore.ImageFormatJPEG);
+    private static readonly ImageFormat s_png = new(PInvokeCore.ImageFormatPNG);
+    private static readonly ImageFormat s_gif = new(PInvokeCore.ImageFormatGIF);
+    private static readonly ImageFormat s_tiff = new(PInvokeCore.ImageFormatTIFF);
+    private static readonly ImageFormat s_exif = new(PInvokeCore.ImageFormatEXIF);
+    private static readonly ImageFormat s_icon = new(PInvokeCore.ImageFormatIcon);
+    private static readonly ImageFormat s_heif = new(PInvokeCore.ImageFormatHEIF);
+    private static readonly ImageFormat s_webp = new(PInvokeCore.ImageFormatWEBP);
 
     private readonly Guid _guid;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='ImageFormat'/> class with the specified GUID.
+    ///  Initializes a new instance of the <see cref='ImageFormat'/> class with the specified GUID.
     /// </summary>
-    public ImageFormat(Guid guid)
-    {
-        _guid = guid;
-    }
+    public ImageFormat(Guid guid) => _guid = guid;
 
     /// <summary>
-    /// Specifies a global unique identifier (GUID) that represents this <see cref='ImageFormat'/>.
+    ///  Specifies a global unique identifier (GUID) that represents this <see cref='ImageFormat'/>.
     /// </summary>
-    public Guid Guid
-    {
-        get { return _guid; }
-    }
+    public Guid Guid => _guid;
 
     /// <summary>
-    /// Specifies a memory bitmap image format.
+    ///  Specifies a memory bitmap image format.
     /// </summary>
-    public static ImageFormat MemoryBmp
-    {
-        get { return s_memoryBMP; }
-    }
+    public static ImageFormat MemoryBmp => s_memoryBMP;
 
     /// <summary>
-    /// Specifies the bitmap image format.
+    ///  Specifies the bitmap image format.
     /// </summary>
-    public static ImageFormat Bmp
-    {
-        get { return s_bmp; }
-    }
+    public static ImageFormat Bmp => s_bmp;
 
     /// <summary>
-    /// Specifies the enhanced Windows metafile image format.
+    ///  Specifies the enhanced Windows metafile image format.
     /// </summary>
-    public static ImageFormat Emf
-    {
-        get { return s_emf; }
-    }
+    public static ImageFormat Emf => s_emf;
 
     /// <summary>
-    /// Specifies the Windows metafile image format.
+    ///  Specifies the Windows metafile image format.
     /// </summary>
-    public static ImageFormat Wmf
-    {
-        get { return s_wmf; }
-    }
+    public static ImageFormat Wmf => s_wmf;
 
     /// <summary>
-    /// Specifies the GIF image format.
+    ///  Specifies the GIF image format.
     /// </summary>
-    public static ImageFormat Gif
-    {
-        get { return s_gif; }
-    }
+    public static ImageFormat Gif => s_gif;
 
     /// <summary>
-    /// Specifies the JPEG image format.
+    ///  Specifies the JPEG image format.
     /// </summary>
-    public static ImageFormat Jpeg
-    {
-        get { return s_jpeg; }
-    }
+    public static ImageFormat Jpeg => s_jpeg;
 
     /// <summary>
-    /// Specifies the W3C PNG image format.
+    ///  Specifies the W3C PNG image format.
     /// </summary>
-    public static ImageFormat Png
-    {
-        get { return s_png; }
-    }
+    public static ImageFormat Png => s_png;
 
     /// <summary>
-    /// Specifies the Tag Image File Format (TIFF) image format.
+    ///  Specifies the Tag Image File Format (TIFF) image format.
     /// </summary>
-    public static ImageFormat Tiff
-    {
-        get { return s_tiff; }
-    }
+    public static ImageFormat Tiff => s_tiff;
 
     /// <summary>
-    /// Specifies the Exchangeable Image Format (EXIF).
+    ///  Specifies the Exchangeable Image Format (EXIF).
     /// </summary>
-    public static ImageFormat Exif
-    {
-        get { return s_exif; }
-    }
+    public static ImageFormat Exif => s_exif;
 
     /// <summary>
-    /// Specifies the Windows icon image format.
+    ///  Specifies the Windows icon image format.
     /// </summary>
-    public static ImageFormat Icon
-    {
-        get { return s_icon; }
-    }
+    public static ImageFormat Icon => s_icon;
 
     /// <summary>
-    /// Specifies the High Efficiency Image Format (HEIF).
+    ///  Specifies the High Efficiency Image Format (HEIF).
     /// </summary>
     /// <remarks>
-    /// This format is supported since Windows 10 1809.
+    ///  <para>This format is supported since Windows 10 1809.</para>
     /// </remarks>
     [SupportedOSPlatform("windows10.0.17763.0")]
-    public static ImageFormat Heif
-    {
-        get { return s_heif; }
-    }
+    public static ImageFormat Heif => s_heif;
 
     /// <summary>
-    /// Specifies the WebP image format.
+    ///  Specifies the WebP image format.
     /// </summary>
     /// <remarks>
-    /// This format is supported since Windows 10 1809.
+    ///  <para>This format is supported since Windows 10 1809.</para>
     /// </remarks>
     [SupportedOSPlatform("windows10.0.17763.0")]
-    public static ImageFormat Webp
-    {
-        get { return s_webp; }
-    }
+    public static ImageFormat Webp => s_webp;
 
     /// <summary>
-    /// Returns a value indicating whether the specified object is an <see cref='ImageFormat'/> equivalent to this
-    /// <see cref='ImageFormat'/>.
+    ///  Returns a value indicating whether the specified object is an <see cref='ImageFormat'/> equivalent to this
+    ///  <see cref='ImageFormat'/>.
     /// </summary>
-    public override bool Equals([NotNullWhen(true)] object? o)
-    {
-        ImageFormat? format = o as ImageFormat;
-        if (format is null)
-            return false;
-        return _guid == format._guid;
-    }
+    public override bool Equals([NotNullWhen(true)] object? o) => o is ImageFormat format && _guid == format._guid;
 
     /// <summary>
-    /// Returns a hash code.
+    ///  Returns a hash code.
     /// </summary>
-    public override int GetHashCode()
-    {
-        return _guid.GetHashCode();
-    }
-
-    // Find any random encoder which supports this format
-    internal ImageCodecInfo? FindEncoder()
-    {
-        ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-        foreach (ImageCodecInfo codec in codecs)
-        {
-            if (codec.FormatID.Equals(_guid))
-                return codec;
-        }
-
-        return null;
-    }
+    public override int GetHashCode() => _guid.GetHashCode();
 
     /// <summary>
-    /// Converts this <see cref='ImageFormat'/> to a human-readable string.
+    ///  The encoder that supports this format, if any.
+    /// </summary>
+    internal Guid Encoder => ImageCodecInfoHelper.GetEncoderClsid(_guid);
+
+    /// <summary>
+    ///  Converts this <see cref='ImageFormat'/> to a human-readable string.
     /// </summary>
     public override string ToString()
     {
-        if (this.Guid == s_memoryBMP.Guid) return "MemoryBMP";
-        if (this.Guid == s_bmp.Guid) return "Bmp";
-        if (this.Guid == s_emf.Guid) return "Emf";
-        if (this.Guid == s_wmf.Guid) return "Wmf";
-        if (this.Guid == s_gif.Guid) return "Gif";
-        if (this.Guid == s_jpeg.Guid) return "Jpeg";
-        if (this.Guid == s_png.Guid) return "Png";
-        if (this.Guid == s_tiff.Guid) return "Tiff";
-        if (this.Guid == s_exif.Guid) return "Exif";
-        if (this.Guid == s_icon.Guid) return "Icon";
-        if (this.Guid == s_heif.Guid) return "Heif";
-        if (this.Guid == s_webp.Guid) return "Webp";
+        if (Guid == PInvokeCore.ImageFormatMemoryBMP) return "MemoryBMP";
+        if (Guid == PInvokeCore.ImageFormatBMP) return "Bmp";
+        if (Guid == PInvokeCore.ImageFormatEMF) return "Emf";
+        if (Guid == PInvokeCore.ImageFormatWMF) return "Wmf";
+        if (Guid == PInvokeCore.ImageFormatGIF) return "Gif";
+        if (Guid == PInvokeCore.ImageFormatJPEG) return "Jpeg";
+        if (Guid == PInvokeCore.ImageFormatPNG) return "Png";
+        if (Guid == PInvokeCore.ImageFormatTIFF) return "Tiff";
+        if (Guid == PInvokeCore.ImageFormatEXIF) return "Exif";
+        if (Guid == PInvokeCore.ImageFormatIcon) return "Icon";
+        if (Guid == PInvokeCore.ImageFormatHEIF) return "Heif";
+        if (Guid == PInvokeCore.ImageFormatWEBP) return "Webp";
         return $"[ImageFormat: {_guid}]";
     }
 }

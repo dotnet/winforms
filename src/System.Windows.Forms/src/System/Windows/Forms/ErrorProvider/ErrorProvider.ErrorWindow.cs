@@ -18,8 +18,7 @@ public partial class ErrorProvider
     /// </summary>
     internal partial class ErrorWindow : NativeWindow
     {
-        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
-
+        private AccessibleObject? _accessibleObject;
         private readonly List<ControlItem> _items = new();
         private readonly Control _parent;
         private readonly ErrorProvider _provider;
@@ -34,27 +33,12 @@ public partial class ErrorProvider
         {
             _provider = provider;
             _parent = parent;
-            Properties = new PropertyStore();
         }
 
         /// <summary>
         ///  The Accessibility Object for this ErrorProvider
         /// </summary>
-        internal AccessibleObject AccessibilityObject
-        {
-            get
-            {
-                AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
-
-                if (accessibleObject is null)
-                {
-                    accessibleObject = CreateAccessibilityInstance();
-                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
-                }
-
-                return accessibleObject;
-            }
-        }
+        internal AccessibleObject AccessibilityObject => _accessibleObject ??= CreateAccessibilityInstance();
 
         /// <summary>
         ///  This is called when a control would like to show an error icon.
@@ -268,13 +252,6 @@ public partial class ErrorProvider
             Debug.Assert(shownTooltips <= 1);
 #endif
         }
-
-        /// <summary>
-        ///  Retrieves our internal property storage object. If you have a property
-        ///  whose value is not always set, you should store it in here to save
-        ///  space.
-        /// </summary>
-        internal PropertyStore Properties { get; }
 
         /// <summary>
         ///  This is called when a control no longer needs to display an error icon.

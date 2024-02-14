@@ -5,12 +5,62 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.BinaryFormat.Tests;
 
 public class WinFormsBinaryFormattedObjectTests
 {
     private static readonly Attribute[] s_visible = [DesignerSerializationVisibilityAttribute.Visible];
+
+    [Fact]
+    public void BinaryFormattedObject_Bitmap_FromBinaryFormatter()
+    {
+        using Bitmap bitmap = new(10, 10);
+        BinaryFormattedObject binary = bitmap.SerializeAndParse();
+        binary.RecordCount.Should().Be(5);
+        binary[1].Should().BeOfType<BinaryLibrary>().Which
+            .LibraryName.Should().Be(AssemblyRef.SystemDrawing);
+        binary[2].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be(typeof(Bitmap).FullName);
+        binary[3].Should().BeOfType<ArraySinglePrimitive<byte>>();
+
+        binary.TryGetBitmap(out object? result).Should().BeTrue();
+        using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
+        deserialized.Size.Should().Be(bitmap.Size);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_Bitmap_RoundTrip()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteBitmap(stream, bitmap);
+
+        stream.Position = 0;
+        BinaryFormattedObject binary = new(stream, leaveOpen: true);
+
+        binary.TryGetBitmap(out object? result).Should().BeTrue();
+        using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
+        deserialized.Size.Should().Be(bitmap.Size);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_Bitmap_FromWinFormsBinaryFormatWriter()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteBitmap(stream, bitmap);
+
+        stream.Position = 0;
+
+        using BinaryFormatterScope formatterScope = new(enable: true);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+        BinaryFormatter binaryFormat = new();
+#pragma warning restore SYSLIB0011
+
+        using Bitmap deserialized = binaryFormat.Deserialize(stream).Should().BeOfType<Bitmap>().Which;
+        deserialized.Size.Should().Be(bitmap.Size);
+    }   
 
     [Fact]
     public void BinaryFormattedObject_ImageListStreamer_FromBinaryFormatter()

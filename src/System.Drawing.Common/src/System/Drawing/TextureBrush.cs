@@ -28,7 +28,7 @@ public sealed unsafe class TextureBrush : Brush
         }
 
         GpTexture* brush;
-        PInvoke.GdipCreateTexture(image._nativeImage, (WrapMode)wrapMode, &brush).ThrowIfFailed();
+        PInvoke.GdipCreateTexture(image.Pointer(), (WrapMode)wrapMode, &brush).ThrowIfFailed();
         GC.KeepAlive(image);
         SetNativeBrushInternal((GpBrush*)brush);
     }
@@ -44,7 +44,7 @@ public sealed unsafe class TextureBrush : Brush
 
         GpTexture* brush;
         PInvoke.GdipCreateTexture2(
-            image._nativeImage,
+            image.Pointer(),
             (WrapMode)wrapMode,
             dstRect.X, dstRect.Y, dstRect.Width, dstRect.Height, &brush).ThrowIfFailed();
 
@@ -65,7 +65,7 @@ public sealed unsafe class TextureBrush : Brush
 
         GpTexture* brush;
         PInvoke.GdipCreateTextureIA(
-            image._nativeImage,
+            image.Pointer(),
             imageAttr is null ? null : imageAttr._nativeImageAttributes,
             dstRect.X,
             dstRect.Y,

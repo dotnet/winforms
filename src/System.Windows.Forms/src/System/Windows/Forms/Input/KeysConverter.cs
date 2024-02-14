@@ -157,7 +157,7 @@ public class KeysConverter : TypeConverter, IComparer
                 return null;
             }
 
-            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+            Dictionary<string, Keys> keyNames = GetKeyNames(culture);
 
             // Parse an array of key tokens.
             string[] tokens = text.Split('+', StringSplitOptions.TrimEntries);
@@ -236,8 +236,8 @@ public class KeysConverter : TypeConverter, IComparer
         {
             List<Enum> termKeys = new();
             Keys modifiers = key & Keys.Modifiers;
-            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
-            IList<string> displayOrder = GetDisplayOrder(culture);
+            Dictionary<string, Keys> keyNames = GetKeyNames(culture);
+            List<string> displayOrder = GetDisplayOrder(culture);
 
             if (key != Keys.None)
             {
@@ -284,8 +284,8 @@ public class KeysConverter : TypeConverter, IComparer
         {
             StringBuilder termStrings = new(32);
             Keys modifiers = key & Keys.Modifiers;
-            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
-            IList<string> displayOrder = GetDisplayOrder(culture);
+            Dictionary<string, Keys> keyNames = GetKeyNames(culture);
+            List<string> displayOrder = GetDisplayOrder(culture);
 
             if (key != Keys.None)
             {
@@ -329,10 +329,11 @@ public class KeysConverter : TypeConverter, IComparer
         }
     }
 
-    private IList<string> GetDisplayOrder(CultureInfo? culture)
+    private List<string> GetDisplayOrder(CultureInfo? culture)
     {
-        // Use CurrentCulture as default to match other TypeConverters.
-        culture ??= CultureInfo.CurrentCulture;
+        // Use CurrentUICulture as default because we assume that this converter is primarily
+        // used in user-facing applications (I.e. what key to press on the keyboard).
+        culture ??= CultureInfo.CurrentUICulture;
         if (!CultureToDisplayOrder.ContainsKey(culture))
         {
             AddLocalizedKeyNames(culture);
@@ -341,10 +342,11 @@ public class KeysConverter : TypeConverter, IComparer
         return CultureToDisplayOrder[culture];
     }
 
-    private IDictionary<string, Keys> GetKeyNames(CultureInfo? culture)
+    private Dictionary<string, Keys> GetKeyNames(CultureInfo? culture)
     {
-        // Use CurrentCulture as default to match other TypeConverters.
-        culture ??= CultureInfo.CurrentCulture;
+        // Use CurrentUICulture as default because we assume that this converter is primarily
+        // used in user-facing applications (I.e. what key to press on the keyboard).
+        culture ??= CultureInfo.CurrentUICulture;
         if (!CultureToKeyName.ContainsKey(culture))
         {
             AddLocalizedKeyNames(culture);

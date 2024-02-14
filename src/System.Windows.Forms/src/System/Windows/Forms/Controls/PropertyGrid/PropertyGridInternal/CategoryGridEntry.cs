@@ -106,7 +106,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
         }
     }
 
-    public override string GetPropertyTextValue(object o) => string.Empty;
+    public override string GetPropertyTextValue(object? o) => string.Empty;
 
     public override Type PropertyType => typeof(void);
 
@@ -148,7 +148,12 @@ internal sealed partial class CategoryGridEntry : GridEntry
         }
     }
 
-    public override void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text)
+    public override void PaintValue(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        PaintValueFlags paintFlags,
+        string? text)
     {
         base.PaintValue(g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected, text);
 

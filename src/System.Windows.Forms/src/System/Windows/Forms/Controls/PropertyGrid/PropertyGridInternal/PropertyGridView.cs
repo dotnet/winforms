@@ -115,7 +115,7 @@ internal sealed partial class PropertyGridView :
 
     private GridPositionData? _positionData;
 
-    public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
+    public PropertyGridView(IServiceProvider? serviceProvider, PropertyGrid propertyGrid)
         : base()
     {
         _paintWidth = ScaleHelper.ScaleToInitialSystemDpi(LogicalPaintWidth);
@@ -1350,7 +1350,7 @@ internal sealed partial class PropertyGridView :
 
     public int GridEntryHeight => RowHeight;
 
-    internal int GetPropertyLocation(string propertyName, bool getXY, bool rowValue)
+    internal int GetPropertyLocation(string? propertyName, bool getXY, bool rowValue)
     {
         if (_allGridEntries is null || _allGridEntries.Count <= 0)
         {
@@ -2581,7 +2581,7 @@ internal sealed partial class PropertyGridView :
         if (_dropDownHolder is not null && _dropDownHolder.Visible)
         {
             bool found = false;
-            for (HWND hwnd = PInvoke.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
+            for (HWND hwnd = PInvokeCore.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
             {
                 if (hwnd == _dropDownHolder.Handle)
                 {
@@ -3126,8 +3126,8 @@ internal sealed partial class PropertyGridView :
 
             // Ensure that tooltips don't display when host application is not foreground app.
             // Assume that we don't want to display the tooltips
-            HWND foregroundWindow = PInvoke.GetForegroundWindow();
-            if (PInvoke.IsChild(PInvoke.GetForegroundWindow(), this))
+            HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
+            if (PInvoke.IsChild(PInvokeCore.GetForegroundWindow(), this))
             {
                 // Don't show the tips if a dropdown is showing
                 if (_dropDownHolder is null || _dropDownHolder.Component is null || rowMoveCurrent == _selectedRow)
@@ -4002,7 +4002,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal void RecursivelyExpand(GridEntry gridEntry, bool initialize, bool expand, int maxExpands)
+    internal void RecursivelyExpand(GridEntry? gridEntry, bool initialize, bool expand, int maxExpands)
     {
         if (gridEntry is null || (expand && --maxExpands < 0))
         {
@@ -4157,7 +4157,7 @@ internal sealed partial class PropertyGridView :
         if (!HasEntries)
         {
             CommonEditorHide(_selectedRow != -1);
-            OwnerGrid.SetStatusBox(null, null);
+            OwnerGrid.SetStatusBox(title: null, description: null);
             SetScrollOffset(0);
             _selectedRow = -1;
             Invalidate();
@@ -4738,7 +4738,7 @@ internal sealed partial class PropertyGridView :
         return success;
     }
 
-    private bool CommitValue(object value)
+    private bool CommitValue(object? value)
     {
         GridEntry? currentEntry = _selectedGridEntry;
 
@@ -4756,7 +4756,7 @@ internal sealed partial class PropertyGridView :
         return CommitValue(currentEntry, value);
     }
 
-    internal bool CommitValue(GridEntry entry, object value, bool closeDropDown = true)
+    internal bool CommitValue(GridEntry entry, object? value, bool closeDropDown = true)
     {
         CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({value?.ToString() ?? "null"})");
 
@@ -4856,8 +4856,6 @@ internal sealed partial class PropertyGridView :
     {
         CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({text ?? "null"})");
 
-        object value;
-
         GridEntry? currentEntry = _selectedGridEntry;
 
         if (_selectedGridEntry is null && _selectedRow != -1)
@@ -4871,6 +4869,7 @@ internal sealed partial class PropertyGridView :
             return true;
         }
 
+        object? value;
         try
         {
             value = currentEntry.ConvertTextToValue(text);
@@ -5202,7 +5201,10 @@ internal sealed partial class PropertyGridView :
             _dropDownHolder.FocusComponent();
             return;
         }
-        else _currentEditor?.Focus();
+        else
+        {
+            _currentEditor?.Focus();
+        }
 
         return;
     }

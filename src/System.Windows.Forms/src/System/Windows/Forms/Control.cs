@@ -4493,7 +4493,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
     {
-        if (IsHandleCreated && AccessibleObject.CanNotifyClients)
+        if (IsHandleCreated && !LocalAppContextSwitches.NoClientNotifications)
         {
             PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
@@ -5198,7 +5198,7 @@ public unsafe partial class Control :
     ///   value.
     ///  </para>
     /// </remarks>
-    public unsafe DragDropEffects DoDragDrop(
+    public DragDropEffects DoDragDrop(
         object data,
         DragDropEffects allowedEffects,
         Bitmap? dragImage,
@@ -6927,7 +6927,9 @@ public unsafe partial class Control :
         {
             if (!tme.IsCompleted)
             {
-                WaitForWaitHandle(tme.AsyncWaitHandle);
+                // In synchronous call we not need waitHandle after wait.
+                using WaitHandle waitHandle = tme.AsyncWaitHandle;
+                WaitForWaitHandle(waitHandle);
             }
 
             if (tme._exception is not null)
@@ -8408,7 +8410,7 @@ public unsafe partial class Control :
     protected virtual void OnPaintBackground(PaintEventArgs pevent)
     {
         // We need the true client rectangle as clip rectangle causes problems on "Windows Classic" theme.
-        PInvoke.GetClientRect(new HandleRef<HWND>(_window, InternalHandle), out RECT rect);
+        PInvokeCore.GetClientRect(new HandleRef<HWND>(_window, InternalHandle), out RECT rect);
         PaintBackground(pevent, rect);
     }
 
@@ -11422,7 +11424,7 @@ public unsafe partial class Control :
 
         if (IsHandleCreated)
         {
-            PInvoke.GetClientRect(this, out rect);
+            PInvokeCore.GetClientRect(this, out rect);
             clientWidth = rect.right;
             clientHeight = rect.bottom;
             PInvoke.GetWindowRect(this, out rect);
@@ -11889,7 +11891,7 @@ public unsafe partial class Control :
                     return;
                 }
 
-                PInvoke.GetClientRect(this, out RECT rc);
+                PInvokeCore.GetClientRect(this, out RECT rc);
                 using PaintEventArgs pevent = new(dc, rc);
                 PaintWithErrorHandling(pevent, PaintLayerBackground);
             }

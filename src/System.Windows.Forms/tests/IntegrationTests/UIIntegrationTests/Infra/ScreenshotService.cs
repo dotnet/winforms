@@ -44,7 +44,7 @@ internal static class ScreenshotService
     /// A <see cref="Bitmap"/> containing the screen capture of the desktop, or <see langword="null"/> if a screen
     /// capture can't be created.
     /// </returns>
-    private static Bitmap? TryCaptureFullScreen()
+    internal static Bitmap? TryCaptureFullScreen()
     {
         if (Screen.PrimaryScreen is not { } primaryScreen)
             return null;

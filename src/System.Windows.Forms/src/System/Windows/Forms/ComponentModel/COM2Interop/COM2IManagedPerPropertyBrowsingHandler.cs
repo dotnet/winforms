@@ -3,8 +3,8 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Variant;
 using Microsoft.VisualStudio.Shell;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 

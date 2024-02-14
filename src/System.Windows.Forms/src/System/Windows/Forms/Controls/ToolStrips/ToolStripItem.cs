@@ -7,8 +7,8 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Layout;
-using Com = Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;

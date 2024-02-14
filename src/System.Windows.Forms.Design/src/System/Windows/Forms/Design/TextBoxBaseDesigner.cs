@@ -27,11 +27,12 @@ internal class TextBoxBaseDesigner : ControlDesigner
         get
         {
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
-
-            PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
-            BorderStyle borderStyle = prop is not null
-                ? (BorderStyle)prop.GetValue(Component)!
-                : BorderStyle.Fixed3D;
+            BorderStyle borderStyle = BorderStyle.Fixed3D;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            props.TryGetPropertyDescriptorValue(
+                "BorderStyle",
+                Component,
+                ref borderStyle);
 
             if (borderStyle == BorderStyle.None)
             {

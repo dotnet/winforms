@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using System.Windows.Forms.Primitives;
+
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -117,8 +119,6 @@ public unsafe partial class AccessibleObject :
     // Indicates this object is being used ONLY to wrap a system IAccessible
     private readonly bool _isSystemWrapper;
 
-    private static bool? s_canNotifyClients;
-
     internal const int InvalidIndex = -1;
 
     internal const int RuntimeIDFirstItem = 0x2a;
@@ -142,24 +142,6 @@ public unsafe partial class AccessibleObject :
     ///  Gets the bounds of the accessible object, in screen coordinates.
     /// </summary>
     public virtual Rectangle Bounds => SystemIAccessible.TryGetLocation(CHILDID_SELF);
-
-    internal static bool CanNotifyClients => s_canNotifyClients ??= InitializeCanNotifyClients();
-
-    private static bool InitializeCanNotifyClients()
-    {
-        // While handling accessibility events, accessibility clients (JAWS, Inspect),
-        // can access AccessibleObject associated with the event. In the designer scenario, controls are not
-        // receiving messages directly and might not respond to messages while in the notification call.
-        // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
-        //
-        // The following compat switch is set in the designer server process to prevent controls from sending notification.
-        if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
-        {
-            return !isEnabled;
-        }
-
-        return true;
-    }
 
     /// <summary>
     ///  Gets a description of the default action for an object.
@@ -3234,7 +3216,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationKind notificationKind,
         AutomationNotificationProcessing notificationProcessing,
         string? notificationText)
-        => CanNotifyClients
+        => !LocalAppContextSwitches.NoClientNotifications
             && PInvoke.UiaRaiseNotificationEvent(
                 this,
                 notificationKind,
@@ -3253,7 +3235,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationEvent(provider, eventId);
@@ -3265,7 +3247,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationPropertyChangedEvent(provider, propertyId, oldValue, newValue);
@@ -3285,7 +3267,7 @@ public unsafe partial class AccessibleObject :
 
     internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             int length = runtimeId.Length;
