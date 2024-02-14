@@ -100,9 +100,9 @@ public static class Clipboard
         }
 
         // OleGetClipboard always returns a proxy. The proxy forwards all IDataObject method calls to the real data object,
-        // without giving out the real data object. If the data placed on the clipboard is not one of our CCWs or the data
+        // without giving out the real data object. If the data placed on the clipboard is not one of our CCWs or the clipboard
         // has been flushed, marshal will create a wrapper around the proxy for us to use. However, if the data placed on
-        // the clipboard is one of our own and the data has not been flushed, we need to retrieve the real data object
+        // the clipboard is one of our own and the clipboard has not been flushed, we need to retrieve the real data object
         // pointer in order to retrieve the original managed object via ComWrappers. To do this, we must query for an
         // interface that is not known to the proxy e.g. IComCallableWrapper. If we are able to query for IComCallableWrapper
         // it means that the real data object is one of our CCWs and we've retrieved it successfully,
@@ -129,8 +129,8 @@ public static class Clipboard
         {
             // If we do not have a IComDataObject, built-in com support is turned off and
             // we have a proxy where there is no way to retrieve the original data object
-            // pointer from it as the clipboard has likely been flushed.
-            // We need to mimic built-in com behavior and wrap the proxy ourselves.
+            // pointer from it likely because either the clipboard was flushed or the data on the
+            // clipboard is from another process. We need to mimic built-in com behavior and wrap the proxy ourselves.
             return new DataObject(proxyDataObject, managedDataObject);
         }
 
