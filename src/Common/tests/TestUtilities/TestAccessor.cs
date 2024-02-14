@@ -23,9 +23,6 @@ namespace System;
 ///   Where internals access is more useful are testing building blocks of more
 ///   complicated objects, such as internal helper methods or classes.
 ///  </para>
-///  <para>
-///   This can be used to access private/internal objects as well via
-///  </para>
 /// </remarks>
 /// <example>
 ///  This class can also be derived from to create a strongly typed wrapper
@@ -66,7 +63,7 @@ public class TestAccessor<T> : ITestAccessor
     {
         Type type = typeof(TDelegate);
         MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
-        Type[] types = invokeMethodInfo is null ? Array.Empty<Type>() : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
+        Type[] types = invokeMethodInfo is null ? [] : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
 
         // To make it easier to write a class wrapper with a number of delegates,
         // we'll take the name from the delegate itself when unspecified.

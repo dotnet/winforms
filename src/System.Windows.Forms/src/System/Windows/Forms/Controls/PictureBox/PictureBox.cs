@@ -22,7 +22,9 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionPictureBox))]
 public partial class PictureBox : Control, ISupportInitialize
 {
-    private static readonly bool s_useWebRequest = AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest) ? useWebRequest : true;
+    private static readonly bool s_useWebRequest =
+        !AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest)
+        || useWebRequest;
 
     /// <summary>
     ///  The type of border this control will have.
@@ -1147,8 +1149,7 @@ public partial class PictureBox : Control, ISupportInitialize
             ImageAnimator.UpdateFrames(Image);
 
             // Error and initial image are drawn centered, non-stretched.
-            Rectangle drawingRect =
-                (_imageInstallationType == ImageInstallationType.ErrorOrInitial)
+            Rectangle drawingRect = _imageInstallationType == ImageInstallationType.ErrorOrInitial
                 ? ImageRectangleFromSizeMode(PictureBoxSizeMode.CenterImage)
                 : ImageRectangle;
 
@@ -1177,7 +1178,10 @@ public partial class PictureBox : Control, ISupportInitialize
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-        if (_sizeMode == PictureBoxSizeMode.Zoom || _sizeMode == PictureBoxSizeMode.StretchImage || _sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage is not null)
+        if (_sizeMode == PictureBoxSizeMode.Zoom
+            || _sizeMode == PictureBoxSizeMode.StretchImage
+            || _sizeMode == PictureBoxSizeMode.CenterImage
+            || BackgroundImage is not null)
         {
             Invalidate();
         }
