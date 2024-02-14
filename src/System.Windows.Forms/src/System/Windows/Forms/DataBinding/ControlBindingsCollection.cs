@@ -157,12 +157,12 @@ public class ControlBindingsCollection : BindingsCollection
     public Binding Add(
         string propertyName,
         object dataSource,
-        string dataMember,
+        string? dataMember,
         bool formattingEnabled,
         DataSourceUpdateMode updateMode,
-        object nullValue,
+        object? nullValue,
         string formatString,
-        IFormatProvider formatInfo,
+        IFormatProvider? formatInfo,
         bool invokeControl)
     {
         ArgumentNullException.ThrowIfNull(dataSource);
