@@ -1169,7 +1169,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     }
 
     internal TreeNodeAccessibleObject AccessibilityObject
-        => _accessibleObject ??= new TreeNodeAccessibleObject(this, TreeView);
+        => _accessibleObject ??= TreeView is null ? null : new TreeNodeAccessibleObject(this, TreeView);
 
     /// <summary>
     ///  Adds a new child node at the appropriate sorted position
