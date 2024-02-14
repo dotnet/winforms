@@ -2096,9 +2096,9 @@ public partial class TreeView : Control
 
         // Raise an event to highlight & announce the edited node
         // if editing hasn't been canceled.
-        if (IsAccessibilityObjectCreated && !e.CancelEdit)
+        if (IsAccessibilityObjectCreated && !e.CancelEdit && e.Node is not null)
         {
-            e.Node!.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            e.Node.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -2118,9 +2118,9 @@ public partial class TreeView : Control
         _onAfterCheck?.Invoke(this, e);
 
         // Raise an event to announce a toggle state change.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
-            AccessibleObject? nodeAccessibleObject = e.Node!.AccessibilityObject;
+            TreeNodeAccessibleObject? nodeAccessibleObject = e.Node.AccessibilityObject;
             if (nodeAccessibleObject is null)
             {
                 return;
@@ -2154,9 +2154,9 @@ public partial class TreeView : Control
         _onAfterCollapse?.Invoke(this, e);
 
         // Raise an event to announce the expand-collapse state change.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
-            e.Node!.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
+            e.Node.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
                 newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
@@ -2179,9 +2179,9 @@ public partial class TreeView : Control
         _onAfterExpand?.Invoke(this, e);
 
         // Raise an event to announce the expand-collapse state change.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
-            e.Node!.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
+            e.Node.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
                 newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
@@ -2220,9 +2220,9 @@ public partial class TreeView : Control
         _onAfterSelect?.Invoke(this, e);
 
         // Raise an event to highlight & announce the selected node.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
-            AccessibleObject? nodeAccessibleObject = e.Node!.AccessibilityObject;
+            TreeNodeAccessibleObject? nodeAccessibleObject = e.Node.AccessibilityObject;
             if (nodeAccessibleObject is null)
             {
                 return;
@@ -2856,14 +2856,14 @@ public partial class TreeView : Control
                             {
                                 g.FillRectangle(SystemBrushes.Highlight, bounds);
                                 ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
-                                TextRenderer.DrawText(g, e.Node!.Text, font, bounds, color, TextFormatFlags.Default);
+                                TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else
                             {
                                 using var brush = BackColor.GetCachedSolidBrushScope();
                                 g.FillRectangle(brush, bounds);
 
-                                TextRenderer.DrawText(g, e.Node!.Text, font, bounds, color, TextFormatFlags.Default);
+                                TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                         }
                     }
