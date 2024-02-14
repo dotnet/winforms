@@ -2206,7 +2206,7 @@ public partial class TreeView : Control
 
         // Raise an event to highlight & announce the edited node
         // if editing hasn't been canceled.
-        if (IsAccessibilityObjectCreated && !e.CancelEdit)
+        if (IsAccessibilityObjectCreated && !e.CancelEdit && e.Node is not null)
         {
             e.Node.AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
@@ -2228,7 +2228,7 @@ public partial class TreeView : Control
         onAfterCheck?.Invoke(this, e);
 
         // Raise an event to announce a toggle state change.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
             TreeNode.TreeNodeAccessibleObject nodeAccessibleObject = e.Node.AccessibilityObject;
             if (nodeAccessibleObject is null)
@@ -2264,7 +2264,7 @@ public partial class TreeView : Control
         onAfterCollapse?.Invoke(this, e);
 
         // Raise an event to announce the expand-collapse state change.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
             e.Node.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                 UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
@@ -2288,8 +2288,8 @@ public partial class TreeView : Control
     {
         onAfterExpand?.Invoke(this, e);
 
-        // Raise anevent to announce the expand-collapse state change.
-        if (IsAccessibilityObjectCreated)
+        // Raise an event to announce the expand-collapse state change.
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
             e.Node.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                 UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
@@ -2330,7 +2330,7 @@ public partial class TreeView : Control
         onAfterSelect?.Invoke(this, e);
 
         // Raise an event to highlight & announce the selected node.
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Node is not null)
         {
             TreeNode.TreeNodeAccessibleObject nodeAccessibleObject = e.Node.AccessibilityObject;
             if (nodeAccessibleObject is null)
@@ -2958,14 +2958,14 @@ public partial class TreeView : Control
                             {
                                 g.FillRectangle(SystemBrushes.Highlight, bounds);
                                 ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
-                                TextRenderer.DrawText(g, e.Node.Text, font, bounds, color, TextFormatFlags.Default);
+                                TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else
                             {
                                 using var brush = BackColor.GetCachedSolidBrushScope();
                                 g.FillRectangle(brush, bounds);
 
-                                TextRenderer.DrawText(g, e.Node.Text, font, bounds, color, TextFormatFlags.Default);
+                                TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                         }
                     }
