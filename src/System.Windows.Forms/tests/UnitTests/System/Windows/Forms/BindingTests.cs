@@ -187,8 +187,8 @@ public class BindingTests
     {
         yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null, null, true };
         yield return new object[] { string.Empty, new(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture, true };
-        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString", CultureInfo.InvariantCulture, true };
-        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString", CultureInfo.CurrentCulture, true };
+        yield return new object[] { "propertyName", new(), "dataMember", false, DataSourceUpdateMode.Never, new(), "formatString", CultureInfo.InvariantCulture, true };
+        yield return new object[] { "propertyName", new(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new(), "formatString", CultureInfo.CurrentCulture, true };
     }
 
     [Theory]
