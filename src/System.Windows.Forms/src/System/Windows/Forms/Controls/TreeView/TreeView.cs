@@ -2098,7 +2098,7 @@ public partial class TreeView : Control
         // if editing hasn't been canceled.
         if (IsAccessibilityObjectCreated && !e.CancelEdit)
         {
-            e.Node!.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            e.Node!.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -2120,7 +2120,12 @@ public partial class TreeView : Control
         // Raise an event to announce a toggle state change.
         if (IsAccessibilityObjectCreated)
         {
-            AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
+            AccessibleObject? nodeAccessibleObject = e.Node!.AccessibilityObject;
+            if (nodeAccessibleObject is null)
+            {
+                return;
+            }
+
             ToggleState newState = nodeAccessibleObject.ToggleState;
             ToggleState oldState = newState == ToggleState.ToggleState_On
                 ? ToggleState.ToggleState_Off
@@ -2151,7 +2156,7 @@ public partial class TreeView : Control
         // Raise an event to announce the expand-collapse state change.
         if (IsAccessibilityObjectCreated)
         {
-            e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+            e.Node!.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
                 newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
@@ -2176,7 +2181,7 @@ public partial class TreeView : Control
         // Raise an event to announce the expand-collapse state change.
         if (IsAccessibilityObjectCreated)
         {
-            e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+            e.Node!.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
                 newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
@@ -2217,7 +2222,12 @@ public partial class TreeView : Control
         // Raise an event to highlight & announce the selected node.
         if (IsAccessibilityObjectCreated)
         {
-            AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
+            AccessibleObject? nodeAccessibleObject = e.Node!.AccessibilityObject;
+            if (nodeAccessibleObject is null)
+            {
+                return;
+            }
+
             nodeAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             nodeAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
 
@@ -3094,7 +3104,7 @@ public partial class TreeView : Control
         // Raise an event to highlight & announce the selected node.
         if (IsAccessibilityObjectCreated)
         {
-            SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            SelectedNode?.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -3452,7 +3462,7 @@ public partial class TreeView : Control
                 if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders && !IsAccessibilityObjectCreated && Focused)
                 {
                     base.WndProc(ref m);
-                    SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+                    SelectedNode?.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
                 }
                 else
                 {
