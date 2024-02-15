@@ -6,8 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows.Forms.Primitives;
 using Microsoft.Office;
-using Windows.Win32.System.Com;
-
 namespace System.Windows.Forms;
 
 public sealed partial class Application
@@ -19,9 +17,7 @@ public sealed partial class Application
     /// </summary>
     internal unsafe sealed class LightThreadContext :
         MarshalByRefObject,
-        IHandle<HANDLE>,
-        IMsoComponent.Interface,
-        IManagedWrapper<IMsoComponent>
+        IHandle<HANDLE>
     {
         private const int STATE_OLEINITIALIZED = 0x00000001;
         private const int STATE_EXTERNALOLEINIT = 0x00000002;
@@ -899,18 +895,7 @@ public sealed partial class Application
                     _currentForm.Visible = true;
                 }
 
-                if ((!fullModal && !localModal) || ComponentManager is ComponentManager)
-                {
-                    result = ComponentManager!.FPushMessageLoop(_componentID, reason, null);
-                }
-                else if (reason is msoloop.DoEvents or msoloop.DoEventsModal)
-                {
-                    result = LocalModalMessageLoop(null);
-                }
-                else
-                {
-                    result = LocalModalMessageLoop(_currentForm);
-                }
+                result = ComponentManager.FPushMessageLoop(_componentID, reason, null);
             }
             finally
             {
@@ -945,47 +930,6 @@ public sealed partial class Application
                     // If we had a component manager, detach from it.
                     RevokeComponent();
                 }
-            }
-        }
-
-        private bool LocalModalMessageLoop(Form? form)
-        {
-            try
-            {
-                // Execute the message loop until the active component tells us to stop.
-                MSG msg = default;
-                bool continueLoop = true;
-
-                while (continueLoop)
-                {
-                    if (PInvoke.GetMessage(&msg, HWND.Null, 0, 0))
-                    {
-                        if (!PreTranslateMessage(ref msg))
-                        {
-                            PInvoke.TranslateMessage(msg);
-                            PInvoke.DispatchMessage(&msg);
-                        }
-
-                        if (form is not null)
-                        {
-                            continueLoop = !form.CheckCloseDialog(false);
-                        }
-                    }
-                    else if (form is null)
-                    {
-                        break;
-                    }
-                    else if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
-                    {
-                        PInvoke.WaitMessage();
-                    }
-                }
-
-                return continueLoop;
-            }
-            catch
-            {
-                return false;
             }
         }
 
@@ -1182,23 +1126,10 @@ public sealed partial class Application
             }
         }
 
-        // Things to test in VS when you change the IMsoComponent code:
-        //
-        // - You can bring up dialogs multiple times (ie, the editor for TextBox.Lines)
-        // - Double-click DataFormWizard, cancel wizard
-        // - When a dialog is open and you switch to another application, when you switch
-        //   back to VS the dialog gets the focus
-        // - If one modal dialog launches another, they are all modal (Try web forms Table\Rows\Cell)
-        // - When a dialog is up, VS is completely disabled, including moving and resizing VS.
-        // - After doing all this, you can ctrl-shift-N start a new project and VS is enabled.
-
-        BOOL IMsoComponent.Interface.FDebugMessage(nint hInst, uint msg, WPARAM wparam, LPARAM lparam)
-            => true;
-
-        BOOL IMsoComponent.Interface.FPreTranslateMessage(MSG* msg)
+        public BOOL FPreTranslateMessage(MSG* msg)
             => PreTranslateMessage(ref Unsafe.AsRef<MSG>(msg));
 
-        void IMsoComponent.Interface.OnEnterState(msocstate uStateID, BOOL fEnter)
+        public void OnEnterState(msocstate uStateID, BOOL fEnter)
         {
             // Return if our (WINFORMS) Modal Loop is still running.
             if (_ourModalLoop)
@@ -1220,31 +1151,13 @@ public sealed partial class Application
             }
         }
 
-        void IMsoComponent.Interface.OnAppActivate(BOOL fActive, uint dwOtherThreadID)
-        {
-        }
-
-        void IMsoComponent.Interface.OnLoseActivation()
-        {
-        }
-
-        void IMsoComponent.Interface.OnActivationChange(
-            IMsoComponent* component,
-            BOOL fSameComponent,
-            MSOCRINFO* pcrinfo,
-            BOOL fHostIsActivating,
-            nint pchostinfo,
-            uint dwReserved)
-        {
-        }
-
-        BOOL IMsoComponent.Interface.FDoIdle(msoidlef grfidlef)
+        public BOOL FDoIdle(msoidlef grfidlef)
         {
             _idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
             return false;
         }
 
-        BOOL IMsoComponent.Interface.FContinueMessageLoop(
+        public BOOL FContinueMessageLoop(
             msoloop uReason,
             void* pvLoopData,
             MSG* pMsgPeeked)
@@ -1302,24 +1215,15 @@ public sealed partial class Application
             return continueLoop;
         }
 
-        BOOL IMsoComponent.Interface.FQueryTerminate(BOOL fPromptUser) => true;
-
-        void IMsoComponent.Interface.Terminate()
-        {
-            Dispose(false);
-        }
-
-        HWND IMsoComponent.Interface.HwndGetWindow(msocWindow dwWhich, uint dwReserved) => HWND.Null;
-
         private unsafe class LiteComponentManager
         {
-            private IMsoComponent.Interface? _activeComponent;
+            private LightThreadContext? _activeComponent;
 
             private nuint _cookieCounter = 0;
             private msocstate _currentState;
 
             public BOOL FRegisterComponent(
-                IMsoComponent.Interface component,
+                LightThreadContext component,
                 MSOCRINFO* pcrinfo,
                 nuint* pdwComponentID)
             {
