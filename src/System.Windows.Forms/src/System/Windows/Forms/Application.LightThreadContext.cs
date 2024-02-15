@@ -19,11 +19,11 @@ public sealed partial class Application
         MarshalByRefObject,
         IHandle<HANDLE>
     {
-        private const int STATE_OLEINITIALIZED = 0x00000001;
-        private const int STATE_EXTERNALOLEINIT = 0x00000002;
-        private const int STATE_INTHREADEXCEPTION = 0x00000004;
-        private const int STATE_POSTEDQUIT = 0x00000008;
-        private const int STATE_FILTERSNAPSHOTVALID = 0x00000010;
+        private bool _oleInitialized;
+        private bool _externalOleInit;
+        private bool _inThreadException;
+        private bool _postedQuit;
+        private bool _filterSnapshotValid;
 
         private static readonly Dictionary<uint, LightThreadContext> s_contextHash = [];
 
@@ -51,7 +51,6 @@ public sealed partial class Application
         private HANDLE _handle;
         private readonly uint _id;
         private int _messageLoopCount;
-        private int _threadState;
         private int _modalCount;
 
         // Used for correct restoration of focus after modality
@@ -216,7 +215,7 @@ public sealed partial class Application
 
             if (filter is not null)
             {
-                SetState(STATE_FILTERSNAPSHOTVALID, false);
+                _filterSnapshotValid = false;
                 if (_messageFilters.Count > 0 && filter is IMessageModifyAndFilter)
                 {
                     // insert the IMessageModifyAndFilter filters first
@@ -315,9 +314,9 @@ public sealed partial class Application
                             }
                             finally
                             {
-                                if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
+                                if (_oleInitialized && !_externalOleInit)
                                 {
-                                    SetState(STATE_OLEINITIALIZED, false);
+                                    _oleInitialized = false;
                                     PInvoke.OleUninitialize();
                                 }
                             }
@@ -590,8 +589,6 @@ public sealed partial class Application
             return false;
         }
 
-        private bool GetState(int bit) => (_threadState & bit) != 0;
-
         /// <summary>
         ///  A method of determining whether we are handling messages that does not demand register
         ///  the component manager.
@@ -600,21 +597,21 @@ public sealed partial class Application
 
         internal ApartmentState OleRequired()
         {
-            if (!GetState(STATE_OLEINITIALIZED))
+            if (!_oleInitialized)
             {
                 HRESULT hr = PInvoke.OleInitialize(pvReserved: (void*)null);
 
-                SetState(STATE_OLEINITIALIZED, true);
+                _oleInitialized = true;
                 if (hr == HRESULT.RPC_E_CHANGED_MODE)
                 {
                     // This could happen if the thread was already initialized for MTA
                     // and then we call OleInitialize which tries to initialize it for STA
                     // This currently happens while profiling.
-                    SetState(STATE_EXTERNALOLEINIT, true);
+                    _externalOleInit = true;
                 }
             }
 
-            return GetState(STATE_EXTERNALOLEINIT) ? ApartmentState.MTA : ApartmentState.STA;
+            return _externalOleInit? ApartmentState.MTA : ApartmentState.STA;
         }
 
         private void OnAppThreadExit(object? sender, EventArgs e)
@@ -626,12 +623,12 @@ public sealed partial class Application
         /// </summary>
         internal void OnThreadException(Exception ex)
         {
-            if (GetState(STATE_INTHREADEXCEPTION))
+            if (_inThreadException)
             {
                 return;
             }
 
-            SetState(STATE_INTHREADEXCEPTION, true);
+            _inThreadException = true;
             try
             {
                 if (_threadExceptionHandler is not null)
@@ -683,7 +680,7 @@ public sealed partial class Application
             }
             finally
             {
-                SetState(STATE_INTHREADEXCEPTION, false);
+                _inThreadException = false;
             }
         }
 
@@ -697,7 +694,7 @@ public sealed partial class Application
             //
             // We can't follow the KB article exactly, because we don't have an HWND to PostMessage to.
             PInvoke.PostThreadMessage(_id, PInvoke.WM_QUIT, default, default);
-            SetState(STATE_POSTEDQUIT, true);
+            _postedQuit = true;
         }
 
         /// <summary>
@@ -715,7 +712,7 @@ public sealed partial class Application
         {
             if (_messageFilters is not null)
             {
-                SetState(STATE_FILTERSNAPSHOTVALID, false);
+                _filterSnapshotValid = false;
                 _messageFilters.Remove(f);
             }
         }
@@ -743,7 +740,7 @@ public sealed partial class Application
             // this flag gets set during loop teardown for another form.
             if (reason == msoloop.Main)
             {
-                SetState(STATE_POSTEDQUIT, false);
+                _postedQuit = false;
             }
 
             if (s_totalMessageLoopCount++ == 0)
@@ -887,7 +884,7 @@ public sealed partial class Application
             // If message filter is added or removed inside the user-provided PreFilterMessage function,
             // and user code pumps messages, we might re-enter ProcessFilter on the same stack, we
             // should not update the snapshot until the next message.
-            if (_messageFilters is not null && !GetState(STATE_FILTERSNAPSHOTVALID) && _inProcessFilters == 0)
+            if (_messageFilters is not null && !_filterSnapshotValid && _inProcessFilters == 0)
             {
                 if (_messageFilterSnapshot is not null)
                 {
@@ -898,7 +895,7 @@ public sealed partial class Application
                     }
                 }
 
-                SetState(STATE_FILTERSNAPSHOTVALID, true);
+                _filterSnapshotValid = true;
             }
 
             _inProcessFilters++;
@@ -1030,18 +1027,6 @@ public sealed partial class Application
             return result;
         }
 
-        private void SetState(int bit, bool value)
-        {
-            if (value)
-            {
-                _threadState |= bit;
-            }
-            else
-            {
-                _threadState &= (~bit);
-            }
-        }
-
         public void OnEnterState(msocstate uStateID, BOOL fEnter)
         {
             // Return if our (WINFORMS) Modal Loop is still running.
@@ -1072,7 +1057,7 @@ public sealed partial class Application
 
             // If we get a null message, and we have previously posted the WM_QUIT message,
             // then someone ate the message.
-            if (pMsgPeeked is null && GetState(STATE_POSTEDQUIT))
+            if (pMsgPeeked is null && _postedQuit)
             {
                 continueLoop = false;
             }
