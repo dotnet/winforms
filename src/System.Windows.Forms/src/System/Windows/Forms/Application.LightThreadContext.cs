@@ -277,7 +277,7 @@ public sealed partial class Application
             _ourModalLoop = true;
             try
             {
-                ComponentManager?.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
+                OnEnterState(msocstate.Modal, BOOL.TRUE);
             }
             finally
             {
@@ -342,12 +342,6 @@ public sealed partial class Application
                             if (!ourThread)
                             {
                                 return;
-                            }
-
-                            // If we had a component manager, detach from it.
-                            if (_componentManager is not null)
-                            {
-                                RevokeComponent();
                             }
 
                             DisposeThreadWindows();
@@ -495,8 +489,8 @@ public sealed partial class Application
             _ourModalLoop = true;
             try
             {
-                // If We started the ModalMessageLoop .. this will call us back on the IMSOComponent.OnStateEnter and not do anything ...
-                ComponentManager.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
+                // If We started the ModalMessageLoop .. this will call us back on the IMSOComponent.OnStateEnter and not do anything
+                OnEnterState(msocstate.Modal, false);
             }
             finally
             {
@@ -826,13 +820,7 @@ public sealed partial class Application
             }
 
             bool fullModal = false;
-            bool localModal = false;
             HWND hwndOwner = default;
-
-            if (reason == msoloop.DoEventsModal)
-            {
-                localModal = true;
-            }
 
             if (reason is msoloop.ModalForm or msoloop.ModalAlert)
             {
@@ -904,7 +892,7 @@ public sealed partial class Application
                     EndModalMessageLoop(context);
 
                     // Again, if the hwndOwner was valid and disabled above, re-enable it.
-                    if (hwndOwner != IntPtr.Zero)
+                    if (!hwndOwner.IsNull)
                     {
                         PInvoke.EnableWindow(hwndOwner, true);
                     }
@@ -924,11 +912,6 @@ public sealed partial class Application
                 if (reason == msoloop.Main)
                 {
                     Dispose(true);
-                }
-                else if (_messageLoopCount == 0 && _componentManager is not null)
-                {
-                    // If we had a component manager, detach from it.
-                    RevokeComponent();
                 }
             }
         }
@@ -1091,29 +1074,6 @@ public sealed partial class Application
             return false;
         }
 
-        /// <summary>
-        ///  Revokes our component from the active component manager. Does nothing if there is no active
-        ///  component manager or we are already invoked.
-        /// </summary>
-        private void RevokeComponent()
-        {
-            if (_componentManager is { } manager && _componentID != s_invalidId)
-            {
-                try
-                {
-                    _componentManager = null;
-                    using (manager as IDisposable)
-                    {
-                        manager.FRevokeComponent(_componentID);
-                    }
-                }
-                finally
-                {
-                    _componentID = s_invalidId;
-                }
-            }
-        }
-
         private void SetState(int bit, bool value)
         {
             if (value)
@@ -1220,7 +1180,6 @@ public sealed partial class Application
             private LightThreadContext? _activeComponent;
 
             private nuint _cookieCounter = 0;
-            private msocstate _currentState;
 
             public BOOL FRegisterComponent(
                 LightThreadContext component,
@@ -1240,59 +1199,11 @@ public sealed partial class Application
                 return true;
             }
 
-            public BOOL FRevokeComponent(nuint dwComponentID)
-            {
-                if (_activeComponent is null)
-                {
-                    return false;
-                }
-
-                _activeComponent = null;
-                return true;
-            }
-
-            public void OnComponentEnterState(
-                nuint dwComponentID,
-                msocstate uStateID,
-                msoccontext uContext,
-                uint cpicmExclude,
-                IMsoComponentManager** rgpicmExclude,
-                uint dwReserved)
-            {
-                _currentState = uStateID;
-
-                if (uContext is msoccontext.All or msoccontext.Mine)
-                {
-                    // We should notify all components we contain that the state has changed.
-                    _activeComponent?.OnEnterState(uStateID, true);
-                }
-            }
-
-            public BOOL FOnComponentExitState(
-                nuint dwComponentID,
-                msocstate uStateID,
-                msoccontext uContext,
-                uint cpicmExclude,
-                IMsoComponentManager** rgpicmExclude)
-            {
-                _currentState = 0;
-
-                if (uContext is msoccontext.All or msoccontext.Mine)
-                {
-                    // We should notify all components we contain that the state has changed.
-                    _activeComponent?.OnEnterState(uStateID, false);
-                }
-
-                return false;
-            }
-
             public BOOL FPushMessageLoop(
                 nuint dwComponentID,
                 msoloop uReason,
                 void* pvLoopData)
             {
-                // Hold onto old state to allow restoring it before we exit.
-                msocstate currentLoopState = _currentState;
                 BOOL continueLoop = true;
 
                 if (_activeComponent is null)
@@ -1300,94 +1211,87 @@ public sealed partial class Application
                     return false;
                 }
 
-                try
+                MSG msg = default;
+
+                while (true)
                 {
-                    MSG msg = default;
-
-                    while (true)
+                    if (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                     {
-                        if (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
+                        if (!_activeComponent.FContinueMessageLoop(uReason, pvLoopData, &msg))
                         {
-                            if (!_activeComponent.FContinueMessageLoop(uReason, pvLoopData, &msg))
+                            return true;
+                        }
+
+                        // If the component wants us to process the message, do it.
+                        PInvoke.GetMessage(&msg, HWND.Null, 0, 0);
+
+                        if (msg.message == PInvoke.WM_QUIT)
+                        {
+                            ThreadContext.FromCurrent().DisposeThreadWindows();
+
+                            if (uReason != msoloop.Main)
                             {
-                                return true;
+                                PInvoke.PostQuitMessage((int)msg.wParam);
                             }
 
-                            // If the component wants us to process the message, do it.
-                            PInvoke.GetMessage(&msg, HWND.Null, 0, 0);
+                            return true;
+                        }
 
-                            if (msg.message == PInvoke.WM_QUIT)
-                            {
-                                ThreadContext.FromCurrent().DisposeThreadWindows();
+                        // Now translate and dispatch the message.
+                        //
+                        // Reading through the rather sparse documentation, it seems we should only call
+                        // FPreTranslateMessage on the active component.
+                        if (!_activeComponent.FPreTranslateMessage(&msg))
+                        {
+                            PInvoke.TranslateMessage(msg);
+                            PInvoke.DispatchMessage(&msg);
+                        }
+                    }
+                    else
+                    {
+                        // If this is a DoEvents loop, then get out. There's nothing left for us to do.
+                        if (uReason is msoloop.DoEvents or msoloop.DoEventsModal)
+                        {
+                            break;
+                        }
 
-                                if (uReason != msoloop.Main)
-                                {
-                                    PInvoke.PostQuitMessage((int)msg.wParam);
-                                }
+                        // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
+                        bool continueIdle = false;
 
-                                return true;
-                            }
+                        _activeComponent.FDoIdle(msoidlef.All);
 
-                            // Now translate and dispatch the message.
-                            //
-                            // Reading through the rather sparse documentation, it seems we should only call
-                            // FPreTranslateMessage on the active component.
-                            if (!_activeComponent.FPreTranslateMessage(&msg))
-                            {
-                                PInvoke.TranslateMessage(msg);
-                                PInvoke.DispatchMessage(&msg);
-                            }
+                        // Give the component one more chance to terminate the message loop.
+                        if (!_activeComponent.FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked: null))
+                        {
+                            return true;
+                        }
+
+                        if (continueIdle)
+                        {
+                            // If someone has asked for idle time, give it to them. However, don't cycle immediately;
+                            // wait up to 100ms. We don't want someone to attach to idle, forget to detach, and then
+                            // cause CPU to end up in race condition. For Windows Forms this generally isn't an issue
+                            // because our component always returns false from its idle request
+                            PInvoke.MsgWaitForMultipleObjectsEx(
+                                0,
+                                null,
+                                100,
+                                QUEUE_STATUS_FLAGS.QS_ALLINPUT,
+                                MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
                         }
                         else
                         {
-                            // If this is a DoEvents loop, then get out. There's nothing left for us to do.
-                            if (uReason is msoloop.DoEvents or msoloop.DoEventsModal)
+                            // We should call GetMessage here, but we cannot because the component manager requires
+                            // that we notify the active component before we pull the message off the queue. This is
+                            // a bit of a problem, because WaitMessage waits for a NEW message to appear on the
+                            // queue. If a message appeared between processing and now WaitMessage would wait for
+                            // the next message. We minimize this here by calling PeekMessage.
+                            if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                             {
-                                break;
-                            }
-
-                            // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
-                            bool continueIdle = false;
-
-                            _activeComponent.FDoIdle(msoidlef.All);
-
-                            // Give the component one more chance to terminate the message loop.
-                            if (!_activeComponent.FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked: null))
-                            {
-                                return true;
-                            }
-
-                            if (continueIdle)
-                            {
-                                // If someone has asked for idle time, give it to them. However, don't cycle immediately;
-                                // wait up to 100ms. We don't want someone to attach to idle, forget to detach, and then
-                                // cause CPU to end up in race condition. For Windows Forms this generally isn't an issue
-                                // because our component always returns false from its idle request
-                                PInvoke.MsgWaitForMultipleObjectsEx(
-                                    0,
-                                    null,
-                                    100,
-                                    QUEUE_STATUS_FLAGS.QS_ALLINPUT,
-                                    MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
-                            }
-                            else
-                            {
-                                // We should call GetMessage here, but we cannot because the component manager requires
-                                // that we notify the active component before we pull the message off the queue. This is
-                                // a bit of a problem, because WaitMessage waits for a NEW message to appear on the
-                                // queue. If a message appeared between processing and now WaitMessage would wait for
-                                // the next message. We minimize this here by calling PeekMessage.
-                                if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
-                                {
-                                    PInvoke.WaitMessage();
-                                }
+                                PInvoke.WaitMessage();
                             }
                         }
                     }
-                }
-                finally
-                {
-                    _currentState = currentLoopState;
                 }
 
                 return !continueLoop;
