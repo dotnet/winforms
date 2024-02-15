@@ -7,8 +7,6 @@ using System.Runtime.ExceptionServices;
 using System.Windows.Forms.Primitives;
 using Microsoft.Office;
 using Windows.Win32.System.Com;
-using ComIMessageFilter = Windows.Win32.Media.Audio.IMessageFilter;
-using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 
 namespace System.Windows.Forms;
 
@@ -30,7 +28,6 @@ public sealed partial class Application
         private const int STATE_INTHREADEXCEPTION = 0x00000004;
         private const int STATE_POSTEDQUIT = 0x00000008;
         private const int STATE_FILTERSNAPSHOTVALID = 0x00000010;
-        private const int STATE_TRACKINGCOMPONENT = 0x00000020;
 
         private static readonly nuint s_invalidId = unchecked((nuint)(-1));
 
@@ -68,7 +65,6 @@ public sealed partial class Application
 
         // IMsoComponentManager stuff
         private IMsoComponentManager.Interface? _componentManager;
-        private bool _externalComponentManager;
         private bool _fetchingComponentManager;
 
         // IMsoComponent stuff
@@ -144,17 +140,7 @@ public sealed partial class Application
 
                 try
                 {
-                    // Attempt to obtain the Host Application MSOComponentManager
-                    _componentManager = GetExternalComponentManager();
-                    if (_componentManager is not null)
-                    {
-                        _externalComponentManager = true;
-                    }
-                    else
-                    {
-                        _componentManager = new ComponentManager();
-                    }
-
+                    _componentManager = new ComponentManager();
                     if (_componentManager is not null)
                     {
                         RegisterComponentManager();
@@ -166,48 +152,6 @@ public sealed partial class Application
                 }
 
                 return _componentManager;
-
-                unsafe static IMsoComponentManager.Interface? GetExternalComponentManager()
-                {
-                    Application.OleRequired();
-                    using ComScope<ComIMessageFilter> messageFilter = new(null);
-
-                    // Clear the thread's message filter to see if there was an existing filter
-                    if (PInvoke.CoRegisterMessageFilter(null, messageFilter).Failed || messageFilter.IsNull)
-                    {
-                        return null;
-                    }
-
-                    // There was an existing filter, reregister it
-                    ComIMessageFilter* dummy = default;
-                    PInvoke.CoRegisterMessageFilter(messageFilter, &dummy);
-
-                    // Now look to see if it implements the native IServiceProvider
-                    using var serviceProvider = messageFilter.TryQuery<ComIServiceProvider>(out HRESULT hr);
-                    if (hr.Failed)
-                    {
-                        return null;
-                    }
-
-                    // Check the service provider for the service that provides IMsoComponentManager
-                    using ComScope<IUnknown> serviceHandle = new(null);
-                    Guid sid = new(MsoComponentIds.SID_SMsoComponentManager);
-                    Guid iid = new(MsoComponentIds.IID_IMsoComponentManager);
-
-                    if (serviceProvider.Value->QueryService(&sid, &iid, serviceHandle).Failed || serviceHandle.IsNull)
-                    {
-                        return null;
-                    }
-
-                    // We have the component manager service, now get the component manager interface
-                    var componentManager = serviceHandle.TryQuery<IMsoComponentManager>(out hr);
-                    if (hr.Succeeded && !componentManager.IsNull)
-                    {
-                        return new IMsoComponentManager.NativeAdapter(componentManager);
-                    }
-
-                    return null;
-                }
 
                 void RegisterComponentManager()
                 {
@@ -223,11 +167,6 @@ public sealed partial class Application
                     bool result = _componentManager.FRegisterComponent(ComHelpers.GetComPointer<IMsoComponent>(this), &info, &id);
                     _componentID = id;
                     Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
-
-                    if (result && _componentManager is not Application.ComponentManager)
-                    {
-                        _messageLoopCount++;
-                    }
 
                     Debug.Assert(result,
                         $"Failed to register WindowsForms with the ComponentManager -- DoEvents and modal dialogs will be broken. size: {info.cbSize}");
@@ -362,7 +301,7 @@ public sealed partial class Application
         }
 
         // Called immediately before we begin pumping messages for a modal message loop.
-        internal unsafe void BeginModalMessageLoop(ApplicationContext? context)
+        internal void BeginModalMessageLoop(ApplicationContext? context)
         {
 #if DEBUG
             _debugModalCounter++;
@@ -654,13 +593,6 @@ public sealed partial class Application
         // appropriate MsoComponentManager activation magic
         internal unsafe void FormActivated(bool activate)
         {
-            if (activate)
-            {
-                if (ComponentManager is { } manager && manager is not Application.ComponentManager)
-                {
-                    manager.FOnComponentActivate(_componentID);
-                }
-            }
         }
 
         /// <summary>
@@ -669,15 +601,6 @@ public sealed partial class Application
         /// </summary>
         internal unsafe void TrackInput(bool track)
         {
-            // Protect against double setting, as this causes asserts in the VS component manager.
-            if (track != GetState(STATE_TRACKINGCOMPONENT))
-            {
-                if (ComponentManager is { } manager && manager is not Application.ComponentManager)
-                {
-                    manager.FSetTrackingComponent(_componentID, track);
-                    SetState(STATE_TRACKINGCOMPONENT, track);
-                }
-            }
         }
 
         /// <summary>
@@ -729,26 +652,14 @@ public sealed partial class Application
         {
             // If we are already running a loop, we're fine.
             // If we are running in external manager we may need to make sure first the loop is active
-            if (_messageLoopCount > (mustBeActive && _externalComponentManager ? 1 : 0))
+            if (_messageLoopCount > 0)
             {
                 return true;
             }
 
-            // Also, access the ComponentManager property to demand create it, and we're also
-            // fine if it is an external manager, because it has already pushed a loop.
-            if (ComponentManager is not null && _externalComponentManager)
-            {
-                if (mustBeActive == false)
-                {
-                    return true;
-                }
+            // Also, access the ComponentManager property to demand create it.
 
-                using ComScope<IMsoComponent> component = new(null);
-                if (ComponentManager.FGetActiveComponent(msogac.Active, component, null, 0))
-                {
-                    return ComHelpers.WrapsManagedObject(this, component.Value);
-                }
-            }
+            _ = ComponentManager;
 
             // Finally, check if a message loop has been registered
             MessageLoopCallback? callback = _messageLoopCallback;
@@ -1426,11 +1337,6 @@ public sealed partial class Application
 
         void IMsoComponent.Interface.Terminate()
         {
-            if (_messageLoopCount > 0 && ComponentManager is not Application.ComponentManager)
-            {
-                _messageLoopCount--;
-            }
-
             Dispose(false);
         }
 
