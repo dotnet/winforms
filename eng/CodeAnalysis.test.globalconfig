@@ -28,6 +28,9 @@ dotnet_diagnostic.CA1810.severity = none # TODO: warning
 # CA1812: Avoid uninstantiated internal classes
 dotnet_diagnostic.CA1812.severity = none
 
+# CA1815: Override equals and operator equals on value types
+dotnet_diagnostic.CA1815.severity = none
+
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = none # TODO: warning
 dotnet_code_quality.CA1822.api_surface = unset
