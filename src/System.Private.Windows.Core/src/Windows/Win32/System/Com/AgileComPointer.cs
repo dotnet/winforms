@@ -68,6 +68,14 @@ internal unsafe class AgileComPointer<TInterface> :
         return currentUnknown.Value == otherUnknown.Value;
     }
 
+    /// <inheritdoc cref="IsSameNativeObject(AgileComPointer{TInterface})"/>
+    public bool IsSameNativeObject(TInterface* other)
+    {
+        using var currentUnknown = GetInterface<IUnknown>();
+        using ComScope<IUnknown> otherUnknown = ComScope<IUnknown>.QueryFrom(other);
+        return currentUnknown.Value == otherUnknown.Value;
+    }
+
     /// <summary>
     ///  Gets the default interface. Throws if failed.
     /// </summary>

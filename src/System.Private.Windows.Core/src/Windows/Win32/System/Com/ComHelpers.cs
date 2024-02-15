@@ -199,10 +199,19 @@ internal static unsafe partial class ComHelpers
     }
 
     /// <summary>
-    ///  Returns <see langword="true"/> if the given <paramref name="object"/> is projected as the given <paramref name="unknown"/>.
+    ///  Returns <see langword="true"/> if the given <paramref name="object"/> is projected as the given <paramref name="comPointer"/>.
     /// </summary>
-    internal static bool WrapsManagedObject(object @object, IUnknown* unknown)
+    internal static bool WrapsManagedObject<T>(object @object, T* comPointer)
+        where T : unmanaged, IComIID
     {
+        if (comPointer is null)
+        {
+            return false;
+        }
+
+        using ComScope<IUnknown> unknown = new(null);
+        ((IUnknown*)comPointer)->QueryInterface(IID.Get<IUnknown>(), unknown).ThrowOnFailure();
+
         // If it is a ComWrappers object we need to simply pull out the original object to check.
         if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
         {
