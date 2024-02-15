@@ -5,7 +5,7 @@ namespace Microsoft.Office;
 
 /// <summary>
 ///  Reasons for pushing a message loop as passed to <see cref="IMsoComponentManager.FPushMessageLoop" />.
-///  The host should remain in message loop until <see cref="IMsoComponent.FContinueMessageLoop" />
+///  The host should remain in message loop until <see cref="IMsoComponent.FContinueMessageLoop(msoloop, void*, MSG*)" />
 ///  returns <see cref="BOOL.FALSE" />
 /// </summary>
 internal enum msoloop : uint
