@@ -1,6 +1,6 @@
 {
   "tools": {
-    "dotnet": "7.0.115",
+    "dotnet": "7.0.116",
     "runtimes": {
       "dotnet/x64": [
         "$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)"
@@ -11,12 +11,12 @@
     }
   },
   "sdk": {
-    "version": "7.0.115"
+    "version": "7.0.116"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "7.0.0-beta.24059.5",
-    "Microsoft.DotNet.CMake.Sdk": "7.0.0-beta.24059.5",
-    "Microsoft.DotNet.Helix.Sdk": "7.0.0-beta.24059.5",
+    "Microsoft.DotNet.Arcade.Sdk": "7.0.0-beta.24114.2",
+    "Microsoft.DotNet.CMake.Sdk": "7.0.0-beta.24114.2",
+    "Microsoft.DotNet.Helix.Sdk": "7.0.0-beta.24114.2",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
     "Microsoft.NET.Sdk.IL": "7.0.16-servicing.24066.29"
   },
