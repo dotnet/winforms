@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows.Forms.Primitives;
 using Microsoft.Office;
+
 namespace System.Windows.Forms;
 
 public sealed partial class Application
@@ -956,81 +956,78 @@ public sealed partial class Application
                 return true;
             }
 
-            if (msg.IsKeyMessage())
+            if (!msg.IsKeyMessage())
             {
-                if (msg.message == PInvoke.WM_CHAR)
-                {
-                    // 1 = extended keyboard, 46 = scan code
-                    int breakLParamMask = 0x1460000;
-                    if ((int)(uint)msg.wParam == 3 && ((int)msg.lParam & breakLParamMask) == breakLParamMask)
-                    {
-                        // wParam is the key character, which for ctrl-brk is the same as ctrl-C.
-                        // So we need to go to the lparam to distinguish the two cases.
-                        // You might also be able to do this with WM_KEYDOWN (again with wParam=3)
+                return false;
+            }
 
-                        if (Debugger.IsAttached)
-                        {
-                            Debugger.Break();
-                        }
+            if (msg.message == PInvoke.WM_CHAR)
+            {
+                // 1 = extended keyboard, 46 = scan code
+                int breakLParamMask = 0x1460000;
+                if ((int)(uint)msg.wParam == 3 && ((int)msg.lParam & breakLParamMask) == breakLParamMask)
+                {
+                    // wParam is the key character, which for ctrl-brk is the same as ctrl-C.
+                    // So we need to go to the lparam to distinguish the two cases.
+                    // You might also be able to do this with WM_KEYDOWN (again with wParam=3)
+
+                    if (Debugger.IsAttached)
+                    {
+                        Debugger.Break();
                     }
                 }
+            }
 
-                Control? target = Control.FromChildHandle(msg.hwnd);
-                bool retValue = false;
+            Control? target = Control.FromChildHandle(msg.hwnd);
+            bool result = false;
 
-                Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+            Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 
-                if (target is not null)
+            if (target is not null)
+            {
+                if (NativeWindow.WndProcShouldBeDebuggable)
                 {
-                    if (NativeWindow.WndProcShouldBeDebuggable)
+                    // We don't want to do a catch in the debuggable case.
+                    if (Control.PreProcessControlMessageInternal(target, ref m) == PreProcessControlState.MessageProcessed)
                     {
-                        // We don't want to do a catch in the debuggable case.
-                        if (Control.PreProcessControlMessageInternal(target, ref m) == PreProcessControlState.MessageProcessed)
-                        {
-                            retValue = true;
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (Control.PreProcessControlMessageInternal(target, ref m) == PreProcessControlState.MessageProcessed)
-                            {
-                                retValue = true;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            OnThreadException(e);
-                        }
+                        result = true;
                     }
                 }
                 else
                 {
-                    // See if this is a dialog message -- this is for handling any native dialogs that are launched from
-                    // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
-
-                    // First, get the first top-level window in the hierarchy.
-                    HWND hwndRoot = PInvoke.GetAncestor(msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
-
-                    // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
-                    // so we should return true to prevent Translate/Dispatch from being called.
-                    if (!hwndRoot.IsNull && PInvoke.IsDialogMessage(hwndRoot, in msg))
+                    try
                     {
-                        return true;
+                        if (Control.PreProcessControlMessageInternal(target, ref m) == PreProcessControlState.MessageProcessed)
+                        {
+                            result = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        OnThreadException(e);
                     }
                 }
+            }
+            else
+            {
+                // See if this is a dialog message -- this is for handling any native dialogs that are launched from
+                // WinForms code.  This can happen with ActiveX controls that launch dialogs specifically
 
-                msg.wParam = m.WParamInternal;
-                msg.lParam = m.LParamInternal;
+                // First, get the first top-level window in the hierarchy.
+                HWND hwndRoot = PInvoke.GetAncestor(msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
-                if (retValue)
+                // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
+                // so we should return true to prevent Translate/Dispatch from being called.
+                if (!hwndRoot.IsNull && PInvoke.IsDialogMessage(hwndRoot, in msg))
                 {
                     return true;
                 }
             }
 
-            return false;
+            msg.wParam = m.WParamInternal;
+            msg.lParam = m.LParamInternal;
+
+            return result;
         }
 
         private void SetState(int bit, bool value)
@@ -1045,9 +1042,6 @@ public sealed partial class Application
             }
         }
 
-        public BOOL FPreTranslateMessage(MSG* msg)
-            => PreTranslateMessage(ref Unsafe.AsRef<MSG>(msg));
-
         public void OnEnterState(msocstate uStateID, BOOL fEnter)
         {
             // Return if our (WINFORMS) Modal Loop is still running.
@@ -1061,19 +1055,13 @@ public sealed partial class Application
                 // We should only be messing with windows we own.  See the "ctrl-shift-N" test above.
                 if (fEnter)
                 {
-                    DisableWindowsForModalLoop(true, null); // WinFormsOnly = true
+                    DisableWindowsForModalLoop(onlyWinForms: true, null);
                 }
                 else
                 {
-                    EnableWindowsForModalLoop(true, null); // WinFormsOnly = true
+                    EnableWindowsForModalLoop(onlyWinForms: true, null);
                 }
             }
-        }
-
-        public BOOL FDoIdle(msoidlef grfidlef)
-        {
-            _idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
-            return false;
         }
 
         public BOOL FContinueMessageLoop(
@@ -1163,10 +1151,7 @@ public sealed partial class Application
                     }
 
                     // Now translate and dispatch the message.
-                    //
-                    // Reading through the rather sparse documentation, it seems we should only call
-                    // FPreTranslateMessage on the active component.
-                    if (!FPreTranslateMessage(&msg))
+                    if (!PreTranslateMessage(ref msg))
                     {
                         PInvoke.TranslateMessage(msg);
                         PInvoke.DispatchMessage(&msg);
@@ -1181,9 +1166,7 @@ public sealed partial class Application
                     }
 
                     // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
-                    bool continueIdle = false;
-
-                    FDoIdle(msoidlef.All);
+                    _idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
 
                     // Give the component one more chance to terminate the message loop.
                     if (!FContinueMessageLoop(uReason, pMsgPeeked: null))
@@ -1191,30 +1174,14 @@ public sealed partial class Application
                         return true;
                     }
 
-                    if (continueIdle)
+                    // We should call GetMessage here, but we cannot because the component manager requires
+                    // that we notify the active component before we pull the message off the queue. This is
+                    // a bit of a problem, because WaitMessage waits for a NEW message to appear on the
+                    // queue. If a message appeared between processing and now WaitMessage would wait for
+                    // the next message. We minimize this here by calling PeekMessage.
+                    if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                     {
-                        // If someone has asked for idle time, give it to them. However, don't cycle immediately;
-                        // wait up to 100ms. We don't want someone to attach to idle, forget to detach, and then
-                        // cause CPU to end up in race condition. For Windows Forms this generally isn't an issue
-                        // because our component always returns false from its idle request
-                        PInvoke.MsgWaitForMultipleObjectsEx(
-                            0,
-                            null,
-                            100,
-                            QUEUE_STATUS_FLAGS.QS_ALLINPUT,
-                            MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
-                    }
-                    else
-                    {
-                        // We should call GetMessage here, but we cannot because the component manager requires
-                        // that we notify the active component before we pull the message off the queue. This is
-                        // a bit of a problem, because WaitMessage waits for a NEW message to appear on the
-                        // queue. If a message appeared between processing and now WaitMessage would wait for
-                        // the next message. We minimize this here by calling PeekMessage.
-                        if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
-                        {
-                            PInvoke.WaitMessage();
-                        }
+                        PInvoke.WaitMessage();
                     }
                 }
             }
