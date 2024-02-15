@@ -18,7 +18,7 @@ public class ThreadContextTests
     public void ThreadContext_EmptyProcessFiltersWorks()
     {
         // Test that no filters at all does not throw, and that returns false from translation
-        Application.ThreadContext threadContext = new();
+        Application.ThreadContext threadContext = new Application.LightThreadContext();
         MSG msg = new();
         Assert.False(threadContext.PreTranslateMessage(ref msg));
     }
@@ -27,7 +27,7 @@ public class ThreadContextTests
     public void ThreadContext_WrongProcessFiltersPassesThrough()
     {
         // Test that a filter for the wrong ID returns false, but does get called
-        Application.ThreadContext threadContext = new();
+        Application.ThreadContext threadContext = new Application.LightThreadContext();
 
         MessageId filterId = TestMessageId2;
         Mock<IMessageFilter> mockContext = new(MockBehavior.Strict);
@@ -47,7 +47,7 @@ public class ThreadContextTests
     public void ThreadContext_CorrectProcessFiltersProcesses()
     {
         // Test that a filter with the correct ID returns true
-        Application.ThreadContext threadContext = new();
+        Application.ThreadContext threadContext = new Application.LightThreadContext();
 
         MessageId filterId = TestMessageId2;
         Mock<IMessageFilter> mockContext = new(MockBehavior.Strict);
@@ -67,7 +67,7 @@ public class ThreadContextTests
     public void ThreadContext_MultipleProcessFiltersProcesses()
     {
         // Test that multiple filters work
-        Application.ThreadContext threadContext = new();
+        Application.ThreadContext threadContext = new Application.LightThreadContext();
 
         MessageId filterId2 = TestMessageId2;
         Mock<IMessageFilter> mockContext2 = new(MockBehavior.Strict);

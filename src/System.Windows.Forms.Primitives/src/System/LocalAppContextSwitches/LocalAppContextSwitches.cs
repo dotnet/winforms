@@ -22,6 +22,7 @@ internal static partial class LocalAppContextSwitches
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
+    internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -30,6 +31,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_doNotCatchUnhandledExceptions;
     private static int s_dataGridViewUIAStartRowCountAtZero;
     private static int s_noClientNotifications;
+    private static int s_enableMsoComponentManager;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -171,6 +173,21 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(NoClientNotificationsSwitchName, ref s_noClientNotifications);
+    }
+
+    /// <summary>
+    ///  If <see langword="true"/> Windows Forms threads will register with existing IMsoComponentManager instances.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   See <see href="https://learn.microsoft.com/previous-versions/office/developer/office-2007/ff518974(v=office.12)">
+    ///   Component API Reference for the 2007 Office System</see> for more information on the IMsoComponentManager.
+    ///  </para>
+    /// </remarks>
+    public static bool EnableMsoComponentManager
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(EnableMsoComponentManagerSwitchName, ref s_enableMsoComponentManager);
     }
 
     internal static void SetLocalAppContextSwitchValue(string switchName, bool value)
