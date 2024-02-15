@@ -43,7 +43,7 @@ public sealed partial class Application
         ///  Retrieves the component manager for this process.  If there is no component manager
         ///  currently installed, we install our own.
         /// </summary>
-        internal unsafe IMsoComponentManager.Interface? ComponentManager
+        internal IMsoComponentManager.Interface? ComponentManager
         {
             get
             {
@@ -75,10 +75,7 @@ public sealed partial class Application
                         _componentManager = new ComponentManager();
                     }
 
-                    if (_componentManager is not null)
-                    {
-                        RegisterComponentManager();
-                    }
+                    RegisterComponentManager();
                 }
                 finally
                 {
@@ -87,7 +84,7 @@ public sealed partial class Application
 
                 return _componentManager;
 
-                unsafe static IMsoComponentManager.Interface? GetExternalComponentManager()
+                static IMsoComponentManager.Interface? GetExternalComponentManager()
                 {
                     Application.OleRequired();
                     using ComScope<ComIMessageFilter> messageFilter = new(null);
@@ -209,25 +206,19 @@ public sealed partial class Application
 
         internal override void FormActivated(bool activate)
         {
-            if (activate)
+            if (activate && ComponentManager is { } manager && manager is not Application.ComponentManager)
             {
-                if (ComponentManager is { } manager && manager is not Application.ComponentManager)
-                {
-                    manager.FOnComponentActivate(_componentID);
-                }
+                manager.FOnComponentActivate(_componentID);
             }
         }
 
         internal override void TrackInput(bool track)
         {
             // Protect against double setting, as this causes asserts in the VS component manager.
-            if (_trackingComponent != track)
+            if (_trackingComponent != track && ComponentManager is { } manager && manager is not Application.ComponentManager)
             {
-                if (ComponentManager is { } manager && manager is not Application.ComponentManager)
-                {
-                    manager.FSetTrackingComponent(_componentID, track);
-                    _trackingComponent = track;
-                }
+                manager.FSetTrackingComponent(_componentID, track);
+                _trackingComponent = track;
             }
         }
 
@@ -288,7 +279,7 @@ public sealed partial class Application
             }
         }
 
-        private unsafe bool LocalModalMessageLoop(Form? form)
+        private bool LocalModalMessageLoop(Form? form)
         {
             try
             {
@@ -333,7 +324,7 @@ public sealed partial class Application
         ///  Revokes our component from the active component manager. Does nothing if there is no active
         ///  component manager or we are already invoked.
         /// </summary>
-        private unsafe void RevokeComponent()
+        private void RevokeComponent()
         {
             if (_componentManager is { } manager && _componentID != s_invalidId)
             {
@@ -398,7 +389,7 @@ public sealed partial class Application
         {
         }
 
-        unsafe void IMsoComponent.Interface.OnActivationChange(
+        void IMsoComponent.Interface.OnActivationChange(
             IMsoComponent* component,
             BOOL fSameComponent,
             MSOCRINFO* pcrinfo,
