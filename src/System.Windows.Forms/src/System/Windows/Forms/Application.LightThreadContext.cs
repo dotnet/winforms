@@ -64,8 +64,7 @@ public sealed partial class Application
         private WeakReference<Control>? _activatingControlRef;
 
         // IMsoComponentManager stuff
-        private IMsoComponentManager.Interface? _componentManager;
-        private bool _fetchingComponentManager;
+        private LiteComponentManager? _componentManager;
 
         // IMsoComponent stuff
         private nuint _componentID = s_invalidId;
@@ -119,11 +118,11 @@ public sealed partial class Application
         ///  Retrieves the component manager for this process.  If there is no component manager
         ///  currently installed, we install our own.
         /// </summary>
-        internal IMsoComponentManager.Interface? ComponentManager
+        private LiteComponentManager ComponentManager
         {
             get
             {
-                if (_componentManager is not null || _fetchingComponentManager)
+                if (_componentManager is not null)
                 {
                     return _componentManager;
                 }
@@ -136,41 +135,12 @@ public sealed partial class Application
                 // later on as we come out of the recursion.  So, we guard it here and return
                 // null.  EVERYONE who accesses the component manager must handle a NULL return!
 
-                _fetchingComponentManager = true;
-
-                try
-                {
-                    _componentManager = new ComponentManager();
-                    if (_componentManager is not null)
-                    {
-                        RegisterComponentManager();
-                    }
-                }
-                finally
-                {
-                    _fetchingComponentManager = false;
-                }
-
+                _componentManager = new LiteComponentManager();
+                nuint id;
+                bool result = _componentManager.FRegisterComponent(this, null, &id);
+                _componentID = id;
+                Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
                 return _componentManager;
-
-                void RegisterComponentManager()
-                {
-                    MSOCRINFO info = new()
-                    {
-                        cbSize = (uint)sizeof(MSOCRINFO),
-                        uIdleTimeInterval = 0,
-                        grfcrf = msocrf.PreTranslateAll | msocrf.NeedIdleTime,
-                        grfcadvf = msocadvf.Modal
-                    };
-
-                    UIntPtr id;
-                    bool result = _componentManager.FRegisterComponent(ComHelpers.GetComPointer<IMsoComponent>(this), &info, &id);
-                    _componentID = id;
-                    Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
-
-                    Debug.Assert(result,
-                        $"Failed to register WindowsForms with the ComponentManager -- DoEvents and modal dialogs will be broken. size: {info.cbSize}");
-                }
             }
         }
 
@@ -530,8 +500,7 @@ public sealed partial class Application
             try
             {
                 // If We started the ModalMessageLoop .. this will call us back on the IMSOComponent.OnStateEnter and not do anything ...
-                IMsoComponentManager.Interface? cm = ComponentManager;
-                cm?.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
+                ComponentManager.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
             }
             finally
             {
@@ -1342,135 +1311,43 @@ public sealed partial class Application
 
         HWND IMsoComponent.Interface.HwndGetWindow(msocWindow dwWhich, uint dwReserved) => HWND.Null;
 
-        private unsafe class LiteComponentManager : IMsoComponentManager.Interface
+        private unsafe class LiteComponentManager
         {
-            private struct ComponentHashtableEntry
-            {
-                public AgileComPointer<IMsoComponent> component;
-                public MSOCRINFO componentInfo;
-            }
+            private IMsoComponent.Interface? _activeComponent;
 
-            private Dictionary<nuint, ComponentHashtableEntry>? _oleComponents;
-            private UIntPtr _cookieCounter = UIntPtr.Zero;
-            private AgileComPointer<IMsoComponent>? _activeComponent;
-            private AgileComPointer<IMsoComponent>? _trackingComponent;
+            private nuint _cookieCounter = 0;
             private msocstate _currentState;
 
-            private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= new();
-
-            HRESULT IMsoComponentManager.Interface.QueryService(
-                Guid* guidService,
-                Guid* iid,
-                void** ppvObj)
-            {
-                if (ppvObj is not null)
-                {
-                    *ppvObj = null;
-                }
-
-                return HRESULT.E_NOINTERFACE;
-            }
-
-            BOOL IMsoComponentManager.Interface.FDebugMessage(
-                nint dwReserved,
-                uint msg,
-                WPARAM wParam,
-                LPARAM lParam)
-            {
-                return true;
-            }
-
-            BOOL IMsoComponentManager.Interface.FRegisterComponent(
-                IMsoComponent* component,
+            public BOOL FRegisterComponent(
+                IMsoComponent.Interface component,
                 MSOCRINFO* pcrinfo,
                 nuint* pdwComponentID)
             {
-                if (pcrinfo is null || pdwComponentID is null || component is null || pcrinfo->cbSize < sizeof(MSOCRINFO))
+                if (pcrinfo is null || pdwComponentID is null || pcrinfo->cbSize < sizeof(MSOCRINFO))
                 {
                     return false;
                 }
 
-                // Construct Hashtable entry for this component
-                ComponentHashtableEntry entry = new ComponentHashtableEntry
-                {
-                    component
-#if DEBUG
-                        = new(component, takeOwnership: false, trackDisposal: false),
-#else
-                    = new(component, takeOwnership: false),
-#endif
-                    componentInfo = *pcrinfo
-                };
-
+                _activeComponent = component;
                 _cookieCounter += 1;
-                OleComponents.Add(_cookieCounter, entry);
 
                 // Return the cookie
                 *pdwComponentID = _cookieCounter;
                 return true;
             }
 
-            BOOL IMsoComponentManager.Interface.FRevokeComponent(nuint dwComponentID)
+            public BOOL FRevokeComponent(nuint dwComponentID)
             {
-                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
+                if (_activeComponent is null)
                 {
                     return false;
                 }
 
-                if (entry.component == _activeComponent)
-                {
-                    DisposeHelper.NullAndDispose(ref _activeComponent);
-                }
-
-                if (entry.component == _trackingComponent)
-                {
-                    DisposeHelper.NullAndDispose(ref _trackingComponent);
-                }
-
-                OleComponents.Remove(dwComponentID);
+                _activeComponent = null;
                 return true;
             }
 
-            BOOL IMsoComponentManager.Interface.FUpdateComponentRegistration(
-                nuint dwComponentID,
-                MSOCRINFO* pcrinfo)
-            {
-                // Update the registration info
-                if (pcrinfo is null || !OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
-                {
-                    return false;
-                }
-
-                entry.componentInfo = *pcrinfo;
-                OleComponents[dwComponentID] = entry;
-                return true;
-            }
-
-            BOOL IMsoComponentManager.Interface.FOnComponentActivate(nuint dwComponentID)
-            {
-                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
-                {
-                    return false;
-                }
-
-                _activeComponent = entry.component;
-                return true;
-            }
-
-            BOOL IMsoComponentManager.Interface.FSetTrackingComponent(nuint dwComponentID, BOOL fTrack)
-            {
-                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
-                    || !((entry.component == _trackingComponent) ^ fTrack))
-                {
-                    return false;
-                }
-
-                _trackingComponent = fTrack ? entry.component : null;
-
-                return true;
-            }
-
-            void IMsoComponentManager.Interface.OnComponentEnterState(
+            public void OnComponentEnterState(
                 nuint dwComponentID,
                 msocstate uStateID,
                 msoccontext uContext,
@@ -1483,15 +1360,11 @@ public sealed partial class Application
                 if (uContext is msoccontext.All or msoccontext.Mine)
                 {
                     // We should notify all components we contain that the state has changed.
-                    foreach (ComponentHashtableEntry entry in OleComponents.Values)
-                    {
-                        using var component = entry.component.GetInterface();
-                        component.Value->OnEnterState(uStateID, true);
-                    }
+                    _activeComponent?.OnEnterState(uStateID, true);
                 }
             }
 
-            BOOL IMsoComponentManager.Interface.FOnComponentExitState(
+            public BOOL FOnComponentExitState(
                 nuint dwComponentID,
                 msocstate uStateID,
                 msoccontext uContext,
@@ -1502,32 +1375,14 @@ public sealed partial class Application
 
                 if (uContext is msoccontext.All or msoccontext.Mine)
                 {
-                    Debug.Indent();
-
                     // We should notify all components we contain that the state has changed.
-                    foreach (ComponentHashtableEntry entry in OleComponents.Values)
-                    {
-                        using var component = entry.component.GetInterface();
-                        component.Value->OnEnterState(uStateID, false);
-                    }
-
-                    Debug.Unindent();
+                    _activeComponent?.OnEnterState(uStateID, false);
                 }
 
                 return false;
             }
 
-            BOOL IMsoComponentManager.Interface.FInState(msocstate uStateID, void* pvoid)
-                => _currentState == uStateID;
-
-            BOOL IMsoComponentManager.Interface.FContinueIdle()
-            {
-                // If we have a message in the queue, then don't continue idle processing.
-                MSG msg = default;
-                return PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE);
-            }
-
-            BOOL IMsoComponentManager.Interface.FPushMessageLoop(
+            public BOOL FPushMessageLoop(
                 nuint dwComponentID,
                 msoloop uReason,
                 void* pvLoopData)
@@ -1536,27 +1391,20 @@ public sealed partial class Application
                 msocstate currentLoopState = _currentState;
                 BOOL continueLoop = true;
 
-                if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
+                if (_activeComponent is null)
                 {
                     return false;
                 }
 
-                AgileComPointer<IMsoComponent>? prevActive = _activeComponent;
-
                 try
                 {
                     MSG msg = default;
-                    AgileComPointer<IMsoComponent>? requestingComponent = entry.component;
-                    _activeComponent = requestingComponent;
 
                     while (true)
                     {
-                        // Determine the component to route the message to
-                        using var component = (_trackingComponent ?? _activeComponent ?? requestingComponent).GetInterface();
-
                         if (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                         {
-                            if (!component.Value->FContinueMessageLoop(uReason, pvLoopData, &msg))
+                            if (!_activeComponent.FContinueMessageLoop(uReason, pvLoopData, &msg))
                             {
                                 return true;
                             }
@@ -1580,7 +1428,7 @@ public sealed partial class Application
                             //
                             // Reading through the rather sparse documentation, it seems we should only call
                             // FPreTranslateMessage on the active component.
-                            if (!component.Value->FPreTranslateMessage(&msg))
+                            if (!_activeComponent.FPreTranslateMessage(&msg))
                             {
                                 PInvoke.TranslateMessage(msg);
                                 PInvoke.DispatchMessage(&msg);
@@ -1597,17 +1445,10 @@ public sealed partial class Application
                             // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
                             bool continueIdle = false;
 
-                            if (OleComponents is not null)
-                            {
-                                foreach (ComponentHashtableEntry idleEntry in OleComponents.Values)
-                                {
-                                    using var idleComponent = idleEntry.component.GetInterface();
-                                    continueIdle |= idleComponent.Value->FDoIdle(msoidlef.All);
-                                }
-                            }
+                            _activeComponent.FDoIdle(msoidlef.All);
 
                             // Give the component one more chance to terminate the message loop.
-                            if (!component.Value->FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked: null))
+                            if (!_activeComponent.FContinueMessageLoop(uReason, pvLoopData, pMsgPeeked: null))
                             {
                                 return true;
                             }
@@ -1643,81 +1484,9 @@ public sealed partial class Application
                 finally
                 {
                     _currentState = currentLoopState;
-                    _activeComponent = prevActive;
                 }
 
                 return !continueLoop;
-            }
-
-            BOOL IMsoComponentManager.Interface.FCreateSubComponentManager(
-                IUnknown* punkOuter,
-                IUnknown* punkServProv,
-                Guid* riid,
-                void** ppvObj)
-            {
-                // We do not support sub component managers.
-                if (ppvObj is not null)
-                {
-                    *ppvObj = null;
-                }
-
-                return false;
-            }
-
-            BOOL IMsoComponentManager.Interface.FGetParentComponentManager(IMsoComponentManager** ppicm)
-            {
-                // We have no parent.
-                if (ppicm is not null)
-                {
-                    *ppicm = null;
-                }
-
-                return false;
-            }
-
-            BOOL IMsoComponentManager.Interface.FGetActiveComponent(
-                msogac dwgac,
-                IMsoComponent** ppic,
-                MSOCRINFO* pcrinfo,
-                uint dwReserved)
-            {
-                AgileComPointer<IMsoComponent>? component = dwgac switch
-                {
-                    msogac.Active => _activeComponent,
-                    msogac.Tracking => _trackingComponent,
-                    msogac.TrackingOrActive => _trackingComponent ?? _activeComponent,
-                    _ => null
-                };
-
-                if (component is null)
-                {
-                    return false;
-                }
-
-                if (pcrinfo is not null)
-                {
-                    if (pcrinfo->cbSize < sizeof(MSOCRINFO))
-                    {
-                        return false;
-                    }
-
-                    foreach (ComponentHashtableEntry entry in OleComponents.Values)
-                    {
-                        if (entry.component == component)
-                        {
-                            *pcrinfo = entry.componentInfo;
-                            break;
-                        }
-                    }
-                }
-
-                if (ppic is not null)
-                {
-                    // Adding ref by not releasing the ComScope.
-                    *ppic = component.GetInterface().Value;
-                }
-
-                return true;
             }
         }
     }
