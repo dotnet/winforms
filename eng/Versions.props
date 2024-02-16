@@ -103,6 +103,7 @@
     <MicrosoftCodeAnalysisPublicApiAnalyzersVersion>$(MicrosoftCodeAnalysisAnalyzersVersion)</MicrosoftCodeAnalysisPublicApiAnalyzersVersion>
     <MicrosoftCodeAnalysisNetAnalyzersVersion>8.0.0-preview.23327.3</MicrosoftCodeAnalysisNetAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.2.0-beta.507</StyleCopAnalyzersVersion>
+    <NugetPackagingVersion>6.3.4</NugetPackagingVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
