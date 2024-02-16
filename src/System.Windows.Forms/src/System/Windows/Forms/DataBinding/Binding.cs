@@ -21,20 +21,13 @@ public partial class Binding
     private EventDescriptor? _validateInfo;
     private TypeConverter? _propInfoConverter;
 
-    private bool _formattingEnabled;
-    private bool _modified;
-
-    // Recursion guards
-    private bool _inSetPropValue;
-    private bool _inPushOrPull;
-    private bool _inOnBindingComplete;
+    private BindingStates _state;
 
     // formatting stuff
     private string _formatString = string.Empty;
     private IFormatProvider? _formatInfo;
     private object? _nullValue;
     private object? _dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
-    private bool _dsNullValueSet;
     private ConvertEventHandler? _onParse;
     private ConvertEventHandler? _onFormat;
 
@@ -148,7 +141,7 @@ public partial class Binding
         _bindToObject = new BindToObject(this);
 
         PropertyName = propertyName;
-        _formattingEnabled = formattingEnabled;
+        _state.ChangeFlags(BindingStates.FormattingEnabled, formattingEnabled);
         _formatString = formatString;
         _nullValue = nullValue;
         _formatInfo = formatInfo;
@@ -290,12 +283,12 @@ public partial class Binding
         // formatting features. However, it is also used to trigger other new Whidbey binding
         // behavior not related to formatting (such as error handling). This preserves Everett
         // legacy behavior for old bindings (where FormattingEnabled = false).
-        get => _formattingEnabled;
+        get => _state.HasFlag(BindingStates.FormattingEnabled);
         set
         {
-            if (_formattingEnabled != value)
+            if (_state.HasFlag(BindingStates.FormattingEnabled) != value)
             {
-                _formattingEnabled = value;
+                _state.ChangeFlags(BindingStates.FormattingEnabled, value);
                 if (IsBinding)
                 {
                     PushData();
@@ -373,7 +366,7 @@ public partial class Binding
                 // Set value
                 _dsNullValue = value;
 
-                _dsNullValueSet = true;
+                _state.ChangeFlags(BindingStates.DataSourceNullValueSet, true);
 
                 // If control's property is capable of displaying a special value for DBNull,
                 // and the DBNull status of data source's property has changed, force the
@@ -575,7 +568,7 @@ public partial class Binding
     }
 
     private object? GetDataSourceNullValue(Type? type) =>
-        _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
+        _state.HasFlag(BindingStates.DataSourceNullValueSet) ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
 
     private object? GetPropValue()
     {
@@ -617,11 +610,11 @@ public partial class Binding
 
     protected virtual void OnBindingComplete(BindingCompleteEventArgs e)
     {
-        if (!_inOnBindingComplete)
+        if (!_state.HasFlag(BindingStates.InOnBindingComplete))
         {
             try
             {
-                _inOnBindingComplete = true;
+                _state.ChangeFlags(BindingStates.InOnBindingComplete, true);
                 _onComplete?.Invoke(this, e);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
@@ -637,7 +630,7 @@ public partial class Binding
             }
             finally
             {
-                _inOnBindingComplete = false;
+                _state.ChangeFlags(BindingStates.InOnBindingComplete, false);
             }
         }
     }
@@ -646,7 +639,7 @@ public partial class Binding
     {
         _onParse?.Invoke(this, cevent);
 
-        if (!_formattingEnabled && cevent is not null)
+        if (!_state.HasFlag(BindingStates.FormattingEnabled) && cevent is not null)
         {
             if (!(cevent.Value is DBNull) && cevent.Value is not null && cevent.DesiredType is not null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
             {
@@ -659,7 +652,7 @@ public partial class Binding
     {
         _onFormat?.Invoke(this, cevent);
 
-        if (!_formattingEnabled && cevent is not null)
+        if (!_state.HasFlag(BindingStates.FormattingEnabled) && cevent is not null)
         {
             if (!(cevent.Value is DBNull) && cevent.DesiredType is not null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
             {
@@ -672,7 +665,7 @@ public partial class Binding
     {
         Type? type = _bindToObject.BindToType;
         Debug.Assert(type is not null);
-        if (_formattingEnabled)
+        if (_state.HasFlag(BindingStates.FormattingEnabled))
         {
             // Fire the Parse event so that user code gets a chance to supply the parsed value for us
             ConvertEventArgs e = new(value, type);
@@ -747,7 +740,7 @@ public partial class Binding
         }
 
         Type type = _propInfo!.PropertyType;
-        if (_formattingEnabled)
+        if (_state.HasFlag(BindingStates.FormattingEnabled))
         {
             // Fire the Format event so that user code gets a chance to supply the formatted value for us
             ConvertEventArgs e = new(value, type);
@@ -847,7 +840,7 @@ public partial class Binding
             // If control property supports change events, only pull if the value has been changed since
             // the last update (ie. its dirty). For properties that do NOT support change events, we cannot
             // track the dirty state, so we just have to pull all the time.
-            if (_propInfo!.SupportsChangeEvents && !_modified)
+            if (_propInfo!.SupportsChangeEvents && !_state.HasFlag(BindingStates.Modified))
             {
                 return false;
             }
@@ -860,12 +853,12 @@ public partial class Binding
         }
 
         // Re-entrancy check between push and pull (new for Whidbey - requires FormattingEnabled)
-        if (_inPushOrPull && _formattingEnabled)
+        if (_state.HasFlag(BindingStates.InPushOrPull) && _state.HasFlag(BindingStates.FormattingEnabled))
         {
             return false;
         }
 
-        _inPushOrPull = true;
+        _state.ChangeFlags(BindingStates.InPushOrPull, true);
 
         // Get the value from the bound control property
         object? value = GetPropValue();
@@ -922,7 +915,7 @@ public partial class Binding
         }
         finally
         {
-            _inPushOrPull = false;
+            _state.ChangeFlags(BindingStates.InPushOrPull, false);
         }
 
         if (FormattingEnabled)
@@ -938,7 +931,7 @@ public partial class Binding
             // alone, so that the control's value will continue to be re-validated and re-pulled later.
             if (args.BindingCompleteState == BindingCompleteState.Success && args.Cancel == false)
             {
-                _modified = false;
+                _state.ChangeFlags(BindingStates.Modified, false);
             }
 
             return args.Cancel;
@@ -947,7 +940,7 @@ public partial class Binding
         {
             // Do not emit BindingComplete events, or allow the operation to be cancelled.
             // If we get this far, treat the operation as successful and clear the dirty flag.
-            _modified = false;
+            _state.ChangeFlags(BindingStates.Modified, false);
             return false;
         }
     }
@@ -971,12 +964,12 @@ public partial class Binding
         }
 
         // Re-entrancy check between push and pull
-        if (_inPushOrPull && _formattingEnabled)
+        if (_state.HasFlag(BindingStates.InPushOrPull) && _state.HasFlag(BindingStates.FormattingEnabled))
         {
             return false;
         }
 
-        _inPushOrPull = true;
+        _state.ChangeFlags(BindingStates.InPushOrPull, true);
 
         try
         {
@@ -985,7 +978,7 @@ public partial class Binding
                 dataSourceValue = _bindToObject.GetValue();
                 object? controlValue = FormatObject(dataSourceValue);
                 SetPropValue(controlValue);
-                _modified = false;
+                _state.ChangeFlags(BindingStates.Modified, false);
             }
             else
             {
@@ -999,7 +992,7 @@ public partial class Binding
         }
         finally
         {
-            _inPushOrPull = false;
+            _state.ChangeFlags(BindingStates.InPushOrPull, false);
         }
 
         if (FormattingEnabled)
@@ -1038,7 +1031,7 @@ public partial class Binding
             return;
         }
 
-        _inSetPropValue = true;
+        _state.ChangeFlags(BindingStates.InSetPropValue, true);
 
         try
         {
@@ -1068,7 +1061,7 @@ public partial class Binding
         }
         finally
         {
-            _inSetPropValue = false;
+            _state.ChangeFlags(BindingStates.InSetPropValue, false);
         }
     }
 
@@ -1077,18 +1070,18 @@ public partial class Binding
     private bool ShouldSerializeNullValue() => _nullValue is not null;
 
     private bool ShouldSerializeDataSourceNullValue() =>
-        _dsNullValueSet && _dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
+       _state.HasFlag(BindingStates.DataSourceNullValueSet) && _dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
 
     private void Target_PropertyChanged(object? sender, EventArgs e)
     {
-        if (_inSetPropValue)
+        if (_state.HasFlag(BindingStates.InSetPropValue))
         {
             return;
         }
 
         if (IsBinding)
         {
-            _modified = true;
+            _state.ChangeFlags(BindingStates.Modified, true);
 
             // If required, update data source every time control property changes.
             // NOTE: We need modified=true to be set both before pulling data
@@ -1097,7 +1090,7 @@ public partial class Binding
             if (DataSourceUpdateMode == DataSourceUpdateMode.OnPropertyChanged)
             {
                 PullData(reformat: false);
-                _modified = true;
+                _state.ChangeFlags(BindingStates.Modified, true);
             }
         }
     }

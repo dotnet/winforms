@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -13,7 +11,7 @@ namespace System.Windows.Forms.Design.Behavior;
 /// <summary>
 ///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interrupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
 /// </summary>
-internal sealed class DragAssistanceManager
+internal sealed partial class DragAssistanceManager
 {
     private readonly BehaviorService _behaviorService;
     private readonly IServiceProvider _serviceProvider;
@@ -43,8 +41,8 @@ internal sealed class DragAssistanceManager
     // When we draw snap lines - we only draw lines from the targetControl to the control we're snapping to.  To do this, we'll keep a dictionary... format: snapLineToBounds[SnapLine]=ControlBounds.
     private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = new();
     // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc.  From there, if we receive a test hook message requesting these - we got 'em
-    private Line[] _recentLines;
-    private readonly Image _backgroundImage; // instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
+    private Line[]? _recentLines;
+    private readonly Image? _backgroundImage; // instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
     private const int SnapDistance = 8; // default snapping distance (pixels)
     private int _snapPointX, _snapPointY; // defines the snap adjustment that needs to be made during the mousemove/drag operation
     private const int INVALID_VALUE = 0x1111; // used to represent 'un-set' distances
@@ -54,14 +52,28 @@ internal sealed class DragAssistanceManager
     /// <summary>
     ///  Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controls to exclude from snapping.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider) : this(serviceProvider, null, null, null, false, false)
+    internal DragAssistanceManager(IServiceProvider serviceProvider)
+        : this(
+              serviceProvider,
+              graphics: null,
+              dragComponents: null,
+              backgroundImage: null,
+              resizing: false,
+              ctrlDrag: false)
     {
     }
 
     /// <summary>
     ///  Internal constructor that takes the service provider and the list of dragComponents.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, List<IComponent> dragComponents) : this(serviceProvider, null, dragComponents, null, false, false)
+    internal DragAssistanceManager(IServiceProvider serviceProvider, List<IComponent> dragComponents)
+        : this(
+              serviceProvider,
+              graphics: null,
+              dragComponents,
+              backgroundImage: null,
+              resizing: false,
+              ctrlDrag: false)
     {
     }
 
@@ -69,24 +81,49 @@ internal sealed class DragAssistanceManager
     ///  Internal constructor that takes the service provider, the list of dragComponents, and a boolean
     ///  indicating that we are resizing.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, List<IComponent> dragComponents, bool resizing) : this(serviceProvider, null, dragComponents, null, resizing, false)
+    internal DragAssistanceManager(IServiceProvider serviceProvider, List<IComponent> dragComponents, bool resizing)
+        : this(
+              serviceProvider,
+              graphics: null,
+              dragComponents,
+              backgroundImage: null,
+              resizing,
+              ctrlDrag: false)
     {
     }
 
     /// <summary>
     ///  Internal constructor called by DragBehavior.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, List<IComponent> dragComponents, Image backgroundImage, bool ctrlDrag) : this(serviceProvider, graphics, dragComponents, backgroundImage, false, ctrlDrag)
+    internal DragAssistanceManager(
+        IServiceProvider serviceProvider,
+        Graphics? graphics,
+        List<IComponent>? dragComponents,
+        Image? backgroundImage,
+        bool ctrlDrag)
+        : this(
+              serviceProvider,
+              graphics,
+              dragComponents,
+              backgroundImage,
+              resizing: false,
+              ctrlDrag)
     {
     }
 
     /// <summary>
     ///  Internal constructor called by DragBehavior.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, List<IComponent> dragComponents, Image backgroundImage, bool resizing, bool ctrlDrag)
+    internal DragAssistanceManager(
+        IServiceProvider serviceProvider,
+        Graphics? graphics,
+        List<IComponent>? dragComponents,
+        Image? backgroundImage,
+        bool resizing,
+        bool ctrlDrag)
     {
         _serviceProvider = serviceProvider;
-        _behaviorService = serviceProvider.GetService(typeof(BehaviorService)) as BehaviorService;
+        _behaviorService = serviceProvider.GetRequiredService<BehaviorService>();
         if (!(serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host) || _behaviorService is null)
         {
             Debug.Fail("Cannot get DesignerHost or BehaviorService");
@@ -105,16 +142,16 @@ internal sealed class DragAssistanceManager
         if (serviceProvider.GetService(typeof(IUIService)) is IUIService uiService)
         {
             // Can't use 'as' here since Color is a value type
-            if (uiService.Styles["VsColorSnaplines"] is Color)
+            if (uiService.Styles["VsColorSnaplines"] is Color snaplinesColor)
             {
-                _edgePen = new Pen((Color)uiService.Styles["VsColorSnaplines"]);
+                _edgePen = new Pen(snaplinesColor);
                 _disposeEdgePen = true;
             }
 
-            if (uiService.Styles["VsColorSnaplinesTextBaseline"] is Color)
+            if (uiService.Styles["VsColorSnaplinesTextBaseline"] is Color snaplinesTextBaselineColor)
             {
                 _baselinePen.Dispose();
-                _baselinePen = new Pen((Color)uiService.Styles["VsColorSnaplinesTextBaseline"]);
+                _baselinePen = new Pen(snaplinesTextBaselineColor);
             }
         }
 
@@ -250,7 +287,7 @@ internal sealed class DragAssistanceManager
     /// <summary>
     ///  Here, we erase all of our old horizontal and vertical snaplines UNLESS they are also contained in our tempHorzLines or tempVertLines arrays - if they are - then erasing them would be redundant (since we know we want to draw them on this mousemove)
     /// </summary>
-    private Line[] EraseOldSnapLines(Line[] lines, List<Line> tempLines)
+    private Line[] EraseOldSnapLines(Line[] lines, List<Line>? tempLines)
     {
         if (lines is not null)
         {
@@ -269,12 +306,12 @@ internal sealed class DragAssistanceManager
                             continue;
                         }
 
-                        Line[] diffs = Line.GetDiffs(line, tempLines[j]);
+                        Line[]? diffs = Line.GetDiffs(line, tempLines[j]);
                         if (diffs is not null)
                         {
                             for (int k = 0; k < diffs.Length; k++)
                             {
-                                invalidRect = new Rectangle(diffs[k].x1, diffs[k].y1, diffs[k].x2 - diffs[k].x1, diffs[k].y2 - diffs[k].y1);
+                                invalidRect = new Rectangle(diffs[k].X1, diffs[k].Y1, diffs[k].X2 - diffs[k].X1, diffs[k].Y2 - diffs[k].Y1);
 
                                 invalidRect.Inflate(1, 1);
                                 if (_backgroundImage is not null)
@@ -295,7 +332,7 @@ internal sealed class DragAssistanceManager
 
                 if (!foundMatch)
                 {
-                    invalidRect = new Rectangle(line.x1, line.y1, line.x2 - line.x1, line.y2 - line.y1);
+                    invalidRect = new Rectangle(line.X1, line.Y1, line.X2 - line.X1, line.Y2 - line.Y1);
                     invalidRect.Inflate(1, 1);
                     if (_backgroundImage is not null)
                     {
@@ -325,8 +362,8 @@ internal sealed class DragAssistanceManager
 
     internal void EraseSnapLines()
     {
-        EraseOldSnapLines(_vertLines, null);
-        EraseOldSnapLines(_horzLines, null);
+        EraseOldSnapLines(_vertLines, tempLines: null);
+        EraseOldSnapLines(_horzLines, tempLines: null);
     }
 
     /// <summary>
@@ -371,7 +408,7 @@ internal sealed class DragAssistanceManager
     }
 
     // Returns true of this child component (off the root control) should add its snaplines to the collection
-    private bool AddChildCompSnaplines(IComponent comp, List<IComponent> dragComponents, Rectangle clipBounds, Control targetControl)
+    private bool AddChildCompSnaplines(IComponent comp, List<IComponent>? dragComponents, Rectangle clipBounds, Control? targetControl)
     {
         if (!(comp is Control control) || // has to be a control to get snaplines
            (dragComponents is not null && dragComponents.Contains(comp) && !_ctrlDrag) || // cannot be something that we are dragging, unless we are in a ctrlDrag
@@ -399,7 +436,7 @@ internal sealed class DragAssistanceManager
     }
 
     // Returns true if we should add snaplines for this control
-    private bool AddControlSnaplinesWhenResizing(ControlDesigner designer, Control control, Control targetControl)
+    private bool AddControlSnaplinesWhenResizing(ControlDesigner designer, Control control, Control? targetControl)
     {
         // do not add snaplines if we are resizing the control is a container control with AutoSize set to true and the control is the parent of the targetControl
         if (_resizing &&
@@ -418,16 +455,18 @@ internal sealed class DragAssistanceManager
     /// <summary>
     ///  Initializes our class - we cache all snap lines for every control we can find. This is done for perf. reasons.
     /// </summary>
-    private void Initialize(List<IComponent> dragComponents, IDesignerHost host)
+    [MemberNotNull(nameof(_verticalDistances))]
+    [MemberNotNull(nameof(_horizontalDistances))]
+    private void Initialize(List<IComponent>? dragComponents, IDesignerHost host)
     {
         // our targetControl will always be the 0th component in our dragComponents array list (a.k.a. the primary selected component).
-        Control targetControl = null;
+        Control? targetControl = null;
         if (dragComponents is not null && dragComponents.Count > 0)
         {
             targetControl = dragComponents[0] as Control;
         }
 
-        Control rootControl = host.RootComponent as Control;
+        Control rootControl = (Control)host.RootComponent;
         // the clipping bounds will be used to ignore all controls that are completely outside of our rootcomponent's bounds -this way we won't end up snapping to controls that are not visible on the form's surface
         Rectangle clipBounds = new(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
         clipBounds.Inflate(-1, -1);
@@ -448,8 +487,10 @@ internal sealed class DragAssistanceManager
         if (targetControl is not null)
         {
             bool disposeDesigner = false;
-            // get all the target snapline information we need to create one then
-            if (!(host.GetDesigner(targetControl) is ControlDesigner designer))
+
+            // Get all the target snapline information we need to create one then.
+            ControlDesigner? designer;
+            if (host.GetDesigner(targetControl) is not ControlDesigner controlDesigner)
             {
                 designer = TypeDescriptor.CreateDesigner(targetControl, typeof(IDesigner)) as ControlDesigner;
                 if (designer is not null)
@@ -460,11 +501,19 @@ internal sealed class DragAssistanceManager
                     disposeDesigner = true;
                 }
             }
-
-            AddSnapLines(designer, _targetHorizontalSnapLines, _targetVerticalSnapLines, true, targetControl is not null);
-            if (disposeDesigner)
+            else
             {
-                designer.Dispose();
+                designer = controlDesigner;
+            }
+
+            if (designer is not null)
+            {
+                AddSnapLines(designer, _targetHorizontalSnapLines, _targetVerticalSnapLines, true, targetControl is not null);
+
+                if (disposeDesigner)
+                {
+                    designer.Dispose();
+                }
             }
         }
 
@@ -478,7 +527,7 @@ internal sealed class DragAssistanceManager
 
             if (host.GetDesigner(comp) is ControlDesigner designer)
             {
-                if (AddControlSnaplinesWhenResizing(designer, comp as Control, targetControl))
+                if (AddControlSnaplinesWhenResizing(designer, (Control)comp, targetControl))
                 {
                     AddSnapLines(designer, _horizontalSnapLines, _verticalSnapLines, false, targetControl is not null);
                 }
@@ -490,7 +539,7 @@ internal sealed class DragAssistanceManager
                     ControlDesigner internalDesigner = designer.InternalControlDesigner(i);
                     if (internalDesigner is not null &&
                         AddChildCompSnaplines(internalDesigner.Component, dragComponents, clipBounds, targetControl) &&
-                        AddControlSnaplinesWhenResizing(internalDesigner, internalDesigner.Component as Control, targetControl))
+                        AddControlSnaplinesWhenResizing(internalDesigner, (Control)internalDesigner.Component, targetControl))
                     {
                         AddSnapLines(internalDesigner, _horizontalSnapLines, _verticalSnapLines, false, targetControl is not null);
                     }
@@ -506,14 +555,14 @@ internal sealed class DragAssistanceManager
     /// <summary>
     ///  Helper function that determines if the child control is related to the parent.
     /// </summary>
-    private static bool IsChildOfParent(Control child, Control parent)
+    private static bool IsChildOfParent(Control? child, Control? parent)
     {
         if (child is null || parent is null)
         {
             return false;
         }
 
-        Control currentParent = child.Parent;
+        Control? currentParent = child.Parent;
         while (currentParent is not null)
         {
             if (currentParent.Equals(parent))
@@ -700,75 +749,75 @@ internal sealed class DragAssistanceManager
             if (lines[i].LineType == LineType.Margin || lines[i].LineType == LineType.Padding)
             {
                 currentPen = _edgePen;
-                if (lines[i].x1 == lines[i].x2)
+                if (lines[i].X1 == lines[i].X2)
                 {// vertical margin
                     int coord = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
                     coord += (Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom) - coord) / 2;
-                    lines[i].y1 = lines[i].y2 = coord;
+                    lines[i].Y1 = lines[i].Y2 = coord;
                     if (lines[i].LineType == LineType.Margin)
                     {
-                        lines[i].x1 = Math.Min(dragRect.Right, lines[i].OriginalBounds.Right);
-                        lines[i].x2 = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
+                        lines[i].X1 = Math.Min(dragRect.Right, lines[i].OriginalBounds.Right);
+                        lines[i].X2 = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
                     }
                     else if (lines[i].PaddingLineType == PaddingLineType.PaddingLeft)
                     {
-                        lines[i].x1 = lines[i].OriginalBounds.Left;
-                        lines[i].x2 = dragRect.Left;
+                        lines[i].X1 = lines[i].OriginalBounds.Left;
+                        lines[i].X2 = dragRect.Left;
                     }
                     else
                     {
                         Debug.Assert(lines[i].PaddingLineType == PaddingLineType.PaddingRight);
-                        lines[i].x1 = dragRect.Right;
-                        lines[i].x2 = lines[i].OriginalBounds.Right;
+                        lines[i].X1 = dragRect.Right;
+                        lines[i].X2 = lines[i].OriginalBounds.Right;
                     }
 
-                    lines[i].x2--; // off by 1 adjust
+                    lines[i].X2--; // off by 1 adjust
                 }
                 else
                 {// horizontal margin
                     int coord = Math.Max(dragRect.Left, lines[i].OriginalBounds.Left);
                     coord += (Math.Min(dragRect.Right, lines[i].OriginalBounds.Right) - coord) / 2;
-                    lines[i].x1 = lines[i].x2 = coord;
+                    lines[i].X1 = lines[i].X2 = coord;
                     if (lines[i].LineType == LineType.Margin)
                     {
-                        lines[i].y1 = Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom);
-                        lines[i].y2 = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
+                        lines[i].Y1 = Math.Min(dragRect.Bottom, lines[i].OriginalBounds.Bottom);
+                        lines[i].Y2 = Math.Max(dragRect.Top, lines[i].OriginalBounds.Top);
                     }
                     else if (lines[i].PaddingLineType == PaddingLineType.PaddingTop)
                     {
-                        lines[i].y1 = lines[i].OriginalBounds.Top;
-                        lines[i].y2 = dragRect.Top;
+                        lines[i].Y1 = lines[i].OriginalBounds.Top;
+                        lines[i].Y2 = dragRect.Top;
                     }
                     else
                     {
                         Debug.Assert(lines[i].PaddingLineType == PaddingLineType.PaddingBottom);
-                        lines[i].y1 = dragRect.Bottom;
-                        lines[i].y2 = lines[i].OriginalBounds.Bottom;
+                        lines[i].Y1 = dragRect.Bottom;
+                        lines[i].Y2 = lines[i].OriginalBounds.Bottom;
                     }
 
-                    lines[i].y2--; // off by 1 adjust
+                    lines[i].Y2--; // off by 1 adjust
                 }
             }
             else if (lines[i].LineType == LineType.Baseline)
             {
                 currentPen = _baselinePen;
-                lines[i].x2 -= 1; // off by 1 adjust
+                lines[i].X2 -= 1; // off by 1 adjust
             }
             else
             {
                 // default to edgePen
                 currentPen = _edgePen;
-                if (lines[i].x1 == lines[i].x2)
+                if (lines[i].X1 == lines[i].X2)
                 {
-                    lines[i].y2--; // off by 1 adjustment
+                    lines[i].Y2--; // off by 1 adjustment
                 }
                 else
                 {
-                    lines[i].x2--; // off by 1 adjustment
+                    lines[i].X2--; // off by 1 adjustment
                 }
             }
 
-            _graphics.DrawLine(currentPen, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
+            _graphics.DrawLine(currentPen, lines[i].X1, lines[i].Y1, lines[i].X2, lines[i].Y2);
         }
     }
 
@@ -781,7 +830,7 @@ internal sealed class DragAssistanceManager
         for (int i = 0; i < currentLines.Count; i++)
         {
             Line curLine = currentLines[i];
-            Line mergedLine = Line.Overlap(snapLine, curLine);
+            Line? mergedLine = Line.Overlap(snapLine, curLine);
             if (mergedLine is not null)
             {
                 currentLines[i] = mergedLine;
@@ -805,7 +854,8 @@ internal sealed class DragAssistanceManager
         LineType type = LineType.Standard;
         if (IsMarginOrPaddingSnapLine(snapLine))
         {
-            type = snapLine.Filter.StartsWith(SnapLine.Margin) ? LineType.Margin : LineType.Padding;
+            // We already check if snapLine.Filter is not null inside IsMarginOrPaddingSnapLine.
+            type = snapLine.Filter!.StartsWith(SnapLine.Margin) ? LineType.Margin : LineType.Padding;
         }
 
         // propagate the baseline through to the linetype
@@ -1068,110 +1118,6 @@ internal sealed class DragAssistanceManager
         _baselinePen?.Dispose();
 
         _backgroundImage?.Dispose();
-    }
-
-    /// <summary>
-    ///  Our 'line' class - used to manage two points and calculate the difference between any two lines.
-    /// </summary>
-    internal class Line
-    {
-        public int x1, y1, x2, y2;
-        private LineType _lineType;
-        private PaddingLineType _paddingLineType;
-        private Rectangle _originalBounds;
-
-        public LineType LineType
-        {
-            get => _lineType;
-            set => _lineType = value;
-        }
-
-        public Rectangle OriginalBounds
-        {
-            get => _originalBounds;
-            set => _originalBounds = value;
-        }
-
-        public PaddingLineType PaddingLineType
-        {
-            get => _paddingLineType;
-            set => _paddingLineType = value;
-        }
-
-        public Line(int x1, int y1, int x2, int y2)
-        {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-            _lineType = LineType.Standard;
-        }
-
-        private Line(int x1, int y1, int x2, int y2, LineType type)
-        {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-            _lineType = type;
-        }
-
-        public static Line[] GetDiffs(Line l1, Line l2)
-        {
-            // x's align
-            if (l1.x1 == l1.x2 && l1.x1 == l2.x1)
-            {
-                return [
-                    new(l1.x1, Math.Min(l1.y1, l2.y1), l1.x1, Math.Max(l1.y1, l2.y1)),
-                    new(l1.x1, Math.Min(l1.y2, l2.y2), l1.x1, Math.Max(l1.y2, l2.y2))
-                ];
-            }
-
-            // y's align
-            if (l1.y1 == l1.y2 && l1.y1 == l2.y1)
-            {
-                return [
-                    new(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x1, l2.x1), l1.y1),
-                    new(Math.Min(l1.x2, l2.x2), l1.y1, Math.Max(l1.x2, l2.x2), l1.y1)
-                ];
-            }
-
-            return null;
-        }
-
-        public static Line Overlap(Line l1, Line l2)
-        {
-            // Need to be the same type
-            if (l1.LineType != l2.LineType)
-            {
-                return null;
-            }
-
-            // only makes sense to do this for Standard and Baseline
-            if ((l1.LineType != LineType.Standard) && (l1.LineType != LineType.Baseline))
-            {
-                return null;
-            }
-
-            // 2 overlapping vertical lines
-            if ((l1.x1 == l1.x2) && (l2.x1 == l2.x2) && (l1.x1 == l2.x1))
-            {
-                return new Line(l1.x1, Math.Min(l1.y1, l2.y1), l1.x2, Math.Max(l1.y2, l2.y2), l1.LineType);
-            }
-
-            // 2 overlapping horizontal lines
-            if ((l1.y1 == l1.y2) && (l2.y1 == l2.y2) && (l1.y1 == l2.y2))
-            {
-                return new Line(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x2, l2.x2), l1.y2, l1.LineType);
-            }
-
-            return null;
-        }
-
-        public override string ToString()
-        {
-            return $"Line, type = {_lineType}, dims =({x1}, {y1})->({x2}, {y2})";
-        }
     }
 
     /// <summary>
