@@ -29,6 +29,8 @@ public sealed partial class Application
             msoloop uReason,
             MSG* pMsgPeeked)
         {
+            Debug.Assert(uReason != msoloop.FocusWait);
+
             bool continueLoop = true;
 
             // If we get a null message, and we have previously posted the WM_QUIT message,
@@ -41,17 +43,6 @@ public sealed partial class Application
             {
                 switch (uReason)
                 {
-                    case msoloop.FocusWait:
-
-                        // For focus wait, check to see if we are now the active application.
-                        PInvoke.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
-                        if (pid == PInvoke.GetCurrentProcessId())
-                        {
-                            continueLoop = false;
-                        }
-
-                        break;
-
                     case msoloop.ModalAlert:
                     case msoloop.ModalForm:
 

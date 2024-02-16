@@ -4706,7 +4706,7 @@ public partial class Form : ContainerControl
         {
             // First put all the owned windows into a list
             callback = new EnumThreadWindowsCallback(HWND);
-            PInvoke.EnumThreadWindows(PInvoke.GetCurrentThreadId(), callback.Callback);
+            PInvoke.EnumCurrentThreadWindows(callback.Callback);
 
             // Reset the owner of the windows in the list
             callback.ResetOwners();
