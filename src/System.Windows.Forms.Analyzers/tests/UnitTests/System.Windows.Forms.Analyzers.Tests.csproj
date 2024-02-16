@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
+    <PackageReference Include="NuGet.Packaging" Version="$(NugetPackagingVersion)" />
   </ItemGroup>
 
   <ItemGroup>
