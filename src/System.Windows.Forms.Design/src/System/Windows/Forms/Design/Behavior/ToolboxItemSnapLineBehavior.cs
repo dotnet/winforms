@@ -126,10 +126,10 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             {
                 if (line.LineType == DragAssistanceManager.LineType.Standard)
                 {
-                    if (!horizontalComponentIdentified && line.x1 == line.x2)
+                    if (!horizontalComponentIdentified && line.X1 == line.X2)
                     {
                         // check for vertical equality
-                        if (line.x1 == lastRectangle.Left)
+                        if (line.X1 == lastRectangle.Left)
                         {
                             // we had a line on the left of the box - so we must have snapped left
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Left;
@@ -144,16 +144,16 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 
                         horizontalComponentIdentified = true;
                     }
-                    else if (!verticalComponentIdentified && line.y1 == line.y2)
+                    else if (!verticalComponentIdentified && line.Y1 == line.Y2)
                     {
                         // check for vertical equality
-                        if (line.y1 == lastRectangle.Top)
+                        if (line.Y1 == lastRectangle.Top)
                         {
                             // we had a line on the top of the box - so we must have snapped top
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Top;
                             offset.Y = lastRectangle.Top - mouseLoc.Y;
                         }
-                        else if (line.y1 == lastRectangle.Bottom)
+                        else if (line.Y1 == lastRectangle.Bottom)
                         {
                             // we had a line on the bottom of the box - so we must have snapped bottom
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Bottom;
@@ -166,10 +166,10 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 else if ((line.LineType == DragAssistanceManager.LineType.Margin) ||
                             (line.LineType == DragAssistanceManager.LineType.Padding))
                 {
-                    if (!verticalComponentIdentified && line.x1 == line.x2)
+                    if (!verticalComponentIdentified && line.X1 == line.X2)
                     {
                         // now, we're looking at a vertical margin line - is it above?
-                        if (Math.Max(line.y1, line.y2) <= lastRectangle.Top)
+                        if (Math.Max(line.Y1, line.Y2) <= lastRectangle.Top)
                         {
                             // aha - we had a margin line at the top of the box
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Top;
@@ -184,10 +184,10 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 
                         verticalComponentIdentified = true;
                     }
-                    else if (!horizontalComponentIdentified && line.y1 == line.y2)
+                    else if (!horizontalComponentIdentified && line.Y1 == line.Y2)
                     {
                         // now, we're looking at a horz margin line - is it left?
-                        if (Math.Max(line.x1, line.x2) <= lastRectangle.Left)
+                        if (Math.Max(line.X1, line.X2) <= lastRectangle.Left)
                         {
                             // aha - we had a margin line at the left of the box
                             snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Left;
