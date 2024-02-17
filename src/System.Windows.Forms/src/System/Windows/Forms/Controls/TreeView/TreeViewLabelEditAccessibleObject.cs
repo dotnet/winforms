@@ -20,7 +20,7 @@ internal sealed unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccess
 
     private protected override string? AutomationId =>
         _owningTreeView.TryGetTarget(out TreeView? target)
-            ? target._editNode?.AccessibilityObject.Name
+            ? target._editNode?.AccessibilityObject?.Name
             : null;
 
     internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
