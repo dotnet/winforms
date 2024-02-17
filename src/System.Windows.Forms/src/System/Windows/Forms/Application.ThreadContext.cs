@@ -15,7 +15,7 @@ public sealed partial class Application
     ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
     ///  threaded.
     /// </summary>
-    internal unsafe abstract class ThreadContext : MarshalByRefObject, IHandle<HANDLE>
+    internal abstract unsafe partial class ThreadContext : MarshalByRefObject, IHandle<HANDLE>
     {
         private bool _oleInitialized;
         private bool _externalOleInit;
@@ -41,7 +41,7 @@ public sealed partial class Application
 
         // Parking window list
         private readonly List<ParkingWindow> _parkingWindows = [];
-        private Control? _marshalingControl;
+        private Control? _marshallingControl;
         private List<IMessageFilter>? _messageFilters;
         private List<IMessageFilter>? _messageFilterSnapshot;
         private int _inProcessFilters;
@@ -98,18 +98,15 @@ public sealed partial class Application
         public ApplicationContext? ApplicationContext { get; private set; }
 
         public virtual void EnsureReadyForIdle() { }
-        // For ComponentThreadContext, ensure ComponentManager is created
 
         internal bool CustomThreadExceptionHandlerAttached => _threadExceptionHandler is not null;
 
         /// <summary>
-        ///  Retrieves the actual parking form.  This will demand create the parking window
-        ///  if it needs to.
+        ///  Retrieves the actual parking form. This will demand create the parking window if it needs to.
         /// </summary>
         internal ParkingWindow GetParkingWindow(DPI_AWARENESS_CONTEXT context)
         {
-            // Locking 'this' here is ok since this is an internal class.
-            lock (this)
+            lock (_parkingWindows)
             {
                 ParkingWindow? parkingWindow = GetParkingWindowForContext(context);
                 if (parkingWindow is null)
@@ -136,10 +133,9 @@ public sealed partial class Application
         }
 
         /// <summary>
-        ///  Returns parking window that matches dpi awareness context. return null if not found.
+        ///  Returns existing parking window that matches the given dpi awareness context, if one exists.
         /// </summary>
-        /// <returns>return matching parking window from list. returns null if not found</returns>
-        internal ParkingWindow? GetParkingWindowForContext(DPI_AWARENESS_CONTEXT context)
+        private ParkingWindow? GetParkingWindowForContext(DPI_AWARENESS_CONTEXT context)
         {
             if (_parkingWindows.Count == 0)
             {
@@ -156,11 +152,11 @@ public sealed partial class Application
             }
 
             // Supported OS scenario.
-            foreach (ParkingWindow p in _parkingWindows)
+            foreach (ParkingWindow window in _parkingWindows)
             {
-                if (context.IsEquivalent(p.DpiAwarenessContext))
+                if (context.IsEquivalent(window.DpiAwarenessContext))
                 {
-                    return p;
+                    return window;
                 }
             }
 
@@ -175,16 +171,20 @@ public sealed partial class Application
         }
 
         /// <summary>
-        ///  Retrieves the actual parking form.  This will demand create the MarshalingControl window
-        ///  if it needs to.
+        ///  Retrieves the <see cref="MarshalingControl"/>.
         /// </summary>
-        internal Control MarshalingControl
+        internal Control MarshallingControl
         {
             get
             {
+                if (_marshallingControl is { } control)
+                {
+                    return control;
+                }
+
                 lock (this)
                 {
-                    if (_marshalingControl is null)
+                    if (_marshallingControl is null)
                     {
 #if DEBUG
                         if (CoreSwitches.PerfTrack.Enabled)
@@ -194,16 +194,16 @@ public sealed partial class Application
                         }
 #endif
 
-                        _marshalingControl = new MarshalingControl();
+                        _marshallingControl = new ContextMarshallingControl();
                     }
 
-                    return _marshalingControl;
+                    return _marshallingControl;
                 }
             }
         }
 
         /// <summary>
-        ///  Allows you to setup a message filter for the application's message pump.  This
+        ///  Allows you to setup a message filter for the application's message pump. This
         ///  installs the filter on the current thread.
         /// </summary>
         internal void AddMessageFilter(IMessageFilter? filter)
@@ -377,23 +377,18 @@ public sealed partial class Application
         }
 
         /// <summary>
-        ///  Gets rid of all windows in this thread context.  Nulls out
-        ///  window objects that we hang on to.
+        ///  Gets rid of all windows in this thread context. Nulls out window objects that we hang on to.
         /// </summary>
         internal void DisposeThreadWindows()
         {
-            // We dispose the main window first, so it can perform any
-            // cleanup that it may need to do.
+            // We dispose the main window first, so it can perform any cleanup that it may need to do.
             try
             {
-                if (ApplicationContext is not null)
-                {
-                    ApplicationContext.Dispose();
-                    ApplicationContext = null;
-                }
+                ApplicationContext?.Dispose();
+                ApplicationContext = null;
 
                 // Then, we rudely destroy all of the windows on the thread
-                ThreadWindows tw = new(true);
+                ThreadWindows tw = new(onlyWinForms: true);
                 tw.Dispose();
 
                 // And dispose the parking form, if it isn't already
@@ -883,24 +878,24 @@ public sealed partial class Application
             {
                 if (_messageFilterSnapshot is not null && _messageFilterSnapshot.Count != 0)
                 {
-                    IMessageFilter f;
+                    IMessageFilter filter;
                     int count = _messageFilterSnapshot.Count;
 
-                    Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+                    Message message = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 
                     for (int i = 0; i < count; i++)
                     {
-                        f = _messageFilterSnapshot[i];
-                        bool filterMessage = f.PreFilterMessage(ref m);
+                        filter = _messageFilterSnapshot[i];
+                        bool filterMessage = filter.PreFilterMessage(ref message);
 
                         // Make sure that we update the msg struct with the new result after the call to
                         // PreFilterMessage.
-                        if (f is IMessageModifyAndFilter)
+                        if (filter is IMessageModifyAndFilter)
                         {
-                            msg.hwnd = (HWND)m.HWnd;
-                            msg.message = (uint)m.MsgInternal;
-                            msg.wParam = m.WParamInternal;
-                            msg.lParam = m.LParamInternal;
+                            msg.hwnd = (HWND)message.HWnd;
+                            msg.message = (uint)message.MsgInternal;
+                            msg.wParam = message.WParamInternal;
+                            msg.lParam = message.LParamInternal;
                             modified = true;
                         }
 

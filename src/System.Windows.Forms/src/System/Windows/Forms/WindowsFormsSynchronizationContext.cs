@@ -27,7 +27,7 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
     {
         // Store the current thread to ensure it stays alive during an invoke.
         DestinationThread = Thread.CurrentThread;
-        _controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
+        _controlToSendTo = Application.ThreadContext.FromCurrent().MarshallingControl;
         Debug.Assert(_controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
     }
 

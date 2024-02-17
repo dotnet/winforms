@@ -30,9 +30,7 @@ public partial class ComboBox
 
             // Look for a popped up dropdown
             _shouldSubClass = subclass;
-            PInvoke.EnumThreadWindows(
-                PInvoke.GetCurrentThreadId(),
-                Callback);
+            PInvoke.EnumCurrentThreadWindows(Callback);
         }
 
         [SkipLocalsInit]
