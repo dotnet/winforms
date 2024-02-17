@@ -83,9 +83,9 @@ public:
     BEGIN_MSG_MAP(CAxTestControl)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
+        COMMAND_CODE_HANDLER(BN_CLICKED, OnButtonClicked)
         CHAIN_MSG_MAP(CComControl<CAxTestControl>)
         ALT_MSG_MAP(1)
-        COMMAND_CODE_HANDLER(BN_CLICKED, OnButtonClicked)
     END_MSG_MAP()
 
     LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
