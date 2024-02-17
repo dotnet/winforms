@@ -126,3 +126,5 @@ HRESULT CAxTestControl::Fire_OnClick()
 
     return hr;
 }
+
+OBJECT_ENTRY_AUTO(__uuidof(AxTestControl), CAxTestControl);
