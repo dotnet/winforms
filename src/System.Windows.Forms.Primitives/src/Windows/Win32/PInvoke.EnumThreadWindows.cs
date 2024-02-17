@@ -10,7 +10,10 @@ internal static partial class PInvoke
 {
     public delegate BOOL EnumThreadWindowsCallback(HWND hWnd);
 
-    public static unsafe BOOL EnumThreadWindows(uint dwThreadId, EnumThreadWindowsCallback callback)
+    /// <summary>
+    ///  Enumerates all nonchild windows in the current thread.
+    /// </summary>
+    public static unsafe BOOL EnumCurrentThreadWindows(EnumThreadWindowsCallback callback)
     {
         // We pass a function pointer to the native function and supply the callback as
         // reference data, so that the CLR doesn't need to generate a native code block for
@@ -18,7 +21,7 @@ internal static partial class PInvoke
         GCHandle gcHandle = GCHandle.Alloc(callback);
         try
         {
-            return EnumThreadWindows(dwThreadId, &HandleEnumThreadWindowsNativeCallback, (LPARAM)(nint)gcHandle);
+            return EnumThreadWindows(GetCurrentThreadId(), &HandleEnumThreadWindowsNativeCallback, (LPARAM)(nint)gcHandle);
         }
         finally
         {
@@ -26,7 +29,7 @@ internal static partial class PInvoke
         }
     }
 
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static BOOL HandleEnumThreadWindowsNativeCallback(HWND hWnd, LPARAM lParam)
     {
         return ((EnumThreadWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);

@@ -15,9 +15,9 @@ internal enum msoloop : uint
     Debug        = 3,  // component has entered debug mode
     ModalForm    = 4,  // component is displaying a modal form
     ModalAlert   = 5,  // Different from ModalForm in the intention that
-                        // this should act as much like a blocking call as
-                        // as possible- app should do no idling in this case
-                        // if alerts might come up in badly defined states
+                       // this should act as much like a blocking call as
+                       // as possible- app should do no idling in this case
+                       // if alerts might come up in badly defined states
 
     // Unofficial msoloop messages
     DoEventsModal = unchecked((uint)(-2)),
