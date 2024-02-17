@@ -3,11 +3,64 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.ApplicationInstallationAndServicing;
 
 namespace System.Windows.Forms.Tests;
 
 public class AxHostAtlTests
 {
+    #region Utilities
+
+    // taken from \src\System.Windows.Forms\tests\InteropTests\PropertyGridTests.cs
+
+    [DllImport("kernel32", SetLastError = true)]
+    private static extern void ReleaseActCtx(IntPtr hActCtx);
+
+    private unsafe void ExecuteWithActivationContext(string applicationManifest, Action action)
+    {
+        ACTCTXW context = new();
+        HANDLE handle;
+        fixed (char* p = applicationManifest)
+        {
+            context.cbSize = (uint)sizeof(ACTCTXW);
+            context.lpSource = p;
+
+            handle = PInvoke.CreateActCtx(&context);
+        }
+
+        if (handle == IntPtr.Zero)
+        {
+            throw new Win32Exception();
+        }
+
+        try
+        {
+            nuint cookie;
+            if (!PInvoke.ActivateActCtx(handle, &cookie))
+            {
+                throw new Win32Exception();
+            }
+
+            try
+            {
+                action();
+            }
+            finally
+            {
+                if (!PInvoke.DeactivateActCtx(0, cookie))
+                {
+                    throw new Win32Exception();
+                }
+            }
+        }
+        finally
+        {
+            ReleaseActCtx(handle);
+        }
+    }
+
+    #endregion
+
     [WinFormsFact]
     public void AxHost_AtlControl_CreateAndSetText()
     {
@@ -16,32 +69,35 @@ public class AxHostAtlTests
             return;
         }
 
-        using Form form = new();
-        using AxNativeAtlControl control = new();
-
-        int textChangedEventCount = 0;
-        string textChangedEventArg = null;
-        const string testText = "Hello World";
-
-        control.AxTextChanged += (string text) =>
+        ExecuteWithActivationContext("App.manifest", () =>
         {
-            textChangedEventCount++;
-            textChangedEventArg = text;
-        };
+            using Form form = new();
+            using AxNativeAtlControl control = new();
 
-        form.Shown += (object sender, EventArgs e) =>
-        {
-            control.AxText = testText;
-            form.Close();
-        };
+            int textChangedEventCount = 0;
+            string textChangedEventArg = null;
+            const string testText = "Hello World";
 
-        ((ISupportInitialize)control).BeginInit();
-        form.Controls.Add(control);
-        ((ISupportInitialize)control).EndInit();
-        form.ShowDialog();
+            control.AxTextChanged += (string text) =>
+            {
+                textChangedEventCount++;
+                textChangedEventArg = text;
+            };
 
-        Assert.Equal(1, textChangedEventCount);
-        Assert.Equal(testText, textChangedEventArg);
+            form.Shown += (object sender, EventArgs e) =>
+            {
+                control.AxText = testText;
+                form.Close();
+            };
+
+            ((ISupportInitialize)control).BeginInit();
+            form.Controls.Add(control);
+            ((ISupportInitialize)control).EndInit();
+            form.ShowDialog();
+
+            Assert.Equal(1, textChangedEventCount);
+            Assert.Equal(testText, textChangedEventArg);
+        });
     }
 
     private unsafe class AxNativeAtlControl : AxHost
