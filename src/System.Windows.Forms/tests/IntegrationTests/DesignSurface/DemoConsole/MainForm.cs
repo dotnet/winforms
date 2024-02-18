@@ -316,8 +316,20 @@ public partial class MainForm : Form
         IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         if (isurf is not null)
         {
-            propertyGrid.SelectedObject = isurf.GetIDesignerHost().RootComponent;
-            propertyGrid.Site = isurf.GetIDesignerHost().RootComponent.Site;
+            splitContainer.Panel2.Controls.Remove(propertyGrid);
+            propertyGrid = new()
+            {
+                DesignerHost = isurf.GetIDesignerHost(),
+                Dock = DockStyle.Fill,
+                Location = new Point(0, 0),
+                Margin = new Padding(4),
+                Name = "propertyGrid",
+                Size = new Size(226, 502),
+                TabIndex = 0,
+                SelectedObject = isurf.GetIDesignerHost().RootComponent
+            };
+
+            splitContainer.Panel2.Controls.Add(propertyGrid);
         }
     }
 

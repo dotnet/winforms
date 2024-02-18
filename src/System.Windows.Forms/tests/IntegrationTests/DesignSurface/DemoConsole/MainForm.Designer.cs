@@ -1,4 +1,6 @@
-﻿namespace TestConsole;
+﻿using DesignSurfaceExt;
+
+namespace TestConsole;
 
 partial class MainForm
 {
@@ -36,7 +38,7 @@ partial class MainForm
         this.tabPage3 = new System.Windows.Forms.TabPage();
         this.tabPage4 = new System.Windows.Forms.TabPage();
         this.tabPage5 = new System.Windows.Forms.TabPage();
-        this.propertyGrid = new System.Windows.Forms.PropertyGrid();
+        this.propertyGrid = new PropertyGridExt();
         this.menuStrip1 = new System.Windows.Forms.MenuStrip();
         this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.ToolStripMenuItemUnDo = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,15 +143,7 @@ partial class MainForm
         this.tabPage5.TabIndex = 3;
         this.tabPage5.Text = "tabPage5";
         this.tabPage5.UseVisualStyleBackColor = true;
-        // 
-        // propertyGrid
-        // 
-        this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.propertyGrid.Location = new System.Drawing.Point(0, 0);
-        this.propertyGrid.Margin = new System.Windows.Forms.Padding(4);
-        this.propertyGrid.Name = "propertyGrid";
-        this.propertyGrid.Size = new System.Drawing.Size(226, 502);
-        this.propertyGrid.TabIndex = 0;
+
         // 
         // menuStrip1
         // 
@@ -300,7 +294,7 @@ partial class MainForm
     #endregion
 
     private System.Windows.Forms.SplitContainer splitContainer;
-    private System.Windows.Forms.PropertyGrid propertyGrid;
+    private PropertyGridExt propertyGrid;
     private System.Windows.Forms.MenuStrip menuStrip1;
     private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemUnDo;
