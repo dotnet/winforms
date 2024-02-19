@@ -637,6 +637,19 @@ public partial class TextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsFact]
+    public void TextBox_AutoCompleteCustomSource_ThrowsOnNull()
+    {
+        using TextBox tb = new();
+        tb.AutoCompleteMode = AutoCompleteMode.Suggest;
+        tb.AutoCompleteSource = AutoCompleteSource.CustomSource;
+        tb.AutoCompleteCustomSource.Clear();
+        Assert.Throws<ArgumentNullException>(() => tb.AutoCompleteCustomSource.Add(null));
+        Assert.Throws<ArgumentNullException>(() => tb.AutoCompleteCustomSource.AddRange(null));
+        Assert.Throws<ArgumentNullException>(() => tb.AutoCompleteCustomSource.Insert(0, null));
+        Assert.Throws<InvalidOperationException>(() => tb.AutoCompleteCustomSource.AddRange([null]));
+    }
+
     private class SubTextBox : TextBox
     {
         public int TextCount;
