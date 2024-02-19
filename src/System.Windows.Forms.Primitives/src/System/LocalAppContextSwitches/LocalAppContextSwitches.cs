@@ -17,6 +17,7 @@ internal static partial class LocalAppContextSwitches
     // for more details on how to enable these switches in the application.
     private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
     internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
+    internal const string ApplyApplicationFontToMenusSwitchName = "System.Windows.Forms.ApplyApplicationFontToMenus";
     internal const string ServicePointManagerCheckCrlSwitchName = "System.Windows.Forms.ServicePointManagerCheckCrl";
     internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
@@ -26,6 +27,7 @@ internal static partial class LocalAppContextSwitches
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
+    private static int s_applyApplicationFontToMenus;
     private static int s_servicePointManagerCheckCrl;
     private static int s_trackBarModernRendering;
     private static int s_doNotCatchUnhandledExceptions;
@@ -138,6 +140,12 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_anchorLayoutV2);
+    }
+
+    public static bool ApplyApplicationFontToMenus
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(ApplyApplicationFontToMenusSwitchName, ref s_applyApplicationFontToMenus);
     }
 
     public static bool ScaleTopLevelFormMinMaxSizeForDpi

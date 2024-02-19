@@ -8,6 +8,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;
@@ -549,6 +550,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // pointer in an instance variable for perf so we don't have to keep fishing into
             // thread local storage for it.
             _defaultFont ??= ToolStripManager.DefaultFont;
+
+            if (_defaultFont != base.Font && LocalAppContextSwitches.ApplyApplicationFontToMenus is true)
+            {
+                return base.Font;
+            }
 
             return _defaultFont;
         }
