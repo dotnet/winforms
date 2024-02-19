@@ -119,6 +119,8 @@ public class AutoCompleteStringCollection : IList
     /// </summary>
     public void Insert(int index, string value)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(index, _data.Count);
         ArgumentNullException.ThrowIfNull(value);
         _data.Insert(index, value);
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));

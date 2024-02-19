@@ -36,6 +36,20 @@ public class AutoCompleteStringCollectionTests
     }
 
     [WinFormsFact]
+    public void AutoCompleteStringCollection_AddRange_NullValues_ThrowsInvalidOperationException()
+    {
+        AutoCompleteStringCollection collection = new();
+        Assert.Throws<InvalidOperationException>(() => collection.AddRange([null]));
+    }
+
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_Add_NullValue_ThrowsArgumentNullException()
+    {
+        AutoCompleteStringCollection collection = new();
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null));
+    }
+
+        [WinFormsFact]
     public void AutoCompleteStringCollection_Contains_Invoke_ReturnsExpected()
     {
         AutoCompleteStringCollection collection = new();
@@ -172,6 +186,14 @@ public class AutoCompleteStringCollectionTests
         Assert.Empty(collection);
     }
 
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_IListInsert_NullItem_ThrowsArgumentNullException()
+    {
+        IList collection = new AutoCompleteStringCollection();
+        Assert.Throws<ArgumentNullException>("value", () => collection.Insert(0, null));
+        Assert.Empty(collection);
+    }
+
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(1)]
@@ -214,7 +236,6 @@ public class AutoCompleteStringCollectionTests
     }
 
     [WinFormsTheory]
-    [InlineData(null)]
     [InlineData("text")]
     public void AutoCompleteStringCollection_IListRemove_InvalidItem_Nop(object value)
     {
