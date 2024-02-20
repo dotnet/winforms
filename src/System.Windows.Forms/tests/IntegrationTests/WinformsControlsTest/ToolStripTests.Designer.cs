@@ -53,6 +53,13 @@ partial class ToolStripTests
         this.toolStrip2_DropDownButton1_ChildButton2 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip2_SplitButton1_ChildButton1 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip2_SplitButton1_ChildButton2 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStrip2_MenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStrip2_MenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+        this.uncheckedCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.checkCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.checkedCheckOnClickFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.indeterminateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.indeterminateCheckOnClickFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip2.SuspendLayout();
         this.toolStrip1.SuspendLayout();
         this.statusStrip1.SuspendLayout();
@@ -81,6 +88,8 @@ partial class ToolStripTests
         this.toolStrip2_Button4,
         this.toolStrip2_Button5,
         this.toolStrip2_Button6,
+        this.toolStrip2_MenuItem1,
+        this.toolStrip2_MenuItem2,
         this.toolStrip2_SplitButton1,
         this.toolStrip2_DropDownButton1,});
         this.toolStrip2.Location = new System.Drawing.Point(0, 22);
@@ -149,6 +158,63 @@ partial class ToolStripTests
         this.toolStrip2_SplitButton1_ChildButton2.Name = "toolStrip2_SplitButton1_ChildButton2";
         this.toolStrip2_SplitButton1_ChildButton2.Size = new System.Drawing.Size(180, 22);
         this.toolStrip2_SplitButton1_ChildButton2.Text = "toolStrip2_SplitButton1_ChildButton2";
+        // 
+        // toolStrip2_MenuItem1
+        //
+        this.toolStrip2_MenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
+        this.toolStrip2_MenuItem1.Name = "toolStripMenuItem_checked";
+        this.toolStrip2_MenuItem1.Size = new System.Drawing.Size(180, 40);
+        this.toolStrip2_MenuItem1.Text = "toolStripMenuItem_checked";
+        this.toolStrip2_MenuItem1.ToolTipText = "toolStripMenuItem_checked";
+        // 
+        // toolStrip2_MenuItem2
+        // 
+        this.toolStrip2_MenuItem2.DropDownItems.AddRange(new ToolStripItem[] { uncheckedCheckOnClickToolStripMenuItem, checkCheckOnClickToolStripMenuItem, checkedCheckOnClickFToolStripMenuItem, indeterminateToolStripMenuItem, indeterminateCheckOnClickFToolStripMenuItem });
+        this.toolStrip2_MenuItem2.Name = "toolStripMenuItemWithDropDownItem";
+        this.toolStrip2_MenuItem2.Size = new System.Drawing.Size(180, 40);
+        this.toolStrip2_MenuItem2.Text = "toolStripMenuItemWithDropDownItem_unchecked";
+        this.toolStrip2_MenuItem2.ToolTipText = "toolStripMenuItemWithDropDownItem";
+        // 
+        // uncheckedCheckOnClickToolStripMenuItem
+        // 
+        this.uncheckedCheckOnClickToolStripMenuItem.CheckOnClick = true;
+        this.uncheckedCheckOnClickToolStripMenuItem.Name = "uncheckedCheckOnClickToolStripMenuItem";
+        this.uncheckedCheckOnClickToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
+        this.uncheckedCheckOnClickToolStripMenuItem.Text = "Unchecked_CheckOnClick(T)";
+        // 
+        // checkCheckOnClickToolStripMenuItem
+        // 
+        this.checkCheckOnClickToolStripMenuItem.Checked = true;
+        this.checkCheckOnClickToolStripMenuItem.CheckOnClick = true;
+        this.checkCheckOnClickToolStripMenuItem.CheckState = CheckState.Checked;
+        this.checkCheckOnClickToolStripMenuItem.Name = "checkCheckOnClickToolStripMenuItem";
+        this.checkCheckOnClickToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
+        this.checkCheckOnClickToolStripMenuItem.Text = "Checked_CheckOnClick(T)";
+        // 
+        // checkedCheckOnClickFToolStripMenuItem
+        // 
+        this.checkedCheckOnClickFToolStripMenuItem.Checked = true;
+        this.checkedCheckOnClickFToolStripMenuItem.CheckState = CheckState.Checked;
+        this.checkedCheckOnClickFToolStripMenuItem.Name = "checkedCheckOnClickFToolStripMenuItem";
+        this.checkedCheckOnClickFToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
+        this.checkedCheckOnClickFToolStripMenuItem.Text = "Checked_CheckOnClick(F)";
+        // 
+        // indeterminateToolStripMenuItem
+        // 
+        this.indeterminateToolStripMenuItem.Checked = true;
+        this.indeterminateToolStripMenuItem.CheckOnClick = true;
+        this.indeterminateToolStripMenuItem.CheckState = CheckState.Indeterminate;
+        this.indeterminateToolStripMenuItem.Name = "indeterminateToolStripMenuItem";
+        this.indeterminateToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
+        this.indeterminateToolStripMenuItem.Text = "Indeterminate_CheckOnClick(T)";
+        // 
+        // indeterminateCheckOnClickFToolStripMenuItem
+        // 
+        this.indeterminateCheckOnClickFToolStripMenuItem.Checked = true;
+        this.indeterminateCheckOnClickFToolStripMenuItem.CheckState = CheckState.Indeterminate;
+        this.indeterminateCheckOnClickFToolStripMenuItem.Name = "indeterminateCheckOnClickFToolStripMenuItem";
+        this.indeterminateCheckOnClickFToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
+        this.indeterminateCheckOnClickFToolStripMenuItem.Text = "Indeterminate_CheckOnClick(F)";
         // 
         // toolStrip2_SplitButton1
         //
@@ -286,4 +352,11 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_DropDownButton1_ChildButton2;
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_SplitButton1_ChildButton1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_SplitButton1_ChildButton2;
+    private System.Windows.Forms.ToolStripMenuItem toolStrip2_MenuItem1;
+    private System.Windows.Forms.ToolStripMenuItem toolStrip2_MenuItem2;
+    private System.Windows.Forms.ToolStripMenuItem uncheckedCheckOnClickToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem checkCheckOnClickToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem checkedCheckOnClickFToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem indeterminateToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem indeterminateCheckOnClickFToolStripMenuItem;
 }
