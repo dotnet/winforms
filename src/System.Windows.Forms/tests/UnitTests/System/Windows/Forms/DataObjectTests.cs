@@ -18,6 +18,8 @@ namespace System.Windows.Forms.Tests;
 // NB: doesn't require thread affinity
 public class DataObjectTests
 {
+    private unsafe delegate IDataObject CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* dataObject);
+
     private static readonly string[] s_clipboardFormats =
     {
         DataFormats.CommaSeparatedValue,
@@ -1820,8 +1822,8 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
-            .Returns(new string[] { format1, "Format2" });
+            .Setup(o => o.GetFormats())
+            .Returns([format1, "Format2"]);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -1882,7 +1884,7 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
+            .Setup(o => o.GetFormats())
             .Returns((string[])null);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
@@ -1929,8 +1931,8 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
-            .Returns(new string[] { "Format1", DataFormats.Bitmap, "Format2" });
+            .Setup(o => o.GetFormats())
+            .Returns(["Format1", DataFormats.Bitmap, "Format2"]);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -2006,8 +2008,8 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
-            .Returns(new string[] { format1, "Format2" });
+            .Setup(o => o.GetFormats())
+            .Returns([format1, "Format2"]);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
         IEnumFORMATETC source = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -2069,7 +2071,7 @@ public class DataObjectTests
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetFormats(true))
+            .Setup(o => o.GetFormats())
             .Returns((string[])null);
         DataObject dataObject = new(mockDataObject.Object);
         IComDataObject comDataObject = dataObject;
@@ -2459,46 +2461,49 @@ public class DataObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(DataObjectMockRoundTripData))]
-    public void DataObject_MockRoundTrip_IsSame(object data)
+    public unsafe void DataObject_MockRoundTrip_OutData_IsSame(object data)
     {
         dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
-        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = controlAccessor.PrepareIncomingDragData(data);
-        inData.Should().BeSameAs(data);
+        IComDataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().NotBeSameAs(data);
 
-        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
     }
 
     [WinFormsFact]
-    public void DataObject_StringData_MockRoundTrip_IsWrapped()
+    public unsafe void DataObject_StringData_MockRoundTrip_IsWrapped()
     {
         string testString = "Test";
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.PrepareIncomingDragData(testString);
+        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
         inData.Should().BeAssignableTo<DataObject>();
 
-        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(inData);
         outData.GetData(typeof(string)).Should().Be(testString);
     }
 
     [WinFormsFact]
-    public void DataObject_IDataObject_MockRoundTrip_IsWrapped()
+    public unsafe void DataObject_IDataObject_MockRoundTrip_IsWrapped()
     {
         CustomIDataObject data = new();
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.PrepareIncomingDragData(data);
+        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeAssignableTo<DataObject>();
         inData.Should().NotBeSameAs(data);
 
-        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
-        outData.Should().BeSameAs(inData);
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
     }
 
     private class CustomIDataObject : IDataObject
@@ -2518,16 +2523,17 @@ public class DataObjectTests
     }
 
     [WinFormsFact]
-    public void DataObject_ComTypesIDataObject_MockRoundTrip_IsWrapped()
+    public unsafe void DataObject_ComTypesIDataObject_MockRoundTrip_IsWrapped()
     {
         CustomComTypesDataObject data = new();
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.PrepareIncomingDragData(data);
+        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeSameAs(data);
 
-        IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(inData);
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeAssignableTo<DataObject>();
         outData.Should().NotBeSameAs(inData);
     }
@@ -2546,11 +2552,11 @@ public class DataObjectTests
     }
 
     [Collection("Sequential")]
-    public class DataObjectSequentialTests()
+    public unsafe class DataObjectSequentialTests()
     {
         [WinFormsTheory]
         [BoolData]
-        public unsafe void DataObject_IDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
+        public void DataObject_CustomIDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
         {
             string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
             AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
@@ -2563,20 +2569,18 @@ public class DataObjectTests
 
                 CustomIDataObject data = new();
                 dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-                dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+                var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-                IComDataObject inData = accessor.PrepareIncomingDragData(data);
+                IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
                 inData.Should().BeAssignableTo<DataObject>();
                 inData.Should().NotBeSameAs(data);
 
-                // Simulate COM call. The COM call will eventually hit PrepareOutgoingDropData.
+                // Simulate COM call. The COM call will eventually hit CreateWinFormsDataObjectForOutgoingDropData.
                 // Note that this will be a ComWrappers created object since data has been wrapped in our DataObject.
                 var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-                object managedDataObject = ComHelpers.GetObjectForIUnknown(inDataPtr.AsUnknown);
+                IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
 
-                IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(managedDataObject);
-
-                outData.Should().BeSameAs(inData);
+                outData.Should().BeSameAs(data);
             }
             finally
             {
@@ -2586,7 +2590,7 @@ public class DataObjectTests
 
         [WinFormsTheory]
         [BoolData]
-        public unsafe void DataObject_ComTypesIDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
+        public void DataObject_ComTypesIDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
         {
             string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
             AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
@@ -2599,17 +2603,15 @@ public class DataObjectTests
 
                 CustomComTypesDataObject data = new();
                 dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-                dynamic dropTargetAccessor = typeof(DropTarget).TestAccessor().Dynamic;
+                var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-                IComDataObject inData = accessor.PrepareIncomingDragData(data);
+                IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
                 inData.Should().BeSameAs(data);
 
-                // Simulate COM call. The COM call will eventually hit PrepareOutgoingDropData.
+                // Simulate COM call. The COM call will eventually hit CreateWinFormsDataObjectForOutgoingDropData.
                 // Note that this will not be a ComWrappers created object since IComDataObject does not get wrapped in our DataObject.
                 var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-                object managedDataObject = ComHelpers.GetObjectForIUnknown(inDataPtr.AsUnknown);
-
-                IDataObject outData = dropTargetAccessor.PrepareOutgoingDropData(ComHelpers.GetObjectForIUnknown(inDataPtr.AsUnknown));
+                IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
 
                 outData.Should().BeAssignableTo<DataObject>();
                 outData.Should().NotBeSameAs(inData);
