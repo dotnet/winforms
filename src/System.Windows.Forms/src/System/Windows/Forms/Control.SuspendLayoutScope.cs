@@ -21,7 +21,9 @@ public unsafe partial class Control
 
             if (_control is not null)
             {
+#if DEBUG
                 _layoutSuspendCount = _control.LayoutSuspendCount;
+#endif
                 _control.SuspendLayout();
             }
         }
@@ -31,7 +33,9 @@ public unsafe partial class Control
             if (_control is not null)
             {
                 _control.ResumeLayout(_performLayout);
+#if DEBUG
                 Debug.Assert(_layoutSuspendCount == _control.LayoutSuspendCount, "Suspend/Resume layout mismatch!");
+#endif
             }
         }
     }
