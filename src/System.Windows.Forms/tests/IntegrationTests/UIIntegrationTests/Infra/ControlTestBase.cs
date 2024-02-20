@@ -293,6 +293,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected async Task RunFormAsync<T>(Func<(Form dialog, T control)> createDialog, Func<Form, T, Task> testDriverAsync)
     {
+        using var messageRecordService = new WindowsMessageRecordService();
         using var screenRecordService = new ScreenRecordService();
 
         Form? dialog = null;
@@ -322,6 +323,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         await JoinableTaskFactory.SwitchToMainThreadAsync();
         (dialog, control) = createDialog();
+        messageRecordService.RegisterEvents(dialog);
         screenRecordService.RegisterEvents(dialog);
 
         Assert.NotNull(dialog);
@@ -336,6 +338,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     protected async Task RunFormWithoutControlAsync<TForm>(Func<TForm> createForm, Func<TForm, Task> testDriverAsync)
         where TForm : Form
     {
+        using var messageRecordService = new WindowsMessageRecordService();
         using var screenRecordService = new ScreenRecordService();
 
         TForm? dialog = null;
@@ -364,6 +367,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         await JoinableTaskFactory.SwitchToMainThreadAsync();
         dialog = createForm();
+        messageRecordService.RegisterEvents(dialog);
         screenRecordService.RegisterEvents(dialog);
 
         Assert.NotNull(dialog);
