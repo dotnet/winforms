@@ -88,14 +88,10 @@ public partial class Control
                 value._tabIndex = nextTabIndex;
             }
 
-            // if we don't suspend layout, AssignParent will indirectly trigger a layout event
+            // If we don't suspend layout, AssignParent will indirectly trigger a layout event
             // before we're ready (AssignParent will fire a PropertyChangedEvent("Visible"), which calls PerformLayout)
-#if DEBUG
-            int dbgLayoutCheck = Owner.LayoutSuspendCount;
-#endif
-            Owner.SuspendLayout();
 
-            try
+            using (SuspendLayoutScope scope = new(Owner, performLayout: false))
             {
                 Control? oldParent = value._parent;
                 try
@@ -116,16 +112,9 @@ public partial class Control
                         }
                     }
                 }
+            }
 
-                value.InitLayout();
-            }
-            finally
-            {
-                Owner.ResumeLayout(false);
-#if DEBUG
-                Owner.AssertLayoutSuspendCount(dbgLayoutCheck);
-#endif
-            }
+            value.InitLayout();
 
             // Not putting in the finally block, as it would eat the original
             // exception thrown from AssignParent if the following throws an exception.
@@ -151,26 +140,15 @@ public partial class Control
         {
             ArgumentNullException.ThrowIfNull(controls);
 
-            if (controls.Length > 0)
+            if (controls.Length == 0)
             {
-#if DEBUG
-                int dbgLayoutCheck = Owner.LayoutSuspendCount;
-#endif
-                Owner.SuspendLayout();
-                try
-                {
-                    for (int i = 0; i < controls.Length; ++i)
-                    {
-                        Add(controls[i]);
-                    }
-                }
-                finally
-                {
-                    Owner.ResumeLayout(true);
-                }
-#if DEBUG
-                Owner.AssertLayoutSuspendCount(dbgLayoutCheck);
-#endif
+                return;
+            }
+
+            using SuspendLayoutScope scope = new(Owner, performLayout: true);
+            for (int i = 0; i < controls.Length; ++i)
+            {
+                Add(controls[i]);
             }
         }
 
@@ -195,9 +173,9 @@ public partial class Control
         {
             key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-            List<Control> foundControls = new();
+            List<Control> foundControls = [];
             FindInternal(key, searchAllChildren, this, foundControls);
-            return foundControls.ToArray();
+            return [.. foundControls];
         }
 
         /// <summary>
@@ -401,46 +379,26 @@ public partial class Control
 
         public virtual void Clear()
         {
-#if DEBUG
-            int layoutSuspendCount = Owner.LayoutSuspendCount;
-#endif
-            Owner.SuspendLayout();
-            // clear all preferred size caches in the tree -
-            // inherited fonts could go away, etc.
+            using SuspendLayoutScope scope = new(Owner);
+
+            // Clear all preferred size caches in the tree - inherited fonts could go away, etc.
             CommonProperties.xClearAllPreferredSizeCaches(Owner);
 
-            try
+            while (Count != 0)
             {
-                while (Count != 0)
-                {
-                    RemoveAt(Count - 1);
-                }
-            }
-            finally
-            {
-                Owner.ResumeLayout();
-#if DEBUG
-                Debug.Assert(Owner.LayoutSuspendCount == layoutSuspendCount, "Suspend/Resume layout mismatch!");
-#endif
+                RemoveAt(Count - 1);
             }
         }
 
         /// <summary>
-        ///  Retrieves the index of the specified
-        ///  child control in this array.  An ArgumentException
-        ///  is thrown if child is not parented to this
-        ///  Control.
+        ///  Retrieves the index of the specified child control in this array. An ArgumentException
+        ///  is thrown if child is not parented to this Control.
         /// </summary>
-        public int GetChildIndex(Control child)
-        {
-            return GetChildIndex(child, true);
-        }
+        public int GetChildIndex(Control child) => GetChildIndex(child, true);
 
         /// <summary>
-        ///  Retrieves the index of the specified
-        ///  child control in this array.  An ArgumentException
-        ///  is thrown if child is not parented to this
-        ///  Control.
+        ///  Retrieves the index of the specified child control in this array. An ArgumentException
+        ///  is thrown if child is not parented to this Control.
         /// </summary>
         public virtual int GetChildIndex(Control child, bool throwException)
         {
@@ -454,8 +412,8 @@ public partial class Control
         }
 
         /// <summary>
-        ///  This is internal virtual method so that "Readonly Collections" can override this and throw as they should not allow changing
-        ///  the child control indices.
+        ///  This is internal virtual method so that "Readonly Collections" can override this and throw as they
+        ///  should not allow changing the child control indices.
         /// </summary>
         internal virtual void SetChildIndexInternal(Control child, int newIndex)
         {
@@ -481,14 +439,10 @@ public partial class Control
         }
 
         /// <summary>
-        ///  Sets the index of the specified
-        ///  child control in this array.  An ArgumentException
-        ///  is thrown if child is not parented to this
-        ///  Control.
+        ///  Sets the index of the specified child control in this array. An ArgumentException
+        ///  is thrown if child is not parented to this Control.
         /// </summary>
-        public virtual void SetChildIndex(Control child, int newIndex)
-        {
+        public virtual void SetChildIndex(Control child, int newIndex) =>
             SetChildIndexInternal(child, newIndex);
-        }
     }
 }

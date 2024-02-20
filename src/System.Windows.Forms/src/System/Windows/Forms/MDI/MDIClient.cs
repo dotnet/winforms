@@ -7,20 +7,21 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Represents the container for multiple-document interface (MDI) child forms.
-/// This class cannot be inherited.
+///  Represents the container for multiple-document interface (MDI) child forms.
+///  This class cannot be inherited.
 /// </summary>
 /// <remarks>
-///  Don't create an <see cref="MdiClient"/> control.
-///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
+///  <para>
+///   Don't create an <see cref="MdiClient"/> control. A form creates and uses the <see cref="MdiClient"/> when you set
+///   the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
+///  </para>
 /// </remarks>
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 public sealed partial class MdiClient : Control
 {
-    // kept in add order, not ZOrder. Need to return the correct
-    // array of items...
-    private readonly List<Form> _children = new();
+    // Kept in add order, not ZOrder. Need to return the correct array of items.
+    private readonly List<Form> _children = [];
 
     /// <summary>
     ///  Creates a new MdiClient.
@@ -179,7 +180,7 @@ public sealed partial class MdiClient : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override void ScaleCore(float dx, float dy)
     {
-        // Don't scale child forms...
+        // Don't scale child forms.
 
         SuspendLayout();
         try

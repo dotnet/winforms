@@ -597,9 +597,8 @@ internal partial class PropertyGridView
             }
 
             // Parent the control now. That way it can inherit our font and scale itself if it wants to.
-            try
+            using (SuspendLayoutScope scope = new(this, performLayout: true))
             {
-                SuspendLayout();
                 Controls.Add(control);
 
                 Size size = new(2 * DropDownHolderBorder + control.Width, 2 * DropDownHolderBorder + control.Height);
@@ -656,10 +655,6 @@ internal partial class PropertyGridView
                     CreateNewLink.Dock = DockStyle.Bottom;
                     Controls.Add(CreateNewLink);
                 }
-            }
-            finally
-            {
-                ResumeLayout(true);
             }
 
             // Hook the resize event.
