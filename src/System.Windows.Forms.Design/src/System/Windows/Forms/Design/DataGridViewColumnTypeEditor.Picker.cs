@@ -1,19 +1,22 @@
-﻿using System.Collections;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design;
-[
-ToolboxItem(false),
-DesignTimeVisible(false)
-]
-internal class DataGridViewColumnTypePicker : ContainerControl
+
+[ToolboxItem(false)]
+[DesignTimeVisible(false)]
+internal partial class DataGridViewColumnTypePicker : ContainerControl
 {
     private ListBox _typesListBox;
     private Type? _selectedType;
 
-    private IWindowsFormsEditorService? _edSvc;        // the current editor service that we need to close the drop down.
+    // The current editor service that we need to close the drop down.
+    private IWindowsFormsEditorService? _windowsFormsEditorService;
     private static Type _dataGridViewColumnType = typeof(DataGridViewColumn);
 
     private const int MinimumHeight = 90;
@@ -21,12 +24,12 @@ internal class DataGridViewColumnTypePicker : ContainerControl
 
     public DataGridViewColumnTypePicker()
     {
-        _typesListBox = new ListBox();
+        _typesListBox = new();
         Size = _typesListBox.Size;
         _typesListBox.Dock = DockStyle.Fill;
         _typesListBox.Sorted = true;
         _typesListBox.HorizontalScrollbar = true;
-        _typesListBox.SelectedIndexChanged += new EventHandler(typesListBox_SelectedIndexChanged);
+        _typesListBox.SelectedIndexChanged += typesListBox_SelectedIndexChanged;
         Controls.Add(_typesListBox);
         BackColor = SystemColors.Control;
         ActiveControl = _typesListBox;
@@ -39,18 +42,12 @@ internal class DataGridViewColumnTypePicker : ContainerControl
         get
         {
             int width = 0;
-            Graphics g = _typesListBox.CreateGraphics();
-            try
+            using Graphics g = _typesListBox.CreateGraphics();
+
+            for (int i = 0; i < _typesListBox.Items.Count; i++)
             {
-                for (int i = 0; i < _typesListBox.Items.Count; i++)
-                {
-                    ListBoxItem item = (ListBoxItem)_typesListBox.Items[i];
-                    width = Math.Max(width, Size.Ceiling(g.MeasureString(item.ToString(), _typesListBox.Font)).Width);
-                }
-            }
-            finally
-            {
-                g.Dispose();
+                ListBoxItem item = (ListBoxItem)_typesListBox.Items[i];
+                width = Math.Max(width, Size.Ceiling(g.MeasureString(item.ToString(), _typesListBox.Font)).Width);
             }
 
             return width;
@@ -59,10 +56,7 @@ internal class DataGridViewColumnTypePicker : ContainerControl
 
     private void CloseDropDown()
     {
-        if (_edSvc is not null)
-        {
-            _edSvc.CloseDropDown();
-        }
+        _windowsFormsEditorService?.CloseDropDown();
     }
 
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
@@ -81,15 +75,15 @@ internal class DataGridViewColumnTypePicker : ContainerControl
     }
 
     /// <devdoc>
-    /// Setup the picker, and fill it with type information
+    ///  Setup the picker, and fill it with type information
     /// </devdoc>
     public void Start(IWindowsFormsEditorService edSvc, ITypeDiscoveryService discoveryService, Type defaultType)
     {
-        _edSvc = edSvc;
+        _windowsFormsEditorService = edSvc;
 
         _typesListBox.Items.Clear();
 
-        ICollection columnTypes = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(_dataGridViewColumnType, false /*excludeGlobalTypes*/));
+        ICollection columnTypes = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(_dataGridViewColumnType, excludeGlobalTypes: false));
 
         foreach (Type t in columnTypes)
         {
@@ -121,15 +115,14 @@ internal class DataGridViewColumnTypePicker : ContainerControl
 
         _selectedType = null;
 
-        // set our default width.
-        //
+        // Set our default width.
         Width = Math.Max(Width, PreferredWidth + (SystemInformation.VerticalScrollBarWidth * 2));
     }
 
     private void typesListBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
         _selectedType = _typesListBox.SelectedItem is ListBoxItem selectedItem ? selectedItem.ColumnType : null;
-        _edSvc?.CloseDropDown();
+        _windowsFormsEditorService?.CloseDropDown();
     }
 
     private int TypeToSelectedIndex(Type type)
@@ -145,27 +138,5 @@ internal class DataGridViewColumnTypePicker : ContainerControl
         Debug.Assert(false, "we should have found a type by now");
 
         return -1;
-    }
-
-    private class ListBoxItem
-    {
-        private Type _columnType;
-        public ListBoxItem(Type columnType)
-        {
-            _columnType = columnType;
-        }
-
-        public override string ToString()
-        {
-            return _columnType.Name;
-        }
-
-        public Type ColumnType
-        {
-            get
-            {
-                return _columnType;
-            }
-        }
     }
 }

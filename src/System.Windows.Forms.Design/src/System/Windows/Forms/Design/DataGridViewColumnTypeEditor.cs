@@ -12,21 +12,15 @@ internal class DataGridViewColumnTypeEditor : UITypeEditor
 
     private DataGridViewColumnTypePicker? _columnTypePicker;
 
-    public override bool IsDropDownResizable
-    {
-        get
-        {
-            return true;
-        }
-    }
+    public override bool IsDropDownResizable => true;
 
-    public override object EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         if (provider is not null)
         {
-            IWindowsFormsEditorService? edSvc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+            IWindowsFormsEditorService? windowsFormsEditorService = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
 
-            if (edSvc is not null && context?.Instance is not null)
+            if (windowsFormsEditorService is not null && context?.Instance is not null)
             {
                 _columnTypePicker ??= new DataGridViewColumnTypePicker();
 
@@ -39,8 +33,8 @@ internal class DataGridViewColumnTypeEditor : UITypeEditor
                     discoveryService = host.GetService(typeof(ITypeDiscoveryService)) as ITypeDiscoveryService;
                 }
 
-                _columnTypePicker.Start(edSvc, discoveryService!, item.DataGridViewColumn.GetType());
-                edSvc.DropDownControl(_columnTypePicker);
+                _columnTypePicker.Start(windowsFormsEditorService, discoveryService!, item.DataGridViewColumn.GetType());
+                windowsFormsEditorService.DropDownControl(_columnTypePicker);
                 if (_columnTypePicker.SelectedType is not null)
                 {
                     value = _columnTypePicker.SelectedType;
@@ -48,11 +42,8 @@ internal class DataGridViewColumnTypeEditor : UITypeEditor
             }
         }
 
-        return value!;
+        return value;
     }
 
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
-    {
-        return UITypeEditorEditStyle.DropDown;
-    }
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;
 }
