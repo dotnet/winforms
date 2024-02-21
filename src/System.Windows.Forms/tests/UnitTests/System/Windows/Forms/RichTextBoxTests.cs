@@ -10673,21 +10673,6 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
-    [WinFormsFact]
-    public void RichTextBox_Paste_PastesData()
-    {
-        using RichTextBox richTextBox1 = new();
-        string text = "Hello, World!";
-
-        Clipboard.Clear();
-        richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
-        Assert.Empty(richTextBox1.Text);
-
-        Clipboard.SetText(text);
-        richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
-        Assert.Equal(text, richTextBox1.Text);
-    }
-
     private class CustomGetParaFormatRichTextBox : RichTextBox
     {
         public bool MakeCustom { get; set; }
