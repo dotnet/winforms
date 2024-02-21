@@ -57,6 +57,10 @@ public class AutoCompleteStringCollection : IList
     ///  Adds a string with the specified value to the
     ///  <see cref="AutoCompleteStringCollection"/> .
     /// </summary>
+    /// <returns>
+    ///  The position into which the new element was inserted, or -1 to indicate that
+    ///  the item was not inserted into the collection.
+    /// </returns>
     public int Add(string value)
     {
         if (value is null)
@@ -83,6 +87,11 @@ public class AutoCompleteStringCollection : IList
             {
                 nonNullItems.Add(item);
             }
+        }
+
+        if (nonNullItems.Count <= 0)
+        {
+            return;
         }
 
         _data.AddRange(nonNullItems);
