@@ -22,7 +22,7 @@ public abstract partial class AxHost
 
         internal ConnectionPointCookie(object? source, object sink, Type eventInterface, bool throwException)
         {
-            if (source is not IConnectionPointContainer.Interface cpc)
+            if (!ComHelpers.SupportsInterface<IConnectionPointContainer>(source))
             {
                 if (throwException)
                 {
@@ -45,8 +45,10 @@ public abstract partial class AxHost
             IConnectionPoint* connectionPoint = null;
             try
             {
+                using var cpc = ComHelpers.GetComScope<IConnectionPointContainer>(source);
+
                 Guid riid = eventInterface.GUID;
-                HRESULT hr = cpc.FindConnectionPoint(&riid, &connectionPoint);
+                HRESULT hr = cpc.Value->FindConnectionPoint(&riid, &connectionPoint);
             }
             catch (Exception ex)
             {
