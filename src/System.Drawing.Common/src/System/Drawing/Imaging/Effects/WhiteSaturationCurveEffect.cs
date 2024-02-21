@@ -3,19 +3,16 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Sets the white saturation of an image. The white saturation is the point at which the lightest areas of the image
 ///  are converted to white.
 /// </summary>
-[RequiresPreviewFeatures]
-public class WhiteSaturationEffect : ColorCurveEffect
+public class WhiteSaturationCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="WhiteSaturationEffect"/> with the given parameters.
+    ///  Creates a new <see cref="WhiteSaturationCurveEffect"/> with the given parameters.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="whiteSaturation">
@@ -24,7 +21,7 @@ public class WhiteSaturationEffect : ColorCurveEffect
     ///  so that they spread out over the interval [0, 255]. Color channel values greater than 240 are set to 255.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="whiteSaturation"/> was less than 1 or greater than 255.</exception>
-    public WhiteSaturationEffect(CurveChannel channel, int whiteSaturation)
+    public WhiteSaturationCurveEffect(CurveChannel channel, int whiteSaturation)
         : base(CurveAdjustments.AdjustWhiteSaturation, channel, whiteSaturation)
     {
     }

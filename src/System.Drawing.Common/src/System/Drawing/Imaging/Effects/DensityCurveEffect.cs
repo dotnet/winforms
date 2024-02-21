@@ -3,18 +3,15 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Simulates increasing or decreasing the film density of a photograph.
 /// </summary>
-[RequiresPreviewFeatures]
-public class DensityEffect : ColorCurveEffect
+public class DensityCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="DensityEffect"/> with the given <paramref name="density"/>.
+    ///  Creates a new <see cref="DensityCurveEffect"/> with the given <paramref name="density"/>.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="density">
@@ -22,7 +19,7 @@ public class DensityEffect : ColorCurveEffect
     ///  increased density (lighter picture) and negative values specify decreased density (darker picture).
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="density"/> is less than -256 or greater than 256.</exception>
-    public DensityEffect(CurveChannel channel, int density)
+    public DensityCurveEffect(CurveChannel channel, int density)
         : base(CurveAdjustments.AdjustDensity, channel, density)
     {
     }
