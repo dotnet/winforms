@@ -19,7 +19,7 @@ public unsafe partial class DataObject
         /// <summary>
         ///  Maps <see cref="IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
-        private unsafe class WinFormsDataObjectToNativeAdapter : IDataObject, Com.IDataObject.Interface
+        private unsafe class WinFormsDataObjectToNativeAdapter : Com.IDataObject.Interface
         {
             private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
@@ -33,20 +33,7 @@ public unsafe partial class DataObject
             /// <summary>
             ///  Returns true if the tymed is useable.
             /// </summary>
-            private static bool GetTymedUseable(Com.TYMED tymed) => (tymed & AllowedTymeds) != 0;
-
-            object? IDataObject.GetData(string format, bool autoConvert) => _dataObject.GetData(format, autoConvert);
-            object? IDataObject.GetData(string format) => _dataObject.GetData(format);
-            object? IDataObject.GetData(Type format) => _dataObject.GetData(format);
-            bool IDataObject.GetDataPresent(string format, bool autoConvert) => _dataObject.GetDataPresent(format, autoConvert);
-            bool IDataObject.GetDataPresent(string format) => _dataObject.GetDataPresent(format);
-            bool IDataObject.GetDataPresent(Type format) => _dataObject.GetDataPresent(format);
-            string[] IDataObject.GetFormats(bool autoConvert) => _dataObject.GetFormats(autoConvert);
-            string[] IDataObject.GetFormats() => _dataObject.GetFormats();
-            void IDataObject.SetData(string format, bool autoConvert, object? data) => _dataObject.SetData(format, autoConvert, data);
-            void IDataObject.SetData(string format, object? data) => _dataObject.SetData(format, data);
-            void IDataObject.SetData(Type format, object? data) => _dataObject.SetData(format, data);
-            void IDataObject.SetData(object? data) => _dataObject.SetData(data);
+            private static bool GetTymedUseable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
 
             HRESULT Com.IDataObject.Interface.GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
             {
@@ -274,7 +261,7 @@ public unsafe partial class DataObject
 
                 if (dwDirection == (uint)ComTypes.DATADIR.DATADIR_GET)
                 {
-                    *ppenumFormatEtc = ComHelpers.GetComPointer<IEnumFORMATETC>(new FormatEnumerator(this));
+                    *ppenumFormatEtc = ComHelpers.GetComPointer<IEnumFORMATETC>(new FormatEnumerator(_dataObject));
                     return HRESULT.S_OK;
                 }
 

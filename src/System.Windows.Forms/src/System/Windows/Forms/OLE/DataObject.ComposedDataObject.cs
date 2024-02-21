@@ -24,9 +24,9 @@ public unsafe partial class DataObject
         [
             // FD9EA796-3B13-4370-A679-56106BB288FB
             0x96, 0xa7, 0x9e, 0xfd,
-        0x13, 0x3b,
-        0x70, 0x43,
-        0xa6, 0x79, 0x56, 0x10, 0x6b, 0xb2, 0x88, 0xfb
+            0x13, 0x3b,
+            0x70, 0x43,
+            0xa6, 0x79, 0x56, 0x10, 0x6b, 0xb2, 0x88, 0xfb
         ];
 
         private readonly IDataObject _winFormsDataObject;
@@ -46,8 +46,9 @@ public unsafe partial class DataObject
 
         public static ComposedDataObject CreateFromWinFormsDataObject(IDataObject winFormsDataObject)
         {
-            Com.IDataObject.Interface nativeDataObject = new WinFormsDataObjectToNativeAdapter(winFormsDataObject);
-            return new ComposedDataObject(winFormsDataObject, nativeDataObject, new NativeDataObjectToRuntimeAdapter(ComHelpers.GetComPointer<Com.IDataObject>(nativeDataObject)));
+            WinFormsDataObjectToNativeAdapter winFormsToNative = new(winFormsDataObject);
+            NativeDataObjectToRuntimeAdapter nativeToRuntime = new(ComHelpers.GetComPointer<Com.IDataObject>(winFormsToNative));
+            return new(winFormsDataObject, winFormsToNative, nativeToRuntime);
         }
 
         public static ComposedDataObject CreateFromNativeDataObject(Com.IDataObject* nativeDataObject)
@@ -55,15 +56,16 @@ public unsafe partial class DataObject
             // Add ref so each adapter can take ownership of the native data object.
             nativeDataObject->AddRef();
             nativeDataObject->AddRef();
-            NativeDataObjectToWinFormsAdapter winFormsDataObject = new(nativeDataObject);
-            return new ComposedDataObject(winFormsDataObject, winFormsDataObject, new NativeDataObjectToRuntimeAdapter(nativeDataObject));
+            NativeDataObjectToWinFormsAdapter nativeToWinForms = new(nativeDataObject);
+            NativeDataObjectToRuntimeAdapter nativeToRuntime = new(nativeDataObject);
+            return new(nativeToWinForms, nativeToWinForms, nativeToRuntime);
         }
 
         public static ComposedDataObject CreateFromRuntimeDataObject(ComTypes.IDataObject runtimeDataObject)
         {
-            var runtimeToNative = new RuntimeDataObjectToNativeAdapter(runtimeDataObject);
-            var winFormsDataObject = new NativeDataObjectToWinFormsAdapter(ComHelpers.GetComPointer<Com.IDataObject>(runtimeDataObject));
-            return new ComposedDataObject(winFormsDataObject, runtimeToNative, runtimeDataObject);
+            RuntimeDataObjectToNativeAdapter runtimeToNative = new(runtimeDataObject);
+            NativeDataObjectToWinFormsAdapter nativeToWinForms = new(ComHelpers.GetComPointer<Com.IDataObject>(runtimeDataObject));
+            return new(nativeToWinForms, runtimeToNative, runtimeDataObject);
         }
 
         /// <summary>

@@ -197,11 +197,11 @@ public static partial class DataFormats
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
-    public static Format GetFormat(int id)
-         // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
-         // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
-         // to represent format as an unsigned type.
-         => GetFormat((ushort)(id & 0xFFFF));
+    public static Format GetFormat(int id) =>
+        // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
+        // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
+        // to represent format as an unsigned type.
+        GetFormat((ushort)(id & 0xFFFF));
 
     /// <inheritdoc cref="GetFormat(int)"/>
     internal static unsafe Format GetFormat(ushort id)

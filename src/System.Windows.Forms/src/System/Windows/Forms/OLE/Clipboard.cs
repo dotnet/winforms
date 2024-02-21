@@ -130,6 +130,7 @@ public static class Clipboard
             // we have a proxy where there is no way to retrieve the original data object
             // pointer from it likely because either the clipboard was flushed or the data on the
             // clipboard is from another process. We need to mimic built-in com behavior and wrap the proxy ourselves.
+            // DataObject will ref count proxyDataObject properly to take ownership.
             return new DataObject(proxyDataObject.Value);
         }
 
