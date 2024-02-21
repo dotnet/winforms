@@ -4031,8 +4031,8 @@ public class TabPageTests
 
                 yield return new object[] { appearance, useVisualStyleBackColor, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { appearance, useVisualStyleBackColor, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
-                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { appearance, useVisualStyleBackColor, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { appearance, useVisualStyleBackColor, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
             }
@@ -4170,8 +4170,8 @@ public class TabPageTests
 
                 yield return new object[] { appearance, useVisualStyleBackColor, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { appearance, useVisualStyleBackColor, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
-                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                yield return new object[] { appearance, useVisualStyleBackColor, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { appearance, useVisualStyleBackColor, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { appearance, useVisualStyleBackColor, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
             }
