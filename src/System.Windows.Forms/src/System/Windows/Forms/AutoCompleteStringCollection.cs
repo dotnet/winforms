@@ -59,7 +59,11 @@ public class AutoCompleteStringCollection : IList
     /// </summary>
     public int Add(string value)
     {
-        ArgumentNullException.ThrowIfNull(value);
+        if (value is null)
+        {
+            return -1;
+        }
+
         int index = ((IList)_data).Add(value);
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
         return index;
@@ -72,15 +76,16 @@ public class AutoCompleteStringCollection : IList
     {
         ArgumentNullException.ThrowIfNull(value);
 
+        List<string> nonNullItems = [];
         foreach (string item in value)
         {
-            if (item is null)
+            if (item is not null)
             {
-                throw new InvalidOperationException(SR.InvalidNullItemInCollection);
+                nonNullItems.Add(item);
             }
         }
 
-        _data.AddRange(value);
+        _data.AddRange(nonNullItems);
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
     }
 
@@ -121,9 +126,12 @@ public class AutoCompleteStringCollection : IList
     {
         ArgumentOutOfRangeException.ThrowIfNegative(index);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(index, _data.Count);
-        ArgumentNullException.ThrowIfNull(value);
-        _data.Insert(index, value);
-        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
+
+        if (value is not null)
+        {
+            _data.Insert(index, value);
+            OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
+        }
     }
 
     /// <summary>
