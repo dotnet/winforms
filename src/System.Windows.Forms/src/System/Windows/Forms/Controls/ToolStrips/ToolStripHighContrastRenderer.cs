@@ -492,11 +492,11 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
         if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (item.Pressed || item.Selected)))
         {
             // Translate white, black and blue to colors visible in high contrast mode.
-            Span<ValueColorMap> map =
+            Span<(Color OldColor, Color NewColor)> map =
             [
-                new ValueColorMap(Color.Black, Color.White),
-                new ValueColorMap(Color.White, Color.Black),
-                new ValueColorMap(Color.FromArgb(0, 0, 128), Color.White)
+                new(Color.Black, Color.White),
+                new(Color.White, Color.Black),
+                new(Color.FromArgb(0, 0, 128), Color.White)
             ];
 
             attrs.SetRemapTable(ColorAdjustType.Bitmap, map);
