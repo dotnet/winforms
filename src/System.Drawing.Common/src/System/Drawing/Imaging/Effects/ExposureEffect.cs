@@ -11,7 +11,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  Simulates increasing or decreasing the exposure of a photograph
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class ExposureEffect : ColorCurveEffect
+public class ExposureEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="ExposureEffect"/> with the given <paramref name="exposure"/> adjustment.

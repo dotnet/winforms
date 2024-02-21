@@ -315,7 +315,22 @@ public partial class MainForm : Form
         // - find out the DesignSurfaceExt control hosted by the TabPage
         IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         if (isurf is not null)
-            propertyGrid.SelectedObject = isurf.GetIDesignerHost().RootComponent;
+        {
+            splitContainer.Panel2.Controls.Remove(propertyGrid);
+            propertyGrid = new()
+            {
+                DesignerHost = isurf.GetIDesignerHost(),
+                Dock = DockStyle.Fill,
+                Location = new Point(0, 0),
+                Margin = new Padding(4),
+                Name = "propertyGrid",
+                Size = new Size(226, 502),
+                TabIndex = 0,
+                SelectedObject = isurf.GetIDesignerHost().RootComponent
+            };
+
+            splitContainer.Panel2.Controls.Add(propertyGrid);
+        }
     }
 
     private void undoToolStripMenuItem_Click(object sender, EventArgs e)

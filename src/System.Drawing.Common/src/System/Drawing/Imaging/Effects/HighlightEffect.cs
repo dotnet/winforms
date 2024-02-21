@@ -13,7 +13,7 @@ namespace System.Drawing.Imaging.Effects;
 ///  the dark areas.
 /// </summary>
 [RequiresPreviewFeatures]
-public sealed class HighlightEffect : ColorCurveEffect
+public class HighlightEffect : ColorCurveEffect
 {
     /// <summary>
     ///  Creates a new <see cref="HighlightEffect"/> with the given <paramref name="highlight"/> adjustment.

@@ -32,7 +32,8 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
 
     internal HelpPane(PropertyGrid owner) : base(owner)
     {
-        SuspendLayout();
+        using SuspendLayoutScope scope = new(this, performLayout: false);
+
         _titleLabel = new()
         {
             UseMnemonic = false,
@@ -54,7 +55,6 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
 
         Text = SR.PropertyGridHelpPaneTitle;
         SetStyle(ControlStyles.Selectable, false);
-        ResumeLayout(false);
     }
 
     public virtual int Lines

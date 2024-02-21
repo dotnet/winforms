@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
 [Designer($"System.Windows.Forms.Design.BindingSourceDesigner, {AssemblyRef.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionBindingSource))]
-public class BindingSource : Component,
+public partial class BindingSource : Component,
                              IBindingListView,
                              ITypedList,
                              ICancelAddNew,
@@ -33,20 +33,18 @@ public class BindingSource : Component,
     private static readonly object s_eventPositionChanged = new();
     private static readonly object s_eventInitialized = new();
 
+    // flags enum field to hold private bool fields
+    private BindingSourceStates _state;
+
     // Public property values
     private object? _dataSource;
     private string _dataMember = string.Empty;
     private string? _sort;
     private string? _filter;
     private readonly CurrencyManager _currencyManager;
-    private bool _parentsCurrentItemChanging;
-    private bool _disposedOrFinalized;
 
     // Description of the current bound list
     private IList _innerList; // ...DON'T access this directly. ALWAYS use the List property.
-    private bool _isBindingList;
-    private bool _listRaisesItemChangedEvents;
-    private bool _listExtractedFromEnumerable;
 
     // Description of items in the current bound list
     private Type? _itemType;
@@ -56,10 +54,6 @@ public class BindingSource : Component,
     // Cached list of 'related' binding sources returned to callers of ICurrencyManagerProvider.GetRelatedCurrencyManager()
     private Dictionary<string, BindingSource>? _relatedBindingSources;
 
-    // Support for user-overriding of the AllowNew property
-    private bool _allowNewIsSet;
-    private bool _allowNewSetValue = true;
-
     // Support for property change event hooking on list items
     private object? _currentItemHookedForItemChange;
     private object? _lastCurrentItem;
@@ -67,11 +61,6 @@ public class BindingSource : Component,
 
     // State data
     private int _addNewPos = -1;
-    private bool _initializing;
-    private bool _needToSetList;
-    private bool _recursionDetectionFlag;
-    private bool _innerListChanging;
-    private bool _endingEdit;
 
     public BindingSource()
         : this(dataSource: null, dataMember: string.Empty)
@@ -81,6 +70,9 @@ public class BindingSource : Component,
     public BindingSource(object? dataSource, string dataMember)
         : base()
     {
+        // default values for state
+        _state.ChangeFlags(BindingSourceStates.AllowNewSetValue, true);
+
         // Set data source and data member
         _dataSource = dataSource;
         _dataMember = dataMember;
@@ -112,20 +104,20 @@ public class BindingSource : Component,
 
     private bool AllowNewInternal(bool checkConstructor)
     {
-        if (_disposedOrFinalized)
+        if (_state.HasFlag(BindingSourceStates.DisposedOrFinalized))
         {
             return false;
         }
 
-        if (_allowNewIsSet)
+        if (_state.HasFlag(BindingSourceStates.AllowNewIsSet))
         {
-            return _allowNewSetValue;
+            return _state.HasFlag(BindingSourceStates.AllowNewSetValue);
         }
-        else if (_listExtractedFromEnumerable)
+        else if (_state.HasFlag(BindingSourceStates.ListExtractedFromEnumerable))
         {
             return false;
         }
-        else if (_isBindingList)
+        else if (_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             return ((IBindingList)List).AllowNew;
         }
@@ -269,7 +261,7 @@ public class BindingSource : Component,
         }
         set
         {
-            if (_initializing || DesignMode)
+            if (_state.HasFlag(BindingSourceStates.Initializing) || DesignMode)
             {
                 return;
             }
@@ -307,7 +299,7 @@ public class BindingSource : Component,
         }
         set
         {
-            if (_initializing || DesignMode)
+            if (_state.HasFlag(BindingSourceStates.Initializing) || DesignMode)
             {
                 return;
             }
@@ -609,30 +601,30 @@ public class BindingSource : Component,
             _sort = null;
             _dataMember = null!;
             _innerList = null!;
-            _isBindingList = false;
-            _needToSetList = true;
+            _state.ChangeFlags(BindingSourceStates.IsBindingList, false);
+            _state.ChangeFlags(BindingSourceStates.NeedToSetList, true);
             RaiseListChangedEvents = false;
         }
 
-        _disposedOrFinalized = true;
+        _state.ChangeFlags(BindingSourceStates.DisposedOrFinalized, true);
         base.Dispose(disposing);
     }
 
     public void EndEdit()
     {
-        if (_endingEdit)
+        if (_state.HasFlag(BindingSourceStates.EndingEdit))
         {
             return;
         }
 
         try
         {
-            _endingEdit = true;
+            _state.ChangeFlags(BindingSourceStates.EndingEdit, true);
             _currencyManager.EndCurrentEdit();
         }
         finally
         {
-            _endingEdit = false;
+            _state.ChangeFlags(BindingSourceStates.EndingEdit, false);
         }
     }
 
@@ -643,9 +635,9 @@ public class BindingSource : Component,
     /// </summary>
     private void EnsureInnerList()
     {
-        if (!_initializing && _needToSetList)
+        if (!_state.HasFlag(BindingSourceStates.Initializing) && _state.HasFlag(BindingSourceStates.NeedToSetList))
         {
-            _needToSetList = false;
+            _state.ChangeFlags(BindingSourceStates.NeedToSetList, false);
             ResetList();
         }
     }
@@ -715,7 +707,7 @@ public class BindingSource : Component,
     {
         // Don't mess with things during initialization because the data
         // member property can get set before the data source property.
-        if (_initializing)
+        if (_state.HasFlag(BindingSourceStates.Initializing))
         {
             return true;
         }
@@ -745,16 +737,16 @@ public class BindingSource : Component,
         // when our parent updates which then causes our parent to update which
         // then causes us to update which then causes our parent to update which
         // then causes us to update which then causes our parent to update...
-        if (!_innerListChanging)
+        if (!_state.HasFlag(BindingSourceStates.InnerListChanging))
         {
             try
             {
-                _innerListChanging = true;
+                _state.ChangeFlags(BindingSourceStates.InnerListChanging, true);
                 OnListChanged(e);
             }
             finally
             {
-                _innerListChanging = false;
+                _state.ChangeFlags(BindingSourceStates.InnerListChanging, false);
             }
         }
     }
@@ -792,7 +784,7 @@ public class BindingSource : Component,
     /// </remarks>
     private void OnSimpleListChanged(ListChangedType listChangedType, int newIndex)
     {
-        if (!_isBindingList)
+        if (!_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             OnListChanged(new ListChangedEventArgs(listChangedType, newIndex));
         }
@@ -850,7 +842,7 @@ public class BindingSource : Component,
     protected virtual void OnListChanged(ListChangedEventArgs e)
     {
         // Sometimes we are required to suppress ListChanged events
-        if (!RaiseListChangedEvents || _initializing)
+        if (!RaiseListChangedEvents || _state.HasFlag(BindingSourceStates.Initializing))
         {
             return;
         }
@@ -874,20 +866,20 @@ public class BindingSource : Component,
     /// </summary>
     private void ParentCurrencyManager_CurrentItemChanged(object? sender, EventArgs e)
     {
-        if (_initializing)
+        if (_state.HasFlag(BindingSourceStates.Initializing))
         {
             return;
         }
 
         // Commit pending changes in prior list
-        if (_parentsCurrentItemChanging)
+        if (_state.HasFlag(BindingSourceStates.ParentsCurrentItemChanging))
         {
             return;
         }
 
         try
         {
-            _parentsCurrentItemChanging = true;
+            _state.ChangeFlags(BindingSourceStates.ParentsCurrentItemChanging, true);
             // Do what RelatedCurrencyManager does when the parent changes:
             // 1. PullData from the controls into the back end.
             // 2. Don't EndEdit the transaction.
@@ -895,7 +887,7 @@ public class BindingSource : Component,
         }
         finally
         {
-            _parentsCurrentItemChanging = false;
+            _state.ChangeFlags(BindingSourceStates.ParentsCurrentItemChanging, false);
         }
 
         CurrencyManager cm = (CurrencyManager)sender!;
@@ -1041,8 +1033,8 @@ public class BindingSource : Component,
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public virtual void ResetAllowNew()
     {
-        _allowNewIsSet = false;
-        _allowNewSetValue = true;
+        _state.ChangeFlags(BindingSourceStates.AllowNewIsSet, false);
+        _state.ChangeFlags(BindingSourceStates.AllowNewSetValue, true);
     }
 
     public void ResetBindings(bool metadataChanged)
@@ -1076,14 +1068,14 @@ public class BindingSource : Component,
     {
         // Don't bind during initialization, since the data source may not have been initialized yet.
         // Instead, set a flag that causes binding to occur on first post-init attempt to access list.
-        if (_initializing)
+        if (_state.HasFlag(BindingSourceStates.Initializing))
         {
-            _needToSetList = true;
+            _state.ChangeFlags(BindingSourceStates.NeedToSetList, true);
             return;
         }
         else
         {
-            _needToSetList = false;
+            _state.ChangeFlags(BindingSourceStates.NeedToSetList, false);
         }
 
         // Find the list identified by the current DataSource and DataMember properties.
@@ -1095,7 +1087,7 @@ public class BindingSource : Component,
         // but does not correspond to a valid property on the data source.
         object? dataSourceInstance = _dataSource is Type dataSourceType ? GetListFromType(dataSourceType) : _dataSource;
         object? list = ListBindingHelper.GetList(dataSourceInstance, _dataMember);
-        _listExtractedFromEnumerable = false;
+        _state.ChangeFlags(BindingSourceStates.ListExtractedFromEnumerable, false);
 
         // Convert the candidate list into an IList, if necessary...
         IList? bindingList = null;
@@ -1119,7 +1111,7 @@ public class BindingSource : Component,
                 // Don't consider it a list of enumerables in this case
                 if (bindingList is not null)
                 {
-                    _listExtractedFromEnumerable = true;
+                    _state.ChangeFlags(BindingSourceStates.ListExtractedFromEnumerable, true);
                 }
             }
 
@@ -1175,7 +1167,7 @@ public class BindingSource : Component,
         _innerList = listInternal;
 
         // Remember whether the new list implements IBindingList
-        _isBindingList = (listInternal is IBindingList);
+        _state.ChangeFlags(BindingSourceStates.IsBindingList, (listInternal is IBindingList));
 
         // Determine whether the new list converts PropertyChanged events on its items into ListChanged events.
         // If it does, then the BindingSource won't need to hook the PropertyChanged events itself. If the list
@@ -1183,11 +1175,11 @@ public class BindingSource : Component,
         // which implements IBindingList automatically supports this capability.
         if (listInternal is IRaiseItemChangedEvents raiseItemChangedEvents)
         {
-            _listRaisesItemChangedEvents = raiseItemChangedEvents.RaisesItemChangedEvents;
+            _state.ChangeFlags(BindingSourceStates.ListRaisesItemChangedEvents, raiseItemChangedEvents.RaisesItemChangedEvents);
         }
         else
         {
-            _listRaisesItemChangedEvents = _isBindingList;
+            _state.ChangeFlags(BindingSourceStates.ListRaisesItemChangedEvents, _state.HasFlag(BindingSourceStates.IsBindingList));
         }
 
         // If list schema may have changed, update list item info now
@@ -1236,7 +1228,7 @@ public class BindingSource : Component,
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal virtual bool ShouldSerializeAllowNew() => _allowNewIsSet;
+    internal virtual bool ShouldSerializeAllowNew() => _state.HasFlag(BindingSourceStates.AllowNewIsSet);
 
     /// <summary>
     ///  Hooks property changed events for the NEW current item, if necessary
@@ -1245,7 +1237,7 @@ public class BindingSource : Component,
     {
         Debug.Assert(_currentItemHookedForItemChange is null, "BindingSource trying to hook new current item before unhooking old current item!");
 
-        if (!_listRaisesItemChangedEvents)
+        if (!_state.HasFlag(BindingSourceStates.ListRaisesItemChangedEvents))
         {
             if (Position >= 0 && Position <= Count - 1)
             {
@@ -1264,7 +1256,7 @@ public class BindingSource : Component,
     /// </summary>
     private void UnhookItemChangedEventsForOldCurrent()
     {
-        if (!_listRaisesItemChangedEvents)
+        if (!_state.HasFlag(BindingSourceStates.ListRaisesItemChangedEvents))
         {
             UnwirePropertyChangedEvents(_currentItemHookedForItemChange);
             _currentItemHookedForItemChange = null;
@@ -1361,7 +1353,7 @@ public class BindingSource : Component,
     ///  Begin bulk member initialization - deferring calculation of inner list until
     ///  EndInit is reached
     /// </summary>
-    void ISupportInitialize.BeginInit() => _initializing = true;
+    void ISupportInitialize.BeginInit() => _state.ChangeFlags(BindingSourceStates.Initializing, true);
 
     /// <summary>
     ///  End bulk member initialization - updating the inner list and notifying any
@@ -1369,7 +1361,7 @@ public class BindingSource : Component,
     /// </summary>
     private void EndInitCore()
     {
-        _initializing = false;
+        _state.ChangeFlags(BindingSourceStates.Initializing, false);
         EnsureInnerList();
         OnInitialized();
     }
@@ -1413,7 +1405,7 @@ public class BindingSource : Component,
     /// <summary>
     ///  Report to any dependents whether we are still in bulk member initialization
     /// </summary>
-    bool ISupportInitializeNotification.IsInitialized => !_initializing;
+    bool ISupportInitializeNotification.IsInitialized => !_state.HasFlag(BindingSourceStates.Initializing);
 
     /// <summary>
     ///  Event used to signal to our dependents that we have completed bulk member
@@ -1442,23 +1434,23 @@ public class BindingSource : Component,
         {
             try
             {
-                if (_disposedOrFinalized)
+                if (_state.HasFlag(BindingSourceStates.DisposedOrFinalized))
                 {
                     return 0;
                 }
 
-                if (_recursionDetectionFlag)
+                if (_state.HasFlag(BindingSourceStates.RecursionDetectionFlag))
                 {
                     throw new InvalidOperationException(SR.BindingSourceRecursionDetected);
                 }
 
-                _recursionDetectionFlag = true;
+                _state.ChangeFlags(BindingSourceStates.RecursionDetectionFlag, true);
 
                 return List.Count;
             }
             finally
             {
-                _recursionDetectionFlag = false;
+                _state.ChangeFlags(BindingSourceStates.RecursionDetectionFlag, false);
             }
         }
     }
@@ -1539,7 +1531,7 @@ public class BindingSource : Component,
         {
             List[index] = value;
 
-            if (!_isBindingList)
+            if (!_state.HasFlag(BindingSourceStates.IsBindingList))
             {
                 OnSimpleListChanged(ListChangedType.ItemChanged, index);
             }
@@ -1608,7 +1600,7 @@ public class BindingSource : Component,
             // If the inner list is an IBindingList, let it create and add the new item for us.
             // Then make the new item the current item (...assuming, as CurrencyManager does,
             // that the new item was added at the *bottom* of the list).
-            if (_isBindingList)
+            if (_state.HasFlag(BindingSourceStates.IsBindingList))
             {
                 addNewItem = ((IBindingList)List).AddNew();
                 Position = Count - 1;
@@ -1646,7 +1638,7 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual bool AllowEdit
     {
-        get => _isBindingList ? ((IBindingList)List).AllowEdit : !List.IsReadOnly;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) ? ((IBindingList)List).AllowEdit : !List.IsReadOnly;
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
@@ -1657,7 +1649,7 @@ public class BindingSource : Component,
         set
         {
             // If value was previously set and isn't changing now, do nothing
-            if (_allowNewIsSet && value == _allowNewSetValue)
+            if (_state.HasFlag(BindingSourceStates.AllowNewIsSet) && value == _state.HasFlag(BindingSourceStates.AllowNewSetValue))
             {
                 return;
             }
@@ -1665,14 +1657,14 @@ public class BindingSource : Component,
             // Don't let user set value to true if inner list can never support adding of items
             // do NOT check for a default constructor because someone will set AllowNew=True
             // when they have overridden OnAddingNew (which we cannot detect).
-            if (value && !_isBindingList && !IsListWriteable(checkConstructor: false))
+            if (value && !_state.HasFlag(BindingSourceStates.IsBindingList) && !IsListWriteable(checkConstructor: false))
             {
                 throw new InvalidOperationException(SR.NoAllowNewOnReadOnlyList);
             }
 
             // Record new value, which will now override inner list's value
-            _allowNewIsSet = true;
-            _allowNewSetValue = value;
+            _state.ChangeFlags(BindingSourceStates.AllowNewIsSet, true);
+            _state.ChangeFlags(BindingSourceStates.AllowNewSetValue, value);
 
             // Mimic the DataView class and fire a list reset event now
             OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
@@ -1682,7 +1674,7 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual bool AllowRemove
     {
-        get => _isBindingList ? ((IBindingList)List).AllowRemove : !List.IsReadOnly && !List.IsFixedSize;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) ? ((IBindingList)List).AllowRemove : !List.IsReadOnly && !List.IsFixedSize;
     }
 
     [Browsable(false)]
@@ -1691,38 +1683,38 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual bool SupportsSearching
     {
-        get => _isBindingList && ((IBindingList)List).SupportsSearching;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) && ((IBindingList)List).SupportsSearching;
     }
 
     [Browsable(false)]
     public virtual bool SupportsSorting
     {
-        get => _isBindingList && ((IBindingList)List).SupportsSorting;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) && ((IBindingList)List).SupportsSorting;
     }
 
     [Browsable(false)]
     public virtual bool IsSorted
     {
-        get => _isBindingList && ((IBindingList)List).IsSorted;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) && ((IBindingList)List).IsSorted;
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual PropertyDescriptor? SortProperty
     {
-        get => _isBindingList ? ((IBindingList)List).SortProperty : null;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) ? ((IBindingList)List).SortProperty : null;
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual ListSortDirection SortDirection
     {
-        get => _isBindingList ? ((IBindingList)List).SortDirection : ListSortDirection.Ascending;
+        get => _state.HasFlag(BindingSourceStates.IsBindingList) ? ((IBindingList)List).SortDirection : ListSortDirection.Ascending;
     }
 
     void IBindingList.AddIndex(PropertyDescriptor property)
     {
-        if (!_isBindingList)
+        if (!_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             throw new NotSupportedException(SR.OperationRequiresIBindingList);
         }
@@ -1733,7 +1725,7 @@ public class BindingSource : Component,
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual void ApplySort(PropertyDescriptor property, ListSortDirection sort)
     {
-        if (!_isBindingList)
+        if (!_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             throw new NotSupportedException(SR.OperationRequiresIBindingList);
         }
@@ -1743,7 +1735,7 @@ public class BindingSource : Component,
 
     public virtual int Find(PropertyDescriptor prop, object key)
     {
-        if (!_isBindingList)
+        if (!_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             throw new NotSupportedException(SR.OperationRequiresIBindingList);
         }
@@ -1753,7 +1745,7 @@ public class BindingSource : Component,
 
     void IBindingList.RemoveIndex(PropertyDescriptor prop)
     {
-        if (!_isBindingList)
+        if (!_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             throw new NotSupportedException(SR.OperationRequiresIBindingList);
         }
@@ -1765,7 +1757,7 @@ public class BindingSource : Component,
     {
         _sort = null;
 
-        if (_isBindingList)
+        if (_state.HasFlag(BindingSourceStates.IsBindingList))
         {
             ((IBindingList)List).RemoveSort();
         }

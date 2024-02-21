@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageReference Include="Verify.Xunit" Version="$(VerifyXunitVersion)" />
+    <PackageReference Include="NuGet.Packaging" Version="$(NugetPackagingVersion)" />
   </ItemGroup>
 
   <ItemGroup>

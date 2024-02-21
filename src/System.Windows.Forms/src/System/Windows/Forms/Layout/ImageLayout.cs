@@ -9,12 +9,12 @@ namespace System.Windows.Forms;
 public enum ImageLayout
 {
     /// <summary>
-    ///  The image is aligned TOP - LEFT across the controls client rectangle.
+    ///  The image is left-aligned at the top across the control's client rectangle.
     /// </summary>
     None,
 
     /// <summary>
-    ///  The image is tiled across the controls client rectangle.
+    ///  The image is tiled across the control's client rectangle.
     /// </summary>
     Tile,
 
@@ -24,12 +24,12 @@ public enum ImageLayout
     Center,
 
     /// <summary>
-    ///  The image is stretched across the controls client rectangle.
+    ///  The image is stretched across the control's client rectangle.
     /// </summary>
     Stretch,
 
     /// <summary>
-    ///  The image is stretched across the controls client rectangle.
+    ///  The image is enlarged within the control's client rectangle.
     /// </summary>
-    Zoom,
+    Zoom
 }

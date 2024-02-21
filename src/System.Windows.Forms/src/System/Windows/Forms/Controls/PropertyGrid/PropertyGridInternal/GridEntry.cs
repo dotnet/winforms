@@ -764,7 +764,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     }
 
     // Note: we don't do set because of the value class semantics, etc.
-
+#nullable enable
     public sealed override object Value => PropertyValue;
 
     internal Point ValueToolTipLocation
@@ -849,11 +849,12 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Converts the given string of text to a value.
     /// </summary>
-    public object ConvertTextToValue(string text)
+    public object? ConvertTextToValue(string? text)
     {
         if (TypeConverter.CanConvertFrom(this, typeof(string)))
         {
-            return TypeConverter.ConvertFromString(this, text);
+            // We will return an empty string when text is null.
+            return TypeConverter.ConvertFromString(this, text!);
         }
 
         return text;
@@ -863,11 +864,11 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Create the root grid entry given an object or set of objects.
     /// </summary>
     /// <param name="objects">The objects to build the root entry on.</param>
-    internal static GridEntry CreateRootGridEntry(
+    internal static GridEntry? CreateRootGridEntry(
         PropertyGridView view,
         object[] objects,
         IServiceProvider baseProvider,
-        IDesignerHost currentHost,
+        IDesignerHost? currentHost,
         PropertyTab tab,
         PropertySort initialSortType)
     {
@@ -877,8 +878,20 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
 
         return objects.Length == 1
-            ? new SingleSelectRootGridEntry(view, objects[0], baseProvider, currentHost, tab, initialSortType)
-            : new MultiSelectRootGridEntry(view, objects, baseProvider, currentHost, tab, initialSortType);
+            ? new SingleSelectRootGridEntry(
+                view,
+                objects[0],
+                baseProvider,
+                currentHost,
+                tab,
+                initialSortType)
+            : new MultiSelectRootGridEntry(
+                view,
+                objects,
+                baseProvider,
+                currentHost,
+                tab,
+                initialSortType);
     }
 
     /// <summary>
@@ -912,14 +925,14 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             return true;
         }
 
-        GridEntry[] childProperties = GetChildEntries();
+        GridEntry[]? childProperties = GetChildEntries();
 
         bool expandable = childProperties is not null && childProperties.Length > 0;
 
         if (useExistingChildren && _children is not null && _children.Count > 0)
         {
             bool same = true;
-            if (childProperties.Length == _children.Count)
+            if (childProperties is not null && childProperties.Length == _children.Count)
             {
                 for (int i = 0; i < childProperties.Length; i++)
                 {
@@ -960,7 +973,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
         else
         {
-            if (_children is not null)
+            if (_children is not null && childProperties is not null)
             {
                 _children.Clear();
                 _children.AddRange(childProperties);
@@ -1034,7 +1047,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         try
         {
             object originalValue = PropertyValue;
-            object value = UITypeEditor.EditValue(this, this, originalValue);
+            object? value = UITypeEditor.EditValue(this, this, originalValue);
 
             // Since edit value can push a modal loop there is a chance that this gridentry will be zombied
             // before it returns. Make sure we're not disposed.
@@ -1067,7 +1080,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
         catch (Exception e)
         {
-            if (this.TryGetService(out IUIService uiService))
+            if (this.TryGetService(out IUIService? uiService))
             {
                 uiService.ShowError(e);
             }
@@ -1101,7 +1114,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             && entry.PropertyDepth == PropertyDepth;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is GridEntry entry && EqualsIgnoreParent(entry))
         {
@@ -1114,10 +1127,10 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  Searches for a value of a given property for a value editor user.
     /// </summary>
-    private object FindPropertyValue(string propertyName, Type propertyType)
+    private object? FindPropertyValue(string propertyName, Type propertyType)
     {
         object owner = GetValueOwner();
-        PropertyDescriptor property = TypeDescriptor.GetProperties(owner)[propertyName];
+        PropertyDescriptor? property = TypeDescriptor.GetProperties(owner)[propertyName];
         if (property is not null && property.PropertyType == propertyType)
         {
             return property.GetValue(owner);
@@ -1130,7 +1143,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///  Returns the index of a child <see cref="GridEntry"/>.
     /// </summary>
     internal int GetChildIndex(GridEntry entry) => Children.IndexOf(entry);
-#nullable enable
+
     /// <summary>
     ///  Gets the components that own the current value. This is usually the value of the root entry, which is the
     ///  object being browsed. Walks up the <see cref="GridEntry"/> tree looking for an owner that is an

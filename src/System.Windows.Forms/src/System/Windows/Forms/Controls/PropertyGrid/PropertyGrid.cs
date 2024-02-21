@@ -140,7 +140,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         _onComponentRemoved = OnComponentRemoved;
         _onComponentChanged = OnComponentChanged;
 
-        SuspendLayout();
+        using SuspendLayoutScope layoutScope = new(this);
 
         // Scaling PropertyGrid but its children will be excluded from AutoScale. Please see OnLayoutInternal().
         AutoScaleMode = AutoScaleMode.Inherit;
@@ -155,14 +155,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             RescaleConstants();
         }
-        else
+        else if (!s_isScalingInitialized)
         {
-            if (!s_isScalingInitialized)
-            {
-                s_normalButtonSize = LogicalToDeviceUnits(s_defaultNormalButtonSize);
-                s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
-                s_isScalingInitialized = true;
-            }
+            s_normalButtonSize = LogicalToDeviceUnits(s_defaultNormalButtonSize);
+            s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
+            s_isScalingInitialized = true;
         }
 
         try
@@ -177,57 +174,62 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             _separator2 = CreateSeparatorButton();
 
             _toolStrip = new PropertyGridToolStrip(this);
-            _toolStrip.SuspendLayout();
-            _toolStrip.ShowItemToolTips = true;
 
-            _toolStrip.AccessibleRole = AccessibleRole.ToolBar;
-            _toolStrip.TabStop = true;
-            _toolStrip.AllowMerge = false;
+            // SetupToolbar should perform the layout
+            using SuspendLayoutScope suspendToolStripLayout = new(_toolStrip, performLayout: false);
+            {
+                _toolStrip.ShowItemToolTips = true;
 
-            // This caption is for testing.
-            _toolStrip.Text = "PropertyGridToolBar";
+                _toolStrip.AccessibleRole = AccessibleRole.ToolBar;
+                _toolStrip.TabStop = true;
+                _toolStrip.AllowMerge = false;
 
-            // LayoutInternal handles positioning, and for perf reasons, we manually size.
-            _toolStrip.Dock = DockStyle.None;
-            _toolStrip.AutoSize = false;
-            _toolStrip.TabIndex = 1;
-            _toolStrip.ImageScalingSize = s_normalButtonSize;
+                // This caption is for testing.
+                _toolStrip.Text = "PropertyGridToolBar";
 
-            // Parity with the old...
-            _toolStrip.CanOverflow = false;
+                // LayoutInternal handles positioning, and for perf reasons, we manually size.
+                _toolStrip.Dock = DockStyle.None;
+                _toolStrip.AutoSize = false;
+                _toolStrip.TabIndex = 1;
+                _toolStrip.ImageScalingSize = s_normalButtonSize;
 
-            // Hide the grip but add in a few more pixels of padding.
-            _toolStrip.GripStyle = ToolStripGripStyle.Hidden;
-            Padding toolStripPadding = _toolStrip.Padding;
-            toolStripPadding.Left = 2;
-            _toolStrip.Padding = toolStripPadding;
-            SetToolStripRenderer();
+                // Parity with the old.
+                _toolStrip.CanOverflow = false;
 
-            // Always add the property tab here.
-            AddTab(DefaultTabType, PropertyTabScope.Static);
+                // Hide the grip but add in a few more pixels of padding.
+                _toolStrip.GripStyle = ToolStripGripStyle.Hidden;
+                Padding toolStripPadding = _toolStrip.Padding;
+                toolStripPadding.Left = 2;
+                _toolStrip.Padding = toolStripPadding;
+                SetToolStripRenderer();
 
-            _helpPane = new(this);
-            _helpPane.SuspendLayout();
-            _helpPane.TabStop = false;
-            _helpPane.Dock = DockStyle.None;
-            _helpPane.BackColor = SystemColors.Control;
-            _helpPane.ForeColor = SystemColors.ControlText;
-            _helpPane.MouseMove += OnChildMouseMove;
-            _helpPane.MouseDown += OnChildMouseDown;
+                // Always add the property tab here.
+                AddTab(DefaultTabType, PropertyTabScope.Static);
 
-            _commandsPane = new CommandsPane(this);
-            _commandsPane.SuspendLayout();
-            _commandsPane.TabIndex = 3;
-            _commandsPane.Dock = DockStyle.None;
-            SetHotCommandColors();
-            _commandsPane.Visible = false;
-            _commandsPane.MouseMove += OnChildMouseMove;
-            _commandsPane.MouseDown += OnChildMouseDown;
+                _helpPane = new(this);
+                using SuspendLayoutScope suspendHelpPaneLayout = new(_helpPane, performLayout: false);
 
-            Controls.AddRange(new Control[] { _helpPane, _commandsPane, _gridView, _toolStrip });
+                _helpPane.TabStop = false;
+                _helpPane.Dock = DockStyle.None;
+                _helpPane.BackColor = SystemColors.Control;
+                _helpPane.ForeColor = SystemColors.ControlText;
+                _helpPane.MouseMove += OnChildMouseMove;
+                _helpPane.MouseDown += OnChildMouseDown;
 
-            SetActiveControl(_gridView);
-            _toolStrip.ResumeLayout(performLayout: false);  // SetupToolbar should perform the layout
+                _commandsPane = new CommandsPane(this);
+                using SuspendLayoutScope suspendCommandsPaneLayout = new(_commandsPane, performLayout: false);
+                _commandsPane.TabIndex = 3;
+                _commandsPane.Dock = DockStyle.None;
+                SetHotCommandColors();
+                _commandsPane.Visible = false;
+                _commandsPane.MouseMove += OnChildMouseMove;
+                _commandsPane.MouseDown += OnChildMouseDown;
+
+                Controls.AddRange([_helpPane, _commandsPane, _gridView, _toolStrip]);
+
+                SetActiveControl(_gridView);
+            }
+
             SetupToolbar();
             PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
             SetSelectState(0);
@@ -235,13 +237,6 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         catch (Exception ex) when (!ex.IsCriticalException())
         {
             Debug.Fail(ex.ToString());
-        }
-        finally
-        {
-            _helpPane?.ResumeLayout(performLayout: false);
-            _commandsPane?.ResumeLayout(performLayout: false);
-
-            ResumeLayout(performLayout: true);
         }
     }
 
@@ -3966,6 +3961,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             designPage,
             propertyPagesButtonHandler,
             useRadioButtonRole: false);
+
         _viewPropertyPagesButton.Enabled = false;
         buttonList.Add(_viewPropertyPagesButton);
 
@@ -3980,14 +3976,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         _toolStrip.ImageList = LargeButtons ? _largeButtonImages : _normalButtonImages;
 
-        _toolStrip.SuspendLayout();
-        _toolStrip.Items.Clear();
-        for (int j = 0; j < buttonList.Count; j++)
+        using (SuspendLayoutScope scope = new(_toolStrip))
         {
-            _toolStrip.Items.Add(buttonList[j]);
+            _toolStrip.Items.Clear();
+            for (int j = 0; j < buttonList.Count; j++)
+            {
+                _toolStrip.Items.Add(buttonList[j]);
+            }
         }
-
-        _toolStrip.ResumeLayout();
 
         if (_tabsDirty)
         {

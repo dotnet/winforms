@@ -10,21 +10,17 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Manages the position and bindings of a list.
 /// </summary>
-public class CurrencyManager : BindingManagerBase
+public partial class CurrencyManager : BindingManagerBase
 {
     private object? _dataSource;
     private IList _list;
 
-    private bool _bound;
-    private bool _shouldBind = true;
+    // flags enum field to hold private bool fields
+    private CurrencyManagerStates _state;
 
     protected int listposition = -1;
 
     private int _lastGoodKnownRow = -1;
-    private bool _pullingData;
-
-    private bool _inChangeRecordState;
-    private bool _suspendPushDataInCurrentChanged;
     private ItemChangedEventHandler? _onItemChanged;
     private ListChangedEventHandler? _onListChanged;
     private readonly ItemChangedEventArgs _resetEvent = new(-1);
@@ -55,6 +51,7 @@ public class CurrencyManager : BindingManagerBase
 
     internal CurrencyManager(object? dataSource)
     {
+        _state.ChangeFlags(CurrencyManagerStates.ShouldBind, true);
         _list = null!;
         SetDataSource(dataSource);
     }
@@ -195,10 +192,10 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets a value indicating whether the list is bound to a data source.
     /// </summary>
-    internal override bool IsBinding => _bound;
+    internal override bool IsBinding => _state.HasFlag(CurrencyManagerStates.Bound);
 
     // The DataGridView needs this.
-    internal bool ShouldBind => _shouldBind;
+    internal bool ShouldBind => _state.HasFlag(CurrencyManagerStates.ShouldBind);
 
     /// <summary>
     ///  Gets the list as an object.
@@ -353,14 +350,14 @@ public class CurrencyManager : BindingManagerBase
         if (endCurrentEdit)
         {
             // Do not PushData when pro.
-            _inChangeRecordState = true;
+            _state.ChangeFlags(CurrencyManagerStates.InChangeRecordState, true);
             try
             {
                 EndCurrentEdit();
             }
             finally
             {
-                _inChangeRecordState = false;
+                _state.ChangeFlags(CurrencyManagerStates.InChangeRecordState, false);
             }
         }
 
@@ -400,7 +397,7 @@ public class CurrencyManager : BindingManagerBase
     // will return true if this function changes the position in the list
     private bool CurrencyManager_PushData()
     {
-        if (_pullingData)
+        if (_state.HasFlag(CurrencyManagerStates.PullingData))
         {
             return false;
         }
@@ -447,7 +444,7 @@ public class CurrencyManager : BindingManagerBase
     private bool CurrencyManager_PullData()
     {
         bool success = true;
-        _pullingData = true;
+        _state.ChangeFlags(CurrencyManagerStates.PullingData, true);
 
         try
         {
@@ -455,7 +452,7 @@ public class CurrencyManager : BindingManagerBase
         }
         finally
         {
-            _pullingData = false;
+            _state.ChangeFlags(CurrencyManagerStates.PullingData, false);
         }
 
         return success;
@@ -678,7 +675,7 @@ public class CurrencyManager : BindingManagerBase
             return;
         }
 
-        _suspendPushDataInCurrentChanged = true;
+        _state.ChangeFlags(CurrencyManagerStates.SuspendPushDataInCurrentChanged, true);
         try
         {
             switch (dbe.ListChangedType)
@@ -821,7 +818,7 @@ public class CurrencyManager : BindingManagerBase
         }
         finally
         {
-            _suspendPushDataInCurrentChanged = false;
+            _state.ChangeFlags(CurrencyManagerStates.SuspendPushDataInCurrentChanged, false);
         }
 
         Debug.Assert(_lastGoodKnownRow == -1 || listposition == _lastGoodKnownRow, "how did they get out of sync?");
@@ -839,12 +836,12 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     protected internal override void OnCurrentChanged(EventArgs e)
     {
-        if (!_inChangeRecordState)
+        if (!_state.HasFlag(CurrencyManagerStates.InChangeRecordState))
         {
             CompModSwitches.DataView.TraceVerbose($"OnCurrentChanged() {e}");
             int curLastGoodKnownRow = _lastGoodKnownRow;
             bool positionChanged = false;
-            if (!_suspendPushDataInCurrentChanged)
+            if (!_state.HasFlag(CurrencyManagerStates.SuspendPushDataInCurrentChanged))
             {
                 positionChanged = CurrencyManager_PushData();
             }
@@ -895,7 +892,7 @@ public class CurrencyManager : BindingManagerBase
 
         // We should not push the data when we suspend the changeEvents.
         // but we should still fire the OnItemChanged event that we get when processing the EndCurrentEdit method.
-        if ((e.Index == listposition || (e.Index == -1 && Position < Count)) && !_inChangeRecordState)
+        if ((e.Index == listposition || (e.Index == -1 && Position < Count)) && !_state.HasFlag(CurrencyManagerStates.InChangeRecordState))
         {
             positionChanged = CurrencyManager_PushData();
         }
@@ -974,9 +971,9 @@ public class CurrencyManager : BindingManagerBase
         _lastGoodKnownRow = -1;
         try
         {
-            if (!_shouldBind)
+            if (!ShouldBind)
             {
-                _shouldBind = true;
+                _state.ChangeFlags(CurrencyManagerStates.ShouldBind, true);
                 // we need to put the listPosition at the beginning of the list if the list is not empty
                 listposition = (_list is not null && _list.Count != 0) ? 0 : -1;
                 UpdateIsBinding();
@@ -984,7 +981,7 @@ public class CurrencyManager : BindingManagerBase
         }
         catch
         {
-            _shouldBind = false;
+            _state.ChangeFlags(CurrencyManagerStates.ShouldBind, false);
             UpdateIsBinding();
             throw;
         }
@@ -996,9 +993,9 @@ public class CurrencyManager : BindingManagerBase
     public override void SuspendBinding()
     {
         _lastGoodKnownRow = -1;
-        if (_shouldBind)
+        if (ShouldBind)
         {
-            _shouldBind = false;
+            _state.ChangeFlags(CurrencyManagerStates.ShouldBind, false);
             UpdateIsBinding();
         }
     }
@@ -1018,17 +1015,17 @@ public class CurrencyManager : BindingManagerBase
 
     private void UpdateIsBinding(bool raiseItemChangedEvent)
     {
-        bool newBound = _list is not null && _list.Count > 0 && _shouldBind && listposition != -1;
+        bool newBound = _list is not null && _list.Count > 0 && ShouldBind && listposition != -1;
         if (_list is not null)
         {
-            if (_bound != newBound)
+            if (_state.HasFlag(CurrencyManagerStates.Bound) != newBound)
             {
                 // we will call end edit when moving from bound state to unbounded state
                 //
                 // bool endCurrentEdit = bound && !newBound;
-                _bound = newBound;
+                _state.ChangeFlags(CurrencyManagerStates.Bound, newBound);
                 int newPos = newBound ? 0 : -1;
-                ChangeRecordState(newPos, _bound, (Position != newPos), true, false);
+                ChangeRecordState(newPos, _state.HasFlag(CurrencyManagerStates.Bound), (Position != newPos), true, false);
                 int numLinks = Bindings.Count;
                 for (int i = 0; i < numLinks; i++)
                 {

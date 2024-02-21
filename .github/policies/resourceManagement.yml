@@ -186,7 +186,8 @@ configuration:
           branch: main
       - and:
         - isAction:
-            action: Null
+            action: Closed
+        - isMerged
         - not:
             titleContains:
               pattern: '[main] Update dependencies'
@@ -302,11 +303,7 @@ configuration:
       description: 'help wanted: labelled'
     - if:
       - payloadType: Pull_Request
-      - or:
-        - isAction:
-            action: Null
-        - isAction:
-            action: Closed
+      - isAction: Closed
       then:
       - removeLabel:
           label: ':construction: work in progress'
@@ -335,4 +332,4 @@ configuration:
           label: ':mailbox_with_mail: waiting-for-testing'
       description: Remove intermediate labels from closed issue.
 onFailure: 
-onSuccess: 
+onSuccess:

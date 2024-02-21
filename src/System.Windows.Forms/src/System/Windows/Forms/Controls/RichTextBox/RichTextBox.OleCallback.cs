@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 public partial class RichTextBox
 {
     // I used the visual basic 6 RichText (REOleCB.CPP) as a guide for this
-    private unsafe class OleCallback : IRichEditOleCallback.Interface
+    private unsafe class OleCallback : IRichEditOleCallback.Interface, IManagedWrapper<IRichEditOleCallback>
     {
         private readonly RichTextBox _owner;
         private IDataObject? _lastDataObject;
