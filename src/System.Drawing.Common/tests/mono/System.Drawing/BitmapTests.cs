@@ -389,7 +389,8 @@ public class BitmapTests
             }
         }
 
-        hash = MD5.Create().ComputeHash(pixels);
+        // cs/weak-crypto
+        hash = MD5.Create().ComputeHash(pixels);// CodeQL [SM02196] Using MD5 for this specific scenario is acceptable.
         return ByteArrayToString(hash);
     }
 
