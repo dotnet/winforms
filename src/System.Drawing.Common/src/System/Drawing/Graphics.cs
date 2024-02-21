@@ -3366,7 +3366,20 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #endif
 
 #if NET9_0_OR_GREATER
-    [RequiresPreviewFeatures]
+    /// <inheritdoc cref="DrawImage(Image, Effect, RectangleF, Drawing2D.Matrix?, GraphicsUnit, ImageAttributes?)"/>
+    public void DrawImage(
+        Image image,
+        Effect effect) => DrawImage(image, effect, default, default, GraphicsUnit.Pixel, null);
+
+    /// <summary>
+    ///  Draws a portion of an image after applying a specified effect.
+    /// </summary>
+    /// <param name="image"><see cref="Image"/> to be drawn.</param>
+    /// <param name="effect">The effect to be applied when drawing.</param>
+    /// <param name="srcRect">The portion of the image to be drawn. <see cref="RectangleF.Empty"/> draws the full image.</param>
+    /// <param name="transform">The transform to apply to the <paramref name="srcRect"/> to determine the destination.</param>
+    /// <param name="srcUnit">Unit of measure of the <paramref name="srcRect"/>.</param>
+    /// <param name="imageAttr">Additional adjustments to be applied, if any.</param>
     public void DrawImage(
         Image image,
         Effect effect,
@@ -3384,6 +3397,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             imageAttr.Pointer(),
             (Unit)srcUnit).ThrowIfFailed();
 
+        GC.KeepAlive(effect);
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(image);
         GC.KeepAlive(this);
     }
 #endif

@@ -4,7 +4,6 @@
 using System.Drawing.Imaging;
 #if NET9_0_OR_GREATER
 using System.Drawing.Imaging.Effects;
-using System.Runtime.Versioning;
 #endif
 
 namespace System.Drawing;
@@ -24,7 +23,6 @@ internal static unsafe class PointerExtensions
     public static GpMetafile* Pointer(this Metafile? metafile) => metafile is null ? null : (GpMetafile*)((Image)metafile).Pointer();
     public static GpImage* Pointer(this Image? image) => image is null ? null : ((IPointer<GpImage>)image).Pointer;
 #if NET9_0_OR_GREATER
-    [RequiresPreviewFeatures]
     public static CGpEffect* Pointer(this Effect? effect) => effect is null ? null : effect.NativeEffect;
 #endif
 }

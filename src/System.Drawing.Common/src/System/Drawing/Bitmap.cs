@@ -365,7 +365,6 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     /// </summary>
     /// <param name="effect">The effect to apply.</param>
     /// <param name="area">The area to apply to, or <see cref="Rectangle.Empty"/> for the entire image.</param>
-    [RequiresPreviewFeatures]
     public void ApplyEffect(Effect effect, Rectangle area = default)
     {
         RECT rect = area;

@@ -4,7 +4,6 @@
 #if NET9_0_OR_GREATER
 
 using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
 
 namespace System.Drawing.Imaging.Effects;
 
@@ -12,10 +11,9 @@ namespace System.Drawing.Imaging.Effects;
 ///  Allows modification of the color components of an image. Individual color component values are changed to entries
 ///  in a series of lookup tables.
 /// </summary>
-[RequiresPreviewFeatures]
 public unsafe class ColorLookupTableEffect : Effect
 {
-    private readonly ColorLUTParams _parameters;
+    private readonly byte[] _bytes = new byte[1024];
 
     /// <summary>
     ///  Creates a new <see cref="ColorLookupTableEffect"/> with the given parameters.
@@ -40,33 +38,41 @@ public unsafe class ColorLookupTableEffect : Effect
         ReadOnlySpan<byte> blueLookupTable,
         ReadOnlySpan<byte> alphaLookupTable) : base(PInvoke.ColorLUTEffectGuid)
     {
-        // ColorLUTParams will validate that the length fits.
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(redLookupTable.Length, 256, nameof(redLookupTable));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(greenLookupTable.Length, 256, nameof(greenLookupTable));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(blueLookupTable.Length, 256, nameof(blueLookupTable));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(alphaLookupTable.Length, 256, nameof(alphaLookupTable));
 
-        Unsafe.SkipInit(out _parameters);
-        _parameters.lutR = redLookupTable;
-        _parameters.lutG = greenLookupTable;
-        _parameters.lutB = blueLookupTable;
-        _parameters.lutA = alphaLookupTable;
+        Span<byte> bytes = _bytes;
+        blueLookupTable.CopyTo(bytes);
+        greenLookupTable.CopyTo(bytes[256..]);
+        redLookupTable.CopyTo(bytes[512..]);
+        alphaLookupTable.CopyTo(bytes[768..]);
+
+        fixed (byte* b = _bytes)
+        {
+            SetParameters(ref Unsafe.AsRef<ColorLUTParams>(b));
+        }
     }
-
-    /// <summary>
-    ///  The lookup table for the red channel.
-    /// </summary>
-    public ReadOnlySpan<byte> RedLookupTable => _parameters.lutR.AsReadOnlySpan();
-
-    /// <summary>
-    ///  The lookup table for the green channel.
-    /// </summary>
-    public ReadOnlySpan<byte> GreenLookupTable => _parameters.lutG.AsReadOnlySpan();
 
     /// <summary>
     ///  The lookup table for the blue channel.
     /// </summary>
-    public ReadOnlySpan<byte> BlueLookupTable => _parameters.lutB.AsReadOnlySpan();
+    public ReadOnlyMemory<byte> BlueLookupTable => new(_bytes, 0, 256);
+
+    /// <summary>
+    ///  The lookup table for the green channel.
+    /// </summary>
+    public ReadOnlyMemory<byte> GreenLookupTable => new(_bytes, 256, 256);
+
+    /// <summary>
+    ///  The lookup table for the red channel.
+    /// </summary>
+    public ReadOnlyMemory<byte> RedLookupTable => new(_bytes, 512, 256);
 
     /// <summary>
     ///  The lookup table for the alpha channel.
     /// </summary>
-    public ReadOnlySpan<byte> AlphaLookupTable => _parameters.lutA.AsReadOnlySpan();
+    public ReadOnlyMemory<byte> AlphaLookupTable => new(_bytes, 768, 256);
 }
 #endif
