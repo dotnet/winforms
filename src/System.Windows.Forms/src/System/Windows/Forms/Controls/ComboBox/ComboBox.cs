@@ -917,12 +917,12 @@ public partial class ComboBox : ListControl
 
     private string[] GetStringsForAutoComplete()
     {
-        if (_itemsCollection is not null)
+        if (Items is not null)
         {
-            string[] strings = new string[_itemsCollection.Count];
-            for (int i = 0; i < _itemsCollection.Count; i++)
+            string[] strings = new string[Items.Count];
+            for (int i = 0; i < Items.Count; i++)
             {
-                strings[i] = GetItemText(_itemsCollection[i])!;
+                strings[i] = GetItemText(Items[i])!;
             }
 
             return strings;
