@@ -128,8 +128,8 @@ internal sealed partial class DesignerActionPanel
                         // Make sure we draw properly under high contrast by re-mapping
                         // the arrow color to the WindowText color
                         using ImageAttributes attributes = new();
-                        ValueColorMap map = new(Color.Black, SystemColors.WindowText);
-                        attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<ValueColorMap>(ref map));
+                        (Color OldColor, Color NewColor) map = new(Color.Black, SystemColors.WindowText);
+                        attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<(Color OldColor, Color NewColor)>(ref map));
                         int imageWidth = arrowBitmap.Width;
                         int imageHeight = arrowBitmap.Height;
                         g.DrawImage(
