@@ -172,7 +172,8 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
         }
     }
 
-    public override object? PropertyValue
+    [AllowNull]
+    public override object PropertyValue
     {
         get => Target;
         set
