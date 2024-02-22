@@ -292,15 +292,18 @@ public sealed class PrintDialog : CommonDialog
                 dialogSettings->nMaxPage = (ushort)PrinterSettings.MaximumPage;
             }
 
-            HRESULT result = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            BOOL result = RuntimeInformation.ProcessArchitecture == Architecture.X86
                 ? PInvoke.PrintDlg(&dialogSettings32)
                 : PInvoke.PrintDlg(&dialogSettings64);
 
-            if (result.Failed)
+            if (!result)
             {
 #if DEBUG
                 var extendedResult = PInvoke.CommDlgExtendedError();
-                Debug.Fail($"PrintDlg returned non zero error code: {extendedResult}");
+                if (extendedResult != COMMON_DLG_ERRORS.CDERR_GENERALCODES)
+                {
+                    Debug.Fail($"PrintDlg returned non zero error code: {extendedResult}");
+                }
 #endif
                 return false;
             }
@@ -331,7 +334,7 @@ public sealed class PrintDialog : CommonDialog
                 PrinterSettings.Collate = dialogSettings->Flags.HasFlag(PRINTDLGEX_FLAGS.PD_COLLATE);
             }
 
-            return true;
+            return result;
         }
         finally
         {
