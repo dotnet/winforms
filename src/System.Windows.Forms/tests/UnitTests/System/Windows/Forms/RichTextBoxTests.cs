@@ -10655,7 +10655,7 @@ public class RichTextBoxTests
         using RichTextBox richTextBox1 = new();
         richTextBox1.Text = "Hello, World!";
 
-        Assert.NotEqual(IntPtr.Zero, richTextBox1.Handle);
+        Assert.NotEqual(0, richTextBox1.Handle);
         int invalidatedCallCount = 0;
         richTextBox1.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
