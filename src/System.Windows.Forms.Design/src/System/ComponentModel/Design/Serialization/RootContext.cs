@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.CodeDom;
-using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization;
 
