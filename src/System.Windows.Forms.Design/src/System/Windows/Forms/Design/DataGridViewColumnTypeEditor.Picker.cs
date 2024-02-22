@@ -54,10 +54,7 @@ internal partial class DataGridViewColumnTypePicker : ContainerControl
         }
     }
 
-    private void CloseDropDown()
-    {
-        _windowsFormsEditorService?.CloseDropDown();
-    }
+    private void CloseDropDown() => _windowsFormsEditorService?.CloseDropDown();
 
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
