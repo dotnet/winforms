@@ -209,6 +209,11 @@ internal static partial class LocalAppContextSwitches
         {
             s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
         }
+
+        if (switchName == ApplyApplicationFontToMenusSwitchName)
+        {
+            s_applyApplicationFontToMenus = value ? 1 : 0;
+        }
     }
 
     internal static bool GetCachedSwitchValue(string switchName)
