@@ -5177,7 +5177,7 @@ public unsafe partial class Control :
         Point cursorOffset,
         bool useDefaultDragImage)
     {
-        ComTypes.IDataObject dataObject = PrepareIncomingDragData(data);
+        ComTypes.IDataObject dataObject = CreateRuntimeDataObjectForDrag(data);
 
         DROPEFFECT finalEffect;
 
@@ -5203,36 +5203,11 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Prepares the incoming drag data for consumption.
-    ///  The incoming <paramref name="data"/> should implement <see cref="ComTypes.IDataObject"/> to be taken as is.
-    ///  Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
+    ///  Creates <see cref="DataObject"/> for drag operation.
+    ///  The incoming <paramref name="data"/> will always be wrapped.
     /// </summary>
-    private static ComTypes.IDataObject PrepareIncomingDragData(object data)
-    {
-        ComTypes.IDataObject dataObject;
-
-        if (data is ComTypes.IDataObject comDataObject)
-        {
-            dataObject = comDataObject;
-        }
-        else
-        {
-            DataObject iwdata;
-            if (data is IDataObject dataAsDataObject)
-            {
-                iwdata = new DataObject(dataAsDataObject);
-            }
-            else
-            {
-                iwdata = new DataObject();
-                iwdata.SetData(data);
-            }
-
-            dataObject = iwdata;
-        }
-
-        return dataObject;
-    }
+    private static DataObject CreateRuntimeDataObjectForDrag(object data) =>
+        data is DataObject dataObject ? dataObject : new DataObject(data);
 
     public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
     {
