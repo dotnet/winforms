@@ -249,13 +249,10 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
                     }
                 }
             }
-            else
+            else if (owner is not null)
             {
-                if (owner is not null)
-                {
-                    changeService.OnComponentChanging(owner, entry.PropertyDescriptor);
-                    changeService.OnComponentChanged(owner, entry.PropertyDescriptor);
-                }
+                changeService.OnComponentChanging(owner, entry.PropertyDescriptor);
+                changeService.OnComponentChanged(owner, entry.PropertyDescriptor);
             }
         }
     }
