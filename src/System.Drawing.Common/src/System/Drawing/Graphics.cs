@@ -780,11 +780,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         => DrawRectangle(pen, (float)x, y, width, height);
 
     /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
-    public void DrawRectangles(Pen pen, params RectangleF[] rects)
-    {
-        ArgumentNullException.ThrowIfNull(rects);
-        DrawRectangles(pen, rects.AsSpan());
-    }
+    public void DrawRectangles(Pen pen, params RectangleF[] rects) => DrawRectangles(pen, rects.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
 #if NET9_0_OR_GREATER
@@ -809,11 +805,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     /// <param name="pen"><see cref="Pen"/> that determines the color, width, and style of the outlines of the rectangles.</param>
     /// <param name="rects">An array of <see cref="Rectangle"/> structures that represents the rectangles to draw.</param>
-    public void DrawRectangles(Pen pen, params Rectangle[] rects)
-    {
-        ArgumentNullException.ThrowIfNull(rects);
-        DrawRectangles(pen, rects.AsSpan());
-    }
+    public void DrawRectangles(Pen pen, params Rectangle[] rects) => DrawRectangles(pen, rects.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
 #if NET9_0_OR_GREATER
@@ -887,11 +879,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         DrawPie(pen, (float)x, y, width, height, startAngle, sweepAngle);
 
     /// <inheritdoc cref="DrawPolygon(Pen, Point[])"/>
-    public void DrawPolygon(Pen pen, params PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawPolygon(pen, points.AsSpan());
-    }
+    public void DrawPolygon(Pen pen, params PointF[] points) => DrawPolygon(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawPolygon(Pen, Point[])"/>
 #if NET9_0_OR_GREATER
@@ -916,11 +904,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
     /// <param name="points">An array of <see cref="Point"/> structures that represent the vertices of the polygon.</param>
-    public void DrawPolygon(Pen pen, params Point[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawPolygon(pen, points.AsSpan());
-    }
+    public void DrawPolygon(Pen pen, params Point[] points) => DrawPolygon(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawPolygon(Pen, Point[])"/>
 #if NET9_0_OR_GREATER
@@ -955,11 +939,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
-    public void DrawCurve(Pen pen, params PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawCurve(pen, points.AsSpan());
-    }
+    public void DrawCurve(Pen pen, params PointF[] points) => DrawCurve(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
 #if NET9_0_OR_GREATER
@@ -980,11 +960,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
-    public void DrawCurve(Pen pen, PointF[] points, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawCurve(pen, points.AsSpan(), tension);
-    }
+    public void DrawCurve(Pen pen, PointF[] points, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), tension);
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
 #if NET9_0_OR_GREATER
@@ -1019,11 +996,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #endif
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
-    public void DrawCurve(Pen pen, PointF[] points, int offset, int numberOfSegments, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawCurve(pen, points.AsSpan(), offset, numberOfSegments, tension);
-    }
+    public void DrawCurve(Pen pen, PointF[] points, int offset, int numberOfSegments, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), offset, numberOfSegments, tension);
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
 #if NET9_0_OR_GREATER
@@ -1050,11 +1024,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
-    public void DrawCurve(Pen pen, params Point[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawCurve(pen, points.AsSpan());
-    }
+    public void DrawCurve(Pen pen, params Point[] points) => DrawCurve(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
 #if NET9_0_OR_GREATER
@@ -1075,11 +1045,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
-    public void DrawCurve(Pen pen, Point[] points, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawCurve(pen, points.AsSpan(), tension);
-    }
+    public void DrawCurve(Pen pen, Point[] points, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), tension);
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
 #if NET9_0_OR_GREATER
@@ -1111,11 +1078,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="offset">The index of the first point in the array to draw.</param>
     /// <param name="numberOfSegments">The number of segments to draw.</param>
     /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
-    public void DrawCurve(Pen pen, Point[] points, int offset, int numberOfSegments, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawCurve(pen, points.AsSpan(), offset, numberOfSegments, tension);
-    }
+    public void DrawCurve(Pen pen, Point[] points, int offset, int numberOfSegments, float tension) =>
+        DrawCurve(pen, points.OrThrowIfNull().AsSpan(), offset, numberOfSegments, tension);
 
     /// <inheritdoc cref="DrawCurve(Pen, Point[], int, int, float)"/>
 #if NET9_0_OR_GREATER
@@ -1142,11 +1106,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
-    public void DrawClosedCurve(Pen pen, params PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawClosedCurve(pen, points.AsSpan());
-    }
+    public void DrawClosedCurve(Pen pen, params PointF[] points) =>
+        DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1176,11 +1137,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="points">An array of points that define the closed curve.</param>
     /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
     /// <param name="fillmode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the curve.</param>
-    public void DrawClosedCurve(Pen pen, PointF[] points, float tension, FillMode fillmode)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawClosedCurve(pen, points.AsSpan(), tension, fillmode);
-    }
+    public void DrawClosedCurve(Pen pen, PointF[] points, float tension, FillMode fillmode) =>
+        DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan(), tension, fillmode);
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1205,11 +1163,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
-    public void DrawClosedCurve(Pen pen, Point[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawClosedCurve(pen, points.AsSpan());
-    }
+    public void DrawClosedCurve(Pen pen, Point[] points) => DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1234,11 +1188,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
 
-    public void DrawClosedCurve(Pen pen, Point[] points, float tension, FillMode fillmode)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawClosedCurve(pen, points.AsSpan(), tension, fillmode);
-    }
+    public void DrawClosedCurve(Pen pen, Point[] points, float tension, FillMode fillmode) =>
+        DrawClosedCurve(pen, points.OrThrowIfNull().AsSpan(), tension, fillmode);
 
     /// <inheritdoc cref="DrawClosedCurve(Pen, PointF[], float, FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1346,11 +1297,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="FillRectangles(Brush, RectangleF[])"/>
-    public void FillRectangles(Brush brush, params Rectangle[] rects)
-    {
-        ArgumentNullException.ThrowIfNull(rects);
-        FillRectangles(brush, rects.AsSpan());
-    }
+    public void FillRectangles(Brush brush, params Rectangle[] rects) =>
+        FillRectangles(brush, rects.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="FillRectangles(Brush, RectangleF[])"/>
 #if NET9_0_OR_GREATER
@@ -1379,11 +1327,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #endif
 
     /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
-    public void FillPolygon(Brush brush, PointF[] points, FillMode fillMode)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        FillPolygon(brush, points.AsSpan(), fillMode);
-    }
+    public void FillPolygon(Brush brush, PointF[] points, FillMode fillMode) =>
+        FillPolygon(brush, points.OrThrowIfNull().AsSpan(), fillMode);
 
     /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1421,11 +1366,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="brush">The <see cref="Brush"/> to fill the polygon with.</param>
     /// <param name="points">An array points that represent the vertices of the polygon.</param>
     /// <param name="fillMode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the polygon.</param>
-    public void FillPolygon(Brush brush, Point[] points, FillMode fillMode)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        FillPolygon(brush, points.AsSpan(), fillMode);
-    }
+    public void FillPolygon(Brush brush, Point[] points, FillMode fillMode) =>
+        FillPolygon(brush, points.OrThrowIfNull().AsSpan(), fillMode);
 
     /// <inheritdoc cref="FillPolygon(Brush, Point[], FillMode)"/>
 #if NET9_0_OR_GREATER
@@ -1519,11 +1461,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         => FillPie(brush, (float)x, y, width, height, startAngle, sweepAngle);
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
-    public void FillClosedCurve(Brush brush, params PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        FillClosedCurve(brush, points.AsSpan());
-    }
+    public void FillClosedCurve(Brush brush, params PointF[] points) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
 #if NET9_0_OR_GREATER
@@ -1563,11 +1502,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="points">An array of points that make up the closed curve.</param>
     /// <param name="fillmode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the closed curve.</param>
     /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
-    public void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        FillClosedCurve(brush, points.AsSpan(), fillmode, tension);
-    }
+    public void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode, float tension) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan(), fillmode, tension);
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
 #if NET9_0_OR_GREATER
@@ -1593,11 +1529,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
-    public void FillClosedCurve(Brush brush, params Point[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        FillClosedCurve(brush, points.AsSpan());
-    }
+    public void FillClosedCurve(Brush brush, params Point[] points) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
 #if NET9_0_OR_GREATER
@@ -1632,11 +1565,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #endif
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
-    public void FillClosedCurve(Brush brush, Point[] points, FillMode fillmode, float tension)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        FillClosedCurve(brush, points.AsSpan(), fillmode, tension);
-    }
+    public void FillClosedCurve(Brush brush, Point[] points, FillMode fillmode, float tension) =>
+        FillClosedCurve(brush, points.OrThrowIfNull().AsSpan(), fillmode, tension);
 
     /// <inheritdoc cref="FillClosedCurve(Brush, PointF[], FillMode, float)"/>
 #if NET9_0_OR_GREATER
@@ -2441,11 +2371,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawLine(Pen pen, PointF pt1, PointF pt2) => DrawLine(pen, pt1.X, pt1.Y, pt2.X, pt2.Y);
 
     /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
-    public void DrawLines(Pen pen, PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawLines(pen, points.AsSpan());
-    }
+    public void DrawLines(Pen pen, PointF[] points) => DrawLines(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawLines(Pen, Point[])"/>
 #if NET9_0_OR_GREATER
@@ -2843,11 +2769,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <inheritdoc cref="DrawBeziers(Pen, Point[])"/>
-    public void DrawBeziers(Pen pen, params PointF[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawBeziers(pen, points.AsSpan());
-    }
+    public void DrawBeziers(Pen pen, params PointF[] points) =>
+        DrawBeziers(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawBeziers(Pen, Point[])"/>
 #if NET9_0_OR_GREATER
@@ -2878,11 +2801,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Points that represent the points that determine the curve. The number of points in the array
     ///  should be a multiple of 3 plus 1, such as 4, 7, or 10.
     /// </param>
-    public void DrawBeziers(Pen pen, params Point[] points)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        DrawBeziers(pen, points.AsSpan());
-    }
+    public void DrawBeziers(Pen pen, params Point[] points) => DrawBeziers(pen, points.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawBeziers(Pen, Point[])"/>
 #if NET9_0_OR_GREATER

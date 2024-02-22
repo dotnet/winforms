@@ -3,7 +3,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Windows.Forms;
+namespace System;
 
 internal static class ArgumentValidation
 {
