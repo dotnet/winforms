@@ -7,7 +7,8 @@ namespace System.Drawing.Tests;
 
 public abstract class DrawingTest
 {
-    private static Security.Cryptography.MD5 s_md5 = Security.Cryptography.MD5.Create();
+    // cs/weak-crypto
+    private static Security.Cryptography.MD5 s_md5 = Security.Cryptography.MD5.Create();  // CodeQL [SM02196] This hash is used in test to compare two bitmaps.
 
     protected unsafe void ValidateBitmapContent(Bitmap bitmap, params byte[] expectedHash)
     {

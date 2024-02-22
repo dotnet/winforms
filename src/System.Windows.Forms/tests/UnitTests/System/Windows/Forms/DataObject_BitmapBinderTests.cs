@@ -42,7 +42,8 @@ public class DataObject_BitmapBinderTests
         {
             using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            BinaryFormatter formatter = new();
+            // cs/binary-formatter-without-binder
+            BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore
             formatter.Serialize(stream, value);
             Assert.True(stream.Length > 0);
@@ -94,7 +95,8 @@ public class DataObject_BitmapBinderTests
         using BinaryFormatterScope formatterScope = new(enable: true);
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
         formatter.Serialize(stream, value);
         Assert.True(stream.Length > 0);
