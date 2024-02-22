@@ -10663,7 +10663,7 @@ public class RichTextBoxTests
         int createdCallCount = 0;
         richTextBox1.HandleCreated += (sender, e) => createdCallCount++;
 
-        Point pt = new Point(x, y);
+        Point pt = new(x, y);
         int index = richTextBox1.GetCharIndexFromPosition(pt);
 
         Assert.Equal(expectedIndex, index);
