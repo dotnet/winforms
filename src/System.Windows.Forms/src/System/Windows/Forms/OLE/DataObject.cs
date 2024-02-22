@@ -37,22 +37,6 @@ public unsafe partial class DataObject :
     }
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="ComTypes.IDataObject"/>.
-    /// </summary>
-    internal DataObject(ComTypes.IDataObject data)
-    {
-        if (data is DataObject dataObject)
-        {
-            _innerData = dataObject._innerData;
-        }
-        else
-        {
-            CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IComDataObject");
-            _innerData = ComposedDataObject.CreateFromRuntimeDataObject(data);
-        }
-    }
-
-    /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
@@ -77,9 +61,13 @@ public unsafe partial class DataObject :
     public DataObject(object data)
     {
         CompModSwitches.DataObject.TraceVerbose($"Constructed DataObject base on Object: {data}");
-        if (data is IDataObject dataObject && !Marshal.IsComObject(data))
+        if (data is DataObject dataObject)
         {
-            _innerData = ComposedDataObject.CreateFromWinFormsDataObject(dataObject);
+            _innerData = dataObject._innerData;
+        }
+        else if (data is IDataObject iDataObject)
+        {
+            _innerData = ComposedDataObject.CreateFromWinFormsDataObject(iDataObject);
         }
         else if (data is ComTypes.IDataObject comDataObject)
         {
