@@ -28,15 +28,6 @@ public unsafe partial class DataObject :
     private readonly ComposedDataObject _innerData;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IDataObject"/>.
-    /// </summary>
-    internal DataObject(IDataObject data)
-    {
-        CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IDataObject");
-        _innerData = ComposedDataObject.CreateFromWinFormsDataObject(data);
-    }
-
-    /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
