@@ -4,6 +4,9 @@
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Runtime.CompilerServices;
+#if NET9_0_OR_GREATER
+using System.ComponentModel;
+#endif
 
 namespace System.Drawing.Imaging;
 
@@ -341,12 +344,15 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     }
 
     /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
-    public void SetRemapTable(ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Default);
+    public void SetRemapTable(params ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Default);
 
     /// <summary>
     ///  Sets the default color-remap table.
     /// </summary>
     /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+#if NET9_0_OR_GREATER
+    [EditorBrowsable(EditorBrowsableState.Never)]
+#endif
     public void SetRemapTable(ColorMap[] map, ColorAdjustType type)
     {
         ArgumentNullException.ThrowIfNull(map);
@@ -358,7 +364,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     public void SetRemapTable(ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
 
     /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
-    public void SetRemapTable(ReadOnlySpan<ValueColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
+    public void SetRemapTable(ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Default, map);
 #endif
 
     /// <summary>
@@ -403,7 +409,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
-    public void SetRemapTable(ColorAdjustType type, ReadOnlySpan<ValueColorMap> map)
+    public void SetRemapTable(ColorAdjustType type, ReadOnlySpan<(Color OldColor, Color NewColor)> map)
     {
         StackBuffer stackBuffer = default;
         using BufferScope<(ARGB, ARGB)> buffer = new(stackBuffer, map.Length);
@@ -447,10 +453,12 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
         GC.KeepAlive(this);
     }
 
-    public void SetBrushRemapTable(ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Brush);
+    public void SetBrushRemapTable(params ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Brush);
 
 #if NET9_0_OR_GREATER
     public void SetBrushRemapTable(ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Brush, map);
+
+    public void SetBrushRemapTable(ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Brush, map);
 #endif
 
     public void ClearBrushRemapTable() => ClearRemapTable(ColorAdjustType.Brush);

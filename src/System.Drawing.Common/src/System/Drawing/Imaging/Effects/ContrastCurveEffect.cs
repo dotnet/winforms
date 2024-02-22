@@ -3,18 +3,15 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Increases or decreases the contrast of an image.
 /// </summary>
-[RequiresPreviewFeatures]
-public class ContrastEffect : ColorCurveEffect
+public class ContrastCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="ContrastEffect"/> with the given <paramref name="contrast"/> adjustment value.
+    ///  Creates a new <see cref="ContrastCurveEffect"/> with the given <paramref name="contrast"/> adjustment value.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="contrast">
@@ -22,7 +19,7 @@ public class ContrastEffect : ColorCurveEffect
     ///  specify increased contrast and negative values specify decreased contrast.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="contrast"/> is less than -100 or greater than 100.</exception>
-    public ContrastEffect(CurveChannel channel, int contrast)
+    public ContrastCurveEffect(CurveChannel channel, int contrast)
         : base(CurveAdjustments.AdjustContrast, channel, contrast)
     {
     }

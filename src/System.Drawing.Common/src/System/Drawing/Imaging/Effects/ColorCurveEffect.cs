@@ -3,14 +3,11 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Base class for several effects that can be applied to an image.
 /// </summary>
-[RequiresPreviewFeatures]
 public abstract class ColorCurveEffect : Effect
 {
     private readonly ColorCurveParams _parameters;

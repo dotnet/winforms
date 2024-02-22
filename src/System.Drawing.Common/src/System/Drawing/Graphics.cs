@@ -747,18 +747,18 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="DrawRoundedRectangle(Pen, RectangleF, SizeF)"/>
-    public void DrawRoundedRectangle(Pen pen, Rectangle rect, Size corner) =>
-        DrawRoundedRectangle(pen, (RectangleF)rect, corner);
+    public void DrawRoundedRectangle(Pen pen, Rectangle rect, Size radius) =>
+        DrawRoundedRectangle(pen, (RectangleF)rect, radius);
 
     /// <summary>
     ///  Draws the outline of the specified rounded rectangle.
     /// </summary>
     /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
     /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
-    public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF corner)
+    public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF radius)
     {
         using GraphicsPath path = new();
-        path.AddRoundedRectangle(rect, corner);
+        path.AddRoundedRectangle(rect, radius);
         DrawPath(pen, path);
     }
 #endif
@@ -1114,19 +1114,19 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
-    public void FillRoundedRectangle(Brush brush, Rectangle rect, Size corner) =>
-        FillRoundedRectangle(brush, (RectangleF)rect, corner);
+    public void FillRoundedRectangle(Brush brush, Rectangle rect, Size radius) =>
+        FillRoundedRectangle(brush, (RectangleF)rect, radius);
 
     /// <summary>
     ///  Fills the interior of a rounded rectangle with a <see cref='Brush'/>.
     /// </summary>
     /// <param name="brush">The <see cref="Brush"/> to fill the rounded rectangle with.</param>
     /// <param name="rect">The bounds of the rounded rectangle.</param>
-    /// <param name="corner">The size of the ellipse used to round the corners of the rectangle.</param>
-    public void FillRoundedRectangle(Brush brush, RectangleF rect, SizeF corner)
+    /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
+    public void FillRoundedRectangle(Brush brush, RectangleF rect, SizeF radius)
     {
         using GraphicsPath path = new();
-        path.AddRoundedRectangle(rect, corner);
+        path.AddRoundedRectangle(rect, radius);
         FillPath(brush, path);
     }
 #endif
@@ -3366,7 +3366,20 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #endif
 
 #if NET9_0_OR_GREATER
-    [RequiresPreviewFeatures]
+    /// <inheritdoc cref="DrawImage(Image, Effect, RectangleF, Matrix?, GraphicsUnit, ImageAttributes?)"/>
+    public void DrawImage(
+        Image image,
+        Effect effect) => DrawImage(image, effect, srcRect: default, transform: default, GraphicsUnit.Pixel, imageAttr: null);
+
+    /// <summary>
+    ///  Draws a portion of an image after applying a specified effect.
+    /// </summary>
+    /// <param name="image"><see cref="Image"/> to be drawn.</param>
+    /// <param name="effect">The effect to be applied when drawing.</param>
+    /// <param name="srcRect">The portion of the image to be drawn. <see cref="RectangleF.Empty"/> draws the full image.</param>
+    /// <param name="transform">The transform to apply to the <paramref name="srcRect"/> to determine the destination.</param>
+    /// <param name="srcUnit">Unit of measure of the <paramref name="srcRect"/>.</param>
+    /// <param name="imageAttr">Additional adjustments to be applied, if any.</param>
     public void DrawImage(
         Image image,
         Effect effect,
@@ -3384,6 +3397,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             imageAttr.Pointer(),
             (Unit)srcUnit).ThrowIfFailed();
 
+        GC.KeepAlive(effect);
+        GC.KeepAlive(imageAttr);
+        GC.KeepAlive(image);
         GC.KeepAlive(this);
     }
 #endif

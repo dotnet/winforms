@@ -3,19 +3,16 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Sets the black saturation of an image. The black saturation is the point at which the darkest areas of the image
 ///  are converted to black.
 /// </summary>
-[RequiresPreviewFeatures]
-public class BlackSaturationEffect : ColorCurveEffect
+public class BlackSaturationCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="BlackSaturationEffect"/> with the given parameters.
+    ///  Creates a new <see cref="BlackSaturationCurveEffect"/> with the given parameters.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="blackSaturation">
@@ -24,7 +21,7 @@ public class BlackSaturationEffect : ColorCurveEffect
     ///  so that they spread out over the interval [0, 255]. Color channel values less than 15 are set to 0.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="blackSaturation"/> is less than 0 or greater than 254.</exception>
-    public BlackSaturationEffect(CurveChannel channel, int blackSaturation)
+    public BlackSaturationCurveEffect(CurveChannel channel, int blackSaturation)
         : base(CurveAdjustments.AdjustBlackSaturation, channel, blackSaturation)
     {
     }

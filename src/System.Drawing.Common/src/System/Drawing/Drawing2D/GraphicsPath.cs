@@ -494,40 +494,40 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="AddRoundedRectangle(RectangleF, SizeF)"/>
-    public void AddRoundedRectangle(Rectangle rect, Size corner) =>
-        AddRoundedRectangle((RectangleF)rect, corner);
+    public void AddRoundedRectangle(Rectangle rect, Size radius) =>
+        AddRoundedRectangle((RectangleF)rect, radius);
 
     /// <summary>
     ///  Adds a rounded rectangle to this path.
     /// </summary>
     /// <param name="rect">The bounds of the rectangle to add.</param>
-    /// <param name="corner">The size of the ellipse used to round the corners of the rectangle.</param>
-    public void AddRoundedRectangle(RectangleF rect, SizeF corner)
+    /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
+    public void AddRoundedRectangle(RectangleF rect, SizeF radius)
     {
         StartFigure();
         AddArc(
-            rect.Right - corner.Width,
+            rect.Right - radius.Width,
             rect.Top,
-            corner.Width,
-            corner.Height,
+            radius.Width,
+            radius.Height,
             -90.0f, 90.0f);
         AddArc(
-            rect.Right - corner.Width,
-            rect.Bottom - corner.Height,
-            corner.Width,
-            corner.Height,
+            rect.Right - radius.Width,
+            rect.Bottom - radius.Height,
+            radius.Width,
+            radius.Height,
             0.0f, 90.0f);
         AddArc(
             rect.Left,
-            rect.Bottom - corner.Height,
-            corner.Width,
-            corner.Height,
+            rect.Bottom - radius.Height,
+            radius.Width,
+            radius.Height,
             90.0f, 90.0f);
         AddArc(
             rect.Left,
             rect.Top,
-            corner.Width,
-            corner.Height,
+            radius.Width,
+            radius.Height,
             180.0f, 90.0f);
         CloseFigure();
     }

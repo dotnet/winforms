@@ -1,11 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects.Tests;
 
-[RequiresPreviewFeatures]
 public class EffectsTests
 {
     [Fact]
@@ -23,18 +20,18 @@ public class EffectsTests
     }
 
     [Theory]
-    [InlineData(CurveChannel.CurveChannelAll, 0)]
-    [InlineData(CurveChannel.CurveChannelRed, 0)]
-    [InlineData(CurveChannel.CurveChannelGreen, 0)]
-    [InlineData(CurveChannel.CurveChannelBlue, 0)]
-    [InlineData(CurveChannel.CurveChannelAll, 254)]
-    [InlineData(CurveChannel.CurveChannelRed, 254)]
-    [InlineData(CurveChannel.CurveChannelGreen, 254)]
-    [InlineData(CurveChannel.CurveChannelBlue, 254)]
+    [InlineData(CurveChannel.All, 0)]
+    [InlineData(CurveChannel.Red, 0)]
+    [InlineData(CurveChannel.Green, 0)]
+    [InlineData(CurveChannel.Blue, 0)]
+    [InlineData(CurveChannel.All, 254)]
+    [InlineData(CurveChannel.Red, 254)]
+    [InlineData(CurveChannel.Green, 254)]
+    [InlineData(CurveChannel.Blue, 254)]
     public void BlackSaturationEffect_Apply(CurveChannel channel, int blackPoint)
     {
         using Bitmap bitmap = new(10, 10);
-        using BlackSaturationEffect effect = new(channel, blackPoint);
+        using BlackSaturationCurveEffect effect = new(channel, blackPoint);
         bitmap.ApplyEffect(effect);
     }
 
@@ -43,23 +40,23 @@ public class EffectsTests
     [InlineData(255)]
     public void BlackSaturationEffect_Apply_Invalid(int blackPoint)
     {
-        Action action = () => _ = new BlackSaturationEffect(CurveChannel.CurveChannelAll, blackPoint);
+        Action action = () => _ = new BlackSaturationCurveEffect(CurveChannel.All, blackPoint);
         action.Should().Throw<ArgumentException>();
     }
 
     [Theory]
-    [InlineData(CurveChannel.CurveChannelAll, 1)]
-    [InlineData(CurveChannel.CurveChannelRed, 1)]
-    [InlineData(CurveChannel.CurveChannelGreen, 1)]
-    [InlineData(CurveChannel.CurveChannelBlue, 1)]
-    [InlineData(CurveChannel.CurveChannelAll, 255)]
-    [InlineData(CurveChannel.CurveChannelRed, 255)]
-    [InlineData(CurveChannel.CurveChannelGreen, 255)]
-    [InlineData(CurveChannel.CurveChannelBlue, 255)]
+    [InlineData(CurveChannel.All, 1)]
+    [InlineData(CurveChannel.Red, 1)]
+    [InlineData(CurveChannel.Green, 1)]
+    [InlineData(CurveChannel.Blue, 1)]
+    [InlineData(CurveChannel.All, 255)]
+    [InlineData(CurveChannel.Red, 255)]
+    [InlineData(CurveChannel.Green, 255)]
+    [InlineData(CurveChannel.Blue, 255)]
     public void WhiteSaturationEffect_Apply(CurveChannel channel, int whitePoint)
     {
         using Bitmap bitmap = new(10, 10);
-        using WhiteSaturationEffect effect = new(channel, whitePoint);
+        using WhiteSaturationCurveEffect effect = new(channel, whitePoint);
         bitmap.ApplyEffect(effect);
     }
 
@@ -69,7 +66,7 @@ public class EffectsTests
     [InlineData(256)]
     public void WhiteSaturationEffect_Apply_Invalid(int whitePoint)
     {
-        Action action = () => _ = new WhiteSaturationEffect(CurveChannel.CurveChannelAll, whitePoint);
+        Action action = () => _ = new WhiteSaturationCurveEffect(CurveChannel.All, whitePoint);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -186,11 +183,38 @@ public class EffectsTests
         Span<byte> buffer = stackalloc byte[256];
         buffer.Fill(tableValue);
         using ColorLookupTableEffect effect = new(buffer, buffer, buffer, buffer);
+
+        effect.AlphaLookupTable.Length.Should().Be(256);
+        effect.AlphaLookupTable.Span[0].Should().Be(tableValue);
+        effect.AlphaLookupTable.Span[255].Should().Be(tableValue);
+        effect.BlueLookupTable.Length.Should().Be(256);
+        effect.BlueLookupTable.Span[0].Should().Be(tableValue);
+        effect.BlueLookupTable.Span[255].Should().Be(tableValue);
+        effect.GreenLookupTable.Length.Should().Be(256);
+        effect.GreenLookupTable.Span[0].Should().Be(tableValue);
+        effect.GreenLookupTable.Span[255].Should().Be(tableValue);
+        effect.RedLookupTable.Length.Should().Be(256);
+        effect.RedLookupTable.Span[0].Should().Be(tableValue);
+        effect.RedLookupTable.Span[255].Should().Be(tableValue);
+
         bitmap.ApplyEffect(effect);
 
         // The final values will be padded with zeros
         using ColorLookupTableEffect effect2 = new(buffer[..100], buffer[..1], buffer, buffer);
         bitmap.ApplyEffect(effect);
+
+        effect2.RedLookupTable.Length.Should().Be(256);
+        effect2.RedLookupTable.Span[0].Should().Be(tableValue);
+        effect2.RedLookupTable.Span[255].Should().Be(0);
+        effect2.GreenLookupTable.Length.Should().Be(256);
+        effect2.GreenLookupTable.Span[0].Should().Be(tableValue);
+        effect2.GreenLookupTable.Span[255].Should().Be(0);
+        effect2.BlueLookupTable.Length.Should().Be(256);
+        effect2.BlueLookupTable.Span[0].Should().Be(tableValue);
+        effect2.BlueLookupTable.Span[255].Should().Be(tableValue);
+        effect2.AlphaLookupTable.Length.Should().Be(256);
+        effect2.AlphaLookupTable.Span[0].Should().Be(tableValue);
+        effect2.AlphaLookupTable.Span[255].Should().Be(tableValue);
     }
 
     [Fact]
@@ -227,7 +251,7 @@ public class EffectsTests
     public void ContrastEffect_Apply(int contrast)
     {
         using Bitmap bitmap = new(10, 10);
-        using ContrastEffect effect = new(CurveChannel.CurveChannelAll, contrast);
+        using ContrastCurveEffect effect = new(CurveChannel.All, contrast);
         bitmap.ApplyEffect(effect);
     }
 
@@ -236,7 +260,7 @@ public class EffectsTests
     [InlineData(101)]
     public void ContrastEffect_Apply_Invalid(int contrast)
     {
-        Action action = () => _ = new ContrastEffect(CurveChannel.CurveChannelAll, contrast);
+        Action action = () => _ = new ContrastCurveEffect(CurveChannel.All, contrast);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -247,7 +271,7 @@ public class EffectsTests
     public void DensityEffect_Apply(int density)
     {
         using Bitmap bitmap = new(10, 10);
-        using DensityEffect effect = new(CurveChannel.CurveChannelAll, density);
+        using DensityCurveEffect effect = new(CurveChannel.All, density);
         bitmap.ApplyEffect(effect);
     }
 
@@ -256,7 +280,7 @@ public class EffectsTests
     [InlineData(257)]
     public void DensityEffect_Apply_Invalid(int density)
     {
-        Action action = () => _ = new DensityEffect(CurveChannel.CurveChannelAll, density);
+        Action action = () => _ = new DensityCurveEffect(CurveChannel.All, density);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -267,7 +291,7 @@ public class EffectsTests
     public void ExposureEffect_Apply(int exposure)
     {
         using Bitmap bitmap = new(10, 10);
-        using ExposureEffect effect = new(CurveChannel.CurveChannelAll, exposure);
+        using ExposureCurveEffect effect = new(CurveChannel.All, exposure);
         bitmap.ApplyEffect(effect);
     }
 
@@ -276,7 +300,7 @@ public class EffectsTests
     [InlineData(257)]
     public void ExposureEffect_Apply_Invalid(int exposure)
     {
-        Action action = () => _ = new ExposureEffect(CurveChannel.CurveChannelAll, exposure);
+        Action action = () => _ = new ExposureCurveEffect(CurveChannel.All, exposure);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -287,7 +311,7 @@ public class EffectsTests
     public void HighlightEffect_Apply(int highlight)
     {
         using Bitmap bitmap = new(10, 10);
-        using HighlightEffect effect = new(CurveChannel.CurveChannelAll, highlight);
+        using HighlightCurveEffect effect = new(CurveChannel.All, highlight);
         bitmap.ApplyEffect(effect);
     }
 
@@ -296,7 +320,7 @@ public class EffectsTests
     [InlineData(101)]
     public void HighlightEffect_Apply_Invalid(int highlight)
     {
-        Action action = () => _ = new HighlightEffect(CurveChannel.CurveChannelAll, highlight);
+        Action action = () => _ = new HighlightCurveEffect(CurveChannel.All, highlight);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -307,7 +331,7 @@ public class EffectsTests
     public void MidtoneEffect_Apply(int midtone)
     {
         using Bitmap bitmap = new(10, 10);
-        using MidtoneEffect effect = new(CurveChannel.CurveChannelAll, midtone);
+        using MidtoneCurveEffect effect = new(CurveChannel.All, midtone);
         bitmap.ApplyEffect(effect);
     }
 
@@ -316,7 +340,7 @@ public class EffectsTests
     [InlineData(101)]
     public void MidtoneEffect_Apply_Invalid(int midtone)
     {
-        Action action = () => _ = new MidtoneEffect(CurveChannel.CurveChannelAll, midtone);
+        Action action = () => _ = new MidtoneCurveEffect(CurveChannel.All, midtone);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -327,7 +351,7 @@ public class EffectsTests
     public void ShadowEffect_Apply(int shadow)
     {
         using Bitmap bitmap = new(10, 10);
-        using ShadowEffect effect = new(CurveChannel.CurveChannelAll, shadow);
+        using ShadowCurveEffect effect = new(CurveChannel.All, shadow);
         bitmap.ApplyEffect(effect);
     }
 
@@ -336,7 +360,7 @@ public class EffectsTests
     [InlineData(101)]
     public void ShadowEffect_Apply_Invalid(int shadow)
     {
-        Action action = () => _ = new ShadowEffect(CurveChannel.CurveChannelAll, shadow);
+        Action action = () => _ = new ShadowCurveEffect(CurveChannel.All, shadow);
         action.Should().Throw<ArgumentException>();
     }
 
