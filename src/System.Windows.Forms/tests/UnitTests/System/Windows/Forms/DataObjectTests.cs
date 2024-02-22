@@ -16,10 +16,8 @@ using Point = System.Drawing.Point;
 namespace System.Windows.Forms.Tests;
 
 // NB: doesn't require thread affinity
-public class DataObjectTests
+public partial class DataObjectTests
 {
-    private unsafe delegate IDataObject CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* dataObject);
-
     private static readonly string[] s_clipboardFormats =
     {
         DataFormats.CommaSeparatedValue,
@@ -2467,7 +2465,14 @@ public class DataObjectTests
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
         IComDataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
-        inData.Should().NotBeSameAs(data);
+        if (data is DataObject)
+        {
+            inData.Should().BeSameAs(data);
+        }
+        else
+        {
+            inData.Should().NotBeSameAs(data);
+        }
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
@@ -2506,22 +2511,6 @@ public class DataObjectTests
         outData.Should().BeSameAs(data);
     }
 
-    private class CustomIDataObject : IDataObject
-    {
-        public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
-        public object GetData(string format) => throw new NotImplementedException();
-        public object GetData(Type format) => throw new NotImplementedException();
-        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
-        public bool GetDataPresent(string format) => throw new NotImplementedException();
-        public bool GetDataPresent(Type format) => throw new NotImplementedException();
-        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
-        public string[] GetFormats() => throw new NotImplementedException();
-        public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
-        public void SetData(string format, object data) => throw new NotImplementedException();
-        public void SetData(Type format, object data) => throw new NotImplementedException();
-        public void SetData(object data) => throw new NotImplementedException();
-    }
-
     [WinFormsFact]
     public unsafe void DataObject_ComTypesIDataObject_MockRoundTrip_IsWrapped()
     {
@@ -2530,96 +2519,11 @@ public class DataObjectTests
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
         IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
-        inData.Should().BeSameAs(data);
+        inData.Should().NotBeSameAs(data);
+        inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
-        outData.Should().BeAssignableTo<DataObject>();
-        outData.Should().NotBeSameAs(inData);
-    }
-
-    private class CustomComTypesDataObject : IComDataObject
-    {
-        public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
-        public void DUnadvise(int connection) => throw new NotImplementedException();
-        public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
-        public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
-        public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
-        public void GetData(ref FORMATETC format, out STGMEDIUM medium) => throw new NotImplementedException();
-        public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
-        public int QueryGetData(ref FORMATETC format) => throw new NotImplementedException();
-        public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
-    }
-
-    [Collection("Sequential")]
-    public unsafe class DataObjectSequentialTests()
-    {
-        [WinFormsTheory]
-        [BoolData]
-        public void DataObject_CustomIDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
-        {
-            string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
-            AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
-
-            try
-            {
-                AppContext.SetSwitch(builtInComInteropSwitch, builtInComSupported);
-                AppContext.TryGetSwitch(builtInComInteropSwitch, out bool isEnabled).Should().BeTrue();
-                isEnabled.Should().Be(builtInComSupported);
-
-                CustomIDataObject data = new();
-                dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-                var dropTargetAccessor = typeof(DropTarget).TestAccessor();
-
-                IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
-                inData.Should().BeAssignableTo<DataObject>();
-                inData.Should().NotBeSameAs(data);
-
-                // Simulate COM call. The COM call will eventually hit CreateWinFormsDataObjectForOutgoingDropData.
-                // Note that this will be a ComWrappers created object since data has been wrapped in our DataObject.
-                var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-                IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
-
-                outData.Should().BeSameAs(data);
-            }
-            finally
-            {
-                AppContext.SetSwitch(builtInComInteropSwitch, original);
-            }
-        }
-
-        [WinFormsTheory]
-        [BoolData]
-        public void DataObject_ComTypesIDataObject_MockRoundTrip_ToggleBuiltInCom(bool builtInComSupported)
-        {
-            string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
-            AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
-
-            try
-            {
-                AppContext.SetSwitch(builtInComInteropSwitch, builtInComSupported);
-                AppContext.TryGetSwitch(builtInComInteropSwitch, out bool isEnabled).Should().BeTrue();
-                isEnabled.Should().Be(builtInComSupported);
-
-                CustomComTypesDataObject data = new();
-                dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-                var dropTargetAccessor = typeof(DropTarget).TestAccessor();
-
-                IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
-                inData.Should().BeSameAs(data);
-
-                // Simulate COM call. The COM call will eventually hit CreateWinFormsDataObjectForOutgoingDropData.
-                // Note that this will not be a ComWrappers created object since IComDataObject does not get wrapped in our DataObject.
-                var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-                IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
-
-                outData.Should().BeAssignableTo<DataObject>();
-                outData.Should().NotBeSameAs(inData);
-            }
-            finally
-            {
-                AppContext.SetSwitch(builtInComInteropSwitch, original);
-            }
-        }
+        outData.Should().BeSameAs(inData);
     }
 }

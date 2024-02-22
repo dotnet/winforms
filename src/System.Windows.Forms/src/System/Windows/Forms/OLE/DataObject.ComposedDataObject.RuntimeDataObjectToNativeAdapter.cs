@@ -14,7 +14,7 @@ public unsafe partial class DataObject
         /// <summary>
         ///  Maps <see cref="ComTypes.IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
-        private class RuntimeDataObjectToNativeAdapter : Com.IDataObject.Interface, ComTypes.IDataObject
+        private class RuntimeDataObjectToNativeAdapter : Com.IDataObject.Interface, ComTypes.IDataObject, Com.IManagedWrapper<Com.IDataObject>
         {
             private readonly ComTypes.IDataObject _runtimeDataObject;
 

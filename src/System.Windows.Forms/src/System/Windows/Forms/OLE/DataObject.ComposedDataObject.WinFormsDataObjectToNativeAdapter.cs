@@ -19,7 +19,7 @@ public unsafe partial class DataObject
         /// <summary>
         ///  Maps <see cref="IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
-        private unsafe class WinFormsDataObjectToNativeAdapter : Com.IDataObject.Interface
+        private unsafe class WinFormsDataObjectToNativeAdapter : Com.IDataObject.Interface, IManagedWrapper<Com.IDataObject>
         {
             private const int DATA_S_SAMEFORMATETC = 0x00040130;
 

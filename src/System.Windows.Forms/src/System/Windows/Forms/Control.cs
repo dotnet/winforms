@@ -5231,36 +5231,11 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Creates <see cref="ComTypes.IDataObject"/> for drag operation.
-    ///  The incoming <paramref name="data"/> will always be wrapped
-    ///  unless it only implements <see cref="ComTypes.IDataObject"/>.
+    ///  Creates <see cref="DataObject"/> for drag operation.
+    ///  The incoming <paramref name="data"/> will always be wrapped.
     /// </summary>
-    private static ComTypes.IDataObject CreateRuntimeDataObjectForDrag(object data)
-    {
-        ComTypes.IDataObject dataObject;
-
-        if (data is not ComTypes.IDataObject comDataObject || data is IDataObject)
-        {
-            DataObject iwdata;
-            if (data is IDataObject dataAsDataObject)
-            {
-                iwdata = new DataObject(dataAsDataObject);
-            }
-            else
-            {
-                iwdata = new DataObject();
-                iwdata.SetData(data);
-            }
-
-            dataObject = iwdata;
-        }
-        else
-        {
-            dataObject = comDataObject;
-        }
-
-        return dataObject;
-    }
+    private static DataObject CreateRuntimeDataObjectForDrag(object data) =>
+        data is DataObject dataObject ? dataObject : new DataObject(data);
 
     public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
     {

@@ -38,7 +38,7 @@ public unsafe partial class DataObject
             _winFormsDataObject = winFormsDataObject;
             _nativeDataObject = nativeDataObject;
             _runtimeDataObject = runtimeDataObject;
-            if (winFormsDataObject is not DataStore)
+            if (winFormsDataObject is not NativeDataObjectToWinFormsAdapter and not DataStore)
             {
                 OriginalIDataObject = winFormsDataObject;
             }
@@ -64,7 +64,7 @@ public unsafe partial class DataObject
         public static ComposedDataObject CreateFromRuntimeDataObject(ComTypes.IDataObject runtimeDataObject)
         {
             RuntimeDataObjectToNativeAdapter runtimeToNative = new(runtimeDataObject);
-            NativeDataObjectToWinFormsAdapter nativeToWinForms = new(ComHelpers.GetComPointer<Com.IDataObject>(runtimeDataObject));
+            NativeDataObjectToWinFormsAdapter nativeToWinForms = new(ComHelpers.GetComPointer<Com.IDataObject>(runtimeToNative));
             return new(nativeToWinForms, runtimeToNative, runtimeDataObject);
         }
 
