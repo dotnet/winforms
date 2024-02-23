@@ -12,14 +12,14 @@ public partial class ListView
     ///  Represents the collection of items in a ListView or ListViewGroup
     /// </summary>
     [ListBindable(false)]
-    public partial class ListViewItemCollection : IList
+    public partial class ListViewItemCollection : IList, IList<ListViewItem>
     {
         ///  A caching mechanism for key accessor
         ///  We use an index here rather than control so that we don't have lifetime
         ///  issues by holding on to extra references.
-        private int lastAccessedIndex = -1;
+        private int _lastAccessedIndex = -1;
 
-        private readonly IInnerList innerList;
+        private readonly IInnerList _innerList;
 
         public ListViewItemCollection(ListView owner)
         {
@@ -27,66 +27,30 @@ public partial class ListView
             // In Whidbey this constructor is a no-op.
 
             // initialize the inner list w/ a dummy list.
-            innerList = new ListViewNativeItemCollection(owner);
+            _innerList = new ListViewNativeItemCollection(owner);
         }
 
         internal ListViewItemCollection(IInnerList innerList)
         {
             Debug.Assert(innerList is not null, "Can't pass in null innerList");
-            this.innerList = innerList;
+            _innerList = innerList;
         }
 
-        private IInnerList InnerList
-        {
-            get
-            {
-                return innerList;
-            }
-        }
+        private IInnerList InnerList => _innerList;
 
         /// <summary>
         ///  Returns the total number of items within the list view.
         /// </summary>
         [Browsable(false)]
-        public int Count
-        {
-            get
-            {
-                return InnerList.Count;
-            }
-        }
+        public int Count => InnerList.Count;
 
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
+        object ICollection.SyncRoot => this;
 
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ICollection.IsSynchronized => true;
 
-        bool IList.IsFixedSize
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IList.IsFixedSize => false;
 
-        public bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsReadOnly => false;
 
         /// <summary>
         ///  Returns the ListViewItem at the given index.
@@ -111,10 +75,7 @@ public partial class ListView
 
         object? IList.this[int index]
         {
-            get
-            {
-                return this[index];
-            }
+            get => this[index];
             set
             {
                 this[index] = value is ListViewItem item
@@ -152,10 +113,7 @@ public partial class ListView
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
-        public virtual ListViewItem Add(string? text)
-        {
-            return Add(text, -1);
-        }
+        public virtual ListViewItem Add(string? text) => Add(text, -1);
 
         int IList.Add(object? item)
         {
@@ -194,8 +152,6 @@ public partial class ListView
             InnerList.Add(value);
             return value;
         }
-
-        // <-- NEW ADD OVERLOADS IN WHIDBEY
 
         /// <summary>
         ///  Add an item to the ListView.  The item will be inserted either in
@@ -239,8 +195,6 @@ public partial class ListView
             return item;
         }
 
-        // END - NEW ADD OVERLOADS IN WHIDBEY  -->
-
         public void AddRange(params ListViewItem[] items)
         {
             ArgumentNullException.ThrowIfNull(items);
@@ -260,10 +214,7 @@ public partial class ListView
         /// <summary>
         ///  Removes all items from the list view.
         /// </summary>
-        public virtual void Clear()
-        {
-            InnerList.Clear();
-        }
+        public virtual void Clear() => InnerList.Clear();
 
         public bool Contains(ListViewItem item)
         {
@@ -294,10 +245,10 @@ public partial class ListView
         {
             key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-            List<ListViewItem> foundItems = new();
+            List<ListViewItem> foundItems = [];
             FindInternal(key, searchAllSubItems, this, foundItems);
 
-            return foundItems.ToArray();
+            return [.. foundItems];
         }
 
         /// <summary>
@@ -369,11 +320,11 @@ public partial class ListView
             }
 
             // step 1 - check the last cached item
-            if (IsValidIndex(lastAccessedIndex))
+            if (IsValidIndex(_lastAccessedIndex))
             {
-                if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                 {
-                    return lastAccessedIndex;
+                    return _lastAccessedIndex;
                 }
             }
 
@@ -382,13 +333,13 @@ public partial class ListView
             {
                 if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                 {
-                    lastAccessedIndex = i;
+                    _lastAccessedIndex = i;
                     return i;
                 }
             }
 
             // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-            lastAccessedIndex = -1;
+            _lastAccessedIndex = -1;
             return -1;
         }
 
@@ -431,8 +382,6 @@ public partial class ListView
             }
         }
 
-        // <-- NEW INSERT OVERLOADS IN WHIDBEY
-
         public ListViewItem Insert(int index, string? text, string? imageKey)
             => Insert(index, new ListViewItem(text, imageKey));
 
@@ -447,8 +396,6 @@ public partial class ListView
             {
                 Name = key
             });
-
-        // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
         /// <summary>
         ///  Removes an item from the ListView
@@ -486,6 +433,43 @@ public partial class ListView
             if (item is ListViewItem listViewItem)
             {
                 Remove(listViewItem);
+            }
+        }
+
+        void IList<ListViewItem>.Insert(int index, ListViewItem item) => Insert(index, item);
+
+        void ICollection<ListViewItem>.Add(ListViewItem item) => Add(item);
+
+        public void CopyTo(ListViewItem[] array, int arrayIndex) => CopyTo((Array)array, arrayIndex);
+
+        bool ICollection<ListViewItem>.Remove(ListViewItem item)
+        {
+            if (Contains(item))
+            {
+                Remove(item);
+                return true;
+            }
+
+            return false;
+        }
+
+        IEnumerator<ListViewItem> IEnumerable<ListViewItem>.GetEnumerator()
+        {
+            var enumerator = GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current is ListViewItem item)
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        public void AddRange(IEnumerable<ListViewItem> collection)
+        {
+            foreach (ListViewItem item in collection)
+            {
+                Add(item);
             }
         }
     }
