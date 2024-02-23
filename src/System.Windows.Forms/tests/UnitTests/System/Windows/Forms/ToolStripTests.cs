@@ -1639,9 +1639,10 @@ public partial class ToolStripTests
         Assert.Same(form.Font, item2.Font);
 
         LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, false);
-        Assert.Same(ToolStripManager.DefaultFont, item2.Font);
+        
         Assert.Same(ToolStripManager.DefaultFont, toolStrip1.Font);
         Assert.Same(ToolStripManager.DefaultFont, item1.Font);
+        Assert.Same(ToolStripManager.DefaultFont, item2.Font);
     }
 
     public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()
