@@ -6,7 +6,7 @@
     <PatchVersion>0</PatchVersion>
     <!-- version in our package name #.#.#-below.#####.## -->
     <PreReleaseVersionLabel>preview</PreReleaseVersionLabel>
-    <PreReleaseVersionIteration>2</PreReleaseVersionIteration>
+    <PreReleaseVersionIteration>3</PreReleaseVersionIteration>
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <!-- Use the compiler in the CLI instead of in the sdk, since CLI is newer. -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
