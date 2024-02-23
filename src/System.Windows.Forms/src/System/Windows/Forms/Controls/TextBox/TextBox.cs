@@ -721,17 +721,6 @@ public partial class TextBox : TextBoxBase
         base.SelectInternal(start, length, textLen);
     }
 
-    private string[] GetStringsForAutoComplete()
-    {
-        string[] strings = new string[AutoCompleteCustomSource.Count];
-        for (int i = 0; i < AutoCompleteCustomSource.Count; i++)
-        {
-            strings[i] = AutoCompleteCustomSource[i];
-        }
-
-        return strings;
-    }
-
     /// <summary>
     ///  Sets the AutoComplete mode in TextBox.
     /// </summary>
@@ -767,7 +756,7 @@ public partial class TextBox : TextBoxBase
                     {
                         if (_stringSource is null)
                         {
-                            _stringSource = new StringSource(GetStringsForAutoComplete());
+                            _stringSource = new StringSource(AutoCompleteCustomSource.ToArray());
                             if (!_stringSource.Bind(this, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                             {
                                 throw new ArgumentException(SR.AutoCompleteFailure);
@@ -775,7 +764,7 @@ public partial class TextBox : TextBoxBase
                         }
                         else
                         {
-                            _stringSource.RefreshList(GetStringsForAutoComplete());
+                            _stringSource.RefreshList(AutoCompleteCustomSource.ToArray());
                         }
                     }
                 }
