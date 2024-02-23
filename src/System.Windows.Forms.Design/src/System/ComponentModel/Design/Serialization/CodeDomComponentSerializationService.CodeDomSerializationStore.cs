@@ -17,13 +17,16 @@ public sealed partial class CodeDomComponentSerializationService
     ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
     ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
     /// </summary>
+    [Serializable]
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
-        private const string StateKey = "State";
-        private const string NameKey = "Names";
-        private const string AssembliesKey = "Assemblies";
-        private const string ResourcesKey = "Resources";
-        private const string ShimKey = "Shim";
+#if DEBUG
+        private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
+#else
+#pragma warning disable CS0649  // Field is never assigned to, and will always have its default value null
+        private static readonly TraceSwitch? s_trace;
+#pragma warning restore CS0649  // Field is never assigned to, and will always have its default value null
+#endif
 
         private MemoryStream? _resourceStream;
 
@@ -306,7 +309,71 @@ public sealed partial class CodeDomComponentSerializationService
         /// <summary>
         ///  The Save method is not supported.
         /// </summary>
-        public override void Save(Stream stream) => throw new PlatformNotSupportedException();
+        public override void Save(Stream stream)
+        {
+            Close();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+            new BinaryFormatter().Serialize(stream, this);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+        }
+
+        [Conditional("DEBUG")]
+        internal static void TraceCode(Dictionary<string, CodeDomComponentSerializationState> state)
+        {
+            if (!s_trace!.TraceVerbose)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<string, CodeDomComponentSerializationState> stateEntry in state)
+            {
+                object? code = stateEntry.Value.Code;
+
+                if (code is null)
+                {
+                    continue;
+                }
+
+                CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
+                using StringWriter stringWriter = new(CultureInfo.InvariantCulture);
+                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {stateEntry.Key}: ");
+                Debug.Indent();
+
+                if (code is CodeTypeDeclaration codeTypeDeclaration)
+                {
+                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, stringWriter, o: null);
+                }
+                else if (code is CodeStatementCollection statements)
+                {
+                    foreach (CodeStatement statement in statements)
+                    {
+                        codeGenerator.GenerateCodeFromStatement(statement, stringWriter, o: null);
+                    }
+                }
+                else if (code is CodeStatement codeStatement)
+                {
+                    codeGenerator.GenerateCodeFromStatement(codeStatement, stringWriter, o: null);
+                }
+                else if (code is CodeExpression codeExpression)
+                {
+                    codeGenerator.GenerateCodeFromExpression(codeExpression, stringWriter, o: null);
+                }
+                else
+                {
+                    stringWriter.Write("Unknown code type: ");
+                    stringWriter.WriteLine(code.GetType().Name);
+                }
+
+                // spit this line by line so it respects the indent.
+                StringReader stringReader = new(stringWriter.ToString());
+                for (string? ln = stringReader.ReadLine(); ln is not null; ln = stringReader.ReadLine())
+                {
+                    Debug.WriteLine(ln);
+                }
+
+                Debug.Unindent();
+            }
+        }
 
         /// <summary>
         ///  Implements the save part of ISerializable. Used in unit tests only.
@@ -314,12 +381,6 @@ public sealed partial class CodeDomComponentSerializationService
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             ArgumentNullException.ThrowIfNull(info);
-
-            info.AddValue(StateKey, _objectState);
-            info.AddValue(NameKey, _objectNames);
-            info.AddValue(AssembliesKey, AssemblyNames);
-            info.AddValue(ResourcesKey, _resources?.Data);
-            info.AddValue(ShimKey, _shimObjectNames);
         }
     }
 }

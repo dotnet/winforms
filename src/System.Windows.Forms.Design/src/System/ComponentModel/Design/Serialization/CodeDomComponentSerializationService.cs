@@ -162,6 +162,7 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
     }
 
     // Saved state
+    [Serializable]
     internal sealed class CodeDomComponentSerializationState
     {
         public readonly object? Code; // code gen

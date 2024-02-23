@@ -9,6 +9,7 @@ namespace System.ComponentModel.Design.Serialization;
 /// <summary>
 ///  The exception that is thrown when the code dom serializer experiences an error.
 /// </summary>
+[Serializable]
 public class CodeDomSerializerException : SystemException
 {
     public CodeDomSerializerException(string? message, CodeLinePragma? linePragma) : base(message)
@@ -40,5 +41,10 @@ public class CodeDomSerializerException : SystemException
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         throw new PlatformNotSupportedException();
+    }
+
+    protected CodeDomSerializerException(SerializationInfo info, StreamingContext streamingContext)
+    {
+        ArgumentNullException.ThrowIfNull(info);
     }
 }
