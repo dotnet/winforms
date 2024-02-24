@@ -389,7 +389,8 @@ public class BitmapTests
             }
         }
 
-        hash = MD5.Create().ComputeHash(pixels);
+        // cs/weak-crypto
+        hash = MD5.Create().ComputeHash(pixels); // CodeQL [SM02196] This hash is used in test to compare two bitmaps.
         return ByteArrayToString(hash);
     }
 

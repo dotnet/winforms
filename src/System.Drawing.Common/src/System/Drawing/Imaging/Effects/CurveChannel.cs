@@ -13,21 +13,21 @@ public enum CurveChannel
     /// <summary>
     ///  Specifies that the color adjustment applies to all channels.
     /// </summary>
-    CurveChannelAll = GdiPlus.CurveChannel.CurveChannelAll,
+    All = GdiPlus.CurveChannel.CurveChannelAll,
 
     /// <summary>
     ///  Specifies that the color adjustment applies only to the red channel.
     /// </summary>
-    CurveChannelRed = GdiPlus.CurveChannel.CurveChannelRed,
+    Red = GdiPlus.CurveChannel.CurveChannelRed,
 
     /// <summary>
     ///  Specifies that the color adjustment applies only to the green channel.
     /// </summary>
-    CurveChannelGreen = GdiPlus.CurveChannel.CurveChannelGreen,
+    Green = GdiPlus.CurveChannel.CurveChannelGreen,
 
     /// <summary>
     ///  Specifies that the color adjustment applies only to the blue channel.
     /// </summary>
-    CurveChannelBlue = GdiPlus.CurveChannel.CurveChannelBlue
+    Blue = GdiPlus.CurveChannel.CurveChannelBlue
 }
 #endif

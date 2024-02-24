@@ -35,6 +35,23 @@ public class AutoCompleteStringCollectionTests
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null));
     }
 
+#nullable enable
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_AddRange_NullValues_Nop()
+    {
+        AutoCompleteStringCollection collection = new();
+        collection.AddRange([null!]);
+        Assert.Empty(collection);
+    }
+
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_Add_NullValue_ThrowsArgumentNullException()
+    {
+        AutoCompleteStringCollection collection = new();
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null!));
+    }
+#nullable disable
+
     [WinFormsFact]
     public void AutoCompleteStringCollection_Contains_Invoke_ReturnsExpected()
     {
@@ -180,6 +197,16 @@ public class AutoCompleteStringCollectionTests
         IList collection = new AutoCompleteStringCollection();
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "value"));
     }
+
+#nullable enable
+    [WinFormsFact]
+    public void AutoCompleteStringCollection_IListInsert_NullItem_Nop()
+    {
+        IList collection = new AutoCompleteStringCollection();
+        collection.Insert(0, null);
+        Assert.Empty(collection);
+    }
+#nullable disable
 
     [WinFormsFact]
     public void AutoCompleteStringCollection_Remove_String_Success()

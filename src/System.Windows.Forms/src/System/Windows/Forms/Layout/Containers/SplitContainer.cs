@@ -1596,12 +1596,14 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         Panel2.SuspendLayout();
 
         if (Width == 0)
-        {         // Set the correct Width iif the WIDTH has changed to ZERO.
+        {
+            // Set the correct Width iif the WIDTH has changed to ZERO.
             Panel1.Size = new Size(0, Panel1.Height);
             Panel2.Size = new Size(0, Panel2.Height);
         }
         else if (Height == 0)
-        {   // Set the correct Height iif the HEIGHT has changed to ZERO.
+        {
+            // Set the correct Height iif the HEIGHT has changed to ZERO.
             Panel1.Size = new Size(Panel1.Width, 0);
             Panel2.Size = new Size(Panel2.Width, 0);
         }

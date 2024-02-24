@@ -3,21 +3,18 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Base class for all effects.
 /// </summary>
-[RequiresPreviewFeatures]
 public unsafe abstract class Effect : IDisposable
 {
     private CGpEffect* _nativeEffect;
 
     internal CGpEffect* NativeEffect => _nativeEffect;
 
-    protected Effect(Guid guid)
+    private protected Effect(Guid guid)
     {
         CGpEffect* nativeEffect;
         PInvoke.GdipCreateEffect(guid, &nativeEffect).ThrowIfFailed();
@@ -41,7 +38,7 @@ public unsafe abstract class Effect : IDisposable
 
     ~Effect() => Dispose(disposing: false);
 
-    private void Dispose(bool disposing)
+    public virtual void Dispose(bool disposing)
     {
         if (_nativeEffect is not null)
         {

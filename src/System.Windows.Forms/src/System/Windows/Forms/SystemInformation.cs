@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Drawing.Interop;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
 using Windows.Win32.System.StationsAndDesktops;
 using Windows.Win32.UI.Accessibility;
 using static Windows.Win32.UI.WindowsAndMessaging.SYSTEM_METRICS_INDEX;
@@ -21,9 +20,6 @@ public static class SystemInformation
 {
     private static bool s_checkMultiMonitorSupport;
     private static bool s_multiMonitorSupport;
-    private static bool s_highContrast;
-    private static bool s_systemEventsAttached;
-    private static bool s_systemEventsDirty = true;
 
     private static HWINSTA s_processWinStation;
     private static bool s_isUserInteractive;
@@ -43,18 +39,9 @@ public static class SystemInformation
     {
         get
         {
-            EnsureSystemEvents();
-            if (s_systemEventsDirty)
-            {
-                HIGHCONTRASTW data = default;
-
-                s_highContrast = PInvokeCore.SystemParametersInfo(ref data)
-                    && data.dwFlags.HasFlag(HIGHCONTRASTW_FLAGS.HCF_HIGHCONTRASTON);
-
-                s_systemEventsDirty = false;
-            }
-
-            return s_highContrast;
+            HIGHCONTRASTW data = default;
+            return PInvokeCore.SystemParametersInfo(ref data)
+                && data.dwFlags.HasFlag(HIGHCONTRASTW_FLAGS.HCF_HIGHCONTRASTON);
         }
     }
 
@@ -535,20 +522,6 @@ public static class SystemInformation
     ///  the system.
     /// </summary>
     public static string UserName => Environment.UserName;
-
-    private static void EnsureSystemEvents()
-    {
-        if (!s_systemEventsAttached)
-        {
-            SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
-            s_systemEventsAttached = true;
-        }
-    }
-
-    private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
-    {
-        s_systemEventsDirty = true;
-    }
 
     /// <summary>
     ///  Gets whether the drop shadow effect in enabled.

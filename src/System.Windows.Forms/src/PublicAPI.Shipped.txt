@@ -1,30 +1,6 @@
 #nullable enable
-override System.Windows.Forms.PropertyGrid.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.PropertyGrid.OnEnabledChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnFontChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnGotFocus(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnHandleCreated(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnHandleDestroyed(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnMouseDown(System.Windows.Forms.MouseEventArgs! me) -> void
-override System.Windows.Forms.PropertyGrid.OnMouseMove(System.Windows.Forms.MouseEventArgs! me) -> void
-override System.Windows.Forms.PropertyGrid.OnMouseUp(System.Windows.Forms.MouseEventArgs! me) -> void
-override System.Windows.Forms.PropertyGrid.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
-override System.Windows.Forms.PropertyGrid.OnResize(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnSystemColorsChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.PropertyGrid.OnVisibleChanged(System.EventArgs! e) -> void
 ~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
-System.Windows.Forms.PropertyGrid.OnComComponentNameChanged(System.ComponentModel.Design.ComponentRenameEventArgs! e) -> void
-System.Windows.Forms.PropertyGrid.OnNotifyPropertyValueUIItemsChanged(object? sender, System.EventArgs! e) -> void
-virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type! tabType) -> System.Windows.Forms.Design.PropertyTab?
-virtual System.Windows.Forms.PropertyGrid.OnPropertySortChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.PropertyGrid.OnPropertyTabChanged(System.Windows.Forms.PropertyTabChangedEventArgs! e) -> void
-virtual System.Windows.Forms.PropertyGrid.OnPropertyValueChanged(System.Windows.Forms.PropertyValueChangedEventArgs! e) -> void
-virtual System.Windows.Forms.PropertyGrid.OnSelectedGridItemChanged(System.Windows.Forms.SelectedGridItemChangedEventArgs! e) -> void
-virtual System.Windows.Forms.PropertyGrid.OnSelectedObjectsChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.PropertyGrid.ShowPropertyPageImage.get -> System.Drawing.Bitmap!
-virtual System.Windows.Forms.PropertyGrid.SortByCategoryImage.get -> System.Drawing.Bitmap!
-virtual System.Windows.Forms.PropertyGrid.SortByPropertyImage.get -> System.Drawing.Bitmap!
 abstract System.Windows.Forms.BindingManagerBase.AddNew() -> void
 abstract System.Windows.Forms.BindingManagerBase.CancelCurrentEdit() -> void
 abstract System.Windows.Forms.BindingManagerBase.Count.get -> int
@@ -1310,10 +1286,23 @@ override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing
 override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
 override System.Windows.Forms.PropertyGrid.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
 override System.Windows.Forms.PropertyGrid.BackgroundImageLayout.set -> void
+override System.Windows.Forms.PropertyGrid.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.PropertyGrid.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.PropertyGrid.Dispose(bool disposing) -> void
 override System.Windows.Forms.PropertyGrid.ForeColor.get -> System.Drawing.Color
 override System.Windows.Forms.PropertyGrid.ForeColor.set -> void
+override System.Windows.Forms.PropertyGrid.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnMouseDown(System.Windows.Forms.MouseEventArgs! me) -> void
+override System.Windows.Forms.PropertyGrid.OnMouseMove(System.Windows.Forms.MouseEventArgs! me) -> void
+override System.Windows.Forms.PropertyGrid.OnMouseUp(System.Windows.Forms.MouseEventArgs! me) -> void
+override System.Windows.Forms.PropertyGrid.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.PropertyGrid.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.PropertyGrid.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.PropertyGrid.Refresh() -> void
 override System.Windows.Forms.PropertyGrid.ScaleCore(float dx, float dy) -> void
@@ -8751,6 +8740,8 @@ System.Windows.Forms.PropertyGrid.MouseEnter -> System.EventHandler?
 System.Windows.Forms.PropertyGrid.MouseLeave -> System.EventHandler?
 System.Windows.Forms.PropertyGrid.MouseMove -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.PropertyGrid.MouseUp -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.PropertyGrid.OnComComponentNameChanged(System.ComponentModel.Design.ComponentRenameEventArgs! e) -> void
+System.Windows.Forms.PropertyGrid.OnNotifyPropertyValueUIItemsChanged(object? sender, System.EventArgs! e) -> void
 System.Windows.Forms.PropertyGrid.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.PropertyGrid.Padding.set -> void
 System.Windows.Forms.PropertyGrid.PaddingChanged -> System.EventHandler?
@@ -13186,9 +13177,18 @@ virtual System.Windows.Forms.PropertyGrid.CanShowCommands.get -> bool
 virtual System.Windows.Forms.PropertyGrid.CommandsVisible.get -> bool
 virtual System.Windows.Forms.PropertyGrid.CommandsVisibleIfAvailable.get -> bool
 virtual System.Windows.Forms.PropertyGrid.CommandsVisibleIfAvailable.set -> void
+virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type! tabType) -> System.Windows.Forms.Design.PropertyTab?
 virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type!
 virtual System.Windows.Forms.PropertyGrid.HelpVisible.get -> bool
 virtual System.Windows.Forms.PropertyGrid.HelpVisible.set -> void
+virtual System.Windows.Forms.PropertyGrid.OnPropertySortChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.PropertyGrid.OnPropertyTabChanged(System.Windows.Forms.PropertyTabChangedEventArgs! e) -> void
+virtual System.Windows.Forms.PropertyGrid.OnPropertyValueChanged(System.Windows.Forms.PropertyValueChangedEventArgs! e) -> void
+virtual System.Windows.Forms.PropertyGrid.OnSelectedGridItemChanged(System.Windows.Forms.SelectedGridItemChangedEventArgs! e) -> void
+virtual System.Windows.Forms.PropertyGrid.OnSelectedObjectsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.PropertyGrid.ShowPropertyPageImage.get -> System.Drawing.Bitmap!
+virtual System.Windows.Forms.PropertyGrid.SortByCategoryImage.get -> System.Drawing.Bitmap!
+virtual System.Windows.Forms.PropertyGrid.SortByPropertyImage.get -> System.Drawing.Bitmap!
 virtual System.Windows.Forms.PropertyGrid.ToolbarVisible.get -> bool
 virtual System.Windows.Forms.PropertyGrid.ToolbarVisible.set -> void
 virtual System.Windows.Forms.RadioButton.OnCheckedChanged(System.EventArgs! e) -> void

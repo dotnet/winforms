@@ -806,7 +806,7 @@ public partial class DataGridView
                     if (dataGridViewColumnTmp.Visible
                         && dataGridViewColumnTmp.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
                     {
-                        if (dataGridViewColumnTmp.FillWeight < (dataGridViewColumnTmp.MinimumWidth * weightSum) / (float)availableWidth)
+                        if (dataGridViewColumnTmp.FillWeight < (dataGridViewColumnTmp.MinimumWidth * weightSum) / availableWidth)
                         {
                             desiredWidthTooSmall = true;
                             dataGridViewColumnTmp.DesiredFillWidth = -1;
@@ -10541,87 +10541,139 @@ public partial class DataGridView
     }
 
     /// <summary>
-    ///  Determines if Scrollbars should be visible,
-    ///  updates their bounds and the bounds of all
+    ///  Determines if Scrollbars should be visible, updates their bounds and the bounds of all
     ///  other regions in the dataGridView's Layout.
     /// </summary>
     private void LayoutScrollBars()
     {
-        SuspendLayout();
-        try
+        using SuspendLayoutScope scope = new(this, performLayout: false);
+
+        // Scrollbars are a tricky issue. We need to see if we can cram our columns and rows in without scrollbars
+        // and if they don't fit, we make scrollbars visible and then fixup our regions for the data.
+        bool allowHorizScrollbar = ((_scrollBars == ScrollBars.Both) || (_scrollBars == ScrollBars.Horizontal))
+            && _dataGridViewState2[State2_AllowHorizontalScrollbar];
+        bool allowVertScrollbar = _scrollBars is ScrollBars.Both or ScrollBars.Vertical;
+        bool needHorizScrollbarWithoutVertScrollbar = false;
+        bool needHorizScrollbar = false;
+        bool needVertScrollbar = false;
+        bool rightToLeftInternal = RightToLeftInternal;
+        int oldfirstDisplayedScrollingRow;
+
+        int totalVisibleColCount = Columns.GetColumnCount(DataGridViewElementStates.Visible);
+        int totalVisibleRowCount = Rows.GetRowCount(DataGridViewElementStates.Visible);
+        int totalVisibleWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible);
+        int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+
+        // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perf
+        int totalVisibleHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible);
+        int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+
+        int horizScrollBarHeight = _horizScrollBar.Height = SystemInformation.HorizontalScrollBarHeight;
+        int vertScrollBarWidth = _vertScrollBar.Width = SystemInformation.VerticalScrollBarWidth;
+
+        if (allowHorizScrollbar
+            && totalVisibleWidth > _layout.Data.Width
+            && totalVisibleFrozenWidth < _layout.Data.Width
+            && horizScrollBarHeight <= _layout.Data.Height)
         {
-            // Scrollbars are a tricky issue.
-            // We need to see if we can cram our columns and rows
-            // in without scrollbars and if they don't fit, we make
-            // scrollbars visible and then fixup our regions for the
-            // data.
-            bool allowHorizScrollbar = ((_scrollBars == ScrollBars.Both) || (_scrollBars == ScrollBars.Horizontal))
-                && _dataGridViewState2[State2_AllowHorizontalScrollbar];
-            bool allowVertScrollbar = _scrollBars is ScrollBars.Both or ScrollBars.Vertical;
-            bool needHorizScrollbarWithoutVertScrollbar = false;
-            bool needHorizScrollbar = false;
-            bool needVertScrollbar = false;
-            bool rightToLeftInternal = RightToLeftInternal;
-            int oldfirstDisplayedScrollingRow;
-
-            int totalVisibleColCount = Columns.GetColumnCount(DataGridViewElementStates.Visible);
-            int totalVisibleRowCount = Rows.GetRowCount(DataGridViewElementStates.Visible);
-            int totalVisibleWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible);
-            int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
-
-            // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perf
-            int totalVisibleHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible);
-            int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
-
-            int horizScrollBarHeight = _horizScrollBar.Height = SystemInformation.HorizontalScrollBarHeight;
-            int vertScrollBarWidth = _vertScrollBar.Width = SystemInformation.VerticalScrollBarWidth;
-
-            if (allowHorizScrollbar
-                && totalVisibleWidth > _layout.Data.Width
-                && totalVisibleFrozenWidth < _layout.Data.Width
-                && horizScrollBarHeight <= _layout.Data.Height)
+            int oldDataHeight = _layout.Data.Height;
+            _layout.Data.Height -= horizScrollBarHeight;
+            Debug.Assert(_layout.Data.Height >= 0);
+            needHorizScrollbarWithoutVertScrollbar = needHorizScrollbar = true;
+            if (totalVisibleWidth - _layout.Data.Width <= vertScrollBarWidth
+                || _layout.Data.Width - totalVisibleFrozenWidth <= vertScrollBarWidth)
             {
-                int oldDataHeight = _layout.Data.Height;
-                _layout.Data.Height -= horizScrollBarHeight;
-                Debug.Assert(_layout.Data.Height >= 0);
-                needHorizScrollbarWithoutVertScrollbar = needHorizScrollbar = true;
-                if (totalVisibleWidth - _layout.Data.Width <= vertScrollBarWidth
-                    || _layout.Data.Width - totalVisibleFrozenWidth <= vertScrollBarWidth)
+                // Would we still need a horizontal scrollbar if there were a vertical one?
+                oldfirstDisplayedScrollingRow = DisplayedBandsInfo.FirstDisplayedScrollingRow;
+                ComputeVisibleRows();
+                if (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+                    && DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount - Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+                    && (totalVisibleHeight - totalVisibleFrozenHeight != ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight)))
                 {
-                    // Would we still need a horizontal scrollbar if there were a vertical one?
-                    oldfirstDisplayedScrollingRow = DisplayedBandsInfo.FirstDisplayedScrollingRow;
-                    ComputeVisibleRows();
-                    if (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
-                        && DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount - Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
-                        && (totalVisibleHeight - totalVisibleFrozenHeight != ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight)))
-                    {
-                        needHorizScrollbar = totalVisibleFrozenWidth < _layout.Data.Width - vertScrollBarWidth;
-                    }
-
-                    DisplayedBandsInfo.FirstDisplayedScrollingRow = oldfirstDisplayedScrollingRow;
+                    needHorizScrollbar = totalVisibleFrozenWidth < _layout.Data.Width - vertScrollBarWidth;
                 }
 
-                if (needHorizScrollbar)
+                DisplayedBandsInfo.FirstDisplayedScrollingRow = oldfirstDisplayedScrollingRow;
+            }
+
+            if (needHorizScrollbar)
+            {
+                if (_layout.RowHeadersVisible)
                 {
-                    if (_layout.RowHeadersVisible)
-                    {
-                        _layout.RowHeaders.Height -= horizScrollBarHeight;
-                        Debug.Assert(_layout.RowHeaders.Height >= 0);
-                    }
+                    _layout.RowHeaders.Height -= horizScrollBarHeight;
+                    Debug.Assert(_layout.RowHeaders.Height >= 0);
                 }
-                else
+            }
+            else
+            {
+                // Restore old data height because turns out a horizontal scroll bar wouldn't make sense
+                _layout.Data.Height = oldDataHeight;
+            }
+        }
+
+        oldfirstDisplayedScrollingRow = DisplayedBandsInfo.FirstDisplayedScrollingRow;
+
+        ComputeVisibleRows();
+        if (allowVertScrollbar
+            && DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+            && DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount - Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+            && (totalVisibleHeight - totalVisibleFrozenHeight != ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight))
+            && _layout.Data.Height > totalVisibleFrozenHeight
+            && vertScrollBarWidth <= _layout.Data.Width)
+        {
+            _layout.Data.Width -= vertScrollBarWidth;
+            Debug.Assert(_layout.Data.Width >= 0);
+            if (rightToLeftInternal)
+            {
+                _layout.Data.X += vertScrollBarWidth;
+            }
+
+            if (_layout.ColumnHeadersVisible)
+            {
+                _layout.ColumnHeaders.Width -= vertScrollBarWidth;
+                Debug.Assert(_layout.ColumnHeaders.Width >= 0);
+                if (rightToLeftInternal)
                 {
-                    // Restore old data height because turns out a horizontal scroll bar wouldn't make sense
-                    _layout.Data.Height = oldDataHeight;
+                    _layout.ColumnHeaders.X += vertScrollBarWidth;
                 }
             }
 
-            oldfirstDisplayedScrollingRow = DisplayedBandsInfo.FirstDisplayedScrollingRow;
+            needVertScrollbar = true;
+        }
+
+        DisplayedBandsInfo.FirstDisplayedScrollingCol = ComputeFirstVisibleScrollingColumn();
+
+        // Compute the number of visible columns only after setting up the vertical scroll bar.
+        ComputeVisibleColumns();
+
+        if (allowHorizScrollbar
+            && needVertScrollbar && !needHorizScrollbar
+            && totalVisibleWidth > _layout.Data.Width && totalVisibleFrozenWidth < _layout.Data.Width
+            && horizScrollBarHeight <= _layout.Data.Height)
+        {
+            DisplayedBandsInfo.FirstDisplayedScrollingRow = oldfirstDisplayedScrollingRow;
+            if (_layout.ColumnHeadersVisible)
+            {
+                _layout.ColumnHeaders.Width += vertScrollBarWidth;
+                if (rightToLeftInternal)
+                {
+                    _layout.ColumnHeaders.X -= vertScrollBarWidth;
+                }
+            }
+
+            _layout.Data.Width += vertScrollBarWidth;
+            if (rightToLeftInternal)
+            {
+                _layout.Data.X -= vertScrollBarWidth;
+            }
+
+            _layout.Data.Height -= horizScrollBarHeight;
+            Debug.Assert(_layout.Data.Height >= 0);
+            needVertScrollbar = false;
 
             ComputeVisibleRows();
-            if (allowVertScrollbar
-                && DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
-                && DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount - Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+            if (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
+                && DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount
                 && (totalVisibleHeight - totalVisibleFrozenHeight != ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight))
                 && _layout.Data.Height > totalVisibleFrozenHeight
                 && vertScrollBarWidth <= _layout.Data.Width)
@@ -10646,159 +10698,98 @@ public partial class DataGridView
                 needVertScrollbar = true;
             }
 
-            DisplayedBandsInfo.FirstDisplayedScrollingCol = ComputeFirstVisibleScrollingColumn();
-            // we compute the number of visible columns only after we set up the vertical scroll bar.
-            ComputeVisibleColumns();
-
-            if (allowHorizScrollbar
-                && needVertScrollbar && !needHorizScrollbar
-                && totalVisibleWidth > _layout.Data.Width && totalVisibleFrozenWidth < _layout.Data.Width
-                && horizScrollBarHeight <= _layout.Data.Height)
-            {
-                DisplayedBandsInfo.FirstDisplayedScrollingRow = oldfirstDisplayedScrollingRow;
-                if (_layout.ColumnHeadersVisible)
-                {
-                    _layout.ColumnHeaders.Width += vertScrollBarWidth;
-                    if (rightToLeftInternal)
-                    {
-                        _layout.ColumnHeaders.X -= vertScrollBarWidth;
-                    }
-                }
-
-                _layout.Data.Width += vertScrollBarWidth;
-                if (rightToLeftInternal)
-                {
-                    _layout.Data.X -= vertScrollBarWidth;
-                }
-
-                _layout.Data.Height -= horizScrollBarHeight;
-                Debug.Assert(_layout.Data.Height >= 0);
-                needVertScrollbar = false;
-
-                ComputeVisibleRows();
-                if (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)
-                    && DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount
-                    && (totalVisibleHeight - totalVisibleFrozenHeight != ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight))
-                    && _layout.Data.Height > totalVisibleFrozenHeight
-                    && vertScrollBarWidth <= _layout.Data.Width)
-                {
-                    _layout.Data.Width -= vertScrollBarWidth;
-                    Debug.Assert(_layout.Data.Width >= 0);
-                    if (rightToLeftInternal)
-                    {
-                        _layout.Data.X += vertScrollBarWidth;
-                    }
-
-                    if (_layout.ColumnHeadersVisible)
-                    {
-                        _layout.ColumnHeaders.Width -= vertScrollBarWidth;
-                        Debug.Assert(_layout.ColumnHeaders.Width >= 0);
-                        if (rightToLeftInternal)
-                        {
-                            _layout.ColumnHeaders.X += vertScrollBarWidth;
-                        }
-                    }
-
-                    needVertScrollbar = true;
-                }
-
-                if (needVertScrollbar)
-                {
-                    needHorizScrollbar = true;
-                }
-                else
-                {
-                    needHorizScrollbar = needHorizScrollbarWithoutVertScrollbar;
-                }
-            }
-
-            _layout.ResizeBoxRect = default;
-            if (needVertScrollbar && needHorizScrollbar)
-            {
-                _layout.ResizeBoxRect = new Rectangle(
-                    rightToLeftInternal ? _layout.Data.X - _vertScrollBar.Width : _layout.Data.Right,
-                    _layout.Data.Bottom,
-                    _vertScrollBar.Width,
-                    _horizScrollBar.Height);
-            }
-
-            if (needHorizScrollbar && totalVisibleColCount > 0)
-            {
-                int widthNotVisible = totalVisibleWidth - _layout.Data.Width;
-
-                _horizScrollBar.Minimum = 0;
-                _horizScrollBar.Maximum = totalVisibleWidth - totalVisibleFrozenWidth;
-                Debug.Assert(_horizScrollBar.Maximum > 0);
-                _horizScrollBar.SmallChange = 1;
-                _horizScrollBar.LargeChange = Math.Max(totalVisibleWidth - totalVisibleFrozenWidth - widthNotVisible, 0);
-                _horizScrollBar.Enabled = Enabled;
-                _horizScrollBar.Bounds = new Rectangle(
-                    rightToLeftInternal ? _layout.Inside.X + _layout.ResizeBoxRect.Width : _layout.Inside.X,
-                    _layout.Data.Bottom,
-                    _layout.Inside.Width - _layout.ResizeBoxRect.Width,
-                    _horizScrollBar.Height);
-                _horizScrollBar.Visible = true;
-                _horizScrollBar.Invalidate();
-            }
-            else
-            {
-                _horizScrollBar.Visible = false;
-                HorizontalOffset = 0;
-
-                _horizScrollBar.Enabled = false;
-                _horizScrollBar.Minimum = 0;
-                _horizScrollBar.Maximum = 1;
-                _horizScrollBar.SmallChange = 1;
-                _horizScrollBar.LargeChange = 1;
-                _horizScrollBar.Value = 0;
-            }
-
             if (needVertScrollbar)
             {
-                int vertScrollBarTop = _layout.Data.Y;
-                int vertScrollBarHeight = _layout.Data.Height;
-                if (_layout.ColumnHeadersVisible)
-                {
-                    vertScrollBarTop = _layout.ColumnHeaders.Y;
-                    vertScrollBarHeight += _layout.ColumnHeaders.Height;
-                }
-                else if (SingleHorizontalBorderAdded)
-                {
-                    vertScrollBarTop--;
-                    vertScrollBarHeight++;
-                }
-
-                _vertScrollBar.Minimum = 0;
-                _vertScrollBar.Maximum = totalVisibleHeight - totalVisibleFrozenHeight;
-                Debug.Assert(_vertScrollBar.Maximum > 0);
-                _vertScrollBar.Value = ComputeHeightOfScrolledOffRows();
-                _vertScrollBar.LargeChange = _layout.Data.Height - totalVisibleFrozenHeight;
-                _vertScrollBar.Bounds = new Rectangle(
-                    rightToLeftInternal ? _layout.Data.X - _vertScrollBar.Width : _layout.Data.Right,
-                    vertScrollBarTop,
-                    _vertScrollBar.Width,
-                    vertScrollBarHeight);
-                _vertScrollBar.Enabled = Enabled;
-                _vertScrollBar.Visible = true;
-                _vertScrollBar.Invalidate();
-
-                VerticalScrollingOffset = _vertScrollBar.Value;
+                needHorizScrollbar = true;
             }
             else
             {
-                _vertScrollBar.Visible = false;
-                VerticalScrollingOffset = ComputeHeightOfScrolledOffRows();
-
-                _vertScrollBar.Enabled = false;
-                _vertScrollBar.Minimum = 0;
-                _vertScrollBar.Maximum = 1;
-                _vertScrollBar.LargeChange = 1;
-                _vertScrollBar.Value = 0;
+                needHorizScrollbar = needHorizScrollbarWithoutVertScrollbar;
             }
         }
-        finally
+
+        _layout.ResizeBoxRect = default;
+        if (needVertScrollbar && needHorizScrollbar)
         {
-            ResumeLayout(false);
+            _layout.ResizeBoxRect = new Rectangle(
+                rightToLeftInternal ? _layout.Data.X - _vertScrollBar.Width : _layout.Data.Right,
+                _layout.Data.Bottom,
+                _vertScrollBar.Width,
+                _horizScrollBar.Height);
+        }
+
+        if (needHorizScrollbar && totalVisibleColCount > 0)
+        {
+            int widthNotVisible = totalVisibleWidth - _layout.Data.Width;
+
+            _horizScrollBar.Minimum = 0;
+            _horizScrollBar.Maximum = totalVisibleWidth - totalVisibleFrozenWidth;
+            Debug.Assert(_horizScrollBar.Maximum > 0);
+            _horizScrollBar.SmallChange = 1;
+            _horizScrollBar.LargeChange = Math.Max(totalVisibleWidth - totalVisibleFrozenWidth - widthNotVisible, 0);
+            _horizScrollBar.Enabled = Enabled;
+            _horizScrollBar.Bounds = new Rectangle(
+                rightToLeftInternal ? _layout.Inside.X + _layout.ResizeBoxRect.Width : _layout.Inside.X,
+                _layout.Data.Bottom,
+                _layout.Inside.Width - _layout.ResizeBoxRect.Width,
+                _horizScrollBar.Height);
+            _horizScrollBar.Visible = true;
+            _horizScrollBar.Invalidate();
+        }
+        else
+        {
+            _horizScrollBar.Visible = false;
+            HorizontalOffset = 0;
+
+            _horizScrollBar.Enabled = false;
+            _horizScrollBar.Minimum = 0;
+            _horizScrollBar.Maximum = 1;
+            _horizScrollBar.SmallChange = 1;
+            _horizScrollBar.LargeChange = 1;
+            _horizScrollBar.Value = 0;
+        }
+
+        if (needVertScrollbar)
+        {
+            int vertScrollBarTop = _layout.Data.Y;
+            int vertScrollBarHeight = _layout.Data.Height;
+            if (_layout.ColumnHeadersVisible)
+            {
+                vertScrollBarTop = _layout.ColumnHeaders.Y;
+                vertScrollBarHeight += _layout.ColumnHeaders.Height;
+            }
+            else if (SingleHorizontalBorderAdded)
+            {
+                vertScrollBarTop--;
+                vertScrollBarHeight++;
+            }
+
+            _vertScrollBar.Minimum = 0;
+            _vertScrollBar.Maximum = totalVisibleHeight - totalVisibleFrozenHeight;
+            Debug.Assert(_vertScrollBar.Maximum > 0);
+            _vertScrollBar.Value = ComputeHeightOfScrolledOffRows();
+            _vertScrollBar.LargeChange = _layout.Data.Height - totalVisibleFrozenHeight;
+            _vertScrollBar.Bounds = new Rectangle(
+                rightToLeftInternal ? _layout.Data.X - _vertScrollBar.Width : _layout.Data.Right,
+                vertScrollBarTop,
+                _vertScrollBar.Width,
+                vertScrollBarHeight);
+            _vertScrollBar.Enabled = Enabled;
+            _vertScrollBar.Visible = true;
+            _vertScrollBar.Invalidate();
+
+            VerticalScrollingOffset = _vertScrollBar.Value;
+        }
+        else
+        {
+            _vertScrollBar.Visible = false;
+            VerticalScrollingOffset = ComputeHeightOfScrolledOffRows();
+
+            _vertScrollBar.Enabled = false;
+            _vertScrollBar.Minimum = 0;
+            _vertScrollBar.Maximum = 1;
+            _vertScrollBar.LargeChange = 1;
+            _vertScrollBar.Value = 0;
         }
     }
 

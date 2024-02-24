@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Ole;
-using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -13,7 +12,7 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class DragDropFormat : IDisposable
 {
-    private short _format;
+    private ushort _format;
     private STGMEDIUM _medium;
 
     public STGMEDIUM Medium => _medium;
@@ -21,7 +20,7 @@ internal class DragDropFormat : IDisposable
     /// <summary>
     ///  Initializes a new instance of the <see cref="DragDropFormat"/> class using the specified format, storage medium, and owner.
     /// </summary>
-    public DragDropFormat(short format, STGMEDIUM medium, bool copyData)
+    public DragDropFormat(ushort format, STGMEDIUM medium, bool copyData)
     {
         _format = format;
 
@@ -32,15 +31,12 @@ internal class DragDropFormat : IDisposable
     /// <summary>
     ///  Returns a copy of the storage mediumn in this instance.
     /// </summary>
-    public STGMEDIUM GetData()
-    {
-        return CopyData(_format, _medium);
-    }
+    public STGMEDIUM GetData() => CopyData(_format, _medium);
 
     /// <summary>
     ///  Refreshes the storage medium in this instance.
     /// </summary>
-    public void RefreshData(short format, STGMEDIUM medium, bool copyData)
+    public void RefreshData(ushort format, STGMEDIUM medium, bool copyData)
     {
         ReleaseData();
         _format = format;
@@ -55,7 +51,7 @@ internal class DragDropFormat : IDisposable
     /// <returns>
     ///  A copy of <paramref name="mediumSource"/>.
     /// </returns>
-    private static STGMEDIUM CopyData(short format, STGMEDIUM mediumSource)
+    private static unsafe STGMEDIUM CopyData(ushort format, STGMEDIUM mediumSource)
     {
         STGMEDIUM mediumDestination = default;
 
@@ -69,13 +65,13 @@ internal class DragDropFormat : IDisposable
                 case TYMED.TYMED_GDI:
                 case TYMED.TYMED_MFPICT:
 
-                    mediumDestination.unionmember = PInvoke.OleDuplicateData(
-                        (HANDLE)mediumSource.unionmember,
+                    mediumDestination.hGlobal = (HGLOBAL)(nint)PInvoke.OleDuplicateData(
+                        (HANDLE)(nint)mediumSource.hGlobal,
                         (CLIPBOARD_FORMAT)format,
                         // Note that GMEM_DDESHARE is ignored
                         GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
 
-                    if (mediumDestination.unionmember == IntPtr.Zero)
+                    if (mediumDestination.hGlobal.IsNull)
                     {
                         return default;
                     }
@@ -85,32 +81,30 @@ internal class DragDropFormat : IDisposable
                 case TYMED.TYMED_ISTORAGE:
                 case TYMED.TYMED_ISTREAM:
 
-                    mediumDestination.unionmember = mediumSource.unionmember;
-                    Marshal.AddRef(mediumSource.unionmember);
+                    mediumDestination.hGlobal = mediumSource.hGlobal;
+                    Marshal.AddRef(mediumSource.hGlobal);
                     break;
 
                 case TYMED.TYMED_NULL:
                 default:
 
-                    mediumDestination.unionmember = IntPtr.Zero;
+                    mediumDestination.hGlobal = HGLOBAL.Null;
                     break;
             }
 
             mediumDestination.tymed = mediumSource.tymed;
             mediumDestination.pUnkForRelease = mediumSource.pUnkForRelease;
 
-            // If the object is non-null, perform an indirect AddRef() by requesting the IUnknown.
             if (mediumSource.pUnkForRelease is not null)
             {
-                Marshal.GetIUnknownForObject(mediumSource.pUnkForRelease);
+                mediumSource.pUnkForRelease->AddRef();
             }
 
             return mediumDestination;
         }
         catch
         {
-            var comMedium = (Com.STGMEDIUM)mediumDestination;
-            PInvoke.ReleaseStgMedium(ref comMedium);
+            PInvoke.ReleaseStgMedium(ref mediumDestination);
             return default;
         }
     }
@@ -118,13 +112,12 @@ internal class DragDropFormat : IDisposable
     /// <summary>
     ///  Frees the storage medium in this instance.
     /// </summary>
-    private void ReleaseData()
+    private unsafe void ReleaseData()
     {
-        var comMedium = (Com.STGMEDIUM)_medium;
-        PInvoke.ReleaseStgMedium(ref comMedium);
+        PInvoke.ReleaseStgMedium(ref _medium);
         _medium.pUnkForRelease = null;
         _medium.tymed = TYMED.TYMED_NULL;
-        _medium.unionmember = IntPtr.Zero;
+        _medium.hGlobal = HGLOBAL.Null;
     }
 
     public void Dispose()

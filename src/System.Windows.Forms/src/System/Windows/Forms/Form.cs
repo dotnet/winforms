@@ -2317,31 +2317,22 @@ public partial class Form : ContainerControl
 
                 if (ParentInternal is not null && ParentInternal.Visible)
                 {
-                    SuspendLayout();
-                    try
-                    {
-                        PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_SHOW);
-                        CreateControl();
+                    using SuspendLayoutScope scope = new(this);
+                    PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_SHOW);
+                    CreateControl();
 
-                        // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to
-                        // update the menu bar because we always create the window as if it were not maximized.
-                        // See comment on CreateHandle about this.
-                        if (WindowState == FormWindowState.Maximized)
-                        {
-                            MdiParentInternal.UpdateWindowIcon(true);
-                        }
-                    }
-                    finally
+                    // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to
+                    // update the menu bar because we always create the window as if it were not maximized.
+                    // See comment on CreateHandle about this.
+                    if (WindowState == FormWindowState.Maximized)
                     {
-                        ResumeLayout();
+                        MdiParentInternal.UpdateWindowIcon(true);
                     }
                 }
             }
 
             OnVisibleChanged(EventArgs.Empty);
         }
-
-        // (
 
         if (value && !IsMdiChild && (WindowState == FormWindowState.Maximized || TopMost))
         {
@@ -4929,26 +4920,21 @@ public partial class Form : ContainerControl
     protected override void ScaleCore(float x, float y)
     {
         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({x}, {y})");
-        SuspendLayout();
-        try
-        {
-            // Get size values in advance to prevent one change from affecting another.
-            Size clientSize = ClientSize;
-            ScaleMinMaxSize(x, y);
-            ScaleDockPadding(x, y);
-            if (WindowState == FormWindowState.Normal)
-            {
-                ClientSize = ScaleSize(clientSize, x, y);
-            }
 
-            foreach (Control control in Controls)
-            {
-                control?.Scale(x, y);
-            }
-        }
-        finally
+        using SuspendLayoutScope scope = new(this);
+
+        // Get size values in advance to prevent one change from affecting another.
+        Size clientSize = ClientSize;
+        ScaleMinMaxSize(x, y);
+        ScaleDockPadding(x, y);
+        if (WindowState == FormWindowState.Normal)
         {
-            ResumeLayout();
+            ClientSize = ScaleSize(clientSize, x, y);
+        }
+
+        foreach (Control control in Controls)
+        {
+            control?.Scale(x, y);
         }
     }
 

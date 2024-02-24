@@ -13,7 +13,7 @@ namespace System.Drawing;
 public unsafe static class Helpers
 {
     // This MUST come before s_anyInstalledPrinters. Caching for performance in tests.
-    public static IReadOnlyList<string> InstalledPrinters { get; } = PrinterSettings.InstalledPrinters;
+    public static PrinterSettings.StringCollection InstalledPrinters { get; } = PrinterSettings.InstalledPrinters;
 
     private static bool s_anyInstalledPrinters = InstalledPrinters.Count > 0;
 

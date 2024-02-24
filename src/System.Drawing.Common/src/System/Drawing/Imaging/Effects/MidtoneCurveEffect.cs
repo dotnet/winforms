@@ -3,8 +3,6 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
@@ -12,11 +10,10 @@ namespace System.Drawing.Imaging.Effects;
 ///  color channel values near the minimum or maximum intensity. You can use this effect to lighten (or darken)
 ///  an image without loosing the contrast between the darkest and lightest portions of the image.
 /// </summary>
-[RequiresPreviewFeatures]
-public class MidtoneEffect : ColorCurveEffect
+public class MidtoneCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="MidtoneEffect"/> with the given <paramref name="midtone"/> adjustment.
+    ///  Creates a new <see cref="MidtoneCurveEffect"/> with the given <paramref name="midtone"/> adjustment.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="midtone">
@@ -24,7 +21,7 @@ public class MidtoneEffect : ColorCurveEffect
     ///  mid-tones are made lighter, and negative values specify that the mid-tones are made darker.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="midtone"/> is less than -100 or greater than 100.</exception>
-    public MidtoneEffect(CurveChannel channel, int midtone)
+    public MidtoneCurveEffect(CurveChannel channel, int midtone)
         : base(CurveAdjustments.AdjustMidtone, channel, midtone)
     {
     }
