@@ -444,7 +444,8 @@ public class ImageListTests
         BinaryFormatter formatter = new();
         formatter.Serialize(stream, source);
         stream.Position = 0;
-        return (T)formatter.Deserialize(stream);
+        // cs/deserialization-unexpected-subtypes
+        return (T)formatter.Deserialize(stream); // CodeQL [SM02229] Testing legacy features: we are deserializing stream with controlled content.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
     }
 

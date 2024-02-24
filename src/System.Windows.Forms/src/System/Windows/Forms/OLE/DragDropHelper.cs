@@ -200,12 +200,12 @@ internal static unsafe class DragDropHelper
         {
             try
             {
-                void* basePtr = PInvokeCore.GlobalLock((HGLOBAL)dragDropFormat.Medium.unionmember);
+                void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
                 return (basePtr is not null) && (*(BOOL*)basePtr == true);
             }
             finally
             {
-                PInvokeCore.GlobalUnlock((HGLOBAL)dragDropFormat.Medium.unionmember);
+                PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
             }
         }
         else

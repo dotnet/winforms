@@ -3,14 +3,11 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
-///  Adjusts the light, midtone, or dark areas of an image.
+///  Adjusts the light, mid-tone, or dark areas of an image.
 /// </summary>
-[RequiresPreviewFeatures]
 public class LevelsEffect : Effect
 {
     private readonly LevelsParams _levelsParams;

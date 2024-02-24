@@ -116,7 +116,7 @@ internal sealed class LayoutTransaction : IDisposable
         }
         else
         {
-            LayoutTransaction.DoLayout(elementToLayout, elementCausingLayout, property);
+            DoLayout(elementToLayout, elementCausingLayout, property);
         }
     }
 }

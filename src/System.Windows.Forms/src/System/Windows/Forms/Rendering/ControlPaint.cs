@@ -1457,7 +1457,7 @@ public static unsafe partial class ControlPaint
             // Replace black/white with foreColor/backColor.
             ImageAttributes attributes = new();
 
-            Span<ValueColorMap> map =
+            Span<(Color OldColor, Color NewColor)> map =
             [
                 new(Color.Black, foreColor),
                 new(Color.White, backColor)
@@ -1581,8 +1581,8 @@ public static unsafe partial class ControlPaint
     {
         using ImageAttributes attributes = new();
 
-        ValueColorMap map = new(oldColor, newColor);
-        attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<ValueColorMap>(ref map));
+        (Color OldColor, Color NewColor) map = new(oldColor, newColor);
+        attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<(Color OldColor, Color NewColor)>(ref map));
 
         g.DrawImage(image, dest, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes, null, 0);
     }

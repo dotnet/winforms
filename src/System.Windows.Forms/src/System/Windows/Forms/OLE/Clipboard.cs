@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
 
@@ -87,7 +86,7 @@ public static class Clipboard
         }
 
         int retryTimes = 10;
-        ComScope<Com.IDataObject> proxyDataObject = new(null);
+        using ComScope<Com.IDataObject> proxyDataObject = new(null);
         HRESULT hr;
         while ((hr = PInvoke.OleGetClipboard(proxyDataObject)).Failed)
         {
@@ -112,7 +111,6 @@ public static class Clipboard
         if (hr.Succeeded)
         {
             target = realDataObject.AsUnknown;
-            proxyDataObject.Dispose();
         }
         else
         {
@@ -125,13 +123,15 @@ public static class Clipboard
             return null;
         }
 
-        if (managedDataObject is not IComDataObject dataObject)
+        if (managedDataObject is not Com.IDataObject.Interface dataObject)
         {
-            // If we do not have a IComDataObject, built-in com support is turned off and
+            // We always wrap data set on the Clipboard in a DataObject, so if we do not have
+            // a IDataObject.Interface this means built-in com support is turned off and
             // we have a proxy where there is no way to retrieve the original data object
             // pointer from it likely because either the clipboard was flushed or the data on the
             // clipboard is from another process. We need to mimic built-in com behavior and wrap the proxy ourselves.
-            return new DataObject(proxyDataObject, managedDataObject);
+            // DataObject will ref count proxyDataObject properly to take ownership.
+            return new DataObject(proxyDataObject.Value);
         }
 
         if (dataObject is DataObject { IsWrappedForClipboard: true } wrappedData)

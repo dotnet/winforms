@@ -3,14 +3,11 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Changes the brightness and contrast of an image.
 /// </summary>
-[RequiresPreviewFeatures]
 public unsafe class BrightnessContrastEffect : Effect
 {
     private readonly BrightnessContrastParams _brightnessContrastParams;

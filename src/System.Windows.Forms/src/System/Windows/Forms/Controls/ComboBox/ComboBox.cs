@@ -915,30 +915,20 @@ public partial class ComboBox : ListControl
         return cyCombo;
     }
 
-    private string[] GetStringsForAutoComplete(IList collection)
+    private string[] GetStringsForAutoComplete()
     {
-        if (collection is AutoCompleteStringCollection)
+        if (Items is not null)
         {
-            string[] strings = new string[AutoCompleteCustomSource.Count];
-            for (int i = 0; i < AutoCompleteCustomSource.Count; i++)
+            string[] strings = new string[Items.Count];
+            for (int i = 0; i < Items.Count; i++)
             {
-                strings[i] = AutoCompleteCustomSource[i];
-            }
-
-            return strings;
-        }
-        else if (collection is ObjectCollection && _itemsCollection is not null)
-        {
-            string[] strings = new string[_itemsCollection.Count];
-            for (int i = 0; i < _itemsCollection.Count; i++)
-            {
-                strings[i] = GetItemText(_itemsCollection[i])!;
+                strings[i] = GetItemText(Items[i])!;
             }
 
             return strings;
         }
 
-        return Array.Empty<string>();
+        return [];
     }
 
     /// <summary>
@@ -3283,7 +3273,7 @@ public partial class ComboBox : ListControl
 
             if (_stringSource is null)
             {
-                _stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
+                _stringSource = new StringSource(AutoCompleteCustomSource.ToArray());
                 if (!_stringSource.Bind(_childEdit, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                 {
                     throw new ArgumentException(SR.AutoCompleteFailure);
@@ -3291,7 +3281,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                _stringSource.RefreshList(GetStringsForAutoComplete(AutoCompleteCustomSource));
+                _stringSource.RefreshList(AutoCompleteCustomSource.ToArray());
             }
 
             return;
@@ -3326,7 +3316,7 @@ public partial class ComboBox : ListControl
 
             if (_stringSource is null)
             {
-                _stringSource = new StringSource(GetStringsForAutoComplete(Items));
+                _stringSource = new StringSource(GetStringsForAutoComplete());
                 if (!_stringSource.Bind(_childEdit, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                 {
                     throw new ArgumentException(SR.AutoCompleteFailureListItems);
@@ -3334,7 +3324,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                _stringSource.RefreshList(GetStringsForAutoComplete(Items));
+                _stringSource.RefreshList(GetStringsForAutoComplete());
             }
 
             return;

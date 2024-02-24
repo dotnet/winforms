@@ -3,14 +3,11 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Sharpens an image.
 /// </summary>
-[RequiresPreviewFeatures]
 public unsafe class SharpenEffect : Effect
 {
     private readonly SharpenParams _sharpenParams;

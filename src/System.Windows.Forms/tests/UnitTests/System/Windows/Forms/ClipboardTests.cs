@@ -12,7 +12,7 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms.Tests;
 
-public class ClipboardTests
+public partial class ClipboardTests
 {
     [WinFormsFact]
     public void Clipboard_Clear_InvokeMultipleTimes_Success()
@@ -595,31 +595,5 @@ public class ClipboardTests
         void IDataObject.SetData(Type format, object data) => throw new NotImplementedException();
         void IDataObject.SetData(object data) => throw new NotImplementedException();
         void ComTypes.IDataObject.SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
-    }
-
-    [Collection("Sequential")]
-    public class ClipboardSequentialTests()
-    {
-        [WinFormsTheory]
-        [BoolData]
-        public void Clipboard_SetText_InvokeString_GetReturnsExpected(bool builtInComSupported)
-        {
-            string builtInComInteropSwitch = "System.Runtime.InteropServices.BuiltInComInterop.IsSupported";
-            AppContext.TryGetSwitch(builtInComInteropSwitch, out bool original);
-            try
-            {
-                AppContext.SetSwitch(builtInComInteropSwitch, builtInComSupported);
-                AppContext.TryGetSwitch(builtInComInteropSwitch, out bool isEnabled).Should().BeTrue();
-                isEnabled.Should().Be(builtInComSupported);
-
-                Clipboard.SetText("text");
-                Assert.Equal("text", Clipboard.GetText());
-                Assert.True(Clipboard.ContainsText());
-            }
-            finally
-            {
-                AppContext.SetSwitch(builtInComInteropSwitch, original);
-            }
-        }
     }
 }

@@ -3,7 +3,6 @@
 
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace System.ComponentModel.Design;
 

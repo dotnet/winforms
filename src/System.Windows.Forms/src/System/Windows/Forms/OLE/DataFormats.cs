@@ -197,20 +197,22 @@ public static partial class DataFormats
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
-    public static unsafe Format GetFormat(int id)
-    {
+    public static Format GetFormat(int id) =>
         // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
         // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
         // to represent format as an unsigned type.
-        ushort clampedId = (ushort)(id & 0xFFFF);
+        GetFormat((ushort)(id & 0xFFFF));
 
+    /// <inheritdoc cref="GetFormat(int)"/>
+    internal static unsafe Format GetFormat(ushort id)
+    {
         lock (s_internalSyncObject)
         {
             EnsurePredefined();
 
             for (int n = 0; n < s_formatCount; n++)
             {
-                if (s_formatList[n].Id == clampedId)
+                if (s_formatList[n].Id == id)
                 {
                     return s_formatList[n];
                 }
@@ -224,7 +226,7 @@ public static partial class DataFormats
             Span<char> formatName = stackalloc char[256];
             fixed (char* pFormatName = formatName)
             {
-                int length = PInvoke.GetClipboardFormatName(clampedId, pFormatName, 256);
+                int length = PInvoke.GetClipboardFormatName(id, pFormatName, 256);
                 if (length != 0)
                 {
                     name = formatName.Slice(0, length).ToString();
@@ -233,10 +235,10 @@ public static partial class DataFormats
 
             // This can happen if windows adds a standard format that we don't know about,
             // so we should play it safe.
-            name ??= $"Format{clampedId}";
+            name ??= $"Format{id}";
 
             EnsureFormatSpace(1);
-            s_formatList[s_formatCount] = new Format(name, clampedId);
+            s_formatList[s_formatCount] = new Format(name, id);
             return s_formatList[s_formatCount++];
         }
     }

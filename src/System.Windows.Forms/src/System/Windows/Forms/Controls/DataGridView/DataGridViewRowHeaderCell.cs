@@ -1036,9 +1036,9 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         int height = bounds.Y + (bounds.Height - s_iconsHeight) / 2;
         Rectangle bmpRect = new(width, height, s_iconsWidth, s_iconsHeight);
 
-        ValueColorMap map = new(Color.Black, foreColor);
+        (Color OldColor, Color NewColor) map = new(Color.Black, foreColor);
         using ImageAttributes attr = new();
-        attr.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<ValueColorMap>(ref map));
+        attr.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<(Color OldColor, Color NewColor)>(ref map));
 
         if (SystemInformation.HighContrast &&
             // We can't replace black with white and vice versa as in other cases due to the colors of images are not exactly black and white.

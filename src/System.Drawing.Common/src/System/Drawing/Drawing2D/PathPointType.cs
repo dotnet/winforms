@@ -1,18 +1,45 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Drawing2D;
 
 public enum PathPointType
 {
-    Start = 0, // move
-    Line = 1, // line
-    Bezier = 3, // default Beizer (= cubic Bezier)
-    PathTypeMask = 0x07, // type mask (lowest 3 bits).
-    DashMode = 0x10, // currently in dash mode.
-    PathMarker = 0x20, // a marker for the path.
-    CloseSubpath = 0x80, // closed flag
+    /// <summary>
+    ///  Indicates that the point is the start of a figure.
+    /// </summary>
+    Start = GdiPlus.PathPointType.PathPointTypeStart,
 
-    // Path types used for advanced path.
-    Bezier3 = 3,    // cubic Bezier
+    /// <summary>
+    ///  Indicates that the point is an endpoint of a line.
+    /// </summary>
+    Line = GdiPlus.PathPointType.PathPointTypeLine,
+
+    /// <summary>
+    ///  Indicates that the point is an endpoint or a control point of a cubic Bézier spline.
+    /// </summary>
+    Bezier = GdiPlus.PathPointType.PathPointTypeBezier,
+
+    /// <summary>
+    ///  Masks all bits except for the three low-order bits, which indicate the point type.
+    /// </summary>
+    PathTypeMask = GdiPlus.PathPointType.PathPointTypePathTypeMask,
+
+    /// <summary>
+    ///  Not used.
+    /// </summary>
+    DashMode = GdiPlus.PathPointType.PathPointTypeDashMode,
+
+    /// <summary>
+    ///  Specifies that the point is a marker.
+    /// </summary>
+    PathMarker = GdiPlus.PathPointType.PathPointTypePathMarker,
+
+    /// <summary>
+    ///  Specifies that the point is the last point in a closed subpath (figure).
+    /// </summary>
+    CloseSubpath = GdiPlus.PathPointType.PathPointTypeCloseSubpath,
+
+    /// <inheritdoc cref="Bezier"/>
+    Bezier3 = GdiPlus.PathPointType.PathPointTypeBezier3
 }
