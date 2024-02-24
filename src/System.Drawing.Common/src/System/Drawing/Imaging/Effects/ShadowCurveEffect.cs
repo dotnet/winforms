@@ -3,8 +3,6 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
@@ -12,11 +10,10 @@ namespace System.Drawing.Imaging.Effects;
 ///  intensity. You can use this effect to get more definition in the dark areas of an image without affecting
 ///  the light areas.
 /// </summary>
-[RequiresPreviewFeatures]
-public class ShadowEffect : ColorCurveEffect
+public class ShadowCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="ShadowEffect"/> with the given <paramref name="shadow"/>.
+    ///  Creates a new <see cref="ShadowCurveEffect"/> with the given <paramref name="shadow"/>.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="shadow">
@@ -24,7 +21,7 @@ public class ShadowEffect : ColorCurveEffect
     ///  dark areas are made lighter, and negative values specify that the dark areas are made darker.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="shadow"/> is less than -100 or greater than 100.</exception>
-    public ShadowEffect(CurveChannel channel, int shadow)
+    public ShadowCurveEffect(CurveChannel channel, int shadow)
         : base(CurveAdjustments.AdjustShadow, channel, shadow)
     {
     }

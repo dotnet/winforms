@@ -1652,8 +1652,8 @@ public class ScrollableControlTests
 
                     yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
                     yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
-                    yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
-                    yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                    yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
+                    yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
                     yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
                     yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
                 }
@@ -1802,8 +1802,8 @@ public class ScrollableControlTests
 
                 yield return new object[] { hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-                yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
-                yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                 yield return new object[] { hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
             }

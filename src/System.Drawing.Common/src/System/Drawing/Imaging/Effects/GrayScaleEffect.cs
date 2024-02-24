@@ -3,14 +3,11 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
 ///  Effect that converts an image to grayscale.
 /// </summary>
-[RequiresPreviewFeatures]
 public sealed class GrayScaleEffect : ColorMatrixEffect
 {
     public GrayScaleEffect() : base(

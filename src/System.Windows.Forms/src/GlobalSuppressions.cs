@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 // Publicly shipped API
-
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnKeyDown(System.Windows.Forms.KeyEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnKeyUp(System.Windows.Forms.KeyEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnMouseDown(System.Windows.Forms.MouseEventArgs)")]
@@ -18,6 +17,7 @@
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.FontDialog.RunDialog(System.IntPtr)~System.Boolean")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)")]
+[assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.Control.EndInvoke(System.IAsyncResult)~System.Object")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.FontDialog.EventApply")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.FileDialog.EventFileOk")]
 [assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
@@ -32,3 +32,7 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.VisualStyles.VisualStyleRenderer.t_themeHandles")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.VisualStyles.VisualStyleRenderer.t_threadCacheVersion")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.RadioButtonRenderer.t_visualStyleRenderer")]
+
+// Matches native naming
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Matches native naming", Scope = "member", Target = "~F:System.Windows.Forms.Control.WM_GETCONTROLNAME")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Matches native naming", Scope = "member", Target = "~F:System.Windows.Forms.Control.WM_GETCONTROLTYPE")]

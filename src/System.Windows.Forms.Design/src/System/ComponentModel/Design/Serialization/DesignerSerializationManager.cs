@@ -4,7 +4,6 @@
 using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization;
 

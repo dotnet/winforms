@@ -1348,7 +1348,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             get
             {
-                EditorAttribute editorAttr = new("Design.DataGridViewColumnTypeEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor));
+                EditorAttribute editorAttr = new($"System.Windows.Forms.Design.DataGridViewColumnTypeEditor, {AssemblyRef.SystemDesign}", typeof(System.Drawing.Design.UITypeEditor));
                 DescriptionAttribute descriptionAttr = new(SR.DataGridViewColumnTypePropertyDescription);
                 CategoryAttribute categoryAttr = CategoryAttribute.Design;
                 // add the description attribute and the categories attribute

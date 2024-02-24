@@ -18,12 +18,15 @@ global using ColorPalette = System.Drawing.Imaging.ColorPalette;
 global using DashCap = System.Drawing.Drawing2D.DashCap;
 global using DashStyle = System.Drawing.Drawing2D.DashStyle;
 global using EmfPlusRecordType = System.Drawing.Imaging.EmfPlusRecordType;
+global using FillMode = System.Drawing.Drawing2D.FillMode;
 global using ImageCodecInfo = System.Drawing.Imaging.ImageCodecInfo;
+global using ImageLockMode = System.Drawing.Imaging.ImageLockMode;
 global using LineCap = System.Drawing.Drawing2D.LineCap;
 global using LineJoin = System.Drawing.Drawing2D.LineJoin;
 global using Matrix = System.Drawing.Drawing2D.Matrix;
 global using MatrixOrder = System.Drawing.Drawing2D.MatrixOrder;
 global using PenAlignment = System.Drawing.Drawing2D.PenAlignment;
+global using PixelFormat = System.Drawing.Imaging.PixelFormat;
 global using PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode;
 global using TextRenderingHint = System.Drawing.Text.TextRenderingHint;
 

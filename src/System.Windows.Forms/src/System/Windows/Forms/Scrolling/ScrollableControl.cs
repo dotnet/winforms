@@ -696,7 +696,14 @@ public partial class ScrollableControl : Control, IArrangedElement
                 PaintTransparentBackground(e, _displayRect);
             }
 
-            ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, BackColor, BackgroundImageLayout, _displayRect, _displayRect, _displayRect.Location);
+            ControlPaint.DrawBackgroundImage(
+                e.Graphics,
+                BackgroundImage,
+                BackColor,
+                BackgroundImageLayout,
+                _displayRect,
+                _displayRect,
+                _displayRect.Location);
         }
         else
         {

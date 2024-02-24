@@ -387,7 +387,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     }
 
     /// <summary>
-    ///  Adds an <see cref='Imaging.EncoderParameters'/> to the specified <see cref='Image'/>.
+    ///  Adds an <see cref='EncoderParameters'/> to the specified <see cref='Image'/>.
     /// </summary>
     public void SaveAdd(Image image, Imaging.EncoderParameters? encoderParams)
     {
@@ -543,16 +543,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     /// <summary>
     ///  Gets the pixel format for this <see cref='Image'/>.
     /// </summary>
-    public PixelFormat PixelFormat
-    {
-        get
-        {
-            PixelFormat format;
-            Status status = PInvoke.GdipGetImagePixelFormat(_nativeImage, (int*)&format);
-            GC.KeepAlive(this);
-            return (status != Status.Ok) ? PixelFormat.Undefined : format;
-        }
-    }
+    public PixelFormat PixelFormat => (PixelFormat)this.GetPixelFormat();
 
     /// <summary>
     ///  Gets an array of the property IDs stored in this <see cref='Image'/>.
@@ -619,11 +610,9 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     /// </summary>
     public RectangleF GetBounds(ref GraphicsUnit pageUnit)
     {
-        RectF bounds;
-        Unit unit = (Unit)pageUnit;
-        PInvoke.GdipGetImageBounds(_nativeImage, &bounds, &unit).ThrowIfFailed();
-        pageUnit = (GraphicsUnit)unit;
-        GC.KeepAlive(this);
+        // The Unit is hard coded to GraphicsUnit.Pixel in GDI+.
+        RectangleF bounds = this.GetImageBounds();
+        pageUnit = GraphicsUnit.Pixel;
         return bounds;
     }
 

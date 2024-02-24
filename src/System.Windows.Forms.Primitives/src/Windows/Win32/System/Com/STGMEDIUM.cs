@@ -33,4 +33,12 @@ internal unsafe partial struct STGMEDIUM
         tymed = (ComType.TYMED)stg.tymed,
         unionmember = stg.u.hGlobal
     };
+
+    public void ReleaseUnknown()
+    {
+        if (pUnkForRelease is not null)
+        {
+            pUnkForRelease->Release();
+        }
+    }
 }

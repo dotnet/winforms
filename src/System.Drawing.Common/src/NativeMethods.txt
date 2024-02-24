@@ -55,10 +55,8 @@ GdipBeginContainer2
 GdipBitmapApplyEffect
 GdipBitmapConvertFormat
 GdipBitmapGetPixel
-GdipBitmapLockBits
 GdipBitmapSetPixel
 GdipBitmapSetResolution
-GdipBitmapUnlockBits
 GdipClearPathMarkers
 GdipCloneBitmapArea
 GdipCloneBitmapAreaI
@@ -250,7 +248,6 @@ GdipGetHatchForegroundColor
 GdipGetHatchStyle
 GdipGetHemfFromMetafile
 GdipGetImageAttributesAdjustedPalette
-GdipGetImageBounds
 GdipGetImageDecoders
 GdipGetImageDecodersSize
 GdipGetImageDimension
@@ -260,7 +257,6 @@ GdipGetImageHeight
 GdipGetImageHorizontalResolution
 GdipGetImagePalette
 GdipGetImagePaletteSize
-GdipGetImagePixelFormat
 GdipGetImageRawFormat
 GdipGetImageThumbnail
 GdipGetImageType
@@ -558,7 +554,7 @@ LevelsParams
 PALETTEENTRY
 PaletteFlags
 PaletteType
-PixelFormat*
+PathPointType
 PRINTER_ENUM_CONNECTIONS
 PRINTER_ENUM_LOCAL
 PRINTER_INFO_4W

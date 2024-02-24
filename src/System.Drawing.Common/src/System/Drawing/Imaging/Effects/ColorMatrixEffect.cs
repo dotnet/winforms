@@ -3,8 +3,6 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
@@ -16,7 +14,6 @@ namespace System.Drawing.Imaging.Effects;
 ///   examples of using a color matrix to adjust the colors of an image.
 ///  </para>
 /// </remarks>
-[RequiresPreviewFeatures]
 public unsafe class ColorMatrixEffect : Effect
 {
     private readonly ColorMatrix _matrix;
@@ -35,5 +32,15 @@ public unsafe class ColorMatrixEffect : Effect
 
         _matrix = matrix;
     }
+
+    /// <summary>
+    ///  The color transform matrix.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <see cref="ColorMatrix"/> is mutable, but effects do not support changing the matrix after creation.
+    ///  </para>
+    /// </remarks>
+    public ColorMatrix Matrix => _matrix;
 }
 #endif

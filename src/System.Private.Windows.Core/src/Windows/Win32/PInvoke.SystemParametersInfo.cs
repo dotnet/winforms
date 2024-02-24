@@ -47,6 +47,8 @@ internal static partial class PInvokeCore
     {
         fixed (void* p = &highContrast)
         {
+            // Note that the documentation for HIGHCONTRASTW says that the lpszDefaultScheme member needs to be
+            // freed, but this is incorrect. No internal users ever free the pointer and the pointer never changes.
             highContrast.cbSize = (uint)sizeof(HIGHCONTRASTW);
             return SystemParametersInfo(
                 SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETHIGHCONTRAST,

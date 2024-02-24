@@ -8,7 +8,7 @@ namespace System.Drawing.Printing;
 
 public partial class PrinterSettings
 {
-    public class StringCollection : ICollection, IReadOnlyList<string>
+    public class StringCollection : ICollection, IEnumerable<string>
     {
         private readonly List<string> _list;
 

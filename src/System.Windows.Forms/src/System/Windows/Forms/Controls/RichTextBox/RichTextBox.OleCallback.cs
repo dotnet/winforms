@@ -139,7 +139,7 @@ public partial class RichTextBox
                 keyState |= MODIFIERKEYS_FLAGS.MK_SHIFT;
             }
 
-            _lastDataObject = DataObject.FromComPointer(lpdataobj);
+            _lastDataObject = new DataObject(lpdataobj);
 
             if (!_owner.EnableAutoDragDrop)
             {

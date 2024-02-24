@@ -3,8 +3,6 @@
 
 #if NET9_0_OR_GREATER
 
-using System.Runtime.Versioning;
-
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
@@ -12,18 +10,17 @@ namespace System.Drawing.Imaging.Effects;
 ///  intensity. You can use this effect to get more definition in the light areas of an image without affecting
 ///  the dark areas.
 /// </summary>
-[RequiresPreviewFeatures]
-public class HighlightEffect : ColorCurveEffect
+public class HighlightCurveEffect : ColorCurveEffect
 {
     /// <summary>
-    ///  Creates a new <see cref="HighlightEffect"/> with the given <paramref name="highlight"/> adjustment.
+    ///  Creates a new <see cref="HighlightCurveEffect"/> with the given <paramref name="highlight"/> adjustment.
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="highlight">
     ///  A value in the range of -100 through 100. A value of 0 specifies no change. Positive values specify that the
     ///  light areas are made lighter, and negative values specify that the light areas are made darker.
     /// </param>
-    public HighlightEffect(CurveChannel channel, int highlight)
+    public HighlightCurveEffect(CurveChannel channel, int highlight)
         : base(CurveAdjustments.AdjustHighlight, channel, highlight)
     {
     }

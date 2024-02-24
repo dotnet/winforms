@@ -8,6 +8,7 @@ using System.Drawing.Imaging.Effects;
 using System.Runtime.Versioning;
 #endif
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace System.Drawing;
@@ -15,7 +16,7 @@ namespace System.Drawing;
 [Editor($"System.Drawing.Design.BitmapEditor, {AssemblyRef.SystemDrawingDesign}",
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
-[Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+[TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
 {
     private static readonly Color s_defaultTransparentColor = Color.LightGray;
@@ -267,12 +268,11 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
 
         fixed (void* data = &bitmapData.GetPinnableReference())
         {
-            PInvoke.GdipBitmapLockBits(
-                this.Pointer(),
-                rect.IsEmpty ? null : (Rect*)&rect,
-                (uint)flags,
-                (int)format,
-                (GdiPlus.BitmapData*)data).ThrowIfFailed();
+            this.LockBits(
+                rect,
+                (GdiPlus.ImageLockMode)flags,
+                (GdiPlus.PixelFormat)format,
+                ref Unsafe.AsRef<GdiPlus.BitmapData>(data));
         }
 
         GC.KeepAlive(this);
@@ -285,7 +285,7 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
 
         fixed (void* data = &bitmapdata.GetPinnableReference())
         {
-            PInvoke.GdipBitmapUnlockBits(this.Pointer(), (GdiPlus.BitmapData*)data).ThrowIfFailed();
+            this.UnlockBits(ref Unsafe.AsRef<GdiPlus.BitmapData>(data));
         }
 
         GC.KeepAlive(this);
@@ -365,7 +365,6 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     /// </summary>
     /// <param name="effect">The effect to apply.</param>
     /// <param name="area">The area to apply to, or <see cref="Rectangle.Empty"/> for the entire image.</param>
-    [RequiresPreviewFeatures]
     public void ApplyEffect(Effect effect, Rectangle area = default)
     {
         RECT rect = area;
