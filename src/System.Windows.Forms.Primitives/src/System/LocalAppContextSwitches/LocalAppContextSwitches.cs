@@ -142,6 +142,9 @@ internal static partial class LocalAppContextSwitches
         get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_anchorLayoutV2);
     }
 
+    /// <summary>
+    ///  Gets or sets a value indicating whether the application font should be applied to menu.
+    /// </summary>
     public static bool ApplyApplicationFontToMenus
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

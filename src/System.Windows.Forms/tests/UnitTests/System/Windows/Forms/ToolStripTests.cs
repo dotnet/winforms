@@ -1622,26 +1622,31 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_ApplyApplicationFontToMenus_GetReturnsExpected()
     {
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, true);
         using Font font = new("Microsoft Sans Serif", 8.25f);
         using Form form = new();
         using ToolStrip toolStrip1 = new();
         using SubToolStripItem item1 = new();
         using SubToolStripItem item2 = new();
 
-        toolStrip1.Items.Add(item1);
-        toolStrip1.Items.Add(item2);
-        form.Controls.Add(toolStrip1);
-        form.Font = font;
+        try
+        {
+            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, true);
+            toolStrip1.Items.Add(item1);
+            toolStrip1.Items.Add(item2);
+            form.Controls.Add(toolStrip1);
+            form.Font = font;
 
-        Assert.Same(form.Font, toolStrip1.Font);
-        Assert.Same(form.Font, item1.Font);
-        Assert.Same(form.Font, item2.Font);
-
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, false);
-        Assert.Same(ToolStripManager.DefaultFont, item2.Font);
-        Assert.Same(ToolStripManager.DefaultFont, toolStrip1.Font);
-        Assert.Same(ToolStripManager.DefaultFont, item1.Font);
+            Assert.Same(form.Font, toolStrip1.Font);
+            Assert.Same(form.Font, item1.Font);
+            Assert.Same(form.Font, item2.Font);
+        }
+        finally
+        {
+            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, false);
+            Assert.Same(ToolStripManager.DefaultFont, item2.Font);
+            Assert.Same(ToolStripManager.DefaultFont, toolStrip1.Font);
+            Assert.Same(ToolStripManager.DefaultFont, item1.Font);
+        }
     }
 
     public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()
