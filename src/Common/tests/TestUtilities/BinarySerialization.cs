@@ -78,7 +78,7 @@ public static class BinarySerialization
             using MemoryStream serializedStream = new(raw);
 
             // cs/dangerous-binary-deserialization
-            return binaryFormatter.Deserialize(serializedStream); // CodeQL[SM03722] : Testing legacy feature. Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+            return binaryFormatter.Deserialize(serializedStream); // CodeQL[SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
         }
     }
 
