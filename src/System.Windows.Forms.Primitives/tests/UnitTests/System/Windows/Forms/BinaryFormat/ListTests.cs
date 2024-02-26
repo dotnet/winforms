@@ -175,7 +175,7 @@ public class ListTests
         // cs/binary-formatter-without-binder
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         // cs/dangerous-binary-deserialization
-        IList deserialized = (IList)formatter.Deserialize(stream); // CodeQL[SM02229] : This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+        IList deserialized = (IList)formatter.Deserialize(stream); // CodeQL[SM02229] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
 
         deserialized.Should().BeEquivalentTo(list);

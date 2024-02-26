@@ -121,7 +121,7 @@ public class HashtableTests
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 
         // cs/dangerous-binary-deserialization
-        Hashtable deserialized = (Hashtable)formatter.Deserialize(stream); // CodeQL [SM03722] : This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+        Hashtable deserialized = (Hashtable)formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
 
         deserialized.Count.Should().Be(hashtable.Count);

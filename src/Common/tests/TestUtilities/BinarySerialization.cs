@@ -50,7 +50,7 @@ public static class BinarySerialization
         }
     }
 
-#pragma warning disable SYSLIB0050 // Type or member is obsolete
+#pragma warning disable SYSLIB0050  // Type or member is obsolete
     public static T EnsureDeserialize<T>(string blob)
     {
         object @object = FromBase64String(blob);
@@ -67,18 +67,18 @@ public static class BinarySerialization
         static object FromByteArray(byte[] raw,
             FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
+#pragma warning disable SYSLIB0011  // Type or member is obsolete
             // cs/binary-formatter-without-binder
-            BinaryFormatter binaryFormatter = new()// CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+            BinaryFormatter binaryFormatter = new() // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
             {
                 AssemblyFormat = assemblyStyle
             };
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011  // Type or member is obsolete
 
             using MemoryStream serializedStream = new(raw);
 
             // cs/dangerous-binary-deserialization
-            return binaryFormatter.Deserialize(serializedStream);// CodeQL[SM03722] : This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+            return binaryFormatter.Deserialize(serializedStream); // CodeQL[SM03722] : Testing legacy feature. Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
         }
     }
 
@@ -91,18 +91,18 @@ public static class BinarySerialization
         static byte[] ToByteArray(object obj,
             FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
+#pragma warning disable SYSLIB0011  // Type or member is obsolete
             // cs/binary-formatter-without-binder
-            BinaryFormatter binaryFormatter = new()// CodeQL [SM04191]: Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+            BinaryFormatter binaryFormatter = new() // CodeQL [SM04191]: Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
             {
                 AssemblyFormat = assemblyStyle
             };
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011  // Type or member is obsolete
 
             using MemoryStream stream = new();
             binaryFormatter.Serialize(stream, obj);
             return stream.ToArray();
         }
     }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050  // Type or member is obsolete
 }
