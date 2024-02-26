@@ -3,6 +3,7 @@
 
 using System.CodeDom;
 using System.Collections;
+using System.Runtime.Serialization;
 
 namespace System.ComponentModel.Design.Serialization;
 
@@ -163,7 +164,7 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
 
     // Saved state
     [Serializable]
-    internal sealed class CodeDomComponentSerializationState
+    internal sealed class CodeDomComponentSerializationState : ISerializable
     {
         public readonly object? Code; // code gen
         public readonly CodeStatementCollection? Ctx; // generated statements coming from the context
@@ -185,6 +186,11 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
             Resources = resources;
             Events = events;
             Modifier = modifier;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            ArgumentNullException.ThrowIfNull(info);
         }
     }
 }

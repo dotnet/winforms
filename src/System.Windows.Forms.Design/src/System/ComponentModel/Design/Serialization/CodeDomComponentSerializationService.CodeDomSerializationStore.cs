@@ -27,6 +27,11 @@ public sealed partial class CodeDomComponentSerializationService
         private static readonly TraceSwitch? s_trace;
 #pragma warning restore CS0649  // Field is never assigned to, and will always have its default value null
 #endif
+        private const string StateKey = "State";
+        private const string NameKey = "Names";
+        // private const string AssembliesKey = "Assemblies";
+        private const string ResourcesKey = "Resources";
+        private const string ShimKey = "Shim";
 
         private MemoryStream? _resourceStream;
 
@@ -381,6 +386,12 @@ public sealed partial class CodeDomComponentSerializationService
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             ArgumentNullException.ThrowIfNull(info);
+
+            info.AddValue(StateKey, _objectState);
+            info.AddValue(NameKey, _objectNames);
+            // info.AddValue(AssembliesKey, AssemblyNames);
+            info.AddValue(ResourcesKey, _resources?.Data);
+            info.AddValue(ShimKey, _shimObjectNames);
         }
     }
 }
