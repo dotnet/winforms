@@ -1622,6 +1622,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_ApplyApplicationFontToMenus_GetReturnsExpected()
     {
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, true);
         using Font font = new("Microsoft Sans Serif", 8.25f);
         using Form form = new();
         using ToolStrip toolStrip1 = new();
@@ -1630,7 +1631,6 @@ public partial class ToolStripTests
 
         try
         {
-            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, true);
             toolStrip1.Items.Add(item1);
             toolStrip1.Items.Add(item2);
             form.Controls.Add(toolStrip1);
