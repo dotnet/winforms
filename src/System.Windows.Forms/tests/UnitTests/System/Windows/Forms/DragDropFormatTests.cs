@@ -9,10 +9,11 @@ using FORMATETC = System.Runtime.InteropServices.ComTypes.FORMATETC;
 using IStream = Windows.Win32.System.Com.IStream;
 using STGMEDIUM = System.Runtime.InteropServices.ComTypes.STGMEDIUM;
 using TYMED = System.Runtime.InteropServices.ComTypes.TYMED;
+using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
 
-public class DragDropFormatTests
+public unsafe class DragDropFormatTests
 {
     public static IEnumerable<object[]> DragDropFormat_TestData()
     {
@@ -21,7 +22,7 @@ public class DragDropFormatTests
             cfFormat = (short)PInvoke.RegisterClipboardFormat("InShellDragLoop"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
-            ptd = IntPtr.Zero,
+            ptd = nint.Zero,
             tymed = TYMED.TYMED_HGLOBAL
         };
 
@@ -44,7 +45,7 @@ public class DragDropFormatTests
             cfFormat = (short)PInvoke.RegisterClipboardFormat("DragContext"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
-            ptd = IntPtr.Zero,
+            ptd = nint.Zero,
             tymed = TYMED.TYMED_ISTREAM
         };
 
@@ -66,13 +67,13 @@ public class DragDropFormatTests
 
         try
         {
-            dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
+            dragDropFormat = new DragDropFormat((ushort)formatEtc.cfFormat, (Com.STGMEDIUM)medium, copyData: false);
             dragDropFormat.Dispose();
-            int handleSize = (int)PInvokeCore.GlobalSize((HGLOBAL)dragDropFormat.Medium.unionmember);
+            int handleSize = (int)PInvokeCore.GlobalSize(dragDropFormat.Medium.hGlobal);
             Assert.Equal(0, handleSize);
-            Assert.Null(dragDropFormat.Medium.pUnkForRelease);
-            Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
-            Assert.Equal(IntPtr.Zero, dragDropFormat.Medium.unionmember);
+            Assert.Equal(nint.Zero, (nint)dragDropFormat.Medium.pUnkForRelease);
+            Assert.Equal(Com.TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
+            Assert.True(dragDropFormat.Medium.hGlobal.IsNull);
         }
         finally
         {
@@ -88,28 +89,28 @@ public class DragDropFormatTests
 
         try
         {
-            dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
-            STGMEDIUM data = dragDropFormat.GetData();
-            Assert.Equal(medium.pUnkForRelease, data.pUnkForRelease);
-            Assert.Equal(medium.tymed, data.tymed);
+            dragDropFormat = new DragDropFormat((ushort)formatEtc.cfFormat, (Com.STGMEDIUM)medium, copyData: false);
+            Com.STGMEDIUM data = dragDropFormat.GetData();
+            Assert.Equal(medium.pUnkForRelease ?? nint.Zero, (nint)data.pUnkForRelease);
+            Assert.Equal((uint)medium.tymed, (uint)data.tymed);
 
             switch (data.tymed)
             {
-                case TYMED.TYMED_HGLOBAL:
-                case TYMED.TYMED_FILE:
-                case TYMED.TYMED_ENHMF:
-                case TYMED.TYMED_GDI:
-                case TYMED.TYMED_MFPICT:
+                case Com.TYMED.TYMED_HGLOBAL:
+                case Com.TYMED.TYMED_FILE:
+                case Com.TYMED.TYMED_ENHMF:
+                case Com.TYMED.TYMED_GDI:
+                case Com.TYMED.TYMED_MFPICT:
 
-                    Assert.NotEqual(medium.unionmember, data.unionmember);
+                    Assert.NotEqual(medium.unionmember, data.hGlobal);
                     break;
 
-                case TYMED.TYMED_ISTORAGE:
-                case TYMED.TYMED_ISTREAM:
-                case TYMED.TYMED_NULL:
+                case Com.TYMED.TYMED_ISTORAGE:
+                case Com.TYMED.TYMED_ISTREAM:
+                case Com.TYMED.TYMED_NULL:
                 default:
 
-                    Assert.Equal(medium.unionmember, data.unionmember);
+                    Assert.Equal(medium.unionmember, (nint)data.hGlobal);
                     break;
             }
         }
@@ -127,42 +128,45 @@ public class DragDropFormatTests
 
         try
         {
-            dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
-            STGMEDIUM dataRefresh = new()
+            dragDropFormat = new DragDropFormat((ushort)formatEtc.cfFormat, (Com.STGMEDIUM)medium, copyData: false);
+            Com.STGMEDIUM dataRefresh = new()
             {
                 pUnkForRelease = dragDropFormat.Medium.pUnkForRelease,
                 tymed = dragDropFormat.Medium.tymed,
-                unionmember = dragDropFormat.Medium.tymed switch
+                u = new()
                 {
-                    TYMED.TYMED_HGLOBAL or TYMED.TYMED_FILE or TYMED.TYMED_ENHMF or TYMED.TYMED_GDI or TYMED.TYMED_MFPICT
-                    => PInvoke.OleDuplicateData(
-                        (HANDLE)dragDropFormat.Medium.unionmember,
-                        (CLIPBOARD_FORMAT)formatEtc.cfFormat,
-                        GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT),
-                    _ => dragDropFormat.Medium.unionmember,
+                    hGlobal = dragDropFormat.Medium.tymed switch
+                    {
+                        Com.TYMED.TYMED_HGLOBAL or Com.TYMED.TYMED_FILE or Com.TYMED.TYMED_ENHMF or Com.TYMED.TYMED_GDI or Com.TYMED.TYMED_MFPICT
+                        => (HGLOBAL)(nint)PInvoke.OleDuplicateData(
+                            (HANDLE)(nint)dragDropFormat.Medium.hGlobal,
+                            (CLIPBOARD_FORMAT)formatEtc.cfFormat,
+                            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT),
+                        _ => dragDropFormat.Medium.hGlobal,
+                    }
                 }
             };
 
-            dragDropFormat.RefreshData(formatEtc.cfFormat, dataRefresh, copyData: false);
-            STGMEDIUM data = dragDropFormat.GetData();
+            dragDropFormat.RefreshData((ushort)formatEtc.cfFormat, dataRefresh, copyData: false);
+            Com.STGMEDIUM data = dragDropFormat.GetData();
 
             switch (dragDropFormat.Medium.tymed)
             {
-                case TYMED.TYMED_HGLOBAL:
-                case TYMED.TYMED_FILE:
-                case TYMED.TYMED_ENHMF:
-                case TYMED.TYMED_GDI:
-                case TYMED.TYMED_MFPICT:
+                case Com.TYMED.TYMED_HGLOBAL:
+                case Com.TYMED.TYMED_FILE:
+                case Com.TYMED.TYMED_ENHMF:
+                case Com.TYMED.TYMED_GDI:
+                case Com.TYMED.TYMED_MFPICT:
 
-                    Assert.NotEqual(dragDropFormat.Medium.unionmember, data.unionmember);
+                    Assert.NotEqual(dragDropFormat.Medium.u, data.u);
                     break;
 
-                case TYMED.TYMED_ISTORAGE:
-                case TYMED.TYMED_ISTREAM:
-                case TYMED.TYMED_NULL:
+                case Com.TYMED.TYMED_ISTORAGE:
+                case Com.TYMED.TYMED_ISTREAM:
+                case Com.TYMED.TYMED_NULL:
                 default:
 
-                    Assert.Equal(dragDropFormat.Medium.unionmember, data.unionmember);
+                    Assert.Equal(dragDropFormat.Medium.u, data.u);
                     break;
             }
         }

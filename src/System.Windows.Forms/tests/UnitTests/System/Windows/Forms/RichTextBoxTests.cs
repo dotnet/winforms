@@ -10646,6 +10646,33 @@ public class RichTextBoxTests
             Times.Once);
     }
 
+    [WinFormsTheory]
+    [InlineData(-1, -1, 0)]
+    [InlineData(0, 0, 0)]
+    [InlineData(10, 10, 1)]
+    public void RichTextBox_GetCharIndexFromPosition_Invoke_ReturnsExpected(int x, int y, int expectedIndex)
+    {
+        using RichTextBox richTextBox1 = new();
+        richTextBox1.Text = "Hello, World!";
+
+        Assert.NotEqual(0, richTextBox1.Handle);
+        int invalidatedCallCount = 0;
+        richTextBox1.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        richTextBox1.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        richTextBox1.HandleCreated += (sender, e) => createdCallCount++;
+
+        Point pt = new(x, y);
+        int index = richTextBox1.GetCharIndexFromPosition(pt);
+
+        Assert.Equal(expectedIndex, index);
+        Assert.True(richTextBox1.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+    }
+
     private class CustomGetParaFormatRichTextBox : RichTextBox
     {
         public bool MakeCustom { get; set; }

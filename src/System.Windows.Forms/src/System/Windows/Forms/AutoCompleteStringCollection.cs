@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 public class AutoCompleteStringCollection : IList
 {
     private CollectionChangeEventHandler? _onCollectionChanged;
-    private readonly List<string> _data = new();
+    private readonly List<string> _data = [];
 
     public AutoCompleteStringCollection()
     {
@@ -57,8 +57,17 @@ public class AutoCompleteStringCollection : IList
     ///  Adds a string with the specified value to the
     ///  <see cref="AutoCompleteStringCollection"/> .
     /// </summary>
+    /// <returns>
+    ///  The position into which the new element was inserted, or -1 to indicate that
+    ///  the item was not inserted into the collection.
+    /// </returns>
     public int Add(string value)
     {
+        if (value is null)
+        {
+            return -1;
+        }
+
         int index = ((IList)_data).Add(value);
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
         return index;
@@ -71,7 +80,21 @@ public class AutoCompleteStringCollection : IList
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        _data.AddRange(value);
+        List<string> nonNullItems = [];
+        foreach (string item in value)
+        {
+            if (item is not null)
+            {
+                nonNullItems.Add(item);
+            }
+        }
+
+        if (nonNullItems.Count <= 0)
+        {
+            return;
+        }
+
+        _data.AddRange(nonNullItems);
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
     }
 
@@ -110,8 +133,14 @@ public class AutoCompleteStringCollection : IList
     /// </summary>
     public void Insert(int index, string value)
     {
-        _data.Insert(index, value);
-        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(index, _data.Count);
+
+        if (value is not null)
+        {
+            _data.Insert(index, value);
+            OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
+        }
     }
 
     /// <summary>
@@ -168,4 +197,6 @@ public class AutoCompleteStringCollection : IList
     void ICollection.CopyTo(Array array, int index) => ((ICollection)_data).CopyTo(array, index);
 
     public IEnumerator GetEnumerator() => _data.GetEnumerator();
+
+    internal string[] ToArray() => [.. _data];
 }
