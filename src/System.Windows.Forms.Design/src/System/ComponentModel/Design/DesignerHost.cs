@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -1267,6 +1267,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
     MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
     {
         return typeof(IDesignerHost).GetMethod(name, bindingAttr, binder, types, modifiers);
@@ -1275,6 +1276,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
     MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetMethod(name, bindingAttr);
@@ -1283,6 +1285,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
     MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetMethods(bindingAttr);
@@ -1291,6 +1294,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
     FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetField(name, bindingAttr);
@@ -1299,6 +1303,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
     FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetFields(bindingAttr);
@@ -1307,6 +1312,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
     PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetProperty(name, bindingAttr);
@@ -1315,6 +1321,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
     PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder? binder, Type? returnType, Type[] types, ParameterModifier[]? modifiers)
     {
         return typeof(IDesignerHost).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
@@ -1323,14 +1330,23 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
     PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetProperties(bindingAttr);
     }
 
+    internal const DynamicallyAccessedMemberTypes GetAllMembers = DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
+        DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
+        DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
+        DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
+        DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
+        DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
+
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
+    [DynamicallyAccessedMembers(GetAllMembers)]
     MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetMember(name, bindingAttr);
