@@ -29,7 +29,7 @@ public sealed partial class CodeDomComponentSerializationService
 #endif
         private const string StateKey = "State";
         private const string NameKey = "Names";
-        // private const string AssembliesKey = "Assemblies";
+        private const string AssembliesKey = "Assemblies";
         private const string ResourcesKey = "Resources";
         private const string ShimKey = "Shim";
 
@@ -62,7 +62,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// <summary>
         ///  Nested classes within us access this property to get to our array of saved assembly names.
         /// </summary>
-        private AssemblyName[]? AssemblyNames { get; set; }
+        private AssemblyNameInfo[]? AssemblyNameInfos { get; set; }
 
         /// <summary>
         ///  If there were errors generated during serialization or deserialization of the store, they will be added to this collection.
@@ -179,8 +179,12 @@ public sealed partial class CodeDomComponentSerializationService
                 }
             }
 
-            AssemblyNames = new AssemblyName[assemblies.Count];
-            assemblies.Values.CopyTo(AssemblyNames, 0);
+            AssemblyNameInfos = new AssemblyNameInfo[assemblies.Count];
+            int idx = 0;
+            foreach (AssemblyName assemblyName in assemblies.Values)
+            {
+                AssemblyNameInfos[idx++] = new AssemblyNameInfo(assemblyName.ContentType, assemblyName.CultureName, assemblyName.Flags, assemblyName.FullName, assemblyName.Name, assemblyName.Version);
+            }
 
             _objectState = state;
             _objects.Clear();
@@ -389,9 +393,47 @@ public sealed partial class CodeDomComponentSerializationService
 
             info.AddValue(StateKey, _objectState);
             info.AddValue(NameKey, _objectNames);
-            // info.AddValue(AssembliesKey, AssemblyNames);
+            info.AddValue(AssembliesKey, AssemblyNameInfos);
             info.AddValue(ResourcesKey, _resources?.Data);
             info.AddValue(ShimKey, _shimObjectNames);
+        }
+    }
+
+    [Serializable]
+    internal sealed class AssemblyNameInfo : ISerializable
+    {
+        public AssemblyContentType ContentType { get; set; }
+        public string? CultureName { get; set; }
+        public AssemblyNameFlags Flags { get; set; }
+        public string FullName { get; }
+        public string? Name { get; set; }
+        public Version? Version { get; set; }
+
+        public AssemblyNameInfo(AssemblyContentType contentType,
+            string? cultureName,
+            AssemblyNameFlags flags,
+            string fullName,
+            string? name,
+            Version? version)
+        {
+            ContentType = contentType;
+            CultureName = cultureName;
+            Flags = flags;
+            FullName = fullName;
+            Name = name;
+            Version = version;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            ArgumentNullException.ThrowIfNull(info);
+
+            info.AddValue("ContentType", ContentType);
+            info.AddValue("CultureName", CultureName);
+            info.AddValue("Flags", Flags);
+            info.AddValue("FullName", FullName);
+            info.AddValue("Name", Name);
+            info.AddValue("Version", Version);
         }
     }
 }
