@@ -102,7 +102,7 @@ public class PrimitiveTypeTests
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
 
         // cs/binary-formatter-without-binder
-        BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 

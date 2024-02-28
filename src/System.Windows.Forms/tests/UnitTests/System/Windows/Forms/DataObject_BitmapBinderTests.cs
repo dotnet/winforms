@@ -43,7 +43,7 @@ public class DataObject_BitmapBinderTests
             using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
             // cs/binary-formatter-without-binder
-            BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+            BinaryFormatter formatter = new(); // CodeQL [SM04191] This is a test. Safe because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore
             formatter.Serialize(stream, value);
             Assert.True(stream.Length > 0);
@@ -55,7 +55,7 @@ public class DataObject_BitmapBinderTests
             };
 
             // cs/dangerous-binary-deserialization
-            object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Safe use because input stream is controlled contains strings and Bitmap which is instantiated by a binder. 
+            object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. Safe use because input stream is controlled contains strings and Bitmap which is instantiated by a binder. 
             Assert.NotNull(deserialized);
 
             if (value is not Bitmap)
@@ -96,7 +96,7 @@ public class DataObject_BitmapBinderTests
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         // cs/binary-formatter-without-binder
-        BinaryFormatter formatter = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
         formatter.Serialize(stream, value);
         Assert.True(stream.Length > 0);

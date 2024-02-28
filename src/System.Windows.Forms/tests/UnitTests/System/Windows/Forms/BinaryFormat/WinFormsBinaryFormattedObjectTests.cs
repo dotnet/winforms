@@ -56,7 +56,7 @@ public class WinFormsBinaryFormattedObjectTests
         using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         // cs/binary-formatter-without-binder
-        BinaryFormatter binaryFormat = new(); // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        BinaryFormatter binaryFormat = new(); // CodeQL [SM04191] This is a test deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
 
         // cs/dangerous-binary-deserialization
