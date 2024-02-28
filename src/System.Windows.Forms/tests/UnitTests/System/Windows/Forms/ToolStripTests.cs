@@ -1620,9 +1620,40 @@ public partial class ToolStripTests
     }
 
     [WinFormsFact]
-    public void ToolStrip_Font_ApplyApplicationFontToMenus_GetReturnsExpected()
+    public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsApplication()
     {
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, true);
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
+
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        nativeWindowTestAccessor.t_anyHandleCreated = false;
+
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        Application.SetDefaultFont(font);
+
+        using ToolStrip toolStrip1 = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+
+        try
+        {
+            toolStrip1.Items.Add(item1);
+            toolStrip1.Items.Add(item2);
+
+            Assert.Equal(font, toolStrip1.Font);
+            Assert.Equal(font, item1.Font);
+            Assert.Equal(font, item2.Font);
+        }
+        finally
+        {
+            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);
+        }
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsForm()
+    {
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
+
         using Font font = new("Microsoft Sans Serif", 8.25f);
         using Form form = new();
         using ToolStrip toolStrip1 = new();
@@ -1642,11 +1673,13 @@ public partial class ToolStripTests
         }
         finally
         {
-            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyApplicationFontToMenusSwitchName, false);
-            Assert.Same(ToolStripManager.DefaultFont, item2.Font);
-            Assert.Same(ToolStripManager.DefaultFont, toolStrip1.Font);
-            Assert.Same(ToolStripManager.DefaultFont, item1.Font);
+            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);           
         }
+
+        Assert.Equal(ToolStripManager.DefaultFont, toolStrip1.Font);
+        Assert.Equal(Control.DefaultFont, toolStrip1.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item1.Font);
     }
 
     public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()

@@ -52,7 +52,7 @@ public static partial class ToolStripManager
     {
         get
         {
-            if (LocalAppContextSwitches.ApplyApplicationFontToMenus)
+            if (LocalAppContextSwitches.ApplyParentFontToMenus)
             {
                 return Control.DefaultFont;
             }

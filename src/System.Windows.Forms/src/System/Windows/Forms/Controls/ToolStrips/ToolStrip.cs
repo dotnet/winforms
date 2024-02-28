@@ -541,7 +541,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            if (IsFontSet() || LocalAppContextSwitches.ApplyApplicationFontToMenus)
+            if (IsFontSet() || LocalAppContextSwitches.ApplyParentFontToMenus)
             {
                 return base.Font;
             }

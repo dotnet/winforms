@@ -17,7 +17,7 @@ internal static partial class LocalAppContextSwitches
     // for more details on how to enable these switches in the application.
     private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
     internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
-    internal const string ApplyApplicationFontToMenusSwitchName = "System.Windows.Forms.ApplyApplicationFontToMenus";
+    internal const string ApplyParentFontToMenusSwitchName = "System.Windows.Forms.ApplyParentFontToMenus";
     internal const string ServicePointManagerCheckCrlSwitchName = "System.Windows.Forms.ServicePointManagerCheckCrl";
     internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
     private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
@@ -27,7 +27,7 @@ internal static partial class LocalAppContextSwitches
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
-    private static int s_applyApplicationFontToMenus;
+    private static int s_applyParentFontToMenus;
     private static int s_servicePointManagerCheckCrl;
     private static int s_trackBarModernRendering;
     private static int s_doNotCatchUnhandledExceptions;
@@ -143,12 +143,13 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Gets or sets a value indicating whether the application font should be applied to menu.
+    ///  Gets or sets a value indicating whether the parent font (as set by <see cref="System.Windows.Forms.Application.SetDefaultFont(Font)" />
+    ///  or by the parent control or form's font) is applied to menus.
     /// </summary>
-    public static bool ApplyApplicationFontToMenus
+    public static bool ApplyParentFontToMenus
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(ApplyApplicationFontToMenusSwitchName, ref s_applyApplicationFontToMenus);
+        get => GetCachedSwitchValue(ApplyParentFontToMenusSwitchName, ref s_applyParentFontToMenus);
     }
 
     public static bool ScaleTopLevelFormMinMaxSizeForDpi
@@ -213,9 +214,9 @@ internal static partial class LocalAppContextSwitches
             s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
         }
 
-        if (switchName == ApplyApplicationFontToMenusSwitchName)
+        if (switchName == ApplyParentFontToMenusSwitchName)
         {
-            s_applyApplicationFontToMenus = value ? 1 : 0;
+            s_applyParentFontToMenus = value ? 1 : 0;
         }
     }
 
