@@ -84,22 +84,15 @@ public class CodeDomSerializerExceptionTests
         Assert.Throws<ArgumentNullException>("manager", () => new CodeDomSerializerException(new InvalidOperationException(), (IDesignerSerializationManager)null));
     }
 
-    [Theory]
-    [BoolData]
-    public void CodeDomSerializerException_Serialize_ThrowsSerializationException(bool formatterEnabled)
+    [Fact]
+    public void CodeDomSerializerException_Serialize_ThrowsSerializationException()
     {
-        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using BinaryFormatterScope formatterScope = new(enable: false);
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
-        if (formatterEnabled)
-        {
-            Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
-        }
-        else
-        {
-            Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
-        }
+        Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
+#pragma warning restore SYSLIB0011
     }
 
     [Fact]

@@ -9,7 +9,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    private sealed partial class CodeDomSerializationStore
+    internal sealed partial class CodeDomSerializationStore
     {
         /// <summary>
         ///  This is a serialization manager that can load assemblies and search for types and provide a resource manager from our serialization store.

@@ -10,6 +10,7 @@ using System.Windows.Forms.Design;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using CodeDomComponentSerializationState = System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationState;
+using static System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomSerializationStore;
 
 namespace System.ComponentModel.Design.Serialization.Tests;
 
@@ -168,7 +169,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal(["name1", "name2"], names);
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -256,7 +257,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -358,7 +359,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -403,7 +404,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -449,7 +450,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -495,7 +496,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -544,7 +545,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -593,7 +594,7 @@ public class CodeDomComponentSerializationServiceTests
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
         Assert.Equal("name", Assert.Single(names));
 
-        AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
+        AssemblyNameInfo[] assemblies = Assert.IsType<AssemblyNameInfo[]>(info.GetValue("Assemblies", typeof(AssemblyNameInfo[])));
         Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
 
         Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -679,23 +680,15 @@ public class CodeDomComponentSerializationServiceTests
         Assert.Throws<ArgumentNullException>("info", () => serializable.GetObjectData(null, new StreamingContext()));
     }
 
-    [Theory]
-    [BoolData]
-    public void LoadStore_SerializedStore_ThrowsSerializationException(bool formatterEnabled)
+    [Fact]
+    public void LoadStore_SerializedStore_ThrowsSerializationException()
     {
-        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using BinaryFormatterScope formatterScope = new(enable: false);
         CodeDomComponentSerializationService service = new();
         SerializationStore store = service.CreateStore();
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
-        if (formatterEnabled)
-        {
-            Assert.Throws<SerializationException>(() => formatter.Serialize(stream, store));
-        }
-        else
-        {
-            Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, store));
-        }
+        Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, store));
     }
 
     [Fact]

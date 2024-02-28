@@ -18,7 +18,7 @@ public sealed partial class CodeDomComponentSerializationService
     ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
     /// </summary>
     [Serializable]
-    private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
+    internal sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
 #if DEBUG
         private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
@@ -183,7 +183,7 @@ public sealed partial class CodeDomComponentSerializationService
             int idx = 0;
             foreach (AssemblyName assemblyName in assemblies.Values)
             {
-                AssemblyNameInfos[idx++] = new AssemblyNameInfo(assemblyName.ContentType, assemblyName.CultureName, assemblyName.Flags, assemblyName.FullName, assemblyName.Name, assemblyName.Version);
+                AssemblyNameInfos[idx++] = new AssemblyNameInfo(assemblyName);
             }
 
             _objectState = state;
@@ -396,44 +396,6 @@ public sealed partial class CodeDomComponentSerializationService
             info.AddValue(AssembliesKey, AssemblyNameInfos);
             info.AddValue(ResourcesKey, _resources?.Data);
             info.AddValue(ShimKey, _shimObjectNames);
-        }
-    }
-
-    [Serializable]
-    internal sealed class AssemblyNameInfo : ISerializable
-    {
-        public AssemblyContentType ContentType { get; set; }
-        public string? CultureName { get; set; }
-        public AssemblyNameFlags Flags { get; set; }
-        public string FullName { get; }
-        public string? Name { get; set; }
-        public Version? Version { get; set; }
-
-        public AssemblyNameInfo(AssemblyContentType contentType,
-            string? cultureName,
-            AssemblyNameFlags flags,
-            string fullName,
-            string? name,
-            Version? version)
-        {
-            ContentType = contentType;
-            CultureName = cultureName;
-            Flags = flags;
-            FullName = fullName;
-            Name = name;
-            Version = version;
-        }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            ArgumentNullException.ThrowIfNull(info);
-
-            info.AddValue("ContentType", ContentType);
-            info.AddValue("CultureName", CultureName);
-            info.AddValue("Flags", Flags);
-            info.AddValue("FullName", FullName);
-            info.AddValue("Name", Name);
-            info.AddValue("Version", Version);
         }
     }
 }

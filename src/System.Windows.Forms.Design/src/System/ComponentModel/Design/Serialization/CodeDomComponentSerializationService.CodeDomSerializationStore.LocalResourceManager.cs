@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design.Serialization;
 
 public sealed partial class CodeDomComponentSerializationService
 {
-    private sealed partial class CodeDomSerializationStore
+    internal sealed partial class CodeDomSerializationStore
     {
         /// <summary>
         ///  Our private resource manager...it just pushes all the data into a hashtable and then we serialize the hashtable.  On deserialization, the hashtable is rebuilt for us and we have all the data we saved out.

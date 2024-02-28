@@ -41,22 +41,14 @@ public class ExceptionCollectionTests
         Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
     }
 
-    [Theory]
-    [BoolData]
-    public void ExceptionCollection_Serialize_ThrowsSerializationException(bool formatterEnabled)
+    [Fact]
+    public void ExceptionCollection_Serialize_ThrowsSerializationException()
     {
-        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using BinaryFormatterScope formatterScope = new(enable: false);
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
         ExceptionCollection collection = new(new ArrayList());
-        if (formatterEnabled)
-        {
-            Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
-        }
-        else
-        {
-            Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
-        }
+        Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
     }
 
     [Fact]
