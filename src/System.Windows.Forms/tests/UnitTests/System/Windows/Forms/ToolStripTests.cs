@@ -1622,15 +1622,17 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsApplication()
     {
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
+
         // Generally at this stage NativeWindow.AnyHandleCreated=true, we won't be able to set the font.
         var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
         nativeWindowTestAccessor.t_anyHandleCreated = false;
 
         using Font font = new("Microsoft Sans Serif", 8.25f);
         Application.SetDefaultFont(font);
 
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
-
+        using Form form = new();
         using ToolStrip toolStrip1 = new();
         using SubToolStripItem item1 = new();
         using SubToolStripItem item2 = new();
@@ -1639,7 +1641,11 @@ public partial class ToolStripTests
         {
             toolStrip1.Items.Add(item1);
             toolStrip1.Items.Add(item2);
+            form.Controls.Add(toolStrip1);
+            form.Shown += (s, e) => { form.Close(); };
+            form.ShowDialog();
 
+            Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
             Assert.Equal(font, toolStrip1.Font);
             Assert.Equal(font, item1.Font);
             Assert.Equal(font, item2.Font);
@@ -1647,7 +1653,7 @@ public partial class ToolStripTests
         finally
         {
             LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);
-            Application.SetDefaultFont(SystemFonts.CaptionFont);
+            nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
         }
     }
 
@@ -1669,6 +1675,7 @@ public partial class ToolStripTests
             form.Controls.Add(toolStrip1);
             form.Font = font;
 
+            Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
             Assert.Same(form.Font, toolStrip1.Font);
             Assert.Same(form.Font, item1.Font);
             Assert.Same(form.Font, item2.Font);
