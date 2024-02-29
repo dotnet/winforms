@@ -445,8 +445,8 @@ public class ImageListTests
         BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         formatter.Serialize(stream, source);
         stream.Position = 0;
-        // cs/dangerous-binary-deserialization
-        return (T)formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+        // cs/dangerous-binary-deserialization, cs/deserialization-unexpected-subtypes
+        return (T)formatter.Deserialize(stream); // CodeQL [SM03722, SM02229] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
     }
 
