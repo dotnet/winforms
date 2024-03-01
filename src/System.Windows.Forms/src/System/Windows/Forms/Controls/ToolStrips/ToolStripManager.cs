@@ -3,7 +3,6 @@
 
 using System.Collections.Concurrent;
 using System.Drawing;
-using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;

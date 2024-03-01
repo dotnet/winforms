@@ -1620,6 +1620,30 @@ public partial class ToolStripTests
     }
 
     [WinFormsFact]
+    public void Form_Font_GetReturnFont_SameAsApplication()
+    {
+        // Generally at this stage NativeWindow.AnyHandleCreated=true, we won't be able to set the font.
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
+        nativeWindowTestAccessor.t_anyHandleCreated = false;
+
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        Application.SetDefaultFont(font);
+
+        using Form form = new();
+
+        try
+        {
+            Assert.Equal(font, form.Font);
+        }
+        finally
+        {
+            Application.SetDefaultFont(SystemFonts.DefaultFont);
+            nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
+        }
+    }
+
+    [WinFormsFact]
     public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsApplication()
     {
         LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
@@ -1642,8 +1666,6 @@ public partial class ToolStripTests
             toolStrip1.Items.Add(item1);
             toolStrip1.Items.Add(item2);
             form.Controls.Add(toolStrip1);
-            form.Shown += (s, e) => { form.Close(); };
-            form.ShowDialog();
 
             Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
             Assert.Equal(font, form.Font);
@@ -1654,7 +1676,6 @@ public partial class ToolStripTests
         finally
         {
             LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);
-            nativeWindowTestAccessor.t_anyHandleCreated = false;
             Application.SetDefaultFont(SystemFonts.DefaultFont);
             nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
         }
