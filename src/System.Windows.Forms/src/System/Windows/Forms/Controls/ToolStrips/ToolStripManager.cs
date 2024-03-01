@@ -52,11 +52,6 @@ public static partial class ToolStripManager
     {
         get
         {
-            if (LocalAppContextSwitches.ApplyParentFontToMenus)
-            {
-                return Control.DefaultFont;
-            }
-
             Font? sysFont = null;
 
             // We need to cache the default fonts for the different DPIs.
