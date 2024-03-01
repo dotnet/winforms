@@ -1620,6 +1620,47 @@ public partial class ToolStripTests
     }
 
     [WinFormsFact]
+    public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsApplication()
+    {
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
+
+        // Generally at this stage NativeWindow.AnyHandleCreated=true, we won't be able to set the font.
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
+        nativeWindowTestAccessor.t_anyHandleCreated = false;
+
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        Application.SetDefaultFont(font);
+
+        using Form form = new();
+        using ToolStrip toolStrip1 = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+
+        try
+        {
+            toolStrip1.Items.Add(item1);
+            toolStrip1.Items.Add(item2);
+            form.Controls.Add(toolStrip1);
+            form.Shown += (s, e) => { form.Close(); };
+            form.ShowDialog();
+
+            Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
+            Assert.Equal(font, form.Font);
+            Assert.Equal(font, toolStrip1.Font);
+            Assert.Equal(font, item1.Font);
+            Assert.Equal(font, item2.Font);
+        }
+        finally
+        {
+            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);
+            nativeWindowTestAccessor.t_anyHandleCreated = false;
+            Application.SetDefaultFont(SystemFonts.DefaultFont);
+            nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
+        }
+    }
+
+    [WinFormsFact]
     public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsForm()
     {
         LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);

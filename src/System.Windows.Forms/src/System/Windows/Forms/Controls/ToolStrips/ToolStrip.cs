@@ -541,7 +541,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            if (LocalAppContextSwitches.ApplyParentFontToMenus || IsFontSet())
+            if (IsFontSet())
             {
                 return base.Font;
             }
@@ -550,6 +550,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // pointer in an instance variable for perf so we don't have to keep fishing into
             // thread local storage for it.
             _defaultFont ??= ToolStripManager.DefaultFont;
+
+            if (LocalAppContextSwitches.ApplyParentFontToMenus is true && _defaultFont != base.Font)
+            {
+                return base.Font;
+            }
 
             return _defaultFont;
         }
