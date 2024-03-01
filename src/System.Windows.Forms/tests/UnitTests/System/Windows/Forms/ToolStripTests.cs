@@ -1631,6 +1631,7 @@ public partial class ToolStripTests
         Application.SetDefaultFont(font);
 
         using Form form = new();
+        Application.OpenForms.Add(form);
 
         try
         {
@@ -1663,10 +1664,10 @@ public partial class ToolStripTests
 
         try
         {
+            Application.OpenForms.Add(form);
             toolStrip1.Items.Add(item1);
             toolStrip1.Items.Add(item2);
             form.Controls.Add(toolStrip1);
-
             Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
             Assert.Equal(font, form.Font);
             Assert.Equal(font, toolStrip1.Font);
