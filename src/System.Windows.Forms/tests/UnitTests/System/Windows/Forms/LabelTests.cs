@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.Automation;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -437,24 +438,19 @@ public class LabelTests
         label.AutoSizeChanged -= handler;
         Assert.Equal(0, callCount);
 
-        // The event handler should not be invoked.
         label.AutoSizeChanged += handler;
         label.AutoSize = label.AutoSize;
         Assert.Equal(0, callCount);
 
-        // The event handler should be invoked.
         label.AutoSize = !label.AutoSize;
         Assert.Equal(1, callCount);
 
-        // The event handler should not be invoked.
         label.AutoSize = label.AutoSize;
         Assert.Equal(1, callCount);
 
-        // The event handler should be invoked.
         label.AutoSize = !label.AutoSize;
         Assert.Equal(2, callCount);
 
-        // The event handler should not be invoked.
         label.AutoSizeChanged -= handler;
         label.AutoSize = !label.AutoSize;
         Assert.Equal(2, callCount);
@@ -522,7 +518,6 @@ public class LabelTests
         Assert.Null(label.BackgroundImage);
     }
 
-
     [WinFormsFact]
     public void Label_BackgroundImageChangedEvent_AddRemove_Success()
     {
@@ -539,25 +534,20 @@ public class LabelTests
         label.BackgroundImageChanged -= handler;
         Assert.Equal(0, callCount);
 
-        // The event handler should not be invoked.
         label.BackgroundImageChanged += handler;
         label.BackgroundImage = label.BackgroundImage;
         Assert.Equal(0, callCount);
 
-        // The event handler should be invoked.
         var image = new Bitmap(10, 10);
         label.BackgroundImage = image;
         Assert.Equal(1, callCount);
 
-        // The event handler should not be invoked.
         label.BackgroundImage = label.BackgroundImage;
         Assert.Equal(1, callCount);
 
-        // The event handler should be invoked.
         label.BackgroundImage = null;
         Assert.Equal(2, callCount);
 
-        // The event handler should not be invoked.
         label.BackgroundImageChanged -= handler;
         label.BackgroundImage = image;
         Assert.Equal(2, callCount);
@@ -598,24 +588,19 @@ public class LabelTests
         label.BackgroundImageLayoutChanged -= handler;
         Assert.Equal(0, callCount);
 
-        // The event handler should not be invoked.
         label.BackgroundImageLayoutChanged += handler;
         label.BackgroundImageLayout = label.BackgroundImageLayout;
         Assert.Equal(0, callCount);
 
-        // The event handler should be invoked.
         label.BackgroundImageLayout = ImageLayout.Center;
         Assert.Equal(1, callCount);
 
-        // The event handler should not be invoked.
         label.BackgroundImageLayout = label.BackgroundImageLayout;
         Assert.Equal(1, callCount);
 
-        // The event handler should be invoked.
         label.BackgroundImageLayout = ImageLayout.Stretch;
         Assert.Equal(2, callCount);
 
-        // The event handler should not be invoked.
         label.BackgroundImageLayoutChanged -= handler;
         label.BackgroundImageLayout = ImageLayout.Zoom;
         Assert.Equal(2, callCount);
@@ -723,6 +708,159 @@ public class LabelTests
         Assert.True(label.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [InlineData(AutomationLiveSetting.Off)]
+    [InlineData(AutomationLiveSetting.Polite)]
+    [InlineData(AutomationLiveSetting.Assertive)]
+    public void Label_LiveSetting_Set_GetReturnsExpected(AutomationLiveSetting value)
+    {
+        using Label label = new();
+        label.LiveSetting = value;
+        Assert.Equal(value, label.LiveSetting);
+    }
+
+    [WinFormsFact]
+    public void Label_LiveSetting_SetInvalidValue_ThrowsInvalidEnumArgumentException()
+    {
+        using Label label = new();
+        Assert.Throws<InvalidEnumArgumentException>(() => label.LiveSetting = (AutomationLiveSetting)999);
+    }
+
+    [WinFormsFact]
+    public void Label_KeyUp_AddRemove_Success()
+    {
+        using SubLabel label = new();
+        int callCount = 0;
+        KeyEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            callCount++;
+        };
+
+        label.KeyUp += handler;
+        label.OnKeyUp(new KeyEventArgs(Keys.A));
+        Assert.Equal(1, callCount);
+
+        label.KeyUp -= handler;
+        label.OnKeyUp(new KeyEventArgs(Keys.A));
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_KeyDown_AddRemove_Success()
+    {
+        using SubLabel label = new();
+        int callCount = 0;
+        KeyEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            callCount++;
+        };
+
+        label.KeyDown += handler;
+        label.OnKeyDown(new KeyEventArgs(Keys.A));
+        Assert.Equal(1, callCount);
+
+        label.KeyDown -= handler;
+        label.OnKeyDown(new KeyEventArgs(Keys.A));
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_KeyPress_AddRemove_Success()
+    {
+        using SubLabel label = new();
+        int callCount = 0;
+        KeyPressEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            callCount++;
+        };
+
+        label.KeyPress += handler;
+        label.OnKeyPress(new KeyPressEventArgs('A'));
+        Assert.Equal(1, callCount);
+
+        label.KeyPress -= handler;
+        label.OnKeyPress(new KeyPressEventArgs('A'));
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_TabStopChanged_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.TabStopChanged += handler;
+        label.TabStop = !label.TabStop;
+        Assert.Equal(1, callCount);
+
+        label.TabStopChanged -= handler;
+        label.TabStop = !label.TabStop;
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_TextAlignChanged_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.TextAlignChanged += handler;
+        label.TextAlign = ContentAlignment.BottomCenter;
+        Assert.Equal(1, callCount);
+
+        label.TextAlignChanged -= handler;
+        label.TextAlign = ContentAlignment.BottomLeft;
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_UseCompatibleTextRendering_GetSet_ReturnsExpected()
+    {
+        using Label label = new();
+        bool defaultValue = label.UseCompatibleTextRendering;
+
+        // Set true.
+        label.UseCompatibleTextRendering = true;
+        Assert.True(label.UseCompatibleTextRendering);
+
+        // Set false.
+        label.UseCompatibleTextRendering = false;
+        Assert.False(label.UseCompatibleTextRendering);
+
+        // Set default.
+        label.UseCompatibleTextRendering = defaultValue;
+        Assert.Equal(defaultValue, label.UseCompatibleTextRendering);
+    }
+
+    [WinFormsFact]
+    public void Label_UseCompatibleTextRendering_SetWithAutoSize_UpdatesPreferredSize()
+    {
+        using Label label = new()
+        {
+            AutoSize = true,
+            Text = "Some text"
+        };
+        Size defaultSize = label.PreferredSize;
+
+        label.UseCompatibleTextRendering = !label.UseCompatibleTextRendering;
+        Assert.NotEqual(defaultSize, label.PreferredSize);
+    }
+
     public class SubLabel : Label
     {
         public new bool CanEnableIme => base.CanEnableIme;
@@ -791,6 +929,12 @@ public class LabelTests
 
         public new bool GetTopLevel() => base.GetTopLevel();
 
-        public void RecreateHandle() => base.RecreateHandle();
+        public new void RecreateHandle() => base.RecreateHandle();
+
+        public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
+
+        public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
+
+        public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
     }
 }
