@@ -55,12 +55,14 @@ public class WinFormsBinaryFormattedObjectTests
 
         using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter binaryFormat = new();
+        // cs/binary-formatter-without-binder
+        BinaryFormatter binaryFormat = new(); // CodeQL [SM04191] This is a test deserialization process is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011
 
-        using Bitmap deserialized = binaryFormat.Deserialize(stream).Should().BeOfType<Bitmap>().Which;
+        // cs/dangerous-binary-deserialization
+        using Bitmap deserialized = binaryFormat.Deserialize(stream).Should().BeOfType<Bitmap>().Which; // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
         deserialized.Size.Should().Be(bitmap.Size);
-    }   
+    }
 
     [Fact]
     public void BinaryFormattedObject_ImageListStreamer_FromBinaryFormatter()

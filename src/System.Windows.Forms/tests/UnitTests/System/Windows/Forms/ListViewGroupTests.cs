@@ -1334,11 +1334,13 @@ public class ListViewGroupTests
         using BinaryFormatterScope formatterScope = new(enable: true);
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
+        // cs/binary-formatter-without-binder 
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         formatter.Serialize(stream, group);
         stream.Seek(0, SeekOrigin.Begin);
 
-        ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
+        // cs/dangerous-binary-deserialization 
+        ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Deserialization is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
         Assert.Equal(group.Header, result.Header);
         Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);
