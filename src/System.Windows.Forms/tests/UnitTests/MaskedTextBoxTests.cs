@@ -157,7 +157,7 @@ public class MaskedTextBoxTests
     [InlineData(null)]
     public void MaskedTextBox_Culture_SetCulture_UpdatesMaskedTextProvider(string cultureName)
     {
-        if (cultureName == null)
+        if (cultureName is null)
         {
             using MaskedTextBox control = new();
             Assert.Throws<ArgumentNullException>(() => control.Culture = null);
@@ -182,7 +182,6 @@ public class MaskedTextBoxTests
             control.Culture = differentCulture;
             Assert.Equal(differentCulture, control.Culture);
             Assert.False(control.IsHandleCreated);
-
         }
     }
 
