@@ -6,5 +6,7 @@ namespace System.Windows.Forms
 {
     internal class LightThemedSystemColors : ThemedSystemColors
     {
+        private static LightThemedSystemColors? s_instance;
+        public static LightThemedSystemColors DefaultInstance => s_instance ??= new LightThemedSystemColors();
     }
 }

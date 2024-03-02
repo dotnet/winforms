@@ -108,6 +108,8 @@ DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
+DwmSetWindowAttribute
+DWM_WINDOW_CORNER_PREFERENCE
 DuplicateHandle
 EC_*
 ECO_*
