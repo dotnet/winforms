@@ -60,8 +60,6 @@ public sealed partial class Application
 
     // Used to avoid recursive exit
     private static bool s_exiting;
-    private static ThemedSystemColors? s_systemColors;
-
     private static bool s_parkingWindowCreated;
 
     /// <summary>
@@ -272,8 +270,6 @@ public sealed partial class Application
 
     private static bool SetDefaultDarkModeCore(DarkMode darkMode)
     {
-        s_systemColors = null;
-
         if (EnvironmentDarkMode == DarkMode.NotSupported)
         {
             s_darkMode = DarkMode.NotSupported;
@@ -284,7 +280,7 @@ public sealed partial class Application
         return true;
     }
 
-    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
     public static DarkMode EnvironmentDarkMode
     {
@@ -292,9 +288,13 @@ public sealed partial class Application
         {
             int systemDarkMode = -1;
 
+            if (SystemInformation.HighContrast)
+            {
+                return DarkMode.NotSupported;
+            }
+
             // Dark mode is supported when we are >= W11/22000
             // Technically, we could go earlier, but then the APIs we're using weren't officially public.
-            // For Windows 10 RS2 and above
             if (OsVersion.IsWindows11_OrGreater())
             {
                 try
@@ -318,32 +318,24 @@ public sealed partial class Application
         }
     }
 
-    internal static bool IsDarkModeEnabled => DefaultDarkMode switch
-    {
-        DarkMode.Enabled => true,
-        DarkMode.Disabled => false,
-        _ => EnvironmentDarkMode switch
+    internal static bool IsDarkModeEnabled => SystemInformation.HighContrast
+        ? false
+        : DefaultDarkMode switch
         {
             DarkMode.Enabled => true,
             DarkMode.Disabled => false,
-            _ => throw new InvalidOperationException("DefaultDarkMode is not set.")
-        }
-    };
+            _ => EnvironmentDarkMode switch
+            {
+                DarkMode.Enabled => true,
+                DarkMode.Disabled => false,
+                _ => throw new InvalidOperationException("DefaultDarkMode is not set.")
+            }
+        };
 
     internal static ThemedSystemColors SystemColors
-    {
-        get
-        {
-            if (s_systemColors is null)
-            {
-                s_systemColors = IsDarkModeEnabled
-                    ? (ThemedSystemColors)new DarkThemedSystemColors()
-                    : new LightThemedSystemColors();
-            }
-
-            return s_systemColors;
-        }
-    }
+        => IsDarkModeEnabled
+            ? DarkThemedSystemColors.DefaultInstance
+            : LightThemedSystemColors.DefaultInstance;
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.

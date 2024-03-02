@@ -3,7 +3,6 @@ System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
-
 System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
 System.Windows.Forms.Control.DarkMode.set -> void
 System.Windows.Forms.DarkMode
@@ -11,20 +10,19 @@ System.Windows.Forms.DarkMode.Disabled = 3 -> System.Windows.Forms.DarkMode
 System.Windows.Forms.DarkMode.Enabled = 2 -> System.Windows.Forms.DarkMode
 System.Windows.Forms.DarkMode.Inherits = 1 -> System.Windows.Forms.DarkMode
 System.Windows.Forms.DarkMode.NotSupported = 0 -> System.Windows.Forms.DarkMode
-
-System.Windows.Forms.Form.WindowBorderColor.get -> System.Drawing.Color
-System.Windows.Forms.Form.WindowBorderColor.set -> void
-System.Windows.Forms.Form.WindowBorderThickness.get -> int
-System.Windows.Forms.Form.WindowBorderThickness.set -> void
-System.Windows.Forms.Form.WindowCaptionColor.get -> System.Drawing.Color
-System.Windows.Forms.Form.WindowCaptionColor.set -> void
-System.Windows.Forms.Form.WindowCaptionTextColor.get -> System.Drawing.Color
-System.Windows.Forms.Form.WindowCaptionTextColor.set -> void
+System.Windows.Forms.Form.SetWindowBorderColor(System.Drawing.Color color) -> void
+System.Windows.Forms.Form.SetWindowCaptionColor(System.Drawing.Color color) -> void
+System.Windows.Forms.Form.SetWindowCaptionTextColor(System.Drawing.Color color) -> void
+System.Windows.Forms.Form.SetWindowCornerPreference(System.Windows.Forms.Form.WindowCornerPreference cornerPreference) -> void
+System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.Default = 0 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.DoNotRound = 1 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.Forms.Form.WindowCornerPreference
+System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
 virtual System.Windows.Forms.Control.DarkModeSupported.get -> bool
 virtual System.Windows.Forms.Control.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 virtual System.Windows.Forms.Control.IsDarkModeEnabled.get -> bool
 virtual System.Windows.Forms.Control.SetDarkModeCore(System.Windows.Forms.DarkMode darkModeSetting) -> bool
-
 virtual System.Drawing.Design.PropertyValueUIHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! propDesc, System.Collections.ArrayList! valueUIItemList) -> void
 virtual System.Drawing.Design.PropertyValueUIItemInvokeHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! descriptor, System.Drawing.Design.PropertyValueUIItem! invokedItem) -> void
 virtual System.Windows.Forms.Application.MessageLoopCallback.Invoke() -> bool

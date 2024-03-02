@@ -1686,10 +1686,10 @@ public unsafe partial class Control :
             DarkMode.Disabled => false,
 
             // Only DarkModeSettings.Inherits remains:
-            _ => Parent?.IsDarkModeEnabled ?? IsApplicationDarkmode()
+            _ => Parent?.IsDarkModeEnabled ?? IsApplicationDarkMode()
         };
 
-        // Has the darkmode changed?
+        // Has the dark mode changed?
         if (wasDarkModeEnabled ^ isDarkMode)
         {
             Properties.SetObject(s_isDarkModeEnabledProperty, isDarkMode);
@@ -1699,7 +1699,7 @@ public unsafe partial class Control :
 
         return isDarkMode;
 
-        bool IsApplicationDarkmode()
+        static bool IsApplicationDarkMode()
         {
             bool isDark = Application.DefaultDarkMode switch
             {
@@ -7629,6 +7629,40 @@ public unsafe partial class Control :
             if (_text is not null && _text.Length != 0)
             {
                 PInvoke.SetWindowText(this, _text);
+            }
+
+            if (IsDarkModeEnabled)
+            {
+                if (this is TextBox)
+                {
+                    _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer::Edit", null);
+                }
+
+                if (this is (Button
+                    or Label
+                    or GroupBox
+                    or Panel
+                    or SplitterPanel
+                    or ComboBox
+                    or ListBox
+                    or CheckedListBox
+                    or MaskedTextBox
+                    or NumericUpDown
+                    or CheckBox
+                    or RadioButton
+                    or ListView
+                    or TreeView
+                    or DataGridView
+                    or RichTextBox
+                    or TabControl))
+                {
+                    _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+                }
+
+                if (this is (ComboBox or ListBox))
+                {
+                    PInvoke.SetWindowTheme(HWND, "DarkMode_CFD", null);
+                }
             }
 
             if (this is not ScrollableControl
