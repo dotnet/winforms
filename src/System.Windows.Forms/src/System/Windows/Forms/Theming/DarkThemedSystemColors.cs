@@ -8,6 +8,10 @@ namespace System.Windows.Forms
 {
     internal class DarkThemedSystemColors : ThemedSystemColors
     {
+        private static DarkThemedSystemColors? s_instance;
+
+        public static DarkThemedSystemColors DefaultInstance => s_instance ??= new DarkThemedSystemColors();
+
         public override Color Control => Color.FromArgb(0xFF, 0x20, 0x20, 0x20);
         public override Color ControlText => Color.FromArgb(0xFF, 0xF0, 0xF0, 0xF0);
         public override Color ControlDark => Color.FromArgb(0xFF, 0x40, 0x40, 0x40);
