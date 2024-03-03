@@ -166,6 +166,7 @@ GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
+GetComboBoxInfo
 GetCurrentActCtx
 GetCurrentObject
 GetCurrentProcess

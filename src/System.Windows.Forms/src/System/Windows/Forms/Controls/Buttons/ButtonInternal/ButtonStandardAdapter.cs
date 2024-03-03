@@ -70,7 +70,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         if (!Control.UseVisualStyleBackColor)
         {
             bool isHighContrastHighlighted = up && IsHighContrastHighlighted();
-            Color color = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
+            Color color = isHighContrastHighlighted ? Application.SystemColors.Highlight : Control.BackColor;
 
             if (color.HasTransparency())
             {
@@ -164,7 +164,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
 
         if (up & IsHighContrastHighlighted())
         {
-            Color highlightTextColor = SystemColors.HighlightText;
+            Color highlightTextColor = Application.SystemColors.HighlightText;
             PaintField(e, layout, colors, highlightTextColor, drawFocus: false);
 
             if (Control.Focused && Control.ShowFocusCues)
@@ -175,7 +175,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         }
         else if (up & IsHighContrastHighlighted())
         {
-            PaintField(e, layout, colors, SystemColors.HighlightText, drawFocus: true);
+            PaintField(e, layout, colors, Application.SystemColors.HighlightText, drawFocus: true);
         }
         else
         {

@@ -1771,6 +1771,12 @@ public unsafe partial class Control :
         set => SetDarkMode(value);
     }
 
+    private bool ShouldSerializeDarkMode()
+        => DarkMode != DefaultDarkMode;
+
+    private void ResetDarkMode()
+        => DarkMode = DefaultDarkMode;
+
     protected virtual bool IsDarkModeEnabled
     {
         get
@@ -7844,35 +7850,25 @@ public unsafe partial class Control :
 
             if (IsDarkModeEnabled)
             {
-                if (this is TextBox)
-                {
-                    _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer::Edit", null);
-                }
-
                 if (this is (Button
                     or Label
                     or GroupBox
                     or Panel
                     or SplitterPanel
-                    or ComboBox
                     or ListBox
                     or CheckedListBox
                     or MaskedTextBox
                     or NumericUpDown
                     or CheckBox
                     or RadioButton
-                    or ListView
                     or TreeView
                     or DataGridView
+                    or TextBox
                     or RichTextBox
-                    or TabControl))
+                    or TabControl
+                    or Form))
                 {
                     _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
-                }
-
-                if (this is (ComboBox or ListBox))
-                {
-                    PInvoke.SetWindowTheme(HWND, "DarkMode_CFD", null);
                 }
             }
 

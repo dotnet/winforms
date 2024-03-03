@@ -285,11 +285,11 @@ public abstract partial class TextBoxBase : Control
             }
             else if (ReadOnly)
             {
-                return SystemColors.Control;
+                return Application.SystemColors.Control;
             }
             else
             {
-                return SystemColors.Window;
+                return Application.SystemColors.Window;
             }
         }
         set => base.BackColor = value;
@@ -513,7 +513,7 @@ public abstract partial class TextBoxBase : Control
             }
             else
             {
-                return SystemColors.WindowText;
+                return Application.SystemColors.WindowText;
             }
         }
         set => base.ForeColor = value;

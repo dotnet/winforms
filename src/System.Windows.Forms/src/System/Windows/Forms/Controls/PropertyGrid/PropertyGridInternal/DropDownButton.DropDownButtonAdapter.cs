@@ -15,7 +15,7 @@ internal sealed partial class DropDownButton : Button
 
         private void DDB_Draw3DBorder(PaintEventArgs e, Rectangle r, bool raised)
         {
-            if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
+            if (Control.BackColor != Application.SystemColors.Control && SystemInformation.HighContrast)
             {
                 if (raised)
                 {
@@ -87,7 +87,7 @@ internal sealed partial class DropDownButton : Button
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
             bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
-            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
+            Color backgroundColor = isHighContrastHighlighted ? Application.SystemColors.Highlight : Control.BackColor;
             if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
             {
                 using Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor);
