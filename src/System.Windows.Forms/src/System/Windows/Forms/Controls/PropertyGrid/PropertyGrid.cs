@@ -70,12 +70,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private object[]? _selectedObjects;
 
     private int _paintFrozen;
-    private Color _lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
-    private Color _categoryForegroundColor = SystemColors.ControlText;
-    private Color _categorySplitterColor = SystemColors.Control;
-    private Color _viewBorderColor = SystemColors.ControlDark;
-    private Color _selectedItemWithFocusForeColor = SystemColors.HighlightText;
-    private Color _selectedItemWithFocusBackColor = SystemColors.Highlight;
+    private Color _lineColor = SystemInformation.HighContrast ? Application.SystemColors.ControlDarkDark : Application.SystemColors.InactiveBorder;
+    private Color _categoryForegroundColor = Application.SystemColors.ControlText;
+    private Color _categorySplitterColor = Application.SystemColors.Control;
+    private Color _viewBorderColor = Application.SystemColors.ControlDark;
+    private Color _selectedItemWithFocusForeColor = Application.SystemColors.HighlightText;
+    private Color _selectedItemWithFocusBackColor = Application.SystemColors.Highlight;
     private bool _canShowVisualStyleGlyphs = true;
 
     private AttributeCollection? _browsableAttributes;
@@ -211,8 +211,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 _helpPane.TabStop = false;
                 _helpPane.Dock = DockStyle.None;
-                _helpPane.BackColor = SystemColors.Control;
-                _helpPane.ForeColor = SystemColors.ControlText;
+                _helpPane.BackColor = Application.SystemColors.Control;
+                _helpPane.ForeColor = Application.SystemColors.ControlText;
                 _helpPane.MouseMove += OnChildMouseMove;
                 _helpPane.MouseDown += OnChildMouseDown;
 
@@ -3694,7 +3694,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     private void SetHotCommandColors()
-        => _commandsPane.SetColors(SystemColors.Control, SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
+        => _commandsPane.SetColors(SystemColors.Control, Application.SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
 
     internal void SetStatusBox(string? title, string? description) => _helpPane.SetDescription(title, description);
 

@@ -137,7 +137,7 @@ public static unsafe partial class ControlPaint
     ///  which ControlDark does not work in high contrast color schemes.
     /// </summary>
     public static Color ContrastControlDark
-        => SystemInformation.HighContrast ? SystemColors.WindowFrame : SystemColors.ControlDark;
+        => SystemInformation.HighContrast ? Application.SystemColors.WindowFrame : Application.SystemColors.ControlDark;
 
     /// <summary>
     ///  Creates a 16-bit color bitmap.
@@ -1081,7 +1081,7 @@ public static unsafe partial class ControlPaint
             graphics.DrawLine(mediumPen, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
 
             // Bottom + right inset
-            if (color.ToKnownColor() == SystemColors.Control.ToKnownColor())
+            if (color.ToKnownColor() == Application.SystemColors.Control.ToKnownColor())
             {
                 Pen pen = SystemPens.ControlLight;
                 graphics.DrawLine(
@@ -1097,16 +1097,16 @@ public static unsafe partial class ControlPaint
             // Standard button
             Debug.Assert(style == ButtonBorderStyle.Outset, "Caller should have known how to use us.");
 
-            bool stockColor = color.ToKnownColor() == SystemColors.Control.ToKnownColor();
+            bool stockColor = color.ToKnownColor() == Application.SystemColors.Control.ToKnownColor();
             HLSColor hls = new(color);
 
             // Top + left
-            using var lightPen = (stockColor ? SystemColors.ControlLightLight : hls.Lighter(1.0f)).GetCachedPenScope();
+            using var lightPen = (stockColor ? Application.SystemColors.ControlLightLight : hls.Lighter(1.0f)).GetCachedPenScope();
             graphics.DrawLine(lightPen, bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
             graphics.DrawLine(lightPen, bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
 
             // Bottom + right
-            using var darkPen = (stockColor ? SystemColors.ControlDarkDark : hls.Darker(1.0f)).GetCachedPenScope();
+            using var darkPen = (stockColor ? Application.SystemColors.ControlDarkDark : hls.Darker(1.0f)).GetCachedPenScope();
 
             graphics.DrawLine(
                 darkPen,
@@ -1119,14 +1119,14 @@ public static unsafe partial class ControlPaint
             using var topLeftPen = (!stockColor
                 ? color
                 : SystemInformation.HighContrast
-                    ? SystemColors.ControlLightLight
-                    : SystemColors.Control).GetCachedPenScope();
+                    ? Application.SystemColors.ControlLightLight
+                    : Application.SystemColors.Control).GetCachedPenScope();
 
             graphics.DrawLine(topLeftPen, bounds.X + 1, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + 1);
             graphics.DrawLine(topLeftPen, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
 
             // Bottom + right inset
-            using var bottomRightPen = (stockColor ? SystemColors.ControlDark : hls.Darker(0.5f)).GetCachedPenScope();
+            using var bottomRightPen = (stockColor ? Application.SystemColors.ControlDark : hls.Darker(0.5f)).GetCachedPenScope();
 
             graphics.DrawLine(
                 bottomRightPen,
@@ -1324,8 +1324,8 @@ public static unsafe partial class ControlPaint
             ? SystemBrushes.Control
             : SystemBrushes.Window;
         Color foreground = ((state & ButtonState.Inactive) == ButtonState.Inactive)
-            ? (SystemInformation.HighContrast ? SystemColors.GrayText : SystemColors.ControlDark)
-            : SystemColors.ControlText;
+            ? (SystemInformation.HighContrast ? Application.SystemColors.GrayText : Application.SystemColors.ControlDark)
+            : Application.SystemColors.ControlText;
         DrawFlatCheckBox(graphics, rectangle, foreground, background, state);
     }
 
@@ -1395,7 +1395,7 @@ public static unsafe partial class ControlPaint
     ///  control has the current keyboard focus.
     /// </summary>
     public static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle)
-        => DrawFocusRectangle(graphics, rectangle, SystemColors.ControlText, SystemColors.Control);
+        => DrawFocusRectangle(graphics, rectangle, Application.SystemColors.ControlText, Application.SystemColors.Control);
 
     /// <summary>
     ///  Draws a focus rectangle. A focus rectangle is a dotted rectangle that Windows uses to indicate what
@@ -2001,7 +2001,7 @@ public static unsafe partial class ControlPaint
     {
         if (SystemInformation.HighContrast)
         {
-            TextRenderer.DrawTextInternal(dc, s, font, layoutRectangle, SystemColors.GrayText, quality, format);
+            TextRenderer.DrawTextInternal(dc, s, font, layoutRectangle, Application.SystemColors.GrayText, quality, format);
         }
         else
         {
@@ -2079,7 +2079,7 @@ public static unsafe partial class ControlPaint
     /// </summary>
     private static Brush GetActiveBrush(Color backColor)
     {
-        Color brushColor = backColor.GetBrightness() <= .5 ? SystemColors.ControlLight : SystemColors.ControlDark;
+        Color brushColor = backColor.GetBrightness() <= .5 ? Application.SystemColors.ControlLight : Application.SystemColors.ControlDark;
 
         if (t_frameBrushActive is null || !s_frameColorActive.Equals(brushColor))
         {
@@ -2209,7 +2209,7 @@ public static unsafe partial class ControlPaint
     /// </summary>
     private static Brush GetSelectedBrush(Color backColor)
     {
-        Color brushColor = backColor.GetBrightness() <= .5 ? SystemColors.ControlLight : SystemColors.ControlDark;
+        Color brushColor = backColor.GetBrightness() <= .5 ? Application.SystemColors.ControlLight : Application.SystemColors.ControlDark;
 
         if (t_frameBrushSelected is null || !s_frameColorSelected.Equals(brushColor))
         {

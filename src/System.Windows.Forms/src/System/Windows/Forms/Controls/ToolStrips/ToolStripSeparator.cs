@@ -15,7 +15,7 @@ public partial class ToolStripSeparator : ToolStripItem
 
     public ToolStripSeparator()
     {
-        ForeColor = SystemColors.ControlDark;
+        ForeColor = Application.SystemColors.ControlDark;
     }
 
     [Browsable(false)]
@@ -300,7 +300,7 @@ public partial class ToolStripSeparator : ToolStripItem
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal override bool ShouldSerializeForeColor() => ForeColor != SystemColors.ControlDark;
+    internal override bool ShouldSerializeForeColor() => ForeColor != Application.SystemColors.ControlDark;
 
     protected internal override void SetBounds(Rectangle rect)
     {

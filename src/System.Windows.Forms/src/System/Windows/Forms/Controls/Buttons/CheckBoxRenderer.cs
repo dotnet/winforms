@@ -141,7 +141,7 @@ public static class CheckBoxRenderer
                 ControlPaint.DrawCheckBox(g, glyphBounds, ConvertToButtonState(state));
             }
 
-            textColor = SystemColors.ControlText;
+            textColor = Application.SystemColors.ControlText;
         }
 
         TextRenderer.DrawText(g, checkBoxText, font, textBounds, textColor, flags);
@@ -213,7 +213,7 @@ public static class CheckBoxRenderer
                 ControlPaint.DrawCheckBox(g, glyphBounds, ConvertToButtonState(state));
             }
 
-            textColor = SystemColors.ControlText;
+            textColor = Application.SystemColors.ControlText;
         }
 
         TextRenderer.DrawText(g, checkBoxText, font, textBounds, textColor, flags);

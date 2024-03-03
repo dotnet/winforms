@@ -541,7 +541,7 @@ public partial class GroupBox : Control
 
         if (SystemInformation.HighContrast)
         {
-            Color boxColor = Enabled ? ForeColor : SystemColors.GrayText;
+            Color boxColor = Enabled ? ForeColor : Application.SystemColors.GrayText;
 
             ReadOnlySpan<int> lines =
             [

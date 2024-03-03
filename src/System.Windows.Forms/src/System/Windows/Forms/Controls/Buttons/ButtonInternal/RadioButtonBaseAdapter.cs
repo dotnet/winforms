@@ -34,7 +34,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
         Color field = checkBackground;
         if (!Control.Enabled && disabledColors)
         {
-            field = SystemColors.Control;
+            field = Application.SystemColors.Control;
         }
 
         using var fieldBrush = field.GetCachedSolidBrushScope();
@@ -69,7 +69,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
             }
 
             // Otherwise we are in HighContrast mode
-            field = SystemColors.Control;
+            field = Application.SystemColors.Control;
         }
 
         double scale = GetDpiScaleRatio();
@@ -139,7 +139,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
 
         if (!Control.Enabled && disabledColors)
         {
-            checkColor = SystemColors.ControlDark;
+            checkColor = Application.SystemColors.ControlDark;
         }
 
         double scale = GetDpiScaleRatio();

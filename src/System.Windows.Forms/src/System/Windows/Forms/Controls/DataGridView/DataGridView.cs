@@ -353,8 +353,8 @@ public partial class DataGridView : Control, ISupportInitialize
     private Timer? _horizScrollTimer;
 
     private readonly Dictionary<Type, TypeConverter> _converters;
-    private static readonly Color s_defaultBackColor = SystemColors.Window;
-    private static readonly Color s_defaultBackgroundColor = SystemColors.ControlDark;
+    private static Color s_defaultBackColor = Application.SystemColors.Window;
+    private static Color s_defaultBackgroundColor = Application.SystemColors.ControlDark;
     private Color _backgroundColor = s_defaultBackgroundColor;
 
     private RECT[]? _cachedScrollableRegion;
@@ -2073,7 +2073,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     private static SolidBrush DefaultForeBrush => (SolidBrush)SystemBrushes.WindowText;
 
-    private static Color DefaultGridColor => SystemColors.WindowFrame;
+    private static Color DefaultGridColor => Application.SystemColors.WindowFrame;
 
     private static SolidBrush DefaultHeadersBackBrush => (SolidBrush)SystemBrushes.Control;
 
