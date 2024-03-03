@@ -235,7 +235,7 @@ public partial class LinkLabel : Label, IButtonControl
     public Color LinkColor
     {
         get => _linkColor.IsEmpty
-            ? SystemInformation.HighContrast ? SystemColors.HotTrack : IELinkColor
+            ? SystemInformation.HighContrast ? Application.SystemColors.HotTrack : IELinkColor
             : _linkColor;
         set
         {

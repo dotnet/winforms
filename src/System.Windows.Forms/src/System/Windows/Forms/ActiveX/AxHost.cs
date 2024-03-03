@@ -3361,8 +3361,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
         else
         {
-            qaContainer.colorFore = GetOleColorFromColor(SystemColors.WindowText);
-            qaContainer.colorBack = GetOleColorFromColor(SystemColors.Window);
+            qaContainer.colorFore = GetOleColorFromColor(Application.SystemColors.WindowText);
+            qaContainer.colorBack = GetOleColorFromColor(Application.SystemColors.Window);
         }
 
         qaContainer.dwAmbientFlags = QACONTAINERFLAGS.QACONTAINER_AUTOCLIP

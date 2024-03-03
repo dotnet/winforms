@@ -191,7 +191,7 @@ public partial class ComponentEditorForm : Form
 
         Label grayStrip = new Label
         {
-            BackColor = SystemColors.ControlDark
+            BackColor = Application.SystemColors.ControlDark
         };
 
         int selectorWidth = MIN_SELECTOR_WIDTH;

@@ -180,14 +180,14 @@ public static class VisualStyleInformation
     /// </summary>
     public static Color TextControlBorder => Application.RenderWithVisualStyles
         ? SetParameters(VisualStyleElement.TextBox.TextEdit.Normal).GetColor(ColorProperty.BorderColor)
-        : SystemColors.WindowFrame;
+        : Application.SystemColors.WindowFrame;
 
     /// <summary>
     ///  This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
     /// </summary>
     public static Color ControlHighlightHot => Application.RenderWithVisualStyles
         ? SetParameters(VisualStyleElement.Button.PushButton.Normal).GetColor(ColorProperty.AccentColorHint)
-        : SystemColors.ButtonHighlight;
+        : Application.SystemColors.ButtonHighlight;
 
     private static VisualStyleRenderer SetParameters(VisualStyleElement element)
     {

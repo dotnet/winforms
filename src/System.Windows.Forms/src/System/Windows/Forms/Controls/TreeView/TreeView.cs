@@ -192,7 +192,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
+        get => ShouldSerializeBackColor() ? base.BackColor : Application.SystemColors.Window;
         set
         {
             base.BackColor = value;
@@ -436,7 +436,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color ForeColor
     {
-        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
+        get => ShouldSerializeForeColor() ? base.ForeColor : Application.SystemColors.WindowText;
         set
         {
             base.ForeColor = value;
@@ -1859,7 +1859,7 @@ public partial class TreeView : Control
         }
 
         // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES
-        // style if it is set before the window is created.  To get around the problem,
+        // style if it is set before the window is created. To get around the problem,
         // we set it here after the window is created, and we make sure we don't set it
         // in getCreateParams so that this will actually change the value of the bit.
         // This seems to make the TreeView happy.
@@ -1878,19 +1878,19 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
-        if (c != SystemColors.Window)
+        if (c != Application.SystemColors.Window || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
         }
 
         c = ForeColor;
 
-        if (c != SystemColors.WindowText)
+        if (c != Application.SystemColors.WindowText || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
 
-        // Put the linecolor into the native control only if set.
+        // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETLINECOLOR, 0, _lineColor.ToWin32());
@@ -2641,7 +2641,10 @@ public partial class TreeView : Control
         // This stops the style from being removed for any derived classes that set it using P/Invoke.
         if (_treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
         {
-            PInvoke.SendMessage(this, PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
+            PInvoke.SendMessage(this,
+                PInvoke.TVM_SETEXTENDEDSTYLE,
+                (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER,
+                (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
         }
     }
 
@@ -2830,13 +2833,13 @@ public partial class TreeView : Control
                             TreeNodeStates curState = e.State;
 
                             Font font = node.NodeFont ?? node.TreeView.Font;
-                            Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
+                            Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? Application.SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
 
                             // Draw the actual node.
                             if ((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected)
                             {
                                 g.FillRectangle(SystemBrushes.Highlight, bounds);
-                                ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
+                                ControlPaint.DrawFocusRectangle(g, bounds, color, Application.SystemColors.Highlight);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else

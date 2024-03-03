@@ -150,7 +150,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
                 g.DrawRectangle(SystemPens.ButtonHighlight, dropDownRect);
             }
 
-            Color arrowColor = item.Selected && !item.Pressed ? SystemColors.HighlightText : SystemColors.ControlText;
+            Color arrowColor = item.Selected && !item.Pressed ? Application.SystemColors.HighlightText : Application.SystemColors.ControlText;
             DrawArrow(new ToolStripArrowRenderEventArgs(g, item, dropDownRect, arrowColor, ArrowDirection.Down));
         }
     }
@@ -201,9 +201,9 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             RenderItemInternalFilled(e, /*pressFill = */false);
             ToolStripItem item = e.Item;
             Graphics g = e.Graphics;
-            Color arrowColor = !item.Enabled ? SystemColors.ControlDark
-                : item.Selected && !item.Pressed ? SystemColors.HighlightText
-                : SystemColors.ControlText;
+            Color arrowColor = !item.Enabled ? Application.SystemColors.ControlDark
+                : item.Selected && !item.Pressed ? Application.SystemColors.HighlightText
+                : Application.SystemColors.ControlText;
             DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
         }
         else
@@ -216,18 +216,18 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
     {
         if (e.Item.Selected && (!e.Item.Pressed || e.Item is ToolStripButton))
         {
-            e.DefaultTextColor = SystemColors.HighlightText;
+            e.DefaultTextColor = Application.SystemColors.HighlightText;
         }
-        else if (e.TextColor != SystemColors.HighlightText && e.TextColor != SystemColors.ControlText)
+        else if (e.TextColor != Application.SystemColors.HighlightText && e.TextColor != Application.SystemColors.ControlText)
         {
             // we'll change the DefaultTextColor, if someone wants to change this,manually set the TextColor property.
             if (e.Item.Selected || e.Item.Pressed)
             {
-                e.DefaultTextColor = SystemColors.HighlightText;
+                e.DefaultTextColor = Application.SystemColors.HighlightText;
             }
             else
             {
-                e.DefaultTextColor = SystemColors.ControlText;
+                e.DefaultTextColor = Application.SystemColors.ControlText;
             }
         }
 
@@ -241,7 +241,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             && !e.Item.IsOnDropDown
             && ((ToolStripMenuItem)e.Item).Checked))
         {
-            e.TextColor = SystemColors.HighlightText;
+            e.TextColor = Application.SystemColors.HighlightText;
         }
 
         base.OnRenderItemText(e);
@@ -378,7 +378,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
     // Indicates whether system is currently set to high contrast 'white on black' mode
     internal static bool IsHighContrastWhiteOnBlack()
     {
-        return SystemColors.Control.ToArgb() == Color.Black.ToArgb();
+        return Application.SystemColors.Control.ToArgb() == Color.Black.ToArgb();
     }
 
     protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
