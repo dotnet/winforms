@@ -4632,7 +4632,7 @@ public partial class ListView : Control
         // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
         // However, if the customer paints the items w/ a color different from the list view's back color
         // then when the user changes selection the native list view will not invalidate the entire list view item area.
-        // PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
+        PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
 
         // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
         // we have to set this style after the list view was created and before we position the native list view items.
@@ -5934,7 +5934,7 @@ public partial class ListView : Control
 
     private void WmNmDblClick()
     {
-        // If we're checked, hittest to see if we're
+        // If we're checked, hit-test to see if we're
         // on the item
 
         if (!CheckBoxes || VirtualMode)
@@ -6016,6 +6016,31 @@ public partial class ListView : Control
     private unsafe bool WmNotify(ref Message m)
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+
+        // We need to set the text color when we are in dark mode,
+        // so that the themed headers are actually readable.
+        if (IsDarkModeEnabled && !OwnerDraw && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
+        {
+            NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
+
+            if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT)
+            {
+                // Request item draw notifications.
+                m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW;
+                return true; // And done.
+            }
+
+            else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
+            {
+                // We're just setting the text color, but we do not adapt the text (fore) color,
+                // instead we stick to the theming settings...
+                PInvoke.SetTextColor(nmlvcd->nmcd.hdc, Application.SystemColors.WindowText);
+
+                // ...and then just let the default handling play out.
+                m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
+                return false;
+            }
+        }
 
         if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {
