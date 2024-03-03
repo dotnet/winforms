@@ -565,7 +565,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         base.OnPaintBackground(e);
         if (ShowCheckMargin || ShowImageMargin)
         {
-            Renderer.DrawImageMargin(new ToolStripRenderEventArgs(e.Graphics, this, ImageMargin, SystemColors.Control));
+            Renderer.DrawImageMargin(new ToolStripRenderEventArgs(e.Graphics, this, ImageMargin, Application.SystemColors.Control));
         }
     }
 

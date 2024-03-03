@@ -37,11 +37,11 @@ internal abstract partial class ButtonBaseAdapter
                 ButtonFace = _backColor
             };
 
-            if (_backColor == SystemColors.Control)
+            if (_backColor == Application.SystemColors.Control)
             {
-                colors.ButtonShadow = SystemColors.ControlDark;
-                colors.ButtonShadowDark = SystemColors.ControlDarkDark;
-                colors.Highlight = SystemColors.ControlLightLight;
+                colors.ButtonShadow = Application.SystemColors.ControlDark;
+                colors.ButtonShadowDark = Application.SystemColors.ControlDarkDark;
+                colors.Highlight = Application.SystemColors.ControlLightLight;
             }
             else
             {
@@ -59,7 +59,7 @@ internal abstract partial class ButtonBaseAdapter
                 }
             }
 
-            colors.WindowDisabled = HighContrast ? SystemColors.GrayText : colors.ButtonShadow;
+            colors.WindowDisabled = HighContrast ? Application.SystemColors.GrayText : colors.ButtonShadow;
 
             const float lowlight = .1f;
             float adjust = 1 - lowlight;
@@ -85,7 +85,7 @@ internal abstract partial class ButtonBaseAdapter
                 Adjust255(adjust, colors.Highlight.G),
                 Adjust255(adjust, colors.Highlight.B));
 
-            if (HighContrast && _backColor != SystemColors.Control)
+            if (HighContrast && _backColor != Application.SystemColors.Control)
             {
                 colors.Highlight = colors.LowHighlight;
             }

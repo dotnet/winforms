@@ -55,7 +55,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             else
             {
                 // return the default IE Color if cell is not not selected
-                return Selected ? SystemColors.HighlightText : LinkUtilities.IEActiveLinkColor;
+                return Selected ? Application.SystemColors.HighlightText : LinkUtilities.IEActiveLinkColor;
             }
         }
         set
@@ -173,7 +173,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             else
             {
                 // return the default IE Color when cell is not selected
-                return Selected ? SystemColors.HighlightText : LinkUtilities.IELinkColor;
+                return Selected ? Application.SystemColors.HighlightText : LinkUtilities.IELinkColor;
             }
         }
         set
@@ -352,12 +352,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             }
             else if (SystemInformation.HighContrast)
             {
-                return Selected ? SystemColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
+                return Selected ? Application.SystemColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
             }
             else
             {
                 // return the default IE Color if cell is not not selected
-                return Selected ? SystemColors.HighlightText : LinkUtilities.IEVisitedLinkColor;
+                return Selected ? Application.SystemColors.HighlightText : LinkUtilities.IEVisitedLinkColor;
             }
         }
         set
@@ -406,9 +406,9 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            // Selected cells have SystemColors.Highlight as a background.
-            // SystemColors.HighlightText is supposed to be in contrast with SystemColors.Highlight.
-            return Selected ? SystemColors.HighlightText : SystemColors.HotTrack;
+            // Selected cells have Application.SystemColors.Highlight as a background.
+            // Application.SystemColors.HighlightText is supposed to be in contrast with Application.SystemColors.Highlight.
+            return Selected ? Application.SystemColors.HighlightText : Application.SystemColors.HotTrack;
         }
     }
 

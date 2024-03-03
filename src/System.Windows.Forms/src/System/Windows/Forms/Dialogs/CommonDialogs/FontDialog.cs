@@ -96,7 +96,7 @@ public class FontDialog : CommonDialog
     {
         get
         {
-            // Convert to RGB and back to resolve indirect colors like SystemColors.ControlText
+            // Convert to RGB and back to resolve indirect colors like Application.SystemColors.ControlText
             // to real color values like Color.Lime
             return !_usingDefaultIndirectColor ? _color : ColorTranslator.FromWin32(ColorTranslator.ToWin32(_color));
         }
@@ -109,7 +109,7 @@ public class FontDialog : CommonDialog
             }
             else
             {
-                _color = SystemColors.ControlText;
+                _color = Application.SystemColors.ControlText;
                 _usingDefaultIndirectColor = true;
             }
         }
@@ -367,7 +367,7 @@ public class FontDialog : CommonDialog
     {
         _options = CHOOSEFONT_FLAGS.CF_SCREENFONTS | CHOOSEFONT_FLAGS.CF_EFFECTS;
         _font = null;
-        _color = SystemColors.ControlText;
+        _color = Application.SystemColors.ControlText;
         _usingDefaultIndirectColor = true;
         ShowColor = false;
         _minSize = DefaultMinSize;
@@ -393,7 +393,7 @@ public class FontDialog : CommonDialog
             hInstance = PInvoke.GetModuleHandle((PCWSTR)null),
             nSizeMin = _minSize,
             nSizeMax = _maxSize == 0 ? int.MaxValue : _maxSize,
-            rgbColors = ShowColor || ShowEffects ? _color : SystemColors.ControlText
+            rgbColors = ShowColor || ShowEffects ? _color : Application.SystemColors.ControlText
         };
 
         if (_minSize > 0 || _maxSize > 0)

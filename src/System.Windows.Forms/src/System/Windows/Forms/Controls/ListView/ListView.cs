@@ -103,8 +103,8 @@ public partial class ListView : Control
 
     // Ownerdraw data caches...  Only valid inside WM_PAINT.
 
-    private Color _odCacheForeColor = SystemColors.WindowText;
-    private Color _odCacheBackColor = SystemColors.Window;
+    private Color _odCacheForeColor = Application.SystemColors.WindowText;
+    private Color _odCacheBackColor = Application.SystemColors.Window;
     private Font _odCacheFont;
     private HFONT _odCacheFontHandle;
     private FontHandleWrapper? _odCacheFontHandleWrapper;
@@ -353,7 +353,7 @@ public partial class ListView : Control
             }
             else
             {
-                return SystemColors.Window;
+                return Application.SystemColors.Window;
             }
         }
         set
@@ -853,7 +853,7 @@ public partial class ListView : Control
             }
             else
             {
-                return SystemColors.WindowText;
+                return Application.SystemColors.WindowText;
             }
         }
         set
@@ -2882,7 +2882,7 @@ public partial class ListView : Control
                         }
 
                         // Work-around for a comctl quirk where,
-                        // if clrText is the same as SystemColors.HotTrack,
+                        // if clrText is the same as Application.SystemColors.HotTrack,
                         // the subitem's color is not changed to nmcd->clrText.
                         //
                         // Try to tweak the blue component of clrText first, then green, then red.
@@ -2920,7 +2920,7 @@ public partial class ListView : Control
                                     mask >>= 8; // Try the next color.
                                     // We try adjusting Blue, Green, Red in that order,
                                     // since 0x0000FF is the most likely value of
-                                    // SystemColors.HotTrack
+                                    // Application.SystemColors.HotTrack
                                     totalshift += 8;
                                 }
                             }
@@ -4615,6 +4615,16 @@ public partial class ListView : Control
 
         UpdateExtendedStyles();
         RealizeProperties();
+
+        if (IsDarkModeEnabled)
+        {
+            _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+
+            // Get the ListView's ColumnHeader handle:
+            var columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(columnHeaderHandle, "DarkMode_ItemsView", null);
+        }
+
         PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
         PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
 
@@ -4622,7 +4632,7 @@ public partial class ListView : Control
         // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
         // However, if the customer paints the items w/ a color different from the list view's back color
         // then when the user changes selection the native list view will not invalidate the entire list view item area.
-        PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
+        // PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
 
         // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
         // we have to set this style after the list view was created and before we position the native list view items.
@@ -5008,13 +5018,13 @@ public partial class ListView : Control
         Color c;
 
         c = BackColor;
-        if (c != SystemColors.Window)
+        if (c != Application.SystemColors.Window || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
-        if (c != SystemColors.WindowText)
+        if (c != Application.SystemColors.WindowText || IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }

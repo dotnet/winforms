@@ -245,8 +245,8 @@ public partial class ToolStripTextBox
 
             if (!Enabled)
             {
-                outerBorderColor = SystemColors.ControlDark;
-                innerBorderColor = SystemColors.Control;
+                outerBorderColor = Application.SystemColors.ControlDark;
+                innerBorderColor = Application.SystemColors.Control;
             }
 
             using Graphics g = hdc.CreateGraphics();

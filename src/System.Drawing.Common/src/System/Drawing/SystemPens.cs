@@ -3,6 +3,45 @@
 
 namespace System.Drawing;
 
+public static class SystemColorsRouter
+{
+    internal static Func<Color> ActiveBorderRouter = () => SystemColors.ActiveBorder;
+
+    public static Color ActiveBorder => ActiveBorderRouter();
+    public static Color ActiveCaption => SystemColors.ActiveCaption;
+    public static Color ActiveCaptionText => SystemColors.ActiveCaptionText;
+    public static Color AppWorkspace => SystemColors.AppWorkspace;
+    public static Color ButtonFace => SystemColors.ButtonFace;
+    public static Color ButtonHighlight => SystemColors.ButtonHighlight;
+    public static Color ButtonShadow => SystemColors.ButtonShadow;
+    public static Color Control => SystemColors.Control;
+    public static Color ControlDark => SystemColors.ControlDark;
+    public static Color ControlDarkDark => SystemColors.ControlDarkDark;
+    public static Color ControlLight => SystemColors.ControlLight;
+    public static Color ControlLightLight => SystemColors.ControlLightLight;
+    public static Color ControlText => SystemColors.ControlText;
+    public static Color Desktop => SystemColors.Desktop;
+    public static Color GradientActiveCaption => SystemColors.GradientActiveCaption;
+    public static Color GradientInactiveCaption => SystemColors.GradientInactiveCaption;
+    public static Color GrayText => SystemColors.GrayText;
+    public static Color Highlight => SystemColors.Highlight;
+    public static Color HighlightText => SystemColors.HighlightText;
+    public static Color HotTrack => SystemColors.HotTrack;
+    public static Color InactiveBorder => SystemColors.InactiveBorder;
+    public static Color InactiveCaption => SystemColors.InactiveCaption;
+    public static Color InactiveCaptionText => SystemColors.InactiveCaptionText;
+    public static Color Info => SystemColors.Info;
+    public static Color InfoText => SystemColors.InfoText;
+    public static Color Menu => SystemColors.Menu;
+    public static Color MenuBar => SystemColors.MenuBar;
+    public static Color MenuHighlight => SystemColors.MenuHighlight;
+    public static Color MenuText => SystemColors.MenuText;
+    public static Color ScrollBar => SystemColors.ScrollBar;
+    public static Color Window => SystemColors.Window;
+    public static Color WindowFrame => SystemColors.WindowFrame;
+    public static Color WindowText => SystemColors.WindowText;
+}
+
 public static class SystemPens
 {
     private static readonly object s_systemPensKey = new();
