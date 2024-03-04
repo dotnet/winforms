@@ -461,6 +461,7 @@ public class LabelTests
     {
         using Label label = new();
         Assert.NotEqual(0, label.Handle);
+
         int invalidatedCallCount = 0;
         label.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -499,8 +500,8 @@ public class LabelTests
         using Label label = new();
         Assert.Null(label.BackgroundImage);  // Default value
 
-        // Set null.
-        var image1 = new Bitmap(10, 10);
+        // Set image.
+        using Bitmap image1 = new Bitmap(10, 10);
         label.BackgroundImage = image1;
         Assert.Same(image1, label.BackgroundImage);
 
@@ -509,7 +510,7 @@ public class LabelTests
         Assert.Same(image1, label.BackgroundImage);
 
         // Set different.
-        var image2 = new Bitmap(10, 10);
+        using Bitmap image2 = new Bitmap(50, 10);
         label.BackgroundImage = image2;
         Assert.Same(image2, label.BackgroundImage);
 
@@ -610,8 +611,11 @@ public class LabelTests
     public void Label_ImageIndex_GetSet_ImageList()
     {
         using ImageList imageList = new();
-        imageList.Images.Add(new Bitmap(10, 10));
-        imageList.Images.Add(new Bitmap(10, 10));
+        using Bitmap bitmap1 = new Bitmap(10, 10);
+        using Bitmap bitmap2 = new Bitmap(10, 10);
+
+        imageList.Images.Add(bitmap1);
+        imageList.Images.Add(bitmap2);
 
         using Label label = new();
         label.ImageList = imageList;
@@ -641,8 +645,11 @@ public class LabelTests
     public void Label_ImageKey_GetSet_ImageList()
     {
         using ImageList imageList = new();
-        imageList.Images.Add("key1", new Bitmap(10, 10));
-        imageList.Images.Add("key2", new Bitmap(10, 10));
+        using Bitmap bitmap1 = new Bitmap(10, 10);
+        using Bitmap bitmap2 = new Bitmap(10, 10);
+
+        imageList.Images.Add("key1", bitmap1);
+        imageList.Images.Add("key2", bitmap2);
 
         using Label label = new();
         label.ImageList = imageList;
@@ -672,7 +679,7 @@ public class LabelTests
     public void Label_ImageList_GetSet_Image()
     {
         using Label label = new();
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new Bitmap(10, 10);
         label.Image = image;
 
         // Set valid value.
@@ -698,9 +705,11 @@ public class LabelTests
     {
         using SubLabel label = new();
         using ImageList imageList = new();
-        label.ImageList = imageList;
+        using Bitmap bitmap = new Bitmap(10, 10);
 
-        imageList.Images.Add(new Bitmap(10, 10));
+        label.ImageList = imageList;
+        imageList.Images.Add(bitmap);
+
         label.CreateControl();
         Assert.True(label.IsHandleCreated);
 
