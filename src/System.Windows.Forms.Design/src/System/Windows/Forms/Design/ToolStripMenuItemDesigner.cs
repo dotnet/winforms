@@ -35,6 +35,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     // Make Selection service a class level member.. used a lot.
     private ISelectionService _selectionService;
 
+    private IComponentChangeService _componentChangeService;
+
     // DesignerTransaction used for removing Items
     private DesignerTransaction _pendingTransaction;
     private bool fireComponentChanged;
@@ -340,7 +342,14 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
     }
 
-    private IComponentChangeService ComponentChangeService => GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+    private IComponentChangeService ComponentChangeService
+    {
+        get
+        {
+            _componentChangeService ??= GetService<IComponentChangeService>();
+            return _componentChangeService;
+        }
+    }
 
     /// <summary>
     ///  Adds the dummy node for InSitu Edit.
@@ -1002,6 +1011,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             {
                 ComponentChangeService.ComponentAdding -= ComponentChangeSvc_ComponentAdding;
                 ComponentChangeService.ComponentAdded -= ComponentChangeSvc_ComponentAdded;
+
+                ComponentChangeService.ComponentRemoving -= ComponentChangeSvc_ComponentRemoving;
+                ComponentChangeService.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
             }
 
             if (_toolStripAdornerWindowService is not null)
@@ -1515,6 +1527,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             ComponentChangeService.ComponentAdding += ComponentChangeSvc_ComponentAdding;
             ComponentChangeService.ComponentAdded += ComponentChangeSvc_ComponentAdded;
+
+            ComponentChangeService.ComponentRemoving += ComponentChangeSvc_ComponentRemoving;
+            ComponentChangeService.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
         }
 
         if (_undoEngine is null && TryGetService(out _undoEngine))
