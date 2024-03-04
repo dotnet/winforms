@@ -16,10 +16,11 @@ public partial class Binding
 
     private readonly BindToObject _bindToObject;
 
+#pragma warning disable 0649
     private PropertyDescriptor? _propInfo;
     private PropertyDescriptor? _propIsNullInfo;
     private EventDescriptor? _validateInfo;
-    private TypeConverter? _propInfoConverter;
+#pragma warning restore 0649
 
     private BindingStates _state;
 
@@ -461,100 +462,9 @@ public partial class Binding
         CheckBinding();
     }
 
-    private void CheckBinding()
+    private static void CheckBinding()
     {
-        _bindToObject.CheckBinding();
-
-        if (BindableComponent is not null && !string.IsNullOrEmpty(PropertyName))
-        {
-            BindableComponent.DataBindings.CheckDuplicates(this);
-
-            Type controlClass = BindableComponent.GetType();
-
-            // Check Properties
-            string propertyNameIsNull = PropertyName + "IsNull";
-            PropertyDescriptor? tempPropInfo = null;
-            PropertyDescriptor? tempPropIsNullInfo = null;
-            PropertyDescriptorCollection propInfos;
-
-            // If the control is being inherited, then get the properties for
-            // the control's type rather than for the control itself.  Getting
-            // properties for the control will merge the control's properties with
-            // those of its designer.  Normally we want that, but for
-            // inherited controls we don't because an inherited control should
-            // "act" like a runtime control.
-            InheritanceAttribute? attr = (InheritanceAttribute?)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];
-            if (attr is not null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
-            {
-                propInfos = TypeDescriptor.GetProperties(controlClass);
-            }
-            else
-            {
-                propInfos = TypeDescriptor.GetProperties(BindableComponent);
-            }
-
-            for (int i = 0; i < propInfos.Count; i++)
-            {
-                if (tempPropInfo is null && string.Equals(propInfos[i].Name, PropertyName, StringComparison.OrdinalIgnoreCase))
-                {
-                    tempPropInfo = propInfos[i];
-                    if (tempPropIsNullInfo is not null)
-                    {
-                        break;
-                    }
-                }
-
-                if (tempPropIsNullInfo is null && string.Equals(propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase))
-                {
-                    tempPropIsNullInfo = propInfos[i];
-                    if (tempPropInfo is not null)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (tempPropInfo is null)
-            {
-                throw new ArgumentException(string.Format(SR.ListBindingBindProperty, PropertyName), nameof(PropertyName));
-            }
-
-            if (tempPropInfo.IsReadOnly && _controlUpdateMode != ControlUpdateMode.Never)
-            {
-                throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, PropertyName), nameof(PropertyName));
-            }
-
-            _propInfo = tempPropInfo;
-            _propInfoConverter = _propInfo.Converter;
-
-            if (tempPropIsNullInfo is not null && tempPropIsNullInfo.PropertyType == typeof(bool) && !tempPropIsNullInfo.IsReadOnly)
-            {
-                _propIsNullInfo = tempPropIsNullInfo;
-            }
-
-            // Check events
-            EventDescriptor? tempValidateInfo = null;
-            string validateName = "Validating";
-            EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(BindableComponent);
-            for (int i = 0; i < eventInfos.Count; i++)
-            {
-                if (tempValidateInfo is null && string.Equals(eventInfos[i]!.Name, validateName, StringComparison.OrdinalIgnoreCase))
-                {
-                    tempValidateInfo = eventInfos[i];
-                    break;
-                }
-            }
-
-            _validateInfo = tempValidateInfo;
-        }
-        else
-        {
-            _propInfo = null;
-            _validateInfo = null;
-        }
-
-        // go see if we become bound now.
-        UpdateIsBinding();
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     internal bool ControlAtDesignTime()
@@ -661,146 +571,14 @@ public partial class Binding
         }
     }
 
-    private object? ParseObject(object? value)
+    private static object? ParseObject(object? value)
     {
-        Type? type = _bindToObject.BindToType;
-        Debug.Assert(type is not null);
-        if (_state.HasFlag(BindingStates.FormattingEnabled))
-        {
-            // Fire the Parse event so that user code gets a chance to supply the parsed value for us
-            ConvertEventArgs e = new(value, type);
-            OnParse(e);
-
-            object? newValue = e.Value;
-            if (!Equals(value, newValue))
-            {
-                // If event handler replaced formatted value with parsed value, use that
-                return newValue;
-            }
-            else
-            {
-                // Otherwise parse the formatted value ourselves
-                TypeConverter? fieldInfoConverter = null;
-                if (_bindToObject.FieldInfo is not null)
-                {
-                    fieldInfoConverter = _bindToObject.FieldInfo.Converter;
-                }
-
-                return Formatter.ParseObject(
-                    value,
-                    type,
-                    (value is null ? _propInfo!.PropertyType : value.GetType()),
-                    fieldInfoConverter,
-                    _propInfoConverter,
-                    _formatInfo,
-                    _nullValue,
-                    GetDataSourceNullValue(type));
-            }
-        }
-        else
-        {
-            ConvertEventArgs e = new(value, type);
-
-            // First try: use the OnParse event
-            OnParse(e);
-            if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
-            {
-                return e.Value;
-            }
-
-            // Second try: use the TypeConverter
-            TypeConverter typeConverter = TypeDescriptor.GetConverter(value is not null ? value.GetType() : typeof(object));
-            if (typeConverter is not null && typeConverter.CanConvertTo(type))
-            {
-                return typeConverter.ConvertTo(value, type);
-            }
-
-            // Last try: use Convert.ToType
-            if (value is IConvertible)
-            {
-                object ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
-                if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
-                {
-                    return ret;
-                }
-            }
-
-            return null;
-        }
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
-    private object? FormatObject(object? value)
+    private static object? FormatObject(object? value)
     {
-        // We will not format the object when the control is in design time.
-        // This is because if we bind a boolean property on a control to a
-        // row that is full of DBNulls then we cause problems in the shell.
-        if (ControlAtDesignTime())
-        {
-            return value;
-        }
-
-        Type type = _propInfo!.PropertyType;
-        if (_state.HasFlag(BindingStates.FormattingEnabled))
-        {
-            // Fire the Format event so that user code gets a chance to supply the formatted value for us
-            ConvertEventArgs e = new(value, type);
-            OnFormat(e);
-
-            if (e.Value != value)
-            {
-                // If event handler replaced parsed value with formatted value, use that
-                return e.Value;
-            }
-            else
-            {
-                // Otherwise format the parsed value ourselves
-                TypeConverter? fieldInfoConverter = null;
-                if (_bindToObject.FieldInfo is not null)
-                {
-                    fieldInfoConverter = _bindToObject.FieldInfo.Converter;
-                }
-
-                return Formatter.FormatObject(value, type, fieldInfoConverter, _propInfoConverter, _formatString, _formatInfo, _nullValue, _dsNullValue);
-            }
-        }
-        else
-        {
-            // first try: use the Format event
-            ConvertEventArgs e = new(value, type);
-            OnFormat(e);
-            object? ret = e.Value;
-
-            // Fire the Format event even if the control property is of type Object.
-            if (type == typeof(object))
-            {
-                return value;
-            }
-
-            // stop now if we have a value of a compatible type
-            if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
-            {
-                return ret;
-            }
-
-            // second try: use type converter for the desiredType
-            TypeConverter typeConverter = TypeDescriptor.GetConverter(value is not null ? value.GetType() : typeof(object));
-            if (typeConverter is not null && typeConverter.CanConvertTo(type))
-            {
-                return typeConverter.ConvertTo(value, type);
-            }
-
-            // last try: use Convert.ChangeType
-            if (value is IConvertible)
-            {
-                ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
-                if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
-                {
-                    return ret;
-                }
-            }
-
-            throw new FormatException(SR.ListBindingFormatFailed);
-        }
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     /// <summary>

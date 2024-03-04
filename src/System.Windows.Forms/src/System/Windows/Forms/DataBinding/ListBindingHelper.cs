@@ -126,35 +126,7 @@ public static class ListBindingHelper
 
     public static PropertyDescriptorCollection GetListItemProperties(object? list)
     {
-        PropertyDescriptorCollection pdc;
-
-        if (list is null)
-        {
-            return new PropertyDescriptorCollection(null);
-        }
-        else if (list is Type type)
-        {
-            pdc = GetListItemPropertiesByType(type);
-        }
-        else
-        {
-            object? target = GetList(list);
-
-            if (target is ITypedList typedList)
-            {
-                pdc = typedList.GetItemProperties(null);
-            }
-            else if (target is IEnumerable enumerable)
-            {
-                pdc = GetListItemPropertiesByEnumerable(enumerable);
-            }
-            else
-            {
-                pdc = TypeDescriptor.GetProperties(target!);
-            }
-        }
-
-        return pdc;
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     public static PropertyDescriptorCollection GetListItemProperties(object? list, PropertyDescriptor[]? listAccessors)
@@ -253,32 +225,7 @@ public static class ListBindingHelper
     [ExcludeFromCodeCoverage]
     private static object? CreateInstanceOfType(Type type)
     {
-        object? instancedObject = null;
-        Exception? instanceException = null;
-
-        try
-        {
-            instancedObject = Activator.CreateInstance(type);
-        }
-        catch (TargetInvocationException ex)
-        {
-            instanceException = ex; // Default ctor threw an exception
-        }
-        catch (MethodAccessException ex)
-        {
-            instanceException = ex; // Default ctor was not public
-        }
-        catch (MissingMethodException ex)
-        {
-            instanceException = ex; // No default ctor defined
-        }
-
-        if (instanceException is not null)
-        {
-            throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
-        }
-
-        return instancedObject;
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     public static Type GetListItemType(object? dataSource, string? dataMember)
@@ -390,60 +337,7 @@ public static class ListBindingHelper
 
     private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable iEnumerable, PropertyDescriptor[] listAccessors, int startIndex)
     {
-        PropertyDescriptorCollection? pdc = null;
-        object? subList = null;
-        // Walk down the tree - first try and get the value
-        // This is tricky, because we can't do a standard GetValue - we need an instance of one of the
-        // items in the list.
-        //
-        // For example:
-        //
-        //        Customer has a property Orders which is of type Order[]
-        //
-        //        Customers is a Customer[] (this is the IList)
-        //        Customers does not have the property "Orders" - Customer has that property
-        //        So we need to get the value of Customers[0]
-        //
-        object? instance = GetFirstItemByEnumerable(iEnumerable);
-
-        if (instance is not null)
-        {
-            // This calls GetValue(Customers[0], "Orders") - or Customers[0].Orders
-            // If this list is non-null, it is an instance of Orders (Order[]) for the first customer
-            subList = GetList(listAccessors[startIndex].GetValue(instance));
-        }
-
-        if (subList is null)
-        {
-            // Can't get shape by Instance, try by Type
-            pdc = GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
-        }
-        else
-        {
-            // We have the Instance (e.g. Orders)
-            ++startIndex;
-
-            if (subList is IEnumerable ienumerableSubList)
-            {
-                if (startIndex == listAccessors.Length)
-                {
-                    // Last one, so get the shape
-                    pdc = GetListItemPropertiesByEnumerable(ienumerableSubList);
-                }
-                else
-                {
-                    // Looks like they want more (e.g. Customers.Orders.OrderDetails)
-                    pdc = GetListItemPropertiesByEnumerable(ienumerableSubList, listAccessors, startIndex);
-                }
-            }
-            else
-            {
-                // Not a list, so switch to a non-list based method of retrieving properties
-                pdc = GetListItemPropertiesByInstance(subList, listAccessors, startIndex);
-            }
-        }
-
-        return pdc;
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     private static Type GetListItemTypeByEnumerable(IEnumerable iEnumerable)
@@ -454,81 +348,13 @@ public static class ListBindingHelper
 
     private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object? target, PropertyDescriptor[] listAccessors, int startIndex)
     {
-        Debug.Assert(listAccessors is not null);
-
-        // At this point, things can be simplified because:
-        //   We know target is _not_ a list
-        //   We have an instance
-        if (listAccessors.Length > startIndex)
-        {
-            if (listAccessors[startIndex] is null)
-            {
-                return new PropertyDescriptorCollection(null);
-            }
-
-            // Get the value (e.g. given Foo with property Bar, this gets Foo.Bar)
-            object? value = listAccessors[startIndex].GetValue(target);
-
-            if (value is null)
-            {
-                // It's null - we can't walk down by Instance so use Type
-                return GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
-            }
-            else
-            {
-                PropertyDescriptor[]? accessors = null;
-
-                if (listAccessors.Length > startIndex + 1)
-                {
-                    int accessorsCount = listAccessors.Length - (startIndex + 1);
-                    accessors = new PropertyDescriptor[accessorsCount];
-                    for (int i = 0; i < accessorsCount; ++i)
-                    {
-                        accessors[i] = listAccessors[startIndex + 1 + i];
-                    }
-                }
-
-                // We've got the instance of Bar - now get it's shape
-                return GetListItemProperties(value, accessors);
-            }
-        }
-
-        return TypeDescriptor.GetProperties(target!, BrowsableAttributeList);
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     // returns true if 'type' can be treated as a list
     private static bool IsListBasedType(Type type)
     {
-        // check for IList, ITypedList, IListSource
-        if (typeof(IList).IsAssignableFrom(type) ||
-            typeof(ITypedList).IsAssignableFrom(type) ||
-            typeof(IListSource).IsAssignableFrom(type))
-        {
-            return true;
-        }
-
-        // check for IList<>:
-        if (type.IsGenericType && !type.IsGenericTypeDefinition)
-        {
-            if (typeof(IList<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
-            {
-                return true;
-            }
-        }
-
-        // check for SomeObject<T> : IList<T> / SomeObject : IList<(SpecificListObjectType)>
-        foreach (Type curInterface in type.GetInterfaces())
-        {
-            if (curInterface.IsGenericType)
-            {
-                if (typeof(IList<>).IsAssignableFrom(curInterface.GetGenericTypeDefinition()))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     /// <summary>
@@ -547,34 +373,12 @@ public static class ListBindingHelper
     /// </summary>
     private static PropertyInfo? GetTypedIndexer(Type type)
     {
-        PropertyInfo? indexer = null;
-
-        if (!IsListBasedType(type))
-        {
-            return null;
-        }
-
-        PropertyInfo[] props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        for (int idx = 0; idx < props.Length; idx++)
-        {
-            if (props[idx].GetIndexParameters().Length > 0 && props[idx].PropertyType != typeof(object))
-            {
-                indexer = props[idx];
-                // Prefer the standard indexer, if there is one
-                if (indexer.Name == "Item")
-                {
-                    break;
-                }
-            }
-        }
-
-        return indexer;
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type)
     {
-        return TypeDescriptor.GetProperties(GetListItemType(type), BrowsableAttributeList);
+        throw new ArgumentException("Using Binding which will not be supported in trimming");
     }
 
     private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable enumerable)
