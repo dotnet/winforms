@@ -1628,13 +1628,14 @@ public partial class ToolStripTests
         nativeWindowTestAccessor.t_anyHandleCreated = false;
 
         using Font font = new("Microsoft Sans Serif", 8.25f);
-        Application.SetDefaultFont(font);
-
         using Form form = new();
         Application.OpenForms.Add(form);
 
         try
         {
+            Assert.True(Application.OpenForms.Contains(form));
+            Application.SetDefaultFont(font);
+            Assert.Equal(font, Application.DefaultFont);
             Assert.Equal(font, form.Font);
         }
         finally
