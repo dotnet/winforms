@@ -10,6 +10,7 @@ Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 ApplicationConfiguration.Initialize();
 
 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
+Application.SetDefaultFont(new Font(new FontFamily("Microsoft Sans Serif"), 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0));
 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
 try
