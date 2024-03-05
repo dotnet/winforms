@@ -451,14 +451,7 @@ internal class ToolStripDesigner : ControlDesigner
         }
     }
 
-    private IComponentChangeService ComponentChangeService
-    {
-        get
-        {
-            _componentChangeService ??= GetService<IComponentChangeService>();
-            return _componentChangeService;
-        }
-    }
+    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetService<IComponentChangeService>();
 
     /// <summary>
     ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves.
@@ -1425,7 +1418,7 @@ internal class ToolStripDesigner : ControlDesigner
         // initialize new Manager For Editing ToolStrips
         _editManager = new ToolStripEditorManager(component);
 
-        _host = GetService<IDesignerHost>();
+        _host = GetRequiredService<IDesignerHost>();
 
         // Setup the dropdown if our handle has been created.
         if (Control.IsHandleCreated)
@@ -1509,7 +1502,7 @@ internal class ToolStripDesigner : ControlDesigner
 
         if (parentPanel is not null)
         {
-            if (!(ToolStrip is MenuStrip))
+            if (ToolStrip is not MenuStrip)
             {
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parentPanel)["Controls"];
 

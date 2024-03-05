@@ -342,14 +342,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
     }
 
-    private IComponentChangeService ComponentChangeService
-    {
-        get
-        {
-            _componentChangeService ??= GetService<IComponentChangeService>();
-            return _componentChangeService;
-        }
-    }
+    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetService<IComponentChangeService>();
 
     /// <summary>
     ///  Adds the dummy node for InSitu Edit.
@@ -562,8 +555,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
                 }
             }
-            else // if committedEditorNode is null and we are in commitEdit then just add the new Item, since this item is added through dropDown.
+            else
             {
+                // if committedEditorNode is null and we are in commitEdit then just add the new Item, since this item is added through dropDown.
                 // if no editorNode then we are committing a NEW NODE...
                 index = MenuItem.DropDownItems.IndexOf(typeHereNode);
                 try
