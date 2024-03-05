@@ -7374,6 +7374,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">L'argomento è null o non è un oggetto NumericUpDownAcceleration.</target>
         <note />
       </trans-unit>
+      <trans-unit id="NumericUpDownAllowThousandsSeparatorInputDescr">
+        <source>Indicates whether the numeric up-down should accept thousands separator input.</source>
+        <target state="new">Indicates whether the numeric up-down should accept thousands separator input.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NumericUpDownDecimalPlacesDescr">
         <source>Indicates the number of decimal places to display.</source>
         <target state="translated">Indica il numero di posizioni decimali da visualizzare.</target>

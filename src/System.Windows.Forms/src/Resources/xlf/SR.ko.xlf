@@ -7374,6 +7374,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">인수가 null이거나 NumericUpDownAcceleration 개체가 아닙니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="NumericUpDownAllowThousandsSeparatorInputDescr">
+        <source>Indicates whether the numeric up-down should accept thousands separator input.</source>
+        <target state="new">Indicates whether the numeric up-down should accept thousands separator input.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NumericUpDownDecimalPlacesDescr">
         <source>Indicates the number of decimal places to display.</source>
         <target state="translated">표시할 소수 자릿수를 나타냅니다.</target>

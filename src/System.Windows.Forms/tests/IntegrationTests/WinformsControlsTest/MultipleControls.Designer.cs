@@ -35,6 +35,7 @@ partial class MultipleControls
         this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
         this.button1 = new System.Windows.Forms.Button();
         this.label1 = new System.Windows.Forms.Label();
+        this.label2 = new System.Windows.Forms.Label();
         this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
         this.richTextBox1 = new System.Windows.Forms.RichTextBox();
         this.textBox1 = new System.Windows.Forms.TextBox();
@@ -49,6 +50,7 @@ partial class MultipleControls
         this.groupBox1 = new System.Windows.Forms.GroupBox();
         this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
         this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+        this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
         this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
         this.linkLabel1 = new System.Windows.Forms.LinkLabel();
         this.linkLabel2 = new System.Windows.Forms.LinkLabel();
@@ -58,6 +60,7 @@ partial class MultipleControls
         this.tabPage2.SuspendLayout();
         this.groupBox1.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
         this.SuspendLayout();
         // 
         // progressBar1
@@ -242,6 +245,32 @@ partial class MultipleControls
         this.numericUpDown1.Name = "numericUpDown1";
         this.numericUpDown1.Size = new System.Drawing.Size(140, 23);
         this.numericUpDown1.TabIndex = 11;
+        this.numericUpDown1.ThousandsSeparator = true;
+        // 
+        // label2
+        // 
+        this.label2.AutoSize = true;
+        this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+        this.label2.Location = new System.Drawing.Point(378, 164);
+        this.label2.Name = "label2";
+        this.label2.Size = new System.Drawing.Size(38, 15);
+        this.label2.TabIndex = 2;
+        this.label2.Text = "AllowThousandsSeparatorInput = false";
+        // 
+        // numericUpDown2
+        // 
+        this.numericUpDown2.Location = new System.Drawing.Point(600, 164);
+        this.numericUpDown2.Name = "numericUpDown2";
+        this.numericUpDown2.Size = new System.Drawing.Size(140, 23);
+        this.numericUpDown2.TabIndex = 11;
+        this.numericUpDown2.Maximum = new decimal(new int[] {
+        10000,
+        0,
+        0,
+        0});
+        this.numericUpDown2.AllowThousandsSeparatorInput = false;
+        this.numericUpDown2.ThousandsSeparator = false;
+        this.numericUpDown2.DecimalPlaces = 2;
         // 
         // domainUpDown1
         // 
@@ -302,6 +331,7 @@ partial class MultipleControls
         this.Controls.Add(this.checkedListBox2);
         this.Controls.Add(this.domainUpDown1);
         this.Controls.Add(this.numericUpDown1);
+        this.Controls.Add(this.numericUpDown2);
         this.Controls.Add(this.checkedListBox1);
         this.Controls.Add(this.groupBox1);
         this.Controls.Add(this.tabControl1);
@@ -309,6 +339,7 @@ partial class MultipleControls
         this.Controls.Add(this.richTextBox1);
         this.Controls.Add(this.maskedTextBox1);
         this.Controls.Add(this.label1);
+        this.Controls.Add(this.label2);
         this.Controls.Add(this.button1);
         this.Controls.Add(this.progressBar1);
         this.Controls.Add(this.linkLabel1);
@@ -322,6 +353,7 @@ partial class MultipleControls
         this.tabPage2.PerformLayout();
         this.groupBox1.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+        ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
         this.ResumeLayout(false);
         this.PerformLayout();
 
@@ -333,6 +365,7 @@ partial class MultipleControls
     private System.ComponentModel.BackgroundWorker backgroundWorker1;
     private System.Windows.Forms.Button button1;
     private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Label label2;
     private System.Windows.Forms.MaskedTextBox maskedTextBox1;
     private System.Windows.Forms.RichTextBox richTextBox1;
     private System.Windows.Forms.TextBox textBox1;
@@ -347,6 +380,7 @@ partial class MultipleControls
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.CheckedListBox checkedListBox1;
     private System.Windows.Forms.NumericUpDown numericUpDown1;
+    private System.Windows.Forms.NumericUpDown numericUpDown2;
     private System.Windows.Forms.DomainUpDown domainUpDown1;
     private System.Windows.Forms.LinkLabel linkLabel1;
     private System.Windows.Forms.LinkLabel linkLabel2;
