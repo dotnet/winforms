@@ -10,20 +10,6 @@ namespace System.Windows.Forms;
 [Obsolete("MenuItem has been deprecated. Use ToolStripMenuItem instead.")]
 public class MenuItem : Menu
 {
-    private const int StateBarBreak = 0x00000020;
-    private const int StateBreak = 0x00000040;
-    private const int StateChecked = 0x00000008;
-    private const int StateDefault = 0x00001000;
-    private const int StateDisabled = 0x00000003;
-    private const int StateRadioCheck = 0x00000200;
-    private const int StateHidden = 0x00010000;
-    private const int StateMdiList = 0x00020000;
-    private const int StateOwnerDraw = 0x00000100;
-
-#pragma warning disable CS0649
-    private MenuItemData _data;
-#pragma warning restore CS0649
-
     /// <summary>
     ///  Initializes a <see cref='MenuItem'/> with a blank caption.
     /// </summary>
@@ -89,14 +75,8 @@ public class MenuItem : Menu
     [DefaultValue(false)]
     public bool BarBreak
     {
-        get
-        {
-            return StateBarBreak != 0;
-        }
-        set
-        {
-            _data.SetState(StateBreak, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -108,14 +88,8 @@ public class MenuItem : Menu
     [DefaultValue(false)]
     public bool Break
     {
-        get
-        {
-            return StateBreak != 0;
-        }
-        set
-        {
-            _data.SetState(StateBarBreak, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -127,14 +101,8 @@ public class MenuItem : Menu
     [SRDescription("Indicates whether the item is checked.")]
     public bool Checked
     {
-        get
-        {
-            return StateChecked != 0;
-        }
-        set
-        {
-            _data.SetState(StateChecked, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -145,14 +113,8 @@ public class MenuItem : Menu
     [SRDescription("Indicates whether the item is the default item.")]
     public bool DefaultItem
     {
-        get
-        {
-            return StateDefault != 0;
-        }
-        set
-        {
-            _data.SetState(StateDefault, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -165,14 +127,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public bool OwnerDraw
     {
-        get
-        {
-            return StateOwnerDraw != 0;
-        }
-        set
-        {
-            _data.SetState(StateOwnerDraw, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -184,14 +140,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public bool Enabled
     {
-        get
-        {
-            return StateDisabled == 0;
-        }
-        set
-        {
-            _data.SetState(StateDisabled, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -200,25 +150,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public int Index
     {
-        get
-        {
-            return -1;
-        }
-        set
-        {
-            int oldIndex = Index;
-            if (oldIndex >= 0)
-            {
-                if (value != oldIndex)
-                {
-                    // The menu reverts to null when we're removed, so hold onto it in a
-                    // local variable
-                    Menu parent = Parent;
-                    parent.MenuItems.RemoveAt(oldIndex);
-                    parent.MenuItems.Add(value, this);
-                }
-            }
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -227,10 +160,7 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public override bool IsParent
     {
-        get
-        {
-            return base.IsParent;
-        }
+        get => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -242,14 +172,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public bool MdiList
     {
-        get
-        {
-            return StateMdiList != 0;
-        }
-        set
-        {
-            _data.SetState(StateMdiList, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -261,14 +185,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public MenuMerge MergeType
     {
-        get
-        {
-            return _data._mergeType;
-        }
-        set
-        {
-            _data._mergeType = value;
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -280,14 +198,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public int MergeOrder
     {
-        get
-        {
-            return _data._mergeOrder;
-        }
-        set
-        {
-            _data._mergeOrder = value;
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -303,7 +215,11 @@ public class MenuItem : Menu
     ///  Gets the menu in which this menu item appears.
     /// </summary>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public Menu Parent { get; internal set; }
+    public Menu Parent
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
 
     /// <summary>
     ///  Gets or sets a value that indicates whether the menu item, if checked,
@@ -314,14 +230,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public bool RadioCheck
     {
-        get
-        {
-            return StateRadioCheck != 0;
-        }
-        set
-        {
-            _data.SetState(StateRadioCheck, value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -332,14 +242,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public string Text
     {
-        get
-        {
-            return _data._caption;
-        }
-        set
-        {
-            _data.SetCaption(value);
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -351,14 +255,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public Shortcut Shortcut
     {
-        get
-        {
-            return _data._shortcut;
-        }
-        set
-        {
-            _data._shortcut = value;
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -370,14 +268,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public bool ShowShortcut
     {
-        get
-        {
-            return _data._showShortcut;
-        }
-        set
-        {
-            _data._showShortcut = value;
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -390,10 +282,7 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public bool Visible
     {
-        get
-        {
-            return StateHidden == 0;
-        }
+        get => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -404,14 +293,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Click
     {
-        add
-        {
-            _data._onClick += value;
-        }
-        remove
-        {
-            _data._onClick -= value;
-        }
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -422,14 +305,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event DrawItemEventHandler DrawItem
     {
-        add
-        {
-            _data._onDrawItem += value;
-        }
-        remove
-        {
-            _data._onDrawItem -= value;
-        }
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -439,14 +316,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event MeasureItemEventHandler MeasureItem
     {
-        add
-        {
-            _data._onMeasureItem += value;
-        }
-        remove
-        {
-            _data._onMeasureItem -= value;
-        }
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -456,14 +327,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Popup
     {
-        add
-        {
-            _data._onPopup += value;
-        }
-        remove
-        {
-            _data._onPopup -= value;
-        }
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -474,14 +339,8 @@ public class MenuItem : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Select
     {
-        add
-        {
-            _data._onSelect += value;
-        }
-        remove
-        {
-            _data._onSelect -= value;
-        }
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -575,13 +434,9 @@ public class MenuItem : Menu
 
     private class MdiListFormData : MdiListUserData
     {
-        private readonly MenuItem _parent;
-        private readonly int _boundIndex;
-
         public MdiListFormData(MenuItem parentItem, int boundFormIndex)
         {
-            _boundIndex = boundFormIndex;
-            _parent = parentItem;
+            throw new PlatformNotSupportedException();
         }
 
         public override void OnClick(EventArgs e)
@@ -592,11 +447,9 @@ public class MenuItem : Menu
 
     private class MdiListMoreWindowsData : MdiListUserData
     {
-        private readonly MenuItem _parent;
-
         public MdiListMoreWindowsData(MenuItem parent)
         {
-            _parent = parent;
+            throw new PlatformNotSupportedException();
         }
 
         public override void OnClick(EventArgs e)
