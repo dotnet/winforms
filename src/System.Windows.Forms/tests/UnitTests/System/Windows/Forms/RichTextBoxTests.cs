@@ -10673,6 +10673,117 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // still call base so that this has a chance to work if it can.
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Invoke_Success()
+    {
+        using Bitmap bitmap1 = new(10, 10);
+        using RichTextBox richTextBox1 = new();
+        richTextBox1.DrawToBitmap(bitmap1, new Rectangle(0, 0, 10, 10));
+
+        Assert.NotNull(bitmap1);
+        Assert.Equal(10, bitmap1.Width);
+        Assert.Equal(10, bitmap1.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData("SaveRichTextBox.rtf")]
+    public void RichTextBox_SaveFilePath_Invoke_Success(string fileName)
+    {
+        using RichTextBox richTextBox1 = new()
+        {
+            Rtf = @"{\rtf1\ansi{Sample for {\v HIDDEN }text}}"
+        };
+        string projectDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory))))));
+        string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", fileName);     
+
+        try
+        {
+            richTextBox1.SaveFile(filePath);
+            richTextBox1.LoadFile(filePath);
+            int startOfSample = richTextBox1.Text.IndexOf("Sample", StringComparison.Ordinal);
+            int endOfText = richTextBox1.Text.IndexOf("text", StringComparison.Ordinal) + "text".Length;
+            richTextBox1.Select(startOfSample, endOfText - startOfSample);
+
+            Assert.NotEmpty(richTextBox1.Rtf);
+            Assert.Equal("Sample for HIDDEN text", richTextBox1.SelectedText);
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(RichTextBoxStreamType.RichText)]
+    [InlineData(RichTextBoxStreamType.PlainText)]
+    [InlineData(RichTextBoxStreamType.UnicodePlainText)]
+    [InlineData(RichTextBoxStreamType.RichNoOleObjs)]
+    [InlineData(RichTextBoxStreamType.TextTextOleObjs)]
+    public void RichTextBox_SaveFile_Invoke_Success(RichTextBoxStreamType fileType)
+    {       
+        using RichTextBox richTextBox1 = new();
+        string projectDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory))))));
+        string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
+
+        try
+        {
+            richTextBox1.SaveFile(filePath, fileType);
+            Assert.True(File.Exists(filePath));
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    public static TheoryData<string, string> PlainTextData => new()
+    {
+        { "Hello World", "Hello World" },
+        { new string('a', 10000), new string('a', 10000) },
+        { "Special characters: !@#$%^&*()", "Special characters: !@#$%^&*()" },
+        { "", "" },
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(PlainTextData))]
+    public void RichTextBox_Paste_PlainText_Data(string value, string expected)
+    {
+        using RichTextBox richTextBox1 = new();
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            Clipboard.SetText(value);
+            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
+
+            Assert.Equal(expected, richTextBox1.Text);
+        }
+    }
+
+    public static TheoryData<string> RtfData => new()
+    {
+        { "{\\rtf Hello World}" },
+        { "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}" },
+        { "{\\rtf1\\ansi{Invalid RTF data" },
+        { "" },
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(RtfData))]
+    public void RichTextBox_Paste_Rtf_Data(string rtf)
+    {
+        using RichTextBox richTextBox1 = new();
+
+        if (!string.IsNullOrEmpty(rtf))
+        {
+            Clipboard.SetText(rtf);
+            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Rtf));
+
+            Assert.StartsWith("{\\rtf", richTextBox1.Rtf);
+        }
+    }
+
     private class CustomGetParaFormatRichTextBox : RichTextBox
     {
         public bool MakeCustom { get; set; }
