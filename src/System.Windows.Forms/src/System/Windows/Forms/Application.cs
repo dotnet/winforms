@@ -315,9 +315,12 @@ public sealed partial class Application
         }
     }
 
-    internal static bool IsDarkModeEnabled => SystemInformation.HighContrast
-        ? false
-        : DefaultDarkMode switch
+    /// <summary>
+    ///  Gets a value indicating whether the application is running in a dark mode context.
+    ///  Note: We're never using dark mode in a high contrast context.
+    /// </summary>
+    public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
+        && DefaultDarkMode switch
         {
             DarkMode.Enabled => true,
             DarkMode.Disabled => false,
@@ -329,7 +332,7 @@ public sealed partial class Application
             }
         };
 
-    internal static ThemedSystemColors SystemColors
+    public static ThemedSystemColors SystemColors
         => IsDarkModeEnabled
             ? DarkThemedSystemColors.DefaultInstance
             : LightThemedSystemColors.DefaultInstance;
