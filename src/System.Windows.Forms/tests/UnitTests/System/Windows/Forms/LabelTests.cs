@@ -501,7 +501,7 @@ public class LabelTests
         Assert.Null(label.BackgroundImage);  // Default value
 
         // Set image.
-        using Bitmap image1 = new Bitmap(10, 10);
+        using Bitmap image1 = new(10, 10);
         label.BackgroundImage = image1;
         Assert.Same(image1, label.BackgroundImage);
 
@@ -510,7 +510,7 @@ public class LabelTests
         Assert.Same(image1, label.BackgroundImage);
 
         // Set different.
-        using Bitmap image2 = new Bitmap(50, 10);
+        using Bitmap image2 = new(50, 10);
         label.BackgroundImage = image2;
         Assert.Same(image2, label.BackgroundImage);
 
@@ -539,7 +539,7 @@ public class LabelTests
         label.BackgroundImage = label.BackgroundImage;
         Assert.Equal(0, callCount);
 
-        var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         label.BackgroundImage = image;
         Assert.Equal(1, callCount);
 
@@ -611,8 +611,8 @@ public class LabelTests
     public void Label_ImageIndex_GetSet_ImageList()
     {
         using ImageList imageList = new();
-        using Bitmap bitmap1 = new Bitmap(10, 10);
-        using Bitmap bitmap2 = new Bitmap(10, 10);
+        using Bitmap bitmap1 = new(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
 
         imageList.Images.Add(bitmap1);
         imageList.Images.Add(bitmap2);
@@ -645,8 +645,8 @@ public class LabelTests
     public void Label_ImageKey_GetSet_ImageList()
     {
         using ImageList imageList = new();
-        using Bitmap bitmap1 = new Bitmap(10, 10);
-        using Bitmap bitmap2 = new Bitmap(10, 10);
+        using Bitmap bitmap1 = new(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
 
         imageList.Images.Add("key1", bitmap1);
         imageList.Images.Add("key2", bitmap2);
@@ -679,7 +679,7 @@ public class LabelTests
     public void Label_ImageList_GetSet_Image()
     {
         using Label label = new();
-        using Bitmap image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         label.Image = image;
 
         // Set valid value.
@@ -705,7 +705,7 @@ public class LabelTests
     {
         using SubLabel label = new();
         using ImageList imageList = new();
-        using Bitmap bitmap = new Bitmap(10, 10);
+        using Bitmap bitmap = new(10, 10);
 
         label.ImageList = imageList;
         imageList.Images.Add(bitmap);
@@ -746,12 +746,14 @@ public class LabelTests
             callCount++;
         };
 
+        KeyEventArgs keyEventArgs = new KeyEventArgs(Keys.A);
+
         label.KeyUp += handler;
-        label.OnKeyUp(new KeyEventArgs(Keys.A));
+        label.OnKeyUp(keyEventArgs);
         Assert.Equal(1, callCount);
 
         label.KeyUp -= handler;
-        label.OnKeyUp(new KeyEventArgs(Keys.A));
+        label.OnKeyUp(keyEventArgs);
         Assert.Equal(1, callCount);
     }
 
@@ -766,12 +768,14 @@ public class LabelTests
             callCount++;
         };
 
+        KeyEventArgs keyEventArgs = new KeyEventArgs(Keys.A);
+
         label.KeyDown += handler;
-        label.OnKeyDown(new KeyEventArgs(Keys.A));
+        label.OnKeyDown(keyEventArgs);
         Assert.Equal(1, callCount);
 
         label.KeyDown -= handler;
-        label.OnKeyDown(new KeyEventArgs(Keys.A));
+        label.OnKeyDown(keyEventArgs);
         Assert.Equal(1, callCount);
     }
 
@@ -786,12 +790,14 @@ public class LabelTests
             callCount++;
         };
 
+        KeyPressEventArgs keyPressEventArgs = new KeyPressEventArgs('A');
+
         label.KeyPress += handler;
-        label.OnKeyPress(new KeyPressEventArgs('A'));
+        label.OnKeyPress(keyPressEventArgs);
         Assert.Equal(1, callCount);
 
         label.KeyPress -= handler;
-        label.OnKeyPress(new KeyPressEventArgs('A'));
+        label.OnKeyPress(keyPressEventArgs);
         Assert.Equal(1, callCount);
     }
 
