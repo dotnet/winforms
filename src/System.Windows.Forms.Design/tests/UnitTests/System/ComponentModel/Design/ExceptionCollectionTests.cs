@@ -42,7 +42,7 @@ public class ExceptionCollectionTests
     }
 
     [Fact]
-    public void ExceptionCollection_Serialize_ThrowsSerializationException()
+    public void ExceptionCollection_Serialize_ThrowsNotSupportedException()
     {
         using BinaryFormatterScope formatterScope = new(enable: false);
         using MemoryStream stream = new();
@@ -51,10 +51,39 @@ public class ExceptionCollectionTests
         Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
     }
 
+    [Theory]
+    [MemberData(nameof(Ctor_ArrayList_TestData))]
+    public void ExceptionCollection_Serialize_Deserialize_Success(ArrayList exceptions)
+    {
+        using BinaryFormatterScope formatterScope = new(enable: true);
+        using MemoryStream stream = new();
+        BinaryFormatter formatter = new();
+        var collection = new ExceptionCollection(exceptions);
+        formatter.Serialize(stream, collection);
+
+        stream.Position = 0;
+        ExceptionCollection deserialized = Assert.IsType<ExceptionCollection>(formatter.Deserialize(stream));
+        if (exceptions is null)
+        {
+            Assert.Null(deserialized.Exceptions);
+        }
+        else
+        {
+            for(int i = 0; i < exceptions.Count; i++)
+            {
+                Assert.Equal(((Exception)exceptions[i]).Message, ((Exception)deserialized.Exceptions[i]).Message);
+            }
+
+            Assert.NotSame(exceptions, deserialized.Exceptions);
+            Assert.Equal(deserialized.Exceptions, deserialized.Exceptions);
+            Assert.NotSame(deserialized.Exceptions, deserialized.Exceptions);
+        }
+    }
+
     [Fact]
     public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
     {
         ExceptionCollection collection = new(new ArrayList());
-        Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
+        Assert.Throws<ArgumentNullException>(() => collection.GetObjectData(null, new StreamingContext()));
     }
 }
