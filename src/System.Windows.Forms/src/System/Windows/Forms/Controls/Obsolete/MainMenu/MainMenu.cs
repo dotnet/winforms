@@ -12,8 +12,6 @@ public class MainMenu : Menu
 #nullable disable
     internal Form form;
     internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
-    private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
-    private EventHandler onCollapse;
 
     /// <summary>
     ///  Creates a new MainMenu control.
@@ -46,8 +44,8 @@ public class MainMenu : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Collapse
     {
-        add => onCollapse += value;
-        remove => onCollapse -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -63,28 +61,11 @@ public class MainMenu : Menu
     {
         get
         {
-            if (rightToLeft == RightToLeft.Inherit)
-            {
-                if (form is not null)
-                {
-                    return form.RightToLeft;
-                }
-                else
-                {
-                    return RightToLeft.Inherit;
-                }
-            }
-            else
-            {
-                return rightToLeft;
-            }
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            if (rightToLeft != value)
-            {
-                rightToLeft = value;
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
