@@ -6,6 +6,10 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
+    /// <summary>
+    ///  This is a temporary list of the light color palette that is used when the system is in "normal light mode".
+    ///  It's purely for testing purposes and will most likely be removed once the system colors are available.
+    /// </summary>
     internal class ForcedLightThemedSystemColors : ThemedSystemColors
     {
         private static ForcedLightThemedSystemColors? s_instance;

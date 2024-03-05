@@ -12,17 +12,17 @@ namespace System.Windows.Forms
         NotSupported = 0,
 
         /// <summary>
-        /// The setting for the current dark mode context is inherited from the parent context.
+        ///  The setting for the current dark mode context is inherited from the parent context.
         /// </summary>
         Inherits = 1,
 
         /// <summary>
-        /// Dark mode for the current context is enabled.
+        ///  Dark mode for the current context is enabled.
         /// </summary>
         Enabled = 2,
 
         /// <summary>
-        /// Dark mode the current context is disabled.
+        ///  Dark mode the current context is disabled.
         /// </summary>
         Disabled = 3
     }
