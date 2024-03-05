@@ -32,6 +32,19 @@ public class MaskedTextBoxTests
         Assert.NotNull(mtb);
     }
 
+    [WinFormsFact]
+    public void MaskedTextBox_DefaultValues()
+    {
+        using MaskedTextBox control = new();
+
+        // Check default values
+        Assert.False(control.BeepOnError);
+        Assert.False(control.AsciiOnly);
+        Assert.Equal(CultureInfo.CurrentCulture, control.Culture);
+
+        Assert.False(control.IsHandleCreated);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void MaskedTextBox_BeepOnError_Set_GetReturnsExpected(bool value)
@@ -40,6 +53,7 @@ public class MaskedTextBoxTests
         {
             BeepOnError = value
         };
+
         Assert.Equal(value, control.BeepOnError);
         Assert.False(control.IsHandleCreated);
 
@@ -60,6 +74,7 @@ public class MaskedTextBoxTests
     {
         using MaskedTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
+
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -99,6 +114,7 @@ public class MaskedTextBoxTests
         {
             AsciiOnly = value
         };
+
         Assert.Equal(value, control.AsciiOnly);
         Assert.False(control.IsHandleCreated);
 
@@ -119,6 +135,7 @@ public class MaskedTextBoxTests
     {
         using MaskedTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
+
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -169,6 +186,7 @@ public class MaskedTextBoxTests
             {
                 Culture = culture
             };
+
             Assert.Equal(culture, control.Culture);
             Assert.False(control.IsHandleCreated);
 
@@ -194,6 +212,7 @@ public class MaskedTextBoxTests
         CultureInfo culture = new CultureInfo(cultureName);
         using MaskedTextBox control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
+
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
