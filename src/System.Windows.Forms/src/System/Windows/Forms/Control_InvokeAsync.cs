@@ -26,7 +26,7 @@ public partial class Control
         {
             try
             {
-                var result = await asyncAction(args).ConfigureAwait(true);
+                object result = await asyncAction(args).ConfigureAwait(true);
                 tcs.SetResult(result);
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ public partial class Control
         {
             try
             {
-                var result = method.DynamicInvoke(args);
+                object? result = method.DynamicInvoke(args);
                 tcs.SetResult(result);
             }
             catch (Exception ex)

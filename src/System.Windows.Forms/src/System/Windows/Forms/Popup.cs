@@ -65,7 +65,6 @@ public partial class Popup : Panel, IMessageFilter
         }
 
         Show(associatingControl);
-
         OnPopupOpened(EventArgs.Empty);
     }
 
@@ -115,7 +114,6 @@ public partial class Popup : Panel, IMessageFilter
         }
 
         PInvoke.ShowWindow((HWND)Handle, (SHOW_WINDOW_CMD)0);
-
         _isVisible = false;
     }
 
@@ -272,7 +270,7 @@ public partial class Popup : Panel, IMessageFilter
         {
             if (m.Msg == PInvoke.WM_GETMINMAXINFO)
             {
-                var nullableMinMaxInfo = Marshal.PtrToStructure(m.LParamInternal, typeof(MINMAXINFO));
+                object? nullableMinMaxInfo = Marshal.PtrToStructure(m.LParamInternal, typeof(MINMAXINFO));
 
                 if (nullableMinMaxInfo is not null)
                 {
