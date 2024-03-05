@@ -6,16 +6,14 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016 // Add public types and members to the declared API
+// Add public types and members to the declared APIto simplify porting of applications from .NET Framework to .NET. These types will not work,
+// but if they are not accessed, other features in the application will work.
+#pragma warning disable RS0016
 #nullable disable
 [Obsolete("ContextMenu has been deprecated. Use ContextMenuStrip instead.")]
 public class ContextMenu : Menu
 {
-    private EventHandler onPopup;
-    private EventHandler onCollapse;
     internal Control sourceControl;
-
-    private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
 
     /// <summary>
     ///  Creates a new ContextMenu object with no items in it by default.
@@ -45,15 +43,15 @@ public class ContextMenu : Menu
     {
         get
         {
-            return sourceControl;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Popup
     {
-        add => onPopup += value;
-        remove => onPopup -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -62,8 +60,8 @@ public class ContextMenu : Menu
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Collapse
     {
-        add => onCollapse += value;
-        remove => onCollapse -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -79,28 +77,11 @@ public class ContextMenu : Menu
     {
         get
         {
-            if (rightToLeft == RightToLeft.Inherit)
-            {
-                if (sourceControl is not null)
-                {
-                    return sourceControl.RightToLeft;
-                }
-                else
-                {
-                    return RightToLeft.No;
-                }
-            }
-            else
-            {
-                return rightToLeft;
-            }
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            if (RightToLeft != value)
-            {
-                rightToLeft = value;
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 

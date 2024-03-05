@@ -17,24 +17,13 @@ public class ToolBar : Control
     /// <summary>
     ///  The size of a button in the ToolBar
     /// </summary>
-    internal Size buttonSize = System.Drawing.Size.Empty;
+    internal Size buttonSize = Size.Empty;
     /// <summary>
     ///  This represents the width of the drop down arrow we have if the
     ///  DropDownArrows property is true.  this value is used by the ToolBarButton
     ///  objects to compute their size
     /// </summary>
     internal const int DDARROW_WIDTH = 15;
-
-    /// <summary>
-    ///  Indicates what our appearance will be.  This will either be normal
-    ///  or flat.
-    /// </summary>
-    private ToolBarAppearance appearance = ToolBarAppearance.Normal;
-
-    /// <summary>
-    ///  Indicates whether or not we have a border
-    /// </summary>
-    private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
     /// <summary>
     ///  The array of buttons we're working with.
@@ -47,29 +36,9 @@ public class ToolBar : Control
     private int buttonCount;
 
     /// <summary>
-    ///  Indicates if text captions should go underneath images in buttons or
-    ///  to the right of them
-    /// </summary>
-    private ToolBarTextAlign textAlign = ToolBarTextAlign.Underneath;
-
-    /// <summary>
     ///  The ImageList object that contains the main images for our control.
     /// </summary>
     private ImageList imageList;
-
-    private const int TOOLBARSTATE_wrappable = 0x00000001;
-    private const int TOOLBARSTATE_dropDownArrows = 0x00000002;
-    private const int TOOLBARSTATE_divider = 0x00000004;
-    private const int TOOLBARSTATE_showToolTips = 0x00000008;
-    private const int TOOLBARSTATE_autoSize = 0x00000010;
-
-    // PERF: take all the bools and put them into a state variable
-    private Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above
-
-    // event handlers
-    //
-    private ToolBarButtonClickEventHandler onButtonClick;
-    private ToolBarButtonClickEventHandler onButtonDropDown;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref='ToolBar'/> class.
@@ -91,16 +60,12 @@ public class ToolBar : Control
     {
         get
         {
-            return appearance;
+            throw new PlatformNotSupportedException();
         }
 
         set
         {
-            if (value != appearance)
-            {
-                appearance = value;
-                RecreateHandle();
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -118,31 +83,12 @@ public class ToolBar : Control
     {
         get
         {
-            return toolBarState[TOOLBARSTATE_autoSize];
+            throw new PlatformNotSupportedException();
         }
 
         set
         {
-            // Note that we intentionally do not call base.  Toolbars size themselves by
-            // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
-            // continue to return false to keep our LayoutEngines from messing with TextBoxes.
-            // This is done for backwards compatibility since the new AutoSize behavior differs.
-            if (AutoSize != value)
-            {
-                toolBarState[TOOLBARSTATE_autoSize] = value;
-                if (Dock == DockStyle.Left || Dock == DockStyle.Right)
-                {
-                    SetStyle(ControlStyles.FixedWidth, AutoSize);
-                    SetStyle(ControlStyles.FixedHeight, false);
-                }
-                else
-                {
-                    SetStyle(ControlStyles.FixedHeight, AutoSize);
-                    SetStyle(ControlStyles.FixedWidth, false);
-                }
-
-                OnAutoSizeChanged(EventArgs.Empty);
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -150,8 +96,8 @@ public class ToolBar : Control
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     new public event EventHandler AutoSizeChanged
     {
-        add => base.AutoSizeChanged += value;
-        remove => base.AutoSizeChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -159,19 +105,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.BackColor;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.BackColor = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     new public event EventHandler BackColorChanged
     {
-        add => base.BackColorChanged += value;
-        remove => base.BackColorChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -179,19 +125,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.BackgroundImage;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.BackgroundImage = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     new public event EventHandler BackgroundImageChanged
     {
-        add => base.BackgroundImageChanged += value;
-        remove => base.BackgroundImageChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -199,19 +145,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.BackgroundImageLayout;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.BackgroundImageLayout = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     new public event EventHandler BackgroundImageLayoutChanged
     {
-        add => base.BackgroundImageLayoutChanged += value;
-        remove => base.BackgroundImageLayoutChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -223,17 +169,12 @@ public class ToolBar : Control
     {
         get
         {
-            return borderStyle;
+            throw new PlatformNotSupportedException();
         }
 
         set
         {
-            if (borderStyle != value)
-            {
-                borderStyle = value;
-
-                RecreateHandle();   // Looks like we need to recreate the handle to avoid painting glitches
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -246,7 +187,7 @@ public class ToolBar : Control
     {
         get
         {
-            return buttonsCollection;
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -259,35 +200,12 @@ public class ToolBar : Control
     {
         get
         {
-            if (buttonSize.IsEmpty)
-            {
-                if (TextAlign == ToolBarTextAlign.Underneath)
-                {
-                    return new Size(39, 36);    // Default button size
-                }
-                else
-                {
-                    return new Size(23, 22);    // Default button size
-                }
-            }
-            else
-            {
-                return buttonSize;
-            }
+            throw new PlatformNotSupportedException();
         }
 
         set
         {
-            if (value.Width < 0 || value.Height < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ButtonSize), value));
-            }
-
-            if (buttonSize != value)
-            {
-                buttonSize = value;
-                RecreateHandle();
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -300,16 +218,12 @@ public class ToolBar : Control
     {
         get
         {
-            return toolBarState[TOOLBARSTATE_divider];
+            throw new PlatformNotSupportedException();
         }
 
         set
         {
-            if (Divider != value)
-            {
-                toolBarState[TOOLBARSTATE_divider] = value;
-                RecreateHandle();
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -320,25 +234,11 @@ public class ToolBar : Control
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public override DockStyle Dock
     {
-        get { return base.Dock; }
+        get { throw new PlatformNotSupportedException(); }
 
         set
         {
-            if (Dock != value)
-            {
-                if (value == DockStyle.Left || value == DockStyle.Right)
-                {
-                    SetStyle(ControlStyles.FixedWidth, AutoSize);
-                    SetStyle(ControlStyles.FixedHeight, false);
-                }
-                else
-                {
-                    SetStyle(ControlStyles.FixedHeight, AutoSize);
-                    SetStyle(ControlStyles.FixedWidth, false);
-                }
-
-                base.Dock = value;
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -351,16 +251,12 @@ public class ToolBar : Control
     {
         get
         {
-            return toolBarState[TOOLBARSTATE_dropDownArrows];
+            throw new PlatformNotSupportedException();
         }
 
         set
         {
-            if (DropDownArrows != value)
-            {
-                toolBarState[TOOLBARSTATE_dropDownArrows] = value;
-                RecreateHandle();
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -369,19 +265,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.ForeColor;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.ForeColor = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     new public event EventHandler ForeColorChanged
     {
-        add => base.ForeColorChanged += value;
-        remove => base.ForeColorChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -393,17 +289,11 @@ public class ToolBar : Control
     {
         get
         {
-            return imageList;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            if (value != imageList)
-            {
-                if (IsHandleCreated)
-                {
-                    RecreateHandle();
-                }
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -416,14 +306,7 @@ public class ToolBar : Control
     {
         get
         {
-            if (imageList is not null)
-            {
-                return imageList.ImageSize;
-            }
-            else
-            {
-                return new Size(0, 0);
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -432,19 +315,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.ImeMode;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.ImeMode = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler ImeModeChanged
     {
-        add => base.ImeModeChanged += value;
-        remove => base.ImeModeChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -452,19 +335,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.RightToLeft;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.RightToLeft = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler RightToLeftChanged
     {
-        add => base.RightToLeftChanged += value;
-        remove => base.RightToLeftChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -479,15 +362,11 @@ public class ToolBar : Control
     {
         get
         {
-            return toolBarState[TOOLBARSTATE_showToolTips];
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            if (ShowToolTips != value)
-            {
-                toolBarState[TOOLBARSTATE_showToolTips] = value;
-                RecreateHandle();
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -497,11 +376,11 @@ public class ToolBar : Control
     {
         get
         {
-            return base.TabStop;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.TabStop = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -512,19 +391,19 @@ public class ToolBar : Control
     {
         get
         {
-            return base.Text;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            base.Text = value;
+            throw new PlatformNotSupportedException();
         }
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     new public event EventHandler TextChanged
     {
-        add => base.TextChanged += value;
-        remove => base.TextChanged -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -540,17 +419,11 @@ public class ToolBar : Control
     {
         get
         {
-            return textAlign;
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            if (textAlign == value)
-            {
-                return;
-            }
-
-            textAlign = value;
-            RecreateHandle();
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -569,15 +442,11 @@ public class ToolBar : Control
     {
         get
         {
-            return toolBarState[TOOLBARSTATE_wrappable];
+            throw new PlatformNotSupportedException();
         }
         set
         {
-            if (Wrappable != value)
-            {
-                toolBarState[TOOLBARSTATE_wrappable] = value;
-                RecreateHandle();
-            }
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -588,8 +457,8 @@ public class ToolBar : Control
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event ToolBarButtonClickEventHandler ButtonClick
     {
-        add => onButtonClick += value;
-        remove => onButtonClick -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -599,8 +468,8 @@ public class ToolBar : Control
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public event ToolBarButtonClickEventHandler ButtonDropDown
     {
-        add => onButtonDropDown += value;
-        remove => onButtonDropDown -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -610,8 +479,8 @@ public class ToolBar : Control
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public new event PaintEventHandler Paint
     {
-        add => base.Paint += value;
-        remove => base.Paint -= value;
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
     }
 
     /// <summary>
@@ -652,24 +521,11 @@ public class ToolBar : Control
         {
             get
             {
-                if (index < 0 || ((owner.buttons is not null) && (index >= owner.buttonCount)))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
-
-                return owner.buttons[index];
+                throw new PlatformNotSupportedException();
             }
             set
             {
-                if (index < 0 || ((owner.buttons is not null) && index >= owner.buttonCount))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
-
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                throw new PlatformNotSupportedException();
             }
         }
 
@@ -701,15 +557,7 @@ public class ToolBar : Control
         {
             get
             {
-                // We do not support null and empty string as valid keys.
-                if (string.IsNullOrEmpty(key))
-                {
-                    return null;
-                }
-
-                // Search for the key in our collection
-                int index = IndexOfKey(key);
-                return this[index];
+                throw new PlatformNotSupportedException();
             }
         }
 
@@ -721,7 +569,7 @@ public class ToolBar : Control
         {
             get
             {
-                return owner.buttonCount;
+                throw new PlatformNotSupportedException();
             }
         }
 
@@ -757,7 +605,7 @@ public class ToolBar : Control
         {
             get
             {
-                return false;
+                throw new PlatformNotSupportedException();
             }
         }
 
