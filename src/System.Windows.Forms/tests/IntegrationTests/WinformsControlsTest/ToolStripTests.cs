@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Primitives;
 
 namespace WinformsControlsTest;
 
@@ -11,7 +10,6 @@ public partial class ToolStripTests : Form
     public ToolStripTests()
     {
         InitializeComponent();
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
 
         toolStrip1.Items.Add(new ToolStripControlHost(new RadioButton() { Text = "RadioButton" })); // RadioButton supports UIA
         toolStrip1.Items.Add(new ToolStripControlHost(new HScrollBar() { Value = 30 })); // HScrollBar doesn't support UIA
