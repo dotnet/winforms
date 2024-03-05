@@ -24,13 +24,9 @@ public abstract class Menu : Component
     ///  Used by findMenuItem
     /// </summary>
     public const int FindShortcut = 1;
-
-    private MenuItemCollection itemsCollection;
     internal MenuItem[] items;
     internal IntPtr handle;
     internal bool created;
-    private object userData;
-    private string name;
 
     /// <summary>
     ///  This is an abstract class.  Instances cannot be created, so the constructor
@@ -51,7 +47,7 @@ public abstract class Menu : Component
     {
         get
         {
-            return handle;
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -64,7 +60,7 @@ public abstract class Menu : Component
     {
         get
         {
-            return items is not null;
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -77,7 +73,7 @@ public abstract class Menu : Component
     {
         get
         {
-            return null;
+            throw new PlatformNotSupportedException();
         }
     }
 
@@ -90,23 +86,8 @@ public abstract class Menu : Component
     DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string Name
     {
-        get => WindowsFormsUtils.GetComponentName(this, name);
-        set
-        {
-            if (value is null || value.Length == 0)
-            {
-                name = null;
-            }
-            else
-            {
-                name = value;
-            }
-
-            if (Site is not null)
-            {
-                Site.Name = name;
-            }
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -114,15 +95,7 @@ public abstract class Menu : Component
     MergableProperty(false)]
     public MenuItemCollection MenuItems
     {
-        get
-        {
-            if (itemsCollection is null)
-            {
-                itemsCollection = new MenuItemCollection(this);
-            }
-
-            return itemsCollection;
-        }
+        get => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -134,14 +107,8 @@ public abstract class Menu : Component
     TypeConverter(typeof(StringConverter))]
     public object Tag
     {
-        get
-        {
-            return userData;
-        }
-        set
-        {
-            userData = value;
-        }
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
     }
 
     public MenuItem FindMenuItem(int type, IntPtr value)
@@ -195,8 +162,6 @@ public abstract class Menu : Component
     [Obsolete("MenuItemCollection has been deprecated.")]
     public class MenuItemCollection : IList
     {
-        private readonly Menu owner;
-
         ///  A caching mechanism for key accessor
         ///  We use an index here rather than control so that we don't have lifetime
         ///  issues by holding on to extra references.
@@ -204,35 +169,20 @@ public abstract class Menu : Component
 
         public MenuItemCollection(Menu owner)
         {
-            this.owner = owner;
             throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual MenuItem this[int index]
         {
-            get
-            {
-                if (index < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
-
-                return owner.items[index];
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         object IList.this[int index]
         {
-            get
-            {
-                return this[index];
-            }
-            set
-            {
-                throw new NotSupportedException();
-            }
+            get => throw new PlatformNotSupportedException();
+            set => throw new PlatformNotSupportedException();
         }
 
         /// <summary>
@@ -241,70 +191,37 @@ public abstract class Menu : Component
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual MenuItem this[string key]
         {
-            get
-            {
-                // We do not support null and empty string as valid keys.
-                if (string.IsNullOrEmpty(key))
-                {
-                    return null;
-                }
-
-                // Search for the key in our collection
-                int index = IndexOfKey(key);
-                if (IsValidIndex(index))
-                {
-                    return this[index];
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public int Count
         {
-            get
-            {
-                return 0;
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         object ICollection.SyncRoot
         {
-            get
-            {
-                return this;
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         bool ICollection.IsSynchronized
         {
-            get
-            {
-                return false;
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         bool IList.IsFixedSize
         {
-            get
-            {
-                return false;
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsReadOnly
         {
-            get
-            {
-                return false;
-            }
+            get => throw new PlatformNotSupportedException();
         }
 
         /// <summary>
