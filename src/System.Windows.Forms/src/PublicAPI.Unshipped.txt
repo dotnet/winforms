@@ -4,6 +4,7 @@ static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Fo
 static System.Windows.Forms.Application.EnvironmentDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.IsDarkModeEnabled.get -> bool
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode) -> bool
+static System.Windows.Forms.Application.SystemColors.get -> System.Windows.Forms.ThemedSystemColors!
 System.Windows.Forms.Control.DarkMode.get -> System.Windows.Forms.DarkMode
 System.Windows.Forms.Control.DarkMode.set -> void
 System.Windows.Forms.DarkMode
@@ -23,7 +24,6 @@ System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Window
 System.Windows.Forms.ThemedSystemColors
 System.Windows.Forms.ThemedSystemColors.ThemedSystemColors() -> void
 virtual System.Windows.Forms.Control.DarkModeSupported.get -> bool
-virtual System.Windows.Forms.Control.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 virtual System.Windows.Forms.Control.IsDarkModeEnabled.get -> bool
 virtual System.Windows.Forms.Control.SetDarkModeCore(System.Windows.Forms.DarkMode darkModeSetting) -> bool
 virtual System.Drawing.Design.PropertyValueUIHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! propDesc, System.Collections.ArrayList! valueUIItemList) -> void
