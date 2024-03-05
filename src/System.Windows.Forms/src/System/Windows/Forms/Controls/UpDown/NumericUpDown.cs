@@ -16,6 +16,7 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionNumericUpDown))]
 public partial class NumericUpDown : UpDownBase, ISupportInitialize
 {
+    private const bool DefaultAllowThousandsSeparator = true;
     private const decimal DefaultValue = decimal.Zero;
     private const decimal DefaultMinimum = decimal.Zero;
     private const decimal DefaultMaximum = (decimal)100.0;
@@ -29,6 +30,9 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     // Member variables
     //
     //////////////////////////////////////////////////////////////
+    // Allow thousands separator input?
+    private bool _allowThousandsSeparatorInput = DefaultAllowThousandsSeparator;
+
     /// <summary>
     ///  The number of decimal places to display.
     /// </summary>
@@ -271,6 +275,27 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     }
 
     /// <summary>
+    ///  Gets or sets a value indicating whether the up-down control accept a thousands separator to be entered.
+    /// </summary>
+    [SRCategory(nameof(SR.CatData))]
+    [DefaultValue(DefaultAllowThousandsSeparator)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.NumericUpDownAllowThousandsSeparatorInputDescr))]
+    public bool AllowThousandsSeparatorInput
+    {
+        get
+        {
+            return _allowThousandsSeparatorInput;
+        }
+
+        set
+        {
+            _allowThousandsSeparatorInput = value;
+            UpdateEditText();
+        }
+    }
+
+    /// <summary>
     ///  Gets or sets a value indicating whether a thousands
     ///  separator is displayed in the up-down control when appropriate.
     /// </summary>
@@ -462,7 +487,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
         {
             // Digits are OK
         }
-        else if (keyInput.Equals(decimalSeparator) || keyInput.Equals(groupSeparator) || keyInput.Equals(negativeSign))
+        else if (keyInput.Equals(decimalSeparator) || (_allowThousandsSeparatorInput && keyInput.Equals(groupSeparator)) || keyInput.Equals(negativeSign))
         {
             // Decimal separator is OK
         }

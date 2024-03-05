@@ -7375,6 +7375,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Аргумент пуст или не является объектом NumericUpDownAcceleration.</target>
         <note />
       </trans-unit>
+      <trans-unit id="NumericUpDownAllowThousandsSeparatorInputDescr">
+        <source>Indicates whether the numeric up-down should accept thousands separator input.</source>
+        <target state="new">Indicates whether the numeric up-down should accept thousands separator input.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NumericUpDownDecimalPlacesDescr">
         <source>Indicates the number of decimal places to display.</source>
         <target state="translated">Указывает число отображаемых десятичных разрядов.</target>

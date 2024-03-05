@@ -7374,6 +7374,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">El argumento es nulo o no es un objeto NumericUpDownAcceleration.</target>
         <note />
       </trans-unit>
+      <trans-unit id="NumericUpDownAllowThousandsSeparatorInputDescr">
+        <source>Indicates whether the numeric up-down should accept thousands separator input.</source>
+        <target state="new">Indicates whether the numeric up-down should accept thousands separator input.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NumericUpDownDecimalPlacesDescr">
         <source>Indicates the number of decimal places to display.</source>
         <target state="translated">Indica el número de posiciones decimales que se muestran.</target>

@@ -7374,6 +7374,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O argumento é nulo ou não é um objeto NumericUpDownAcceleration.</target>
         <note />
       </trans-unit>
+      <trans-unit id="NumericUpDownAllowThousandsSeparatorInputDescr">
+        <source>Indicates whether the numeric up-down should accept thousands separator input.</source>
+        <target state="new">Indicates whether the numeric up-down should accept thousands separator input.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NumericUpDownDecimalPlacesDescr">
         <source>Indicates the number of decimal places to display.</source>
         <target state="translated">Indica o número de casas decimais a serem exibidas.</target>

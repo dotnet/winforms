@@ -7374,6 +7374,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">L'argument est null ou n'est pas un objet NumericUpDownAcceleration.</target>
         <note />
       </trans-unit>
+      <trans-unit id="NumericUpDownAllowThousandsSeparatorInputDescr">
+        <source>Indicates whether the numeric up-down should accept thousands separator input.</source>
+        <target state="new">Indicates whether the numeric up-down should accept thousands separator input.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NumericUpDownDecimalPlacesDescr">
         <source>Indicates the number of decimal places to display.</source>
         <target state="translated">Indique le nombre de décimales à afficher.</target>
