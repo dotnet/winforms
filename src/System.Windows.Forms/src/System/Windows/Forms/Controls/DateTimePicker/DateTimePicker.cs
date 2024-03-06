@@ -127,7 +127,7 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : Application.SystemColors.Window;
+        get => ShouldSerializeBackColor() || IsDarkModeEnabled ? base.BackColor : Application.SystemColors.Window;
         set => base.BackColor = value;
     }
 
@@ -488,7 +488,7 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-        get => ShouldSerializeForeColor() ? base.ForeColor : Application.SystemColors.WindowText;
+        get => ShouldSerializeForeColor() || IsDarkModeEnabled ? base.ForeColor : Application.SystemColors.WindowText;
         set => base.ForeColor = value;
     }
 

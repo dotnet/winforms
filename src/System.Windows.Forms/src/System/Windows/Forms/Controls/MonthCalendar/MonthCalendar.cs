@@ -73,7 +73,7 @@ public partial class MonthCalendar : Control
     /// <summary>
     ///  This is the arbitrary number of pixels that the Win32 control
     ///  inserts between calendars vertically, regardless of font.
-    ///  From comctl32 MonthCalendar sources CALBORDER.
+    ///  From ComCtl32 MonthCalendar sources CALBORDER.
     /// </summary>
     private const int InsertHeightSize = 6;
 
@@ -193,7 +193,7 @@ public partial class MonthCalendar : Control
     {
         get
         {
-            if (ShouldSerializeBackColor())
+            if (ShouldSerializeBackColor() || IsDarkModeEnabled)
             {
                 return base.BackColor;
             }
@@ -407,7 +407,7 @@ public partial class MonthCalendar : Control
     {
         get
         {
-            if (ShouldSerializeForeColor())
+            if (ShouldSerializeForeColor() || IsDarkModeEnabled)
             {
                 return base.ForeColor;
             }
