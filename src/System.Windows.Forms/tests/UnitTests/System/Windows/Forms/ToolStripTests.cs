@@ -9,6 +9,7 @@ using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using Windows.Win32.System.Ole;
+using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1616,6 +1617,39 @@ public partial class ToolStripTests
         Assert.Same(childFont1, child1.Font);
         Assert.Same(childFont2, child2.Font);
         Assert.Equal(3, callCount);
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsForm()
+    {
+        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
+
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        using Form form = new();
+        using ToolStrip toolStrip1 = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+
+        try
+        {
+            toolStrip1.Items.Add(item1);
+            toolStrip1.Items.Add(item2);
+            form.Controls.Add(toolStrip1);
+            form.Font = font;
+
+            Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
+            Assert.Same(form.Font, toolStrip1.Font);
+            Assert.Same(form.Font, item1.Font);
+            Assert.Same(form.Font, item2.Font);
+        }
+        finally
+        {
+            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);
+        }
+
+        Assert.Equal(ToolStripManager.DefaultFont, toolStrip1.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item1.Font);
     }
 
     public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()

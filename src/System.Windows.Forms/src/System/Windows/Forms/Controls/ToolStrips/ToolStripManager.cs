@@ -3,6 +3,7 @@
 
 using System.Collections.Concurrent;
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;
@@ -51,6 +52,11 @@ public static partial class ToolStripManager
     {
         get
         {
+            if (LocalAppContextSwitches.ApplyParentFontToMenus)
+            {
+                return Control.DefaultFont;
+            }
+
             Font? sysFont = null;
 
             // We need to cache the default fonts for the different DPIs.

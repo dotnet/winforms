@@ -100,9 +100,14 @@ public class PrimitiveTypeTests
 
         using BinaryFormatterScope formatterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
+
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-        object deserialized = formatter.Deserialize(stream);
+
+        // cs/dangerous-binary-deserialization
+        object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
         deserialized.Should().Be(value);
     }
 
