@@ -451,7 +451,7 @@ internal class ToolStripDesigner : ControlDesigner
         }
     }
 
-    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetService<IComponentChangeService>();
+    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetRequiredService<IComponentChangeService>();
 
     /// <summary>
     ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves.
@@ -1510,12 +1510,12 @@ internal class ToolStripDesigner : ControlDesigner
 
                 parentPanel.Join(ToolStrip, parentPanel.Rows.Length);
 
-                ComponentChangeService?.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
-
-                // Try to fire ComponentChange on the Location Property for ToolStrip.
-                PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
                 if (ComponentChangeService is not null)
                 {
+                    ComponentChangeService.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
+
+                    // Try to fire ComponentChange on the Location Property for ToolStrip.
+                    PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
                     ComponentChangeService.OnComponentChanging(ToolStrip, locationProp);
                     ComponentChangeService.OnComponentChanged(ToolStrip, locationProp);
                 }
