@@ -104,11 +104,6 @@ internal static partial class LocalAppContextSwitches
                 return false;
             }
 
-            if (switchName == ApplyParentFontToMenusSwitchName)
-            {
-                return false;
-            }
-
             if (framework.Version.Major >= 8)
             {
                 // Behavior changes added in .NET 8
