@@ -220,7 +220,6 @@ public unsafe partial class Control :
 
     private static bool s_needToLoadComCtl = true;
     private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
-    private static readonly int s_isDarkModeEnabledProperty = PropertyStore.CreateKey();
 
     // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
     // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
@@ -7629,50 +7628,50 @@ public unsafe partial class Control :
             {
                 if (this is
 
-                    // Controls with four levels of inheritance, sorted alphabetically by type name
-                    DomainUpDown        // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
-                    or NumericUpDown    // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
+                    // Controls with 4 levels of inheritance, sorted alphabetically by type name
+                    DomainUpDown         // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
+                    or NumericUpDown     // Inherits from UpDownBase, ContainerControl, ScrollableControl, Control
 
-                    // Controls with three levels of inheritance, sorted alphabetically by type name
-                    or CheckedListBox   // Inherits from ListBox, ListControl, Control
-                    or Form             // Excluded - too invasive.
-                    or FlowLayoutPanel  // Inherits from Panel, ScrollableControl, Control
-                    or SplitContainer   // Inherits from ContainerControl, ScrollableControl, Control
-                    or TabPage          // Inherits from Panel, ScrollableControl, Control
-                    or TableLayoutPanel // Inherits from Panel, ScrollableControl, Control
+                    // Controls with 3 levels of inheritance, sorted alphabetically by type name
+                    or CheckedListBox    // Inherits from ListBox, ListControl, Control
+                    or Form              // Excluded - too invasive.
+                    or FlowLayoutPanel   // Inherits from Panel, ScrollableControl, Control
+                    or SplitContainer    // Inherits from ContainerControl, ScrollableControl, Control
+                    or TabPage           // Inherits from Panel, ScrollableControl, Control
+                    or TableLayoutPanel  // Inherits from Panel, ScrollableControl, Control
 
                     // Controls with 2 levels of inheritance, sorted alphabetically by type name
-                    // or ComboBox      // Excluded - directly handled.
-                    or ListBox          // Inherits from ListControl, Control
+                    // or ComboBox       // Excluded - directly handled.
+                    or ListBox           // Inherits from ListControl, Control
 
-                    or Button           // Inherits from ButtonBase, Control
-                    or CheckBox         // Inherits from ButtonBase, Control
-                    or MaskedTextBox    // Inherits from TextBoxBase, Control
-                    or Panel            // Inherits from ScrollableControl, Control
-                    or RadioButton      // Inherits from ButtonBase, Control
-                    or RichTextBox      // Inherits from TextBoxBase, Control
-                    or TextBox          // Inherits from TextBoxBase, Control
+                    or Button            // Inherits from ButtonBase, Control
+                    or CheckBox          // Inherits from ButtonBase, Control
+                    or MaskedTextBox     // Inherits from TextBoxBase, Control
+                    or Panel             // Inherits from ScrollableControl, Control
+                    or RadioButton       // Inherits from ButtonBase, Control
+                    or RichTextBox       // Inherits from TextBoxBase, Control
+                    or TextBox           // Inherits from TextBoxBase, Control
+                    or HScrollBar        // Inherits from ScrollBar, Control
+                    or VScrollBar        // Inherits from ScrollBar, Control
 
                     // Base classes and controls with direct inheritance from Control, sorted alphabetically by type name
-                    // or ButtonBase    // Excluded - probably too invasive.
-                    or DateTimePicker   // Inherits from Control
-                    or GroupBox         // Inherits from Control directly, but behaves like a container
-                    or HScrollBar       // Inherits from ScrollBar, Control
-                    or Label            // Inherits from Control
-                    or LinkLabel        // Inherits from Label, Control
-                    // or ListView      // Excluded - directly handled.
-                    or MonthCalendar    // Inherits from Control
-                    or PictureBox       // Inherits from Control
-                    or ProgressBar      // Inherits from Control
-                    // or ScrollableControl // Excluded - probably too invasive.
-                    // or TextBoxBase       // Excluded - probably too invasive.
-                    or TrackBar         // Inherits from Control
-                    or TreeView         // Inherits from Control
-                    // or UpDownBase       // Excluded - probably too invasive.
-                    or VScrollBar       // Inherits from ScrollBar, Control
+                    or ButtonBase        // Inherits from Control
+                    or DateTimePicker    // Inherits from Control
+                    // or GroupBox       // Inherits from Control directly, but behaves like a container
+                    or Label             // Inherits from Control
+                    or LinkLabel         // Inherits from Label, Control
+                    // or ListView       // Excluded - directly handled.
+                    or MonthCalendar     // Inherits from Control
+                    or PictureBox        // Inherits from Control
+                    or ProgressBar       // Inherits from Control
+                    or ScrollableControl // Inherits from Control
+                    or TextBoxBase       // Excluded - probably too invasive.
+                    or TrackBar          // Inherits from Control
+                    or TreeView          // Inherits from Control
+                    or UpDownBase)       // Inherits from Control
 
-                    // Base class for all UI controls in WinForms
-                    or Control)
+                // Base class for all UI controls in WinForms
+                // or Control           // Excluded.
                 {
                     _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
                 }
