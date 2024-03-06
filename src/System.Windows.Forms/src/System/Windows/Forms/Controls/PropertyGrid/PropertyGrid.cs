@@ -70,7 +70,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private object[]? _selectedObjects;
 
     private int _paintFrozen;
-    private Color _lineColor = SystemInformation.HighContrast ? Application.SystemColors.ControlDarkDark : Application.SystemColors.InactiveBorder;
+
+    private Color _lineColor = SystemInformation.HighContrast
+        ? Application.SystemColors.ControlDarkDark
+        : Application.SystemColors.InactiveBorder;
+
     private Color _categoryForegroundColor = Application.SystemColors.ControlText;
     private Color _categorySplitterColor = Application.SystemColors.Control;
     private Color _viewBorderColor = Application.SystemColors.ControlDark;
@@ -2537,6 +2541,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
+
+        // Making sure, the _toolBar BackColor gets updated when the
+        // default BackColor is not the typical light-theme one.
+        BackColor = BackColor;
+
         OnLayoutInternal(dividerOnly: false);
         TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
         if (_selectedObjects is not null && _selectedObjects.Length > 0)
