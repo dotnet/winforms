@@ -92,6 +92,7 @@
     <MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>
     <MicrosoftCodeAnalysisPackagesVersion>1.1.2-beta1.23322.1</MicrosoftCodeAnalysisPackagesVersion>
     <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
+    <NugetPackagingVersion>6.3.4</NugetPackagingVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
