@@ -441,11 +441,12 @@ public class ImageListTests
         using BinaryFormatterScope formatterScope = new(enable: true);
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         formatter.Serialize(stream, source);
         stream.Position = 0;
-        // cs/deserialization-unexpected-subtypes
-        return (T)formatter.Deserialize(stream); // CodeQL [SM02229] Testing legacy features: we are deserializing stream with controlled content.
+        // cs/dangerous-binary-deserialization, cs/deserialization-unexpected-subtypes
+        return (T)formatter.Deserialize(stream); // CodeQL [SM03722, SM02229] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
     }
 

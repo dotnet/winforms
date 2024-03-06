@@ -14,6 +14,8 @@ Windows Forms requires the following workloads and components be selected when i
 * [Required Individual Components][required-individual-components]:
   * Windows 10 SDK
   * C++/CLI support
+* Required Windows Features
+  * 'Media Features' including 'Windows Media Player Legacy (App)' (Windows 11) or 'Windows Media Player' (Windows 10)
 
 
   :warning: CMake 3.21.0 or later is required. Install CMake from the [official website][cmake-download] or via [Chocolatey][chocolatey]:
