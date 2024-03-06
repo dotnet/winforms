@@ -10695,7 +10695,7 @@ public class RichTextBoxTests
         {
             Rtf = @"{\rtf1\ansi{Sample for {\v HIDDEN }text}}"
         };
-        string projectDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory))))));
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", fileName);     
 
         try
@@ -10724,7 +10724,7 @@ public class RichTextBoxTests
     public void RichTextBox_SaveFile_Invoke_Success(RichTextBoxStreamType fileType)
     {       
         using RichTextBox richTextBox1 = new();
-        string projectDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory))))));
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
 
         try
@@ -10782,6 +10782,149 @@ public class RichTextBoxTests
 
             Assert.StartsWith("{\\rtf", richTextBox1.Rtf);
         }
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragDropEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        DragEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(richTextBox1, sender);
+            callCount++;
+        };
+
+        DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+
+        richTextBox1.DragDrop += handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+
+        richTextBox1.DragDrop -= handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragEnterEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        DragEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(richTextBox1, sender);
+            callCount++;
+        };
+
+        DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+
+        richTextBox1.DragEnter += handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        Assert.Equal(0, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+
+        richTextBox1.DragEnter -= handler;
+        richTextBox1.OnDragDrop(dragEventArgs);
+        Assert.Equal(0, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragLeaveEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(richTextBox1, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        richTextBox1.DragLeave += handler;
+        richTextBox1.OnDragLeave(EventArgs.Empty);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+
+        richTextBox1.DragLeave -= handler;
+        richTextBox1.OnDragLeave(EventArgs.Empty);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DragOverEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        DragEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(richTextBox1, sender);
+            callCount++;
+        };
+
+        DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+
+        richTextBox1.DragOver += handler;
+        richTextBox1.OnDragOver(dragEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+
+        richTextBox1.DragOver -= handler;
+        richTextBox1.OnDragOver(dragEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_GiveFeedbackEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        GiveFeedbackEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(richTextBox1, sender);
+            callCount++;
+        };
+
+        GiveFeedbackEventArgs giveFeedbackEventArgs = new(DragDropEffects.None, true);
+
+        richTextBox1.GiveFeedback += handler;
+        richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+
+        richTextBox1.GiveFeedback -= handler;
+        richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_QueryContinueDragEvent_AddRemove_Success()
+    {
+        using SubRichTextBox richTextBox1 = new();
+        int callCount = 0;
+        QueryContinueDragEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(richTextBox1, sender);
+            callCount++;
+        };
+          
+        QueryContinueDragEventArgs queryContinueDragEventArgs = new(0, true, DragAction.Continue);
+
+        richTextBox1.QueryContinueDrag += handler;
+        richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
+
+        richTextBox1.QueryContinueDrag -= handler;
+        richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
+        Assert.Equal(1, callCount);
+        Assert.False(richTextBox1.IsHandleCreated);
     }
 
     private class CustomGetParaFormatRichTextBox : RichTextBox
@@ -10915,6 +11058,16 @@ public class RichTextBoxTests
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+
+        public new void OnDragDrop(DragEventArgs e) => base.OnDragDrop(e);
+
+        public new void OnDragLeave(EventArgs e) => base.OnDragLeave(e);
+
+        public new void OnDragOver(DragEventArgs e) => base.OnDragOver(e);
+ 
+        public new void OnGiveFeedback(GiveFeedbackEventArgs e) => base.OnGiveFeedback(e);
+
+        public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
     }
 
     private static unsafe string GetClassName(HWND hWnd)
