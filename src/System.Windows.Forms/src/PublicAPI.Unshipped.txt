@@ -2,8 +2,11 @@ override System.Windows.Forms.Popup.CreateParams.get -> System.Windows.Forms.Cre
 override System.Windows.Forms.Popup.WndProc(ref System.Windows.Forms.Message m) -> void
 static System.Windows.Forms.MessageBox.ShowAsync(string? text, string? caption = "", System.Windows.Forms.MessageBoxButtons buttons = System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon icon = System.Windows.Forms.MessageBoxIcon.None, System.Windows.Forms.MessageBoxDefaultButton defaultButton = System.Windows.Forms.MessageBoxDefaultButton.Button1, System.Windows.Forms.MessageBoxOptions options = System.Windows.Forms.MessageBoxOptions.DefaultDesktopOnly, System.Windows.Forms.IWin32Window? owner = null, string? helpFilePath = null, System.Windows.Forms.HelpNavigator navigator = (System.Windows.Forms.HelpNavigator)0, object? param = null) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 static System.Windows.Forms.Popup.GetPopupLocation(System.Windows.Forms.Control! referringControl, System.Drawing.Size popupSize) -> System.Drawing.Point
+System.Windows.Forms.Control.AsyncInvoke<T>(System.Func<System.Threading.Tasks.Task<T>!>! asyncFunc) -> T?
 System.Windows.Forms.Control.InvokeAsync(System.Delegate! method, params object![]! args) -> System.Threading.Tasks.Task<object?>!
-System.Windows.Forms.Control.InvokeAsync(System.Func<object![]!, System.Threading.Tasks.Task<object!>!>! asyncAction, params object![]! args) -> System.Threading.Tasks.Task<object!>!
+System.Windows.Forms.Control.InvokeAsync(System.Delegate! method, System.Threading.CancellationToken cancellationToken, params object![]! args) -> System.Threading.Tasks.Task<object?>!
+System.Windows.Forms.Control.InvokeAsync<T, U>(System.Func<T, System.Threading.CancellationToken, System.Threading.Tasks.Task<U>!>! asyncFunc, T input, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<U>!
+System.Windows.Forms.Control.InvokeAsync<T, U>(System.Func<T, System.Threading.Tasks.Task<U>!>! asyncFunc, T input) -> System.Threading.Tasks.Task<U>!
 System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 System.Windows.Forms.Popup
