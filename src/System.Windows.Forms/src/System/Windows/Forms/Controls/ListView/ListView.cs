@@ -4613,9 +4613,6 @@ public partial class ListView : Control
             PInvoke.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
-        UpdateExtendedStyles();
-        RealizeProperties();
-
         if (IsDarkModeEnabled)
         {
             _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
@@ -4624,6 +4621,9 @@ public partial class ListView : Control
             var columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
             PInvoke.SetWindowTheme(columnHeaderHandle, "DarkMode_ItemsView", null);
         }
+
+        UpdateExtendedStyles();
+        RealizeProperties();
 
         PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
         PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
@@ -6032,9 +6032,7 @@ public partial class ListView : Control
 
             else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
             {
-                // We're just setting the text color, but we do not adapt the text (fore) color,
-                // instead we stick to the theming settings...
-                PInvoke.SetTextColor(nmlvcd->nmcd.hdc, Application.SystemColors.WindowText);
+                PInvoke.SetTextColor(nmlvcd->nmcd.hdc, ForeColor);
 
                 // ...and then just let the default handling play out.
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;

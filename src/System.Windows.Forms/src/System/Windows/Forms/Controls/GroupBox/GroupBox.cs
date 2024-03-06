@@ -397,8 +397,8 @@ public partial class GroupBox : Control
     {
         // BACKCOMPAT requirement:
         //
-        // Why the Height/Width < 10 check? This is because uxtheme doesn't seem to handle those cases similar to
-        // what we do for the non-themed case, so if someone is using the groupbox as a separator, their app will
+        // Why the Height/Width < 10 check? This is because Ux-theme doesn't seem to handle those cases similar to
+        // what we do for the non-themed case, so if someone is using the GroupBox as a separator, their app will
         // look weird in .NET Framework 2.0. We render the old way in these cases.
 
         if (!Application.RenderWithVisualStyles || Width < 10 || Height < 10)
@@ -424,15 +424,15 @@ public partial class GroupBox : Control
             // We only pass in the text color if it is explicitly set, else we let the renderer use the color
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
-            if (ShouldSerializeForeColor() || !Enabled)
+            if (ShouldSerializeForeColor() || IsDarkModeEnabled || !Enabled)
             {
-                Color textcolor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
+                Color textColor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
                 GroupBoxRenderer.DrawGroupBox(
                     e,
                     new Rectangle(0, 0, Width, Height),
                     Text,
                     Font,
-                    textcolor,
+                    textColor,
                     textFlags,
                     gbState);
             }
