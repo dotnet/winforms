@@ -23,10 +23,25 @@ System.Windows.Forms.Popup.PopupContent.get -> System.Windows.Forms.Control?
 System.Windows.Forms.Popup.PopupContent.set -> void
 System.Windows.Forms.Popup.PopupOpened -> System.EventHandler?
 System.Windows.Forms.Popup.PopupOpening -> System.EventHandler?
+System.Windows.Forms.PopupCloseRequestEventArgs
+System.Windows.Forms.PopupCloseRequestEventArgs.ClosingRequestOrigin.get -> System.Windows.Forms.PopupCloseRequestOrigin
+System.Windows.Forms.PopupCloseRequestEventArgs.ClosingRequestOrigin.set -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.KeyData.get -> System.Windows.Forms.Keys
+System.Windows.Forms.PopupCloseRequestEventArgs.KeyData.set -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupCloseRequestEventArgs(System.Windows.Forms.PopupCloseRequestReason closeReason) -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupCloseRequestEventArgs(System.Windows.Forms.PopupCloseRequestReason closingRequestReason, System.Windows.Forms.Keys keyData) -> void
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupClosingRequestReason.get -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestEventArgs.PopupClosingRequestReason.set -> void
 System.Windows.Forms.PopupCloseRequestEventHandler
 System.Windows.Forms.PopupCloseRequestOrigin
 System.Windows.Forms.PopupCloseRequestOrigin.ExternalByUser = 0 -> System.Windows.Forms.PopupCloseRequestOrigin
 System.Windows.Forms.PopupCloseRequestOrigin.InternalByComponent = 1 -> System.Windows.Forms.PopupCloseRequestOrigin
+System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.AppLostFocus = 1 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.CloseMethodInvoked = 2 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.ContentClicked = 3 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.Keyboard = 4 -> System.Windows.Forms.PopupCloseRequestReason
+System.Windows.Forms.PopupCloseRequestReason.PopupLostFocus = 0 -> System.Windows.Forms.PopupCloseRequestReason
 System.Windows.Forms.PopupOpeningEventArgs
 System.Windows.Forms.PopupOpeningEventArgs.PopupOpeningEventArgs(bool cancel, System.Drawing.Size preferredNewSize) -> void
 System.Windows.Forms.PopupOpeningEventArgs.PreferredNewSize.get -> System.Drawing.Size
