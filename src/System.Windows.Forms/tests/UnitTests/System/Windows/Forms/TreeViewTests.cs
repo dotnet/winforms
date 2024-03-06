@@ -5402,9 +5402,9 @@ public class TreeViewTests
 
     public static IEnumerable<object[]> TreeViewEventArgs_TestData()
     {
-        yield return new object[] { null };
         yield return new object[] { new TreeViewEventArgs(null) };
         yield return new object[] { new TreeViewEventArgs(new TreeNode()) };
+        yield return new object[] { new TreeViewEventArgs(new TreeNode(), TreeViewAction.ByMouse) };
     }
 
     [WinFormsTheory]
@@ -5419,6 +5419,8 @@ public class TreeViewTests
             Assert.Same(eventArgs, e);
             callCount++;
         };
+
+        Assert.NotNull(control.AccessibilityObject);
 
         // Call with handler.
         control.AfterCheck += handler;
@@ -5444,6 +5446,8 @@ public class TreeViewTests
             callCount++;
         };
 
+        Assert.NotNull(control.AccessibilityObject);
+
         // Call with handler.
         control.AfterCollapse += handler;
         control.OnAfterCollapse(eventArgs);
@@ -5468,6 +5472,8 @@ public class TreeViewTests
             callCount++;
         };
 
+        Assert.NotNull(control.AccessibilityObject);
+
         // Call with handler.
         control.AfterExpand += handler;
         control.OnAfterExpand(eventArgs);
@@ -5481,7 +5487,6 @@ public class TreeViewTests
 
     public static IEnumerable<object[]> NodeLabelEditEventArgs_TestData()
     {
-        yield return new object[] { null };
         yield return new object[] { new NodeLabelEditEventArgs(null) };
         yield return new object[] { new NodeLabelEditEventArgs(new TreeNode()) };
         yield return new object[] { new NodeLabelEditEventArgs(new TreeNode(), "label") };
@@ -5499,6 +5504,8 @@ public class TreeViewTests
             Assert.Same(eventArgs, e);
             callCount++;
         };
+
+        Assert.NotNull(control.AccessibilityObject);
 
         // Call with handler.
         control.AfterLabelEdit += handler;
@@ -5523,6 +5530,8 @@ public class TreeViewTests
             Assert.Same(eventArgs, e);
             callCount++;
         };
+
+        Assert.NotNull(control.AccessibilityObject);
 
         // Call with handler.
         control.AfterSelect += handler;

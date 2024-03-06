@@ -31,6 +31,13 @@ public partial class Dialogs : Form
 
         _btnOpen.Click += (s, e) =>
         {
+            if (propertyGrid1.SelectedObject is OpenFileDialog openFileDialog)
+            {
+                openFileDialog.ShowDialog(this);
+                MessageBox.Show(string.Join(',', openFileDialog.FileNames), "File Names");
+                return;
+            }
+
             if (propertyGrid1.SelectedObject is CommonDialog dialog)
             {
                 dialog.ShowDialog(this);
