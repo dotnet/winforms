@@ -36,19 +36,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
                     Dim webListener As New WebListener(_downloadFileSize)
                     Dim listener As HttpListener = webListener.ProcessRequests()
-                    Try
-                        My.Computer.Network.DownloadFile(webListener.Address,
-                            destinationFilename,
-                            userName:="",
-                            password:="",
-                            showUI:=False,
-                            connectionTimeout:=100000,
-                            overwrite:=False)
-                    Finally
-                        Assert.True(Directory.Exists(tmpFilePath))
-                        Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 1)
-                        CleanUp(listener, tmpFilePath)
-                    End Try
+                    My.Computer.Network.DownloadFile(webListener.Address,
+                        destinationFilename,
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        connectionTimeout:=100000,
+                        overwrite:=False)
+                    Assert.True(Directory.Exists(tmpFilePath))
+                    Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 1)
+                    CleanUp(listener, tmpFilePath)
                 End Sub)
         End Sub
 
