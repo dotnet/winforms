@@ -19,42 +19,29 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         Friend Function ProcessRequests() As HttpListener
-
-            If Not HttpListener.IsSupported Then
-                Console.WriteLine("Windows XP SP2, Server 2003, or higher is required to use the HttpListener class.")
-            End If
-
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
             listener.Prefixes.Add(_downloadFileUrlPrefix)
             listener.Start()
             Task.Run(
                 Sub()
+                    ' Start the listener to begin listening for requests.
+                    Dim response As HttpListenerResponse = Nothing
                     Try
-                        ' Start the listener to begin listening for requests.
-                        Debug.WriteLine("Listening...")
+                        ' Note: GetContext blocks while waiting for a request.
+                        Dim context As HttpListenerContext = listener.GetContext()
 
-                        Dim response As HttpListenerResponse = Nothing
-                        Try
-                            ' Note: GetContext blocks while waiting for a request.
-                            Dim context As HttpListenerContext = listener.GetContext()
-
-                            ' Create the response.
-                            response = context.Response
-                            Dim responseString As String = Strings.StrDup(_fileSize, "A")
-                            ' Simulate network traffic
-                            Threading.Thread.Sleep(20)
-                            Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
-                            response.ContentLength64 = buffer.Length
-                            Dim output As Stream = response.OutputStream
-                            output.Write(buffer, 0, buffer.Length)
-                        Catch ex As HttpListenerException
-                            Debug.WriteLine(ex.Message)
-                        Finally
-                            response?.Close()
-                        End Try
-                    Catch ex As HttpListenerException
-                        Debug.WriteLine(ex.Message)
+                        ' Create the response.
+                        response = context.Response
+                        Dim responseString As String = Strings.StrDup(_fileSize, "A")
+                        ' Simulate network traffic
+                        Threading.Thread.Sleep(20)
+                        Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
+                        response.ContentLength64 = buffer.Length
+                        Dim output As Stream = response.OutputStream
+                        output.Write(buffer, 0, buffer.Length)
+                    Finally
+                        response?.Close()
                     End Try
                 End Sub)
             Return listener
