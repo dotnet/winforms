@@ -32,7 +32,8 @@ std::wstring format(const wchar_t* format, Args... args)
     int length = std::swprintf(nullptr, 0, format, args...);
     // If this fails, let the program crash.
     wchar_t* buf = new wchar_t[length + 1];
-    std::swprintf(buf, length + 1, format, args...);
+    // cpp/non-constant-format
+    std::swprintf(buf, length + 1, format, args...); // CodeQL [SM01734] : This is a test code and the format string is trusted.
 
     std::wstring str(buf);
     delete[] buf;
