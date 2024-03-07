@@ -30,12 +30,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub DownloadWhereFileExistsNoOverwrite()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
+            Dim webListener As New WebListener(_downloadFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
             Assert.Throws(Of IOException)(
                 Sub()
-                    Dim tmpFilePath As String = CreateTempDirectory()
-                    Dim destinationFilename As String = CreateTempFile(tmpFilePath, 1)
-                    Dim webListener As New WebListener(_downloadFileSize)
-                    Dim listener As HttpListener = webListener.ProcessRequests()
                     My.Computer.Network.DownloadFile(webListener.Address,
                         destinationFilename,
                         userName:="",
@@ -43,10 +43,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         showUI:=False,
                         connectionTimeout:=100000,
                         overwrite:=False)
-                    Assert.True(Directory.Exists(tmpFilePath))
-                    Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 1)
-                    CleanUp(listener, tmpFilePath)
                 End Sub)
+            Assert.True(Directory.Exists(tmpFilePath))
+            Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), 1)
+            CleanUp(listener, tmpFilePath)
         End Sub
 
         <WinFormsFact>
@@ -206,7 +206,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Assert.Throws(Of ArgumentNullException)(
                     Sub()
                         My.Computer.Network.DownloadFile(address:=CStr(Nothing),
-                            destinationFileName:=destinationFilename)
+                            destinationFilename)
                     End Sub)
             Finally
                 CleanUp(listener, tmpFilePath)
@@ -241,7 +241,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim listener As HttpListener = webListener.ProcessRequests()
             Try
                 My.Computer.Network.DownloadFile(webListener.Address,
-                    destinationFileName:=destinationFilename)
+                    destinationFilename)
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             Finally
                 CleanUp(listener, tmpFilePath)
