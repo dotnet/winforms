@@ -38,11 +38,11 @@ public class MaskedTextBoxTests
         using MaskedTextBox control = new();
 
         // Check default values
-        Assert.False(control.BeepOnError);
-        Assert.False(control.AsciiOnly);
-        Assert.Equal(CultureInfo.CurrentCulture, control.Culture);
+        control.BeepOnError.Should().BeFalse();
+        control.AsciiOnly.Should().BeFalse();
+        control.Culture.Should().Be(CultureInfo.CurrentCulture);
 
-        Assert.False(control.IsHandleCreated);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -54,18 +54,18 @@ public class MaskedTextBoxTests
             BeepOnError = value
         };
 
-        Assert.Equal(value, control.BeepOnError);
-        Assert.False(control.IsHandleCreated);
+        control.BeepOnError.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.BeepOnError = value;
-        Assert.Equal(value, control.BeepOnError);
-        Assert.False(control.IsHandleCreated);
+        control.BeepOnError.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.BeepOnError = !value;
-        Assert.Equal(!value, control.BeepOnError);
-        Assert.False(control.IsHandleCreated);
+        control.BeepOnError.Should().Be(!value);;
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -73,37 +73,43 @@ public class MaskedTextBoxTests
     public void MaskedTextBox_BeepOnError_SetWithHandle_GetReturnsExpected(bool value)
     {
         using MaskedTextBox control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Handle.Should().NotBe(IntPtr.Zero);
 
+        // These events are tested to ensure that they are not accidentally triggered when the BeepOnError property is set.
+        // The Invalidated event is triggered when the control or part of it needs to be redrawn. If the setting of BeepOnError causes the control to be redrawn, it may trigger unnecessary performance overhead.
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        // The StyleChanged event is triggered when the style of the control has changed. If the setting of BeepOnError causes a style change, it may affect the appearance or behavior of the control.
         int styleChangedCallCount = 0;
         control.StyleChanged += (sender, e) => styleChangedCallCount++;
+
+        // The HandleCreated event is triggered when a handle to the control is created. If the setting of BeepOnError causes a handle to be created, it may affect the control's lifecycle or behavior.
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         control.BeepOnError = value;
-        Assert.Equal(value, control.BeepOnError);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.BeepOnError.Should().Be(value);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         control.BeepOnError = value;
-        Assert.Equal(value, control.BeepOnError);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.BeepOnError.Should().Be(value);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         control.BeepOnError = !value;
-        Assert.Equal(!value, control.BeepOnError);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.BeepOnError.Should().Be(!value);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsTheory]
@@ -115,18 +121,18 @@ public class MaskedTextBoxTests
             AsciiOnly = value
         };
 
-        Assert.Equal(value, control.AsciiOnly);
-        Assert.False(control.IsHandleCreated);
+        control.AsciiOnly.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.AsciiOnly = value;
-        Assert.Equal(value, control.AsciiOnly);
-        Assert.False(control.IsHandleCreated);
+        control.AsciiOnly.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.AsciiOnly = !value;
-        Assert.Equal(!value, control.AsciiOnly);
-        Assert.False(control.IsHandleCreated);
+        control.AsciiOnly.Should().Be(!value);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -134,7 +140,7 @@ public class MaskedTextBoxTests
     public void MaskedTextBox_AsciiOnly_SetWithHandle_GetReturnsExpected(bool value)
     {
         using MaskedTextBox control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Handle.Should().NotBe(IntPtr.Zero);
 
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -144,27 +150,27 @@ public class MaskedTextBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         control.AsciiOnly = value;
-        Assert.Equal(value, control.AsciiOnly);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.AsciiOnly.Should().Be(value);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         control.AsciiOnly = value;
-        Assert.Equal(value, control.AsciiOnly);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.AsciiOnly.Should().Be(value);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         control.AsciiOnly = !value;
-        Assert.Equal(!value, control.AsciiOnly);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.AsciiOnly.Should().Be(!value);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsTheory]
@@ -177,7 +183,8 @@ public class MaskedTextBoxTests
         if (cultureName is null)
         {
             using MaskedTextBox control = new();
-            Assert.Throws<ArgumentNullException>(() => control.Culture = null);
+            control.Invoking(y => y.Culture = null)
+                .Should().Throw<ArgumentNullException>();
         }
         else
         {
@@ -187,19 +194,19 @@ public class MaskedTextBoxTests
                 Culture = culture
             };
 
-            Assert.Equal(culture, control.Culture);
-            Assert.False(control.IsHandleCreated);
+            control.Culture.Should().Be(culture);
+            control.IsHandleCreated.Should().BeFalse();
 
             // Set same.
             control.Culture = culture;
-            Assert.Equal(culture, control.Culture);
-            Assert.False(control.IsHandleCreated);
+            control.Culture.Should().Be(culture);
+            control.IsHandleCreated.Should().BeFalse();
 
             // Set different.
             CultureInfo differentCulture = new CultureInfo(cultureName == "en-US" ? "fr-FR" : "en-US");
             control.Culture = differentCulture;
-            Assert.Equal(differentCulture, control.Culture);
-            Assert.False(control.IsHandleCreated);
+            control.Culture.Should().Be(differentCulture);
+            control.IsHandleCreated.Should().BeFalse();
         }
     }
 
@@ -211,7 +218,7 @@ public class MaskedTextBoxTests
     {
         CultureInfo culture = new CultureInfo(cultureName);
         using MaskedTextBox control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Handle.Should().NotBe(IntPtr.Zero);
 
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -221,27 +228,27 @@ public class MaskedTextBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         control.Culture = culture;
-        Assert.Equal(culture, control.Culture);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.Culture.Should().Be(culture);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         control.Culture = culture;
-        Assert.Equal(culture, control.Culture);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.Culture.Should().Be(culture);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         CultureInfo differentCulture = new CultureInfo(cultureName == "en-US" ? "fr-FR" : "es-ES");
         control.Culture = differentCulture;
-        Assert.Equal(differentCulture, control.Culture);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.Culture.Should().Be(differentCulture);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 }
