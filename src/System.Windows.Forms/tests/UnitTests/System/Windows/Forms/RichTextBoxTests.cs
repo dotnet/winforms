@@ -10682,9 +10682,9 @@ public class RichTextBoxTests
         using RichTextBox richTextBox1 = new();
         richTextBox1.DrawToBitmap(bitmap1, new Rectangle(0, 0, 10, 10));
 
-        Assert.NotNull(bitmap1);
-        Assert.Equal(10, bitmap1.Width);
-        Assert.Equal(10, bitmap1.Height);
+        bitmap1.Should().NotBeNull();
+        bitmap1.Width.Should().Be(10);
+        bitmap1.Height.Should().Be(10);
     }
 
     [WinFormsTheory]
@@ -10706,8 +10706,8 @@ public class RichTextBoxTests
             int endOfText = richTextBox1.Text.IndexOf("text", StringComparison.Ordinal) + "text".Length;
             richTextBox1.Select(startOfSample, endOfText - startOfSample);
 
-            Assert.NotEmpty(richTextBox1.Rtf);
-            Assert.Equal("Sample for HIDDEN text", richTextBox1.SelectedText);
+            richTextBox1.Rtf.Should().NotBeNullOrEmpty();
+            richTextBox1.SelectedText.Should().Be("Sample for HIDDEN text");
         }
         finally
         {
@@ -10730,7 +10730,7 @@ public class RichTextBoxTests
         try
         {
             richTextBox1.SaveFile(filePath, fileType);
-            Assert.True(File.Exists(filePath));
+            File.Exists(filePath).Should().BeTrue();
         }
         finally
         {
@@ -10757,7 +10757,7 @@ public class RichTextBoxTests
             Clipboard.SetText(value);
             richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
 
-            Assert.Equal(expected, richTextBox1.Text);
+            richTextBox1.Text.Should().Be(expected);
         }
     }
 
@@ -10780,7 +10780,7 @@ public class RichTextBoxTests
             Clipboard.SetText(rtf);
             richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Rtf));
 
-            Assert.StartsWith("{\\rtf", richTextBox1.Rtf);
+            richTextBox1.Rtf.Should().StartWith("{\\rtf");
         }
     }
 
@@ -10791,7 +10791,7 @@ public class RichTextBoxTests
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
-            Assert.Same(richTextBox1, sender);
+            sender.Should().Be(richTextBox1);
             callCount++;
         };
 
@@ -10799,13 +10799,13 @@ public class RichTextBoxTests
 
         richTextBox1.DragDrop += handler;
         richTextBox1.OnDragDrop(dragEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragDrop -= handler;
         richTextBox1.OnDragDrop(dragEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10815,7 +10815,7 @@ public class RichTextBoxTests
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
-            Assert.Same(richTextBox1, sender);
+            sender.Should().Be(richTextBox1);
             callCount++;
         };
 
@@ -10823,13 +10823,13 @@ public class RichTextBoxTests
 
         richTextBox1.DragEnter += handler;
         richTextBox1.OnDragDrop(dragEventArgs);
-        Assert.Equal(0, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(0);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragEnter -= handler;
         richTextBox1.OnDragDrop(dragEventArgs);
-        Assert.Equal(0, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(0);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10839,20 +10839,20 @@ public class RichTextBoxTests
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
-            Assert.Same(richTextBox1, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().Be(richTextBox1);
+            e.Should().Be(EventArgs.Empty);
             callCount++;
         };
 
         richTextBox1.DragLeave += handler;
         richTextBox1.OnDragLeave(EventArgs.Empty);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragLeave -= handler;
         richTextBox1.OnDragLeave(EventArgs.Empty);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10862,7 +10862,7 @@ public class RichTextBoxTests
         int callCount = 0;
         DragEventHandler handler = (sender, e) =>
         {
-            Assert.Same(richTextBox1, sender);
+            sender.Should().Be(richTextBox1);
             callCount++;
         };
 
@@ -10870,13 +10870,13 @@ public class RichTextBoxTests
 
         richTextBox1.DragOver += handler;
         richTextBox1.OnDragOver(dragEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragOver -= handler;
         richTextBox1.OnDragOver(dragEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10886,7 +10886,7 @@ public class RichTextBoxTests
         int callCount = 0;
         GiveFeedbackEventHandler handler = (sender, e) =>
         {
-            Assert.Same(richTextBox1, sender);
+            sender.Should().Be(richTextBox1);
             callCount++;
         };
 
@@ -10894,13 +10894,13 @@ public class RichTextBoxTests
 
         richTextBox1.GiveFeedback += handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.GiveFeedback -= handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10910,7 +10910,7 @@ public class RichTextBoxTests
         int callCount = 0;
         QueryContinueDragEventHandler handler = (sender, e) =>
         {
-            Assert.Same(richTextBox1, sender);
+            sender.Should().Be(richTextBox1);
             callCount++;
         };
           
@@ -10918,13 +10918,13 @@ public class RichTextBoxTests
 
         richTextBox1.QueryContinueDrag += handler;
         richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.QueryContinueDrag -= handler;
         richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(richTextBox1.IsHandleCreated);
+        callCount.Should().Be(1);
+        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     private class CustomGetParaFormatRichTextBox : RichTextBox
