@@ -3,51 +3,18 @@
 
 # trigger ci builds for completed checkins into main and any release branches
 trigger:
-  branches:
-    include:
-      - main
-      - release/*
-      - internal/release/*
-      - internal/experimental/*
-  paths:
-    include:
-      - '*'
-    exclude:
-      - .github/*
-      - docs/*
-      - CODE-OF-CONDUCT.md
-      - CONTRIBUTING.md
-      - LICENSE.TXT
-      - PATENTS.TXT
-      - README.md
-      - SECURITY.md
-      - THIRD-PARTY-NOTICES.TXT
+- main
+- release/*
+- internal/release/*
+- internal/experimental/*
 
 # trigger ci builds on pull requests into main and any release branches
 pr:
-  autoCancel: true
-  branches:
-    include:
-      - main
-      - vnext
-      - release/*
-      - internal/release/*
-      - internal/experimental/*
-      - feature/win32
-      - feature/9.0
-  paths:
-    include:
-      - '*'
-    exclude:
-      - .github/*
-      - docs/*
-      - CODE-OF-CONDUCT.md
-      - CONTRIBUTING.md
-      - LICENSE.TXT
-      - PATENTS.TXT
-      - README.md
-      - SECURITY.md
-      - THIRD-PARTY-NOTICES.TXT
+- main
+- vnext
+- release/*
+- internal/release/*
+- internal/experimental/*
 
 variables:
   - name: TeamName
@@ -55,14 +22,10 @@ variables:
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
-  - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/internal/release/'), eq(variables['Build.Reason'], 'Manual')) }}:
-    - name: PostBuildSign
-      value: false
-  - ${{ else }}:
-    - name: PostBuildSign
-      value: true
+  - name: PostBuildSign
+    value: true
   - name: EnableLoc
-    value: ${{ contains(variables['Build.SourceBranch'], 'main') }}
+    value: false
   - name: NativeToolsOnMachine
     value: true
   - name: isPublic
@@ -73,6 +36,7 @@ variables:
   # used for post-build phases, internal builds only
   - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
     - group: DotNet-Winforms-SDLValidation-Params
+    - group: DotNet-Symbol-Server-Pats
   - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
     - name: _InternalRuntimeDownloadArgs
       value: ''
@@ -80,8 +44,9 @@ variables:
     - group: DotNetBuilds storage account read tokens
     - group: AzureDevOps-Artifact-Feeds-Pats
     - name: _InternalRuntimeDownloadArgs
-      value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
-             /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
+      value: >-
+        /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
+        /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
 
   # Produce test-signed build for PR and Public builds
   - ${{ if or(eq(variables['isPublic'], 'true'), eq(variables['isPR'], 'true')) }}:
@@ -125,21 +90,18 @@ stages:
     parameters:
       name: Windows_x64
       targetArchitecture: x64
-      skipTests: $(SkipTests)
 
   # Windows x86
   - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_x86
       targetArchitecture: x86
-      skipTests: $(SkipTests)
 
   # Windows arm64
   - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_arm64
       targetArchitecture: arm64
-      skipTests: $(SkipTests)
 
 
 - ${{ if and(eq(variables['EnableLoc'], 'true'), ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
@@ -152,22 +114,21 @@ stages:
         UseCheckedInLocProjectJson: true
         LclSource: lclFilesfromPackage
         LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
+        MirrorBranch: release/$(Build.SourceBranchName)
 
 
 - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
   - stage: PublishAssetRegistry
     displayName: Publish to Build Asset Registry
     dependsOn: Build
-    variables:
-    - template: /eng/common/templates/variables/pool-providers.yml
     jobs:
     # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
     - template: /eng/common/templates/job/publish-build-assets.yml
       parameters:
         publishUsingPipelines: true
         pool:
-          name: $(DncEngInternalBuildPool)
-          demands: ImageOverride -equals windows.vs2022preview.amd64
+          name: NetCore1ESPool-Svc-Internal
+          demands: ImageOverride -equals windows.vs2019.amd64
 
 
 # Copied from the arcade repo and modified for winforms
