@@ -19,7 +19,7 @@ jobs:
   displayName: ${{ parameters.name }}
   timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
   variables:
-  - template: /eng/common/templates/variables/pool-providers.yml@self
+  - template: /eng/common/templates-official/variables/pool-providers.yml@self
   strategy:
     matrix:
       ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
@@ -106,7 +106,7 @@ jobs:
     displayName: PublishCodeCoverageResults
     condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
   - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-    - template: /eng/common/templates/steps/generate-sbom.yml@self
+    - template: /eng/common/templates-official/steps/generate-sbom.yml@self
       parameters:
         name: Generate_SBOM_${{ parameters.name }}
   - template: /eng/pipelines/post-build.yml@self

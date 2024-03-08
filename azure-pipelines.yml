@@ -135,7 +135,7 @@ extends:
       - stage: OneLocBuild
         displayName: Publish localizable content to OneLocBuild
         jobs:
-        - template: /eng/common/templates/job/onelocbuild.yml@self
+        - template: /eng/common/templates-official/job/onelocbuild.yml@self
           parameters:
             MirrorRepo: winforms
             UseCheckedInLocProjectJson: true
@@ -146,16 +146,16 @@ extends:
         displayName: Publish to Build Asset Registry
         dependsOn: Build
         variables:
-        - template: /eng/common/templates/variables/pool-providers.yml@self
+        - template: /eng/common/templates-official/variables/pool-providers.yml@self
         jobs:
-        - template: /eng/common/templates/job/publish-build-assets.yml@self
+        - template: /eng/common/templates-official/job/publish-build-assets.yml@self
           parameters:
             publishUsingPipelines: true
             pool:
               name: $(DncEngInternalBuildPool)
               demands: ImageOverride -equals windows.vs2022preview.amd64
     - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
-      - template: /eng/common/templates/post-build/post-build.yml@self
+      - template: /eng/common/templates-official/post-build/post-build.yml@self
         parameters:
           validateDependsOn: PublishAssetRegistry
           publishingInfraVersion: 3
