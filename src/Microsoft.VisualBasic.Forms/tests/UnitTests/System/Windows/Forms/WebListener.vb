@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
+Imports System.Security.Principal
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
@@ -11,6 +12,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _downloadFileUrlPrefix As String
         Private ReadOnly _fileSize As Integer
         Public ReadOnly Address As String
+        Private _userName As String
+        Private _password As String
 
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
             _fileSize = fileSize
@@ -18,10 +21,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Address = $"{_downloadFileUrlPrefix}T{fileSize}"
         End Sub
 
+        Public Sub New(fileSize As Integer, userName As String, password As String, <CallerMemberName> Optional memberName As String = Nothing)
+            Me.New(fileSize, memberName)
+            _userName = userName
+            _password = password
+        End Sub
+
         Friend Function ProcessRequests() As HttpListener
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
             listener.Prefixes.Add(_downloadFileUrlPrefix)
+            If _userName IsNot Nothing AndAlso _password IsNot Nothing Then
+                listener.AuthenticationSchemes = AuthenticationSchemes.Basic
+            End If
             listener.Start()
             Task.Run(
                 Sub()
@@ -30,9 +42,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Try
                         ' Note: GetContext blocks while waiting for a request.
                         Dim context As HttpListenerContext = listener.GetContext()
-
                         ' Create the response.
                         response = context.Response
+                        Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
+                        If context.User?.Identity.IsAuthenticated Then
+                            If identity.Password <> _password Then
+                                response.StatusCode = HttpStatusCode.Unauthorized
+                                Exit Try
+                            End If
+                        End If
                         Dim responseString As String = Strings.StrDup(_fileSize, "A")
                         ' Simulate network traffic
                         Threading.Thread.Sleep(20)
