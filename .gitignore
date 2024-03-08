@@ -385,3 +385,4 @@ InteropTests/NativeTests/out
 # 'git update-index --assume-unchanged <filename>' will allow ignoring changes for tracked files.
 **/ScratchProject/
 **/ScratchProjectWithInternals/
+/CodeMaid.config
