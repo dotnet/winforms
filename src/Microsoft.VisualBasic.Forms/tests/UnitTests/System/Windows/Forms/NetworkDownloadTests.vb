@@ -118,6 +118,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub DownloadWithInvalidUrl()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
+            Dim webListener As New WebListener(_downloadFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Try
+                Assert.Throws(Of ArgumentException)(
+                    Sub()
+                        My.Computer.Network.DownloadFile(address:="x",
+                            destinationFilename,
+                            userName:="",
+                            password:="",
+                            showUI:=True,
+                            connectionTimeout:=100000,
+                            overwrite:=False)
+                    End Sub)
+            Finally
+                CleanUp(listener, tmpFilePath)
+            End Try
+        End Sub
+
+        <WinFormsFact>
         Public Sub DownloadWithNothingDestinationFile()
             Dim webListener As New WebListener(_downloadFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
@@ -240,7 +262,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(_downloadFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Try
-                My.Computer.Network.DownloadFile(webListener.Address,
+                My.Computer.Network.DownloadFile(New Uri(webListener.Address),
                     destinationFilename)
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=18135)
             Finally
@@ -255,7 +277,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(_downloadFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Try
-                My.Computer.Network.DownloadFile(webListener.Address,
+                My.Computer.Network.DownloadFile(New Uri(webListener.Address),
                     destinationFilename,
                     userName:="TDB",
                     password:="TBD")
