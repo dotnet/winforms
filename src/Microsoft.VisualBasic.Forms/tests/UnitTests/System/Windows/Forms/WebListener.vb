@@ -4,7 +4,6 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
-Imports System.Security.Principal
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
