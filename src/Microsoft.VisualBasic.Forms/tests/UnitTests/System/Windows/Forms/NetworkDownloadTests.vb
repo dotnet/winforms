@@ -69,35 +69,37 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 #Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String) -> Void"
 
         <WinFormsFact>
-        Public Sub DownloadFile_Url_PasswordEqualNothing_Success()
+        Public Sub DownloadFile_Url_Password_Success()
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, "")
+            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Try
                 My.Computer.Network.DownloadFile(webListener.Address,
                     destinationFilename,
                     DefaultUserName,
-                    password:=Nothing)
+                    DefaultPassword)
                 Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), actual:=DownloadSmallFileSize)
             Finally
                 CleanUp(listener, tmpFilePath)
             End Try
         End Sub
 
-        <WinFormsFact>
-        Public Sub DownloadFile_Url_PasswordWrong_Throw()
+        <WinFormsTheory>
+        <InlineData(Nothing)>
+        <InlineData("123")>
+        Public Sub DownloadFile_Url_WrongPassword_Throw(password As String)
             Dim tmpFilePath As String = CreateTempDirectory()
             Dim destinationFilename As String = CreateTempFile(tmpFilePath, size:=-1)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, "")
             Dim listener As HttpListener = webListener.ProcessRequests()
             Try
                 Assert.Throws(Of WebException)(
                      Sub()
                          My.Computer.Network.DownloadFile(webListener.Address,
-                                                       destinationFilename,
-                                                       DefaultUserName,
-                                                       password:="123")
+                            destinationFilename,
+                            DefaultUserName,
+                            password)
                      End Sub)
                 Assert.True(Directory.Exists(tmpFilePath))
                 Assert.False(File.Exists(destinationFilename))
