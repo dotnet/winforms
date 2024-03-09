@@ -19,7 +19,13 @@ public class NetworkTests
         Assert.True(network.Ping("127.0.0.1"));
     }
 
+    [Fact]
+    public void PingUri()
+    {
+        Network network = new();
+        Assert.True(network.Ping(new Uri("http://127.0.0.1")));
+    }
+
     // Not tested:
-    //    Public Sub DownloadFile(...) [multiple overloads]
     //    Public Sub UploadFile(...) [multiple overloads]
 }
