@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
             listener.Prefixes.Add(_downloadFileUrlPrefix)
-            If _userName IsNot Nothing AndAlso _password IsNot Nothing Then
+            If _userName IsNot Nothing OrElse _password IsNot Nothing Then
                 listener.AuthenticationSchemes = AuthenticationSchemes.Basic
             End If
             listener.Start()
@@ -46,7 +46,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         response = context.Response
                         Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
                         If context.User?.Identity.IsAuthenticated Then
-                            If identity.Password <> _password Then
+                            If identity.Name <> _userName OrElse identity.Password <> _password Then
                                 response.StatusCode = HttpStatusCode.Unauthorized
                                 Exit Try
                             End If

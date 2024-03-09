@@ -130,37 +130,48 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
                 End If
             End Try
-            Dim contentLength? As Long = response?.Content.Headers.ContentLength
-            If contentLength.HasValue Then
-                Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
-                    Using fileStream As New FileStream(destinationFileName, FileMode.Create, FileAccess.Write, FileShare.None)
+            Select Case response.StatusCode
+                Case HttpStatusCode.OK
+                    Dim contentLength? As Long = response?.Content.Headers.ContentLength
+                    If contentLength.HasValue Then
+                        Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
+                            Using fileStream As New FileStream(destinationFileName, FileMode.Create, FileAccess.Write, FileShare.None)
 
-                        Dim buffer(8191) As Byte
-                        Dim totalBytesRead As Long = 0
-                        Dim bytesRead As Integer
-                        Try
-                            bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
-                            Do While bytesRead > 0
-                                totalBytesRead += bytesRead
+                                Dim buffer(8191) As Byte
+                                Dim totalBytesRead As Long = 0
+                                Dim bytesRead As Integer
+                                Try
+                                    bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
+                                    Do While bytesRead > 0
+                                        totalBytesRead += bytesRead
 
-                                Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
-                                If m_ProgressDialog IsNot Nothing Then
-                                    Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
-                                    InvokeIncrement(percentage)
-                                End If
-                                bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
-                            Loop
-                        Finally
-                            CloseProgressDialog()
-                        End Try
-                    End Using
-                End Using
-            End If
+                                        Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
+                                        If m_ProgressDialog IsNot Nothing Then
+                                            Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
+                                            InvokeIncrement(percentage)
+                                        End If
+                                        bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
+                                    Loop
+                                Finally
+                                    CloseProgressDialog()
+                                End Try
+                            End Using
+                        End Using
+                        If response.StatusCode = HttpStatusCode.OK Then
+                        End If
+
+                        If m_ProgressDialog IsNot Nothing Then
+                            RemoveHandler m_ProgressDialog.UserHitCancel, AddressOf m_ProgressDialog_UserHitCancel
+                        End If
+                    End If
+
+                Case HttpStatusCode.Unauthorized
+                    ' REVIEWER Please check following two web exceptions
+                    Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
+                Case Else
+                    Throw New WebException()
+            End Select
             response?.Dispose()
-            If m_ProgressDialog IsNot Nothing Then
-                RemoveHandler m_ProgressDialog.UserHitCancel, AddressOf m_ProgressDialog_UserHitCancel
-            End If
-
         End Function
 
 #If False Then
