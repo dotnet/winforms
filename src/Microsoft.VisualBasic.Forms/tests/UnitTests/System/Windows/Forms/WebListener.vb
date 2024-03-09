@@ -45,7 +45,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         response = context.Response
                         Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
                         If context.User?.Identity.IsAuthenticated Then
-                            If identity.Name <> _userName OrElse identity.Password <> _password Then
+                            If String.IsNullOrWhiteSpace(identity.Name) OrElse identity.Name <> _userName OrElse String.IsNullOrWhiteSpace(identity.Password) OrElse identity.Password <> _password Then
                                 response.StatusCode = HttpStatusCode.Unauthorized
                                 Exit Try
                             End If
