@@ -3,6 +3,7 @@
 
 Imports System.IO
 Imports System.Net
+Imports Microsoft.VisualBasic.FileIO
 
 Imports Xunit
 
@@ -289,6 +290,104 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
 #Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void"
 
+        <WinFormsTheory>
+        <InlineData("\")>
+        <InlineData("/")>
+        Public Sub DownloadFile_CheckFilePathTrailingSeparator_Throw(separator As String)
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, DownloadSmallFileSize)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Try
+                Assert.Throws(Of ArgumentException)(
+                Sub()
+                    My.Computer.Network.DownloadFile(webListener.Address,
+                        $"{destinationFilename}{separator}",
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub)
+            Finally
+                CleanUp(listener, tmpFilePath)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_GetLongPath_Throw()
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, DownloadSmallFileSize)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Try
+                Assert.Throws(Of InvalidOperationException)(
+                Sub()
+                    My.Computer.Network.DownloadFile(webListener.Address,
+                        destinationFileName:=tmpFilePath, ' This is a Directory!
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub)
+            Finally
+                CleanUp(listener, tmpFilePath)
+            End Try
+        End Sub
+
+        <WinFormsTheory>
+        <InlineData("C:")>
+        <InlineData("\\myshare\mydir")>
+        Public Sub DownloadFile_RootDirectory_Throw(root As String)
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, DownloadSmallFileSize)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Try
+                Assert.Throws(Of InvalidOperationException)(
+                Sub()
+                    My.Computer.Network.DownloadFile(webListener.Address,
+                        destinationFileName:=root, ' This is a Root Directory!
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub)
+            Finally
+                CleanUp(listener, tmpFilePath)
+            End Try
+        End Sub
+
+        <WinFormsTheory>
+        <InlineData("C:\")>
+        <InlineData("\\myshare\mydir\")>
+        Public Sub DownloadFile_RootDirectoryTrailingSeparator_Throw(root As String)
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim destinationFilename As String = CreateTempFile(tmpFilePath, DownloadSmallFileSize)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Try
+                Assert.Throws(Of ArgumentException)(
+                Sub()
+                    My.Computer.Network.DownloadFile(webListener.Address,
+                        destinationFileName:=root, ' This is a Root Directory!
+                        userName:="",
+                        password:="",
+                        showUI:=False,
+                        TestingConnectionTimeout,
+                        overwrite:=True,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub)
+            Finally
+                CleanUp(listener, tmpFilePath)
+            End Try
+        End Sub
+
         <WinFormsFact>
         Public Sub DownloadFile_Url_AllOptionsSet_Success()
             Dim tmpFilePath As String = CreateTempDirectory()
@@ -302,7 +401,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         showUI:=False,
                         TestingConnectionTimeout,
                         overwrite:=True,
-                        FileIO.UICancelOption.DoNothing)
+                        onUserCancel:=UICancelOption.DoNothing)
+
             Assert.True(Directory.Exists(tmpFilePath))
             Assert.Equal(ValidateDownload(tmpFilePath, destinationFilename), DownloadSmallFileSize)
             CleanUp(listener, tmpFilePath)
