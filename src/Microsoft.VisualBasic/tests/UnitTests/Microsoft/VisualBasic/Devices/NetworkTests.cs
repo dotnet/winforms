@@ -20,7 +20,7 @@ public class NetworkTests
     }
 
     [Fact]
-    public void PingUrl()
+    public void PingUri()
     {
         Network network = new();
         Assert.True(network.Ping(new Uri("http://127.0.0.1")));
