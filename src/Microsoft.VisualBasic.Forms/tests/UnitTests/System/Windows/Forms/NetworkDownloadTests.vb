@@ -33,6 +33,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
 #Region "Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String) -> Void"
 
+        <WinFormsTheory>
+        <InlineData(Nothing)>
+        <InlineData("")>
+        Public Sub DownloadFile_Url_destinationFilename_Throw(destinationFilename As String)
+            Dim tmpFilePath As String = CreateTempDirectory()
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Try
+                Assert.Throws(Of ArgumentNullException)(
+                    Sub()
+                        My.Computer.Network.DownloadFile(webListener.Address,
+                            destinationFilename)
+                    End Sub)
+            Finally
+                CleanUp(listener, tmpFilePath)
+            End Try
+        End Sub
+
         <WinFormsFact>
         Public Sub DownloadFile_Url_Success()
             Dim tmpFilePath As String = CreateTempDirectory()
