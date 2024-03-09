@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.Automation;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -421,6 +422,460 @@ public class LabelTests
         Assert.True(label.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void Label_AutoSizeChangedEvent_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.AutoSizeChanged += handler;
+        label.AutoSizeChanged -= handler;
+        Assert.Equal(0, callCount);
+
+        label.AutoSizeChanged += handler;
+        label.AutoSize = label.AutoSize;
+        Assert.Equal(0, callCount);
+
+        label.AutoSize = !label.AutoSize;
+        Assert.Equal(1, callCount);
+
+        label.AutoSize = label.AutoSize;
+        Assert.Equal(1, callCount);
+
+        label.AutoSize = !label.AutoSize;
+        Assert.Equal(2, callCount);
+
+        label.AutoSizeChanged -= handler;
+        label.AutoSize = !label.AutoSize;
+        Assert.Equal(2, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_AutoEllipsis_SetWithHandle_GetReturnsExpected()
+    {
+        using Label label = new();
+        Assert.NotEqual(0, label.Handle);
+
+        int invalidatedCallCount = 0;
+        label.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        label.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        label.HandleCreated += (sender, e) => createdCallCount++;
+
+        // Set true.
+        label.AutoEllipsis = true;
+        Assert.True(label.AutoEllipsis);
+        Assert.True(label.IsHandleCreated);
+        Assert.Equal(1, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+
+        // Set same.
+        label.AutoEllipsis = true;
+        Assert.True(label.AutoEllipsis);
+        Assert.True(label.IsHandleCreated);
+        Assert.Equal(1, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+
+        // Set different.
+        label.AutoEllipsis = false;
+        Assert.False(label.AutoEllipsis);
+        Assert.True(label.IsHandleCreated);
+        Assert.Equal(2, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsFact]
+    public void Label_BackgroundImageGetSet()
+    {
+        using Label label = new();
+        Assert.Null(label.BackgroundImage);  // Default value
+
+        // Set image.
+        using Bitmap image1 = new(10, 10);
+        label.BackgroundImage = image1;
+        Assert.Same(image1, label.BackgroundImage);
+
+        // Set same.
+        label.BackgroundImage = image1;
+        Assert.Same(image1, label.BackgroundImage);
+
+        // Set different.
+        using Bitmap image2 = new(50, 10);
+        label.BackgroundImage = image2;
+        Assert.Same(image2, label.BackgroundImage);
+
+        // Set null.
+        label.BackgroundImage = null;
+        Assert.Null(label.BackgroundImage);
+    }
+
+    [WinFormsFact]
+    public void Label_BackgroundImageChangedEvent_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.BackgroundImageChanged += handler;
+        label.BackgroundImageChanged -= handler;
+        Assert.Equal(0, callCount);
+
+        label.BackgroundImageChanged += handler;
+        label.BackgroundImage = label.BackgroundImage;
+        Assert.Equal(0, callCount);
+
+        using Bitmap image = new(10, 10);
+        label.BackgroundImage = image;
+        Assert.Equal(1, callCount);
+
+        label.BackgroundImage = label.BackgroundImage;
+        Assert.Equal(1, callCount);
+
+        label.BackgroundImage = null;
+        Assert.Equal(2, callCount);
+
+        label.BackgroundImageChanged -= handler;
+        label.BackgroundImage = image;
+        Assert.Equal(2, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_BackgroundImageLayoutGetSet()
+    {
+        using Label label = new();
+        Assert.Equal(ImageLayout.Tile, label.BackgroundImageLayout);  // Default value
+
+        // Set valid value.
+        label.BackgroundImageLayout = ImageLayout.Center;
+        Assert.Equal(ImageLayout.Center, label.BackgroundImageLayout);
+
+        // Set same.
+        label.BackgroundImageLayout = ImageLayout.Center;
+        Assert.Equal(ImageLayout.Center, label.BackgroundImageLayout);
+
+        // Set different.
+        label.BackgroundImageLayout = ImageLayout.Stretch;
+        Assert.Equal(ImageLayout.Stretch, label.BackgroundImageLayout);
+    }
+
+    [WinFormsFact]
+    public void Label_BackgroundImageLayoutChangedEvent_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.BackgroundImageLayoutChanged += handler;
+        label.BackgroundImageLayoutChanged -= handler;
+        Assert.Equal(0, callCount);
+
+        label.BackgroundImageLayoutChanged += handler;
+        label.BackgroundImageLayout = label.BackgroundImageLayout;
+        Assert.Equal(0, callCount);
+
+        label.BackgroundImageLayout = ImageLayout.Center;
+        Assert.Equal(1, callCount);
+
+        label.BackgroundImageLayout = label.BackgroundImageLayout;
+        Assert.Equal(1, callCount);
+
+        label.BackgroundImageLayout = ImageLayout.Stretch;
+        Assert.Equal(2, callCount);
+
+        label.BackgroundImageLayoutChanged -= handler;
+        label.BackgroundImageLayout = ImageLayout.Zoom;
+        Assert.Equal(2, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_ImageIndex_GetSet_ImageList()
+    {
+        using ImageList imageList = new();
+        using Bitmap bitmap1 = new(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
+
+        imageList.Images.Add(bitmap1);
+        imageList.Images.Add(bitmap2);
+
+        using Label label = new();
+        label.ImageList = imageList;
+
+        // Set valid value.
+        label.ImageIndex = 0;
+        Assert.Equal(0, label.ImageIndex);
+
+        // Set same.
+        label.ImageIndex = 0;
+        Assert.Equal(0, label.ImageIndex);
+
+        // Set different.
+        label.ImageIndex = 1;
+        Assert.Equal(1, label.ImageIndex);
+
+        // Set invalid value.
+        Assert.Throws<ArgumentOutOfRangeException>(() => label.ImageIndex = -2);
+        Assert.Equal(1, label.ImageIndex);  // Value should not have changed.
+
+        // Set to default value.
+        label.ImageIndex = -1;
+        Assert.Equal(-1, label.ImageIndex);
+    }
+
+    [WinFormsFact]
+    public void Label_ImageKey_GetSet_ImageList()
+    {
+        using ImageList imageList = new();
+        using Bitmap bitmap1 = new(10, 10);
+        using Bitmap bitmap2 = new(10, 10);
+
+        imageList.Images.Add("key1", bitmap1);
+        imageList.Images.Add("key2", bitmap2);
+
+        using Label label = new();
+        label.ImageList = imageList;
+
+        // Set valid value exists in the ImageList.
+        label.ImageKey = "key1";
+        Assert.Equal("key1", label.ImageKey);
+
+        // Set different value exists in the ImageList.
+        label.ImageKey = "key2";
+        Assert.Equal("key2", label.ImageKey);
+
+        // Set value does not exist in the ImageList.
+        label.ImageKey = "nonexistent";
+        Assert.Equal("nonexistent", label.ImageKey);
+
+        // Set null.
+        label.ImageKey = null;
+        Assert.Equal(ImageList.Indexer.DefaultKey, label.ImageKey);  // Should reset to default value.
+
+        // Set empty.
+        label.ImageKey = string.Empty;
+        Assert.Equal(ImageList.Indexer.DefaultKey, label.ImageKey);  // Should reset to default value.
+    }
+
+    [WinFormsFact]
+    public void Label_ImageList_GetSet_Image()
+    {
+        using Label label = new();
+        using Bitmap image = new(10, 10);
+        label.Image = image;
+
+        // Set valid value.
+        using ImageList imageList = new();
+        label.ImageList = imageList;
+        Assert.Same(imageList, label.ImageList);
+        Assert.Null(label.Image);  // Image should be reset.
+    }
+
+    [WinFormsFact]
+    public void Label_ImageList_Disposing_UnsetsImageList()
+    {
+        using Label label = new();
+        using ImageList imageList = new();
+        label.ImageList = imageList;
+
+        imageList.Dispose();
+        Assert.Null(label.ImageList);
+    }
+
+    [WinFormsFact]
+    public void Label_ImageList_RecreateHandleRefreshesControl()
+    {
+        using SubLabel label = new();
+        using ImageList imageList = new();
+        using Bitmap bitmap = new(10, 10);
+
+        label.ImageList = imageList;
+        imageList.Images.Add(bitmap);
+
+        label.CreateControl();
+        Assert.True(label.IsHandleCreated);
+
+        label.RecreateHandle();
+        Assert.True(label.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AutomationLiveSetting.Off)]
+    [InlineData(AutomationLiveSetting.Polite)]
+    [InlineData(AutomationLiveSetting.Assertive)]
+    public void Label_LiveSetting_Set_GetReturnsExpected(AutomationLiveSetting value)
+    {
+        using Label label = new();
+        label.LiveSetting = value;
+        Assert.Equal(value, label.LiveSetting);
+    }
+
+    [WinFormsFact]
+    public void Label_LiveSetting_SetInvalidValue_ThrowsInvalidEnumArgumentException()
+    {
+        using Label label = new();
+        Assert.Throws<InvalidEnumArgumentException>(() => label.LiveSetting = (AutomationLiveSetting)999);
+    }
+
+    [WinFormsFact]
+    public void Label_KeyUp_AddRemove_Success()
+    {
+        using SubLabel label = new();
+        int callCount = 0;
+        KeyEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            callCount++;
+        };
+
+        KeyEventArgs keyEventArgs = new KeyEventArgs(Keys.A);
+
+        label.KeyUp += handler;
+        label.OnKeyUp(keyEventArgs);
+        Assert.Equal(1, callCount);
+
+        label.KeyUp -= handler;
+        label.OnKeyUp(keyEventArgs);
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_KeyDown_AddRemove_Success()
+    {
+        using SubLabel label = new();
+        int callCount = 0;
+        KeyEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            callCount++;
+        };
+
+        KeyEventArgs keyEventArgs = new KeyEventArgs(Keys.A);
+
+        label.KeyDown += handler;
+        label.OnKeyDown(keyEventArgs);
+        Assert.Equal(1, callCount);
+
+        label.KeyDown -= handler;
+        label.OnKeyDown(keyEventArgs);
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_KeyPress_AddRemove_Success()
+    {
+        using SubLabel label = new();
+        int callCount = 0;
+        KeyPressEventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            callCount++;
+        };
+
+        KeyPressEventArgs keyPressEventArgs = new KeyPressEventArgs('A');
+
+        label.KeyPress += handler;
+        label.OnKeyPress(keyPressEventArgs);
+        Assert.Equal(1, callCount);
+
+        label.KeyPress -= handler;
+        label.OnKeyPress(keyPressEventArgs);
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_TabStopChanged_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.TabStopChanged += handler;
+        label.TabStop = !label.TabStop;
+        Assert.Equal(1, callCount);
+
+        label.TabStopChanged -= handler;
+        label.TabStop = !label.TabStop;
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_TextAlignChanged_AddRemove_Success()
+    {
+        using Label label = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(label, sender);
+            Assert.Same(EventArgs.Empty, e);
+            callCount++;
+        };
+
+        label.TextAlignChanged += handler;
+        label.TextAlign = ContentAlignment.BottomCenter;
+        Assert.Equal(1, callCount);
+
+        label.TextAlignChanged -= handler;
+        label.TextAlign = ContentAlignment.BottomLeft;
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Label_UseCompatibleTextRendering_GetSet_ReturnsExpected()
+    {
+        using Label label = new();
+        bool defaultValue = label.UseCompatibleTextRendering;
+
+        // Set true.
+        label.UseCompatibleTextRendering = true;
+        Assert.True(label.UseCompatibleTextRendering);
+
+        // Set false.
+        label.UseCompatibleTextRendering = false;
+        Assert.False(label.UseCompatibleTextRendering);
+
+        // Set default.
+        label.UseCompatibleTextRendering = defaultValue;
+        Assert.Equal(defaultValue, label.UseCompatibleTextRendering);
+    }
+
+    [WinFormsFact]
+    public void Label_UseCompatibleTextRendering_SetWithAutoSize_UpdatesPreferredSize()
+    {
+        using Label label = new()
+        {
+            AutoSize = true,
+            Text = "Some text"
+        };
+        Size defaultSize = label.PreferredSize;
+
+        label.UseCompatibleTextRendering = !label.UseCompatibleTextRendering;
+        Assert.NotEqual(defaultSize, label.PreferredSize);
+    }
+
     public class SubLabel : Label
     {
         public new bool CanEnableIme => base.CanEnableIme;
@@ -488,5 +943,13 @@ public class LabelTests
         public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
         public new bool GetTopLevel() => base.GetTopLevel();
+
+        public new void RecreateHandle() => base.RecreateHandle();
+
+        public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
+
+        public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
+
+        public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
     }
 }
