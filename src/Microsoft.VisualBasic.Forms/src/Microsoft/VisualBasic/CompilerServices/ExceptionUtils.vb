@@ -63,9 +63,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         '    Select Case Number
 
-        '        Case vbErrors.FileNotFound
-        '            Return New IO.FileNotFoundException(Description)
-
+        Case Else
+            'Fall below to default
+            VBDefinedError = False
         '        Case vbErrors.PermissionDenied
         '            Return New IO.IOException(Description)
 
