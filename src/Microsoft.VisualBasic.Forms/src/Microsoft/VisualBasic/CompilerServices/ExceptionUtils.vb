@@ -20,52 +20,60 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         Friend Shared Function VbMakeException(hr As Integer) As Exception
-            Dim sMsg As String
+            Dim description As String
 
             If hr > 0 AndAlso hr <= &HFFFFI Then
-                sMsg = Utils.GetResourceString(CType(hr, vbErrors))
+                description = Utils.GetResourceString(CType(hr, vbErrors))
             Else
-                sMsg = ""
-            End If
-            VbMakeException = VbMakeExceptionEx(hr, sMsg)
-        End Function
-
-        Friend Shared Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
-            Dim vBDefinedError As Boolean
-
-            VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
-
-            If vBDefinedError Then
-                ' .NET Framework implementation calls:
-                ' Err().SetUnmappedError(number)
+                description = ""
             End If
 
-        End Function
-
-        Friend Shared Function BuildException(Number As Integer, Description As String, ByRef VBDefinedError As Boolean) As Exception
-
-            VBDefinedError = True
-
-            Select Case Number
-
-                Case vbErrors.None
+            Select Case hr
 
                 Case vbErrors.FileNotFound
-                    Return New IO.FileNotFoundException(Description)
+                    Return New IO.FileNotFoundException(description)
 
                 Case vbErrors.PermissionDenied
-                    Return New IO.IOException(Description)
+                    Return New IO.IOException(description)
 
                 Case Else
-                    'Fall below to default
-                    VBDefinedError = False
-                    Return New Exception(Description)
+                    Return New Exception(description)
             End Select
-
-            VBDefinedError = False
-            Return New Exception(Description)
-
         End Function
+
+        ' REVIEWERS: All this code serves no purpose and was for legacy VB6
+        'Private Shared Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
+        '    'Dim vBDefinedError As Boolean
+
+        '    Return BuildException(number, sMsg)
+
+        '    ' Originally
+        '    'VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
+
+        '    'If vBDefinedError Then
+        '    ' .NET Framework implementation calls:
+        '    ' Err().SetUnmappedError(number)
+        '    'End If
+
+        'End Function
+
+        'Private Shared Function BuildException(Number As Integer, Description As String) As Exception
+
+        '    'VBDefinedError = True
+
+        '    Select Case Number
+
+        '        Case vbErrors.FileNotFound
+        '            Return New IO.FileNotFoundException(Description)
+
+        '        Case vbErrors.PermissionDenied
+        '            Return New IO.IOException(Description)
+
+        '        Case Else
+        '            'VBDefinedError = False
+        '            Return New Exception(Description)
+        '    End Select
+        'End Function
 
         ''' <summary>
         ''' Returns a new instance of ArgumentException with the message from resource file and the Exception.ArgumentName property set.
@@ -165,5 +173,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Return New Win32Exception(Marshal.GetLastWin32Error(), Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
+
     End Class
+
 End Namespace
