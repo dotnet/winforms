@@ -41,40 +41,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End Select
         End Function
 
-        ' REVIEWERS: All this code serves no purpose and was for legacy VB6
-        'Private Shared Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
-        '    'Dim vBDefinedError As Boolean
-
-        '    Return BuildException(number, sMsg)
-
-        '    ' Originally
-        '    'VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
-
-        '    'If vBDefinedError Then
-        '    ' .NET Framework implementation calls:
-        '    ' Err().SetUnmappedError(number)
-        '    'End If
-
-        'End Function
-
-        'Private Shared Function BuildException(Number As Integer, Description As String) As Exception
-
-        '    'VBDefinedError = True
-
-        '    Select Case Number
-
-        Case Else
-            'Fall below to default
-            VBDefinedError = False
-        '        Case vbErrors.PermissionDenied
-        '            Return New IO.IOException(Description)
-
-        '        Case Else
-        '            'VBDefinedError = False
-        '            Return New Exception(Description)
-        '    End Select
-        'End Function
-
         ''' <summary>
         ''' Returns a new instance of ArgumentException with the message from resource file and the Exception.ArgumentName property set.
         ''' </summary>
