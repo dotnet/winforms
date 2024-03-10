@@ -63,14 +63,14 @@ Namespace Microsoft.VisualBasic
 
                             If ok = 0 Then 'succeeded
                                 'Process ran to completion
-                                Shell = 0
+                                Return 0
                             Else
                                 'Wait timed out
-                                Shell = ProcessInfo.dwProcessId
+                                Return ProcessInfo.dwProcessId
                             End If
                         Else
                             NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
-                            Shell = ProcessInfo.dwProcessId
+                            Return ProcessInfo.dwProcessId
                         End If
                     Else
                         'Check for a win32 error access denied. If it is, make and throw the exception.
