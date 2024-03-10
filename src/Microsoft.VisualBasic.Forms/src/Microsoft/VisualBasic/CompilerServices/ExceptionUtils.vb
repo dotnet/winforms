@@ -27,28 +27,29 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Else
                 sMsg = ""
             End If
-            VbMakeException = VbMakeExceptionEx(hr, sMsg)
+            Return VbMakeExceptionEx(hr, sMsg)
         End Function
 
-        Friend Shared Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
-            Dim vBDefinedError As Boolean
+        Private Shared Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
+            'Dim vBDefinedError As Boolean
 
-            VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
+            Return BuildException(number, sMsg)
 
-            If vBDefinedError Then
-                ' .NET Framework implementation calls:
-                ' Err().SetUnmappedError(number)
-            End If
+            ' Originally
+            'VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
+
+            'If vBDefinedError Then
+            ' .NET Framework implementation calls:
+            ' Err().SetUnmappedError(number)
+            'End If
 
         End Function
 
-        Friend Shared Function BuildException(Number As Integer, Description As String, ByRef VBDefinedError As Boolean) As Exception
+        Private Shared Function BuildException(Number As Integer, Description As String) As Exception
 
-            VBDefinedError = True
+            'VBDefinedError = True
 
             Select Case Number
-
-                Case vbErrors.None
 
                 Case vbErrors.FileNotFound
                     Return New IO.FileNotFoundException(Description)
@@ -57,14 +58,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
                     Return New IO.IOException(Description)
 
                 Case Else
-                    'Fall below to default
-                    VBDefinedError = False
+                    'VBDefinedError = False
                     Return New Exception(Description)
             End Select
-
-            VBDefinedError = False
-            Return New Exception(Description)
-
         End Function
 
         ''' <summary>
@@ -165,5 +161,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Return New Win32Exception(Marshal.GetLastWin32Error(), Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
+
     End Class
+
 End Namespace
