@@ -603,7 +603,7 @@ internal class DataGridRelationshipRow : DataGridRow
 
     [ComVisible(true)]
     [Obsolete("DataGridRelationshipRowAccessibleObject has been deprecated.")]
-    protected class DataGridRelationshipRowAccessibleObject : DataGridRowAccessibleObject
+    internal class DataGridRelationshipRowAccessibleObject : DataGridRowAccessibleObject
     {
         public DataGridRelationshipRowAccessibleObject(DataGridRow owner) : base(owner)
         {
@@ -663,7 +663,7 @@ internal class DataGridRelationshipRow : DataGridRow
 
     [ComVisible(true)]
     [Obsolete("DataGridRelationshipAccessibleObject has been deprecated.")]
-    protected class DataGridRelationshipAccessibleObject : AccessibleObject
+    internal class DataGridRelationshipAccessibleObject : AccessibleObject
     {
         public DataGridRelationshipAccessibleObject(DataGridRelationshipRow owner, int relationship) : base()
         {

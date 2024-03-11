@@ -422,7 +422,7 @@ internal abstract class DataGridRow : MarshalByRefObject
 
     [ComVisible(true)]
     [Obsolete("DataGridRowAccessibleObject has been deprecated.")]
-    protected class DataGridRowAccessibleObject : AccessibleObject
+    internal class DataGridRowAccessibleObject : AccessibleObject
     {
         private ArrayList cells;
 
@@ -577,7 +577,7 @@ internal abstract class DataGridRow : MarshalByRefObject
 
     [ComVisible(true)]
     [Obsolete("DataGridCellAccessibleObject has been deprecated.")]
-    protected class DataGridCellAccessibleObject : AccessibleObject
+    internal class DataGridCellAccessibleObject : AccessibleObject
     {
         public DataGridCellAccessibleObject(DataGridRow owner, int column) : base()
         {
