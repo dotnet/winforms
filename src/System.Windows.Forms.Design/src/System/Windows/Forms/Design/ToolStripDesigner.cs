@@ -1201,14 +1201,11 @@ internal class ToolStripDesigner : ControlDesigner
                 _toolStripAdornerWindowService = null;
             }
 
-            if (ComponentChangeService is not null)
-            {
-                ComponentChangeService.ComponentAdding -= ComponentChangeSvc_ComponentAdding;
-                ComponentChangeService.ComponentAdded -= ComponentChangeSvc_ComponentAdded;
-                ComponentChangeService.ComponentRemoving -= ComponentChangeSvc_ComponentRemoving;
-                ComponentChangeService.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
-                ComponentChangeService.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
-            }
+            ComponentChangeService.ComponentAdding -= ComponentChangeSvc_ComponentAdding;
+            ComponentChangeService.ComponentAdded -= ComponentChangeSvc_ComponentAdded;
+            ComponentChangeService.ComponentRemoving -= ComponentChangeSvc_ComponentRemoving;
+            ComponentChangeService.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
+            ComponentChangeService.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
         }
 
         base.Dispose(disposing);
@@ -1406,14 +1403,11 @@ internal class ToolStripDesigner : ControlDesigner
     {
         base.Initialize(component);
         AutoResizeHandles = true;
-        if (ComponentChangeService is not null)
-        {
-            ComponentChangeService.ComponentAdding += ComponentChangeSvc_ComponentAdding;
-            ComponentChangeService.ComponentAdded += ComponentChangeSvc_ComponentAdded;
-            ComponentChangeService.ComponentRemoving += ComponentChangeSvc_ComponentRemoving;
-            ComponentChangeService.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
-            ComponentChangeService.ComponentChanged += ComponentChangeSvc_ComponentChanged;
-        }
+        ComponentChangeService.ComponentAdding += ComponentChangeSvc_ComponentAdding;
+        ComponentChangeService.ComponentAdded += ComponentChangeSvc_ComponentAdded;
+        ComponentChangeService.ComponentRemoving += ComponentChangeSvc_ComponentRemoving;
+        ComponentChangeService.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
+        ComponentChangeService.ComponentChanged += ComponentChangeSvc_ComponentChanged;
 
         // initialize new Manager For Editing ToolStrips
         _editManager = new ToolStripEditorManager(component);
@@ -1506,19 +1500,16 @@ internal class ToolStripDesigner : ControlDesigner
             {
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parentPanel)["Controls"];
 
-                ComponentChangeService?.OnComponentChanging(parentPanel, controlsProp);
+                ComponentChangeService.OnComponentChanging(parentPanel, controlsProp);
 
                 parentPanel.Join(ToolStrip, parentPanel.Rows.Length);
 
-                if (ComponentChangeService is not null)
-                {
-                    ComponentChangeService.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
+                ComponentChangeService.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
 
-                    // Try to fire ComponentChange on the Location Property for ToolStrip.
-                    PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
-                    ComponentChangeService.OnComponentChanging(ToolStrip, locationProp);
-                    ComponentChangeService.OnComponentChanged(ToolStrip, locationProp);
-                }
+                // Try to fire ComponentChange on the Location Property for ToolStrip.
+                PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
+                ComponentChangeService.OnComponentChanging(ToolStrip, locationProp);
+                ComponentChangeService.OnComponentChanged(ToolStrip, locationProp);
             }
         }
 
