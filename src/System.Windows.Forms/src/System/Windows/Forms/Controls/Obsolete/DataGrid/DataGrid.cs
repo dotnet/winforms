@@ -14,11 +14,7 @@ namespace System.Windows.Forms;
 [Obsolete("DataGrid has been deprecated. Use DataGridView instead.")]
 public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
-#if DEBUG
     internal TraceSwitch DataGridAcc = new TraceSwitch("DataGridAcc", "Trace Windows Forms DataGrid Accessibility");
-#else
-            internal TraceSwitch DataGridAcc = null;
-#endif
 
     private const int GRIDSTATE_trackColResize = 0x00000008;
     private const int GRIDSTATE_trackRowResize = 0x00000010;
