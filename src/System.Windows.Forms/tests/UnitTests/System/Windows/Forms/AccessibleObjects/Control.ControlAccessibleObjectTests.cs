@@ -1233,7 +1233,16 @@ public class Control_ControlAccessibleObjectTests
 
     public static IEnumerable<object[]> ControlAccessibleObject_TestData()
     {
-        return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
+#pragma warning disable CS0618 // Type or member is obsolete
+        var typesToIgnore = new[]
+        {
+            typeof(DataGrid), typeof(StatusBar), typeof(ToolBar), typeof(DataGridTextBox)
+        };
+ #pragma warning restore CS0618 // Type or member is obsolete
+
+        return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
+           .Where(t => !typesToIgnore.Contains(t))
+            .Select(type => new object[] { type });
     }
 
     [WinFormsTheory]

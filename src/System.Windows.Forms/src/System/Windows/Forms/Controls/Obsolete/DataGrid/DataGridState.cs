@@ -92,6 +92,7 @@ internal sealed class DataGridState : ICloneable
     }
 
     [ComVisible(true)]
+    [Obsolete("DataGridStateParentRowAccessibleObject has been deprecated.")]
     internal class DataGridStateParentRowAccessibleObject : AccessibleObject
     {
         public DataGridStateParentRowAccessibleObject(DataGridState owner) : base()
