@@ -216,7 +216,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         // Add items to strip
         //
 
-        Items.AddRange(
+        Items.AddRange((ToolStripItem[])
         [
             MoveFirstItem,
             MovePreviousItem,

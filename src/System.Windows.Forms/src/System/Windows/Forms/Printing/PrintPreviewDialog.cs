@@ -781,7 +781,7 @@ public partial class PrintPreviewDialog : Form
         SuspendLayout();
 
         resources.ApplyResources(_toolStrip1, "toolStrip1");
-        _toolStrip1.Items.AddRange(
+        _toolStrip1.Items.AddRange((ToolStripItem[])
         [
             _printToolStripButton,
             _zoomToolStripSplitButton,
@@ -812,7 +812,7 @@ public partial class PrintPreviewDialog : Form
 
         _zoomToolStripSplitButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
         _zoomToolStripSplitButton.DoubleClickEnabled = true;
-        _zoomToolStripSplitButton.DropDownItems.AddRange(
+        _zoomToolStripSplitButton.DropDownItems.AddRange((ToolStripItem[])
         [
             _autoToolStripMenuItem,
             _toolStripMenuItem1,
@@ -824,6 +824,7 @@ public partial class PrintPreviewDialog : Form
             _toolStripMenuItem7,
             _toolStripMenuItem8
         ]);
+
         _zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
         _zoomToolStripSplitButton.SplitterWidth = 1;
         resources.ApplyResources(_zoomToolStripSplitButton, "zoomToolStripSplitButton");
