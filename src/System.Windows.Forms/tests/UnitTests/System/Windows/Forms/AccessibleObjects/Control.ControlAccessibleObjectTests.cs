@@ -1355,8 +1355,20 @@ public class Control_ControlAccessibleObjectTests
             { typeof(MaskedTextBox), string.Empty}
         };
 
+#pragma warning disable CS0618 // Type or member is obsolete
+        var typesToIgnore = new[]
+        {
+            typeof(DataGrid), typeof(StatusBar), typeof(ToolBar), typeof(DataGridTextBox)
+        };
+#pragma warning restore CS0618 // Type or member is obsolete
+
         foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
         {
+            if (typesToIgnore.Contains(type))
+            {
+                continue;
+            }
+
             yield return new object[]
             {
                 type,
