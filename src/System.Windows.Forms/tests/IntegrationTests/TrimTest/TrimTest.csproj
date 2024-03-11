@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <OutputType>WinExe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -9,6 +9,10 @@
     <!-- These are needed to suppress the localization step picked up from Arcade targets -->
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+    <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
   </PropertyGroup>
 
   <!-- These normally come from $(UseWindowsForms) when $(ImplicitUsings) is enabled -->

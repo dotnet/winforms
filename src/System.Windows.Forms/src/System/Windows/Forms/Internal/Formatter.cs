@@ -9,6 +9,8 @@ namespace System.Windows.Forms;
 
 internal static class Formatter
 {
+    internal const string ComponentModelTrimIncompatibilityMessage = "ComponentModel APIs are trim incompatible.";
+
     private static readonly Type stringType = typeof(string);
     private static readonly Type booleanType = typeof(bool);
     private static readonly Type checkStateType = typeof(CheckState);
@@ -25,6 +27,7 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
+    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     public static object? FormatObject(
         object? value,
         Type targetType,
@@ -82,6 +85,7 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException is no suitable conversion can be found
     /// </summary>
+    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     private static object? FormatObjectInternal(
         object? value,
         Type targetType,
@@ -212,6 +216,7 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
+    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     public static object? ParseObject(
         object? value,
         Type targetType,
@@ -263,6 +268,7 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException if no suitable conversion can be found
     /// </summary>
+    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     private static object? ParseObjectInternal(
         object? value,
         Type targetType,
@@ -431,7 +437,7 @@ internal static class Formatter
     /// <summary>
     ///  Converts a value to the specified type using best Parse() method on that type
     /// </summary>
-    public static object? InvokeStringParseMethod(object? value, Type targetType, IFormatProvider? formatInfo)
+    public static object? InvokeStringParseMethod(object? value, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type targetType, IFormatProvider? formatInfo)
     {
         try
         {
