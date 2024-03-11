@@ -276,10 +276,7 @@ public partial class TextBoxTests
             AutoCompleteSource = value == AutoCompleteSource.ListItems ? AutoCompleteSource.None : value
         };
 
-        if(value != AutoCompleteSource.ListItems)
-        {
-            control.AutoCompleteSource.Should().Be(value);
-        }   
+        control.AutoCompleteSource.Should().Be(value);  
     }
 
     [WinFormsTheory]
