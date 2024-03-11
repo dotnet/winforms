@@ -27,8 +27,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' The full path and file name of the created file
         ''' If size = -1 not file is create but the full path is returned
         ''' </returns>
-        Private Shared Function CreateTempFile(tmpFilePath As String, Optional size As Integer = -1) As String
-            Dim filename As String = Path.Combine(tmpFilePath, "testing.txt")
+        Private Shared Function CreateTempFile(tmpFilePath As String, size As Integer) As String
+            Dim filename As String = GetDestinationFileName(tmpFilePath)
+
             If size >= 0 Then
                 Using destinationStream As FileStream = File.Create(filename)
                     ' Below allows for limited testing of download data
@@ -40,6 +41,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Using
             End If
             Return filename
+        End Function
+
+        Private Shared Function GetDestinationFileName(tmpFilePath As String) As String
+            Return Path.Combine(tmpFilePath, "testing.txt")
         End Function
 
     End Class
