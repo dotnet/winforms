@@ -2690,6 +2690,14 @@ public partial class AccessibleObjectTests
 
     public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverridden_TestData()
     {
+#pragma warning disable CS0618 // Type or member is obsolete
+        var typesToIgnore = new[]
+        {
+            typeof(ComboBox.ChildAccessibleObject), typeof(DataGridState.DataGridStateParentRowAccessibleObject), typeof(DataGridRow.DataGridCellAccessibleObject),
+            typeof(DataGridRow.DataGridRowAccessibleObject), typeof(DataGridRelationshipRow.DataGridRelationshipRowAccessibleObject),  typeof(DataGridRelationshipRow.DataGridRelationshipAccessibleObject),
+            typeof(DataGridParentRows.DataGridParentRowsAccessibleObject), typeof(DataGridColumnStyle.DataGridColumnHeaderAccessibleObject),
+        };
+#pragma warning restore CS0618 // Type or member is obsolete
         Assembly assembly = typeof(AccessibleObject).Assembly;
         foreach (Type type in assembly.GetTypes())
         {
@@ -2699,7 +2707,7 @@ public partial class AccessibleObjectTests
                 continue;
             }
 
-            if (type == typeof(ComboBox.ChildAccessibleObject))
+            if (typesToIgnore.Contains(type))
             {
                 continue;
             }

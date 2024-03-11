@@ -654,7 +654,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
 
     [Runtime.InteropServices.ComVisible(true)]
     [Obsolete("DataGridColumnHeaderAccessibleObject has been deprecated.")]
-    protected class DataGridColumnHeaderAccessibleObject : AccessibleObject
+    internal class DataGridColumnHeaderAccessibleObject : AccessibleObject
     {
         public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) : this()
         {
