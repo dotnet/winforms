@@ -25,8 +25,8 @@ public class LogTests : FileCleanupTestBase
         log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Warning);
         log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Error, id: 3);
 
-        log.WriteException(new System.ArgumentException());
-        log.WriteException(new System.ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo");
-        log.WriteException(new System.ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo", id: 6);
+        log.WriteException(new ArgumentException());
+        log.WriteException(new ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo");
+        log.WriteException(new ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo", id: 6);
     }
 }

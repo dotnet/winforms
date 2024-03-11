@@ -63,7 +63,7 @@ internal sealed unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEd
 
     public void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, nint parentHandle)
     {
-        object[] objects = component.GetType().IsArray ? (object[])component : new object[] { component };
+        object[] objects = component.GetType().IsArray ? (object[])component : [component];
         nint[] addresses = new nint[objects.Length];
 
         try

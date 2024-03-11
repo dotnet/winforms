@@ -122,7 +122,7 @@ public partial class ColorEditor
             MethodAttributes attrs = MethodAttributes.Public | MethodAttributes.Static;
             PropertyInfo[] props = enumType.GetProperties();
 
-            List<Color> colorList = new();
+            List<Color> colorList = [];
 
             for (int i = 0; i < props.Length; i++)
             {

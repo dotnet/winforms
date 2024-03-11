@@ -167,7 +167,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     public string SelectedPath
     {
         get => _selectedPaths.Length > 0 ? _selectedPaths[0] : string.Empty;
-        set => _selectedPaths = value is not null ? new string[] { value } : Array.Empty<string>();
+        set => _selectedPaths = value is not null ? [value] : [];
     }
 
     /// <summary>
@@ -176,7 +176,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.FolderBrowserDialogSelectedPathsDescr))]
-    public string[] SelectedPaths => _selectedPaths.Length > 0 ? (string[])_selectedPaths.Clone() : Array.Empty<string>();
+    public string[] SelectedPaths => _selectedPaths.Length > 0 ? (string[])_selectedPaths.Clone() : [];
 
     /// <summary>
     ///  Gets or sets the initial directory displayed by the folder browser dialog.
@@ -256,7 +256,7 @@ public sealed class FolderBrowserDialog : CommonDialog
         _options = (FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST);
         _rootFolder = Environment.SpecialFolder.Desktop;
         _descriptionText = string.Empty;
-        _selectedPaths = Array.Empty<string>();
+        _selectedPaths = [];
         _initialDirectory = string.Empty;
         ShowNewFolderButton = true;
         ClientGuid = null;
@@ -403,7 +403,7 @@ public sealed class FolderBrowserDialog : CommonDialog
             using ComScope<IShellItemArray> itemArray = new(null);
             dialog->GetResults(itemArray);
             itemArray.Value->GetCount(out uint itemCount);
-            List<string> tempSelectedPaths = new();
+            List<string> tempSelectedPaths = [];
             for (uint itemIndex = 0; itemIndex < itemCount; itemIndex++)
             {
                 using ComScope<IShellItem> item = new(null);
@@ -416,7 +416,7 @@ public sealed class FolderBrowserDialog : CommonDialog
                 }
             }
 
-            _selectedPaths = tempSelectedPaths.ToArray();
+            _selectedPaths = [.. tempSelectedPaths];
         }
         else
         {
@@ -477,11 +477,10 @@ public sealed class FolderBrowserDialog : CommonDialog
     }
 
     /// <summary>
-    ///  Callback function used to enable/disable the OK button,
-    /// and select the initial folder.
+    ///  Callback function used to enable/disable the OK button, and select the initial folder.
     /// </summary>
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
 #pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
     private static unsafe int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, uint msg, LPARAM lParam, LPARAM lpData)
     {

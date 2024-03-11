@@ -55,7 +55,7 @@ internal sealed class SelectionManager : IDisposable
         behaviorService.Adorners.Add(SelectionGlyphAdorner); // adding this will cause the adorner to get setup with a ptr
                                                          // to the beh.svc.
 
-        _componentToDesigner = new();
+        _componentToDesigner = [];
 
         if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
         {
@@ -247,7 +247,7 @@ internal sealed class SelectionManager : IDisposable
     private void OnBeginDrag(object? source, BehaviorDragDropEventArgs e)
     {
         List<IComponent> dragComps = e.DragComponents.Cast<IComponent>().ToList();
-        List<Glyph> glyphsToRemove = new();
+        List<Glyph> glyphsToRemove = [];
         foreach (ControlBodyGlyph g in BodyGlyphAdorner.Glyphs)
         {
             if (g.RelatedComponent is Control control && (dragComps.Contains(g.RelatedComponent) || !control.AllowDrop))

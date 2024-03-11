@@ -34,8 +34,8 @@ internal class ControlCommandSet : CommandSet
 
         // Establish our set of commands
         //
-        commandSet = new CommandSetItem[]
-        {
+        commandSet =
+        [
             // Alignment commands
             new(
                 this,
@@ -264,7 +264,7 @@ internal class ControlCommandSet : CommandSet
                 new EventHandler(OnStatusAlways),
                 new EventHandler(OnKeySelect),
                 MenuCommands.KeySelectPrevious),
-        };
+        ];
 
         if (MenuService is not null)
         {
@@ -974,8 +974,8 @@ internal class ControlCommandSet : CommandSet
             return;
         }
 
-        List<Control> layoutParentList = new();
-        List<Control> parentList = new();
+        List<Control> layoutParentList = [];
+        List<Control> parentList = [];
         Cursor oldCursor = Cursor.Current;
         try
         {

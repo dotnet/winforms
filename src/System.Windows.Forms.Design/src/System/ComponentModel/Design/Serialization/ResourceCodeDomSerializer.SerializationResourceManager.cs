@@ -33,7 +33,7 @@ internal partial class ResourceCodeDomSerializer
         public SerializationResourceManager(IDesignerSerializationManager manager)
         {
             _manager = manager;
-            _nameTable = new();
+            _nameTable = [];
             // We need to know when we're done so we can push the resource file out.
             manager.SerializationComplete += new EventHandler(OnSerializationComplete);
         }
@@ -84,7 +84,7 @@ internal partial class ResourceCodeDomSerializer
         ///  Returns a hash table where we shove resource sets.
         /// </summary>
         private Dictionary<CultureInfo, Dictionary<string, object?>?> ResourceTable
-            => _resourceSets ??= new();
+            => _resourceSets ??= [];
 
         /// <summary>
         ///  Retrieves the root component we're designing.
@@ -159,7 +159,7 @@ internal partial class ResourceCodeDomSerializer
         /// </summary>
         public bool AddPropertyFill(object value)
         {
-            _propertyFillAdded ??= new();
+            _propertyFillAdded ??= [];
             return _propertyFillAdded.Add(value);
         }
 
@@ -215,7 +215,7 @@ internal partial class ResourceCodeDomSerializer
         /// </summary>
         private Dictionary<string, object?> CreateResourceSet(IResourceReader reader, CultureInfo culture)
         {
-            Dictionary<string, object?> result = new();
+            Dictionary<string, object?> result = [];
 
             // We need to guard against bad or unloadable resources.  We warn the user in the task list here, but we will still load the designer.
             try
@@ -303,7 +303,7 @@ internal partial class ResourceCodeDomSerializer
                 {
                     if (reader is ResXResourceReader resxReader)
                     {
-                        _metadata = new();
+                        _metadata = [];
                         IDictionaryEnumerator de = resxReader.GetMetadataEnumerator();
                         while (de.MoveNext())
                         {
@@ -377,7 +377,7 @@ internal partial class ResourceCodeDomSerializer
                     else if (culture.Equals(CultureInfo.InvariantCulture))
                     {
                         // If this is the invariant culture, always provide a resource set.
-                        resourceSet = new Dictionary<string, object?>();
+                        resourceSet = [];
                     }
 
                     // resourceSet may be null here. We add it to the cache anyway as a sentinel so we don't repeatedly ask for the same resource.
@@ -524,7 +524,7 @@ internal partial class ResourceCodeDomSerializer
                     metadata = GetMetadata();
                     if (metadata is null)
                     {
-                        _metadata = new();
+                        _metadata = [];
                         metadata = _metadata;
                     }
 

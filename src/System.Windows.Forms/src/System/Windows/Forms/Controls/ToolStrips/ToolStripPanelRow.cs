@@ -334,7 +334,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 
     protected void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
     {
-        ((IArrangedElement)this).PerformLayout((IArrangedElement)this, PropertyNames.Size);
+        ((IArrangedElement)this).PerformLayout(this, PropertyNames.Size);
 
         RowManager.OnBoundsChanged(oldBounds, newBounds);
     }
@@ -378,7 +378,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     {
         for (int i = 0; i < Cells.Count; i++)
         {
-            IArrangedElement element = Cells[i] as IArrangedElement;
+            IArrangedElement element = Cells[i];
             if (element.ParticipatesInLayout)
             {
                 ToolStripPanelCell cell = (ToolStripPanelCell)element;

@@ -22,8 +22,10 @@ internal class RichTextBoxActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new();
-        items.Add(new DesignerActionMethodItem(this, "EditLines", SR.EditLinesDisplayName, SR.LinksCategoryName, SR.EditLinesDescription, true));
+        DesignerActionItemCollection items =
+        [
+            new DesignerActionMethodItem(this, "EditLines", SR.EditLinesDisplayName, SR.LinksCategoryName, SR.EditLinesDescription, true),
+        ];
         return items;
     }
 }

@@ -258,21 +258,21 @@ public class DesignSurface : IDisposable, IServiceProvider
 
         // Locate an appropriate constructor for IComponents.
         object? instance = null;
-        ConstructorInfo? ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
+        ConstructorInfo? ctor = TypeDescriptor.GetReflectionType(type).GetConstructor([]);
         if (ctor is not null)
         {
-            instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
+            instance = TypeDescriptor.CreateInstance(this, type, [], []);
         }
         else
         {
             if (typeof(IComponent).IsAssignableFrom(type))
             {
-                ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, new Type[] { typeof(IContainer) }, null);
+                ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, [typeof(IContainer)], null);
             }
 
             if (ctor is not null)
             {
-                instance = TypeDescriptor.CreateInstance(this, type, new Type[] { typeof(IContainer) }, new object[] { ComponentContainer });
+                instance = TypeDescriptor.CreateInstance(this, type, [typeof(IContainer)], [ComponentContainer]);
             }
         }
 
@@ -415,7 +415,7 @@ public class DesignSurface : IDisposable, IServiceProvider
             IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
             {
-                ArrayList newErrors = new();
+                ArrayList newErrors = [];
                 Exception ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                 {
                     HelpLink = SR.DesignSurfaceNoRootComponent

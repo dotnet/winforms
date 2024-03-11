@@ -452,7 +452,7 @@ internal partial class CommandSet : IDisposable
     private IComponent[] FilterSelection(IComponent[]? components, SelectionRules selectionRules)
     {
         if (components is null)
-            return Array.Empty<IComponent>();
+            return [];
 
         // Mask off any selection object that doesn't adhere to the given ruleset.
         // We can ignore this if the ruleset is zero, as all components would be accepted.
@@ -474,7 +474,7 @@ internal partial class CommandSet : IDisposable
             }
         }
 
-        return Array.Empty<IComponent>();
+        return [];
     }
 
     /// <summary>
@@ -505,7 +505,7 @@ internal partial class CommandSet : IDisposable
         IDesignerHost? host = site.GetService<IDesignerHost>();
         if (host is not null)
         {
-            List<IComponent> copySelection = new();
+            List<IComponent> copySelection = [];
             foreach (IComponent comp in comps)
             {
                 copySelection.Add(comp);
@@ -1487,7 +1487,7 @@ internal partial class CommandSet : IDisposable
                         IComponentChangeService? changeService = GetService<IComponentChangeService>();
                         DesignerTransaction? trans = null;
 
-                        List<ParentControlDesigner> designerList = new();
+                        List<ParentControlDesigner> designerList = [];
                         try
                         {
                             trans = host.CreateTransaction(string.Format(SR.CommandSetCutMultiple, cutCount));
@@ -1551,7 +1551,7 @@ internal partial class CommandSet : IDisposable
 
                                 if (changeService is not null)
                                 {
-                                    List<IComponent> al = new();
+                                    List<IComponent> al = [];
                                     GetAssociatedComponents(component, host, al);
                                     foreach (IComponent comp in al)
                                     {
@@ -1622,7 +1622,7 @@ internal partial class CommandSet : IDisposable
                     DesignerTransaction? trans = null;
                     IComponent? commonParent = null;
                     bool commonParentSet = false;
-                    List<ParentControlDesigner> designerList = new();
+                    List<ParentControlDesigner> designerList = [];
                     try
                     {
                         trans = host.CreateTransaction(desc);
@@ -1728,7 +1728,7 @@ internal partial class CommandSet : IDisposable
                                         //
                                         static List<ITreeDesigner> GetDesignerChain(ITreeDesigner designer)
                                         {
-                                            List<ITreeDesigner> designerChain = new();
+                                            List<ITreeDesigner> designerChain = [];
                                             while (designer.Parent is ITreeDesigner parent)
                                             {
                                                 designerChain.Add(parent);
@@ -1773,7 +1773,7 @@ internal partial class CommandSet : IDisposable
 
                             if (changeService is not null)
                             {
-                                List<IComponent> al = new();
+                                List<IComponent> al = [];
                                 GetAssociatedComponents(c, host, al);
                                 foreach (IComponent comp in al)
                                 {
@@ -1858,11 +1858,11 @@ internal partial class CommandSet : IDisposable
     ///  Called when the paste menu item is selected.
     /// </summary>
 
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2301:DoNotCallBinaryFormatterDeserializeWithoutFirstSettingBinaryFormatterBinder", Justification = "data is trusted")]
+    [SuppressMessage("Microsoft.Security", "CA2301:DoNotCallBinaryFormatterDeserializeWithoutFirstSettingBinaryFormatterBinder", Justification = "data is trusted")]
     protected void OnMenuPaste(object? sender, EventArgs e)
     {
         Cursor? oldCursor = Cursor.Current;
-        List<ParentControlDesigner> designerList = new();
+        List<ParentControlDesigner> designerList = [];
         try
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1936,8 +1936,8 @@ internal partial class CommandSet : IDisposable
                         object[] allComponents = new object[components.Count];
                         components.CopyTo(allComponents, 0);
 
-                        List<IComponent> selectComps = new();
-                        List<Control> controls = new();
+                        List<IComponent> selectComps = [];
+                        List<Control> controls = [];
                         string[]? componentNames = null;
                         int idx = 0;
 
@@ -2052,7 +2052,7 @@ internal partial class CommandSet : IDisposable
                                 ComponentDesigner? parentCompDesigner = ((ITreeDesigner)cDesigner).Parent as ComponentDesigner;
                                 Component? parentComp = parentCompDesigner?.Component as Component;
 
-                                List<IComponent> associatedComps = new();
+                                List<IComponent> associatedComps = [];
 
                                 if (parentComp is not null)
                                 {
@@ -2138,7 +2138,7 @@ internal partial class CommandSet : IDisposable
                         }
 
                         // Find those controls that have ControlDesigners and center them on the designer surface
-                        List<Control> compsWithControlDesigners = new();
+                        List<Control> compsWithControlDesigners = [];
                         foreach (Control c in controls)
                         {
                             IDesigner? des = host.GetDesigner(c);
@@ -2174,7 +2174,7 @@ internal partial class CommandSet : IDisposable
 
                             if (numberOfTrayControlsAdded > 0)
                             {
-                                List<Control> listOfTrayControls = new();
+                                List<Control> listOfTrayControls = [];
                                 for (int i = 0; i < numberOfTrayControlsAdded; i++)
                                 {
                                     listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
@@ -2250,7 +2250,7 @@ internal partial class CommandSet : IDisposable
                     IComponent[] selComps;
                     if (components is null || components.Count == 0)
                     {
-                        selComps = Array.Empty<IComponent>();
+                        selComps = [];
                     }
                     else
                     {
@@ -2997,7 +2997,7 @@ internal partial class CommandSet : IDisposable
 
         if (marshalControl is not null && marshalControl.IsHandleCreated)
         {
-            marshalControl.BeginInvoke(new EventHandler(OnSnapLineTimerExpireMarshalled), new object?[] { sender, e });
+            marshalControl.BeginInvoke(new EventHandler(OnSnapLineTimerExpireMarshalled), [sender, e]);
         }
     }
 

@@ -87,7 +87,7 @@ public static partial class ToolStripManager
                         // Call pretranslate on the message to execute the message filters and preprocess message.
                         if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                         {
-                            msg->message = (uint)PInvoke.WM_NULL;
+                            msg->message = PInvoke.WM_NULL;
                         }
                     }
                 }

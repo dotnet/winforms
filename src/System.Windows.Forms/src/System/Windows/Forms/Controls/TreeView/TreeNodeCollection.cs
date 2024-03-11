@@ -237,9 +237,9 @@ public class TreeNodeCollection : IList
     {
         key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
-        List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
+        List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, []);
 
-        return foundNodes.ToArray();
+        return [.. foundNodes];
     }
 
     private static List<TreeNode> FindInternal(

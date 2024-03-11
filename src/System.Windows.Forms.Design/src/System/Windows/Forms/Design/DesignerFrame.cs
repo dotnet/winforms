@@ -348,7 +348,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         public OverlayControl(IServiceProvider provider)
         {
             _provider = provider;
-            _overlayList = new List<Control>();
+            _overlayList = [];
             AutoScroll = true;
             Text = "OverlayControl";
         }

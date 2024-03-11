@@ -833,7 +833,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     private void MoveInsideContainer(ToolStrip toolStripToDrag, Point clientLocation)
     {
-        ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
+        ISupportToolStripPanel draggedControl = toolStripToDrag;
         // if the point is not in this rafting container forward on to the appropriate container.
 
         if (draggedControl.IsCurrentlyDragging && !DragBounds.Contains(clientLocation))
@@ -1051,7 +1051,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
             toolStripToDrag.PerformLayout();
 #if DEBUG
-            ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
+            ISupportToolStripPanel draggedControl = toolStripToDrag;
             if (draggedControl.IsCurrentlyDragging)
             {
                 Debug_VerifyNoOverlaps();

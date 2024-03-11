@@ -45,12 +45,12 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
 
         PropertyDescriptor? prop;
 
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "PasswordChar"
-        };
+        ];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {

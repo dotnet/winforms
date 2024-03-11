@@ -64,7 +64,7 @@ public partial class TabControl : Control
     private readonly MessageId _tabBaseReLayoutMessage = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}{TabBaseReLayoutMessageName}");
 
     // State
-    private readonly List<TabPage> _tabPages = new();
+    private readonly List<TabPage> _tabPages = [];
     private int _lastSelection;
     private short _windowId;
 
@@ -79,7 +79,7 @@ public partial class TabControl : Control
     public TabControl()
         : base()
     {
-        _tabControlState = new Collections.Specialized.BitVector32(0x00000000);
+        _tabControlState = new BitVector32(0x00000000);
 
         _tabCollection = new TabPageCollection(this);
         SetStyle(ControlStyles.UserPaint, false);

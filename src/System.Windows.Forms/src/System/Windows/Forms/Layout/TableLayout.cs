@@ -39,8 +39,8 @@ internal partial class TableLayout : LayoutEngine
     private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
     private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
 
-    private static readonly string?[] _propertiesWhichInvalidateCache = new string?[]
-    {
+    private static readonly string?[] _propertiesWhichInvalidateCache =
+    [
        // suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
 
        null,
@@ -53,7 +53,7 @@ internal partial class TableLayout : LayoutEngine
        PropertyNames.RowStyles,
        PropertyNames.ColumnStyles,
        // RowSpan, ColumnSpan, TableIndex manually call ClearCachedAssignments.
-    };
+    ];
 
     internal static TableLayoutSettings CreateSettings(IArrangedElement owner)
     {
@@ -225,12 +225,12 @@ internal partial class TableLayout : LayoutEngine
         Strip[] cols = containerInfo.Columns;
         if (cols.Length != 0 && totalSpace.Width > usedSpace.Width)
         {
-            cols[cols.Length - 1].MinSize += totalSpace.Width - usedSpace.Width;
+            cols[^1].MinSize += totalSpace.Width - usedSpace.Width;
         }
 
         if (rows.Length != 0 && totalSpace.Height > usedSpace.Height)
         {
-            rows[rows.Length - 1].MinSize += totalSpace.Height - usedSpace.Height;
+            rows[^1].MinSize += totalSpace.Height - usedSpace.Height;
         }
     }
 
@@ -1393,7 +1393,7 @@ internal partial class TableLayout : LayoutEngine
     private static void Debug_VerifyAssignmentsAreCurrent(IArrangedElement container, ContainerInfo containerInfo)
     {
 #if DEBUG
-        Dictionary<IArrangedElement, LayoutInfo> oldLayoutInfo = new();
+        Dictionary<IArrangedElement, LayoutInfo> oldLayoutInfo = [];
         ArrangedElementCollection children = container.Children;
         List<LayoutInfo> childrenInfo = new(children.Count);
 

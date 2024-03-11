@@ -126,7 +126,7 @@ public partial class TreeView : Control
     internal TreeNodeCollection? _nodes;
     internal TreeNode? _editNode;
     internal TreeNode _root;
-    internal Dictionary<IntPtr, TreeNode> _nodesByHandle = new();
+    internal Dictionary<IntPtr, TreeNode> _nodesByHandle = [];
     internal bool _nodesCollectionClear; // this is set when the treeNodeCollection is getting cleared and used by TreeView
     internal TreeViewLabelEditNativeWindow? _labelEdit;
     private MouseButtons _downButton;
@@ -1086,7 +1086,7 @@ public partial class TreeView : Control
         {
             if (IsHandleCreated)
             {
-                IntPtr hItem = PInvoke.SendMessage(this, PInvoke.TVM_GETNEXTITEM, (WPARAM)(uint)PInvoke.TVGN_CARET);
+                IntPtr hItem = PInvoke.SendMessage(this, PInvoke.TVM_GETNEXTITEM, (WPARAM)PInvoke.TVGN_CARET);
                 if (hItem == IntPtr.Zero)
                 {
                     return null;
@@ -1113,7 +1113,7 @@ public partial class TreeView : Control
                 Debug.Assert(_selectedNode is null || _selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
                 nint hnode = (value is null ? 0 : value.Handle);
-                PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_CARET, (LPARAM)hnode);
+                PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_CARET, (LPARAM)hnode);
                 _selectedNode = null;
             }
             else
@@ -1299,7 +1299,7 @@ public partial class TreeView : Control
         {
             if (IsHandleCreated)
             {
-                IntPtr hitem = PInvoke.SendMessage(this, PInvoke.TVM_GETNEXTITEM, (WPARAM)(uint)PInvoke.TVGN_FIRSTVISIBLE);
+                IntPtr hitem = PInvoke.SendMessage(this, PInvoke.TVM_GETNEXTITEM, (WPARAM)PInvoke.TVGN_FIRSTVISIBLE);
                 return (hitem == IntPtr.Zero ? null : NodeFromHandle(hitem));
             }
 
@@ -1315,7 +1315,7 @@ public partial class TreeView : Control
                 Debug.Assert(_topNode is null || _topNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
                 nint hnode = (value is null ? 0 : value.Handle);
-                PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_FIRSTVISIBLE, (LPARAM)hnode);
+                PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_FIRSTVISIBLE, (LPARAM)hnode);
                 _topNode = null;
             }
             else
@@ -1983,7 +1983,7 @@ public partial class TreeView : Control
         }
 
         newImageList.Images.AddRange(images);
-        PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE, (LPARAM)newImageList.Handle);
+        PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)PInvoke.TVSIL_STATE, (LPARAM)newImageList.Handle);
 
         _internalStateImageList?.Dispose();
         _internalStateImageList = newImageList;
@@ -1993,7 +1993,7 @@ public partial class TreeView : Control
     {
         // In certain cases (TREEVIEWSTATE_checkBoxes) e.g., the Native TreeView leaks the imageList
         // even if set by us. To prevent any leaks, we always destroy what was there after setting a new list.
-        IntPtr handleOld = PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE, (LPARAM)handle);
+        IntPtr handleOld = PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)PInvoke.TVSIL_STATE, (LPARAM)handle);
         if ((handleOld != IntPtr.Zero) && (handleOld != handle))
         {
             PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handleOld));
@@ -2004,13 +2004,13 @@ public partial class TreeView : Control
     // We must destroy it explicitly.
     private void DestroyNativeStateImageList(bool reset)
     {
-        IntPtr handle = PInvoke.SendMessage(this, PInvoke.TVM_GETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE);
+        IntPtr handle = PInvoke.SendMessage(this, PInvoke.TVM_GETIMAGELIST, (WPARAM)PInvoke.TVSIL_STATE);
         if (handle != IntPtr.Zero)
         {
             PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handle));
             if (reset)
             {
-                PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE);
+                PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)PInvoke.TVSIL_STATE);
             }
         }
     }
@@ -2676,7 +2676,7 @@ public partial class TreeView : Control
         // If the user shows the ContextMenu bu overriding the WndProc( ), then the treeView
         // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
         // So we need to get the native TREEVIEW out of this weird state.
-        PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_DROPHILITE);
+        PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE);
 
         // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
         // event before calling defWndProc or else it won't get fired until the button
@@ -3117,7 +3117,7 @@ public partial class TreeView : Control
         ContextMenuStrip strip = (ContextMenuStrip)sender!;
         // Unhook the Event.
         strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-        PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_DROPHILITE);
+        PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE);
     }
 
     private void UnhookNodes()

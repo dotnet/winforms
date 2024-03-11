@@ -88,7 +88,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     }
 
     internal int _index;                  // our index into our parents child array
-    internal List<TreeNode> _childNodes = new();
+    internal List<TreeNode> _childNodes = [];
     internal TreeNode? _parent;
     internal TreeView? _treeView;
     private bool _expandOnRealization;
@@ -644,7 +644,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return null;
             }
 
-            return _childNodes[_childNodes.Count - 1];
+            return _childNodes[^1];
         }
     }
 
@@ -697,7 +697,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 LRESULT next = PInvoke.SendMessage(
                     tv,
                     PInvoke.TVM_GETNEXTITEM,
-                    (WPARAM)(uint)PInvoke.TVGN_NEXTVISIBLE,
+                    (WPARAM)PInvoke.TVGN_NEXTVISIBLE,
                     (LPARAM)node.Handle);
 
                 if (next != 0)
@@ -855,7 +855,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 LRESULT prev = PInvoke.SendMessage(
                     tv,
                     PInvoke.TVM_GETNEXTITEM,
-                    (WPARAM)(uint)PInvoke.TVGN_PREVIOUSVISIBLE,
+                    (WPARAM)PInvoke.TVGN_PREVIOUSVISIBLE,
                     (LPARAM)node.Handle);
 
                 if (prev != 0)

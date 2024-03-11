@@ -380,7 +380,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
             }
 
-            Properties.SetInteger(s_propComboBoxCellDropDownWidth, (int)value);
+            Properties.SetInteger(s_propComboBoxCellDropDownWidth, value);
             if (OwnsEditingComboBox(RowIndex))
             {
                 EditingComboBox.DropDownWidth = value;
@@ -467,7 +467,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
             }
 
-            Properties.SetInteger(s_propComboBoxCellMaxDropDownItems, (int)value);
+            Properties.SetInteger(s_propComboBoxCellMaxDropDownItems, value);
             if (OwnsEditingComboBox(RowIndex))
             {
                 EditingComboBox.MaxDropDownItems = value;
@@ -1403,7 +1403,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             comboBox.ValueMember = ValueMember;
             if (HasItems && DataSource is null && Items.Count > 0)
             {
-                comboBox.Items.AddRange(Items.InnerArray.ToArray());
+                comboBox.Items.AddRange([.. Items.InnerArray]);
             }
 
             comboBox.Sorted = Sorted;

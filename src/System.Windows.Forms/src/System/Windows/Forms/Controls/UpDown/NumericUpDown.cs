@@ -86,7 +86,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     {
         get
         {
-            _accelerations ??= new NumericUpDownAccelerationCollection();
+            _accelerations ??= [];
 
             return _accelerations;
         }

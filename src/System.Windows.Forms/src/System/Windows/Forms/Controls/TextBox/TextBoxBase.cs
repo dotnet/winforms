@@ -154,13 +154,13 @@ public abstract partial class TextBoxBase : Control
         }
         set
         {
-            s_shortcutsToDisable ??= new int[]
-                {
+            s_shortcutsToDisable ??=
+                [
                     (int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
                     (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
                     (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
                     (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ
-                };
+                ];
 
             _textBoxFlags[shortcutsEnabled] = value;
         }
@@ -596,7 +596,7 @@ public abstract partial class TextBoxBase : Control
         get
         {
             string text = Text;
-            List<string> list = new();
+            List<string> list = [];
 
             int lineStart = 0;
             while (lineStart < text.Length)
@@ -629,12 +629,12 @@ public abstract partial class TextBoxBase : Control
             }
 
             // Corner case -- last character in Text is a new line; need to add blank line to list
-            if (text.Length > 0 && (text[text.Length - 1] == '\r' || text[text.Length - 1] == '\n'))
+            if (text.Length > 0 && (text[^1] == '\r' || text[^1] == '\n'))
             {
                 list.Add(string.Empty);
             }
 
-            return list.ToArray();
+            return [.. list];
         }
         set
         {
@@ -1443,7 +1443,7 @@ public abstract partial class TextBoxBase : Control
     protected override bool ProcessDialogKey(Keys keyData)
     {
         s_controlKeyboardRouting.TraceVerbose($"TextBoxBase.ProcessDialogKey [{keyData}]");
-        Keys keyCode = (Keys)keyData & Keys.KeyCode;
+        Keys keyCode = keyData & Keys.KeyCode;
 
         if (keyCode == Keys.Tab && AcceptsTab && (keyData & Keys.Control) != 0)
         {

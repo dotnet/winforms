@@ -21,7 +21,7 @@ internal partial class SpecialFolderEnumConverter : EnumConverter
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
         StandardValuesCollection values = base.GetStandardValues(context);
-        List<object> list = new();
+        List<object> list = [];
         bool personalSeen = false;
         for (int i = 0; i < values.Count; i++)
         {

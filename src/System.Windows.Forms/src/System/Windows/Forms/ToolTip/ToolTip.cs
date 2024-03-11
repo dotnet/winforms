@@ -33,7 +33,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     private const int LocationIndexBottom = 2;
     private const int LocationIndexLeft = 3;
     private const int LocationTotal = 4;
-    private readonly Dictionary<Control, TipInfo> _tools = new();
+    private readonly Dictionary<Control, TipInfo> _tools = [];
     private readonly int[] _delayTimes = new int[4];
     private bool _auto = true;
     private bool _showAlways;
@@ -47,7 +47,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     private string _toolTipTitle = string.Empty;
     private ToolTipIcon _toolTipIcon = ToolTipIcon.None;
     private ToolTipTimer? _timer;
-    private readonly Dictionary<HWND, Control> _owners = new();
+    private readonly Dictionary<HWND, Control> _owners = [];
     private bool _stripAmpersands;
     private bool _useAnimation = true;
     private bool _useFading = true;
@@ -66,7 +66,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     ///  Adding a tool twice breaks the ToolTip, so we need to track which
     ///  tools are created to prevent this.
     /// </summary>
-    private readonly HashSet<Control> _created = new();
+    private readonly HashSet<Control> _created = [];
 
     private bool _cancelled;
 
@@ -482,7 +482,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             }
 
             Control? currentTopLevel = null;
-            Control[] controls = _tools.Keys.ToArray();
+            Control[] controls = [.. _tools.Keys];
             for (int i = 0; i < controls.Length; i++)
             {
                 var control = controls[i];
@@ -790,7 +790,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
     private void CreateAllRegions()
     {
-        Control[] controls = _tools.Keys.ToArray();
+        Control[] controls = [.. _tools.Keys];
         foreach (Control control in controls)
         {
             CreateRegion(control);
@@ -799,7 +799,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
     private void DestroyAllRegions()
     {
-        Control[] controls = _tools.Keys.ToArray();
+        Control[] controls = [.. _tools.Keys];
         foreach (Control control in controls)
         {
             // DataGridView manages its own tool tip.
@@ -960,7 +960,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             return _delayTimes[(int)type];
         }
 
-        return (int)PInvoke.SendMessage(this, PInvoke.TTM_GETDELAYTIME, (WPARAM)(uint)type);
+        return (int)PInvoke.SendMessage(this, PInvoke.TTM_GETDELAYTIME, (WPARAM)type);
     }
 
     internal bool GetHandleCreated() => _window is not null && _window.Handle != IntPtr.Zero;
@@ -1143,7 +1143,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     /// </summary>
     public void RemoveAll()
     {
-        Control[] controls = _tools.Keys.ToArray();
+        Control[] controls = [.. _tools.Keys];
         foreach (Control control in controls)
         {
             if (control.IsHandleCreated)
@@ -1177,7 +1177,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (GetHandleCreated() && time >= 0)
         {
-            PInvoke.SendMessage(this, PInvoke.TTM_SETDELAYTIME, (WPARAM)(uint)type, (LPARAM)time);
+            PInvoke.SendMessage(this, PInvoke.TTM_SETDELAYTIME, (WPARAM)type, (LPARAM)time);
             if (type == PInvoke.TTDT_AUTOPOP && time != InfiniteDelay)
             {
                 IsPersistent = false;
@@ -1555,11 +1555,13 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         int centeredX = toolRectangle.Left + toolRectangle.Width / 2 - width / 2; // tooltip will be aligned with tool vertically
         int centeredY = toolRectangle.Top + toolRectangle.Height / 2 - height / 2; // tooltip will be aligned with tool horizontally
 
-        Rectangle[] possibleLocations = new Rectangle[LocationTotal];
-        possibleLocations[LocationIndexTop] = new Rectangle(centeredX, toolRectangle.Top - height, width, height);
-        possibleLocations[LocationIndexRight] = new Rectangle(toolRectangle.Right, centeredY, width, height);
-        possibleLocations[LocationIndexBottom] = new Rectangle(centeredX, toolRectangle.Bottom, width, height);
-        possibleLocations[LocationIndexLeft] = new Rectangle(toolRectangle.Left - width, centeredY, width, height);
+        Rectangle[] possibleLocations =
+        [
+            new Rectangle(centeredX, toolRectangle.Top - height, width, height),
+            new Rectangle(toolRectangle.Right, centeredY, width, height),
+            new Rectangle(centeredX, toolRectangle.Bottom, width, height),
+            new Rectangle(toolRectangle.Left - width, centeredY, width, height),
+        ];
 
         // Neighboring tools should not be overlapped (ideally) by tooltip.
         IList<Rectangle> neighboringToolsRectangles = tool.GetNeighboringToolsRectangles();
@@ -1777,7 +1779,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
     private void HideAllToolTips()
     {
-        Control[] controls = _owners.Values.ToArray();
+        Control[] controls = [.. _owners.Values];
         for (int i = 0; i < controls.Length; i++)
         {
             Hide(controls[i]);
@@ -1953,7 +1955,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         ToolInfoWrapper<Control> toolInfo = default;
         if (toolInfo.SendMessage(this, PInvoke.TTM_GETCURRENTTOOLW) != 0)
         {
-            return (HWND)toolInfo.Info.hwnd;
+            return toolInfo.Info.hwnd;
         }
 
         return default;

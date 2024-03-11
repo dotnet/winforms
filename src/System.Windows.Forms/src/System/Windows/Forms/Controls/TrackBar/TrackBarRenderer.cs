@@ -126,7 +126,7 @@ public static class TrackBarRenderer
         while (numTicks > 0)
         {
             // draw the nth tick
-            float x = bounds.X + ((float)(numTicks - 1)) * inc;
+            float x = bounds.X + (numTicks - 1) * inc;
             t_visualStyleRenderer.DrawEdge(g, new Rectangle((int)Math.Round(x), bounds.Y, lineWidth, bounds.Height), Edges.Left, edgeStyle, EdgeEffects.None);
             numTicks--;
         }
@@ -156,7 +156,7 @@ public static class TrackBarRenderer
         while (numTicks > 0)
         {
             // draw the nth tick
-            float y = bounds.Y + ((float)(numTicks - 1)) * inc;
+            float y = bounds.Y + (numTicks - 1) * inc;
             t_visualStyleRenderer.DrawEdge(g, new Rectangle(bounds.X, (int)Math.Round(y), bounds.Width, lineWidth), Edges.Top, edgeStyle, EdgeEffects.None);
             numTicks--;
         }

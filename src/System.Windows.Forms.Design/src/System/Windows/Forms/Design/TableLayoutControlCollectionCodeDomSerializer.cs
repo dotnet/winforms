@@ -21,7 +21,7 @@ internal class TableLayoutControlCollectionCodeDomSerializer : CollectionCodeDom
     {
         // Here we need to invoke Add once for each and every item in the collection. We can re-use the property
         // reference and method reference, but we will need to recreate the invoke statement each time.
-        CodeStatementCollection statements = new();
+        CodeStatementCollection statements = [];
         CodeMethodReferenceExpression methodRef = new(targetExpression, "Add");
         TableLayoutControlCollection tableCollection = (TableLayoutControlCollection)originalCollection;
 

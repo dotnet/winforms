@@ -56,7 +56,7 @@ public sealed partial class CodeDomComponentSerializationService
             /// <summary>
             ///  A list of MemberData objects representing specific members that should be serialized.
             /// </summary>
-            internal IList<MemberData> Members => _members ??= new List<MemberData>();
+            internal IList<MemberData> Members => _members ??= [];
         }
 
         /// <summary>

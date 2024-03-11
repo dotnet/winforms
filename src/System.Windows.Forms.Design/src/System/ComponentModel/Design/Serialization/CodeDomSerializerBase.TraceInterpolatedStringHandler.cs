@@ -10,7 +10,7 @@ public abstract partial class CodeDomSerializerBase
 {
     /// <summary>
     ///  Provides an interpolated string handler for <see
-    ///  cref="CodeDomSerializerBase.Trace(TraceLevel, ref CodeDomSerializerBase.TraceInterpolatedStringHandler)"/>
+    ///  cref="CodeDomSerializerBase.Trace(TraceLevel, ref TraceInterpolatedStringHandler)"/>
     ///  that only performs formatting if tracing is set to a level higher or equal to the level of the message.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]

@@ -46,7 +46,7 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
     /// </summary>
     public override object Serialize(IDesignerSerializationManager manager, object value)
     {
-        CodeStatementCollection statements = new();
+        CodeStatementCollection statements = [];
         CodeExpression lhs;
 
         if (manager.TryGetContext(out CodeTypeDeclaration? typeDecl) && manager.TryGetContext(out RootContext? rootCtx))

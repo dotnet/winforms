@@ -19,7 +19,7 @@ public abstract partial class AxHost
 
         private TypeConverter? _converter;
         private UITypeEditor? _editor;
-        private readonly List<Attribute> _updateAttributes = new();
+        private readonly List<Attribute> _updateAttributes = [];
         private int _flags;
 
         private const int FlagUpdatedEditorAndConverter = 0x00000001;
@@ -256,7 +256,7 @@ public abstract partial class AxHost
 
             List<Attribute> attributes = new(AttributeArray!);
             attributes.AddRange(_updateAttributes);
-            AttributeArray = attributes.ToArray();
+            AttributeArray = [.. attributes];
             _updateAttributes.Clear();
         }
 

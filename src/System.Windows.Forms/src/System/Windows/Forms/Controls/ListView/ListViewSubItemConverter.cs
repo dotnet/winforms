@@ -32,14 +32,14 @@ internal class ListViewSubItemConverter : ExpandableObjectConverter
             // Subitem has custom style
             if (item.CustomStyle)
             {
-                ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[]
-                {
+                ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(
+                [
                     typeof(ListViewItem),
                     typeof(string),
                     typeof(Color),
                     typeof(Color),
                     typeof(Font)
-                });
+                ]);
                 Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object?[]
                 {
@@ -52,7 +52,7 @@ internal class ListViewSubItemConverter : ExpandableObjectConverter
             }
 
             // Otherwise, just use the text constructor
-            ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
+            ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor([typeof(ListViewItem), typeof(string)]);
             Debug.Assert(ctor is not null, "Expected the constructor to exist.");
             return new InstanceDescriptor(ctor, new object?[] { null, item.Text }, true);
         }

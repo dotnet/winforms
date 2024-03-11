@@ -24,7 +24,7 @@ internal class StringArrayEditor : StringCollectionEditor
     {
         if (editValue is not Array valueArray)
         {
-            return Array.Empty<object>();
+            return [];
         }
 
         object[] items = new object[valueArray.GetLength(0)];

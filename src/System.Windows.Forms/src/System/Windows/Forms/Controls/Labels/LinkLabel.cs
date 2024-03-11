@@ -621,7 +621,7 @@ public partial class LinkLabel : Label, IButtonControl
 
         if (string.IsNullOrEmpty(text))
         {
-            return Array.Empty<CharacterRange>();
+            return [];
         }
 
         StringInfo stringInfo = new(text);
@@ -641,7 +641,7 @@ public partial class LinkLabel : Label, IButtonControl
 
         ranges.Add(new CharacterRange(0, text.Length));
 
-        return ranges.ToArray();
+        return [.. ranges];
     }
 
     /// <summary>

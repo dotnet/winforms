@@ -37,7 +37,7 @@ public class DataGridViewCellStyleConverter : TypeConverter
 
         if (destinationType == typeof(InstanceDescriptor) && value is DataGridViewCellStyle)
         {
-            ConstructorInfo? ctor = value.GetType().GetConstructor(Array.Empty<Type>());
+            ConstructorInfo? ctor = value.GetType().GetConstructor([]);
             return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
         }
 

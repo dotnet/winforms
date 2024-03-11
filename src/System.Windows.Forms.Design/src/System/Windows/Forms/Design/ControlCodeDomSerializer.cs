@@ -379,20 +379,20 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
 
     private void SerializePerformLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
     {
-        SerializeMethodInvocation(manager, statements, control, "PerformLayout", parameters: null, Array.Empty<Type>(), StatementOrdering.Append);
+        SerializeMethodInvocation(manager, statements, control, "PerformLayout", parameters: null, [], StatementOrdering.Append);
     }
 
     private void SerializeResumeLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
     {
         CodeExpressionCollection parameters = new();
         parameters.Add(new CodePrimitiveExpression(false));
-        Type[] paramTypes = { typeof(bool) };
+        Type[] paramTypes = [typeof(bool)];
         SerializeMethodInvocation(manager, statements, control, "ResumeLayout", parameters, paramTypes, StatementOrdering.Append);
     }
 
     private void SerializeSuspendLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
     {
-        SerializeMethodInvocation(manager, statements, control, "SuspendLayout", parameters: null, Array.Empty<Type>(), StatementOrdering.Prepend);
+        SerializeMethodInvocation(manager, statements, control, "SuspendLayout", parameters: null, [], StatementOrdering.Prepend);
     }
 
     /// <summary>

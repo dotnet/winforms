@@ -16,7 +16,7 @@ public partial class DataObject
     private unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC.Interface, IManagedWrapper<IEnumFORMATETC>
     {
         private readonly IDataObject _parent;
-        private readonly List<ComTypes.FORMATETC> _formats = new();
+        private readonly List<ComTypes.FORMATETC> _formats = [];
         private int _current;
 
         public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
