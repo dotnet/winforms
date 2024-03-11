@@ -31,6 +31,10 @@ public class ToolStripDesignerTests
         var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(null);
         mockSite.Setup(s => s.GetService(typeof(ToolStripAdornerWindowService))).Returns(null);
+
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        mockSite.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(mockComponentChangeService.Object);
+
         toolStrip.Site = mockSite.Object;
 
         toolStripDesigner.Initialize(toolStrip);
