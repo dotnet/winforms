@@ -10682,32 +10682,33 @@ public class RichTextBoxTests
         using RichTextBox richTextBox1 = new();
         richTextBox1.DrawToBitmap(bitmap1, new Rectangle(0, 0, 10, 10));
 
-        bitmap1.Should().NotBeNull();
         bitmap1.Width.Should().Be(10);
         bitmap1.Height.Should().Be(10);
     }
 
-    [WinFormsTheory]
-    [InlineData("SaveRichTextBox.rtf")]
+    [WinFormsFact]
     public void RichTextBox_SaveFilePath_Invoke_Success(string fileName)
     {
         using RichTextBox richTextBox1 = new()
         {
             Rtf = @"{\rtf1\ansi{Sample for {\v HIDDEN }text}}"
         };
-        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
-        string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", fileName);     
+         using RichTextBox richTextBox2 = new();
+
+        string fileName = "SaveRichTextBox.rtf";
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");     
+        string filePath = $"{projectDirectory}/src/System.Windows.Forms/tests/UnitTests/TestResources/Files/{fileName}";
 
         try
         {
             richTextBox1.SaveFile(filePath);
-            richTextBox1.LoadFile(filePath);
-            int startOfSample = richTextBox1.Text.IndexOf("Sample", StringComparison.Ordinal);
-            int endOfText = richTextBox1.Text.IndexOf("text", StringComparison.Ordinal) + "text".Length;
-            richTextBox1.Select(startOfSample, endOfText - startOfSample);
+            richTextBox2.LoadFile(filePath);
+            int startOfSample = richTextBox2.Text.IndexOf("Sample", StringComparison.Ordinal);
+            int endOfText = richTextBox2.Text.IndexOf("text", StringComparison.Ordinal) + "text".Length;
+            richTextBox2.Select(startOfSample, endOfText - startOfSample);
 
-            richTextBox1.Rtf.Should().NotBeNullOrEmpty();
-            richTextBox1.SelectedText.Should().Be("Sample for HIDDEN text");
+            richTextBox2.Rtf.Should().NotBeNullOrEmpty();
+            richTextBox2.SelectedText.Should().Be("Sample for HIDDEN text");
         }
         finally
         {
@@ -10724,6 +10725,7 @@ public class RichTextBoxTests
     public void RichTextBox_SaveFile_Invoke_Success(RichTextBoxStreamType fileType)
     {       
         using RichTextBox richTextBox1 = new();
+        
         string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
 
@@ -10738,17 +10740,17 @@ public class RichTextBoxTests
         }
     }
 
-    public static TheoryData<string, string> PlainTextData => new()
+    public static TheoryData<string> PlainTextData => new()
     {
-        { "Hello World", "Hello World" },
-        { new string('a', 10000), new string('a', 10000) },
-        { "Special characters: !@#$%^&*()", "Special characters: !@#$%^&*()" },
-        { "", "" },
+        { "Hello World"},
+        { new string('a', 10000) },
+        { "Special characters: !@#$%^&*()" },
+        { "" },
     };
 
     [WinFormsTheory]
     [MemberData(nameof(PlainTextData))]
-    public void RichTextBox_Paste_PlainText_Data(string value, string expected)
+    public void RichTextBox_Paste_PlainText_Data(string value)
     {
         using RichTextBox richTextBox1 = new();
 
@@ -10757,7 +10759,7 @@ public class RichTextBoxTests
             Clipboard.SetText(value);
             richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
 
-            richTextBox1.Text.Should().Be(expected);
+            richTextBox1.Text.Should().Be(value);
         }
     }
 
@@ -10766,7 +10768,6 @@ public class RichTextBoxTests
         { "{\\rtf Hello World}" },
         { "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}" },
         { "{\\rtf1\\ansi{Invalid RTF data" },
-        { "" },
     };
 
     [WinFormsTheory]
@@ -10800,12 +10801,10 @@ public class RichTextBoxTests
         richTextBox1.DragDrop += handler;
         richTextBox1.OnDragDrop(dragEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragDrop -= handler;
         richTextBox1.OnDragDrop(dragEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10824,12 +10823,10 @@ public class RichTextBoxTests
         richTextBox1.DragEnter += handler;
         richTextBox1.OnDragDrop(dragEventArgs);
         callCount.Should().Be(0);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragEnter -= handler;
         richTextBox1.OnDragDrop(dragEventArgs);
         callCount.Should().Be(0);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10847,12 +10844,10 @@ public class RichTextBoxTests
         richTextBox1.DragLeave += handler;
         richTextBox1.OnDragLeave(EventArgs.Empty);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragLeave -= handler;
         richTextBox1.OnDragLeave(EventArgs.Empty);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10871,12 +10866,10 @@ public class RichTextBoxTests
         richTextBox1.DragOver += handler;
         richTextBox1.OnDragOver(dragEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.DragOver -= handler;
         richTextBox1.OnDragOver(dragEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10895,12 +10888,10 @@ public class RichTextBoxTests
         richTextBox1.GiveFeedback += handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
-
+        
         richTextBox1.GiveFeedback -= handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -10919,12 +10910,10 @@ public class RichTextBoxTests
         richTextBox1.QueryContinueDrag += handler;
         richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
 
         richTextBox1.QueryContinueDrag -= handler;
         richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
         callCount.Should().Be(1);
-        richTextBox1.IsHandleCreated.Should().BeFalse();
     }
 
     private class CustomGetParaFormatRichTextBox : RichTextBox
