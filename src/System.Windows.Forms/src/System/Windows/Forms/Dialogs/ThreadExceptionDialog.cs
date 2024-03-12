@@ -225,7 +225,7 @@ public class ThreadExceptionDialog : Form
         int width = textSize.Width + _scaledPaddingWidth;
         int buttonTop = Math.Max(textSize.Height, _scaledMaxTextHeight) + _scaledPaddingHeight;
 
-        Form? activeForm = Form.ActiveForm;
+        Form? activeForm = ActiveForm;
         if (activeForm is null || activeForm.Text.Length == 0)
         {
             Text = SR.ExDlgCaption;

@@ -1165,7 +1165,7 @@ public unsafe partial class WebBrowserBase : Control
             if (host is not null)
             {
                 IComponent comp = host.RootComponent;
-                if (comp is not null && comp is ContainerControl)
+                if (comp is not null and ContainerControl)
                 {
                     return (ContainerControl)comp;
                 }
@@ -1183,7 +1183,7 @@ public unsafe partial class WebBrowserBase : Control
 
         if (containerControl is null && IsHandleCreated)
         {
-            containerControl = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
+            containerControl = FromHandle(PInvoke.GetParent(this)) as ContainerControl;
         }
 
         // Never use the parking window for this: its hwnd can be destroyed at any time.
@@ -1242,7 +1242,7 @@ public unsafe partial class WebBrowserBase : Control
         // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
         // that is not good enough for DragDrop.
         //
-        if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+        if (Application.OleRequired() != ApartmentState.STA)
         {
             throw new ThreadStateException(SR.ThreadMustBeSTA);
         }

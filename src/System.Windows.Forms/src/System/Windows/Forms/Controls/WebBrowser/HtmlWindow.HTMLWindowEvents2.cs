@@ -31,20 +31,20 @@ public sealed partial class HtmlWindow
         public void onblur(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlWindow.s_eventLostFocus, e);
+            FireEvent(s_eventLostFocus, e);
         }
 
         public bool onerror(string description, string urlString, int line)
         {
             HtmlElementErrorEventArgs e = new(description, urlString, line);
-            FireEvent(HtmlWindow.s_eventError, e);
+            FireEvent(s_eventError, e);
             return e.Handled;
         }
 
         public void onfocus(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlWindow.s_eventGotFocus, e);
+            FireEvent(s_eventGotFocus, e);
         }
 
         public bool onhelp(IHTMLEventObj evtObj)
@@ -56,25 +56,25 @@ public sealed partial class HtmlWindow
         public void onload(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlWindow.s_eventLoad, e);
+            FireEvent(s_eventLoad, e);
         }
 
         public void onresize(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlWindow.s_eventResize, e);
+            FireEvent(s_eventResize, e);
         }
 
         public void onscroll(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlWindow.s_eventScroll, e);
+            FireEvent(s_eventScroll, e);
         }
 
         public void onunload(IHTMLEventObj evtObj)
         {
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(HtmlWindow.s_eventUnload, e);
+            FireEvent(s_eventUnload, e);
             _parent?.WindowShim.OnWindowUnload();
         }
 

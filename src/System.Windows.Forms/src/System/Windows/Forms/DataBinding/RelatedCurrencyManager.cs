@@ -132,7 +132,7 @@ internal class RelatedCurrencyManager : CurrencyManager
     private void ParentManager_MetaDataChanged(object? sender, EventArgs e)
     {
         // Propagate MetaDataChanged events from the parent manager
-        base.OnMetaDataChanged(e);
+        OnMetaDataChanged(e);
     }
 
     private void ParentManager_CurrentItemChanged(object? sender, EventArgs e)

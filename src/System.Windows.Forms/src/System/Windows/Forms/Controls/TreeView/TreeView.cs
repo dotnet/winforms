@@ -3197,7 +3197,7 @@ public partial class TreeView : Control
                         PInvoke.SendMessage(this, PInvoke.TVM_GETITEMW, 0, ref item1);
 
                         TreeNode node = NodeFromHandle(item->hItem)!;
-                        node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
+                        node.CheckedStateInternal = (((int)item1.state >> SHIFTVAL) > 1);
                     }
                 }
 

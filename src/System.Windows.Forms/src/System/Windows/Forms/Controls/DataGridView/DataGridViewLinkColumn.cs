@@ -80,7 +80,7 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         get => base.CellTemplate;
         set
         {
-            if (value is not null && value is not DataGridViewLinkCell)
+            if (value is not null and not DataGridViewLinkCell)
             {
                 throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewLinkCell"));
             }

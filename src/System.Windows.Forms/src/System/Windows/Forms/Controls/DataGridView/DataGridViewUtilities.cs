@@ -17,33 +17,21 @@ internal static class DataGridViewUtilities
     private const byte HorizontalTextMarginRight = 2;
     private const byte VerticalTextMargin = 1;
 
-    internal static ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment)
-    {
+    internal static ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment) =>
         // Why isn't the DataGridView using System.Drawing.ContentAlignment?
-        switch (alignment)
+        alignment switch
         {
-            case DataGridViewContentAlignment.TopLeft:
-                return System.Drawing.ContentAlignment.TopLeft;
-            case DataGridViewContentAlignment.TopCenter:
-                return System.Drawing.ContentAlignment.TopCenter;
-            case DataGridViewContentAlignment.TopRight:
-                return System.Drawing.ContentAlignment.TopRight;
-            case DataGridViewContentAlignment.MiddleLeft:
-                return System.Drawing.ContentAlignment.MiddleLeft;
-            case DataGridViewContentAlignment.MiddleCenter:
-                return System.Drawing.ContentAlignment.MiddleCenter;
-            case DataGridViewContentAlignment.MiddleRight:
-                return System.Drawing.ContentAlignment.MiddleRight;
-            case DataGridViewContentAlignment.BottomLeft:
-                return System.Drawing.ContentAlignment.BottomLeft;
-            case DataGridViewContentAlignment.BottomCenter:
-                return System.Drawing.ContentAlignment.BottomCenter;
-            case DataGridViewContentAlignment.BottomRight:
-                return System.Drawing.ContentAlignment.BottomRight;
-            default:
-                return System.Drawing.ContentAlignment.MiddleCenter;
-        }
-    }
+            DataGridViewContentAlignment.TopLeft => ContentAlignment.TopLeft,
+            DataGridViewContentAlignment.TopCenter => ContentAlignment.TopCenter,
+            DataGridViewContentAlignment.TopRight => ContentAlignment.TopRight,
+            DataGridViewContentAlignment.MiddleLeft => ContentAlignment.MiddleLeft,
+            DataGridViewContentAlignment.MiddleCenter => ContentAlignment.MiddleCenter,
+            DataGridViewContentAlignment.MiddleRight => ContentAlignment.MiddleRight,
+            DataGridViewContentAlignment.BottomLeft => ContentAlignment.BottomLeft,
+            DataGridViewContentAlignment.BottomCenter => ContentAlignment.BottomCenter,
+            DataGridViewContentAlignment.BottomRight => ContentAlignment.BottomRight,
+            _ => ContentAlignment.MiddleCenter,
+        };
 
     internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(
         bool rightToLeft,

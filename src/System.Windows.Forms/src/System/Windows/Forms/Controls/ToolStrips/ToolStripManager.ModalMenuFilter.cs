@@ -70,7 +70,7 @@ public static partial class ToolStripManager
                 if (_showUnderlines != value)
                 {
                     _showUnderlines = value;
-                    ToolStripManager.NotifyMenuModeChange(invalidateText: true, activationChange: false);
+                    NotifyMenuModeChange(invalidateText: true, activationChange: false);
                 }
             }
         }
@@ -236,7 +236,7 @@ public static partial class ToolStripManager
                 // Skip the setter here so we only iterate through the toolstrips once.
                 bool textStyleChanged = _showUnderlines;
                 _showUnderlines = false;
-                ToolStripManager.NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
+                NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
             }
         }
 
@@ -293,7 +293,7 @@ public static partial class ToolStripManager
                 }
                 else if (!MenuKeyToggle)
                 {
-                    ModalMenuFilter.Instance.ShowUnderlines = true;
+                    Instance.ShowUnderlines = true;
                 }
             }
         }
@@ -531,7 +531,7 @@ public static partial class ToolStripManager
             {
                 return true;
             }
-            else if (m.Msg >= (int)PInvoke.WM_NCLBUTTONDOWN && m.Msg <= (int)PInvoke.WM_NCMBUTTONDBLCLK)
+            else if (m.Msg is >= ((int)PInvoke.WM_NCLBUTTONDOWN) and <= ((int)PInvoke.WM_NCMBUTTONDBLCLK))
             {
                 return true;
             }

@@ -96,7 +96,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     ///  Gets or sets the number of decimal places to display in the up-down control.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
-    [DefaultValue(NumericUpDown.DefaultDecimalPlaces)]
+    [DefaultValue(DefaultDecimalPlaces)]
     [SRDescription(nameof(SR.NumericUpDownDecimalPlacesDescr))]
     public int DecimalPlaces
     {
@@ -121,7 +121,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     ///  display the value it contains in hexadecimal format.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
-    [DefaultValue(NumericUpDown.DefaultHexadecimal)]
+    [DefaultValue(DefaultHexadecimal)]
     [SRDescription(nameof(SR.NumericUpDownHexadecimalDescr))]
     public bool Hexadecimal
     {
@@ -275,7 +275,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     ///  separator is displayed in the up-down control when appropriate.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
-    [DefaultValue(NumericUpDown.DefaultThousandsSeparator)]
+    [DefaultValue(DefaultThousandsSeparator)]
     [Localizable(true)]
     [SRDescription(nameof(SR.NumericUpDownThousandsSeparatorDescr))]
     public bool ThousandsSeparator
@@ -422,7 +422,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) && !Spinning)
+        if (InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) && !Spinning)
         {
             StartAcceleration();
         }
@@ -435,7 +435,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     /// </summary>
     protected override void OnKeyUp(KeyEventArgs e)
     {
-        if (base.InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
+        if (InterceptArrowKeys && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
         {
             StopAcceleration();
         }
@@ -451,7 +451,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     {
         base.OnTextBoxKeyPress(source, e);
 
-        NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
+        NumberFormatInfo numberFormatInfo = CultureInfo.CurrentCulture.NumberFormat;
         string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
         string groupSeparator = numberFormatInfo.NumberGroupSeparator;
         string negativeSign = numberFormatInfo.NegativeSign;

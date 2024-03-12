@@ -1834,12 +1834,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     internal void InvalidateCachedRowCount(DataGridViewElementStates includeFilter)
     {
-        Debug.Assert(includeFilter == DataGridViewElementStates.Displayed ||
-                     includeFilter == DataGridViewElementStates.Selected ||
-                     includeFilter == DataGridViewElementStates.ReadOnly ||
-                     includeFilter == DataGridViewElementStates.Resizable ||
-                     includeFilter == DataGridViewElementStates.Frozen ||
-                     includeFilter == DataGridViewElementStates.Visible);
+        Debug.Assert(includeFilter is DataGridViewElementStates.Displayed
+            or DataGridViewElementStates.Selected
+            or DataGridViewElementStates.ReadOnly
+            or DataGridViewElementStates.Resizable
+            or DataGridViewElementStates.Frozen
+            or DataGridViewElementStates.Visible);
 
         if (includeFilter == DataGridViewElementStates.Visible)
         {
@@ -1869,12 +1869,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     internal void InvalidateCachedRowsHeight(DataGridViewElementStates includeFilter)
     {
-        Debug.Assert(includeFilter == DataGridViewElementStates.Displayed ||
-                     includeFilter == DataGridViewElementStates.Selected ||
-                     includeFilter == DataGridViewElementStates.ReadOnly ||
-                     includeFilter == DataGridViewElementStates.Resizable ||
-                     includeFilter == DataGridViewElementStates.Frozen ||
-                     includeFilter == DataGridViewElementStates.Visible);
+        Debug.Assert(includeFilter is DataGridViewElementStates.Displayed
+            or DataGridViewElementStates.Selected
+            or DataGridViewElementStates.ReadOnly
+            or DataGridViewElementStates.Resizable
+            or DataGridViewElementStates.Frozen
+            or DataGridViewElementStates.Visible);
 
         if (includeFilter == DataGridViewElementStates.Visible)
         {
@@ -2281,7 +2281,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     internal void SetRowState(int rowIndex, DataGridViewElementStates state, bool value)
     {
-        Debug.Assert(state == DataGridViewElementStates.Displayed || state == DataGridViewElementStates.Selected || state == DataGridViewElementStates.ReadOnly || state == DataGridViewElementStates.Resizable || state == DataGridViewElementStates.Frozen || state == DataGridViewElementStates.Visible);
+        Debug.Assert(state is DataGridViewElementStates.Displayed
+            or DataGridViewElementStates.Selected
+            or DataGridViewElementStates.ReadOnly
+            or DataGridViewElementStates.Resizable
+            or DataGridViewElementStates.Frozen
+            or DataGridViewElementStates.Visible);
 
         DataGridViewRow dataGridViewRow = SharedRow(rowIndex);
         if (dataGridViewRow.Index == -1)
@@ -2289,9 +2294,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             // row is shared
             if (((_rowStates[rowIndex] & state) != 0) != value)
             {
-                if (state == DataGridViewElementStates.Frozen ||
-                    state == DataGridViewElementStates.Visible ||
-                    state == DataGridViewElementStates.ReadOnly)
+                if (state is DataGridViewElementStates.Frozen or DataGridViewElementStates.Visible or DataGridViewElementStates.ReadOnly)
                 {
                     dataGridViewRow.OnSharedStateChanging(rowIndex, state);
                 }

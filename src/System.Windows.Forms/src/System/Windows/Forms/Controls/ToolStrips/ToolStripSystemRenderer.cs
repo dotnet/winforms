@@ -611,7 +611,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
 
             state = GetSplitButtonToolBarState(splitButton, true);
 
-            if ((state == ToolBarState.Pressed) || (state == ToolBarState.Hot))
+            if (state is ToolBarState.Pressed or ToolBarState.Hot)
             {
                 RenderSmall3DBorderInternal(g, dropDownRect, state, rightToLeft);
             }
@@ -732,7 +732,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
 
     private static void RenderSmall3DBorderInternal(Graphics g, Rectangle bounds, ToolBarState state, bool rightToLeft)
     {
-        if ((state == ToolBarState.Hot) || (state == ToolBarState.Pressed) || (state == ToolBarState.Checked))
+        if (state is ToolBarState.Hot or ToolBarState.Pressed or ToolBarState.Checked)
         {
             Pen leftPen, topPen, rightPen, bottomPen;
             topPen = (state == ToolBarState.Hot) ? SystemPens.ButtonHighlight : SystemPens.ButtonShadow;

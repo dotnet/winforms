@@ -137,7 +137,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
     {
         set
         {
-            Debug.Assert(value >= DataGridViewImageCellLayout.NotSet && value <= DataGridViewImageCellLayout.Zoom);
+            Debug.Assert(value is >= DataGridViewImageCellLayout.NotSet and <= DataGridViewImageCellLayout.Zoom);
             if (ImageLayout != value)
             {
                 Properties.SetInteger(s_propImageCellLayout, (int)value);
@@ -238,10 +238,10 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
         else
         {
-            dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType)!;
+            dataGridViewCell = (DataGridViewImageCell)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewCell);
+        CloneInternal(dataGridViewCell);
         dataGridViewCell.ValueIsIconInternal = ValueIsIcon;
         dataGridViewCell.Description = Description;
         dataGridViewCell.ImageLayoutInternal = ImageLayout;
@@ -437,7 +437,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         Rectangle borderWidthsRect = StdBorderWidths;
         int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
-        DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
+        DataGridViewFreeDimension freeDimension = GetFreeDimensionFromConstraint(constraintSize);
         object? formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
         Image? img = formattedValue as Image;
         Icon? ico = null;

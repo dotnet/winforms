@@ -285,9 +285,9 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
         }
 
         Bitmap bitmap;
-        if (original._image is Bitmap)
+        if (original._image is Bitmap originalBitmap)
         {
-            bitmap = (Bitmap)original._image;
+            bitmap = originalBitmap;
         }
         else if (original._image is Icon originalIcon)
         {
@@ -629,7 +629,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                 BitmapData? targetData = null;
                 try
                 {
-                    tmpBitmap = Bitmap.FromHbitmap((IntPtr)imageInfo.hbmImage);
+                    tmpBitmap = Image.FromHbitmap((IntPtr)imageInfo.hbmImage);
 
                     bmpData = tmpBitmap.LockBits(imageInfo.rcImage, ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
 
