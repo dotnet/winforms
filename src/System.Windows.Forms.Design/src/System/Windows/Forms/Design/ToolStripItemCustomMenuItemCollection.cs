@@ -154,10 +154,10 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                 // alignmentToolStripMenuItem
                 alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment");
-                alignmentToolStripMenuItem.DropDownItems.AddRange([leftToolStripMenuItem, rightToolStripMenuItem]);
+                alignmentToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[leftToolStripMenuItem, rightToolStripMenuItem]);
                 // displayStyleToolStripMenuItem
                 displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle");
-                displayStyleToolStripMenuItem.DropDownItems.AddRange([noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem]);
+                displayStyleToolStripMenuItem.DropDownItems.AddRange((ToolStripItem[])[noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem]);
 
                 if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
                 {

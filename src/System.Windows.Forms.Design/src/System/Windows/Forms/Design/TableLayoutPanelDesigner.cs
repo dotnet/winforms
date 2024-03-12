@@ -369,7 +369,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         autosize.Click += new EventHandler(OnAutoSizeClick);
 
         ToolStripDropDownMenu menu = new();
-        menu.Items.AddRange([add, insert, delete, separator, label, absolute, percent, autosize]);
+        menu.Items.AddRange((ToolStripItem[])[add, insert, delete, separator, label, absolute, percent, autosize]);
         menu.Tag = isRow;
         menu.Opening += new CancelEventHandler(OnRowColMenuOpening);
 
