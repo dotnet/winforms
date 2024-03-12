@@ -451,6 +451,8 @@ internal class ToolStripDesigner : ControlDesigner
         }
     }
 
+    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetRequiredService<IComponentChangeService>();
+
     /// <summary>
     ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves.
     /// </summary>
@@ -1198,6 +1200,12 @@ internal class ToolStripDesigner : ControlDesigner
             {
                 _toolStripAdornerWindowService = null;
             }
+
+            ComponentChangeService.ComponentAdding -= ComponentChangeSvc_ComponentAdding;
+            ComponentChangeService.ComponentAdded -= ComponentChangeSvc_ComponentAdded;
+            ComponentChangeService.ComponentRemoving -= ComponentChangeSvc_ComponentRemoving;
+            ComponentChangeService.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
+            ComponentChangeService.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
         }
 
         base.Dispose(disposing);
@@ -1395,13 +1403,16 @@ internal class ToolStripDesigner : ControlDesigner
     {
         base.Initialize(component);
         AutoResizeHandles = true;
-        if (TryGetService(out _host))
-        {
-            _componentChangeService = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
-        }
+        ComponentChangeService.ComponentAdding += ComponentChangeSvc_ComponentAdding;
+        ComponentChangeService.ComponentAdded += ComponentChangeSvc_ComponentAdded;
+        ComponentChangeService.ComponentRemoving += ComponentChangeSvc_ComponentRemoving;
+        ComponentChangeService.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
+        ComponentChangeService.ComponentChanged += ComponentChangeSvc_ComponentChanged;
 
         // initialize new Manager For Editing ToolStrips
         _editManager = new ToolStripEditorManager(component);
+
+        _host = GetRequiredService<IDesignerHost>();
 
         // Setup the dropdown if our handle has been created.
         if (Control.IsHandleCreated)
@@ -1412,7 +1423,7 @@ internal class ToolStripDesigner : ControlDesigner
         // Hookup to the AdornerService for the overflow dropdown to be parent properly.
         _toolStripAdornerWindowService = GetService<ToolStripAdornerWindowService>();
 
-        // Make sure the overflow is not toplevel
+        // Make sure the overflow is not topLevel
         ToolStrip.OverflowButton.DropDown.TopLevel = false;
 
         // init the verb.
@@ -1485,23 +1496,20 @@ internal class ToolStripDesigner : ControlDesigner
 
         if (parentPanel is not null)
         {
-            if (!(ToolStrip is MenuStrip))
+            if (ToolStrip is not MenuStrip)
             {
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parentPanel)["Controls"];
 
-                _componentChangeService?.OnComponentChanging(parentPanel, controlsProp);
+                ComponentChangeService.OnComponentChanging(parentPanel, controlsProp);
 
                 parentPanel.Join(ToolStrip, parentPanel.Rows.Length);
 
-                _componentChangeService?.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
+                ComponentChangeService.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
 
                 // Try to fire ComponentChange on the Location Property for ToolStrip.
                 PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
-                if (_componentChangeService is not null)
-                {
-                    _componentChangeService.OnComponentChanging(ToolStrip, locationProp);
-                    _componentChangeService.OnComponentChanged(ToolStrip, locationProp);
-                }
+                ComponentChangeService.OnComponentChanging(ToolStrip, locationProp);
+                ComponentChangeService.OnComponentChanged(ToolStrip, locationProp);
             }
         }
 
