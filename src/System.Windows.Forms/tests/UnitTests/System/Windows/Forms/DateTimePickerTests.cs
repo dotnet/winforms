@@ -161,6 +161,141 @@ public class DateTimePickerTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.Format = value);
     }
 
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTitleBackColor_GetSet_ReturnsExpected()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        // Act
+        control.CalendarTitleBackColor = expectedColor;
+
+        // Assert
+        Assert.Equal(expectedColor, control.CalendarTitleBackColor);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTitleBackColor_SetEmpty_ThrowsArgumentException()
+    {
+        using DateTimePicker control = new();
+        Assert.Throws<ArgumentException>(() => control.CalendarTitleBackColor = Color.Empty);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarForeColor_GetSet_ReturnsExpected()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        // Act
+        control.CalendarForeColor = expectedColor;
+
+        // Assert
+        Assert.Equal(expectedColor, control.CalendarForeColor);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarForeColor_SetEmpty_ThrowsArgumentException()
+    {
+        using DateTimePicker control = new();
+        Assert.Throws<ArgumentException>(() => control.CalendarForeColor = Color.Empty);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTitleForeColor_GetSet_ReturnsExpected()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        // Act
+        control.CalendarTitleForeColor = expectedColor;
+
+        // Assert
+        Assert.Equal(expectedColor, control.CalendarTitleForeColor);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTitleForeColor_SetEmpty_ThrowsArgumentException()
+    {
+        using DateTimePicker control = new();
+        Assert.Throws<ArgumentException>(() => control.CalendarTitleForeColor = Color.Empty);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTrailingForeColor_GetSet_ReturnsExpected()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        // Act
+        control.CalendarTrailingForeColor = expectedColor;
+
+        // Assert
+        Assert.Equal(expectedColor, control.CalendarTrailingForeColor);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarTrailingForeColor_SetEmpty_ThrowsArgumentException()
+    {
+        using DateTimePicker control = new();
+        Assert.Throws<ArgumentException>(() => control.CalendarTrailingForeColor = Color.Empty);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarMonthBackground_GetSet_ReturnsExpected()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        var expectedColor = Color.Red;
+
+        // Act
+        control.CalendarMonthBackground = expectedColor;
+
+        // Assert
+        Assert.Equal(expectedColor, control.CalendarMonthBackground);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CalendarMonthBackground_SetEmpty_ThrowsArgumentException()
+    {
+        using DateTimePicker control = new();
+        Assert.Throws<ArgumentException>(() => control.CalendarMonthBackground = Color.Empty);
+    }
+
+    [WinFormsFact]
+    public void Test_BackColorChanged_Event()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        bool eventWasRaised = false;
+
+        // Act
+        control.BackColorChanged += (sender, args) => eventWasRaised = true;
+        control.BackColor = Color.Red;
+
+        // Assert
+        Assert.True(eventWasRaised);
+    }
+
+    [WinFormsFact]
+    public void Test_BackgroundImageChanged_Event()
+    {
+        // Arrange
+        using DateTimePicker control = new();
+        bool eventWasRaised = false;
+
+        // Act
+        control.BackgroundImageChanged += (sender, args) => eventWasRaised = true;
+        control.BackgroundImage = new Bitmap(10, 10);
+
+        // Assert
+        Assert.True(eventWasRaised);
+    }
+
     [WinFormsTheory]
     [InlineData(ControlStyles.ContainerControl, false)]
     [InlineData(ControlStyles.UserPaint, false)]
