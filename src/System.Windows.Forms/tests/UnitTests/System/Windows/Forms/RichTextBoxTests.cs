@@ -10687,7 +10687,7 @@ public class RichTextBoxTests
     }
 
     [WinFormsFact]
-    public void RichTextBox_SaveFilePath_Invoke_Success(string fileName)
+    public void RichTextBox_SaveFilePath_Invoke_Success()
     {
         using RichTextBox richTextBox1 = new()
         {
