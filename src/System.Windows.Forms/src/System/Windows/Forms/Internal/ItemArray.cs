@@ -29,7 +29,7 @@ internal partial class ItemArray : IComparer<Entry>
     public ItemArray(ListControl listControl)
     {
         _listControl = listControl;
-        _entries = new List<Entry>();
+        _entries = [];
     }
 
     internal IReadOnlyList<Entry?> Entries => _entries;

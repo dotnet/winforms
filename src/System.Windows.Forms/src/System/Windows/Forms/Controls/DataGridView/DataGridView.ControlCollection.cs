@@ -24,7 +24,7 @@ public partial class DataGridView
 
         public void Insert(int index, Control value)
         {
-            ((IList)this).Insert(index, (object)value);
+            ((IList)this).Insert(index, value);
         }
 
         public override void Remove(Control? value)

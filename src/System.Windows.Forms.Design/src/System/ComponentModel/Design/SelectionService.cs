@@ -58,7 +58,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
 
         if (_selection is null)
         {
-            _selection = new();
+            _selection = [];
             // Now is the opportune time to hook up all of our events
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
@@ -225,7 +225,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
             }
         }
 
-        _contextAttributes = new();
+        _contextAttributes = [];
 
         for (int i = 0; i < _selection.Count; i++)
         {
@@ -339,7 +339,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
     {
         // Must clone here. Otherwise the values collection is a live collection and will change when the
         // selection changes. GetSelectedComponents should be a snapshot.
-        return _selection?.ToArray() ?? Array.Empty<IComponent>();
+        return _selection?.ToArray() ?? [];
     }
 
     /// <summary>

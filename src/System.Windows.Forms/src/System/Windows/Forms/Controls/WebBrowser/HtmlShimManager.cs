@@ -32,7 +32,7 @@ internal sealed class HtmlShimManager : IDisposable
 
         if (_htmlDocumentShims is null)
         {
-            _htmlDocumentShims = new Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>();
+            _htmlDocumentShims = [];
             shim = new HtmlDocument.HtmlDocumentShim(doc);
             _htmlDocumentShims[doc] = shim;
         }
@@ -56,7 +56,7 @@ internal sealed class HtmlShimManager : IDisposable
         HtmlWindow.HtmlWindowShim? shim = null;
         if (htmlWindowShims is null)
         {
-            htmlWindowShims = new Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>();
+            htmlWindowShims = [];
             shim = new HtmlWindow.HtmlWindowShim(window);
             htmlWindowShims[window] = shim;
         }
@@ -82,7 +82,7 @@ internal sealed class HtmlShimManager : IDisposable
 
         if (htmlElementShims is null)
         {
-            htmlElementShims = new Dictionary<HtmlElement, HtmlElement.HtmlElementShim>();
+            htmlElementShims = [];
             shim = new HtmlElement.HtmlElementShim(element);
             htmlElementShims[element] = shim;
         }

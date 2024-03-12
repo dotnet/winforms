@@ -260,7 +260,7 @@ public partial class ListView
         {
             ArgumentNullException.ThrowIfNull(values);
 
-            HashSet<int> usedIndices = new();
+            HashSet<int> usedIndices = [];
             int[] indices = new int[values.Length];
 
             for (int i = 0; i < values.Length; i++)

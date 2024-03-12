@@ -71,31 +71,33 @@ internal class ListViewActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new();
-        items.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
-            SR.ListViewActionListEditItemsDisplayName,
-            SR.PropertiesCategoryName,
-            SR.ListViewActionListEditItemsDescription, true));
-        items.Add(new DesignerActionMethodItem(this, "InvokeColumnsDialog",
-            SR.ListViewActionListEditColumnsDisplayName,
-            SR.PropertiesCategoryName,
-            SR.ListViewActionListEditColumnsDescription, true));
-        items.Add(new DesignerActionMethodItem(this, "InvokeGroupsDialog",
-            SR.ListViewActionListEditGroupsDisplayName,
-            SR.PropertiesCategoryName,
-            SR.ListViewActionListEditGroupsDescription, true));
-        items.Add(new DesignerActionPropertyItem("View",
-            SR.ListViewActionListViewDisplayName,
-            SR.PropertiesCategoryName,
-            SR.ListViewActionListViewDescription));
-        items.Add(new DesignerActionPropertyItem("SmallImageList",
-            SR.ListViewActionListSmallImagesDisplayName,
-            SR.PropertiesCategoryName,
-            SR.ListViewActionListSmallImagesDescription));
-        items.Add(new DesignerActionPropertyItem("LargeImageList",
-            SR.ListViewActionListLargeImagesDisplayName,
-            SR.PropertiesCategoryName,
-            SR.ListViewActionListLargeImagesDescription));
+        DesignerActionItemCollection items =
+        [
+            new DesignerActionMethodItem(this, "InvokeItemsDialog",
+                SR.ListViewActionListEditItemsDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListEditItemsDescription, true),
+            new DesignerActionMethodItem(this, "InvokeColumnsDialog",
+                SR.ListViewActionListEditColumnsDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListEditColumnsDescription, true),
+            new DesignerActionMethodItem(this, "InvokeGroupsDialog",
+                SR.ListViewActionListEditGroupsDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListEditGroupsDescription, true),
+            new DesignerActionPropertyItem("View",
+                SR.ListViewActionListViewDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListViewDescription),
+            new DesignerActionPropertyItem("SmallImageList",
+                SR.ListViewActionListSmallImagesDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListSmallImagesDescription),
+            new DesignerActionPropertyItem("LargeImageList",
+                SR.ListViewActionListLargeImagesDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListLargeImagesDescription),
+        ];
         return items;
     }
 }

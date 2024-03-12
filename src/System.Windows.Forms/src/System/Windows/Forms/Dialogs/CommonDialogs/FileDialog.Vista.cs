@@ -199,7 +199,7 @@ public partial class FileDialog
     {
         if (string.IsNullOrEmpty(filter))
         {
-            return Array.Empty<COMDLG_FILTERSPEC>();
+            return [];
         }
 
         // Expected input types:
@@ -210,7 +210,7 @@ public partial class FileDialog
         string[] tokens = filter.Split('|');
         if (tokens.Length % 2 != 0)
         {
-            return Array.Empty<COMDLG_FILTERSPEC>();
+            return [];
         }
 
         var extensions = new COMDLG_FILTERSPEC[tokens.Length / 2];
@@ -242,7 +242,7 @@ public partial class FileDialog
         return ppszName.ToStringAndCoTaskMemFree()!;
     }
 
-    private readonly FileDialogCustomPlacesCollection _customPlaces = new();
+    private readonly FileDialogCustomPlacesCollection _customPlaces = [];
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

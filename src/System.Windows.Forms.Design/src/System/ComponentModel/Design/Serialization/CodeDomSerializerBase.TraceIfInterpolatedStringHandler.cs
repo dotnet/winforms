@@ -10,7 +10,7 @@ public abstract partial class CodeDomSerializerBase
 {
     /// <summary>
     ///  Provides an interpolated string handler for <see
-    ///  cref="CodeDomSerializerBase.TraceIf(System.Diagnostics.TraceLevel,bool,ref System.ComponentModel.Design.Serialization.CodeDomSerializerBase.TraceIfInterpolatedStringHandler)"
+    ///  cref="CodeDomSerializerBase.TraceIf(TraceLevel,bool,ref TraceIfInterpolatedStringHandler)"
     ///  /> that only performs formatting if the condition applies and tracing is set to a level higher or equal to
     ///  the level of the message.
     /// </summary>

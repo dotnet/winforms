@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 public partial class DataGridViewColumnCollection : BaseCollection, IList
 {
     private CollectionChangeEventHandler? _onCollectionChanged;
-    private readonly List<DataGridViewColumn> _items = new();
+    private readonly List<DataGridViewColumn> _items = [];
     private List<DataGridViewColumn>? _itemsSorted;
     private int _lastAccessedSortedIndex = -1;
     private int _columnCountsVisible, _columnCountsVisibleSelected;
@@ -1128,7 +1128,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     [MemberNotNull(nameof(_itemsSorted))]
     private void UpdateColumnOrderCache()
     {
-        _itemsSorted = _items.ToList();
+        _itemsSorted = [.. _items];
         _itemsSorted.Sort(s_columnOrderComparer);
         _lastAccessedSortedIndex = -1;
     }

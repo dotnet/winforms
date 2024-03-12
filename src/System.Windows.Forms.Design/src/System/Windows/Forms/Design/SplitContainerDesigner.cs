@@ -127,7 +127,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     {
         get
         {
-            List<Control> components = new();
+            List<Control> components = [];
             foreach (SplitterPanel panel in _splitContainer!.Controls)
             {
                 components.AddRange(panel.Controls.Cast<Control>());
@@ -353,7 +353,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
         BehaviorService.Invalidate();
 
         // From the BodyAdorners Remove all Glyphs Except the ones for SplitterPanels.
-        List<ControlBodyGlyph> glyphsToRemove = new();
+        List<ControlBodyGlyph> glyphsToRemove = [];
         foreach (ControlBodyGlyph g in bodyGlyphAdorner!.Glyphs)
         {
             if (g.RelatedComponent is not SplitterPanel)

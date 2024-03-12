@@ -929,7 +929,7 @@ public partial class TrackBar : Control, ISupportInitialize
         _cumulativeWheelData += e.Delta;
 
         float partialNotches;
-        partialNotches = (float)_cumulativeWheelData / (float)PInvoke.WHEEL_DELTA;
+        partialNotches = _cumulativeWheelData / (float)PInvoke.WHEEL_DELTA;
 
         if (wheelScrollLines == -1)
         {
@@ -937,7 +937,7 @@ public partial class TrackBar : Control, ISupportInitialize
         }
 
         // Evaluate number of bands to scroll
-        int scrollBands = (int)((float)wheelScrollLines * partialNotches);
+        int scrollBands = (int)(wheelScrollLines * partialNotches);
 
         if (scrollBands != 0)
         {
@@ -946,13 +946,13 @@ public partial class TrackBar : Control, ISupportInitialize
             {
                 absScrollBands = scrollBands;
                 Value = Math.Min(absScrollBands + Value, Maximum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
             else
             {
                 absScrollBands = -scrollBands;
                 Value = Math.Max(Value - absScrollBands, Minimum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
         }
 

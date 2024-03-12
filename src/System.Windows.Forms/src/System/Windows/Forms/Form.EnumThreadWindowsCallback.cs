@@ -27,7 +27,7 @@ public partial class Form
             {
                 // Enumerated window is owned by this Form.
                 // Store it in a list for further treatment.
-                _ownedWindows ??= new();
+                _ownedWindows ??= [];
                 _ownedWindows.Add(hwnd);
             }
 

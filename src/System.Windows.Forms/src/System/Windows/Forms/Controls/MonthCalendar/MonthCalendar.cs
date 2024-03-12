@@ -165,7 +165,7 @@ public partial class MonthCalendar : Control
     [SRDescription(nameof(SR.MonthCalendarAnnuallyBoldedDatesDescr))]
     public DateTime[] AnnuallyBoldedDates
     {
-        get => _annualBoldDates.ToArray();
+        get => [.. _annualBoldDates];
         set
         {
             _annualBoldDates.Clear();
@@ -242,7 +242,7 @@ public partial class MonthCalendar : Control
     [Localizable(true)]
     public DateTime[] BoldedDates
     {
-        get => _boldDates.ToArray();
+        get => [.. _boldDates];
 
         set
         {
@@ -521,7 +521,7 @@ public partial class MonthCalendar : Control
     [SRDescription(nameof(SR.MonthCalendarMonthlyBoldedDatesDescr))]
     public DateTime[] MonthlyBoldedDates
     {
-        get => _monthlyBoldDates.ToArray();
+        get => [.. _monthlyBoldDates];
 
         set
         {
@@ -1753,7 +1753,7 @@ public partial class MonthCalendar : Control
         {
             Span<SYSTEMTIME> times = [(SYSTEMTIME)minDate, (SYSTEMTIME)maxDate];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
-            if (PInvoke.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
+            if (PInvoke.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)flags, ref times[0]) == 0)
             {
                 throw new InvalidOperationException(
                     string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
@@ -2030,7 +2030,7 @@ public partial class MonthCalendar : Control
         try
         {
             // Use BeginInvoke instead of Invoke in case the destination thread is not processing messages.
-            BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), new object[] { sender, pref });
+            BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), [sender, pref]);
         }
         catch (InvalidOperationException)
         {

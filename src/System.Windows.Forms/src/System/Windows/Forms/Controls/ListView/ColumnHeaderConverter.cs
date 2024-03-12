@@ -44,7 +44,7 @@ public class ColumnHeaderConverter : ExpandableObjectConverter
 
             if (col.ImageIndex != -1)
             {
-                ctor = t.GetConstructor(new Type[] { typeof(int) });
+                ctor = t.GetConstructor([typeof(int)]);
                 if (ctor is not null)
                 {
                     id = new InstanceDescriptor(ctor, new object[] { col.ImageIndex }, false);
@@ -53,7 +53,7 @@ public class ColumnHeaderConverter : ExpandableObjectConverter
 
             if (id is null && !string.IsNullOrEmpty(col.ImageKey))
             {
-                ctor = t.GetConstructor(new Type[] { typeof(string) });
+                ctor = t.GetConstructor([typeof(string)]);
                 if (ctor is not null)
                 {
                     id = new InstanceDescriptor(ctor, new object[] { col.ImageKey }, false);
@@ -62,7 +62,7 @@ public class ColumnHeaderConverter : ExpandableObjectConverter
 
             if (id is null)
             {
-                ctor = t.GetConstructor(Array.Empty<Type>());
+                ctor = t.GetConstructor([]);
                 if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, Array.Empty<object>(), false);

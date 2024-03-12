@@ -57,13 +57,13 @@ public partial class ComponentEditorForm
             short* patternBits = stackalloc short[]
             {
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555)
+                unchecked(0x5555)
             };
 
             HBITMAP hbitmapTemp = PInvokeCore.CreateBitmap(8, 8, 1, 1, patternBits);

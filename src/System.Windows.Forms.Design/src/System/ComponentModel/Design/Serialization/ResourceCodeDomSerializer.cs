@@ -269,12 +269,12 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
                         if (manager.TryGetContext(out RootContext? rootCtx))
                         {
                             string? baseType = manager.GetName(rootCtx.Value);
-                            parameters = new CodeExpression[] { new CodeTypeOfExpression(baseType!) };
+                            parameters = [new CodeTypeOfExpression(baseType!)];
                         }
                         else
                         {
                             Trace(TraceLevel.Warning, "No root context, we can only assume the resource manager resource name.");
-                            parameters = new CodeExpression[] { new CodePrimitiveExpression(ResourceManagerName) };
+                            parameters = [new CodePrimitiveExpression(ResourceManagerName)];
                         }
 
                         CodeExpression initExpression = new CodeObjectCreateExpression(typeof(ComponentResourceManager), parameters);

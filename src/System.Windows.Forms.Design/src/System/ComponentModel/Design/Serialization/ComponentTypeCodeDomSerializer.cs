@@ -62,13 +62,13 @@ internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
 
             if (member is CodeMemberMethod method && method.Name.Equals(_initMethodName) && method.Parameters.Count == 0)
             {
-                return new CodeMemberMethod[]
-                {
+                return
+                [
                     method
-                };
+                ];
             }
         }
 
-        return Array.Empty<CodeMemberMethod>();
+        return [];
     }
 }

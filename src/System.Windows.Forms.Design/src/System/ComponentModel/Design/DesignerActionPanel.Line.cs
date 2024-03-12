@@ -10,7 +10,7 @@ internal sealed partial class DesignerActionPanel
 {
     private abstract class Line
     {
-        protected readonly List<Control> AddedControls = new();
+        protected readonly List<Control> AddedControls = [];
 
         protected Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
         {

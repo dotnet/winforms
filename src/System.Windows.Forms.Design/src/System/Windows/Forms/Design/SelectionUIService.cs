@@ -54,8 +54,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         _host = host;
         _dragHandler = null;
         _dragComponents = null;
-        _selectionItems = new();
-        _selectionHandlers = new();
+        _selectionItems = [];
+        _selectionHandlers = [];
         AllowDrop = true;
         // Not really any reason for this, except that it can be handy when using Spy++
         Text = "SelectionUIOverlay";
@@ -957,7 +957,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         }
 
         // Now within the given selection, add those items that have the same UI handler and that have the proper rule constraints.
-        List<object> list = new();
+        List<object> list = [];
         for (int i = 0; i < objects.Length; i++)
         {
             if (GetHandler(objects[i]) == primaryHandler)
@@ -1130,13 +1130,13 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         object[]? selection = null;
         if (components is null)
         {
-            return Array.Empty<object>();
+            return [];
         }
 
         // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
         if (selectionRules != SelectionRules.None)
         {
-            List<object> list = new();
+            List<object> list = [];
             foreach (object comp in components)
             {
                 if (_selectionItems.TryGetValue(comp, out SelectionUIItem? item) && item is not ContainerSelectionUIItem)
@@ -1151,7 +1151,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             selection = list.ToArray();
         }
 
-        return selection ?? (Array.Empty<object>());
+        return selection ?? ([]);
     }
 
     /// <summary>

@@ -94,7 +94,7 @@ public partial class ProfessionalColorTable
         _colorFreshnessKey = ProfessionalColors.ColorFreshnessKey;
         _lastKnownColorScheme = ProfessionalColors.ColorScheme;
 
-        return (Color)ColorTable[color];
+        return ColorTable[color];
     }
 
     private void ResetRGBTable()

@@ -827,7 +827,7 @@ public abstract partial class CodeDomSerializerBase
                                                 {
                                                     // MethodInfo from the reflection Universe might not implement MethodHandle property, once we know that the method is available, get it from the runtime type.
                                                     mi = target.GetType().GetMethod(methodRef.MethodName, paramTypes)!;
-                                                    result = Activator.CreateInstance(type, new object[] { target, mi.MethodHandle.GetFunctionPointer() });
+                                                    result = Activator.CreateInstance(type, [target, mi.MethodHandle.GetFunctionPointer()]);
                                                 }
                                             }
                                         }
@@ -2119,11 +2119,11 @@ public abstract partial class CodeDomSerializerBase
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
 
         // No instance descriptor. See if we can get to a public constructor that takes no arguments
-        ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor(Array.Empty<Type>());
+        ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor([]);
         if (ctor is not null)
         {
             isComplete = false;
-            return new CodeObjectCreateExpression(TypeDescriptor.GetClassName(value)!, Array.Empty<CodeExpression>());
+            return new CodeObjectCreateExpression(TypeDescriptor.GetClassName(value)!, []);
         }
 
         // Nothing worked.

@@ -124,7 +124,7 @@ public partial class ControlDesigner : ComponentDesigner
             {
                 if (control.Site is not null)
                 {
-                    sitedChildren ??= new();
+                    sitedChildren ??= [];
                     sitedChildren.Add(control);
                 }
             }
@@ -210,7 +210,7 @@ public partial class ControlDesigner : ComponentDesigner
     private IDesignerTarget DesignerTarget { get; set; }
 
     private Dictionary<IntPtr, bool> SubclassedChildWindows
-        => _subclassedChildren ??= new Dictionary<IntPtr, bool>();
+        => _subclassedChildren ??= [];
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more
@@ -745,7 +745,7 @@ public partial class ControlDesigner : ComponentDesigner
     /// </summary>
     public virtual GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
     {
-        GlyphCollection glyphs = new();
+        GlyphCollection glyphs = [];
 
         if (selectionType == GlyphSelectionType.NotSelected)
         {
@@ -1423,7 +1423,7 @@ public partial class ControlDesigner : ComponentDesigner
         if (BehaviorService is not null && selectionService is not null)
         {
             // create our list of controls-to-drag
-            List<IComponent> dragControls = new();
+            List<IComponent> dragControls = [];
             ICollection selComps = selectionService.GetSelectedComponents();
 
             // must identify a required parent to avoid dragging mixes of children
@@ -1629,7 +1629,7 @@ public partial class ControlDesigner : ComponentDesigner
         // Handle shadowed properties
         string[] shadowProps = ["Visible", "Enabled", "AllowDrop", "Location", "Name"];
 
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];
@@ -2253,7 +2253,7 @@ public partial class ControlDesigner : ComponentDesigner
         };
 
         string exceptionText = ex.ToString();
-        stringFormat.SetMeasurableCharacterRanges(new CharacterRange[] { new(0, exceptionText.Length) });
+        stringFormat.SetMeasurableCharacterRanges([new(0, exceptionText.Length)]);
 
         // rendering calculations...
         int penThickness = 2;

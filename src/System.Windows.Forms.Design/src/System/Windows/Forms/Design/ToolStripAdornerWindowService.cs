@@ -142,7 +142,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         get => _dropDownCollection;
         set
         {
-            _dropDownCollection ??= new ArrayList();
+            _dropDownCollection ??= [];
         }
     }
 

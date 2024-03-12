@@ -93,17 +93,17 @@ public partial struct LinkArea
 
                     string sep = culture.TextInfo.ListSeparator + " ";
                     TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-                    string?[] args = new string?[]
-                    {
+                    string?[] args =
+                    [
                         intConverter.ConvertToString(context, culture, pt.Start),
                         intConverter.ConvertToString(context, culture, pt.Length)
-                    };
+                    ];
                     return string.Join(sep, args);
                 }
                 else if (destinationType == typeof(InstanceDescriptor))
                 {
                     return new InstanceDescriptor(
-                        typeof(LinkArea).GetConstructor(new Type[] { typeof(int), typeof(int) }),
+                        typeof(LinkArea).GetConstructor([typeof(int), typeof(int)]),
                         new object[] { pt.Start, pt.Length });
                 }
             }
@@ -151,7 +151,7 @@ public partial struct LinkArea
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);
-            return props.Sort(new string[] { nameof(LinkArea.Start), nameof(LinkArea.Length) });
+            return props.Sort([nameof(LinkArea.Start), nameof(LinkArea.Length)]);
         }
 
         /// <summary>

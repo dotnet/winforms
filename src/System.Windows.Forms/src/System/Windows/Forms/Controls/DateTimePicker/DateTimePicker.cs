@@ -735,7 +735,7 @@ public partial class DateTimePicker : Control
         {
             if (_prefHeightCache > -1)
             {
-                return (int)_prefHeightCache;
+                return _prefHeightCache;
             }
 
             // Base the preferred height on the current font
@@ -1318,7 +1318,7 @@ public partial class DateTimePicker : Control
         {
             Span<SYSTEMTIME> times = [(SYSTEMTIME)min, (SYSTEMTIME)max];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
-            PInvoke.SendMessage(this, PInvoke.DTM_SETRANGE, (WPARAM)(uint)flags, ref times[0]);
+            PInvoke.SendMessage(this, PInvoke.DTM_SETRANGE, (WPARAM)flags, ref times[0]);
         }
     }
 
@@ -1454,7 +1454,7 @@ public partial class DateTimePicker : Control
         try
         {
             // Use begininvoke instead of invoke in case the destination thread is not processing messages.
-            BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), new object[] { sender, pref });
+            BeginInvoke(new UserPreferenceChangedEventHandler(UserPreferenceChanged), [sender, pref]);
         }
         catch (InvalidOperationException) { } // If the destination thread does not exist, don't send.
     }

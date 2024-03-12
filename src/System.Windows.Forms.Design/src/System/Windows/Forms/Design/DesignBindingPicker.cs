@@ -727,7 +727,7 @@ namespace System.Windows.Forms.Design
             {
                 try
                 {
-                    BindingSource bindingSource = new();
+                    BindingSource bindingSource = [];
                     bindingSource.DataSource = dataSource;
                     dataSource = bindingSource.List;
                 }
@@ -1191,7 +1191,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Determine properties of list member
-            PropertyDescriptorCollection properties = ListBindingHelper.GetListItemProperties(dataSourceInstance, new PropertyDescriptor[] { propertyDescriptor });
+            PropertyDescriptorCollection properties = ListBindingHelper.GetListItemProperties(dataSourceInstance, [propertyDescriptor]);
             if (properties is null)
             {
                 return;
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Create the BindingSource
-            BindingSource bs = new();
+            BindingSource bs = [];
             try
             {
                 bs.DataSource = dataSource;
@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms.Design
         {
             if (node is not null && IsHandleCreated)
             {
-                BeginInvoke(PostSelectTreeNodeCallback, new object[] { node });
+                BeginInvoke(PostSelectTreeNodeCallback, [node]);
             }
         }
 
@@ -1949,7 +1949,7 @@ namespace System.Windows.Forms.Design
             // Cleared every time DesignBindingPicker dropdown is closed.
             // Every instance of BindingPickerTree has it's own cache,
             // but the basic set of images is shared, see s_defaultImages.
-            private readonly Dictionary<int, ImageList> _imageListCacheByDPI = new();
+            private readonly Dictionary<int, ImageList> _imageListCacheByDPI = [];
             private int _dpi = ScaleHelper.OneHundredPercentLogicalDpi;
 
             internal BindingPickerTree()

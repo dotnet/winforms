@@ -17,7 +17,7 @@ public sealed partial class ImageList
     public sealed partial class ImageCollection : IList
     {
         private readonly ImageList _owner;
-        private readonly List<ImageInfo> _imageInfoCollection = new();
+        private readonly List<ImageInfo> _imageInfoCollection = [];
 
         ///  A caching mechanism for key accessor
         ///  We use an index here rather than control so that we don't have lifetime
@@ -35,7 +35,7 @@ public sealed partial class ImageList
             get
             {
                 // pass back a copy of the current state.
-                StringCollection keysCollection = new();
+                StringCollection keysCollection = [];
 
                 for (int i = 0; i < _imageInfoCollection.Count; i++)
                 {

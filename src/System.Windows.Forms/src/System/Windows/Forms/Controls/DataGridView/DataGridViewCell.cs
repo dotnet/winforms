@@ -2612,24 +2612,24 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
 
         Size textOneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);
-        if ((float)(textOneLineSize.Width / textOneLineSize.Height) <= maxRatio)
+        if (textOneLineSize.Width / textOneLineSize.Height <= maxRatio)
         {
             return textOneLineSize;
         }
 
         flags &= TextFormatSupportedFlags;
-        float maxWidth = (float)(textOneLineSize.Width * textOneLineSize.Width) / (float)textOneLineSize.Height / maxRatio * 1.1F;
+        float maxWidth = textOneLineSize.Width * textOneLineSize.Width / (float)textOneLineSize.Height / maxRatio * 1.1F;
         Size textSize;
         do
         {
             // Don't use passed in graphics so we can optimize measurement
             textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, int.MaxValue), flags);
-            if ((float)(textSize.Width / textSize.Height) <= maxRatio || textSize.Width > (int)maxWidth)
+            if (textSize.Width / textSize.Height <= maxRatio || textSize.Width > (int)maxWidth)
             {
                 return textSize;
             }
 
-            maxWidth = (float)textSize.Width * 0.9F;
+            maxWidth = textSize.Width * 0.9F;
         }
         while (maxWidth > 1.0F);
         return textSize;
@@ -2674,7 +2674,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         {
             flags &= TextFormatSupportedFlags;
             int lastFittingWidth = oneLineSize.Width;
-            float maxWidth = (float)lastFittingWidth * 0.9F;
+            float maxWidth = lastFittingWidth * 0.9F;
             Size textSize;
             do
             {
@@ -2687,7 +2687,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 else
                 {
                     lastFittingWidth = (int)maxWidth;
-                    maxWidth = (float)textSize.Width * 0.9F;
+                    maxWidth = textSize.Width * 0.9F;
                 }
             }
             while (maxWidth > 1.0F);

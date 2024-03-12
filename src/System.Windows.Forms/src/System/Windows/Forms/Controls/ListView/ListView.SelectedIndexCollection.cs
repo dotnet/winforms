@@ -59,7 +59,7 @@ public partial class ListView
                             _owner,
                             PInvoke.LVM_GETNEXTITEM,
                             (WPARAM)displayIndex,
-                            (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+                            (LPARAM)PInvoke.LVNI_SELECTED);
                         if (fidx > -1)
                         {
                             indices[i] = fidx;
@@ -107,7 +107,7 @@ public partial class ListView
                             _owner,
                             PInvoke.LVM_GETNEXTITEM,
                             (WPARAM)fidx,
-                            (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+                            (LPARAM)PInvoke.LVNI_SELECTED);
                         Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                     }
 

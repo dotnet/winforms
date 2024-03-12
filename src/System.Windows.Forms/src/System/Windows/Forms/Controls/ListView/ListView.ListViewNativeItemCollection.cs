@@ -99,7 +99,7 @@ public partial class ListView
                 // This saves a call into NativeListView to retrieve the real index.
                 bool valueChecked = value.Checked;
 
-                _owner.InsertItems(_owner._itemCount, new ListViewItem[] { value }, true);
+                _owner.InsertItems(_owner._itemCount, [value], true);
 
                 if (_owner.IsHandleCreated && !_owner.CheckBoxes && valueChecked)
                 {
@@ -217,7 +217,7 @@ public partial class ListView
                     _owner,
                     PInvoke.LVM_GETNEXTITEM,
                     (WPARAM)(-1),
-                    (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+                    (LPARAM)PInvoke.LVNI_SELECTED);
 
                 for (int i = 0; i < count; i++)
                 {
@@ -232,7 +232,7 @@ public partial class ListView
                             nextSelected = (int)PInvoke.SendMessage(
                                 _owner,
                                 PInvoke.LVM_GETNEXTITEM,
-                                (WPARAM)nextSelected, (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+                                (WPARAM)nextSelected, (LPARAM)PInvoke.LVNI_SELECTED);
                         }
                         else
                         {
@@ -335,7 +335,7 @@ public partial class ListView
                 _owner.ApplyUpdateCachedItems();
             }
 
-            _owner.InsertItems(index, new ListViewItem[] { item }, true);
+            _owner.InsertItems(index, [item], true);
             if (_owner.IsHandleCreated && !_owner.CheckBoxes && item.Checked)
             {
                 _owner.UpdateSavedCheckedItems(item, true /*addItem*/);

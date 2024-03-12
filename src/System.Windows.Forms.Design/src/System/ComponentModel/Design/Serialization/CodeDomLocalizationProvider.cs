@@ -176,8 +176,8 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
         }
 
         Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer> map = model is CodeDomLocalizationModel.None
-            ? _nopMemberSerializers ??= new Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>()
-            : _memberSerializers ??= new Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>();
+            ? _nopMemberSerializers ??= []
+            : _memberSerializers ??= [];
 
         if (!map.TryGetValue(currentSerializer, out ResourcePropertyMemberCodeDomSerializer? newSerializer))
         {

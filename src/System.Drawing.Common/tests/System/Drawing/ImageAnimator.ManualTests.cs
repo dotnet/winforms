@@ -36,9 +36,9 @@ public class ImageAnimatorManualTests
             "animated-timer-0-delay-all-frames.gif",
         ];
 
-        Dictionary<string, EventHandler> handlers = new();
-        Dictionary<string, int> frameIndexes = new();
-        Dictionary<string, Bitmap> bitmaps = new();
+        Dictionary<string, EventHandler> handlers = [];
+        Dictionary<string, int> frameIndexes = [];
+        Dictionary<string, Bitmap> bitmaps = [];
 
         Stopwatch stopwatch = new();
 

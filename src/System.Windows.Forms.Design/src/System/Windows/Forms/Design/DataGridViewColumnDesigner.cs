@@ -248,7 +248,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         PropertyDescriptor? prop = properties["Width"] as PropertyDescriptor;
         if (prop is not null)
         {
-            properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, Array.Empty<Attribute>());
+            properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, []);
         }
 
         prop = properties["Name"] as PropertyDescriptor;

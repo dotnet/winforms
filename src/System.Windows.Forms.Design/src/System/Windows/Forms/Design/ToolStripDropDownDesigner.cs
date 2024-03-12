@@ -199,7 +199,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     {
         // If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
         ICollection selComponents = selectionService.GetSelectedComponents();
-        GlyphCollection glyphs = new();
+        GlyphCollection glyphs = [];
         foreach (object selComp in selComponents)
         {
             if (selComp is ToolStripItem item)
@@ -555,7 +555,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         base.PreFilterProperties(properties);
         PropertyDescriptor prop;
         string[] shadowProps = ["AutoClose", SettingsKeyName, "RightToLeft", "AllowDrop"];
-        Attribute[] empty = Array.Empty<Attribute>();
+        Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
             prop = (PropertyDescriptor)properties[shadowProps[i]];

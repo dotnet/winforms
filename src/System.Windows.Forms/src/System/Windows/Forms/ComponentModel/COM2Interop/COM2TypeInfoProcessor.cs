@@ -136,7 +136,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         }
 
         ITypeInfo* temp = FindTypeInfo(comObject, preferIProvideClassInfo: false);
-        return temp is not null ? (new ITypeInfo*[] { temp }) : new ITypeInfo*[0];
+        return temp is not null ? ([temp]) : [];
     }
 
     /// <summary>
@@ -226,7 +226,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
     private static Com2Properties ProcessTypeInfos(object comObject, ITypeInfo*[] typeInfos)
     {
         int defaultProperty = -1;
-        List<Com2PropertyDescriptor> propList = new();
+        List<Com2PropertyDescriptor> propList = [];
         Guid[] typeGuids = new Guid[typeInfos.Length];
 
         for (int i = 0; i < typeInfos.Length; i++)
@@ -237,7 +237,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
             Guid typeGuid = GetGuidForTypeInfo(typeInfo, versions);
             Com2PropertyDescriptor[]? properties = null;
 
-            s_processedLibraries ??= new();
+            s_processedLibraries ??= [];
 
             bool wasProcessed = typeGuid != Guid.Empty && s_processedLibraries.ContainsKey(typeGuid);
 
@@ -289,7 +289,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         Com2PropertyDescriptor[] temp2 = new Com2PropertyDescriptor[propList.Count];
         propList.CopyTo(temp2, 0);
 
-        return new Com2Properties(comObject, propList.ToArray(), defaultProperty);
+        return new Com2Properties(comObject, [.. propList], defaultProperty);
     }
 
     private static unsafe Guid GetGuidForTypeInfo(ITypeInfo* typeInfo, uint[]? versions)
@@ -412,7 +412,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         ITypeInfo* typeInfo,
         int dispidToGet)
     {
-        Dictionary<string, PropertyInfo> propertyInfo = new();
+        Dictionary<string, PropertyInfo> propertyInfo = [];
 
         int nameDispID = GetNameDispId(dispatch);
         bool addAboutBox = false;
@@ -478,7 +478,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
             properties[info.Index] = new Com2PropertyDescriptor(
                 info.DispId,
                 info.Name,
-                info.Attributes.ToArray(),
+                [.. info.Attributes],
                 info.ReadOnly != PropertyInfo.ReadOnlyFalse,
                 info.ValueType,
                 info.TypeData,
@@ -732,8 +732,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
                 DbgTypeInfoProcessorSwitch.TraceVerbose($"ProcessTypeInfoEnum: processing {nItems} variables");
 
-                List<string> strings = new();
-                List<object?> vars = new();
+                List<string> strings = [];
+                List<object?> vars = [];
 
                 object? varValue = null;
 
@@ -821,7 +821,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 if (strings.Count > 0)
                 {
                     string enumName = $"ITypeInfo_{enumNameBstr.AsSpan()}";
-                    s_builtEnums ??= new();
+                    s_builtEnums ??= [];
                     if (s_builtEnums.TryGetValue(enumName, out Type? typeValue))
                     {
                         return typeValue;

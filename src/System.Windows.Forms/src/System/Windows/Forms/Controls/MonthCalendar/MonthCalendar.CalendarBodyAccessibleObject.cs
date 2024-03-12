@@ -158,7 +158,7 @@ public partial class MonthCalendar
                 return null;
             }
 
-            List<CalendarCellAccessibleObject> headers = new();
+            List<CalendarCellAccessibleObject> headers = [];
 
             foreach (CalendarRowAccessibleObject row in RowsAccessibleObjects)
             {

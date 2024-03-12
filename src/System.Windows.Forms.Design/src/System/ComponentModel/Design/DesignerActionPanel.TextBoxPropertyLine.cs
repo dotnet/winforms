@@ -236,7 +236,7 @@ internal sealed partial class DesignerActionPanel
                     // Previous value wasn't found, select the first one by default
                     if (standardValues.Count > 0)
                     {
-                        SetValue(standardValues[standardValues.Count - 1]);
+                        SetValue(standardValues[^1]);
                     }
                 }
 

@@ -383,7 +383,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                         // Get the objects to copy
-                        List<IComponent> temp = new();
+                        List<IComponent> temp = [];
                         for (int i = 0; i < dragComponents.Length; i++)
                         {
                             temp.Add(dragComponents[i].dragComponent);
@@ -397,7 +397,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                             return;
                         }
 
-                        originalControls = new();
+                        originalControls = [];
                         // And stick the copied controls back into the dragComponents array
                         for (int j = 0; j < temp.Count; j++)
                         {
@@ -504,7 +504,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 
                             if (numberOfTrayControlsAdded > 0)
                             {
-                                List<Control> listOfTrayControls = new();
+                                List<Control> listOfTrayControls = [];
                                 for (int i = 0; i < numberOfTrayControlsAdded; i++)
                                 {
                                     listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
@@ -1006,7 +1006,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     internal List<IComponent> GetSortedDragControls(out int primaryControlIndex)
     {
         // create our list of controls-to-drag
-        List<IComponent> dragControls = new();
+        List<IComponent> dragControls = [];
         primaryControlIndex = -1;
         if ((dragComponents is not null) && (dragComponents.Length > 0))
         {

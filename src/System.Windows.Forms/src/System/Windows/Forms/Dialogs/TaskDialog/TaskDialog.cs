@@ -262,7 +262,7 @@ public partial class TaskDialog : IWin32Window
 
     // remove suppression if issue resolves https://github.com/dotnet/roslyn/issues/68526
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
 #pragma warning restore CS3016
     private static unsafe HRESULT HandleTaskDialogNativeCallback(
         HWND hwnd,

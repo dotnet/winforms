@@ -23,7 +23,7 @@ internal partial class CommandSet
         private readonly IUIService? _uiService;
 
         private readonly CommandSet? _commandSet;
-        private static readonly Dictionary<EventHandler, StatusState> s_commandStatusHash = new();       // Dictionary of the command statuses we are tracking.
+        private static readonly Dictionary<EventHandler, StatusState> s_commandStatusHash = [];       // Dictionary of the command statuses we are tracking.
         private bool _updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
 
         public CommandSetItem(CommandSet commandSet,

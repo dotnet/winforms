@@ -412,14 +412,14 @@ public partial class DataGridView : Control, ISupportInitialize
                                 | State2_UsedFillWeightsDirty] = true;
 
         DisplayedBandsInfo = new DisplayedBandsData();
-        _lstRows = new List<DataGridViewRow>();
+        _lstRows = [];
 
         _converters = new(8);
         GridPenColor = DefaultGridColor;
 
-        _selectedBandIndexes = new DataGridViewIntLinkedList();
-        _individualSelectedCells = new DataGridViewCellLinkedList();
-        _individualReadOnlyCells = new DataGridViewCellLinkedList();
+        _selectedBandIndexes = [];
+        _individualSelectedCells = [];
+        _individualReadOnlyCells = [];
 
         AdvancedCellBorderStyle = new DataGridViewAdvancedBorderStyle(this,
             DataGridViewAdvancedCellBorderStyle.OutsetDouble,
@@ -1722,7 +1722,7 @@ public partial class DataGridView : Control, ISupportInitialize
             Debug.Assert(_ptCurrentCell.X >= 0 && _ptCurrentCell.Y >= 0);
             Debug.Assert(_ptCurrentCell.X < Columns.Count);
             Debug.Assert(_ptCurrentCell.Y < Rows.Count);
-            DataGridViewRow dataGridViewRow = (DataGridViewRow)Rows[_ptCurrentCell.Y]; // unsharing row
+            DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y]; // unsharing row
             return dataGridViewRow.Cells[_ptCurrentCell.X];
         }
         set
@@ -3653,7 +3653,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            DataGridViewSelectedCellCollection stcc = new();
+            DataGridViewSelectedCellCollection stcc = [];
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:
@@ -3688,7 +3688,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     {
                         foreach (int rowIndex in _selectedBandIndexes)
                         {
-                            DataGridViewRow dataGridViewRow = (DataGridViewRow)Rows[rowIndex]; // unshares the selected row
+                            DataGridViewRow dataGridViewRow = Rows[rowIndex]; // unshares the selected row
                             foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
                             {
                                 stcc.Add(dataGridViewCell);
@@ -3713,7 +3713,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            DataGridViewSelectedColumnCollection strc = new();
+            DataGridViewSelectedColumnCollection strc = [];
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:
@@ -3739,7 +3739,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            DataGridViewSelectedRowCollection strc = new();
+            DataGridViewSelectedRowCollection strc = [];
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:
@@ -3750,7 +3750,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     foreach (int rowIndex in _selectedBandIndexes)
                     {
-                        strc.Add((DataGridViewRow)Rows[rowIndex]); // unshares the selected row
+                        strc.Add(Rows[rowIndex]); // unshares the selected row
                     }
 
                     break;

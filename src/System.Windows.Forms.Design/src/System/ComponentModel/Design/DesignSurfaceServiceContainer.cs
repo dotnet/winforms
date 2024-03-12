@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 internal sealed class DesignSurfaceServiceContainer : ServiceContainer
 {
-    private readonly HashSet<Type> _fixedServices = new();
+    private readonly HashSet<Type> _fixedServices = [];
 
     /// <summary>
     ///  We always add ourselves as a service.
