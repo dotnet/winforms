@@ -14,6 +14,13 @@ public class MaskedTextBoxTests
         using MaskedTextBox mtb = new();
 
         Assert.NotNull(mtb);
+
+        // Check default values
+        mtb.BeepOnError.Should().BeFalse();
+        mtb.AsciiOnly.Should().BeFalse();
+        mtb.Culture.Should().Be(CultureInfo.CurrentCulture);
+
+        mtb.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -30,19 +37,6 @@ public class MaskedTextBoxTests
         using MaskedTextBox mtb = new(new MaskedTextProvider("Hello World!"));
 
         Assert.NotNull(mtb);
-    }
-
-    [WinFormsFact]
-    public void MaskedTextBox_DefaultValues()
-    {
-        using MaskedTextBox control = new();
-
-        // Check default values
-        control.BeepOnError.Should().BeFalse();
-        control.AsciiOnly.Should().BeFalse();
-        control.Culture.Should().Be(CultureInfo.CurrentCulture);
-
-        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -174,11 +168,14 @@ public class MaskedTextBoxTests
     }
 
     [WinFormsTheory]
-    [InlineData("en-US")]
-    [InlineData("fr-FR")]
-    [InlineData("es-ES")]
-    [InlineData(null)]
-    public void MaskedTextBox_Culture_SetCulture_UpdatesMaskedTextProvider(string cultureName)
+    [InlineData("en-US", false)]
+    [InlineData("fr-FR", false)]
+    [InlineData("es-ES", false)]
+    [InlineData(null, false)]
+    [InlineData("en-US", true)]
+    [InlineData("fr-FR", true)]
+    [InlineData("es-ES", true)]
+    public void MaskedTextBox_Culture_SetCulture_UpdatesMaskedTextProvider(string cultureName, bool createHandle)
     {
         if (cultureName is null)
         {
@@ -194,61 +191,38 @@ public class MaskedTextBoxTests
                 Culture = culture
             };
 
+            if (createHandle)
+            {
+                control.Handle.Should().NotBe(IntPtr.Zero);
+            }
+
             control.Culture.Should().Be(culture);
-            control.IsHandleCreated.Should().BeFalse();
+            control.IsHandleCreated.Should().Be(createHandle);
 
             // Set same.
             control.Culture = culture;
             control.Culture.Should().Be(culture);
-            control.IsHandleCreated.Should().BeFalse();
+            control.IsHandleCreated.Should().Be(createHandle);
 
             // Set different.
             CultureInfo differentCulture = new CultureInfo(cultureName == "en-US" ? "fr-FR" : "en-US");
             control.Culture = differentCulture;
             control.Culture.Should().Be(differentCulture);
-            control.IsHandleCreated.Should().BeFalse();
+            control.IsHandleCreated.Should().Be(createHandle);
+
+            if (createHandle)
+            {
+                int invalidatedCallCount = 0;
+                control.Invalidated += (sender, e) => invalidatedCallCount++;
+                int styleChangedCallCount = 0;
+                control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                int createdCallCount = 0;
+                control.HandleCreated += (sender, e) => createdCallCount++;
+
+                invalidatedCallCount.Should().Be(0);
+                styleChangedCallCount.Should().Be(0);
+                createdCallCount.Should().Be(0);
+            }
         }
-    }
-
-    [WinFormsTheory]
-    [InlineData("en-US")]
-    [InlineData("fr-FR")]
-    [InlineData("es-ES")]
-    public void MaskedTextBox_Culture_SetWithHandle_GetReturnsExpected(string cultureName)
-    {
-        CultureInfo culture = new CultureInfo(cultureName);
-        using MaskedTextBox control = new();
-        control.Handle.Should().NotBe(IntPtr.Zero);
-
-        int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
-        int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
-        int createdCallCount = 0;
-        control.HandleCreated += (sender, e) => createdCallCount++;
-
-        control.Culture = culture;
-        control.Culture.Should().Be(culture);
-        control.IsHandleCreated.Should().BeTrue();
-        invalidatedCallCount.Should().Be(0);
-        styleChangedCallCount.Should().Be(0);
-        createdCallCount.Should().Be(0);
-
-        // Set same.
-        control.Culture = culture;
-        control.Culture.Should().Be(culture);
-        control.IsHandleCreated.Should().BeTrue();
-        invalidatedCallCount.Should().Be(0);
-        styleChangedCallCount.Should().Be(0);
-        createdCallCount.Should().Be(0);
-
-        // Set different.
-        CultureInfo differentCulture = new CultureInfo(cultureName == "en-US" ? "fr-FR" : "es-ES");
-        control.Culture = differentCulture;
-        control.Culture.Should().Be(differentCulture);
-        control.IsHandleCreated.Should().BeTrue();
-        invalidatedCallCount.Should().Be(0);
-        styleChangedCallCount.Should().Be(0);
-        createdCallCount.Should().Be(0);
     }
 }
