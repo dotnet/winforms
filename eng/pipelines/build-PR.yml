@@ -15,25 +15,20 @@ jobs:
     variables:
     - template: /eng/common/templates/variables/pool-providers.yml
     pool:
-      ${{ if eq(variables['System.TeamProject'], 'public') }}:
-        name: $(DncEngPublicBuildPool)
-        demands: ImageOverride -equals windows.vs2022preview.amd64.open
-      ${{ if ne(variables['System.TeamProject'], 'public') }}:
-        name: $(DncEngInternalBuildPool)
-        demands: ImageOverride -equals windows.vs2022preview.amd64
+      name: $(DncEngPublicBuildPool)
+      demands: ImageOverride -equals windows.vs2022preview.amd64.open
     strategy:
       matrix:
-        ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
-          Debug:
-            _BuildConfig: Debug
-            # override some variables for debug
-            _SignType: test
-            # Only collect coverage for external Debug-x64 builds. Uploads fail on internal builds, and coverage
-            # collection on additional legs produces unnecessary performance overhead.
-            ${{ if and(eq(variables['System.TeamProject'], 'public'), eq(parameters.targetArchitecture, 'x64')) }}:
-              _Coverage: true
-            ${{ else }}:
-              _Coverage: false
+        Debug:
+          _BuildConfig: Debug
+          # override some variables for debug
+          _SignType: test
+          # Only collect coverage for external Debug-x64 builds. Uploads fail on internal builds, and coverage
+          # collection on additional legs produces unnecessary performance overhead.
+          ${{ if and(eq(variables['System.TeamProject'], 'public'), eq(parameters.targetArchitecture, 'x64')) }}:
+            _Coverage: true
+          ${{ else }}:
+            _Coverage: false
         Release:
           _BuildConfig: Release
           _Coverage: false
@@ -44,24 +39,6 @@ jobs:
     - checkout: self
       clean: true
 
-    - ${{ if ne(variables['System.TeamProject'], 'public') }}:
-      - task: PowerShell@2
-        displayName: Setup Private Feeds Credentials
-        inputs:
-          filePath: $(Build.SourcesDirectory)/eng/common/SetupNugetSources.ps1
-          arguments: -ConfigFile $(Build.SourcesDirectory)/NuGet.config -Password $Env:Token
-        env:
-          Token: $(dn-bot-dnceng-artifact-feeds-rw)
-
-      - task: MicroBuildSigningPlugin@2
-        displayName: Install MicroBuild plugin for Signing
-        inputs:
-          signType: $(_SignType)
-          zipSources: false
-          feedSource: https://dnceng.pkgs.visualstudio.com/_packaging/MicroBuildToolset/nuget/v3/index.json
-        continueOnError: false
-        condition: and(succeeded(), 
-                       in(variables['_SignType'], 'real', 'test'))
     # NuGet's http cache lasts 30 minutes. If we're on a static machine, this may interfere with
     # auto-update PRs by preventing the CI build from fetching the new version. Delete the cache.
     - powershell: Remove-Item -Recurse -ErrorAction Ignore "$env:LocalAppData\NuGet\v3-cache"
@@ -154,12 +131,6 @@ jobs:
         reportDirectory: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full'
       displayName: PublishCodeCoverageResults
       condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
-
-    # Generate SBOM for the internal leg only
-    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-      - template: ..\common\templates\steps\generate-sbom.yml
-        parameters:
-          name: Generate_SBOM_${{ parameters.name }}
 
     - template: post-build-PR.yml
       parameters:
