@@ -1,0 +1,2 @@
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Collections.Generic.IEnumerable<System.Windows.Forms.ListViewItem!>! collection) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Windows.Forms.ListViewItem![]! array, int arrayIndex) -> void
