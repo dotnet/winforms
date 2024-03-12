@@ -343,7 +343,6 @@ public static class TestHelpers
     /// </summary>
     /// <param name="process">The process to send the Tab key(s) to</param>
     /// <param name="times">The number of times to press tab in a row</param>
-    /// <remarks>Throws an ArgumentException if number of times is zero; this is unlikely to be intended.</remarks>
     /// <returns>Whether or not the Tab key(s) were pressed on the process</returns>
     /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
     public static bool SendTabKeysToProcess(Process process, MainFormControlsTabOrder times, bool switchToMainWindow = true)

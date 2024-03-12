@@ -19,12 +19,16 @@ internal static partial class GdiCache
     ///  Gets an <see cref="HDC"/> based off of the primary display.
     /// </summary>
     /// <remarks>
-    ///  Use in a using statement for proper cleanup.
-    ///
-    ///  When disposed the <see cref="HDC"/> will be returned to the cache. Do NOT change the state of the
-    ///  DC (clipping, selecting objects into it) without restoring the state. If you must pass the scope to
-    ///  another method it must be passed by reference or you risk accidentally returning extra copies to the
-    ///  cache.
+    ///  <para>
+    ///   Use in a using statement for proper cleanup.
+    ///  </para>
+    ///  <para>
+    ///   When disposed the <see cref="HDC"/> will be returned to the cache. Do NOT change the state of the
+    ///   DC (clipping, selecting objects int
+    ///   o it) without restoring the state. If you must pass the scope to
+    ///   another method it must be passed by reference or you risk accidentally returning extra copies to the
+    ///   cache.
+    ///  </para>
     /// </remarks>
     public static ScreenDcCache.ScreenDcScope GetScreenHdc() => (s_dcCache ??= new ScreenDcCache()).Acquire();
 
@@ -32,12 +36,15 @@ internal static partial class GdiCache
     ///  Gets an <see cref="Graphics"/> based off of the primary display.
     /// </summary>
     /// <remarks>
-    ///  Use in a using statement for proper cleanup.
-    ///
-    ///  When disposed the <see cref="Graphics"/> object will be disposed and the underlying <see cref="HDC"/>
-    ///  will be returned to the cache. Do NOT change the state of the underlying DC (clipping, selecting objects
-    ///  into it) without restoring the state. If you must pass the scope to another method it must be passed by
-    ///  reference or you risk double disposal and accidentally returning extra copies to the cache.
+    ///  <para>
+    ///   Use in a using statement for proper cleanup.
+    ///  </para>
+    ///  <para>
+    ///   When disposed the <see cref="Graphics"/> object will be disposed and the underlying <see cref="HDC"/>
+    ///   will be returned to the cache. Do NOT change the state of the underlying DC (clipping, selecting objects
+    ///   into it) without restoring the state. If you must pass the scope to another method it must be passed by
+    ///   reference or you risk double disposal and accidentally returning extra copies to the cache.
+    ///  </para>
     /// </remarks>
     public static ScreenGraphicsScope GetScreenDCGraphics()
     {
@@ -72,11 +79,14 @@ internal static partial class GdiCache
     ///  <paramref name="quality"/>.
     /// </summary>
     /// <remarks>
-    ///  Use in a using statement for proper cleanup.
-    ///
-    ///  When disposed the <see cref="HFONT"/> will be returned to the cache.  If you must pass the scope to
-    ///  another method it must be passed by reference or you risk double disposal and accidentally returning extra
-    ///  copies to the cache.
+    ///  <para>
+    ///   Use in a using statement for proper cleanup.
+    ///  </para>
+    ///  <para>
+    ///   When disposed the <see cref="HFONT"/> will be returned to the cache.  If you must pass the scope to
+    ///   another method it must be passed by reference or you risk double disposal and accidentally returning extra
+    ///   copies to the cache.
+    ///  </para>
     /// </remarks>
     public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
     {

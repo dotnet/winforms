@@ -92,7 +92,7 @@ public partial class BindingContext : ICollection
     ///  Fires the CollectionChangedEvent.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected internal void Add(object dataSource, BindingManagerBase listManager)
     {
@@ -101,7 +101,7 @@ public partial class BindingContext : ICollection
     }
 
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected virtual void AddCore(object dataSource, BindingManagerBase listManager)
     {
@@ -115,7 +115,7 @@ public partial class BindingContext : ICollection
     ///  Occurs when the collection has changed.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     [SRDescription(nameof(SR.collectionChangedEventDescr))]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -136,7 +136,7 @@ public partial class BindingContext : ICollection
     ///  Fires the CollectionChangedEvent.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected internal void Clear()
     {
@@ -148,7 +148,7 @@ public partial class BindingContext : ICollection
     ///  Clears the collection.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected virtual void ClearCore() => _listManagers.Clear();
 
@@ -187,7 +187,7 @@ public partial class BindingContext : ICollection
     ///  The CollectionChanged event is fired if it succeeds.
     /// </summary>
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected internal void Remove(object dataSource)
     {
@@ -196,7 +196,7 @@ public partial class BindingContext : ICollection
     }
 
     /// <remarks>
-    ///  This method is obsolete and unused.
+    ///  <para>This method is obsolete and unused.</para>
     /// </remarks>
     protected virtual void RemoveCore(object dataSource)
     {
